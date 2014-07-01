@@ -7,35 +7,32 @@ import android.preference.PreferenceManager;
 
 public class PrefHelper {
 	
-	private Context context;
+	private SharedPreferences pref;
+	
 	private final String DEFAULT_STRING = null;
 	private final int DEFAULT_INT = 0;
 	
 	public PrefHelper(Context context){
-		this.context = context;
+		this.pref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 	
 	public boolean putString(String key, String value){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor editor = pref.edit();
 		editor.putString(key, value);
 		return editor.commit();
 	}
 	
 	public boolean putInt(String key, int value){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor editor = pref.edit();
 		editor.putInt(key, value);
 		return editor.commit();
 	}
 	
 	public String getString(String key){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		return pref.getString(key, DEFAULT_STRING);
 	}
 	
 	public int getInt(String key){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		return pref.getInt(key, DEFAULT_INT);
 	}
 	

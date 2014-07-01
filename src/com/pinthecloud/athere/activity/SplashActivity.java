@@ -1,17 +1,19 @@
 package com.pinthecloud.athere.activity;
 
-import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PrefHelper;
-import com.pinthecloud.athere.model.POJOTest;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
+import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.helper.PrefHelper;
+
+/**
+ * @author hongkunyoo
+ * 
+ * First Page
+ *
+ */
 public class SplashActivity extends Activity {
 
 	private static final int SPLASH_TIME = 1500;
