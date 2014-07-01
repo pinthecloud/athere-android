@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.pinthecloud.athere.AtHereGlobal;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PrefHelper;
 
@@ -16,9 +17,7 @@ import com.pinthecloud.athere.helper.PrefHelper;
  */
 public class SplashActivity extends Activity {
 
-	private final int SPLASH_TIME = 1500;
-	private final String IS_NEW_USER_KEY = "isNewUserKey";
-	
+	private final int SPLASH_TIME = 500;
 	private PrefHelper pref;
 	
 	
@@ -28,25 +27,24 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.activity_splash);
 		
 		pref = new PrefHelper(this);
-			
 		new Handler().postDelayed(new Runnable(){
 
 			@Override
 			public void run() {
-				String isNew = pref.getString(IS_NEW_USER_KEY);
+				Intent intent = new Intent();
+				boolean isLoggedIn = pref.getBoolean(AtHereGlobal.IS_LOGGED_IN_USER_KEY);
 				
-				// already logged in
-				if (isNew != null){
-					Intent i = new Intent(SplashActivity.this, SquareListActivity.class);
-					startActivity(i);
+				// New User
+				if (!isLoggedIn){
+					intent.setClass(SplashActivity.this, ProfileActivity.class);
 				}
-				// new User
+				// Already logged in
 				else { 
-					Intent i = new Intent(SplashActivity.this, ProfileActivity.class);
-					startActivity(i);
+					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				}
+				startActivity(intent);
+				finish();
 			}
-			
 		}, SPLASH_TIME);
 	}
 }
