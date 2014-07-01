@@ -1,6 +1,6 @@
 package com.pinthecloud.athere;
 
-public class AtHereGlobal {
+public class AhGlobal {
 
 	// Example for global variables
 	public static final String APP_KEY = "EXAMPLE_KEY";

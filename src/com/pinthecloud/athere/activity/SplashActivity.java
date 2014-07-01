@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.pinthecloud.athere.AtHereGlobal;
+import com.pinthecloud.athere.AhGlobal;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PrefHelper;
 
@@ -15,7 +15,7 @@ import com.pinthecloud.athere.helper.PrefHelper;
  * First Page
  *
  */
-public class SplashActivity extends Activity {
+public class SplashActivity extends AhActivity {
 
 	private final int SPLASH_TIME = 500;
 	private PrefHelper pref;
@@ -32,7 +32,7 @@ public class SplashActivity extends Activity {
 			@Override
 			public void run() {
 				Intent intent = new Intent();
-				boolean isLoggedIn = pref.getBoolean(AtHereGlobal.IS_LOGGED_IN_USER_KEY);
+				boolean isLoggedIn = pref.getBoolean(AhGlobal.IS_LOGGED_IN_USER_KEY);
 				
 				// New User
 				if (!isLoggedIn){

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
@@ -15,8 +16,9 @@ import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.MenuDrawerFragment;
+import com.pinthecloud.athere.fragment.SquareListFragment;
 
-public class SquareListActivity extends Activity
+public class SquareListActivity extends AhActivity
         implements MenuDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -34,6 +36,19 @@ public class SquareListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_square_list);
 
+//		/*
+//		 * Set Square List Fragment to container
+//		 */
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        
+//        SquareListFragment squareListFragment = new SquareListFragment();
+//        fragmentTransaction.add(R.id.square_list_container, squareListFragment);
+//        fragmentTransaction.commit();
+        
+        /*
+         * Set drawer fragment
+         */
         mMenuDrawerFragment = (MenuDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.square_list_menu_drawer);
         mTitle = getTitle();
@@ -44,6 +59,11 @@ public class SquareListActivity extends Activity
                 (DrawerLayout) findViewById(R.id.square_list_drawer_layout));
     }
 
+    /*
+     * 
+     * (non-Javadoc)
+     * @see com.pinthecloud.athere.fragment.MenuDrawerFragment.NavigationDrawerCallbacks#onNavigationDrawerItemSelected(int)
+     */
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments

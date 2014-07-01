@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.pinthecloud.athere.AtHereGlobal;
+import com.pinthecloud.athere.AhGlobal;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.helper.PrefHelper;
@@ -27,8 +27,7 @@ public class ProfileFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_profile, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_profile, container, false);
 		
 		/*
 		 * Find UI component
@@ -73,7 +72,7 @@ public class ProfileFragment extends Fragment{
 				}
 				else{
 					pref = new PrefHelper(getActivity());
-					pref.putString(AtHereGlobal.NICK_NAME_KEY, nickName);
+					pref.putString(AhGlobal.NICK_NAME_KEY, nickName);
 //					pref.putBoolean(AtHereGlobal.IS_LOGGED_IN_USER_KEY, true);
 					
 					Intent intent = new Intent(getActivity(), SquareListActivity.class);
