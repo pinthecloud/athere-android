@@ -13,5 +13,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_hongkun_test_acitivity">HongkunTestAcitivity</string>
 
 </resources>
