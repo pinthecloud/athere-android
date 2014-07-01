@@ -16,9 +16,11 @@ import com.pinthecloud.athere.helper.PrefHelper;
  */
 public class SplashActivity extends Activity {
 
-	private static final int SPLASH_TIME = 1500;
+	private final int SPLASH_TIME = 1500;
+	private final String IS_NEW_USER_KEY = "isNewUserKey";
+	
 	private PrefHelper pref;
-	public String isNewUserKey = "isNewUserKey";
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,7 @@ public class SplashActivity extends Activity {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				String isNew = pref.getString(isNewUserKey);
+				String isNew = pref.getString(IS_NEW_USER_KEY);
 				
 				// already logged in
 				if (isNew != null){
