@@ -10,6 +10,16 @@ public class User {
 	@com.google.gson.annotations.SerializedName("mobileId")
 	private String mobileId;
 	
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+	public User(String id, String nickName, String profilePic, String mobileId) {
+		super();
+		this.id = id;
+		this.nickName = nickName;
+		this.profilePic = profilePic;
+		this.mobileId = mobileId;
+	}
 	public String getId() {
 		return id;
 	}
@@ -33,5 +43,15 @@ public class User {
 	}
 	public void setMobileId(String mobileId) {
 		this.mobileId = mobileId;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return getNickName();
 	}
 }

@@ -19,7 +19,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="com.pinthecloud.athere.AhApplication" >
         <activity
             android:name="com.pinthecloud.athere.activity.SplashActivity"
             android:label="@string/app_name"
@@ -42,6 +43,10 @@
         <activity
             android:name="com.pinthecloud.athere.activity.HongkunTestAcitivity"
             android:label="@string/title_activity_hongkun_test_acitivity" >
+        </activity>
+        <activity
+            android:name="com.pinthecloud.athere.activity.AhActivity"
+            android:label="@string/title_activity_ah" >
         </activity>
     </application>
 

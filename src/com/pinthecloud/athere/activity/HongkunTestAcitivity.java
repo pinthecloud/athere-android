@@ -1,34 +1,49 @@
 package com.pinthecloud.athere.activity;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.Context;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.view.View;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.ImageConverter;
+import com.pinthecloud.athere.helper.ProgressAsyncTask;
+import com.pinthecloud.athere.model.ToDoItem;
+import com.pinthecloud.athere.model.User;
 
-public class HongkunTestAcitivity extends Activity {
-	
-	ImageView imageView;
-	ImageView imageView2;
+public class HongkunTestAcitivity extends AhActivity {
+	private MobileServiceTable<ToDoItem> mToDoTable;
+	Context context;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hongkun_test_acitivity);
 		
-//		imageView.buildDrawingCache();
-//		Bitmap img = imageView.getDrawingCache();
 		
-		BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-		Bitmap img = drawable.getBitmap();
 		
-		String imageStr = ImageConverter.convertToString(img);
+	}
+	
+	public void addItem(View view) {
+		final User user = new User();
 		
-		Bitmap afterImg = ImageConverter.convertToImage(imageStr);
+		user.setNickName("nick");
+		user.setMobileId("mobildId");
+		user.setProfilePic("pic");
 		
-		imageView2.setImageBitmap(afterImg);
+//		serviceClient.setProfile(user);
+		
+		(new ProgressAsyncTask<Void, Void, Void>(this) {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				// TODO Auto-generated method stub
+				ToDoItem item = new ToDoItem();
+				serviceClient.addToDoItem(item);
+				
+				return null;
+			}
+			
+		}).execute();
+		
 	}
 }
