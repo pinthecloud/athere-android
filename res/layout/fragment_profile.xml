@@ -32,7 +32,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="text" />
+            android:inputType="text"
+            android:maxLength="15" />
 
     </LinearLayout>
 

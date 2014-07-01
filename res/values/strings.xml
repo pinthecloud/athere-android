@@ -24,7 +24,8 @@
         <item>SmallCat</item>
         <item>Necromancer</item>
     </string-array>
-    <string name="no_nick_name_message">Please type in nickname.</string>
-    <string name="bad_nick_name_message">Please type in proper nickname.</string>
+    <string name="min_nick_name_message">Please type in more than 2 letters.</string>
+    <string name="max_nick_name_message">Please type in less then 15 letters.</string>
+    <string name="bad_nick_name_message">This is invalid nick name.</string>
 
 </resources>
