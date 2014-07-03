@@ -9,7 +9,7 @@ import android.net.Uri;
 
 public class BItmapUtil {
 
-	public static Bitmap resize(Context context, Uri imageUri, int reqWidth, int reqHeight) {
+	public static Bitmap resize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		Bitmap bitmapImage = null;
 
 		try {
@@ -24,12 +24,13 @@ public class BItmapUtil {
 					.openInputStream(imageUri), null, options);
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			throw e;
 		}
 
 		return bitmapImage;
 	}
 
+	
 	public static int calculateSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		final int height = options.outHeight;
 		final int width = options.outWidth;

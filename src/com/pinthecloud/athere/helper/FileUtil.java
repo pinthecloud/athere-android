@@ -1,11 +1,17 @@
 package com.pinthecloud.athere.helper;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -39,7 +45,6 @@ public class FileUtil {
 	    if (! mediaStorageDir.exists()){
 	        if (! mediaStorageDir.mkdirs()){
 	        	// failed to create directory
-	        	Log.e("Error", "can't make folder");
 	            return null;
 	        }
 	    }
@@ -59,5 +64,39 @@ public class FileUtil {
 	    }
 
 	    return mediaFile;
+	}
+
+
+	public static boolean saveImageToInternalStorage(Context context, Bitmap image) throws IOException {
+		try {
+			// Use the compress method on the Bitmap object to write image to
+			// the OutputStream
+			FileOutputStream fos = context.openFileOutput(AhGlobalVariable.PROFILE_IMAGE_FILE_NAME, Context.MODE_PRIVATE);
+
+			// Writing the bitmap to the output stream
+			image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
+		}
+		return true;
+	}
+
+	
+	/*
+	 * look in internal storage
+	 */
+	public static Bitmap getImageFromInternalStorage(Context context, String filename) throws FileNotFoundException {
+		Bitmap imageBitmap = null;
+		try {
+			File filePath = context.getFileStreamPath(filename);
+			FileInputStream fi = new FileInputStream(filePath);
+			imageBitmap = BitmapFactory.decodeStream(fi);
+		} catch (FileNotFoundException e) {
+			throw e;
+		}
+		return imageBitmap;
 	}
 }

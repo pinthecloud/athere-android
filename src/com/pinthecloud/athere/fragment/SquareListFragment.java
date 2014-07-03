@@ -1,14 +1,13 @@
 package com.pinthecloud.athere.fragment;
 
-import com.pinthecloud.athere.R;
-
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SquareListFragment extends Fragment{
+import com.pinthecloud.athere.R;
+
+public class SquareListFragment extends AhFragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
