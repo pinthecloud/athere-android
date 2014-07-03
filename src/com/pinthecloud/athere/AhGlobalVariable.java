@@ -1,9 +1,10 @@
 package com.pinthecloud.athere;
 
-public class AhGlobal {
 
-	// Example for global variables
-	public static final String APP_KEY = "EXAMPLE_KEY";
+public class AhGlobalVariable{
+
+	// String
+	public static final String APP_NAME = "At Here";
 	
 	// SharedPreference Key
 	public static final String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";

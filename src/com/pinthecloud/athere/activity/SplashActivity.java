@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.pinthecloud.athere.AhGlobal;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PrefHelper;
 
@@ -32,14 +32,13 @@ public class SplashActivity extends AhActivity {
 			@Override
 			public void run() {
 				Intent intent = new Intent();
-				boolean isLoggedIn = pref.getBoolean(AhGlobal.IS_LOGGED_IN_USER_KEY);
-				
-				// New User
+				boolean isLoggedIn = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
+
 				if (!isLoggedIn){
+					// New User
 					intent.setClass(SplashActivity.this, ProfileActivity.class);
-				}
-				// Already logged in
-				else { 
+				} else { 
+					// Already logged in
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				}
 				startActivity(intent);
