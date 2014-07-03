@@ -28,7 +28,7 @@
             android:src="@drawable/ic_launcher" />
 
         <EditText
-            android:id="@+id/profile_frag_nick_name_text"
+            android:id="@+id/profile_frag_nick_name_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
