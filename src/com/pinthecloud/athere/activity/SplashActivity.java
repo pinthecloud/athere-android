@@ -42,7 +42,7 @@ public class SplashActivity extends Activity {
 				}
 				// new User
 				else { 
-					Intent i = new Intent(SplashActivity.this, ProfileActivity.class);
+					Intent i = new Intent(SplashActivity.this, HongkunTestAcitivity.class);
 					startActivity(i);
 				}
 			}

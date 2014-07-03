@@ -2,7 +2,7 @@ package com.pinthecloud.athere;
 
 import android.app.Application;
 
-import com.pinthecloud.athere.manager.ServiceClient;
+import com.pinthecloud.athere.helper.ServiceClient;
 
 public class AhApplication extends Application {
 	

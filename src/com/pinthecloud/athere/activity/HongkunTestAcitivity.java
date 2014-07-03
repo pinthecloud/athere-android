@@ -1,26 +1,24 @@
 package com.pinthecloud.athere.activity;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
-import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
+import com.pinthecloud.athere.AhEntityCallback;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.ProgressAsyncTask;
-import com.pinthecloud.athere.model.ToDoItem;
+import com.pinthecloud.athere.helper.PrefHelper;
 import com.pinthecloud.athere.model.User;
 
 public class HongkunTestAcitivity extends AhActivity {
-	private MobileServiceTable<ToDoItem> mToDoTable;
-	Context context;
+	Button btn;
+	int count = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_hongkun_test_acitivity);
-		
-		
-		
+		btn = (Button)findViewById(R.id.button1);
 	}
 	
 	public void addItem(View view) {
@@ -30,20 +28,17 @@ public class HongkunTestAcitivity extends AhActivity {
 		user.setMobileId("mobildId");
 		user.setProfilePic("pic");
 		
-//		serviceClient.setProfile(user);
+		PrefHelper pref = new PrefHelper(this);
+		pref.putInt("sdf",3);
+		pref.getInt("sdf");
 		
-		(new ProgressAsyncTask<Void, Void, Void>(this) {
-
-			@Override
-			protected Void doInBackground(Void... params) {
-				// TODO Auto-generated method stub
-				ToDoItem item = new ToDoItem();
-				serviceClient.addToDoItem(item);
-				
-				return null;
-			}
+		serviceClient.setProfile(user, new AhEntityCallback<User>() {
 			
-		}).execute();
-		
+			@Override
+			public void onCompleted(User entity) {
+				// TODO Auto-generated method stub
+				Log.e("ERROR",user.getNickName());
+			}
+		});
 	}
 }
