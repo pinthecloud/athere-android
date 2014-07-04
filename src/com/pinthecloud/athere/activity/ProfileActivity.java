@@ -1,18 +1,13 @@
 package com.pinthecloud.athere.activity;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ProfileFragment;
 
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends AhActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

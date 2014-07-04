@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.MenuDrawerFragment;
 
-public class SquareListActivity extends Activity
+public class SquareListActivity extends AhActivity
         implements MenuDrawerFragment.NavigationDrawerCallbacks {
 
     /**
@@ -34,25 +34,44 @@ public class SquareListActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_square_list);
 
+//		/*
+//		 * Set Square List Fragment to container
+//		 */
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        
+//        SquareListFragment squareListFragment = new SquareListFragment();
+//        fragmentTransaction.add(R.id.square_list_container, squareListFragment);
+//        fragmentTransaction.commit();
+        
+        /*
+         * Set drawer fragment
+         */
         mMenuDrawerFragment = (MenuDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.square_list_menu_drawer);
+                getFragmentManager().findFragmentById(R.id.square_list_menu_drawer_frag);
         mTitle = getTitle();
 
         // Set up the drawer.
         mMenuDrawerFragment.setUp(
-                R.id.square_list_menu_drawer,
+                R.id.square_list_menu_drawer_frag,
                 (DrawerLayout) findViewById(R.id.square_list_drawer_layout));
     }
 
+    
+    /*
+     * // update the main content by replacing fragments
+     * (non-Javadoc)
+     * @see com.pinthecloud.athere.fragment.MenuDrawerFragment.NavigationDrawerCallbacks#onNavigationDrawerItemSelected(int)
+     */
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.square_list_container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
     }
 
+    
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:

@@ -14,6 +14,8 @@ public class Square {
 	@com.google.gson.annotations.SerializedName("participants")
 	private int participants;
 	
+	private int distance;
+	
 	public String getId() {
 		return id;
 	}
@@ -49,5 +51,11 @@ public class Square {
 	}
 	public void setParticipants(int participants) {
 		this.participants = participants;
+	}
+	public int getDistance() {
+		return distance;
+	}
+	public void setDistance(int distance) {
+		this.distance = distance;
 	}
 }

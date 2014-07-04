@@ -29,7 +29,7 @@
     -->
 
     <fragment
-        android:id="@+id/square_list_menu_drawer"
+        android:id="@+id/square_list_menu_drawer_frag"
         android:name="com.pinthecloud.athere.fragment.MenuDrawerFragment"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"

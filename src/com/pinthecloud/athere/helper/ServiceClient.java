@@ -9,6 +9,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.location.Location;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
@@ -60,18 +65,19 @@ public class ServiceClient {
 	
 	public Context getContext() { return context; }
 	
-	public void getRandomProfile(final AhListCallback<User> callback) throws AhException {
+	public void isAvailableNickName(User user, final AhEntityCallback<Boolean> callback) throws AhException {
 		
-		userTable.where().field("complete").eq(val(false)).execute(new TableQueryCallback<User>() {
+		userTable.where().field("nickName").eq(val(true)).execute(new TableQueryCallback<User>() {
 
 			@Override
 			public void onCompleted(List<User> result, int count, Exception exception, ServiceFilterResponse response) {
 				// Succeed
 				if (exception == null) {
-					callback.onCompleted(result, count);
+					if (count > 0) callback.onCompleted(false);
+					else callback.onCompleted(true);
 				// failed
 				} else {
-					throw new AhException(exception, "getRandomProfile");
+					throw new AhException(exception, "isAvailableNickName");
 				}
 			}
 		});
@@ -94,10 +100,61 @@ public class ServiceClient {
 		
 	}
 
-	public void getSquareList(Location loc, AhListCallback<Square> callback){
+	public void getSquareList(Location loc, final AhListCallback<Square> callback) throws AhException {
 		progressDialog.show();
 		
-		//userTable.where().
+		JsonObject jo = new JsonObject();
+		jo.addProperty("currentLatitude", loc.getLatitude());
+		jo.addProperty("currentLongtitude", loc.getLongitude());
 		
+		Gson g = new Gson();
+		JsonElement json = g.fromJson(jo, JsonElement.class);
+		
+		mClient.invokeApi("getnearsquare", json, new ApiJsonOperationCallback() {
+			
+			@Override
+			public void onCompleted(JsonElement json, Exception exception,
+					ServiceFilterResponse response) {
+				// TODO Auto-generated method stub
+				if ( exception == null) {
+					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
+					if (list == null) throw new AhException(exception, "getSquareList");
+					callback.onCompleted(list, list.size());
+					progressDialog.dismiss();
+				} else {
+					throw new AhException(exception, "getSquareList");
+				}
+			}
+		});
+	}
+	
+	public void createSquare(Square square, final AhEntityCallback<Square> callback) throws AhException {
+		squareTable.insert(square, new TableOperationCallback<Square>() {
+
+			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
+				
+				if (exception == null) {
+					callback.onCompleted(entity);
+					progressDialog.dismiss();
+				} else {
+					throw new AhException(exception, "createSquare");
+				}
+			}
+		});
+	}
+	
+	public void updateSquare(Square square, final AhEntityCallback<Square> callback) throws AhException {
+		squareTable.update(square, new TableOperationCallback<Square>() {
+
+			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
+				
+				if (exception == null) {
+					callback.onCompleted(entity);
+					progressDialog.dismiss();
+				} else {
+					throw new AhException(exception, "updateSquare");
+				}
+			}
+		});
 	}
 }

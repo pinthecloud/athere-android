@@ -1,13 +1,15 @@
 package com.pinthecloud.athere.activity;
 
+import java.util.List;
+
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.pinthecloud.athere.AhEntityCallback;
+import com.pinthecloud.athere.AhListCallback;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PrefHelper;
+import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
 public class HongkunTestAcitivity extends AhActivity {
@@ -32,12 +34,14 @@ public class HongkunTestAcitivity extends AhActivity {
 		pref.putInt("sdf",3);
 		pref.getInt("sdf");
 		
-		serviceClient.setProfile(user, new AhEntityCallback<User>() {
+		//Location loc = new Location(provider);
+		
+		serviceClient.getSquareList(null, new AhListCallback<Square>() {
 			
 			@Override
-			public void onCompleted(User entity) {
+			public void onCompleted(List<Square> list, int count) {
 				// TODO Auto-generated method stub
-				Log.e("ERROR",user.getNickName());
+				
 			}
 		});
 	}

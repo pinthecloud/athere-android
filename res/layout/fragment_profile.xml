@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout        
+    android:id="@+id/profile_frag_layout" 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -26,13 +28,14 @@
             android:src="@drawable/ic_launcher" />
 
         <EditText
-            android:id="@+id/profile_frag_nick_name_text"
+            android:id="@+id/profile_frag_nick_name_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="text" />
+            android:inputType="text"
+            android:maxLength="15" />
 
     </LinearLayout>
 

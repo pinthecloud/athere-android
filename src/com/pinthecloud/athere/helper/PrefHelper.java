@@ -11,6 +11,7 @@ public class PrefHelper {
 	
 	private final String DEFAULT_STRING = null;
 	private final int DEFAULT_INT = 0;
+	private final boolean DEFAULT_BOOLEAN = false;
 	
 	public PrefHelper(Context context){
 		this.pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -28,6 +29,12 @@ public class PrefHelper {
 		return editor.commit();
 	}
 	
+	public boolean putBoolean(String key, boolean value){
+		Editor editor = pref.edit();
+		editor.putBoolean(key, value);
+		return editor.commit();
+	}
+	
 	public String getString(String key){
 		return pref.getString(key, DEFAULT_STRING);
 	}
@@ -36,6 +43,9 @@ public class PrefHelper {
 		return pref.getInt(key, DEFAULT_INT);
 	}
 	
+	public boolean getBoolean(String key){
+		return pref.getBoolean(key, DEFAULT_BOOLEAN);
+	}
 	
 	
 	

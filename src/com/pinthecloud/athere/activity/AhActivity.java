@@ -12,6 +12,7 @@ public class AhActivity extends Activity {
 	protected ServiceClient serviceClient;
 	protected PrefHelper pref;
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -20,6 +21,4 @@ public class AhActivity extends Activity {
 		serviceClient = new ServiceClient(this);
 		pref = new PrefHelper(this);
 	}
-	
-	
 }
