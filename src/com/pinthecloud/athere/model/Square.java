@@ -5,11 +5,11 @@ import android.os.Parcelable;
 
 public class Square implements Parcelable {
 	public Square(){
-		
 	}
 	public Square(Parcel in){
 		readToParcel(in);
 	}
+	
 	@com.google.gson.annotations.SerializedName("id")
 	private String id;
 	@com.google.gson.annotations.SerializedName("whoMade")
@@ -61,7 +61,7 @@ public class Square implements Parcelable {
 	public void setParticipants(int participants) {
 		this.participants = participants;
 	}
-<<<<<<< HEAD
+
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -101,5 +101,4 @@ public class Square implements Parcelable {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
-
 }
