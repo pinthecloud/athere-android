@@ -33,6 +33,11 @@ public class ToDoItem implements Parcelable {
 
 	}
 
+	public ToDoItem(Parcel in) {
+		// TODO Auto-generated constructor stub
+		readToParcel(in);
+	}
+
 	@Override
 	public String toString() {
 		return getText();
@@ -112,8 +117,25 @@ public class ToDoItem implements Parcelable {
 	}
 
 	@Override
-	public void writeToParcel(Parcel arg0, int arg1) {
+	public void writeToParcel(Parcel dest, int flags) {
 		// TODO Auto-generated method stub
-		
+		dest.writeString(mText);
+		dest.writeString(mId);
+		dest.writeByte((byte) (mComplete ? 1:0)); // if mComplete == true, byte == 1
 	}
+	
+	public void readToParcel(Parcel in){
+		mText = in.readString();
+		mId = in.readString();
+		mComplete = in.readByte() != 0;	// mComplete == true if byte != 0
+	}
+	
+	public static final Parcelable.Creator<ToDoItem> CREATOR = new Creator<ToDoItem>(){
+		public ToDoItem createFromParcel(Parcel in){
+			return new ToDoItem(in);
+		}
+		public ToDoItem[] newArray(int size){
+			return new ToDoItem[size];
+		}
+	};
 }
