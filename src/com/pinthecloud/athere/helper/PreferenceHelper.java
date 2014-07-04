@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
-public class PrefHelper {
+public class PreferenceHelper {
 	
 	private SharedPreferences pref;
 	
@@ -13,7 +13,7 @@ public class PrefHelper {
 	private final int DEFAULT_INT = 0;
 	private final boolean DEFAULT_BOOLEAN = false;
 	
-	public PrefHelper(Context context){
+	public PreferenceHelper(Context context){
 		this.pref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 	
