@@ -22,7 +22,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.helper.FileUtil;
-import com.pinthecloud.athere.helper.PrefHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 
 public class ProfileFragment extends AhFragment{
 
@@ -35,7 +35,7 @@ public class ProfileFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		pref = new PrefHelper(context);
+		pref = new PreferenceHelper(context);
 	}
 
 

@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.pinthecloud.athere.AhListCallback;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PrefHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
@@ -30,7 +30,7 @@ public class HongkunTestAcitivity extends AhActivity {
 		user.setMobileId("mobildId");
 		user.setProfilePic("pic");
 		
-		PrefHelper pref = new PrefHelper(this);
+		PreferenceHelper pref = new PreferenceHelper(this);
 		pref.putInt("sdf",3);
 		pref.getInt("sdf");
 		

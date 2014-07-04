@@ -6,7 +6,7 @@ import android.os.Handler;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PrefHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
  * @author hongkunyoo
@@ -17,7 +17,7 @@ import com.pinthecloud.athere.helper.PrefHelper;
 public class SplashActivity extends AhActivity {
 
 	private final int SPLASH_TIME = 500;
-	private PrefHelper pref;
+	private PreferenceHelper pref;
 	
 	
 	@Override
@@ -25,7 +25,7 @@ public class SplashActivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		
-		pref = new PrefHelper(this);
+		pref = new PreferenceHelper(this);
 		new Handler().postDelayed(new Runnable(){
 
 			@Override

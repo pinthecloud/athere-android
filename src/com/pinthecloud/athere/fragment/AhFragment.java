@@ -24,8 +24,9 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.BItmapUtil;
 import com.pinthecloud.athere.helper.FileUtil;
-import com.pinthecloud.athere.helper.PrefHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.ServiceClient;
+
 
 public class AhFragment extends Fragment{
 
@@ -38,7 +39,7 @@ public class AhFragment extends Fragment{
 	protected ServiceClient serviceClient;
 	protected Context context;
 	protected Activity activity;
-	protected PrefHelper pref;
+	protected PreferenceHelper pref;
 
 
 
