@@ -61,7 +61,7 @@ public class AhFragment extends Fragment{
 		nickNameEditText.setSelection(nickName.length());
 
 		// Set regular expression for checking nick name
-		String nickNameRegx = "^[a-zA-Z0-9媛�-���_-]{2,15}$";
+		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
 		String message = "";
 
 
@@ -82,8 +82,8 @@ public class AhFragment extends Fragment{
 
 		return message;
 	}
-	
-	
+
+
 	protected void hideKeyboard(Context context, EditText editText) {
 		InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
@@ -91,7 +91,7 @@ public class AhFragment extends Fragment{
 
 
 	protected void profileImageOnClick(final ImageView profileImage){
-		String select = getResources().getString(R.string.profile_image_select);
+		String select = getResources().getString(R.string.select);
 		final String[] selectList = getResources().getStringArray(R.array.profile_image_select_string_array);
 
 		// Show dialog for selecting where to get profile image

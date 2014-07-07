@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.MenuDrawerFragment;
@@ -62,19 +61,6 @@ implements MenuDrawerFragment.NavigationDrawerCallbacks {
 			return true;
 		}
 		return super.onCreateOptionsMenu(menu);
-	}
-
-
-	/*
-	 * Handle action bar item clicks here. The action bar will
-	 * automatically handle clicks on the Home/Up button, so long
-	 * as you specify a parent activity in AndroidManifest.xml.
-	 * (non-Javadoc)
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return super.onOptionsItemSelected(item);
 	}
 
 

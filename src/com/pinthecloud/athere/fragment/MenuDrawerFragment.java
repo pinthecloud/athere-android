@@ -140,8 +140,8 @@ public class MenuDrawerFragment extends AhFragment {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
-		
-		
+
+
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(
@@ -151,7 +151,7 @@ public class MenuDrawerFragment extends AhFragment {
 				R.string.des_drawer_open, /* "open drawer" description for accessibility */
 				R.string.des_drawer_close/* "close drawer" description for accessibility */
 				) {
-			
+
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				super.onDrawerClosed(drawerView);
@@ -175,7 +175,7 @@ public class MenuDrawerFragment extends AhFragment {
 			}
 		};
 
-		
+
 		// Set a custom shadow that overlays the main content when the drawer opens
 		// Defer code dependent on restoration of previous instance state.
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -224,13 +224,10 @@ public class MenuDrawerFragment extends AhFragment {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-
 		if (item.getItemId() == R.id.action_example) {
-			Toast.makeText(context, "Example action.", Toast.LENGTH_SHORT)
-			.show();
+			Toast.makeText(context, "Example action.", Toast.LENGTH_SHORT).show();
 			return true;
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -247,12 +244,12 @@ public class MenuDrawerFragment extends AhFragment {
 			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
 	}
-	
-	
+
+
 	public boolean isDrawerOpen() {
 		return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
 	}
-	
+
 
 	private ActionBar getActionBar() {
 		return activity.getActionBar();

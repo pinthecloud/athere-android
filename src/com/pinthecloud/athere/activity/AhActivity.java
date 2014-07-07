@@ -15,8 +15,6 @@ public class AhActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.activity_ah);
-		//serviceClient = ((AhApplication) getApplication()).geterviceClient();
 		serviceClient = new ServiceClient(this);
 		pref = new PreferenceHelper(this);
 	}

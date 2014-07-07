@@ -5,23 +5,23 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.ProfileFragment;
+import com.pinthecloud.athere.fragment.BasicProfileFragment;
 
-public class ProfileActivity extends AhActivity {
+public class BasicProfileActivity extends AhActivity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profile);
-
+		setContentView(R.layout.activity_basic_profile);
+		
 		/*
 		 * Set Fragment to container
 		 */
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         
-        ProfileFragment profileFragment = new ProfileFragment();
-        fragmentTransaction.add(R.id.profile_container, profileFragment);
+        BasicProfileFragment basicProfileFragment = new BasicProfileFragment();
+        fragmentTransaction.add(R.id.basic_profile_container, basicProfileFragment);
         fragmentTransaction.commit();
 	}
 }

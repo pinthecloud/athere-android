@@ -20,11 +20,11 @@ import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.SquareListActivity;
+import com.pinthecloud.athere.activity.SquareChatActivity;
 import com.pinthecloud.athere.helper.FileUtil;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
-public class ProfileFragment extends AhFragment{
+public class SquareProfileFragment extends AhFragment{
 
 	private ImageView profileImage;
 	private EditText nickNameEditText;
@@ -42,15 +42,15 @@ public class ProfileFragment extends AhFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_profile, container, false);
+		View view = inflater.inflate(R.layout.fragment_square_profile, container, false);
 
 		/*
 		 * Find UI component
 		 */
-		profileImage = (ImageView) view.findViewById(R.id.profile_frag_image);
-		nickNameEditText = (EditText)view.findViewById(R.id.profile_frag_nick_name_edit_text);
-		startButton = (Button) view.findViewById(R.id.profile_frag_start_button);
-		relativeLayout = (RelativeLayout) view.findViewById(R.id.profile_frag_layout);
+		profileImage = (ImageView) view.findViewById(R.id.square_profile_frag_image);
+		nickNameEditText = (EditText)view.findViewById(R.id.square_profile_frag_nick_name_edit_text);
+		startButton = (Button) view.findViewById(R.id.square_profile_frag_start_button);
+		relativeLayout = (RelativeLayout) view.findViewById(R.id.square_profile_frag_layout);
 
 
 		/*
@@ -88,7 +88,7 @@ public class ProfileFragment extends AhFragment{
 					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
 					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
 
-					Intent intent = new Intent(context, SquareListActivity.class);
+					Intent intent = new Intent(context, SquareChatActivity.class);
 					startActivity(intent);
 					activity.finish();
 				}

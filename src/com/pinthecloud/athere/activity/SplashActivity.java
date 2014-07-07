@@ -35,8 +35,8 @@ public class SplashActivity extends AhActivity {
 
 				if (!isLoggedIn){
 					// New User
-					intent.setClass(SplashActivity.this, HongkunTestAcitivity.class);
-				} else { 
+					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+				} else {
 					// Already logged in
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				}

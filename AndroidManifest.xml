@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pinthecloud.athere.activity.ProfileActivity"
+            android:name="com.pinthecloud.athere.activity.SquareProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
         <activity
@@ -48,6 +48,8 @@
             android:name="com.pinthecloud.athere.activity.AhActivity"
             android:label="@string/title_activity_ah" >
         </activity>
+        <activity android:name="com.pinthecloud.athere.activity.BasicProfileActivity" />
+        <activity android:name="com.pinthecloud.athere.activity.SquareChatActivity" />
     </application>
 
 </manifest>
