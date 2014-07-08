@@ -13,7 +13,6 @@ public class AhMessage implements Parcelable {
 	
 	public AhMessage() {
 	}
-	
 	public AhMessage(Parcel in){
 		readToParcel(in);
 	}
@@ -35,15 +34,14 @@ public class AhMessage implements Parcelable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	//to Parcelable
+	
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
 		dest.writeString(id);
 		dest.writeString(type);
 		dest.writeString(content);		

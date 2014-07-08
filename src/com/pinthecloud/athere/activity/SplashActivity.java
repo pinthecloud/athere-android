@@ -35,7 +35,9 @@ public class SplashActivity extends AhActivity {
 
 				if (!isLoggedIn){
 					// New User
-					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+					intent.setClass(SplashActivity.this, SquareListActivity.class);
+//					intent.setClass(SplashActivity.this, SquareChatActivity.class);
 				} else {
 					// Already logged in
 					intent.setClass(SplashActivity.this, SquareListActivity.class);

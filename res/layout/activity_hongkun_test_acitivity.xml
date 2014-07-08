@@ -5,7 +5,7 @@
     tools:context="${packageName}.${activityClass}" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/row_square_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
@@ -14,9 +14,9 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/row_square_list_name"
         android:layout_marginTop="96dp"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/row_square_list_name"
         android:onClick="addItem"
         android:text="Button" />
 

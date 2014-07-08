@@ -7,13 +7,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.MenuDrawerFragment;
+import com.pinthecloud.athere.fragment.SquareListMenuDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
 
 public class SquareListActivity extends AhActivity
-implements MenuDrawerFragment.NavigationDrawerCallbacks {
+implements SquareListMenuDrawerFragment.NavigationDrawerCallbacks {
 
-	private MenuDrawerFragment mMenuDrawerFragment;
+	private SquareListMenuDrawerFragment mMenuDrawerFragment;
 	private DrawerLayout mDrawerLayout;
 	private CharSequence mTitle;
 
@@ -25,7 +25,7 @@ implements MenuDrawerFragment.NavigationDrawerCallbacks {
 		/*
 		 * Set up drawer and fragment and interactions.
 		 */
-		mMenuDrawerFragment = (MenuDrawerFragment)
+		mMenuDrawerFragment = (SquareListMenuDrawerFragment)
 				getFragmentManager().findFragmentById(R.id.square_list_menu_drawer_frag);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_list_drawer_layout);
 		mMenuDrawerFragment.setUp(R.id.square_list_menu_drawer_frag, mDrawerLayout);

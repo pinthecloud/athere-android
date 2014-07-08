@@ -32,7 +32,7 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
  * > design guidelines</a> for a complete explanation of the behaviors
  * implemented here.
  */
-public class MenuDrawerFragment extends AhFragment {
+public class SquareListMenuDrawerFragment extends AhFragment {
 
 	/**
 	 * A pointer to the current callbacks instance (the Activity).
@@ -81,14 +81,14 @@ public class MenuDrawerFragment extends AhFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_menu_drawer, container, false);
+		View view = inflater.inflate(R.layout.fragment_square_list_menu_drawer, container, false);
 
 		/*
 		 * Find UI component
 		 */
-		mDrawerListView = (ListView) view.findViewById(R.id.menu_drawer_frag_setting_list);
-		nickNameText = (TextView) view.findViewById(R.id.menu_drawer_frag_nick_name_text);
-		profileImage = (ImageView) view.findViewById(R.id.menu_drawer_frag_profile_image);
+		mDrawerListView = (ListView) view.findViewById(R.id.square_list_menu_drawer_frag_setting_list);
+		nickNameText = (TextView) view.findViewById(R.id.square_list_menu_drawer_frag_nick_name_text);
+		profileImage = (ImageView) view.findViewById(R.id.square_list_menu_drawer_frag_profile_image);
 
 		/*
 		 * Set Profile Image and nick name
