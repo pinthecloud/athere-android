@@ -24,5 +24,4 @@ public class SquareChatActivity extends AhActivity{
         fragmentTransaction.add(R.id.square_chat_container, squareChatFragment);
         fragmentTransaction.commit();
 	}
-
 }
