@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.SquareChatListAdapter;
+import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class SquareChatFragment extends AhFragment{

@@ -2,6 +2,7 @@ package com.pinthecloud.athere.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.pinthecloud.athere.R;
@@ -23,5 +24,14 @@ public class BasicProfileActivity extends AhActivity{
         BasicProfileFragment basicProfileFragment = new BasicProfileFragment();
         fragmentTransaction.add(R.id.basic_profile_container, basicProfileFragment);
         fragmentTransaction.commit();
+	}
+	
+	
+	// Callback from confirming dialog in fragment
+	public void doPositiveClick() {
+		// Move to next page
+		Intent intent = new Intent(this, SquareListActivity.class);
+		startActivity(intent);
+		finish();
 	}
 }
