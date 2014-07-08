@@ -15,7 +15,7 @@ import android.widget.ListView;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
-import com.pinthecloud.athere.helper.SquareListAdapter;
+import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.model.Square;
 
 public class SquareListFragment extends AhFragment{

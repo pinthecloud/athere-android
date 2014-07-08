@@ -25,12 +25,16 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="start">Start</string>
-    <string name="man">man</string>
-    <string name="woman">woman</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
     <string name="delete">Delete</string>
     <string name="select">Select</string>
     <string name="settings">Settings</string>
-
+    <string name="complete">Complete</string>
+    <string name="profile">Profile</string>
+    <string name="gender">Gender</string>
+    <string name="birth_year">Birth Year</string>
+    
     <!-- Sentence -->
     <string name="bad_camera_message">Camera didn\'t work. Please try it again.</string>
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -40,6 +44,7 @@
     <string name="bad_nick_name_message">This is invalid nick name.</string>
     <string name="bad_gallery_message">You couldn\'t get image from gallery. Please try it again.</string>
     <string name="type_nick_name_hint">Your nick name(2~15)</string>
+    <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
 
     <!-- String Array -->
 

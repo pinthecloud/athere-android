@@ -7,8 +7,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.SquareListMenuDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
+import com.pinthecloud.athere.fragment.SquareListMenuDrawerFragment;
 
 public class SquareListActivity extends AhActivity
 implements SquareListMenuDrawerFragment.NavigationDrawerCallbacks {

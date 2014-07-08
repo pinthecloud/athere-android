@@ -16,7 +16,7 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
  */
 public class SplashActivity extends AhActivity {
 
-	private final int SPLASH_TIME = 500;
+	private final int SPLASH_TIME = 300;
 	private PreferenceHelper pref;
 	
 	
@@ -35,9 +35,7 @@ public class SplashActivity extends AhActivity {
 
 				if (!isLoggedIn){
 					// New User
-//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
-					intent.setClass(SplashActivity.this, SquareListActivity.class);
-//					intent.setClass(SplashActivity.this, SquareChatActivity.class);
+					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
 				} else {
 					// Already logged in
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
