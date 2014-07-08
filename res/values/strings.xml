@@ -24,7 +24,6 @@
     <!-- Word -->
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="start">Start</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="delete">Delete</string>
@@ -34,6 +33,7 @@
     <string name="profile">Profile</string>
     <string name="gender">Gender</string>
     <string name="birth_year">Birth Year</string>
+    <string name="number_of_persons">Number of persons</string>
     
     <!-- Sentence -->
     <string name="bad_camera_message">Camera didn\'t work. Please try it again.</string>
@@ -43,7 +43,6 @@
     <string name="max_nick_name_message">Please type in less then 16 letters.</string>
     <string name="bad_nick_name_message">This is invalid nick name.</string>
     <string name="bad_gallery_message">You couldn\'t get image from gallery. Please try it again.</string>
-    <string name="type_nick_name_hint">Your nick name(2~15)</string>
     <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
 
     <!-- String Array -->

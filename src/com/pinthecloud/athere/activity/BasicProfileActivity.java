@@ -14,7 +14,7 @@ public class BasicProfileActivity extends AhActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_basic_profile);
-		
+
 		/*
 		 * Set Fragment to container
 		 */
@@ -27,9 +27,11 @@ public class BasicProfileActivity extends AhActivity{
 	}
 	
 	
-	// Callback from confirming dialog in fragment
+	/*
+	 * Callback from confirming dialog in fragment
+	 * Move to next page
+	 */
 	public void doPositiveClick() {
-		// Move to next page
 		Intent intent = new Intent(this, SquareListActivity.class);
 		startActivity(intent);
 		finish();

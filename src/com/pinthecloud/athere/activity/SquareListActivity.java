@@ -21,7 +21,8 @@ implements SquareListMenuDrawerFragment.NavigationDrawerCallbacks {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_list);
-
+		
+		
 		/*
 		 * Set up drawer and fragment and interactions.
 		 */

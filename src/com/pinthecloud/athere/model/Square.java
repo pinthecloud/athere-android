@@ -61,15 +61,22 @@ public class Square implements Parcelable {
 	public void setParticipants(int participants) {
 		this.participants = participants;
 	}
-
+	public int getDistance() {
+		return distance;
+	}
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+	
+	
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
 		dest.writeString(id);
 		dest.writeString(whoMade);
 		dest.writeString(name);
@@ -77,6 +84,8 @@ public class Square implements Parcelable {
 		dest.writeDouble(longitude);
 		dest.writeInt(participants);
 	}
+	
+	
 	public void readToParcel(Parcel in){
 		id = in.readString();
 		whoMade = in.readString();
@@ -86,6 +95,7 @@ public class Square implements Parcelable {
 		participants = in.readInt();
 	}
 	
+	
 	public static final Parcelable.Creator<Square> CREATOR = new Creator<Square>(){
 		public Square createFromParcel(Parcel in){
 			return new Square(in);
@@ -94,11 +104,4 @@ public class Square implements Parcelable {
 			return new Square[size];
 		}
 	};
-
-	public int getDistance() {
-		return distance;
-	}
-	public void setDistance(int distance) {
-		this.distance = distance;
-	}
 }

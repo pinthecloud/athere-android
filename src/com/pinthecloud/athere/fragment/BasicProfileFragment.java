@@ -103,7 +103,7 @@ public class BasicProfileFragment extends AhFragment{
 				
 				// Show confirming dialog
 				DialogFragment dialogFragment = BasicProfileCompleteDialog.newInstance(gender, birthYear);
-				dialogFragment.show(getFragmentManager(), AhGlobalVariable.DIALOG);
+				dialogFragment.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
 

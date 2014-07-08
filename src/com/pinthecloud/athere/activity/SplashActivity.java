@@ -30,18 +30,21 @@ public class SplashActivity extends AhActivity {
 
 			@Override
 			public void run() {
+				boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
+				boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+				
 				Intent intent = new Intent();
-				boolean isLoggedIn = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
-
-				if (!isLoggedIn){
+				if (!isLoggedInUser){
 					// New User
 					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
-				} else {
+				} else if(!isLooggedInSquare){
 					// Already logged in
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
+				} else{
+					// Has entered a square
+					intent.setClass(SplashActivity.this, SquareChatActivity.class);
 				}
 				startActivity(intent);
-				finish();
 			}
 		}, SPLASH_TIME);
 	}

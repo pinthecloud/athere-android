@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
@@ -20,10 +21,6 @@ import com.pinthecloud.athere.model.Square;
 
 public class SquareListFragment extends AhFragment{
 
-	/**
-	 * The fragment argument representing the section number for this
-	 * fragment.
-	 */
 	private static final String ARG_SECTION_NUMBER = "ARG_SECTION_NUMBER";
 
 	private SquareListAdapter squareListAdapter;
@@ -55,7 +52,7 @@ public class SquareListFragment extends AhFragment{
 		 */
 		squareListView = (ListView)view.findViewById(R.id.square_list_frag_list);
 
-		
+
 		/*
 		 * Set temp square items
 		 */
@@ -64,8 +61,8 @@ public class SquareListFragment extends AhFragment{
 			square.setName("Example" + i);
 			squares.add(square);	
 		}
-		
-		
+
+
 		/*
 		 * Set square list view
 		 */
@@ -77,6 +74,7 @@ public class SquareListFragment extends AhFragment{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent intent = new Intent(context, SquareProfileActivity.class);
+				intent.putExtra(AhGlobalVariable.SQUARE_KEY, squares.get(position));
 				startActivity(intent);
 			}
 		});
