@@ -8,8 +8,10 @@ public class AhGlobalVariable{
 	public static final int OK_CANCEL_MODE = 1;
 	public static final int MALE = 1;
 	public static final int FEMALE = 2;
-
+	public static final int RIGHT_ANGLE = 90;
+	
 	// String
+	public static final String LOG_TAG = "Debug";
 	public static final String APP_NAME = "Chupa";
 	public static final String PROFILE_IMAGE_FILE_NAME = "PROFILE_IMAGE.png";
 

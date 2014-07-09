@@ -18,9 +18,9 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
-import com.pinthecloud.athere.AhEntityCallback;
 import com.pinthecloud.athere.AhException;
-import com.pinthecloud.athere.AhListCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
