@@ -2,7 +2,6 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,32 +13,16 @@ import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.model.Square;
 
 public class SquareListFragment extends AhFragment{
 
-	private static final String ARG_SECTION_NUMBER = "ARG_SECTION_NUMBER";
-
 	private SquareListAdapter squareListAdapter;
 	private ListView squareListView;
 
 	private ArrayList<Square> squares = new ArrayList<Square>();
-
-
-	/**
-	 * Returns a new instance of this fragment for the given section
-	 * number.
-	 */
-	public static SquareListFragment newInstance(int sectionNumber) {
-		SquareListFragment fragment = new SquareListFragment();
-		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-		fragment.setArguments(args);
-		return fragment;
-	}
 
 
 	@Override
@@ -80,12 +63,5 @@ public class SquareListFragment extends AhFragment{
 		});
 
 		return view;
-	}
-
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		((SquareListActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
 	}
 }

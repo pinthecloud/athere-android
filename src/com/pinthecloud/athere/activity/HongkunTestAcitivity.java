@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.pinthecloud.athere.AhListCallback;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 

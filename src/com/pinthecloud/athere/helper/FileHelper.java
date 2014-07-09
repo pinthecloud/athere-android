@@ -17,7 +17,7 @@ import android.os.Environment;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 
-public class FileUtil {
+public class FileHelper {
 	
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
