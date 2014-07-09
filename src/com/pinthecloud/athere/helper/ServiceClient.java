@@ -63,6 +63,8 @@ public class ServiceClient {
 		squareTable = mClient.getTable(Square.class);
 	}
 	
+	public MobileServiceClient getClient() { return mClient; }
+	
 	public Context getContext() { return context; }
 	
 	public void isAvailableNickName(User user, final AhEntityCallback<Boolean> callback) throws AhException {
@@ -156,5 +158,9 @@ public class ServiceClient {
 				}
 			}
 		});
+	}
+	
+	public void enterSquare(Square square, final AhEntityCallback<Square> callback) throws AhException {
+		
 	}
 }

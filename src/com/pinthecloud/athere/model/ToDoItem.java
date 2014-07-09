@@ -25,6 +25,17 @@ public class ToDoItem implements Parcelable {
 	 */
 	@com.google.gson.annotations.SerializedName("complete")
 	private boolean mComplete;
+	
+	@com.google.gson.annotations.SerializedName("handle")
+    private String mHandle;
+
+    public String getHandle() {
+        return mHandle;
+    }
+
+    public final void setHandle(String handle) {
+        mHandle = handle;
+    }
 
 	/**
 	 * ToDoItem constructor
