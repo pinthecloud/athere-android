@@ -44,6 +44,7 @@
     <string name="bad_nick_name_message">This is invalid nick name.</string>
     <string name="bad_gallery_message">You couldn\'t get image from gallery. Please try it again.</string>
     <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
+    <string name="no_profile_picture_message">Please take a profile picture.</string>
 
     <!-- String Array -->
 

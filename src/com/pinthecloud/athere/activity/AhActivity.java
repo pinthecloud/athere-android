@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.ServiceClient;
-import com.microsoft.windowsazure.notifications.NotificationsManager;
 
 public class AhActivity extends Activity {
 	

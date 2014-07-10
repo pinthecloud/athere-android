@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +19,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -47,12 +51,17 @@ public class SquareProfileFragment extends AhFragment{
 
 	private Camera mCamera;
 	private CameraPreview mCameraPreview;
-	private FrameLayout cameraLayout;
-	private ImageView profileImageView;
+	private FrameLayout cameraView;
+	private RelativeLayout cameraLayout;
+	private ImageView profilePictureView;
 	private Button cameraButton;
 	private Button selfCameraButton;
 
+	private int cameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 	private boolean takePicture = true;
+
+	private OrientationEventListener oel;
+	private int rotationDegree = 0;
 
 	private LinearLayout profileInfoLayout;
 	private EditText nickNameEditText;
@@ -67,6 +76,10 @@ public class SquareProfileFragment extends AhFragment{
 		public void onPictureTaken(byte[] data, Camera camera){
 			if (data != null){
 				try {
+					// Stop preview before processing image
+					mCamera.stopPreview();
+
+
 					// Get file from taken data
 					File pictureFile = FileHelper.getOutputMediaFile(FileHelper.MEDIA_TYPE_IMAGE);
 					Uri pictureFileUri = Uri.fromFile(pictureFile);
@@ -76,21 +89,30 @@ public class SquareProfileFragment extends AhFragment{
 					FileOutputStream fos = new FileOutputStream(pictureFile);
 					fos.write(data);
 					fos.close();
+					Bitmap pictureBitmap = BitmapFactory.decodeStream
+							(context.getContentResolver().openInputStream(pictureFileUri));
 
 
 					// Rotate picture by orientation
-					// Save cropped and rotated bitmap image
-					Bitmap profileImageBitmap = BitmapFactory.decodeStream
-							(context.getContentResolver().openInputStream(pictureFileUri));
-					profileImageBitmap = BitmapHelper.rotate(profileImageBitmap, AhGlobalVariable.RIGHT_ANGLE);
-					int width = profileImageBitmap.getWidth();
-					int height = profileImageBitmap.getHeight();
-					profileImageBitmap = BitmapHelper.crop(profileImageBitmap, width, height/2);
-					FileHelper.saveImageToInternalStorage(context, profileImageBitmap);
+					pictureBitmap = BitmapHelper.rotate(pictureBitmap, rotationDegree);
 
 
-					// Stop preview and set button to re take
-					mCamera.stopPreview();
+					// Crop picture
+					int width = cameraLayout.getWidth();
+					int height = cameraLayout.getHeight();
+					pictureBitmap = BitmapHelper.crop(pictureBitmap, rotationDegree, width, height);
+
+
+					// Set taken picture to view
+					profilePictureView.setImageBitmap(pictureBitmap);
+
+
+					// Save picture to internal storage
+					FileHelper.saveImageToInternalStorage(context, pictureBitmap);
+
+
+					// Release camera and set button to re take
+					releaseCameraAndRemoveView();
 					takePicture = false;
 				} catch (FileNotFoundException e) {
 					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment mPicutureListener : " + e.getMessage());
@@ -107,6 +129,7 @@ public class SquareProfileFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 		pref = new PreferenceHelper(context);
 
+		// Get parameter from previous activity intent
 		intent = getActivity().getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
 	}
@@ -121,11 +144,12 @@ public class SquareProfileFragment extends AhFragment{
 		/*
 		 * Find UI component
 		 */
-		cameraLayout = (FrameLayout) view.findViewById(R.id.square_profile_frag_camera_view);
+		cameraView = (FrameLayout) view.findViewById(R.id.square_profile_frag_camera_view);
+		cameraLayout = (RelativeLayout) view.findViewById(R.id.square_profile_frag_camera_layout);
 		cameraButton = (Button) view.findViewById(R.id.square_profile_frag_camera_button);
 		selfCameraButton = (Button) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
-		profileImageView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_image);
+		profilePictureView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_picture);
 		nickNameEditText = (EditText)view.findViewById(R.id.square_profile_frag_nick_name_edit_text);
 		completeButton = (Button) view.findViewById(R.id.square_profile_frag_start_button);
 		numberPicker = (NumberPicker) view.findViewById(R.id.square_profile_frag_number_picker);
@@ -170,25 +194,34 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void onClick(View v) {
 				/*
+				 * Check whether user took profile picture or not
 				 * Check nick name edit text and save setting
 				 */
-				String message = checkNickNameEditText();
-				if(!message.equals("")){
-					// Unproper nick name
-					// Show warning toast for each situation
+				if(takePicture){
+					// Has to take profile picture
+					String message = getResources().getString(R.string.no_profile_picture_message);
 					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
-				} else{
-					// Proper nick name
-					// Save this setting and go to next activity
-					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-					pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+				} else {
+					String message = checkNickNameEditText();
+					if(!message.equals("")){
+						// Unproper nick name
+						// Show warning toast for each situation
+						Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+					} else{
+						// Proper nick name
+						// Save this setting and go to next activity
+						pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
+						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 
-					intent.setClass(context, SquareChatActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
+						intent.setClass(context, SquareChatActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
+					}
 				}
 			}
 		});
@@ -202,11 +235,7 @@ public class SquareProfileFragment extends AhFragment{
 							null, // Raw 이미지 생성
 							mPicutureListener); // JPE 이미지 생성
 				}else{
-					if(mCamera != null){
-						mCamera.startPreview();
-					}else{
-						openCameraAndSetView();
-					}
+					openCameraAndSetView();
 					takePicture = true;
 				}
 			}
@@ -215,7 +244,16 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
-				// TODO convert camera mode to selfi
+				if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
+					cameraFacing = CameraInfo.CAMERA_FACING_FRONT;
+				}else{
+					cameraFacing = CameraInfo.CAMERA_FACING_BACK;
+				}
+
+				// Set new camera by facing direction
+				releaseCameraAndRemoveView();
+				openCameraAndSetView();
+				takePicture = true;
 			}
 		});
 
@@ -227,13 +265,15 @@ public class SquareProfileFragment extends AhFragment{
 	public void onResume() {
 		super.onResume();
 
+		// Set camera for taking picture OR
+		// Set taken picture to image view
 		if(takePicture){
 			openCameraAndSetView();
 		}else{
 			try {
 				// Set taken picture to view
-				Bitmap profileImageBitmap = FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_IMAGE_FILE_NAME);
-				profileImageView.setImageBitmap(profileImageBitmap);
+				Bitmap pictureBitmap = FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_FILE_NAME);
+				profilePictureView.setImageBitmap(pictureBitmap);
 			} catch (FileNotFoundException e) {
 				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onResume : " + e.getMessage());
 			}
@@ -245,6 +285,8 @@ public class SquareProfileFragment extends AhFragment{
 	public void onPause() {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onPause");
 		super.onPause();
+
+		// Release camera
 		releaseCameraAndRemoveView();
 	}
 
@@ -284,22 +326,56 @@ public class SquareProfileFragment extends AhFragment{
 
 	/*
 	 * Create our Preview view and set it as the content of our activity.
+	 * Create orientation event listener
 	 */
 	private void openCameraAndSetView(){
-		mCamera = CameraHelper.getCameraInstance();
+		mCamera = CameraHelper.getCameraInstance(cameraFacing);
 		mCameraPreview = new CameraPreview(context, mCamera);
-		cameraLayout.addView(mCameraPreview);
-		profileImageView.setImageBitmap(null);
+		cameraView.addView(mCameraPreview);
+		profilePictureView.setImageBitmap(null);
 		profileInfoLayout.bringToFront();
+
+		// Set camera orientation event listener
+		oel = new OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL){
+
+			@Override
+			public void onOrientationChanged(int orientation) {
+				Log.d(AhGlobalVariable.LOG_TAG, "onOrientationChanged");
+				if (orientation == ORIENTATION_UNKNOWN) return;
+
+				// Check whether it is possible to detect or not
+				if (oel.canDetectOrientation()){
+					// Get picture rotation orientation
+					CameraInfo info = new CameraInfo();
+					int cameraId = CameraHelper.findFrontFacingCameraID(cameraFacing);
+					Camera.getCameraInfo(cameraId, info);
+					orientation = (orientation + 45) / 90 * 90;
+					int rotation = 0;
+					if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+						rotation = (info.orientation - orientation + 360) % 360;
+					} else {  // back-facing camera
+						rotation = (info.orientation + orientation) % 360;
+					}
+
+					// Set the picture rotation orientation
+					Log.d(AhGlobalVariable.LOG_TAG, "rotation" + rotation);
+					rotationDegree = rotation;
+				}
+			}
+		};
+		oel.enable();
 	}
 
 
 	/*
-	 * Remove our Preview view and release camera
+	 * Remove our Preview view and release camera and orientation event listener
 	 */
 	private void releaseCameraAndRemoveView(){
 		if(mCamera != null){
-			cameraLayout.removeAllViews();
+			oel.disable();
+			oel = null;
+
+			cameraView.removeAllViews();
 			mCamera.release();
 			mCamera = null;	
 		}

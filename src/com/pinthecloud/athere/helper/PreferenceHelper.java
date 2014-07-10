@@ -13,6 +13,7 @@ public class PreferenceHelper {
 	private final int DEFAULT_INT = 0;
 	private final boolean DEFAULT_BOOLEAN = false;
 	
+	
 	public PreferenceHelper(Context context){
 		this.pref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
@@ -46,9 +47,6 @@ public class PreferenceHelper {
 	public boolean getBoolean(String key){
 		return pref.getBoolean(key, DEFAULT_BOOLEAN);
 	}
-	
-	
-	
 
 	
 	// @Not Using Method

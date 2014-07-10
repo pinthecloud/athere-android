@@ -87,7 +87,16 @@ public class BitmapHelper {
 	}
 
 
-	public static Bitmap crop(Bitmap bitmap, int width, int height) {
-		return Bitmap.createBitmap(bitmap, 0, 0, width, height);
+	public static Bitmap crop(Bitmap bitmap, int rotationDegree, int width, int height) {
+		int bitmapWidth = bitmap.getWidth();
+		int bitmapHeight = bitmap.getHeight();
+		int xOffset = 0;
+		int yOffset = 0;
+		if(rotationDegree == AhGlobalVariable.ANGLE_180){
+			xOffset = bitmapWidth - width;
+		} else if(rotationDegree == AhGlobalVariable.ANGLE_270){
+			yOffset = bitmapHeight - height;
+		}
+		return Bitmap.createBitmap(bitmap, xOffset, yOffset, width, height);
 	}
 }

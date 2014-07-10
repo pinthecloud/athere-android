@@ -18,14 +18,15 @@
         android:orientation="vertical" >
 
         <RelativeLayout
+            android:id="@+id/square_profile_frag_camera_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="80" >
+            android:layout_weight="2" >
 
             <ImageView
-                android:id="@+id/square_profile_frag_profile_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/square_profile_frag_profile_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/des_profile_image" />
 
             <Button
@@ -41,14 +42,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true" />
-
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/square_profile_frag_profile_info_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="109"
+            android:layout_weight="3"
             android:background="#ffffff"
             android:gravity="center"
             android:orientation="vertical" >
@@ -69,7 +69,7 @@
                 <NumberPicker
                     android:id="@+id/square_profile_frag_number_picker"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/number_picker_height"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true" />
 
@@ -87,9 +87,7 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="@string/complete" />
-
         </LinearLayout>
-
     </LinearLayout>
 
 </FrameLayout>

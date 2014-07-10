@@ -14,7 +14,7 @@ public class SquareProfileActivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_profile);
 
-		
+
 		/*
 		 * Set Fragment to container
 		 */

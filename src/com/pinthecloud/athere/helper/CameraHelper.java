@@ -25,10 +25,17 @@ public class CameraHelper {
 
 
 	/** A safe way to get an instance of the Camera object. */
-	public static Camera getCameraInstance(){
+	public static Camera getCameraInstance(int mode){
 		Camera c = null;
 		try {
-			c = Camera.open(); // attempt to get a Camera instance
+			switch(mode){
+			case Camera.CameraInfo.CAMERA_FACING_BACK:
+				c = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK); // attempt to get a Camera instance
+				break;
+			case Camera.CameraInfo.CAMERA_FACING_FRONT:
+				c = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT); // attempt to get a Camera instance
+				break;
+			}
 		}
 		catch (Exception e){
 			Log.d(AhGlobalVariable.LOG_TAG, "Error Camera is not available(in use or does not exist): " + e.getMessage());
@@ -41,34 +48,33 @@ public class CameraHelper {
 		CameraInfo info = new CameraInfo();
 		Camera.getCameraInfo(cameraId, info);
 		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-		int degrees = 0;
+		int degree = 0;
 		switch (rotation) {
-		case Surface.ROTATION_0: degrees = 0; break;
-		case Surface.ROTATION_90: degrees = 90; break;
-		case Surface.ROTATION_180: degrees = 180; break;
-		case Surface.ROTATION_270: degrees = 270; break;
+		case Surface.ROTATION_0: degree = 0; break;
+		case Surface.ROTATION_90: degree = 90; break;
+		case Surface.ROTATION_180: degree = 180; break;
+		case Surface.ROTATION_270: degree = 270; break;
 		}
 
-		int result;
+		int result = 0;
 		if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-			result = (info.orientation + degrees) % 360;
+			result = (info.orientation + degree) % 360;
 			result = (360 - result) % 360;  // compensate the mirror
 		} else {  // back-facing
-			result = (info.orientation - degrees + 360) % 360;
+			result = (info.orientation - degree + 360) % 360;
 		}
 		camera.setDisplayOrientation(result);
 	}
 
 
-	public static int findFrontFacingCameraID() {
-		int cameraId = -1;
-
+	public static int findFrontFacingCameraID(int facing) {
 		// Search for the front facing camera
+		int cameraId = -1;
 		int numberOfCameras = Camera.getNumberOfCameras();
 		for (int i = 0; i < numberOfCameras; i++) {
 			CameraInfo info = new CameraInfo();
 			Camera.getCameraInfo(i, info);
-			if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+			if (info.facing == facing) {
 				cameraId = i;
 				break;
 			}
