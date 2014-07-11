@@ -5,13 +5,20 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import com.pinthecloud.athere.model.User;
+
 public class PrefHelper {
 	
 	private SharedPreferences pref;
 	
-	private final String DEFAULT_STRING = null;
-	private final int DEFAULT_INT = 0;
-	private final boolean DEFAULT_BOOLEAN = false;
+	public static final String DEFAULT_STRING = null;
+	public static final int DEFAULT_INT = 0;
+	public static final boolean DEFAULT_BOOLEAN = false;
+	
+	private final String NICK_KEY = "NICK_KEY";
+	private final String IS_MAIL_KEY = "IS_MAIL_KEY";
+	private final String AGE_KEY = "AGE_KEY";
+	private final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
 	
 	public PrefHelper(Context context){
 		this.pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -47,9 +54,39 @@ public class PrefHelper {
 		return pref.getBoolean(key, DEFAULT_BOOLEAN);
 	}
 	
+	public boolean putUser(String nickName, boolean isMale, int birthYear, String registrationId) {
+		Editor editor = pref.edit();
+		
+		editor.putString(NICK_KEY, nickName);
+		editor.putBoolean(IS_MAIL_KEY, isMale);
+		editor.putInt(AGE_KEY, DEFAULT_INT);
+		editor.putString(REGISTRATION_ID_KEY, registrationId);
+		
+		return editor.commit();
+	}
 	
+	public User getUser() {
+		
+		User u = new User();
+		u.setNickName(pref.getString(NICK_KEY, DEFAULT_STRING));
+		u.setMale(pref.getBoolean(IS_MAIL_KEY, DEFAULT_BOOLEAN));
+		u.setAge((pref.getInt(AGE_KEY, DEFAULT_INT)));
+		u.setRegistrationId(pref.getString(REGISTRATION_ID_KEY, DEFAULT_STRING));
+		
+		return u;
+	}
 	
+	public boolean putRegistrationId(String id) {
+		Editor editor = pref.edit();
+		
+		editor.putString(REGISTRATION_ID_KEY, id);
+		
+		return editor.commit();
+	}
 
+	public String getRegistrationId() {
+		return pref.getString(REGISTRATION_ID_KEY, DEFAULT_STRING);
+	}
 	
 	// @Not Using Method
 //	public <T> boolean putPreference(String id, T obj) {

@@ -1,24 +1,32 @@
 package com.pinthecloud.athere.activity;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
-import com.microsoft.windowsazure.notifications.NotificationsManager;
+import com.pinthecloud.athere.AhEntityCallback;
+import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PrefHelper;
-import com.pinthecloud.athere.model.MyHandler;
+import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AhMessage.MESSAGE_TYPE;
 import com.pinthecloud.athere.model.ToDoItem;
-import com.pinthecloud.athere.model.User;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn;
 	int count = 0;
+	StringBuilder squareId = new StringBuilder();
 	
 	private MobileServiceTable<ToDoItem> mToDoTable;
 	private MobileServiceClient mClient;
@@ -34,55 +42,176 @@ public class HongkunTestAcitivity extends AhActivity {
 		mClient = serviceClient.getClient();
 		mToDoTable = mClient.getTable(ToDoItem.class);
 		
-		NotificationsManager.handleNotifications(this, SENDER_ID, MyHandler.class);
+		//NotificationsManager.handleNotifications(this, SENDER_ID, MyHandler.class);
+		
+		(new AsyncTask<Context, Void, String>(){
+
+			@Override
+			protected String doInBackground(Context... arg0) {
+				// TODO Auto-generated method stub
+				
+				GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(arg0[0]);
+				String registrationId = "";
+				try {
+					registrationId = gcm.register(SENDER_ID);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return registrationId;
+			}
+			
+			@Override
+			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				serviceClient.setProfile("BobNick", true, 1989, result);
+				Log.e("ERROR","succeed : " + result);
+			}
+			
+		}).execute(this);
+		
+		
+		
 	}
 	
 	public void addItem(View view) {
-		final User user = new User();
 		
-		user.setNickName("nick");
-		user.setMobileId("mobildId");
-		user.setProfilePic("pic");
-		ToDoItem item = new ToDoItem();
-		item.setComplete(true);
-		item.setText("TESTING!!!!!!!");
-		
-		item.setHandle(MyHandler.getHandle());
-		PrefHelper pref = new PrefHelper(this);
-		pref.putInt("sdf",3);
-		pref.getInt("sdf");
-		
-		//Location loc = new Location(provider);
-		
-//		serviceClient.getSquareList(null, new AhListCallback<Square>() {
-//			
+//		new AsyncTask<Void, Void, String>(){
+//
 //			@Override
-//			public void onCompleted(List<Square> list, int count) {
+//			protected String doInBackground(Void... params) {
 //				// TODO Auto-generated method stub
 //				
+//				return serviceClient.createSquareWithoutFuture();
 //			}
-//		});
+//			
+//			@Override
+//			protected void onPostExecute(String result) {
+//				// TODO Auto-generated method stub
+//				super.onPostExecute(result);
+//				
+//				Log.e("ERROR", "onPost Result : " + result);
+//			}
+//			
+//		}.execute();
 		
-		item.setComplete(true);
-		
-		mToDoTable.insert(item, new TableOperationCallback<ToDoItem>() {
-
-			public void onCompleted(ToDoItem entity, Exception exception, ServiceFilterResponse response) {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				String result = serviceClient.createSquareWithoutFuture();
 				
-				if (exception == null) {
-					if (!entity.isComplete()) {
-						//mAdapter.add(entity);
-						Log.e("ERROR","in callback");
-						//latch.countDown();
-					}
-				} else {
-					Log.e("ERROR", exception.toString());
-					Log.e("ERROR","ERROR in callback");
-					//createAndShowDialog(exception, "Error");
-				}
+				Log.e("ERROR", "result : " + result);
+			}
+		}).start();
+			
+		
+		//#######################################################v
+		
+//		new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				Future<String> result = serviceClient.createSquareAsync();
+//				String resultStr = "";
+//				try {
+//					resultStr = result.get();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (ExecutionException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//				Log.e("ERROR","result of Future : " + resultStr);
+//			}
+//		}).start();
+		
+		//#######################################################v
+		
+//		final Object log = new Object();
+//		
+//		new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				serviceClient.createSquareAsync("squareName", 10.0, 10.0, new AhEntityCallback<Square>() {
+//					
+//					@Override
+//					public void onCompleted(Square entity) {
+//						// TODO Auto-generated method stub
+//						squareId.append(entity.getId());
+//						Log.e("ERROR", "addItem01 OK : " + entity.getId());
+//						synchronized (log) {
+//							log.notify();
+//						}
+//						
+//					}
+//				});
+//				
+//				Log.e("ERROR","before sync");
+//				
+//				synchronized (log) {
+//					try {
+//						log.wait();
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//				Log.e("ERROR","after sync");
+//				
+//			}
+//		}).start();
+//		
+//		Log.e("ERROR","end addItem");
+		
+	}
+	
+	public void addItem02(View view) {
+		 
+		Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.splash_logo);
+		serviceClient.enterSquareAsync(squareId.toString(), img, 3, "mobileId", new AhEntityCallback<Boolean>() {
 
+			@Override
+			public void onCompleted(Boolean entity) {
+				// TODO Auto-generated method stub
+				Log.e("ERROR", "addItem02 OK : " + entity);
+				
 			}
 		});
-
+		Thread t = new Thread();
+		
+	}
+	
+	public void addItem03(View view) {
+		 
+		AhMessage message = new AhMessage();
+		
+		message.setType(MESSAGE_TYPE.SQUARE);
+		message.setContent("message contents");
+		message.setSender("bobNick");
+		message.setSenderId(pref.getRegistrationId());
+		message.setReceiver("receiver name");
+		message.setReceiverId(squareId.toString());
+		
+		try{
+			serviceClient.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+				
+				@Override
+				public void onCompleted(AhMessage entity) {
+					// TODO Auto-generated method stub
+					Log.e("ERROR","addItem03 OK : ");
+				}
+			});
+		} catch (AhException ex) {
+			ex.printStackTrace();
+		}
+		
 	}
 }

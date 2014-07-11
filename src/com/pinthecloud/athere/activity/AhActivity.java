@@ -3,7 +3,6 @@ package com.pinthecloud.athere.activity;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.helper.PrefHelper;
 import com.pinthecloud.athere.helper.ServiceClient;
 

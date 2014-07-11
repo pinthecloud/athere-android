@@ -18,6 +18,12 @@ public class AhException extends RuntimeException {
 		this.message = message;
 	}
 	
+	public AhException(String string) {
+		// TODO Auto-generated constructor stub
+		this.ex = new Exception(string);
+		this.message = "";
+	}
+
 	public String getMessage() {
 		return message;
 	}

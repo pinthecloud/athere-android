@@ -15,9 +15,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="55dp"
         android:layout_toRightOf="@+id/textView1"
         android:onClick="addItem"
-        android:text="Button" />
+        android:text="step01" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="16dp"
+        android:onClick="addItem02"
+        android:text="step02" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_centerVertical="true"
+        android:onClick="addItem03"
+        android:text="step03" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="21dp"
+        android:onClick="addItem04"
+        android:text="step04" />
 
 </RelativeLayout>

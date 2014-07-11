@@ -9,16 +9,33 @@ public class User {
 	private String profilePic;
 	@com.google.gson.annotations.SerializedName("mobileId")
 	private String mobileId;
+	@com.google.gson.annotations.SerializedName("registrationId")
+	private String registrationId;
+	@com.google.gson.annotations.SerializedName("isMale")
+	private boolean isMale;
+	@com.google.gson.annotations.SerializedName("companyNum")
+	private int companyNum;
+	@com.google.gson.annotations.SerializedName("age")
+	private int age;
+	@com.google.gson.annotations.SerializedName("squareId")
+	private String squareId;
 	
 	public User() {
-		// TODO Auto-generated constructor stub
+		
 	}
-	public User(String id, String nickName, String profilePic, String mobileId) {
+	public User(String id, String nickName, String profilePic, String mobileId,
+			String registrationId, boolean isMale, int companyNum, int age,
+			String squareId) {
 		super();
 		this.id = id;
 		this.nickName = nickName;
 		this.profilePic = profilePic;
 		this.mobileId = mobileId;
+		this.registrationId = registrationId;
+		this.isMale = isMale;
+		this.companyNum = companyNum;
+		this.age = age;
+		this.squareId = squareId;
 	}
 	public String getId() {
 		return id;
@@ -44,14 +61,36 @@ public class User {
 	public void setMobileId(String mobileId) {
 		this.mobileId = mobileId;
 	}
-	
-	@Override
-	public boolean equals(Object o) {
-		return true;
+	public String getRegistrationId() {
+		return registrationId;
+	}
+	public void setRegistrationId(String registrationId) {
+		this.registrationId = registrationId;
+	}
+	public boolean isMale() {
+		return isMale;
+	}
+	public void setMale(boolean isMale) {
+		this.isMale = isMale;
+	}
+	public int getCompanyNum() {
+		return companyNum;
+	}
+	public void setCompanyNum(int companyNum) {
+		this.companyNum = companyNum;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getSquareId() {
+		return squareId;
+	}
+	public void setSquareId(String squareId) {
+		this.squareId = squareId;
 	}
 	
-	@Override
-	public String toString() {
-		return getNickName();
-	}
+	
 }
