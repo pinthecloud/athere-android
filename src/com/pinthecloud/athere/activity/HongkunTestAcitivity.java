@@ -103,74 +103,11 @@ public class HongkunTestAcitivity extends AhActivity {
 				// TODO Auto-generated method stub
 				String result = serviceClient.createSquareWithoutFuture();
 				
-				Log.e("ERROR", "result : " + result);
+				squareId.append(result);
+				Log.e("ERROR", "squareId : "+result);
 			}
 		}).start();
 			
-		
-		//#######################################################v
-		
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				Future<String> result = serviceClient.createSquareAsync();
-//				String resultStr = "";
-//				try {
-//					resultStr = result.get();
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (ExecutionException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				
-//				Log.e("ERROR","result of Future : " + resultStr);
-//			}
-//		}).start();
-		
-		//#######################################################v
-		
-//		final Object log = new Object();
-//		
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				serviceClient.createSquareAsync("squareName", 10.0, 10.0, new AhEntityCallback<Square>() {
-//					
-//					@Override
-//					public void onCompleted(Square entity) {
-//						// TODO Auto-generated method stub
-//						squareId.append(entity.getId());
-//						Log.e("ERROR", "addItem01 OK : " + entity.getId());
-//						synchronized (log) {
-//							log.notify();
-//						}
-//						
-//					}
-//				});
-//				
-//				Log.e("ERROR","before sync");
-//				
-//				synchronized (log) {
-//					try {
-//						log.wait();
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//				Log.e("ERROR","after sync");
-//				
-//			}
-//		}).start();
-//		
-//		Log.e("ERROR","end addItem");
-		
 	}
 	
 	public void addItem02(View view) {
@@ -185,8 +122,6 @@ public class HongkunTestAcitivity extends AhActivity {
 				
 			}
 		});
-		Thread t = new Thread();
-		
 	}
 	
 	public void addItem03(View view) {

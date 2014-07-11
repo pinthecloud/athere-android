@@ -16,8 +16,11 @@ public class AhBroadCastReceiver extends WakefulBroadcastReceiver {
 		
 		Bundle extra = intent.getExtras();
 		
+		Log.e("ERROR", "received something!");
+		
 		Log.e("ERROR", "message : "+extra.getString("message"));
-		Log.e("ERROR", "other arg : "+extra.getString("testplz"));
+		
+		
 		
 		// Explicitly specify that GcmIntentService will handle the intent.
         ComponentName comp = new ComponentName(context.getPackageName(),

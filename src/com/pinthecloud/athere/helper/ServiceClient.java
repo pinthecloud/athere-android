@@ -14,6 +14,8 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Log;
 
+import com.google.android.gms.internal.ca;
+import com.google.android.gms.wallet.Cart;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -38,6 +40,7 @@ public class ServiceClient {
 	private String APP_URL = "https://athere.azure-mobile.net/";
 	private String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
 	
+	Object lock = new Object();
 	/**
 	 * Activity UI variables
 	 */
@@ -126,26 +129,69 @@ public class ServiceClient {
 		});
 	}
 	
+	public List<Square> getSquareListSync(Location loc) throws AhException {
+		return this.getSquareListSync(loc.getLatitude(), loc.getLongitude());
+	}
+	
+	public List<Square> getSquareListSync(double latitude, double longitude) throws AhException {
+		final AhCarrier<List<Square>> carrier = new AhCarrier<List<Square>>();
+		JsonObject jo = new JsonObject();
+		jo.addProperty("currentLatitude", latitude);
+		jo.addProperty("currentLongtitude", longitude);
+		
+		Gson g = new Gson();
+		JsonElement json = g.fromJson(jo, JsonElement.class);
+		
+		mClient.invokeApi("getnearsquare", json, new ApiJsonOperationCallback() {
+			
+			@Override
+			public void onCompleted(JsonElement json, Exception exception,
+					ServiceFilterResponse response) {
+				// TODO Auto-generated method stub
+				if ( exception == null) {
+					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
+					if (list == null) throw new AhException(exception, "getSquareList");
+					carrier.load(list);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "getSquareListAsync");
+				}
+			}
+		});
+		
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return carrier.getItem();
+	}
+	
+	@Deprecated
 	public String createSquareWithoutFuture() {
 		final ServiceClient _this = this;
 		final StringBuilder sb = new StringBuilder();
 		
-		Log.e("ERROR","start create--withoutFuture");
 		final Object log = new Object();
 		_this.createSquareAsync("squareName", 10.0, 10.0, new AhEntityCallback<Square>() {
 			
 			@Override
 			public void onCompleted(Square entity) {
 				// TODO Auto-generated method stub
-				sb.append("return String");
-				Log.e("ERROR","on complete");
+				sb.append(entity.getId());
 				synchronized (log) {
 					log.notify();
 				}
 				
 			}
 		});
-		Log.e("ERROR","before sync");
+		
 		synchronized (log) {
 			try {
 				log.wait();
@@ -154,48 +200,7 @@ public class ServiceClient {
 				e.printStackTrace();
 			}
 		}
-		Log.e("ERROR","after sync");
 		return sb.toString();
-	}
-	
-	public Future<String> createSquareAsync() {
-		ExecutorService pool = Executors.newFixedThreadPool(10);
-		final ServiceClient _this = this;
-		final StringBuilder sb = new StringBuilder();
-		Log.e("ERROR","start submit");
-		return pool.submit(new Callable<String>() {
-
-			@Override
-			public String call() throws Exception {
-				// TODO Auto-generated method stub
-				Log.e("ERROR","start call");
-				final Object log = new Object();
-				_this.createSquareAsync("squareName", 10.0, 10.0, new AhEntityCallback<Square>() {
-					
-					@Override
-					public void onCompleted(Square entity) {
-						// TODO Auto-generated method stub
-						sb.append("return String");
-						Log.e("ERROR","on complete");
-						synchronized (log) {
-							log.notify();
-						}
-						
-					}
-				});
-				Log.e("ERROR","before sync");
-				synchronized (log) {
-					try {
-						log.wait();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				Log.e("ERROR","after sync");
-				return sb.toString();
-			}
-		});
 	}
 	
 	public void createSquareAsync(String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
@@ -227,6 +232,53 @@ public class ServiceClient {
 				}
 			}
 		});
+	}
+	
+	public Square createSquareSync(String name, double latitude, double longitude) throws AhException {
+		PrefHelper pref = new PrefHelper(context);
+		String whoMade = pref.getRegistrationId();
+		
+		if (whoMade == PrefHelper.DEFAULT_STRING) {
+			throw new AhException("createSquare NO Registration");
+		}
+		Square square = new Square();
+		
+		square.setName(name);
+		square.setLatitude(latitude);
+		square.setLongitude(longitude);
+		square.setWhoMade(whoMade);
+		
+		return this.createSquareSync(square);
+	}
+	
+	public Square createSquareSync(Square square) throws AhException {
+		final AhCarrier<Square> carrier = new AhCarrier<Square>();
+		
+		squareTable.insert(square, new TableOperationCallback<Square>() {
+
+			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
+				
+				if (exception == null) {
+					carrier.load(entity);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "createSquareAsync");
+				}
+			}
+		});
+		
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return carrier.getItem();
 	}
 	
 //	public void updateSquareAsync(Square square, final AhEntityCallback<Square> callback) throws AhException {
@@ -267,25 +319,48 @@ public class ServiceClient {
 				}
 			}
 		});
+	}
+	
+	public boolean enterSquareSync(String squareId, Bitmap img, int companyNum, String mobileId) throws AhException {
+		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
+		PrefHelper pref = new PrefHelper(context);
+		User user = pref.getUser();
 		
-//		JsonElement json = null;
-//		
-//		mClient.invokeApi("enter_square", json, new ApiJsonOperationCallback() {
-//			
-//			@Override
-//			public void onCompleted(JsonElement json, Exception exception,
-//					ServiceFilterResponse response) {
-//				// TODO Auto-generated method stub
-//				if ( exception == null) {
-//					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
-//					if (list == null) throw new AhException(exception, "getSquareList");
-//					callback.onCompleted(list, list.size());
-//					
-//				} else {
-//					throw new AhException(exception, "enterSquareAsync");
-//				}
-//			}
-//		});
+		user.setSquareId(squareId);
+		String profilePic = null;
+		profilePic = ImageConverter.convertToString(img);
+		user.setProfilePic(profilePic);
+		user.setCompanyNum(companyNum);
+		user.setMobileId(mobileId);
+		
+		userTable.insert(user, new TableOperationCallback<User>() {
+
+			@Override
+			public void onCompleted(User entity, Exception exception,
+					ServiceFilterResponse response) {
+				// TODO Auto-generated method stub
+				if (exception == null) {
+					carrier.load(true);
+					synchronized (lock) {
+						lock.notify();
+					}
+					
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
+			}
+		});
+		
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return carrier.getItem();
 	}
 	
 	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
@@ -302,6 +377,38 @@ public class ServiceClient {
 				}
 			}
 		});
+		
+	}
+	
+	public boolean exitSquareSync(String squareId) throws AhException {
+		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
+	
+		userTable.delete(squareId, new TableDeleteCallback() {
+			
+			@Override
+			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
+				// TODO Auto-generated method stub
+				if (exception == null) {
+					carrier.load(true);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "exitSquareAsync");
+				}
+			}
+		});
+		
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return carrier.getItem();
 		
 	}
 	
@@ -328,5 +435,49 @@ public class ServiceClient {
 			}
 		});
 		
+	}
+	
+	public boolean sendMessageSync(AhMessage message) throws AhException {
+		
+		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
+		JsonObject jo = new JsonObject();
+		jo.addProperty("type", message.getType());
+		jo.addProperty("content", message.getContent());
+		jo.addProperty("sender", message.getSender());
+		jo.addProperty("senderId", message.getSenderId());
+		jo.addProperty("receiver", message.getReceiver());
+		jo.addProperty("receiverId", message.getReceiverId());
+		
+		Gson g = new Gson();
+		JsonElement json = g.fromJson(jo, JsonElement.class);
+		
+		mClient.invokeApi("send_message", json, new ApiJsonOperationCallback() {
+			
+			@Override
+			public void onCompleted(JsonElement json, Exception exception,
+					ServiceFilterResponse response) {
+				// TODO Auto-generated method stub
+				if (exception == null){
+					carrier.load(true);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "exitSquareAsync");
+				}
+				
+			}
+		});
+		
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return carrier.getItem();
 	}
 }
