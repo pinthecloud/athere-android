@@ -1,6 +1,9 @@
 package com.pinthecloud.athere.activity;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -35,6 +38,17 @@ public class HongkunTestAcitivity extends AhActivity {
 		
 		mClient = serviceClient.getClient();
 		
+//		
+//		Properties gg = System.getProperties();
+//		Log.e("ERROR",""+gg.size());
+//		Set<String> set = gg.stringPropertyNames();
+//		Iterator<String> i = set.iterator();
+//		Log.e("ERROR",""+i.hasNext());
+//		while(i.hasNext()){
+//			String key =i.next();
+//			Log.e("ERROR",key+" : "+System.getProperty(key));
+//		}
+		
 		//NotificationsManager.handleNotifications(this, SENDER_ID, MyHandler.class);
 		PreferenceHelper pref = new PreferenceHelper(this);
 		pref.putInt("sdf",3);
@@ -66,7 +80,6 @@ public class HongkunTestAcitivity extends AhActivity {
 			}
 			
 		}).execute(this);
-		
 	}
 	
 	public void addItem(View view) {

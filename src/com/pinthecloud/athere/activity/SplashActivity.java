@@ -1,13 +1,17 @@
 package com.pinthecloud.athere.activity;
 
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
  * @author hongkunyoo
@@ -29,12 +33,12 @@ public class SplashActivity extends AhActivity {
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
 		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
-
 		
-//		Intent intent = new Intent();
-//		intent.setClass(SplashActivity.this, HongkunTestAcitivity.class);
-//		startActivity(intent);
-		
+		String httpAgent = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+		if (httpAgent.equals(System.getProperty("http.agent"))){
+			startActivity(new Intent(SplashActivity.this, HongkunTestAcitivity.class));
+			return;
+		}
 		// Show splash image and move to next page
 		new Handler().postDelayed(new Runnable(){
 
