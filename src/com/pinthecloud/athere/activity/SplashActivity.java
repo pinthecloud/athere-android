@@ -3,10 +3,11 @@ package com.pinthecloud.athere.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PrefHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
  * @author hongkunyoo
@@ -16,32 +17,41 @@ import com.pinthecloud.athere.helper.PrefHelper;
  */
 public class SplashActivity extends AhActivity {
 
-	private final int SPLASH_TIME = 500;
-	private PrefHelper pref;
-	
-	
+	private final int SPLASH_TIME = 300;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		
-		pref = new PrefHelper(this);
+
+		// Get device resolution and set it
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
+		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
+
+
+		// Show splash image and move to next page
 		new Handler().postDelayed(new Runnable(){
 
 			@Override
 			public void run() {
-				Intent intent = new Intent();
-				boolean isLoggedIn = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
+				boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
+				boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 
-				if (!isLoggedIn){
+				Intent intent = new Intent();
+				if (!isLoggedInUser){
 					// New User
-					intent.setClass(SplashActivity.this, HongkunTestAcitivity.class);
-				} else { 
+					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+				} else if(!isLooggedInSquare){
 					// Already logged in
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
+				} else{
+					// Has entered a square
+					intent.setClass(SplashActivity.this, SquareListActivity.class);
+					//					intent.setClass(SplashActivity.this, SquareChatActivity.class);
 				}
 				startActivity(intent);
-				finish();
 			}
 		}, SPLASH_TIME);
 	}

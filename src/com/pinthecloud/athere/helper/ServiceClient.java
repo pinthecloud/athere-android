@@ -8,7 +8,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -19,9 +18,9 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
-import com.pinthecloud.athere.AhEntityCallback;
 import com.pinthecloud.athere.AhException;
-import com.pinthecloud.athere.AhListCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
@@ -91,7 +90,7 @@ public class ServiceClient {
 		Calendar c = Calendar.getInstance();
 		int age = c.get(Calendar.YEAR) - (birthYear-1);
 		
-		PrefHelper pref = new PrefHelper(context);
+		PreferenceHelper pref = new PreferenceHelper(context);
 		pref.putUser(nickName, isMale, age, registrationId);
 	}
 
@@ -198,10 +197,10 @@ public class ServiceClient {
 	}
 	
 	public void createSquareAsync(String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
-		PrefHelper pref = new PrefHelper(context);
+		PreferenceHelper pref = new PreferenceHelper(context);
 		String whoMade = pref.getRegistrationId();
 		
-		if (whoMade == PrefHelper.DEFAULT_STRING) {
+		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
 			throw new AhException("createSquare NO Registration");
 		}
 		Square square = new Square();
@@ -229,10 +228,10 @@ public class ServiceClient {
 	}
 	
 	public Square createSquareSync(String name, double latitude, double longitude) throws AhException {
-		PrefHelper pref = new PrefHelper(context);
+		PreferenceHelper pref = new PreferenceHelper(context);
 		String whoMade = pref.getRegistrationId();
 		
-		if (whoMade == PrefHelper.DEFAULT_STRING) {
+		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
 			throw new AhException("createSquare NO Registration");
 		}
 		Square square = new Square();
@@ -290,7 +289,7 @@ public class ServiceClient {
 //	}
 	
 	public void enterSquareAsync(String squareId, Bitmap img, int companyNum, String mobileId, final AhEntityCallback<Boolean> callback) throws AhException {
-		PrefHelper pref = new PrefHelper(context);
+		PreferenceHelper pref = new PreferenceHelper(context);
 		User user = pref.getUser();
 		
 		user.setSquareId(squareId);
@@ -317,7 +316,7 @@ public class ServiceClient {
 	
 	public boolean enterSquareSync(String squareId, Bitmap img, int companyNum, String mobileId) throws AhException {
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
-		PrefHelper pref = new PrefHelper(context);
+		PreferenceHelper pref = new PreferenceHelper(context);
 		User user = pref.getUser();
 		
 		user.setSquareId(squareId);

@@ -1,6 +1,9 @@
 package com.pinthecloud.athere.model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable{
 	@com.google.gson.annotations.SerializedName("id")
 	private String id;
 	@com.google.gson.annotations.SerializedName("nickName")
@@ -20,6 +23,15 @@ public class User {
 	@com.google.gson.annotations.SerializedName("squareId")
 	private String squareId;
 	
+	public static final Parcelable.Creator<User> CREATOR = new Creator<User>(){
+		public User createFromParcel(Parcel in){
+			return new User(in);
+		}
+		public User[] newArray(int size){
+			return new User[size];
+		}
+	};
+	
 	public User() {
 		
 	}
@@ -36,6 +48,9 @@ public class User {
 		this.companyNum = companyNum;
 		this.age = age;
 		this.squareId = squareId;
+	}
+	public User(Parcel in){
+		readToParcel(in);
 	}
 	public String getId() {
 		return id;
@@ -91,6 +106,32 @@ public class User {
 	public void setSquareId(String squareId) {
 		this.squareId = squareId;
 	}
-	
-	
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	@Override
+	public void writeToParcel(Parcel dest, int frags) {
+		dest.writeString(id);
+		dest.writeString(nickName);
+		dest.writeString(profilePic);
+		dest.writeString(mobileId);	
+		dest.writeString(registrationId);	
+		dest.writeInt(isMale? 1 : 0);	
+		dest.writeInt(companyNum);	
+		dest.writeInt(age);	
+		dest.writeString(squareId);	
+	}
+	public void readToParcel(Parcel in){
+		id = in.readString();
+		nickName = in.readString();
+		profilePic = in.readString();
+		mobileId = in.readString();
+		registrationId = in.readString();
+		isMale = in.readInt() == 1;
+		companyNum = in.readInt();
+		age = in.readInt();
+		squareId = in.readString();
+	}
 }

@@ -1,37 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">At Here</string>
+    <!-- Default -->
+    <string name="app_name">Chupa</string>
     <string name="hello_world">Hellow World!</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="title_activity_splash">SplashActivity</string>
-    <string name="title_activity_profile">ProfileActivity</string>
-    <string name="title_activity_square_list">SquareListActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="action_example">Example action</string>
-    <string name="action_settings">Settings</string>
+
+    <!-- Title -->
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_square_list">SquareListActivity</string>
     <string name="title_activity_hongkun_test_acitivity">HongkunTestAcitivity</string>
     <string name="title_activity_ah">AhActivity</string>
-    <string name="des_logo">At Here Logo</string>
+
+    <!-- Description -->
+    <string name="des_drawer_open">Open drawer</string>
+    <string name="des_drawer_close">Close drawer</string>
+    <string name="des_logo">Chupa Logo</string>
     <string name="des_profile_image">Profile Image</string>
-    <string name="start">Start</string>
+
+    <!-- Word -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="delete">Delete</string>
+    <string name="select">Select</string>
+    <string name="settings">Settings</string>
+    <string name="complete">Complete</string>
+    <string name="profile">Profile</string>
+    <string name="gender">Gender</string>
+    <string name="birth_year">Birth Year</string>
+    <string name="number_of_persons">Number of persons</string>
+    
+    <!-- Sentence -->
+    <string name="bad_camera_message">Camera didn\'t work. Please try it again.</string>
+    <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
+    <string name="action_example">Example action</string>
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
     <string name="max_nick_name_message">Please type in less then 16 letters.</string>
     <string name="bad_nick_name_message">This is invalid nick name.</string>
     <string name="bad_gallery_message">You couldn\'t get image from gallery. Please try it again.</string>
-    <string name="type_nick_name_hint">Your nick name(2~15)</string>
-    <string name="profile_image_select">Select</string>
+    <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
+    <string name="no_profile_picture_message">Please take a profile picture.</string>
+
+    <!-- String Array -->
+
     <string-array name="profile_image_select_string_array">
         <item>Album</item>
         <item>Camera</item>
         <item>Delete</item>
     </string-array>
-    <string name="bad_camera_message">Camera didn\'t work. Please try it again.</string>
-    <string name="delete">Delete</string>
-    <string name="delete_profile_image_message">Do you want to make your profile as default?</string>    
+
 </resources>

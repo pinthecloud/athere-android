@@ -8,16 +8,10 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="14" />
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <!-- Azure GCM permissions -->
     <permission
         android:name="com.pinthecloud.athere.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
@@ -26,7 +20,16 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- General permissions -->
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.pinthecloud.athere.AhApplication"
@@ -34,7 +37,9 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <!-- 
+
+        <!-- for Azure GCM -->
+        <!--
         <receiver
             android:name="com.microsoft.windowsazure.notifications.NotificationsBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -43,23 +48,24 @@
                 <category android:name="com.pinthecloud.athere" />
             </intent-filter>
         </receiver>
-         -->
-         <receiver
+        -->
+
+        <receiver
             android:name="com.pinthecloud.athere.AhBroadCastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.pinthecloud.athere" />
             </intent-filter>
         </receiver>
-        
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.pinthecloud.athere.activity.SplashActivity"
-            android:label="@string/app_name"
             android:noHistory="true"
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
@@ -73,18 +79,19 @@
             android:label="@string/title_activity_profile" >
         </activity>
         <activity
-            android:name="com.pinthecloud.athere.activity.SquareListActivity"
-            android:label="@string/title_activity_square_list" >
-        </activity>
-        <activity
             android:name="com.pinthecloud.athere.activity.HongkunTestAcitivity"
             android:label="@string/title_activity_hongkun_test_acitivity" >
         </activity>
         <activity
-            android:name="com.pinthecloud.athere.activity.AhActivity"
-            android:label="@string/title_activity_ah" >
-        </activity>
-        <service android:name="AhIntentService"></service>
+            android:name="com.pinthecloud.athere.activity.SquareProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.pinthecloud.athere.activity.SquareListActivity" />
+        <activity android:name="com.pinthecloud.athere.activity.AhActivity" />
+        <activity android:name="com.pinthecloud.athere.activity.BasicProfileActivity" />
+        <activity android:name="com.pinthecloud.athere.activity.SquareChatActivity" />
+
+        <service android:name="AhIntentService" >
+        </service>
     </application>
 
 </manifest>

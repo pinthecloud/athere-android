@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 import com.pinthecloud.athere.model.User;
 
-public class PrefHelper {
+public class PreferenceHelper {
 	
 	private SharedPreferences pref;
 	
@@ -20,7 +20,8 @@ public class PrefHelper {
 	private final String AGE_KEY = "AGE_KEY";
 	private final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
 	
-	public PrefHelper(Context context){
+	
+	public PreferenceHelper(Context context){
 		this.pref = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 	

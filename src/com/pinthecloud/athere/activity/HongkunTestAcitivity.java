@@ -13,9 +13,8 @@ import android.widget.Button;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.pinthecloud.athere.AhEntityCallback;
-import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhMessage.MESSAGE_TYPE;
 
@@ -37,6 +36,9 @@ public class HongkunTestAcitivity extends AhActivity {
 		mClient = serviceClient.getClient();
 		
 		//NotificationsManager.handleNotifications(this, SENDER_ID, MyHandler.class);
+		PreferenceHelper pref = new PreferenceHelper(this);
+		pref.putInt("sdf",3);
+		pref.getInt("sdf");
 		
 		(new AsyncTask<Context, Void, String>(){
 

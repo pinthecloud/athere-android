@@ -1,6 +1,9 @@
 package com.pinthecloud.athere.model;
 
-public class AhMessage {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class AhMessage implements Parcelable {
 	
 	public enum MESSAGE_TYPE { 
 		SQUARE("SQUARE"), ROOM("ROOM"), SHOUTING("SHOUTING"); 
@@ -20,7 +23,7 @@ public class AhMessage {
 	    }
 	};
 	
-	private String id;
+	private String id = "";
  	private String type = "";
 	private String content = "";
 	private String sender = "";
@@ -28,6 +31,22 @@ public class AhMessage {
 	private String receiver = "";
 	private String receiverId = "";
 	
+
+	public static final Parcelable.Creator<AhMessage> CREATOR = new Creator<AhMessage>(){
+		public AhMessage createFromParcel(Parcel in){
+			return new AhMessage(in);
+		}
+		public AhMessage[] newArray(int size){
+			return new AhMessage[size]; 
+		}
+		
+	};
+	
+	public AhMessage() {
+	}
+	public AhMessage(Parcel in){
+		readToParcel(in);
+	}
 	public String getId() {
 		return id;
 	}
@@ -78,5 +97,27 @@ public class AhMessage {
 		return this.id + this.type + this.content + this.sender + this.senderId +
 				this.receiver + this.receiverId;
 	}
-	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(type);
+		dest.writeString(content);
+		dest.writeString(sender);
+		dest.writeString(senderId);
+		dest.writeString(receiver);
+		dest.writeString(receiverId);
+	}
+	public void readToParcel(Parcel in){
+		id = in.readString();
+		type = in.readString();
+		content = in.readString();
+		sender = in.readString();
+		senderId = in.readString();
+		receiver = in.readString();
+		receiverId = in.readString();
+	}
 }

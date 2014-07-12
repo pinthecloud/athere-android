@@ -1,6 +1,15 @@
 package com.pinthecloud.athere.model;
 
-public class Square {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Square implements Parcelable {
+	public Square(){
+	}
+	public Square(Parcel in){
+		readToParcel(in);
+	}
+	
 	@com.google.gson.annotations.SerializedName("id")
 	private String id;
 	@com.google.gson.annotations.SerializedName("whoMade")
@@ -58,4 +67,41 @@ public class Square {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
+	
+	
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(whoMade);
+		dest.writeString(name);
+		dest.writeDouble(latitude);
+		dest.writeDouble(longitude);
+		dest.writeInt(participants);
+	}
+	
+	
+	public void readToParcel(Parcel in){
+		id = in.readString();
+		whoMade = in.readString();
+		name = in.readString();
+		latitude = in.readDouble();
+		longitude = in.readDouble();
+		participants = in.readInt();
+	}
+	
+	
+	public static final Parcelable.Creator<Square> CREATOR = new Creator<Square>(){
+		public Square createFromParcel(Parcel in){
+			return new Square(in);
+		}
+		public Square[] newArray(int size){
+			return new Square[size];
+		}
+	};
 }

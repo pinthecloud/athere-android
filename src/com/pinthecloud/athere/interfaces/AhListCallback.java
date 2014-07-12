@@ -1,4 +1,4 @@
-package com.pinthecloud.athere;
+package com.pinthecloud.athere.interfaces;
 
 import java.util.List;
 
