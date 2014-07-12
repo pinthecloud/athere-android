@@ -30,7 +30,11 @@ public class SplashActivity extends AhActivity {
 		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
 		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
 
-
+		
+//		Intent intent = new Intent();
+//		intent.setClass(SplashActivity.this, HongkunTestAcitivity.class);
+//		startActivity(intent);
+		
 		// Show splash image and move to next page
 		new Handler().postDelayed(new Runnable(){
 
