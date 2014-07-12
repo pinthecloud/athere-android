@@ -1,8 +1,6 @@
 package com.pinthecloud.athere.activity;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,20 +13,17 @@ import android.widget.Button;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.pinthecloud.athere.AhEntityCallback;
 import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhMessage.MESSAGE_TYPE;
-import com.pinthecloud.athere.model.ToDoItem;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn;
 	int count = 0;
 	StringBuilder squareId = new StringBuilder();
 	
-	private MobileServiceTable<ToDoItem> mToDoTable;
 	private MobileServiceClient mClient;
 	
 	public static final String SENDER_ID = "838051405989";
@@ -40,7 +35,6 @@ public class HongkunTestAcitivity extends AhActivity {
 		btn = (Button)findViewById(R.id.button1);
 		
 		mClient = serviceClient.getClient();
-		mToDoTable = mClient.getTable(ToDoItem.class);
 		
 		//NotificationsManager.handleNotifications(this, SENDER_ID, MyHandler.class);
 		
@@ -71,82 +65,35 @@ public class HongkunTestAcitivity extends AhActivity {
 			
 		}).execute(this);
 		
-		
-		
 	}
 	
 	public void addItem(View view) {
-		
-//		new AsyncTask<Void, Void, String>(){
-//
-//			@Override
-//			protected String doInBackground(Void... params) {
-//				// TODO Auto-generated method stub
-//				
-//				return serviceClient.createSquareWithoutFuture();
-//			}
-//			
-//			@Override
-//			protected void onPostExecute(String result) {
-//				// TODO Auto-generated method stub
-//				super.onPostExecute(result);
-//				
-//				Log.e("ERROR", "onPost Result : " + result);
-//			}
-//			
-//		}.execute();
-		
+				
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				String result = serviceClient.createSquareWithoutFuture();
+				//String result = serviceClient.createSquareWithoutFuture();
+				String result = "38A0D350-ABCA-4E9A-9249-4ACE9D571CE8";
+				Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.splash_logo);
+				serviceClient.enterSquareSync(result, img, 3, "mobileId");
+			
+				AhMessage message = new AhMessage();
 				
-				squareId.append(result);
-				Log.e("ERROR", "squareId : "+result);
+				message.setType(MESSAGE_TYPE.SQUARE);
+				message.setContent("message contents");
+				message.setSender("bobNick");
+				message.setSenderId(pref.getRegistrationId());
+				message.setReceiver("receiver name");
+				message.setReceiverId(result);
+				Log.e("ERROR", message.getReceiverId());
+				
+				boolean re = serviceClient.sendMessageSync(message);
+				
+				Log.e("ERROR","result : "+re);
 			}
 		}).start();
 			
-	}
-	
-	public void addItem02(View view) {
-		 
-		Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.splash_logo);
-		serviceClient.enterSquareAsync(squareId.toString(), img, 3, "mobileId", new AhEntityCallback<Boolean>() {
-
-			@Override
-			public void onCompleted(Boolean entity) {
-				// TODO Auto-generated method stub
-				Log.e("ERROR", "addItem02 OK : " + entity);
-				
-			}
-		});
-	}
-	
-	public void addItem03(View view) {
-		 
-		AhMessage message = new AhMessage();
-		
-		message.setType(MESSAGE_TYPE.SQUARE);
-		message.setContent("message contents");
-		message.setSender("bobNick");
-		message.setSenderId(pref.getRegistrationId());
-		message.setReceiver("receiver name");
-		message.setReceiverId(squareId.toString());
-		
-		try{
-			serviceClient.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-				
-				@Override
-				public void onCompleted(AhMessage entity) {
-					// TODO Auto-generated method stub
-					Log.e("ERROR","addItem03 OK : ");
-				}
-			});
-		} catch (AhException ex) {
-			ex.printStackTrace();
-		}
-		
 	}
 }

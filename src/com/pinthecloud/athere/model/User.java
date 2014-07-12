@@ -8,7 +8,7 @@ public class User {
 	@com.google.gson.annotations.SerializedName("profilePic")
 	private String profilePic;
 	@com.google.gson.annotations.SerializedName("mobileId")
-	private String mobileId;
+	private String mobileId = "Android";
 	@com.google.gson.annotations.SerializedName("registrationId")
 	private String registrationId;
 	@com.google.gson.annotations.SerializedName("isMale")

@@ -16,19 +16,24 @@ public class AhBroadCastReceiver extends WakefulBroadcastReceiver {
 		
 		Bundle extra = intent.getExtras();
 		
-		Log.e("ERROR", "received something!");
+		//Log.e("ERROR", "message : "+extra.getString("message"));
 		
-		Log.e("ERROR", "message : "+extra.getString("message"));
-		
-		
-		
-		// Explicitly specify that GcmIntentService will handle the intent.
+		 // Explicitly specify that GcmIntentService will handle the intent.
         ComponentName comp = new ComponentName(context.getPackageName(),
                 AhIntentService.class.getName());
         
         // Start the service, keeping the device awake while it is launching.
         startWakefulService(context, (intent.setComponent(comp)));
         setResultCode(Activity.RESULT_OK);
+//		Intent newIntent = new Intent(context, AhIntentService.class);
+//		
+//		newIntent.putExtra("bundle", extra);
+//
+//
+//		context.startService(newIntent);
+		
+		
+		//context.startService(service);
 		
 	}
 

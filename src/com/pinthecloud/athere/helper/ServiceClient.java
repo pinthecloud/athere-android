@@ -3,10 +3,6 @@ package com.pinthecloud.athere.helper;
 import java.net.MalformedURLException;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,8 +10,6 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.util.Log;
 
-import com.google.android.gms.internal.ca;
-import com.google.android.gms.wallet.Cart;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -463,7 +457,7 @@ public class ServiceClient {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "exitSquareAsync");
+					throw new AhException(exception, "sendMessageSync");
 				}
 				
 			}
