@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.ShutterCallback;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,7 +31,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -52,7 +53,6 @@ public class SquareProfileFragment extends AhFragment{
 	private Camera mCamera;
 	private CameraPreview mCameraPreview;
 	private FrameLayout cameraView;
-	private RelativeLayout cameraLayout;
 	private ImageView profilePictureView;
 	private Button cameraButton;
 	private Button selfCameraButton;
@@ -69,6 +69,14 @@ public class SquareProfileFragment extends AhFragment{
 	private Button completeButton;
 
 	private Square square;
+
+
+	private ShutterCallback mShutterCallback = new ShutterCallback() {
+
+		@Override
+		public void onShutter() {
+		}
+	};
 
 
 	// JPEG 이미지를 생성 후 호출
@@ -98,8 +106,8 @@ public class SquareProfileFragment extends AhFragment{
 
 
 					// Crop picture
-					int width = cameraLayout.getWidth();
-					int height = cameraLayout.getHeight();
+					int width = profilePictureView.getWidth();
+					int height = profilePictureView.getHeight();
 					pictureBitmap = BitmapHelper.crop(pictureBitmap, rotationDegree, width, height);
 
 
@@ -145,7 +153,6 @@ public class SquareProfileFragment extends AhFragment{
 		 * Find UI component
 		 */
 		cameraView = (FrameLayout) view.findViewById(R.id.square_profile_frag_camera_view);
-		cameraLayout = (RelativeLayout) view.findViewById(R.id.square_profile_frag_camera_layout);
 		cameraButton = (Button) view.findViewById(R.id.square_profile_frag_camera_button);
 		selfCameraButton = (Button) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
@@ -230,10 +237,16 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void onClick(View v) {
 				if(takePicture){
-					mCamera.takePicture(
-							null, // 셔터
-							null, // Raw 이미지 생성
-							mPicutureListener); // JPE 이미지 생성
+					mCamera.autoFocus(new AutoFocusCallback(){
+
+						@Override
+						public void onAutoFocus(boolean success, Camera camera) {
+							mCamera.takePicture(
+									mShutterCallback, // 셔터
+									null, // Raw 이미지 생성
+									mPicutureListener); // JPE 이미지 생성
+						}
+					});
 				}else{
 					openCameraAndSetView();
 					takePicture = true;

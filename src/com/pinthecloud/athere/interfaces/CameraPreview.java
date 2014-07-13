@@ -1,17 +1,16 @@
 package com.pinthecloud.athere.interfaces;
 
 import java.io.IOException;
-import java.util.List;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
-import android.hardware.Camera.Size;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.helper.CameraHelper;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -68,14 +67,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		// set preview size and make any resize, rotate or
 		// reformatting changes here
 		Camera.Parameters parameters = mCamera.getParameters();
-		List<Size> sizes = parameters.getSupportedPictureSizes();
-		for(int i=0 ; i<sizes.size() ; i++){
-			if(sizes.get(i).width == AhGlobalVariable.DEVICE_HEIGHT 
-					&& sizes.get(i).height == AhGlobalVariable.DEVICE_WIDTH){
-				parameters.setPictureSize(sizes.get(i).width, sizes.get(i).height);
-				break;
-			}
-		}
+		Camera.Size previewSize = CameraHelper.getBestPreviewSize(w, h, parameters);
+		Camera.Size pictureSize = CameraHelper.getBestPictureSize(w, h, parameters);
+		parameters.setPreviewSize(previewSize.width, previewSize.height);
+		parameters.setPictureSize(pictureSize.width, pictureSize.height);
 		parameters.setPictureFormat(PixelFormat.JPEG);
 		mCamera.setParameters(parameters);
 		mCamera.setDisplayOrientation(AhGlobalVariable.ANGLE_90);

@@ -17,52 +17,46 @@ import android.util.Log;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class AhIntentService extends IntentService {
-	
+
 	public AhIntentService() {
 		super("AhIntentService");
 	}
 
 	public AhIntentService(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		// TODO Auto-generated method stub
-		
 		AhMessage message = parseIntent(intent);
-		
+
 		if(isRunning(getBaseContext())){
-		// if the app is running, add the message to the chat room.
-			
-			
+			// if the app is running, add the message to the chat room.
 		} else {
-		// if the app is not running, send a notification
-			
+			// if the app is not running, send a notification
 		}
-		
+
 	}
-	
+
 	private boolean isRunning(Context ctx) {
-        ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
-        List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+		ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
 
-        for (RunningTaskInfo task : tasks) {
-            if (ctx.getPackageName().equalsIgnoreCase(task.baseActivity.getPackageName())) 
-                return true;                                  
-        }
+		for (RunningTaskInfo task : tasks) {
+			if (ctx.getPackageName().equalsIgnoreCase(task.baseActivity.getPackageName())) 
+				return true;                                  
+		}
 
-        return false;
-    }
-	
+		return false;
+	}
+
 	private AhMessage parseIntent(Intent intent) {
 		AhMessage message = new AhMessage();
 		Bundle b = intent.getExtras();
 		String jsonStr = b.getString("message");
-		
+
 		JSONObject jo = null;
-		
+
 		String type = "";
 		String content = "";
 		String sender = "";
@@ -71,7 +65,7 @@ public class AhIntentService extends IntentService {
 		String receiverId = "";
 		try {
 			jo = new JSONObject(jsonStr);
-		
+
 			type = jo.getString("type");
 			content = jo.getString("content");
 			sender = jo.getString("sender");
@@ -82,35 +76,35 @@ public class AhIntentService extends IntentService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		message.setType(type);
 		message.setContent(content);
 		message.setSender(sender);
 		message.setSenderId(senderId);
 		message.setReceiver(receiver);
 		message.setReceiverId(receiverId);
-		
+
 		return message;
 	}
-	
+
 	private static boolean isRunning3(Context context) {
 
 
-	    ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+		ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
 
-	    List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+		List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
 
-	    boolean isServiceFound = false;
+		boolean isServiceFound = false;
 
-	    for (int i = 0; i < services.size(); i++) {
+		for (int i = 0; i < services.size(); i++) {
 
-	    	//Log.e("ERROR",services.get(i).service.getPackageName());
-	    	Log.e("ERROR",services.get(i).service.getClassName());
-	    }
+			//Log.e("ERROR",services.get(i).service.getPackageName());
+			Log.e("ERROR",services.get(i).service.getClassName());
+		}
 
-	    return isServiceFound;
+		return isServiceFound;
 	}
-	
+
 	private void print(Context context){
 		ActivityManager activityManager = (ActivityManager)context.getSystemService (Context.ACTIVITY_SERVICE); 
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE); 
@@ -119,7 +113,7 @@ public class AhIntentService extends IntentService {
 		Log.e("ERROR","context.applicationName  : "+ context.getApplicationInfo().name);
 		Log.e("ERROR","context.getPackageName() : "+ context.getPackageName());
 		Log.e("ERROR","context.toString() : "+ context.toString());
-		
+
 		for (RunningTaskInfo task : tasks) {
 			Log.e("ERROR","task : "+ task);
 			Log.e("ERROR","task.baseActivity : "+ task.baseActivity);
@@ -127,6 +121,6 @@ public class AhIntentService extends IntentService {
 			Log.e("ERROR","task.describeContents() : "+ task.describeContents());
 			Log.e("ERROR","task.description : "+ task.description);
 			Log.e("ERROR","task.id : "+ task.id);
-	    } 
+		} 
 	}
 }
