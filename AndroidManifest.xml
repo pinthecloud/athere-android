@@ -58,12 +58,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.pinthecloud.athere.activity.SquareProfileActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.pinthecloud.athere.activity.SquareProfileActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.pinthecloud.athere.activity.SquareListActivity" />
         <activity android:name="com.pinthecloud.athere.activity.HongkunTestAcitivity" />
         <activity android:name="com.pinthecloud.athere.activity.AhActivity" />
         <activity android:name="com.pinthecloud.athere.activity.BasicProfileActivity" />
-        <activity android:name="com.pinthecloud.athere.activity.SquareChatActivity" />
+        <activity android:name="com.pinthecloud.athere.activity.SquareChatActivity" android:windowSoftInputMode="stateHidden"/>
     </application>
 
 </manifest>

@@ -36,12 +36,13 @@ public class SplashActivity extends AhActivity {
 		// Show splash image and move to next page
 		pref = new PreferenceHelper(this);
 		new Handler().postDelayed(new Runnable(){
-
+			
 			@Override
 			public void run() {
 				boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
 				boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 
+				
 				Intent intent = new Intent();
 				if (!isLoggedInUser){
 					// New User
@@ -51,8 +52,7 @@ public class SplashActivity extends AhActivity {
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				} else{
 					// Has entered a square
-					intent.setClass(SplashActivity.this, SquareListActivity.class);
-					//					intent.setClass(SplashActivity.this, SquareChatActivity.class);
+					intent.setClass(SplashActivity.this, SquareChatActivity.class);
 				}
 				startActivity(intent);
 			}

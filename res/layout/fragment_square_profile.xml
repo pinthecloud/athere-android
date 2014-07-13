@@ -2,9 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_profile_frag_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:layout_height="match_parent" >
 
     <FrameLayout
         android:id="@+id/square_profile_frag_camera_view"
@@ -25,8 +23,8 @@
 
             <ImageView
                 android:id="@+id/square_profile_frag_profile_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/des_profile_image" />
 
             <Button
