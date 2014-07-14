@@ -1,9 +1,6 @@
 package com.pinthecloud.athere.activity;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,15 +15,15 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhMessage.MESSAGE_TYPE;
+import com.pinthecloud.athere.model.User;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn;
 	int count = 0;
 	StringBuilder squareId = new StringBuilder();
-	
-	private MobileServiceClient mClient;
 	
 	public static final String SENDER_ID = "838051405989";
 	
@@ -36,19 +33,12 @@ public class HongkunTestAcitivity extends AhActivity {
 		setContentView(R.layout.activity_hongkun_test_acitivity);
 		btn = (Button)findViewById(R.id.button1);
 		
-		mClient = serviceClient.getClient();
 		
-//		
-//		Properties gg = System.getProperties();
-//		Log.e("ERROR",""+gg.size());
-//		Set<String> set = gg.stringPropertyNames();
-//		Iterator<String> i = set.iterator();
-//		Log.e("ERROR",""+i.hasNext());
-//		while(i.hasNext()){
-//			String key =i.next();
-//			Log.e("ERROR",key+" : "+System.getProperty(key));
+//		for(int i = 0 ; i < 3 ; i++){
+//			User u = User.addUserTest();
+//			Log.e("ERROR",u.toString());
+//			userHelper.addUser(u);
 //		}
-		
 		//NotificationsManager.handleNotifications(this, SENDER_ID, MyHandler.class);
 		PreferenceHelper pref = new PreferenceHelper(this);
 		pref.putInt("sdf",3);
@@ -92,7 +82,7 @@ public class HongkunTestAcitivity extends AhActivity {
 				//String result = serviceClient.createSquareWithoutFuture();
 				String result = "38A0D350-ABCA-4E9A-9249-4ACE9D571CE8";
 				Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.splash_logo);
-				serviceClient.enterSquareSync(result, img, 3, "mobileId");
+				serviceClient.enterSquareSync(result, img, 3, "Android");
 			
 				AhMessage message = new AhMessage();
 				

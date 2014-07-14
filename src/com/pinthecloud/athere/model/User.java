@@ -1,7 +1,12 @@
 package com.pinthecloud.athere.model;
 
+import java.util.Random;
+
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.android.gms.internal.jo;
+import com.google.gson.JsonObject;
 
 public class User implements Parcelable{
 	@com.google.gson.annotations.SerializedName("id")
@@ -133,5 +138,63 @@ public class User implements Parcelable{
 		companyNum = in.readInt();
 		age = in.readInt();
 		squareId = in.readString();
+	}
+	
+	public static User addUserTest(){
+		User user = new User();
+		user.id = getRandomString();
+		user.nickName = getRandomString();
+		user.profilePic = getRandomString();
+		user.mobileId = getRandomString();
+		user.registrationId = getRandomString();
+		user.isMale = getRandomInt() < 20;
+		user.companyNum = getRandomInt();
+		user.age = getRandomInt();
+		user.squareId = getRandomString();
+		return user;
+	}
+	
+	private static String getRandomString(){
+		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+		StringBuilder sb = new StringBuilder();
+		Random random = new Random();
+		for (int i = 0; i < random.nextInt(20); i++) {
+		    char c = chars[random.nextInt(chars.length)];
+		    sb.append(c);
+		}
+		String output = sb.toString();
+		return output;
+	}
+	
+	private static int getRandomInt(){
+		Random random = new Random();
+		return random.nextInt(40);
+	}
+	
+	public String toString() {
+		return this.id + " / "+
+		this.nickName + " / "+
+		this.profilePic + " / "+
+		this.mobileId + " / "+
+		this.registrationId + " / "+
+		this.isMale + " / "+
+		this.companyNum + " / "+
+		this.age + " / "+
+		this.squareId;
+	}
+	
+	public JsonObject toJson() {
+		JsonObject jo = new JsonObject();
+		
+		jo.addProperty("nickName", this.nickName);
+		jo.addProperty("profilePic", this.profilePic);
+		jo.addProperty("mobileId", this.profilePic);
+		jo.addProperty("registrationId", this.registrationId);
+		jo.addProperty("isMale", this.isMale);
+		jo.addProperty("companyNum", this.companyNum);
+		jo.addProperty("age", this.age);
+		jo.addProperty("squareId", this.squareId);
+		
+		return jo;
 	}
 }
