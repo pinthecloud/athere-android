@@ -31,7 +31,7 @@
     <string name="gender">Gender</string>
     <string name="birth_year">Birth Year</string>
     <string name="number_of_persons">Number of persons</string>
-    
+
     <!-- Sentence -->
     <string name="bad_camera_message">Camera didn\'t work. Please try it again.</string>
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -49,6 +49,10 @@
         <item>Album</item>
         <item>Camera</item>
         <item>Delete</item>
+    </string-array>
+    <string-array name="square_tab_string_array">
+        <item>Chat</item>
+        <item>Chupa</item>
     </string-array>
 
 </resources>

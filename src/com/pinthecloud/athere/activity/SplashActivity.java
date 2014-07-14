@@ -52,7 +52,7 @@ public class SplashActivity extends AhActivity {
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				} else{
 					// Has entered a square
-					intent.setClass(SplashActivity.this, SquareChatActivity.class);
+					intent.setClass(SplashActivity.this, SquareActivity.class);
 				}
 				startActivity(intent);
 			}
