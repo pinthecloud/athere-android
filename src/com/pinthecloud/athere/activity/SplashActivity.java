@@ -1,14 +1,9 @@
 package com.pinthecloud.athere.activity;
 
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Set;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -57,7 +52,7 @@ public class SplashActivity extends AhActivity {
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				} else{
 					// Has entered a square
-					intent.setClass(SplashActivity.this, SquareChatActivity.class);
+					intent.setClass(SplashActivity.this, SquareActivity.class);
 				}
 				startActivity(intent);
 			}

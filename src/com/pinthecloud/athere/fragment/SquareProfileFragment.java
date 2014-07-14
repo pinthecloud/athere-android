@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.SquareChatActivity;
+import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.BitmapHelper;
 import com.pinthecloud.athere.helper.CameraHelper;
 import com.pinthecloud.athere.helper.FileHelper;
@@ -225,7 +225,7 @@ public class SquareProfileFragment extends AhFragment{
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
 						pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 
-						intent.setClass(context, SquareChatActivity.class);
+						intent.setClass(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
