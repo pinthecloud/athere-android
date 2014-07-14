@@ -15,14 +15,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class SquareChatFragment extends AhFragment{
 
-	private SquareChatListAdapter messageListAdapter;
 	private ListView messageListView;
+	private SquareChatListAdapter messageListSendAdapter;
 	private EditText messageEditText;
 	private Button sendButton;
 
@@ -32,21 +34,22 @@ public class SquareChatFragment extends AhFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-
+		pref = new PreferenceHelper(context);
+		
 		/*
 		 * Set UI component
 		 */
-		messageListView = (ListView)view.findViewById(R.id.square_chat_frag_list);
-		messageEditText = (EditText)view.findViewById(R.id.square_chat_frag_message_text);
-		sendButton = (Button)view.findViewById(R.id.square_chat_frag_send_button);
+		messageListView = (ListView) view.findViewById(R.id.square_chat_frag_list);
+		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
+		sendButton = (Button) view.findViewById(R.id.square_chat_frag_send_button);
 
 
 		/*
 		 * Set message list view
 		 */
-		messageListAdapter = new SquareChatListAdapter
-				(context, R.layout.row_square_chat_list_send, messageList); 
-		messageListView.setAdapter(messageListAdapter);
+		messageListSendAdapter = new SquareChatListAdapter
+				(context, R.layout.row_square_chat_list_send, messageList);
+		messageListView.setAdapter(messageListSendAdapter);
 		messageListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -89,8 +92,10 @@ public class SquareChatFragment extends AhFragment{
 			public void onClick(View v) {
 				AhMessage message = new AhMessage();
 				message.setContent(messageEditText.getText().toString());
+				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
+				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
 				messageList.add(message);
-				messageListAdapter.notifyDataSetChanged();
+				messageListSendAdapter.notifyDataSetChanged();
 
 				messageEditText.setText("");
 			}

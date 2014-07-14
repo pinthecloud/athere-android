@@ -4,33 +4,32 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class AhMessage implements Parcelable {
-	
+
 	public enum MESSAGE_TYPE { 
 		SQUARE("SQUARE"), ROOM("ROOM"), SHOUTING("SHOUTING"); 
-		
-	    private final String value;
 
-	    private MESSAGE_TYPE(final String value) {
-	        this.value = value;
-	    }
-	    public String getValue() {
-	        return value;
-	    }
-	    @Override
-	    public String toString() {
-	        // TODO Auto-generated method stub
-	        return getValue();
-	    }
+		private final String value;
+
+		private MESSAGE_TYPE(final String value) {
+			this.value = value;
+		}
+		public String getValue() {
+			return value;
+		}
+		@Override
+		public String toString() {
+			return getValue();
+		}
 	};
-	
+
 	private String id = "";
- 	private String type = "";
+	private String type = "";
 	private String content = "";
 	private String sender = "";
 	private String senderId = "";
 	private String receiver = "";
 	private String receiverId = "";
-	
+
 
 	public static final Parcelable.Creator<AhMessage> CREATOR = new Creator<AhMessage>(){
 		public AhMessage createFromParcel(Parcel in){
@@ -39,9 +38,9 @@ public class AhMessage implements Parcelable {
 		public AhMessage[] newArray(int size){
 			return new AhMessage[size]; 
 		}
-		
+
 	};
-	
+
 	public AhMessage() {
 	}
 	public AhMessage(Parcel in){
@@ -111,6 +110,8 @@ public class AhMessage implements Parcelable {
 		dest.writeString(receiver);
 		dest.writeString(receiverId);
 	}
+
+
 	public void readToParcel(Parcel in){
 		id = in.readString();
 		type = in.readString();
@@ -119,5 +120,11 @@ public class AhMessage implements Parcelable {
 		senderId = in.readString();
 		receiver = in.readString();
 		receiverId = in.readString();
+	}
+
+
+	public boolean isMine(String id){
+		return this.sender == id;
+		// TODO return this.senderId == id;
 	}
 }

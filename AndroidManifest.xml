@@ -48,7 +48,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="com.pinthecloud.athere" />
             </intent-filter>
-        </receiver>
+        </receiver>
         -->
 
         <receiver
@@ -76,20 +76,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pinthecloud.athere.activity.ProfileActivity"
-            android:label="@string/title_activity_profile" >
-        </activity>
-        <activity
-            android:name="com.pinthecloud.athere.activity.HongkunTestAcitivity"
-            android:label="@string/title_activity_hongkun_test_acitivity" >
-        </activity>
-        <activity
             android:name="com.pinthecloud.athere.activity.SquareProfileActivity"
             android:screenOrientation="portrait" />
+        <activity android:name="com.pinthecloud.athere.activity.HongkunTestAcitivity" />
         <activity android:name="com.pinthecloud.athere.activity.SquareListActivity" />
         <activity android:name="com.pinthecloud.athere.activity.AhActivity" />
         <activity android:name="com.pinthecloud.athere.activity.BasicProfileActivity" />
-        <activity android:name="com.pinthecloud.athere.activity.SquareChatActivity" />
+        <activity
+            android:name="com.pinthecloud.athere.activity.SquareChatActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <service android:name="AhIntentService" >
         </service>
