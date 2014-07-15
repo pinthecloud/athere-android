@@ -55,4 +55,7 @@
         <item>Chupa</item>
     </string-array>
 
+    <string name="title_activity_current_location">CurrentLocation</string>
+    <string name="action_settings">Settings</string>
+
 </resources>
