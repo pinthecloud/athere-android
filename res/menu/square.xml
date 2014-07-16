@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <item
+        android:id="@+id/square_menu_drawer"
+        android:icon="@drawable/ic_drawer"
+        android:title="@string/title_square_menu_drawer"
+        android:showAsAction="ifRoom" />
+
+</menu>

@@ -3,7 +3,7 @@ package com.pinthecloud.athere.interfaces;
 import java.io.IOException;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -71,7 +71,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		Camera.Size pictureSize = CameraHelper.getBestPictureSize(w, h, parameters);
 		parameters.setPreviewSize(previewSize.width, previewSize.height);
 		parameters.setPictureSize(pictureSize.width, pictureSize.height);
-		parameters.setPictureFormat(PixelFormat.JPEG);
+		parameters.setPictureFormat(ImageFormat.JPEG);
 		mCamera.setParameters(parameters);
 		mCamera.setDisplayOrientation(AhGlobalVariable.ANGLE_90);
 

@@ -1,19 +1,35 @@
 package com.pinthecloud.athere.activity;
 
+import android.app.ActionBar;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.TypedValue;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.adapter.SquarePagerAdapter;
-import com.pinthecloud.athere.interfaces.PagerSlidingTabStrip;
+import com.pinthecloud.athere.fragment.SquareDrawerFragment;
+import com.pinthecloud.athere.fragment.SquareTabFragment;
 
 public class SquareActivity extends AhActivity{
 
-	private SquarePagerAdapter mSquarePagerAdapter;
-	private ViewPager mViewPager;
-	private PagerSlidingTabStrip tabs;
+	private ActionBar mActionBar;
+	private View mCustomActionBarView;
+	private TextView mTitleTextView;
+
+	private FragmentManager fragmentManager;
+
+	private DrawerLayout mDrawerLayout; 
+	private ActionBarDrawerToggle mDrawerToggle;
+
+	private View mFragmentView;
+	private SquareDrawerFragment mSquareDrawerFragment;
 
 
 	@Override
@@ -24,39 +40,113 @@ public class SquareActivity extends AhActivity{
 		/*
 		 * Set UI Component
 		 */
-		mViewPager = (ViewPager) findViewById(R.id.square_pager);
-		tabs = (PagerSlidingTabStrip) findViewById(R.id.square_tabs);
+		mActionBar = getActionBar();
+		mActionBar.setCustomView(R.layout.action_bar_general);
+		mCustomActionBarView = mActionBar.getCustomView();
+		mTitleTextView = (TextView) mCustomActionBarView.findViewById(R.id.action_bar_general_title);
+
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_layout);
+		mFragmentView = findViewById(R.id.square_drawer_fragment);
+		fragmentManager = getFragmentManager();
+		mSquareDrawerFragment = (SquareDrawerFragment) fragmentManager.findFragmentById(R.id.square_drawer_fragment);
+
+
+		/*
+		 * Set Action Bar
+		 */
+		mActionBar.setDisplayShowCustomEnabled(true);
+		mActionBar.setDisplayShowHomeEnabled(false);
 
 
 		/*
 		 * Set tab
 		 */
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(this, getFragmentManager());
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		SquareTabFragment mSquareTabFragment = new SquareTabFragment();
+		fragmentTransaction.add(R.id.square_tab_layout, mSquareTabFragment);
+		fragmentTransaction.commit();
 
-		// Set up the ViewPager with the sections adapter.
-		mViewPager.setAdapter(mSquarePagerAdapter);
-		int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
-				getResources().getDisplayMetrics());
-		mViewPager.setPageMargin(pageMargin);
-		tabs.setViewPager(mViewPager);
-		tabs.setOnPageChangeListener(new OnPageChangeListener() {
 
+		/*
+		 * Set Drawer
+		 */
+		mSquareDrawerFragment.setUp(mFragmentView, mDrawerLayout);
+
+		// ActionBarDrawerToggle ties together the the proper interactions
+		// between the navigation drawer and the action bar app icon.
+		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+				mDrawerLayout, /* DrawerLayout object */
+				R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+				R.string.des_drawer_open, /* "open drawer" description for accessibility */
+				R.string.des_drawer_close /* "close drawer" description for accessibility */
+				)
+		{
 			@Override
-			public void onPageSelected(int position) {
-				// TODO
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				if (!mSquareDrawerFragment.isAdded()) {
+					return;
+				}
+				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 			}
 
 			@Override
-			public void onPageScrollStateChanged(int arg0) {
-				// TODO
-			}			
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				if (!mSquareDrawerFragment.isAdded()) {
+					return;
+				}
+				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+			}
+		};
 
+		// Defer code dependent on restoration of previous instance state.
+		mDrawerLayout.post(new Runnable() {
 			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO
+			public void run() {
+				mDrawerToggle.syncState();
 			}
 		});
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+		// set a custom shadow that overlays the main content when the drawer opens
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+	}
+
+
+
+	@Override
+	public void onBackPressed() {
+		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
+			mDrawerLayout.closeDrawer(mFragmentView);
+			return;
+		}
+		super.onBackPressed();
+	}
+
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.square, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.square_menu_drawer:
+			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
+				mDrawerLayout.closeDrawer(mFragmentView);
+			}else{
+				mDrawerLayout.openDrawer(mFragmentView);
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 }
