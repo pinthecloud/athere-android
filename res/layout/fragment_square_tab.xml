@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/square_tab_frag_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.pinthecloud.athere.interfaces.PagerSlidingTabStrip
+        android:id="@+id/square_tab_frag_tab"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_height" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/square_tab_frag_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/square_tab_frag_tab" />
+
+</RelativeLayout>
