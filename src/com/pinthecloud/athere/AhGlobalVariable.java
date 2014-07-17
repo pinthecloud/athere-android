@@ -14,11 +14,14 @@ public class AhGlobalVariable{
 	public static final int ANGLE_270 = 270;
 	public static int DEVICE_WIDTH;
 	public static int DEVICE_HEIGHT;
+	public static int DEVICE_DPI;
+	public static float DEVICE_DENSITY;
 	
 	// String
 	public static final String LOG_TAG = "Debug";
 	public static final String APP_NAME = "Chupa";
-	public static final String PROFILE_PICTURE_FILE_NAME = "PROFILE_PICTURE.png";
+	public static final String PROFILE_PICTURE_NAME = "profile_picture_name.png";
+	public static final String PROFILE_PICTURE_CIRCLE_NAME = "profile_picture_circle_name.png";
 
 	// String Key
 	public static final String DIALOG_KEY = "DIALOG_KEY";

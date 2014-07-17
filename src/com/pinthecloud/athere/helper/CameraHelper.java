@@ -1,13 +1,8 @@
 package com.pinthecloud.athere.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.util.Log;
@@ -123,74 +118,5 @@ public class CameraHelper {
 			}
 		}
 		return result;
-	}
-
-
-	public static void setAutoFocusArea(Camera camera, int posX, int posY,
-			int focusRange, boolean flag, Point point) {
-		if (posX < 0 || posY < 0) {
-			setArea(camera, null);
-			return;
-		}
-
-		int touchPointX;
-		int touchPointY;
-		int endFocusY;
-		int startFocusY;
-
-		if (!flag) {
-			// Camera.setDisplayOrientation()을 이용해서 영상을 세로로 보고 있는 경우.
-			touchPointX = point.y >> 1;
-		touchPointY = point.x >> 1;
-			startFocusY = posX;
-			endFocusY 	= posY;
-		} else {
-			// Camera.setDisplayOrientation()을 이용해서 영상을 가로로 보고 있는 경우.
-			touchPointX = point.x >> 1;
-		touchPointY = point.y >> 1;
-		startFocusY = posY;
-		endFocusY = point.x - posX;
-		}
-
-		float startFocusX 	= 1000F / (float) touchPointY;
-		float endFocusX 	= 1000F / (float) touchPointX;
-
-		startFocusX = (int) (startFocusX * (float) (startFocusY - touchPointY)) - focusRange;
-		startFocusY = (int) (endFocusX * (float) (endFocusY - touchPointX)) - focusRange;
-		endFocusX = startFocusX + focusRange;
-		endFocusY = startFocusY + focusRange;
-
-		if (startFocusX < -1000)
-			startFocusX = -1000;
-
-		if (startFocusY < -1000)
-			startFocusY = -1000;
-
-		if (endFocusX > 1000) {
-			endFocusX = 1000;
-		}
-
-		if (endFocusY > 1000) {
-			endFocusY = 1000;
-		}
-
-		Rect rect = new Rect((int) startFocusX, (int) startFocusY, (int) endFocusX, (int) endFocusY);
-		ArrayList<Camera.Area> arraylist = new ArrayList<Camera.Area>();
-		arraylist.add(new Camera.Area(rect, 1000));
-
-		setArea(camera, arraylist);
-	}
-
-
-	public static void setArea(Camera camera, List<Camera.Area> list) {
-		Camera.Parameters parameters = camera.getParameters();
-		if (parameters.getMaxNumFocusAreas() > 0) {
-			parameters.setFocusAreas(list);
-		}
-		if (parameters.getMaxNumMeteringAreas() > 0) {
-			parameters.setMeteringAreas(list);
-		}
-		parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
-		camera.setParameters(parameters);
 	}
 }

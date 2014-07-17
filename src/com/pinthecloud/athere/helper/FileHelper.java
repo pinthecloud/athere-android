@@ -66,11 +66,11 @@ public class FileHelper {
 	}
 
 
-	public static boolean saveImageToInternalStorage(Context context, Bitmap image) throws IOException {
+	public static boolean saveImageToInternalStorage(Context context, Bitmap image, String key) throws IOException {
 		try {
 			// Use the compress method on the Bitmap object to write image to
 			// the OutputStream
-			FileOutputStream fos = context.openFileOutput(AhGlobalVariable.PROFILE_PICTURE_FILE_NAME, Context.MODE_PRIVATE);
+			FileOutputStream fos = context.openFileOutput(key, Context.MODE_PRIVATE);
 
 			// Writing the bitmap to the output stream
 			image.compress(Bitmap.CompressFormat.PNG, 100, fos);

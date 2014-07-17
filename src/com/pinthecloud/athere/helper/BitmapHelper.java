@@ -7,7 +7,15 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
@@ -54,7 +62,7 @@ public class BitmapHelper {
 
 	public static int getImageOrientation(File imageFile) throws IOException{
 		Log.d(AhGlobalVariable.LOG_TAG, "BitmapHelper getImageOrientation");
-		
+
 		try {
 			ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
 			int orientation = exif.getAttributeInt(
@@ -87,16 +95,59 @@ public class BitmapHelper {
 	}
 
 
-	public static Bitmap crop(Bitmap bitmap, int rotationDegree, int width, int height) {
-		int bitmapWidth = bitmap.getWidth();
-		int bitmapHeight = bitmap.getHeight();
-		int xOffset = 0;
-		int yOffset = 0;
-		if(rotationDegree == AhGlobalVariable.ANGLE_180){
-			xOffset = bitmapWidth - width;
-		} else if(rotationDegree == AhGlobalVariable.ANGLE_270){
-			yOffset = bitmapHeight - height;
-		}
+	public static Bitmap crop(Bitmap bitmap, int xOffset, int yOffset, int width, int height) {
 		return Bitmap.createBitmap(bitmap, xOffset, yOffset, width, height);
+	}
+
+
+	public static Bitmap cropOval(Bitmap bitmap) {
+		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+				bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(output);
+
+		final int color = 0xffff0000;
+		final Paint paint = new Paint();
+		final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+		final RectF rectF = new RectF(rect);
+
+		paint.setAntiAlias(true);
+		paint.setDither(true);
+		paint.setFilterBitmap(true);
+		canvas.drawARGB(0, 0, 0, 0);
+		paint.setColor(color);
+		canvas.drawOval(rectF, paint);
+
+		paint.setColor(Color.BLUE);
+		paint.setStyle(Paint.Style.STROKE);
+		paint.setStrokeWidth((float) 4);
+		paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+		canvas.drawBitmap(bitmap, rect, rect, paint);
+
+		return output;
+	}
+
+
+	public static Bitmap cropRound(Bitmap bitmap) {
+		int targetWidth = 125;
+		int targetHeight = 125;
+		Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
+				targetHeight, Bitmap.Config.ARGB_8888);
+
+		Canvas canvas = new Canvas(targetBitmap);
+		Path path = new Path();
+		path.addCircle(((float) targetWidth - 1) / 2,
+				((float) targetHeight - 1) / 2,
+				(Math.min(((float) targetWidth), 
+						((float) targetHeight)) / 2),
+						Path.Direction.CCW);
+
+		canvas.clipPath(path);
+		Bitmap sourceBitmap = bitmap;
+		canvas.drawBitmap(sourceBitmap, 
+				new Rect(0, 0, sourceBitmap.getWidth(),
+						sourceBitmap.getHeight()), 
+						new Rect(0, 0, targetWidth,
+								targetHeight), null);
+		return targetBitmap;
 	}
 }

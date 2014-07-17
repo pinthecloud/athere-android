@@ -108,7 +108,15 @@ public class SquareProfileFragment extends AhFragment{
 					// Crop picture
 					int width = profilePictureView.getWidth();
 					int height = profilePictureView.getHeight();
-					pictureBitmap = BitmapHelper.crop(pictureBitmap, rotationDegree, width, height);
+					int xOffset = 0;
+					int yOffset = 0;
+					if(rotationDegree == AhGlobalVariable.ANGLE_180){
+						xOffset = pictureBitmap.getWidth() - width;
+					} else if(rotationDegree == AhGlobalVariable.ANGLE_270){
+						yOffset = pictureBitmap.getHeight() - height;
+					}
+					pictureBitmap = BitmapHelper.crop(pictureBitmap, xOffset, yOffset, width, height);
+					Bitmap pictureCircleBitmap = BitmapHelper.cropRound(pictureBitmap);
 
 
 					// Set taken picture to view
@@ -116,7 +124,8 @@ public class SquareProfileFragment extends AhFragment{
 
 
 					// Save picture to internal storage
-					FileHelper.saveImageToInternalStorage(context, pictureBitmap);
+					FileHelper.saveImageToInternalStorage(context, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
+					FileHelper.saveImageToInternalStorage(context, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 
 
 					// Release camera and set button to re take
@@ -285,7 +294,7 @@ public class SquareProfileFragment extends AhFragment{
 		}else{
 			try {
 				// Set taken picture to view
-				Bitmap pictureBitmap = FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_FILE_NAME);
+				Bitmap pictureBitmap = FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
 				profilePictureView.setImageBitmap(pictureBitmap);
 			} catch (FileNotFoundException e) {
 				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onResume : " + e.getMessage());

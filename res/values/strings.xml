@@ -11,6 +11,7 @@
     <string name="title_activity_square_list">SquareListActivity</string>
     <string name="title_activity_hongkun_test_acitivity">HongkunTestAcitivity</string>
     <string name="title_activity_ah">AhActivity</string>
+    <string name="title_activity_current_location">CurrentLocation</string>
     <string name="title_square_menu_drawer">Square Drawer</string>
 
     <!-- Description -->
@@ -54,8 +55,4 @@
         <item>Chat</item>
         <item>Chupa</item>
     </string-array>
-
-    <string name="title_activity_current_location">CurrentLocation</string>
-    <string name="action_settings">Settings</string>
-
 </resources>

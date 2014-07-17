@@ -53,7 +53,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 				// Inflate different layout by user
 				if(message.isMine(pref.getString(AhGlobalVariable.NICK_NAME_KEY))){
-					this.layoutId = R.layout.row_square_chat_list_send;
+					this.layoutId = R.layout.row_square_chat_list_receive;
+					//					this.layoutId = R.layout.row_square_chat_list_send;
 				} else{
 					this.layoutId = R.layout.row_square_chat_list_receive;
 				}
@@ -86,7 +87,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				try {
-					profileImage.setImageBitmap(FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_FILE_NAME));
+					profileImage.setImageBitmap(FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME));
 				} catch (FileNotFoundException e) {
 					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareChatListAdapter getView : " + e.getMessage());
 				}
@@ -105,5 +106,11 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			timeText.setText(time);
 		}
 		return view;
+	}
+
+
+	@Override
+	public boolean isEnabled(int position) {
+		return false;
 	}
 }
