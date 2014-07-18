@@ -50,7 +50,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	}
 
 
-	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		Log.d(AhGlobalVariable.LOG_TAG, "CameraPreview surfaceChanged");
 
 		// If your preview can change or rotate, take care of those events here.
@@ -67,8 +67,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		// set preview size and make any resize, rotate or
 		// reformatting changes here
 		Camera.Parameters parameters = mCamera.getParameters();
-		Camera.Size previewSize = CameraHelper.getBestPreviewSize(w, h, parameters);
-		Camera.Size pictureSize = CameraHelper.getBestPictureSize(w, h, parameters);
+		Camera.Size previewSize =  CameraHelper.getBestPreviewSize(width, height, parameters);
+		Camera.Size pictureSize = CameraHelper.getBestPictureSize(width, height, parameters);
 		parameters.setPreviewSize(previewSize.width, previewSize.height);
 		parameters.setPictureSize(pictureSize.width, pictureSize.height);
 		parameters.setPictureFormat(ImageFormat.JPEG);

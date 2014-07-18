@@ -13,7 +13,6 @@ import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,7 +20,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -60,9 +58,6 @@ public class SquareProfileFragment extends AhFragment{
 	private int cameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 	private boolean takePicture = true;
 
-	private OrientationEventListener oel;
-	private int rotationDegree = 0;
-
 	private LinearLayout profileInfoLayout;
 	private EditText nickNameEditText;
 	private NumberPicker numberPicker;
@@ -87,7 +82,6 @@ public class SquareProfileFragment extends AhFragment{
 					// Stop preview before processing image
 					mCamera.stopPreview();
 
-
 					// Get file from taken data
 					File pictureFile = FileHelper.getOutputMediaFile(FileHelper.MEDIA_TYPE_IMAGE);
 					Uri pictureFileUri = Uri.fromFile(pictureFile);
@@ -100,33 +94,27 @@ public class SquareProfileFragment extends AhFragment{
 					Bitmap pictureBitmap = BitmapFactory.decodeStream
 							(context.getContentResolver().openInputStream(pictureFileUri));
 
-
-					// Rotate picture by orientation
-					pictureBitmap = BitmapHelper.rotate(pictureBitmap, rotationDegree);
-
-
 					// Crop picture
-					int width = profilePictureView.getWidth();
-					int height = profilePictureView.getHeight();
-					int xOffset = 0;
-					int yOffset = 0;
-					if(rotationDegree == AhGlobalVariable.ANGLE_180){
-						xOffset = pictureBitmap.getWidth() - width;
-					} else if(rotationDegree == AhGlobalVariable.ANGLE_270){
-						yOffset = pictureBitmap.getHeight() - height;
+					// Rotate picture
+					int height = pictureBitmap.getHeight();
+					if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
+						pictureBitmap = BitmapHelper.crop(pictureBitmap, 0, 0, height, height);
+						pictureBitmap = BitmapHelper.rotate(pictureBitmap, AhGlobalVariable.ANGLE_90);
+					}else{
+						pictureBitmap = BitmapHelper.crop(pictureBitmap, AhGlobalVariable.DEVICE_HEIGHT - height, 0, height, height);
+						pictureBitmap = BitmapHelper.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
+						pictureBitmap = BitmapHelper.flip(pictureBitmap);
 					}
-					pictureBitmap = BitmapHelper.crop(pictureBitmap, xOffset, yOffset, width, height);
-					Bitmap pictureCircleBitmap = BitmapHelper.cropRound(pictureBitmap);
 
+					// Crop picture in round
+					Bitmap pictureCircleBitmap = BitmapHelper.cropRound(pictureBitmap);
 
 					// Set taken picture to view
 					profilePictureView.setImageBitmap(pictureBitmap);
 
-
 					// Save picture to internal storage
 					FileHelper.saveImageToInternalStorage(context, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
 					FileHelper.saveImageToInternalStorage(context, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
-
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
@@ -356,36 +344,6 @@ public class SquareProfileFragment extends AhFragment{
 		cameraView.addView(mCameraPreview);
 		profilePictureView.setImageBitmap(null);
 		profileInfoLayout.bringToFront();
-
-		// Set camera orientation event listener
-		oel = new OrientationEventListener(context, SensorManager.SENSOR_DELAY_NORMAL){
-
-			@Override
-			public void onOrientationChanged(int orientation) {
-				Log.d(AhGlobalVariable.LOG_TAG, "onOrientationChanged");
-				if (orientation == ORIENTATION_UNKNOWN) return;
-
-				// Check whether it is possible to detect or not
-				if (oel.canDetectOrientation()){
-					// Get picture rotation orientation
-					CameraInfo info = new CameraInfo();
-					int cameraId = CameraHelper.findFrontFacingCameraID(cameraFacing);
-					Camera.getCameraInfo(cameraId, info);
-					orientation = (orientation + 45) / 90 * 90;
-					int rotation = 0;
-					if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-						rotation = (info.orientation - orientation + 360) % 360;
-					} else {  // back-facing camera
-						rotation = (info.orientation + orientation) % 360;
-					}
-
-					// Set the picture rotation orientation
-					Log.d(AhGlobalVariable.LOG_TAG, "rotation" + rotation);
-					rotationDegree = rotation;
-				}
-			}
-		};
-		oel.enable();
 	}
 
 
@@ -394,9 +352,6 @@ public class SquareProfileFragment extends AhFragment{
 	 */
 	private void releaseCameraAndRemoveView(){
 		if(mCamera != null){
-			oel.disable();
-			oel = null;
-
 			cameraView.removeAllViews();
 			mCamera.release();
 			mCamera = null;	

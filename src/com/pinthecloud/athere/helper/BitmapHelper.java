@@ -150,4 +150,16 @@ public class BitmapHelper {
 								targetHeight), null);
 		return targetBitmap;
 	}
+
+
+	public static Bitmap flip(Bitmap src) {
+		// create new matrix for transformation
+		Matrix matrix = new Matrix();
+
+		// horizonal
+		matrix.preScale(-1.0f, 1.0f);
+
+		// return transformed image
+		return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+	}
 }

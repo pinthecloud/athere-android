@@ -44,7 +44,7 @@ public class CameraHelper {
 	}
 
 
-	public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
+	public static int getCameraDisplayOrientation(Activity activity, int cameraId) {
 		CameraInfo info = new CameraInfo();
 		Camera.getCameraInfo(cameraId, info);
 		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
@@ -63,18 +63,34 @@ public class CameraHelper {
 		} else {  // back-facing
 			result = (info.orientation - degree + 360) % 360;
 		}
-		camera.setDisplayOrientation(result);
+		return result;
 	}
 
 
-	public static int findFrontFacingCameraID(int facing) {
+	public static int findFrontFacingCameraID() {
 		// Search for the front facing camera
 		int cameraId = -1;
 		int numberOfCameras = Camera.getNumberOfCameras();
 		for (int i = 0; i < numberOfCameras; i++) {
 			CameraInfo info = new CameraInfo();
 			Camera.getCameraInfo(i, info);
-			if (info.facing == facing) {
+			if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+				cameraId = i;
+				break;
+			}
+		}
+		return cameraId;
+	}
+
+
+	public static int findBackFacingCameraID() {
+		// Search for the front facing camera
+		int cameraId = -1;
+		int numberOfCameras = Camera.getNumberOfCameras();
+		for (int i = 0; i < numberOfCameras; i++) {
+			CameraInfo info = new CameraInfo();
+			Camera.getCameraInfo(i, info);
+			if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
 				cameraId = i;
 				break;
 			}
@@ -86,7 +102,7 @@ public class CameraHelper {
 	public static Camera.Size getBestPreviewSize(int width, int height, Camera.Parameters parameters) {
 		Camera.Size result = null;
 		for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
-			if (size.width <= width && size.height <= height) {
+			if ((size.width <= width && size.height <= height) || (size.width <= height && size.height <= width)) {
 				if (result == null) {
 					result = size;
 				} else {
@@ -105,9 +121,9 @@ public class CameraHelper {
 	public static Camera.Size getBestPictureSize(int width, int height, Camera.Parameters parameters) {
 		Camera.Size result = null;
 		for(Camera.Size size : parameters.getSupportedPictureSizes()){
-			if (size.width <= height && size.height <= width) {
+			if ((size.width <= width && size.height <= height) || (size.width <= height && size.height <= width)) {
 				if (result == null) {
-					result=size;
+					result = size;
 				} else{
 					int resultArea = result.width * result.height;
 					int newArea = size.width * size.height;
@@ -118,5 +134,42 @@ public class CameraHelper {
 			}
 		}
 		return result;
+	}
+
+
+	public static Camera.Size getSmallestPictureSize(Camera.Parameters parameters) {
+		Camera.Size result=null;
+		for (Camera.Size size : parameters.getSupportedPictureSizes()) {
+			if (result == null) {
+				result=size;
+			} else {
+				int resultArea = result.width * result.height;
+				int newArea = size.width * size.height;
+				if (newArea < resultArea) {
+					result = size;
+				}
+			}
+		}
+		return result;
+	}
+
+
+	public static int onOrientationChanged(int orientation, int cameraId){
+		//		if (orientation == ORIENTATION_UNKNOWN) return;
+
+		// Check whether it is possible to detect or not
+		// Get picture rotation orientation
+		//		if(oel.canDetectOrientation()){
+		CameraInfo info = new CameraInfo();
+		Camera.getCameraInfo(cameraId, info);
+		orientation = (orientation + 45) / 90 * 90;
+		int rotation = 0;
+		if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+			rotation = (info.orientation - orientation + 360) % 360;
+		} else {  // back-facing camera
+			rotation = (info.orientation + orientation) % 360;
+		}
+		//		}
+		return rotation;
 	}
 }
