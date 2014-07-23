@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,31 +19,24 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
-import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class SquareChatFragment extends AhFragment{
 
 	private ListView messageListView;
-	private SquareChatListAdapter messageListSendAdapter;
+	private SquareChatListAdapter messageListAdapter;
 	private EditText messageEditText;
 	private Button sendButton;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		pref = new PreferenceHelper(context);
-	}
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-		
+
 		/*
 		 * Set UI component
 		 */
@@ -54,9 +48,9 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set message list view
 		 */
-		messageListSendAdapter = new SquareChatListAdapter
+		messageListAdapter = new SquareChatListAdapter
 				(context, R.layout.row_square_chat_list_send, messageList);
-		messageListView.setAdapter(messageListSendAdapter);
+		messageListView.setAdapter(messageListAdapter);
 		messageListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -97,14 +91,27 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
-				AhMessage message = new AhMessage();
+				// Make message and send it
+				final AhMessage message = new AhMessage();
 				message.setContent(messageEditText.getText().toString());
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
+				message.setReceiverId("38A0D350-ABCA-4E9A-9249-4ACE9D571CE8");
+				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
-				messageListSendAdapter.notifyDataSetChanged();
-
+				messageListAdapter.notifyDataSetChanged();
 				messageEditText.setText("");
+
+				// Send message to server
+				serviceClient.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+
+					@Override
+					public void onCompleted(AhMessage entity) {
+						Log.d(AhGlobalVariable.LOG_TAG, "sent message");
+						message.setStatus(AhMessage.SENT);
+						messageListAdapter.notifyDataSetChanged();
+					}
+				});
 			}
 		});
 

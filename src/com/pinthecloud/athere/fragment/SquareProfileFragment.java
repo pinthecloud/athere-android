@@ -37,7 +37,6 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.BitmapHelper;
 import com.pinthecloud.athere.helper.CameraHelper;
 import com.pinthecloud.athere.helper.FileHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.Square;
 
@@ -132,7 +131,6 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		pref = new PreferenceHelper(context);
 
 		// Get parameter from previous activity intent
 		intent = getActivity().getIntent();

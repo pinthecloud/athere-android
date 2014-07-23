@@ -6,18 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 
 public class SquareChupaFragment extends AhFragment{
 
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		pref = new PreferenceHelper(context);
-	}
-
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

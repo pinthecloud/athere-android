@@ -32,22 +32,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <GridLayout
-                android:id="@+id/row_square_chat_list_receive_time_read_layout"
+            <TextView
+                android:id="@+id/row_square_chat_list_receive_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom" >
+                android:layout_gravity="bottom" />
 
-                <TextView
-                    android:id="@+id/row_square_chat_list_receive_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/row_square_chat_list_receive_read"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </GridLayout>
         </LinearLayout>
     </LinearLayout>
 

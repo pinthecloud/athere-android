@@ -15,7 +15,6 @@ import android.widget.ToggleButton;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.dialog.BasicProfileCompleteDialog;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 
 public class BasicProfileFragment extends AhFragment{
 
@@ -27,14 +26,13 @@ public class BasicProfileFragment extends AhFragment{
 	private ToggleButton femaleButton;
 	private DatePicker yearPicker; 
 	private Button completeButton;
-	
+
 	private int gender = 1;
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		pref = new PreferenceHelper(context);
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);
 
 		/*
@@ -45,16 +43,16 @@ public class BasicProfileFragment extends AhFragment{
 		yearPicker = (DatePicker)view.findViewById(R.id.basic_profile_frag_year_picker);
 		completeButton = (Button) view.findViewById(R.id.basic_profile_frag_start_button);
 
-		
+
 		/*
 		 * Set gender button
 		 */
 		maleButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View view) {
 				boolean on = ((ToggleButton) view).isChecked();
-				
+
 				if(on){
 					gender = 1;
 					maleButton.setEnabled(false);
@@ -64,11 +62,11 @@ public class BasicProfileFragment extends AhFragment{
 			}
 		});
 		femaleButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View view) {
 				boolean on = ((ToggleButton) view).isChecked();
-				
+
 				if(on){
 					gender = 2;
 					maleButton.setEnabled(true);
@@ -77,8 +75,8 @@ public class BasicProfileFragment extends AhFragment{
 				}
 			}
 		});
-		
-		
+
+
 		/*
 		 * Set birth year picker
 		 */
@@ -100,7 +98,7 @@ public class BasicProfileFragment extends AhFragment{
 				pref.putInt(AhGlobalVariable.GENDER_KEY, gender);
 				pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
 
-				
+
 				// Show confirming dialog
 				DialogFragment dialogFragment = BasicProfileCompleteDialog.newInstance(gender, birthYear);
 				dialogFragment.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
