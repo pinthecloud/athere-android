@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -48,13 +49,12 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		if (message != null) {
 			// If the view is new, inflate it
 			if (view == null) {
-				LayoutInflater inflater = (LayoutInflater) 
+				LayoutInflater inflater = (LayoutInflater)
 						context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 				// Inflate different layout by user
 				if(message.isMine(pref.getString(AhGlobalVariable.NICK_NAME_KEY))){
-					this.layoutId = R.layout.row_square_chat_list_receive;
-					//					this.layoutId = R.layout.row_square_chat_list_send;
+					this.layoutId = R.layout.row_square_chat_list_send;
 				} else{
 					this.layoutId = R.layout.row_square_chat_list_receive;
 				}
@@ -68,19 +68,31 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			TextView nickNameText = null;
 			TextView messageText = null;
 			TextView timeText = null;
-			TextView readText = null;
-
+			ProgressBar progressBar = null;
 			if(this.layoutId == R.layout.row_square_chat_list_send){
 				nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_send_nickname);
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
 				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
-				readText = (TextView)view.findViewById(R.id.row_square_chat_list_send_read);
+				progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
+				
+				/*
+				 * Set UI component only in send list
+				 */
+				switch(message.getStatus()){
+				case AhMessage.SENDING:
+					progressBar.setVisibility(View.VISIBLE);
+					break;
+				case AhMessage.SENT:
+					progressBar.setVisibility(View.GONE);
+					break;
+				case AhMessage.FAIL:
+					progressBar.setVisibility(View.GONE);
+					break;
+				}
 			} else{
 				nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nickname);
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_message);
 				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
-				readText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_read);
-
 
 				/*
 				 * Set UI component only in receive list

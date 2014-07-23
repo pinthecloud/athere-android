@@ -71,8 +71,8 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	public void setUp(View mFragmentView, DrawerLayout drawerLayout) {
-		mFragmentView = mFragmentView;
+	public void setUp(View fragmentView, DrawerLayout drawerLayout) {
+		mFragmentView = fragmentView;
 		mDrawerLayout = drawerLayout;
 	}
 }

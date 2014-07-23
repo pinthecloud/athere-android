@@ -1,5 +1,7 @@
 package com.pinthecloud.athere;
 
+import java.net.MalformedURLException;
+
 import android.app.Application;
 
 import com.pinthecloud.athere.helper.ServiceClient;
@@ -12,7 +14,10 @@ public class AhApplication extends Application {
 	@Override
 	public void onCreate(){
 		super.onCreate();
-		this.serviceClient = new ServiceClient(this);
+		try {
+			this.serviceClient = new ServiceClient(this);
+		} catch (MalformedURLException e) {
+		}
 	}
 	
 	

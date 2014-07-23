@@ -5,6 +5,10 @@ import android.os.Parcelable;
 
 public class AhMessage implements Parcelable {
 
+	public static final int SENDING = 0;
+	public static final int SENT = 1;
+	public static final int FAIL = -1;
+	
 	public enum MESSAGE_TYPE { 
 		SQUARE("SQUARE"), ROOM("ROOM"), SHOUTING("SHOUTING"); 
 
@@ -29,6 +33,7 @@ public class AhMessage implements Parcelable {
 	private String senderId = "";
 	private String receiver = "";
 	private String receiverId = "";
+	private int status = 0;
 
 
 	public static final Parcelable.Creator<AhMessage> CREATOR = new Creator<AhMessage>(){
@@ -90,6 +95,12 @@ public class AhMessage implements Parcelable {
 	}
 	public void setReceiverId(String receiverId) {
 		this.receiverId = receiverId;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	@Override
 	public String toString() {
