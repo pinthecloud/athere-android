@@ -28,6 +28,8 @@ public class SplashActivity extends AhActivity {
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
 		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
+		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
+		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 		
 		String httpAgent = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		if (httpAgent.equals(System.getProperty("http.agent"))){
@@ -42,7 +44,6 @@ public class SplashActivity extends AhActivity {
 				boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
 				boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 
-				
 				Intent intent = new Intent();
 				if (!isLoggedInUser){
 					// New User
@@ -52,7 +53,8 @@ public class SplashActivity extends AhActivity {
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				} else{
 					// Has entered a square
-					intent.setClass(SplashActivity.this, SquareChatActivity.class);
+					intent.setClass(SplashActivity.this, SquareListActivity.class);
+//					intent.setClass(SplashActivity.this, SquareActivity.class);
 				}
 				startActivity(intent);
 			}

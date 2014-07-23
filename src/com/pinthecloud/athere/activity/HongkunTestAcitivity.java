@@ -1,20 +1,15 @@
 package com.pinthecloud.athere.activity;
 
-import java.io.IOException;
 import java.util.List;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhMessage.MESSAGE_TYPE;
 import com.pinthecloud.athere.model.Square;

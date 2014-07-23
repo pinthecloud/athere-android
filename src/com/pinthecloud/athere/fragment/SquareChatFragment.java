@@ -30,11 +30,18 @@ public class SquareChatFragment extends AhFragment{
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		pref = new PreferenceHelper(context);
+	}
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-		pref = new PreferenceHelper(context);
 		
 		/*
 		 * Set UI component
@@ -103,5 +110,4 @@ public class SquareChatFragment extends AhFragment{
 
 		return view;
 	}
-
 }

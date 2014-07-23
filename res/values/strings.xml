@@ -11,6 +11,8 @@
     <string name="title_activity_square_list">SquareListActivity</string>
     <string name="title_activity_hongkun_test_acitivity">HongkunTestAcitivity</string>
     <string name="title_activity_ah">AhActivity</string>
+    <string name="title_activity_current_location">CurrentLocation</string>
+    <string name="title_square_menu_drawer">Square Drawer</string>
 
     <!-- Description -->
     <string name="des_drawer_open">Open drawer</string>
@@ -31,11 +33,10 @@
     <string name="gender">Gender</string>
     <string name="birth_year">Birth Year</string>
     <string name="number_of_persons">Number of persons</string>
-    
+
     <!-- Sentence -->
     <string name="bad_camera_message">Camera didn\'t work. Please try it again.</string>
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
-    <string name="action_example">Example action</string>
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
     <string name="max_nick_name_message">Please type in less then 16 letters.</string>
     <string name="bad_nick_name_message">This is invalid nick name.</string>
@@ -50,5 +51,8 @@
         <item>Camera</item>
         <item>Delete</item>
     </string-array>
-
+    <string-array name="square_tab_string_array">
+        <item>Chat</item>
+        <item>Chupa</item>
+    </string-array>
 </resources>

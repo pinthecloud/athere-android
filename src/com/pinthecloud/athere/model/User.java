@@ -26,7 +26,7 @@ public class User implements Parcelable{
 	private int age;
 	@com.google.gson.annotations.SerializedName("squareId")
 	private String squareId;
-	
+
 	public static final Parcelable.Creator<User> CREATOR = new Creator<User>(){
 		public User createFromParcel(Parcel in){
 			return new User(in);
@@ -35,9 +35,9 @@ public class User implements Parcelable{
 			return new User[size];
 		}
 	};
-	
+
 	public User() {
-		
+
 	}
 	public User(String id, String nickName, String profilePic, String mobileId,
 			String registrationId, boolean isMale, int companyNum, int age,
@@ -138,7 +138,7 @@ public class User implements Parcelable{
 		age = in.readInt();
 		squareId = in.readString();
 	}
-	
+
 	public static User addUserTest(){
 		User user = new User();
 		user.id = getRandomString();
@@ -152,39 +152,39 @@ public class User implements Parcelable{
 		user.squareId = getRandomString();
 		return user;
 	}
-	
+
 	private static String getRandomString(){
 		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 		StringBuilder sb = new StringBuilder();
 		Random random = new Random();
 		for (int i = 0; i < random.nextInt(20); i++) {
-		    char c = chars[random.nextInt(chars.length)];
-		    sb.append(c);
+			char c = chars[random.nextInt(chars.length)];
+			sb.append(c);
 		}
 		String output = sb.toString();
 		return output;
 	}
-	
+
 	private static int getRandomInt(){
 		Random random = new Random();
 		return random.nextInt(40);
 	}
-	
+
 	public String toString() {
 		return this.id + " / "+
-		this.nickName + " / "+
-		this.profilePic + " / "+
-		this.mobileId + " / "+
-		this.registrationId + " / "+
-		this.isMale + " / "+
-		this.companyNum + " / "+
-		this.age + " / "+
-		this.squareId;
+				this.nickName + " / "+
+				this.profilePic + " / "+
+				this.mobileId + " / "+
+				this.registrationId + " / "+
+				this.isMale + " / "+
+				this.companyNum + " / "+
+				this.age + " / "+
+				this.squareId;
 	}
-	
+
 	public JsonObject toJson() {
 		JsonObject jo = new JsonObject();
-		
+
 		jo.addProperty("nickName", this.nickName);
 		jo.addProperty("profilePic", this.profilePic);
 		jo.addProperty("mobileId", this.profilePic);
@@ -193,7 +193,7 @@ public class User implements Parcelable{
 		jo.addProperty("companyNum", this.companyNum);
 		jo.addProperty("age", this.age);
 		jo.addProperty("squareId", this.squareId);
-		
+
 		return jo;
 	}
 }

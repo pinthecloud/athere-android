@@ -2,7 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_profile_frag_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
     <FrameLayout
         android:id="@+id/square_profile_frag_camera_view"
@@ -18,35 +20,33 @@
         <RelativeLayout
             android:id="@+id/square_profile_frag_camera_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" >
+            android:layout_height="wrap_content" >
 
-            <ImageView
+            <com.pinthecloud.athere.interfaces.SquareImageView
                 android:id="@+id/square_profile_frag_profile_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/des_profile_image" />
 
             <Button
-                android:id="@+id/square_profile_frag_camera_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
-
-            <Button
                 android:id="@+id/square_profile_frag_self_camera_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true" />
+                android:layout_alignRight="@+id/square_profile_frag_profile_picture"
+                android:layout_alignTop="@+id/square_profile_frag_profile_picture" />
+
+            <Button
+                android:id="@+id/square_profile_frag_camera_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/square_profile_frag_profile_picture"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/square_profile_frag_profile_info_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_height="match_parent"
             android:background="#ffffff"
             android:gravity="center"
             android:orientation="vertical" >
@@ -57,8 +57,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="text"
-                android:maxLength="15" >
-            </EditText>
+                android:maxLength="15" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

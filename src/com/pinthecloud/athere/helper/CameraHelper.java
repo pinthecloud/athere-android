@@ -1,13 +1,8 @@
 package com.pinthecloud.athere.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.util.Log;
@@ -49,7 +44,7 @@ public class CameraHelper {
 	}
 
 
-	public static void setCameraDisplayOrientation(Activity activity, int cameraId, Camera camera) {
+	public static int getCameraDisplayOrientation(Activity activity, int cameraId) {
 		CameraInfo info = new CameraInfo();
 		Camera.getCameraInfo(cameraId, info);
 		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
@@ -68,18 +63,34 @@ public class CameraHelper {
 		} else {  // back-facing
 			result = (info.orientation - degree + 360) % 360;
 		}
-		camera.setDisplayOrientation(result);
+		return result;
 	}
 
 
-	public static int findFrontFacingCameraID(int facing) {
+	public static int findFrontFacingCameraID() {
 		// Search for the front facing camera
 		int cameraId = -1;
 		int numberOfCameras = Camera.getNumberOfCameras();
 		for (int i = 0; i < numberOfCameras; i++) {
 			CameraInfo info = new CameraInfo();
 			Camera.getCameraInfo(i, info);
-			if (info.facing == facing) {
+			if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+				cameraId = i;
+				break;
+			}
+		}
+		return cameraId;
+	}
+
+
+	public static int findBackFacingCameraID() {
+		// Search for the front facing camera
+		int cameraId = -1;
+		int numberOfCameras = Camera.getNumberOfCameras();
+		for (int i = 0; i < numberOfCameras; i++) {
+			CameraInfo info = new CameraInfo();
+			Camera.getCameraInfo(i, info);
+			if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
 				cameraId = i;
 				break;
 			}
@@ -91,7 +102,7 @@ public class CameraHelper {
 	public static Camera.Size getBestPreviewSize(int width, int height, Camera.Parameters parameters) {
 		Camera.Size result = null;
 		for (Camera.Size size : parameters.getSupportedPreviewSizes()) {
-			if (size.width <= width && size.height <= height) {
+			if ((size.width <= width && size.height <= height) || (size.width <= height && size.height <= width)) {
 				if (result == null) {
 					result = size;
 				} else {
@@ -110,9 +121,9 @@ public class CameraHelper {
 	public static Camera.Size getBestPictureSize(int width, int height, Camera.Parameters parameters) {
 		Camera.Size result = null;
 		for(Camera.Size size : parameters.getSupportedPictureSizes()){
-			if (size.width <= height && size.height <= width) {
+			if ((size.width <= width && size.height <= height) || (size.width <= height && size.height <= width)) {
 				if (result == null) {
-					result=size;
+					result = size;
 				} else{
 					int resultArea = result.width * result.height;
 					int newArea = size.width * size.height;
@@ -126,71 +137,39 @@ public class CameraHelper {
 	}
 
 
-	public static void setAutoFocusArea(Camera camera, int posX, int posY,
-			int focusRange, boolean flag, Point point) {
-		if (posX < 0 || posY < 0) {
-			setArea(camera, null);
-			return;
+	public static Camera.Size getSmallestPictureSize(Camera.Parameters parameters) {
+		Camera.Size result=null;
+		for (Camera.Size size : parameters.getSupportedPictureSizes()) {
+			if (result == null) {
+				result=size;
+			} else {
+				int resultArea = result.width * result.height;
+				int newArea = size.width * size.height;
+				if (newArea < resultArea) {
+					result = size;
+				}
+			}
 		}
-
-		int touchPointX;
-		int touchPointY;
-		int endFocusY;
-		int startFocusY;
-
-		if (!flag) {
-			// Camera.setDisplayOrientation()을 이용해서 영상을 세로로 보고 있는 경우.
-			touchPointX = point.y >> 1;
-		touchPointY = point.x >> 1;
-			startFocusY = posX;
-			endFocusY 	= posY;
-		} else {
-			// Camera.setDisplayOrientation()을 이용해서 영상을 가로로 보고 있는 경우.
-			touchPointX = point.x >> 1;
-		touchPointY = point.y >> 1;
-		startFocusY = posY;
-		endFocusY = point.x - posX;
-		}
-
-		float startFocusX 	= 1000F / (float) touchPointY;
-		float endFocusX 	= 1000F / (float) touchPointX;
-
-		startFocusX = (int) (startFocusX * (float) (startFocusY - touchPointY)) - focusRange;
-		startFocusY = (int) (endFocusX * (float) (endFocusY - touchPointX)) - focusRange;
-		endFocusX = startFocusX + focusRange;
-		endFocusY = startFocusY + focusRange;
-
-		if (startFocusX < -1000)
-			startFocusX = -1000;
-
-		if (startFocusY < -1000)
-			startFocusY = -1000;
-
-		if (endFocusX > 1000) {
-			endFocusX = 1000;
-		}
-
-		if (endFocusY > 1000) {
-			endFocusY = 1000;
-		}
-
-		Rect rect = new Rect((int) startFocusX, (int) startFocusY, (int) endFocusX, (int) endFocusY);
-		ArrayList<Camera.Area> arraylist = new ArrayList<Camera.Area>();
-		arraylist.add(new Camera.Area(rect, 1000));
-
-		setArea(camera, arraylist);
+		return result;
 	}
 
 
-	public static void setArea(Camera camera, List<Camera.Area> list) {
-		Camera.Parameters parameters = camera.getParameters();
-		if (parameters.getMaxNumFocusAreas() > 0) {
-			parameters.setFocusAreas(list);
+	public static int onOrientationChanged(int orientation, int cameraId){
+		//		if (orientation == ORIENTATION_UNKNOWN) return;
+
+		// Check whether it is possible to detect or not
+		// Get picture rotation orientation
+		//		if(oel.canDetectOrientation()){
+		CameraInfo info = new CameraInfo();
+		Camera.getCameraInfo(cameraId, info);
+		orientation = (orientation + 45) / 90 * 90;
+		int rotation = 0;
+		if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+			rotation = (info.orientation - orientation + 360) % 360;
+		} else {  // back-facing camera
+			rotation = (info.orientation + orientation) % 360;
 		}
-		if (parameters.getMaxNumMeteringAreas() > 0) {
-			parameters.setMeteringAreas(list);
-		}
-		parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
-		camera.setParameters(parameters);
+		//		}
+		return rotation;
 	}
 }
