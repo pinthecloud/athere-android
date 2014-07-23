@@ -77,8 +77,6 @@ public class ServiceClient {
 		PreferenceHelper pref = new PreferenceHelper(context);
 		pref.putUser(nickName, isMale, age, registrationId);
 	}
-
-	
 	
 	public List<Square> getSquareListSync(Location loc) throws AhException {
 		return this.getSquareListSync(loc.getLatitude(), loc.getLongitude());
@@ -88,7 +86,7 @@ public class ServiceClient {
 		final AhCarrier<List<Square>> carrier = new AhCarrier<List<Square>>();
 		JsonObject jo = new JsonObject();
 		jo.addProperty("currentLatitude", latitude);
-		jo.addProperty("currentLongtitude", longitude);
+		jo.addProperty("currentLongitude", longitude);
 		
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
@@ -107,7 +105,7 @@ public class ServiceClient {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "getSquareListAsync");
+					throw new AhException(exception, "getSquareListSync");
 				}
 			}
 		});
@@ -126,7 +124,7 @@ public class ServiceClient {
 	
 	
 	
-	public Square createSquareSync(String name, double latitude, double longitude) throws AhException {
+	public Square createSquareSync(String name, double latitude, double longitude, boolean isAdmin) throws AhException {
 		PreferenceHelper pref = new PreferenceHelper(context);
 		String whoMade = pref.getRegistrationId();
 		
@@ -332,162 +330,162 @@ public class ServiceClient {
 	 *  Async Task Methods
 	 * 
 	 */
-	public void getSquareListAsync(Location loc, final AhListCallback<Square> callback) throws AhException {
-		progressDialog.show();
-		
-		JsonObject jo = new JsonObject();
-		jo.addProperty("currentLatitude", loc.getLatitude());
-		jo.addProperty("currentLongtitude", loc.getLongitude());
-		
-		Gson g = new Gson();
-		JsonElement json = g.fromJson(jo, JsonElement.class);
-		
-		mClient.invokeApi("getnearsquare", json, new ApiJsonOperationCallback() {
-			
-			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				// TODO Auto-generated method stub
-				if ( exception == null) {
-					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
-					if (list == null) throw new AhException(exception, "getSquareList");
-					callback.onCompleted(list, list.size());
-					progressDialog.dismiss();
-				} else {
-					throw new AhException(exception, "getSquareListAsync");
-				}
-			}
-		});
-	}
-	
-	@Deprecated
-	public String createSquareWithoutFuture() {
-		final ServiceClient _this = this;
-		final StringBuilder sb = new StringBuilder();
-		
-		final Object log = new Object();
-		_this.createSquareAsync("squareName", 10.0, 10.0, new AhEntityCallback<Square>() {
-			
-			@Override
-			public void onCompleted(Square entity) {
-				// TODO Auto-generated method stub
-				sb.append(entity.getId());
-				synchronized (log) {
-					log.notify();
-				}
-				
-			}
-		});
-		
-		synchronized (log) {
-			try {
-				log.wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return sb.toString();
-	}
-	
-	public void createSquareAsync(String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
-		PreferenceHelper pref = new PreferenceHelper(context);
-		String whoMade = pref.getRegistrationId();
-		
-		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
-			throw new AhException("createSquare NO Registration");
-		}
-		Square square = new Square();
-		
-		square.setName(name);
-		square.setLatitude(latitude);
-		square.setLongitude(longitude);
-		square.setWhoMade(whoMade);
-		
-		this.createSquareAsync(square, callback);
-	}
-	
-	public void createSquareAsync(Square square, final AhEntityCallback<Square> callback) throws AhException {
-		squareTable.insert(square, new TableOperationCallback<Square>() {
-
-			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
-				
-				if (exception == null) {
-					callback.onCompleted(entity);
-				} else {
-					throw new AhException(exception, "createSquareAsync");
-				}
-			}
-		});
-	}
-	
-	public void enterSquareAsync(String squareId, Bitmap img, int companyNum, String mobileId, final AhEntityCallback<Boolean> callback) throws AhException {
-		PreferenceHelper pref = new PreferenceHelper(context);
-		User user = pref.getUser();
-		
-		user.setSquareId(squareId);
-		String profilePic = null;
-		profilePic = ImageConverter.convertToString(img);
-		user.setProfilePic(profilePic);
-		user.setCompanyNum(companyNum);
-		user.setMobileId(mobileId);
-		
-		userTable.insert(user, new TableOperationCallback<User>() {
-
-			@Override
-			public void onCompleted(User entity, Exception exception,
-					ServiceFilterResponse response) {
-				// TODO Auto-generated method stub
-				if (exception == null) {
-					callback.onCompleted(true);
-				} else {
-					throw new AhException(exception, "enterSquareAsync");
-				}
-			}
-		});
-	}
-	
-	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
-		
-		userTable.delete(squareId, new TableDeleteCallback() {
-			
-			@Override
-			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
-				// TODO Auto-generated method stub
-				if (exception == null) {
-					callback.onCompleted(true);
-				} else {
-					throw new AhException(exception, "exitSquareAsync");
-				}
-			}
-		});
-		
-	}
-	
-	public void sendMessageAsync(AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
-		
-		JsonObject jo = new JsonObject();
-		jo.addProperty("type", message.getType());
-		jo.addProperty("content", message.getContent());
-		jo.addProperty("sender", message.getSender());
-		jo.addProperty("senderId", message.getSenderId());
-		jo.addProperty("receiver", message.getReceiver());
-		jo.addProperty("receiverId", message.getReceiverId());
-		
-		Gson g = new Gson();
-		JsonElement json = g.fromJson(jo, JsonElement.class);
-		
-		mClient.invokeApi("send_message", json, new ApiJsonOperationCallback() {
-			
-			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				// TODO Auto-generated method stub
-				callback.onCompleted(null);
-			}
-		});
-		
-	}
+//	public void getSquareListAsync(Location loc, final AhListCallback<Square> callback) throws AhException {
+//		progressDialog.show();
+//		
+//		JsonObject jo = new JsonObject();
+//		jo.addProperty("currentLatitude", loc.getLatitude());
+//		jo.addProperty("currentLongtitude", loc.getLongitude());
+//		
+//		Gson g = new Gson();
+//		JsonElement json = g.fromJson(jo, JsonElement.class);
+//		
+//		mClient.invokeApi("getnearsquare", json, new ApiJsonOperationCallback() {
+//			
+//			@Override
+//			public void onCompleted(JsonElement json, Exception exception,
+//					ServiceFilterResponse response) {
+//				// TODO Auto-generated method stub
+//				if ( exception == null) {
+//					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
+//					if (list == null) throw new AhException(exception, "getSquareList");
+//					callback.onCompleted(list, list.size());
+//					progressDialog.dismiss();
+//				} else {
+//					throw new AhException(exception, "getSquareListAsync");
+//				}
+//			}
+//		});
+//	}
+//	
+//	@Deprecated
+//	public String createSquareWithoutFuture() {
+//		final ServiceClient _this = this;
+//		final StringBuilder sb = new StringBuilder();
+//		
+//		final Object log = new Object();
+//		_this.createSquareAsync("squareName", 10.0, 10.0, new AhEntityCallback<Square>() {
+//			
+//			@Override
+//			public void onCompleted(Square entity) {
+//				// TODO Auto-generated method stub
+//				sb.append(entity.getId());
+//				synchronized (log) {
+//					log.notify();
+//				}
+//				
+//			}
+//		});
+//		
+//		synchronized (log) {
+//			try {
+//				log.wait();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		return sb.toString();
+//	}
+//	
+//	public void createSquareAsync(String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
+//		PreferenceHelper pref = new PreferenceHelper(context);
+//		String whoMade = pref.getRegistrationId();
+//		
+//		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
+//			throw new AhException("createSquare NO Registration");
+//		}
+//		Square square = new Square();
+//		
+//		square.setName(name);
+//		square.setLatitude(latitude);
+//		square.setLongitude(longitude);
+//		square.setWhoMade(whoMade);
+//		
+//		this.createSquareAsync(square, callback);
+//	}
+//	
+//	public void createSquareAsync(Square square, final AhEntityCallback<Square> callback) throws AhException {
+//		squareTable.insert(square, new TableOperationCallback<Square>() {
+//
+//			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
+//				
+//				if (exception == null) {
+//					callback.onCompleted(entity);
+//				} else {
+//					throw new AhException(exception, "createSquareAsync");
+//				}
+//			}
+//		});
+//	}
+//	
+//	public void enterSquareAsync(String squareId, Bitmap img, int companyNum, String mobileId, final AhEntityCallback<Boolean> callback) throws AhException {
+//		PreferenceHelper pref = new PreferenceHelper(context);
+//		User user = pref.getUser();
+//		
+//		user.setSquareId(squareId);
+//		String profilePic = null;
+//		profilePic = ImageConverter.convertToString(img);
+//		user.setProfilePic(profilePic);
+//		user.setCompanyNum(companyNum);
+//		user.setMobileId(mobileId);
+//		
+//		userTable.insert(user, new TableOperationCallback<User>() {
+//
+//			@Override
+//			public void onCompleted(User entity, Exception exception,
+//					ServiceFilterResponse response) {
+//				// TODO Auto-generated method stub
+//				if (exception == null) {
+//					callback.onCompleted(true);
+//				} else {
+//					throw new AhException(exception, "enterSquareAsync");
+//				}
+//			}
+//		});
+//	}
+//	
+//	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
+//		
+//		userTable.delete(squareId, new TableDeleteCallback() {
+//			
+//			@Override
+//			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
+//				// TODO Auto-generated method stub
+//				if (exception == null) {
+//					callback.onCompleted(true);
+//				} else {
+//					throw new AhException(exception, "exitSquareAsync");
+//				}
+//			}
+//		});
+//		
+//	}
+//	
+//	public void sendMessageAsync(AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
+//		
+//		JsonObject jo = new JsonObject();
+//		jo.addProperty("type", message.getType());
+//		jo.addProperty("content", message.getContent());
+//		jo.addProperty("sender", message.getSender());
+//		jo.addProperty("senderId", message.getSenderId());
+//		jo.addProperty("receiver", message.getReceiver());
+//		jo.addProperty("receiverId", message.getReceiverId());
+//		
+//		Gson g = new Gson();
+//		JsonElement json = g.fromJson(jo, JsonElement.class);
+//		
+//		mClient.invokeApi("send_message", json, new ApiJsonOperationCallback() {
+//			
+//			@Override
+//			public void onCompleted(JsonElement json, Exception exception,
+//					ServiceFilterResponse response) {
+//				// TODO Auto-generated method stub
+//				callback.onCompleted(null);
+//			}
+//		});
+//		
+//	}
 	
 //	public void isAvailableNickName(User user, final AhEntityCallback<Boolean> callback) throws AhException {
 //	

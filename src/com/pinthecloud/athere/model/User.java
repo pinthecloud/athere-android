@@ -5,7 +5,6 @@ import java.util.Random;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.android.gms.internal.jo;
 import com.google.gson.JsonObject;
 
 public class User implements Parcelable{

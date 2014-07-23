@@ -22,7 +22,9 @@ public class Square implements Parcelable {
 	private double longitude;
 	@com.google.gson.annotations.SerializedName("participants")
 	private int participants;
-	
+	@com.google.gson.annotations.SerializedName("isAdmin")
+	private boolean isAdmin;
+	@com.google.gson.annotations.SerializedName("distance")
 	private int distance;
 	
 	public String getId() {
@@ -67,13 +69,22 @@ public class Square implements Parcelable {
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
 	
 	
+	
+	public static Parcelable.Creator<Square> getCreator() {
+		return CREATOR;
+	}
 	@Override
 	public int describeContents() {
 		return 0;
 	}
-	
 	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
@@ -83,8 +94,9 @@ public class Square implements Parcelable {
 		dest.writeDouble(latitude);
 		dest.writeDouble(longitude);
 		dest.writeInt(participants);
+		dest.writeInt(distance);
+		dest.writeInt(isAdmin? 1: 0);
 	}
-	
 	
 	public void readToParcel(Parcel in){
 		id = in.readString();
@@ -93,8 +105,9 @@ public class Square implements Parcelable {
 		latitude = in.readDouble();
 		longitude = in.readDouble();
 		participants = in.readInt();
+		distance = in.readInt();
+		isAdmin = in.readInt() == 1;
 	}
-	
 	
 	public static final Parcelable.Creator<Square> CREATOR = new Creator<Square>(){
 		public Square createFromParcel(Parcel in){

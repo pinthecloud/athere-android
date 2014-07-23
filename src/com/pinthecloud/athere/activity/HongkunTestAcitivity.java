@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.activity;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,13 +13,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhMessage.MESSAGE_TYPE;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.Square;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn;
@@ -34,46 +33,55 @@ public class HongkunTestAcitivity extends AhActivity {
 		btn = (Button)findViewById(R.id.button1);
 		
 		
-//		for(int i = 0 ; i < 3 ; i++){
-//			User u = User.addUserTest();
-//			Log.e("ERROR",u.toString());
-//			userHelper.addUser(u);
-//		}
-		//NotificationsManager.handleNotifications(this, SENDER_ID, MyHandler.class);
-		PreferenceHelper pref = new PreferenceHelper(this);
-		pref.putInt("sdf",3);
-		pref.getInt("sdf");
-		
-		(new AsyncTask<Context, Void, String>(){
-
-			@Override
-			protected String doInBackground(Context... arg0) {
-				// TODO Auto-generated method stub
-				
-				GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(arg0[0]);
-				String registrationId = "";
-				try {
-					registrationId = gcm.register(SENDER_ID);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return registrationId;
-			}
-			
-			@Override
-			protected void onPostExecute(String result) {
-				// TODO Auto-generated method stub
-				super.onPostExecute(result);
-				serviceClient.setProfile("BobNick", true, 1989, result);
-				Log.e("ERROR","succeed : " + result);
-			}
-			
-		}).execute(this);
+//		(new AsyncTask<Context, Void, String>(){
+//
+//			@Override
+//			protected String doInBackground(Context... arg0) {
+//				// TODO Auto-generated method stub
+//				
+//				GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(arg0[0]);
+//				String registrationId = "";
+//				try {
+//					registrationId = gcm.register(SENDER_ID);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				return registrationId;
+//			}
+//			
+//			@Override
+//			protected void onPostExecute(String result) {
+//				// TODO Auto-generated method stub
+//				super.onPostExecute(result);
+//				serviceClient.setProfile("BobNick", true, 1989, result);
+//				Log.e("ERROR","succeed : " + result);
+//			}
+//			
+//		}).execute(this);
 	}
 	
 	public void addItem(View view) {
+		
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				List<Square> list = serviceClient.getSquareListSync(37.401572, 127.1101709);
 				
+				for(Square square : list){
+					Log.e("ERROR",square.getName());
+				}
+			}
+			
+		}).start();
+		
+		
+	    	    
+	    boolean var = true;
+		if(var) return;
+		
 		new Thread(new Runnable() {
 			
 			@Override
