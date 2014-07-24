@@ -63,6 +63,11 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
+		List<AhMessage> messagesFromBuffer = messageDBHelper.getAllMessages();
+		for(int i=0 ; i<messagesFromBuffer.size() ; i++){
+			messageList.add(messagesFromBuffer.get(i));
+		}
+		messageListAdapter.notifyDataSetChanged();
 
 
 		/*
@@ -128,12 +133,12 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		List<AhMessage> messagesFromBuffer = messageDBHelper.getAllMessages();
 		messageDBHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
-			public void onCompleted(AhMessage entity) {
-				// TODO Auto-generated method stub
+			public void onCompleted(AhMessage message) {
+				messageList.add(message);
+				messageListAdapter.notifyDataSetChanged();
 			}
 		});
 

@@ -3,10 +3,14 @@ package com.pinthecloud.athere;
 import java.net.MalformedURLException;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
+import com.pinthecloud.athere.helper.LocationHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -36,6 +40,7 @@ public class AhApplication extends Application{
 	private static UserHelper userHelper;
 	private static SquareHelper squareHelper;
 	private static MessageHelper messageHelper; 
+	private static LocationHelper locationHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -63,6 +68,7 @@ public class AhApplication extends Application{
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
+		locationHelper = new LocationHelper(this);
 
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
@@ -100,5 +106,15 @@ public class AhApplication extends Application{
 	}
 	public MessageHelper getMessageHelper() {
 		return messageHelper;
+	}
+	public LocationHelper getLocationHelper() {
+		return locationHelper;
+	}
+
+	public boolean isOnline(){
+		ConnectivityManager cm = 
+				(ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
 }

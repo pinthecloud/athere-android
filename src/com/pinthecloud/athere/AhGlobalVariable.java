@@ -29,6 +29,7 @@ public class AhGlobalVariable{
 	public static final String SQUARE_KEY = "SQUARE_KEY";
 
 	// SharedPreference Key
+	public static final String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
 	public static final String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";
 	public static final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
 	public static final String UNIQUE_ID_KEY = "UNIQUE_ID_KEY";

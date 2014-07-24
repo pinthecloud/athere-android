@@ -23,7 +23,6 @@ import android.util.Log;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.R.drawable;
 import com.pinthecloud.athere.activity.SplashActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.model.AhMessage;

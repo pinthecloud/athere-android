@@ -18,8 +18,10 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
+import com.pinthecloud.athere.dialog.LocationConsentDialog;
 import com.pinthecloud.athere.helper.LocationHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 
@@ -30,14 +32,14 @@ public class SquareListFragment extends AhFragment{
 	private ProgressBar mProgressBar;
 
 	private SquareHelper squareHelper;
-	
+
 	private ArrayList<Square> squares = new ArrayList<Square>();
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// Set Helper
 		squareHelper = app.getSquareHelper();
 	}
@@ -70,16 +72,25 @@ public class SquareListFragment extends AhFragment{
 				startActivity(intent);
 			}
 		});
-		getNearSquare();
+
+		/*
+		 * If app haven't got consent from user, show consent dialog.
+		 * Otherwise, get near squares.
+		 */
+		if(!pref.getBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY)){
+			showLocationConsentDialog();
+		}else{
+			getNearSquare();
+		}
 
 		return view;
 	}
 
-
+	
 	private void getNearSquare(){
 		mProgressBar.setVisibility(View.VISIBLE);
 
-		LocationHelper mLocationHelper = new LocationHelper(app);
+		LocationHelper mLocationHelper = app.getLocationHelper();
 		Location loc = mLocationHelper.getLocation();
 		squareHelper.getSquareListAsync(loc, new AhListCallback<Square>() {
 
@@ -90,5 +101,22 @@ public class SquareListFragment extends AhFragment{
 				mProgressBar.setVisibility(View.GONE);
 			}
 		});
+	}
+
+	
+	private void showLocationConsentDialog(){
+		LocationConsentDialog locConsentDialog = new LocationConsentDialog(new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing() {
+				pref.putBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY, true);
+				getNearSquare();
+			}
+			@Override
+			public void doNegativeThing() {
+				// Do nothing
+			}
+		});
+		locConsentDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 }
