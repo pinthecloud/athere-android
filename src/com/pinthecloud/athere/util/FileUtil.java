@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.helper;
+package com.pinthecloud.athere.util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +17,7 @@ import android.os.Environment;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 
-public class FileHelper {
+public class FileUtil {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;

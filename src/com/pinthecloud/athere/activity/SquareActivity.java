@@ -3,6 +3,7 @@ package com.pinthecloud.athere.activity;
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -13,11 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
+import com.pinthecloud.athere.model.Square;
 
 public class SquareActivity extends AhActivity{
+
+	private Intent intent;
+	private Square square;
 
 	private ActionBar mActionBar;
 	private View mCustomActionBarView;
@@ -36,6 +42,10 @@ public class SquareActivity extends AhActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
+
+		// Get parameter from previous activity intent
+		intent = getIntent();
+		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
 
 		/*
 		 * Set UI Component

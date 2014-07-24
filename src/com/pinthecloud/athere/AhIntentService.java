@@ -21,14 +21,14 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.pinthecloud.athere.activity.SplashActivity;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class AhIntentService extends IntentService {
-	
-	AtomicInteger i = new AtomicInteger();
-	
+
+	private AtomicInteger i = new AtomicInteger();
+
 	public AhIntentService() {
 		super("AhIntentService");
 	}
@@ -44,14 +44,14 @@ public class AhIntentService extends IntentService {
 		if(isRunning(getBaseContext())){
 			// if the app is running, add the message to the chat room.
 		} else {
-		// if the app is not running, send a notification
+			// if the app is not running, send a notification
 			NotificationCompat.Builder mBuilder =
-			        new NotificationCompat.Builder(this)
-			        .setSmallIcon(R.drawable.ic_launcher)
-					//.setLargeIcon(ImageConverter.convertToImage(message.get));
-			        .setContentTitle(message.getSender())
-			        .setAutoCancel(true)
-			        .setContentText(message.getContent() +" : "+i.get());
+					new NotificationCompat.Builder(this)
+			.setSmallIcon(R.drawable.ic_launcher)
+			//.setLargeIcon(ImageConverter.convertToImage(message.get));
+			.setContentTitle(message.getSender())
+			.setAutoCancel(true)
+			.setContentText(message.getContent() +" : "+i.get());
 			// Creates an explicit intent for an Activity in your app
 			Intent resultIntent = new Intent(this, SplashActivity.class);
 
@@ -65,20 +65,20 @@ public class AhIntentService extends IntentService {
 			// Adds the Intent that starts the Activity to the top of the stack
 			stackBuilder.addNextIntent(resultIntent);
 			PendingIntent resultPendingIntent =
-			        stackBuilder.getPendingIntent(
-			            0,
-			            PendingIntent.FLAG_UPDATE_CURRENT
-			        );
+					stackBuilder.getPendingIntent(
+							0,
+							PendingIntent.FLAG_UPDATE_CURRENT
+							);
 			mBuilder.setContentIntent(resultPendingIntent);
 			NotificationManager mNotificationManager =
-			    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			// mId allows you to update the notification later on.
 			mNotificationManager.notify(i.getAndIncrement(), mBuilder.build());
 			Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 			v.vibrate(800);
-			
-			UserHelper userHelper = new UserHelper(this);
-			
+
+			UserDBHelper userHelper = new UserDBHelper(this);
+
 			List<User> userList = userHelper.getAllUsers();
 			for(User user : userList){
 				Log.e("ERROR",user.toString());
@@ -91,13 +91,13 @@ public class AhIntentService extends IntentService {
 		ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
 
-        for (RunningTaskInfo task : tasks) {
-            if (ctx.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
-                return true;                                  
-        }
-        return false;
+		for (RunningTaskInfo task : tasks) {
+			if (ctx.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
+				return true;                                  
+		}
+		return false;
 	}
-	
+
 	private AhMessage parseIntent(Intent intent) {
 		AhMessage message = new AhMessage();
 		Bundle b = intent.getExtras();
@@ -136,8 +136,6 @@ public class AhIntentService extends IntentService {
 	}
 
 	private static boolean isRunning3(Context context) {
-
-
 		ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
 
 		List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);

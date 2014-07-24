@@ -85,14 +85,14 @@ public class HongkunTestAcitivity extends AhActivity {
 				//String result = serviceClient.createSquareWithoutFuture();
 				String result = "38A0D350-ABCA-4E9A-9249-4ACE9D571CE8";
 				Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.splash_logo);
-				serviceClient.enterSquareSync(result, img, 3, "Android");
+//				serviceClient.enterSquareSync(result, img, 3, "Android");
 			
 				AhMessage message = new AhMessage();
 				
 				message.setType(MESSAGE_TYPE.SQUARE);
 				message.setContent("message contents");
 				message.setSender("bobNick");
-				message.setSenderId(pref.getRegistrationId());
+//				message.setSenderId(pref.getRegistrationId());
 				message.setReceiver("receiver name");
 				message.setReceiverId(result);
 				Log.e("ERROR", message.getReceiverId());

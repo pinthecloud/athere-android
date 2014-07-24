@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,17 +43,7 @@ public class SquareListFragment extends AhFragment{
 		squareListView = (ListView)view.findViewById(R.id.square_list_frag_list);
 		mProgressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
 
-
-		/*
-		 * Set temp square items
-		 */
-		for(int i=0 ; i<3 ; i++){
-			Square square = new Square();
-			square.setName("Example" + i);
-			squares.add(square);	
-		}
-
-
+		
 		/*
 		 * Set square list view
 		 */
@@ -75,6 +66,21 @@ public class SquareListFragment extends AhFragment{
 
 
 	private void getNearSquare(){
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				List<Square> list = serviceClient.getSquareListSync(37.401572, 127.1101709);
+				
+				for(Square square : list){
+					Log.e("ERROR",square.getName());
+				}
+			}
+			
+		}).start();
+		
+		
 		mProgressBar.setVisibility(View.VISIBLE);
 
 		LocationHelper mLocationHelper = new LocationHelper(context);

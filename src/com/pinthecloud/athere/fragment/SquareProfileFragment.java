@@ -15,30 +15,30 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
-import com.pinthecloud.athere.helper.BitmapHelper;
-import com.pinthecloud.athere.helper.CameraHelper;
-import com.pinthecloud.athere.helper.FileHelper;
+import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.util.CameraUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareProfileFragment extends AhFragment{
 
@@ -46,6 +46,8 @@ public class SquareProfileFragment extends AhFragment{
 	private final int MAX_NUMBER_PERSON = 30;
 
 	private Intent intent;
+	private Square square;
+	private ProgressBar progressBar;
 
 	private Camera mCamera;
 	private CameraPreview mCameraPreview;
@@ -58,12 +60,8 @@ public class SquareProfileFragment extends AhFragment{
 	private boolean takePicture = true;
 
 	private LinearLayout profileInfoLayout;
-	private EditText nickNameEditText;
 	private NumberPicker numberPicker;
 	private Button completeButton;
-
-	private Square square;
-
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -82,7 +80,7 @@ public class SquareProfileFragment extends AhFragment{
 					mCamera.stopPreview();
 
 					// Get file from taken data
-					File pictureFile = FileHelper.getOutputMediaFile(FileHelper.MEDIA_TYPE_IMAGE);
+					File pictureFile = FileUtil.getOutputMediaFile(FileUtil.MEDIA_TYPE_IMAGE);
 					Uri pictureFileUri = Uri.fromFile(pictureFile);
 					if (pictureFile == null){
 						return;
@@ -97,27 +95,28 @@ public class SquareProfileFragment extends AhFragment{
 					// Rotate picture
 					int height = pictureBitmap.getHeight();
 					if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
-						pictureBitmap = BitmapHelper.crop(pictureBitmap, 0, 0, height, height);
-						pictureBitmap = BitmapHelper.rotate(pictureBitmap, AhGlobalVariable.ANGLE_90);
+						pictureBitmap = BitmapUtil.crop(pictureBitmap, 0, 0, height, height);
+						pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_90);
 					}else{
-						pictureBitmap = BitmapHelper.crop(pictureBitmap, AhGlobalVariable.DEVICE_HEIGHT - height, 0, height, height);
-						pictureBitmap = BitmapHelper.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
-						pictureBitmap = BitmapHelper.flip(pictureBitmap);
+						pictureBitmap = BitmapUtil.crop(pictureBitmap, AhGlobalVariable.DEVICE_HEIGHT - height, 0, height, height);
+						pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
+						pictureBitmap = BitmapUtil.flip(pictureBitmap);
 					}
 
 					// Crop picture in round
-					Bitmap pictureCircleBitmap = BitmapHelper.cropRound(pictureBitmap);
+					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
 
 					// Set taken picture to view
 					profilePictureView.setImageBitmap(pictureBitmap);
 
 					// Save picture to internal storage
-					FileHelper.saveImageToInternalStorage(context, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
-					FileHelper.saveImageToInternalStorage(context, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
+					FileUtil.saveImageToInternalStorage(context, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
+					FileUtil.saveImageToInternalStorage(context, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
 					takePicture = false;
+					completeButton.setEnabled(true);
 				} catch (FileNotFoundException e) {
 					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment mPicutureListener : " + e.getMessage());
 				} catch (IOException e) {
@@ -147,38 +146,14 @@ public class SquareProfileFragment extends AhFragment{
 		/*
 		 * Find UI component
 		 */
+		progressBar = (ProgressBar) view.findViewById(R.id.square_profile_frag_progress_bar);
 		cameraView = (FrameLayout) view.findViewById(R.id.square_profile_frag_camera_view);
 		cameraButton = (Button) view.findViewById(R.id.square_profile_frag_camera_button);
 		selfCameraButton = (Button) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_picture);
-		nickNameEditText = (EditText)view.findViewById(R.id.square_profile_frag_nick_name_edit_text);
-		completeButton = (Button) view.findViewById(R.id.square_profile_frag_start_button);
 		numberPicker = (NumberPicker) view.findViewById(R.id.square_profile_frag_number_picker);
-
-
-		/*
-		 * Set nick name edit text
-		 */
-		nickNameEditText.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String nickName = s.toString().trim();
-				if(nickName.length() < 1){
-					completeButton.setEnabled(false);
-				}else{
-					completeButton.setEnabled(true);
-				}
-			}
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
+		completeButton = (Button) view.findViewById(R.id.square_profile_frag_start_button);
 
 
 		/*
@@ -191,42 +166,6 @@ public class SquareProfileFragment extends AhFragment{
 		/*
 		 * Set event on button
 		 */
-		completeButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				/*
-				 * Check whether user took profile picture or not
-				 * Check nick name edit text and save setting
-				 */
-				if(takePicture){
-					// Has to take profile picture
-					String message = getResources().getString(R.string.no_profile_picture_message);
-					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-					toast.setGravity(Gravity.CENTER, 0, 0);
-					toast.show();
-				} else {
-					String message = checkNickNameEditText();
-					if(!message.equals("")){
-						// Unproper nick name
-						// Show warning toast for each situation
-						Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-						toast.setGravity(Gravity.CENTER, 0, 0);
-						toast.show();
-					} else{
-						// Proper nick name
-						// Save this setting and go to next activity
-						pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-						pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-
-						intent.setClass(context, SquareActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
-					}
-				}
-			}
-		});
 		cameraButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -245,6 +184,7 @@ public class SquareProfileFragment extends AhFragment{
 				}else{
 					openCameraAndSetView();
 					takePicture = true;
+					completeButton.setEnabled(false);
 				}
 			}
 		});
@@ -264,6 +204,31 @@ public class SquareProfileFragment extends AhFragment{
 				takePicture = true;
 			}
 		});
+		completeButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				/*
+				 * Check whether user took profile picture or not
+				 * Check nick name edit text and save setting
+				 */
+				if(takePicture){
+					// Has to take profile picture
+					String message = getResources().getString(R.string.no_profile_picture_message);
+					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+					toast.show();
+				} else {
+					// Proper nick name
+					// Save this setting and go to next activity
+					int companyNumber = numberPicker.getValue();
+					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+					pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+					pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+
+					enterSquare();
+				}
+			}
+		});
 
 		return view;
 	}
@@ -280,7 +245,7 @@ public class SquareProfileFragment extends AhFragment{
 		}else{
 			try {
 				// Set taken picture to view
-				Bitmap pictureBitmap = FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
 				profilePictureView.setImageBitmap(pictureBitmap);
 			} catch (FileNotFoundException e) {
 				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onResume : " + e.getMessage());
@@ -300,44 +265,11 @@ public class SquareProfileFragment extends AhFragment{
 
 
 	/*
-	 * Check nick name EditText
-	 */
-	private String checkNickNameEditText(){
-		// Remove blank of along side.
-		String nickName = nickNameEditText.getText().toString().trim();
-		nickNameEditText.setText(nickName);
-		nickNameEditText.setSelection(nickName.length());
-
-		// Set regular expression for checking nick name
-		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
-		String message = "";
-
-
-		/*
-		 * Check logic whether this nick name is valid or not
-		 * If user doesn't type in proper nick name,
-		 * can't go to next activity
-		 */
-
-		// Check length of nick name
-		if(nickName.length() < 2){
-			message = getResources().getString(R.string.min_nick_name_message);
-		} else if(!nickName.matches(nickNameRegx)){
-			message = getResources().getString(R.string.bad_nick_name_message);
-		} else if(nickName.length() > 15){
-			message = getResources().getString(R.string.max_nick_name_message);
-		}
-
-		return message;
-	}
-
-
-	/*
 	 * Create our Preview view and set it as the content of our activity.
 	 * Create orientation event listener
 	 */
 	private void openCameraAndSetView(){
-		mCamera = CameraHelper.getCameraInstance(cameraFacing);
+		mCamera = CameraUtil.getCameraInstance(cameraFacing);
 		mCameraPreview = new CameraPreview(context, mCamera);
 		cameraView.addView(mCameraPreview);
 		profilePictureView.setImageBitmap(null);
@@ -354,6 +286,29 @@ public class SquareProfileFragment extends AhFragment{
 			mCamera.release();
 			mCamera = null;	
 		}
+	}
+
+
+	/*
+	 * Enter a square 
+	 */
+	private void enterSquare(){
+		progressBar.setVisibility(View.VISIBLE);
+		
+		UserHelper userHelper = new UserHelper(context);
+		User user = userHelper.getUser();
+		serviceClient.enterSquareAsync(user, new AhEntityCallback<Boolean>() {
+
+			@Override
+			public void onCompleted(Boolean entity) {
+				progressBar.setVisibility(View.GONE);
+
+				intent.setClass(context, SquareActivity.class);
+				intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+			}
+		});
 	}
 
 
