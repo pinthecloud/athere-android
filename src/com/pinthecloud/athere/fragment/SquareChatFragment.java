@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.helper.MessageReceiveHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 
@@ -30,13 +32,18 @@ public class SquareChatFragment extends AhFragment{
 	private Button sendButton;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-
+	private MessageReceiveHelper messageHelper;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-
+		
+		/**
+		 *  Create MessageHelper to communicate with other component
+		 */
+		messageHelper = new MessageReceiveHelper(context);
+		
 		/*
 		 * Set UI component
 		 */
@@ -114,7 +121,26 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
+		
+		
+		/**
+		 * See 
+		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
+		 *   2) com.pinthecloud.athere.AhIntentService class Line #47, which has the event time when to trigger
+		 *  
+		 * This method sets the MessageHandler received on app running
+		 */
+		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
+			@Override
+			public void onCompleted(AhMessage entity) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		List<AhMessage> messagesFromBuffer = messageHelper.getAllMessages();
+		
 		return view;
 	}
 }

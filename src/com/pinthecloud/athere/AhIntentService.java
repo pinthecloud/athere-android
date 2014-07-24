@@ -21,6 +21,9 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.pinthecloud.athere.activity.SplashActivity;
+import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.fragment.SquareChatFragment;
+import com.pinthecloud.athere.helper.MessageReceiveHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
@@ -28,13 +31,14 @@ import com.pinthecloud.athere.model.User;
 public class AhIntentService extends IntentService {
 	
 	AtomicInteger i = new AtomicInteger();
-	
+	MessageReceiveHelper messageHelper;
 	public AhIntentService() {
-		super("AhIntentService");
+		this("AhIntentService");
 	}
 
 	public AhIntentService(String name) {
 		super(name);
+		messageHelper = new MessageReceiveHelper(getBaseContext());
 	}
 
 	@Override
@@ -43,17 +47,15 @@ public class AhIntentService extends IntentService {
 
 		if(isRunning(getBaseContext())){
 			// if the app is running, add the message to the chat room.
+			messageHelper.triggerMessageEvent(message);
 		} else {
 		// if the app is not running, send a notification
-			NotificationCompat.Builder mBuilder =
-			        new NotificationCompat.Builder(this)
-			        .setSmallIcon(R.drawable.ic_launcher)
-					//.setLargeIcon(ImageConverter.convertToImage(message.get));
-			        .setContentTitle(message.getSender())
-			        .setAutoCancel(true)
-			        .setContentText(message.getContent() +" : "+i.get());
+			
+			// Add the message to the buffer
+			messageHelper.addMessage(message);
+			
 			// Creates an explicit intent for an Activity in your app
-			Intent resultIntent = new Intent(this, SplashActivity.class);
+			Intent resultIntent = new Intent(this, SquareActivity.class);
 
 			// The stack builder object will contain an artificial back stack for the
 			// started Activity.
@@ -69,7 +71,19 @@ public class AhIntentService extends IntentService {
 			            0,
 			            PendingIntent.FLAG_UPDATE_CURRENT
 			        );
+			
+			// Set Notification
+			NotificationCompat.Builder mBuilder =
+			        new NotificationCompat.Builder(this)
+			        .setSmallIcon(R.drawable.ic_launcher)
+					//.setLargeIcon(ImageConverter.convertToImage(message.get));
+			        .setContentTitle(message.getSender())
+			        .setAutoCancel(true)
+			        .setContentText(message.getContent() +" : "+i.get());
+			
+			
 			mBuilder.setContentIntent(resultPendingIntent);
+			
 			NotificationManager mNotificationManager =
 			    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			// mId allows you to update the notification later on.

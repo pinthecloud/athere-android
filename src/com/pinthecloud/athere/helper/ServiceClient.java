@@ -5,8 +5,11 @@ import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -18,6 +21,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+import com.microsoft.windowsazure.notifications.NotificationsHandler;
 import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.interfaces.AhCarrier;
@@ -495,6 +499,34 @@ public class ServiceClient {
 			}
 		});
 	}
+	
+	public void handleMessageReceive(AhEntityCallback<AhMessage> callback){
+		PreferenceHelper pref = new PreferenceHelper(context);
+
+		pref.putString("test222", callback.getClass().getName());
+		Log.e("ERROR","class Name : " + callback.getClass().getName());
+	}
+	
+	public void triggerMessage(){
+		PreferenceHelper pref = new PreferenceHelper(context);
+		String className = pref.getString("test222");
+		AhEntityCallback<AhMessage> obj = null;
+		if (true || className.equals(PreferenceHelper.DEFAULT_STRING)) {
+			try {
+				Class<?> clazz = Class.forName("com.pinthecloud.athere.interfaces.AhEntityCallback<E>");
+				obj = (AhEntityCallback<AhMessage>)clazz.newInstance();
+				AhMessage message = new AhMessage();
+				message.setContent("succeed!!");
+				obj.onCompleted(message);
+			} catch (Exception e) {
+				Log.e("ERROR",e.toString());
+			}
+		} else {
+			Log.e("ERROR","className default");
+		}
+		
+	}
+	
 
 	//	public void isAvailableNickName(User user, final AhEntityCallback<Boolean> callback) throws AhException {
 	//	
