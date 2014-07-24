@@ -142,10 +142,6 @@ public class BasicProfileFragment extends AhFragment{
 					Intent intent = new Intent(context, SquareListActivity.class);
 					startActivity(intent);
 					activity.finish();
-
-					// Show confirming dialog
-					//					DialogFragment dialogFragment = BasicProfileCompleteDialog.newInstance(gender, birthYear);
-					//					dialogFragment.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 				}
 			}
 		});

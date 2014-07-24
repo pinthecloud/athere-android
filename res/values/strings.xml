@@ -33,6 +33,7 @@
     <string name="gender">Gender</string>
     <string name="birth_of_year">Birth of Year</string>
     <string name="number_of_persons">Number of persons</string>
+    <string name="location_consent">Location Consent</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -44,6 +45,8 @@
     <string name="bad_enter_square_message">Entering the square met error. Please try it again.</string>
     <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
     <string name="no_profile_picture_message">Please take a profile picture.</string>
+    <string name="offline_message">Network access is unavailable. Please check network status.</string>
+    <string name="location_consent_message">"Chupa" will use current location information. Do you agree?</string>
 
     <!-- String Array -->
 

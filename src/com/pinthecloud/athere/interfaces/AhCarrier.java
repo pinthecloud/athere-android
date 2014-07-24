@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.interfaces;
 
 public class AhCarrier <E> {
+	
 	private E item;
 	
 	public AhCarrier(){
