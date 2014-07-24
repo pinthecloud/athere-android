@@ -3,8 +3,18 @@
     android:id="@+id/basic_profile_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/basic_profile_frag_nick_name_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:maxLength="15" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,22 +44,15 @@
             android:text="@string/female" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center" >
+        android:text="@string/birth_of_year" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/birth_year" />
-
-        <DatePicker
-            android:id="@+id/basic_profile_frag_year_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+    <NumberPicker
+        android:id="@+id/basic_profile_frag_year_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/basic_profile_frag_start_button"

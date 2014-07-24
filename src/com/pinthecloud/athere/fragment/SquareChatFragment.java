@@ -6,13 +6,10 @@ import java.util.List;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,9 +17,9 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
-import com.pinthecloud.athere.helper.MessageReceiveHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.sqlite.MessageReceiveDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -31,18 +28,26 @@ public class SquareChatFragment extends AhFragment{
 	private EditText messageEditText;
 	private Button sendButton;
 
+	private MessageReceiveDBHelper messageHelper;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-	private MessageReceiveHelper messageHelper;
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		/**
+		 *  Create MessageHelper to communicate with other component
+		 */
+		messageHelper = new MessageReceiveDBHelper(context);
+	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-		
-		/**
-		 *  Create MessageHelper to communicate with other component
-		 */
-		messageHelper = new MessageReceiveHelper(context);
+
 		
 		/*
 		 * Set UI component
@@ -58,13 +63,6 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
-		messageListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-			}
-		});
 
 
 		/*
@@ -103,26 +101,26 @@ public class SquareChatFragment extends AhFragment{
 				message.setContent(messageEditText.getText().toString());
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
-				message.setReceiverId("38A0D350-ABCA-4E9A-9249-4ACE9D571CE8");
+				//				message.setReceiverId("38A0D350-ABCA-4E9A-9249-4ACE9D571CE8");
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
 				messageListAdapter.notifyDataSetChanged();
 				messageEditText.setText("");
 
 				// Send message to server
-				serviceClient.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-
-					@Override
-					public void onCompleted(AhMessage entity) {
-						Log.d(AhGlobalVariable.LOG_TAG, "sent message");
-						message.setStatus(AhMessage.SENT);
-						messageListAdapter.notifyDataSetChanged();
-					}
-				});
+				//				serviceClient.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+				//
+				//					@Override
+				//					public void onCompleted(AhMessage entity) {
+				//						Log.d(AhGlobalVariable.LOG_TAG, "sent message");
+				//						message.setStatus(AhMessage.SENT);
+				//						messageListAdapter.notifyDataSetChanged();
+				//					}
+				//				});
 			}
 		});
-		
-		
+
+
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -130,17 +128,15 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
+		List<AhMessage> messagesFromBuffer = messageHelper.getAllMessages();
 		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
 				// TODO Auto-generated method stub
-				
 			}
 		});
-		
-		List<AhMessage> messagesFromBuffer = messageHelper.getAllMessages();
-		
+
 		return view;
 	}
 }

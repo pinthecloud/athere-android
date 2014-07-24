@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.helper;
+package com.pinthecloud.athere.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,7 @@ import android.view.Surface;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 
-public class CameraHelper {
+public class CameraUtil {
 
 	/** Check if this device has a camera */
 	public static boolean checkCameraHardware(Context context) {

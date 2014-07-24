@@ -1,5 +1,6 @@
-package com.pinthecloud.athere.helper;
+package com.pinthecloud.athere.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,11 +19,12 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 
-public class BitmapHelper {
+public class BitmapUtil {
 
 	public static Bitmap resize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		Bitmap bitmapImage = null;
@@ -161,5 +163,55 @@ public class BitmapHelper {
 
 		// return transformed image
 		return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+	}
+	
+	public static Bitmap convertToBitmap(String str){
+		try{
+			byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
+			Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+			return bitmap;
+		 }catch(Exception e){
+			 e.printStackTrace();
+			 return null;
+		 }
+		
+//		byte[] bytes;
+//		try {
+//			bytes = str.getBytes("UTF-8");
+//			int offset = 0;
+//			int length = bytes.length;
+//			
+//			Bitmap img = BitmapFactory.decodeByteArray(bytes, offset, length);
+//			
+//			return img;
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return null;
+//		}
+	}
+	
+	public static String convertToString(Bitmap img){
+		ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+		img.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte [] b = baos.toByteArray();
+        String temp = Base64.encodeToString(b, Base64.DEFAULT);
+        return temp;
+        
+//		int bytes = img.getByteCount();
+//
+//		ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
+//		img.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
+//
+//		byte[] array = buffer.array();
+//		String returnStr = null;
+//		try {
+//			returnStr = new String(array, "UTF-8");
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			returnStr = null;
+//		}
+//		return returnStr;
 	}
 }

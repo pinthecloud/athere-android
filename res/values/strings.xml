@@ -31,7 +31,7 @@
     <string name="complete">Complete</string>
     <string name="profile">Profile</string>
     <string name="gender">Gender</string>
-    <string name="birth_year">Birth Year</string>
+    <string name="birth_of_year">Birth of Year</string>
     <string name="number_of_persons">Number of persons</string>
 
     <!-- Sentence -->

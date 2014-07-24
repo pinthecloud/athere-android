@@ -2,13 +2,10 @@ package com.pinthecloud.athere.helper;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
@@ -28,6 +25,8 @@ import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.JsonConverter;
 
 public class ServiceClient {
 
@@ -58,6 +57,7 @@ public class ServiceClient {
 	 * Activity UI variables
 	 */
 	private Context context;
+	private PreferenceHelper pref;
 
 	/**
 	 * Model tables
@@ -65,15 +65,11 @@ public class ServiceClient {
 	private MobileServiceTable<User> userTable;
 	private MobileServiceTable<Square> squareTable;
 	private Object lock = new Object();
-	
-	
+
 	/*
 	 * GCM server key
 	 */
 	private final String GCM_SENDER_ID = "838051405989";
-
-	public MobileServiceClient getClient() { return mClient; }
-	public Context getContext() { return context; }
 
 
 	public ServiceClient(Context context) throws MalformedURLException{
@@ -87,17 +83,10 @@ public class ServiceClient {
 			throw e;
 		}
 
-		userTable = mClient.getTable(User.class);
-		squareTable = mClient.getTable(Square.class);
-	}
+		this.userTable = mClient.getTable(User.class);
+		this.squareTable = mClient.getTable(Square.class);
 
-
-	public void setProfile(String nickName, boolean isMale, int birthYear, String registrationId) {
-		Calendar c = Calendar.getInstance();
-		int age = c.get(Calendar.YEAR) - (birthYear-1);
-
-		PreferenceHelper pref = new PreferenceHelper(context);
-		pref.putUser(nickName, isMale, age, registrationId);
+		this.pref = new PreferenceHelper(context);
 	}
 
 
@@ -146,8 +135,7 @@ public class ServiceClient {
 
 
 	public Square createSquareSync(String name, double latitude, double longitude) throws AhException {
-		PreferenceHelper pref = new PreferenceHelper(context);
-		String whoMade = pref.getRegistrationId();
+		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 
 		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
 			throw new AhException("createSquare NO Registration");
@@ -206,17 +194,8 @@ public class ServiceClient {
 	//		});
 	//	}
 
-	public boolean enterSquareSync(String squareId, Bitmap img, int companyNum, String mobileId) throws AhException {
+	public boolean enterSquareSync(User user) throws AhException, InterruptedException {
 		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
-		PreferenceHelper pref = new PreferenceHelper(context);
-		User user = pref.getUser();
-
-		user.setSquareId(squareId);
-		String profilePic = null;
-		profilePic = ImageConverter.convertToString(img);
-		user.setProfilePic(profilePic);
-		user.setCompanyNum(companyNum);
-		user.setMobileId(mobileId);
 
 		JsonObject jo = user.toJson();
 
@@ -245,11 +224,11 @@ public class ServiceClient {
 			try {
 				lock.wait();
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				throw e;
 			}
 		}
 
-		UserHelper userHelper = new UserHelper(this.getContext());
+		UserDBHelper userHelper = new UserDBHelper(context);
 		userHelper.addAllUsers(carrier.getItem());
 
 		return true;
@@ -348,8 +327,6 @@ public class ServiceClient {
 	 * 
 	 */
 	public void getSquareListAsync(Location loc, final AhListCallback<Square> callback) throws AhException {
-		//		progressDialog.show();
-
 		JsonObject jo = new JsonObject();
 		jo.addProperty(currentLatitude, loc.getLatitude());
 		jo.addProperty(currentLongitude, loc.getLongitude());
@@ -363,12 +340,9 @@ public class ServiceClient {
 			public void onCompleted(JsonElement json, Exception exception,
 					ServiceFilterResponse response) {
 				if (exception == null) {
-					Log.d(AhGlobalVariable.LOG_TAG, "result json : " + json.toString());
-
 					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
 					if (list == null) throw new AhException(exception, getSquareList);
 					callback.onCompleted(list, list.size());
-					//					progressDialog.dismiss();
 				} else {
 					throw new AhException(exception, getSquareListAsync);
 				}
@@ -407,14 +381,13 @@ public class ServiceClient {
 
 
 	public void createSquareAsync(String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
-		PreferenceHelper pref = new PreferenceHelper(context);
-		String whoMade = pref.getRegistrationId();
+		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 
 		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
 			throw new AhException("createSquare NO Registration");
 		}
-		Square square = new Square();
 
+		Square square = new Square();
 		square.setName(name);
 		square.setLatitude(latitude);
 		square.setLongitude(longitude);
@@ -439,22 +412,11 @@ public class ServiceClient {
 	}
 
 
-	public void enterSquareAsync(String squareId, Bitmap img, int companyNum, String mobileId, final AhEntityCallback<Boolean> callback) throws AhException {
-		PreferenceHelper pref = new PreferenceHelper(context);
-		User user = pref.getUser();
-
-		user.setSquareId(squareId);
-		String profilePic = null;
-		profilePic = ImageConverter.convertToString(img);
-		user.setProfilePic(profilePic);
-		user.setCompanyNum(companyNum);
-		user.setMobileId(mobileId);
-
+	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
 		userTable.insert(user, new TableOperationCallback<User>() {
 
 			@Override
-			public void onCompleted(User entity, Exception exception,
-					ServiceFilterResponse response) {
+			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
 					callback.onCompleted(true);
 				} else {
@@ -503,17 +465,14 @@ public class ServiceClient {
 			}
 		});
 	}
-	
+
 	public String getRegistrationIdSync(){
-		
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 		String registrationId = "";
 		try {
 			registrationId = gcm.register(GCM_SENDER_ID);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new AhException(e,"getRegistrationId");
+			throw new AhException(e, "getRegistrationIdSync");
 		}
 		return registrationId;
 	}

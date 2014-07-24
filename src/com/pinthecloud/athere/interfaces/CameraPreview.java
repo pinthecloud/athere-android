@@ -10,7 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.helper.CameraHelper;
+import com.pinthecloud.athere.util.CameraUtil;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -67,8 +67,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		// set preview size and make any resize, rotate or
 		// reformatting changes here
 		Camera.Parameters parameters = mCamera.getParameters();
-		Camera.Size previewSize =  CameraHelper.getBestPreviewSize(width, height, parameters);
-		Camera.Size pictureSize = CameraHelper.getBestPictureSize(width, height, parameters);
+		Camera.Size previewSize =  CameraUtil.getBestPreviewSize(width, height, parameters);
+		Camera.Size pictureSize = CameraUtil.getBestPictureSize(width, height, parameters);
 		parameters.setPreviewSize(previewSize.width, previewSize.height);
 		parameters.setPictureSize(pictureSize.width, pictureSize.height);
 		parameters.setPictureFormat(ImageFormat.JPEG);

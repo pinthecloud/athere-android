@@ -30,6 +30,7 @@ public class SplashActivity extends AhActivity {
 		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
 		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
+		AhGlobalVariable.APP_NAME = getResources().getString(R.string.app_name);
 		
 		String httpAgent = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		if (httpAgent.equals(System.getProperty("http.agent"))){
@@ -53,8 +54,9 @@ public class SplashActivity extends AhActivity {
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				} else{
 					// Has entered a square
-//					intent.setClass(SplashActivity.this, SquareListActivity.class);
-					intent.setClass(SplashActivity.this, SquareActivity.class);
+//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+					intent.setClass(SplashActivity.this, SquareListActivity.class);
+//					intent.setClass(SplashActivity.this, SquareActivity.class);
 				}
 				startActivity(intent);
 			}

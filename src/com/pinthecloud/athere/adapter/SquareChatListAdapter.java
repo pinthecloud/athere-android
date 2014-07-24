@@ -18,9 +18,9 @@ import android.widget.TextView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.FileHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
@@ -99,7 +99,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				try {
-					profileImage.setImageBitmap(FileHelper.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME));
+					profileImage.setImageBitmap(FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME));
 				} catch (FileNotFoundException e) {
 					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareChatListAdapter getView : " + e.getMessage());
 				}

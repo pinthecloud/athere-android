@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.helper;
+package com.pinthecloud.athere.sqlite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 
-public class MessageReceiveHelper  extends SQLiteOpenHelper {
+public class MessageReceiveDBHelper  extends SQLiteOpenHelper {
 	
 	// All Static variables
     // Database Version
@@ -36,7 +36,7 @@ public class MessageReceiveHelper  extends SQLiteOpenHelper {
 	private final String RECEIVER = "receiver";
 	private final String RECEIVER_ID = "receiverId";
     
-    public MessageReceiveHelper(Context context) {
+    public MessageReceiveDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 	
@@ -52,7 +52,7 @@ public class MessageReceiveHelper  extends SQLiteOpenHelper {
                 	+ SENDER + " TEXT,"
                 	+ SENDER_ID + " TEXT,"
                 	+ RECEIVER + " TEXT,"
-                	+ RECEIVER_ID + " TEXT,"
+                	+ RECEIVER_ID + " TEXT"
                +")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
@@ -130,8 +130,9 @@ public class MessageReceiveHelper  extends SQLiteOpenHelper {
     // Getting All Messages
     public List<AhMessage> getAllMessages() {
         List<AhMessage> messages = new ArrayList<AhMessage>();
+        
         // Select All Query
-        String selectQuery = "SELECT * FROM " + TABLE_NAME + "ORDER BY " + ID;
+        String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + ID;
  
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
