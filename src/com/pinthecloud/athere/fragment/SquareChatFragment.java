@@ -17,9 +17,10 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.sqlite.MessageReceiveDBHelper;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -28,18 +29,17 @@ public class SquareChatFragment extends AhFragment{
 	private EditText messageEditText;
 	private Button sendButton;
 
-	private MessageReceiveDBHelper messageHelper;
+	private MessageDBHelper messageDBHelper;
+	private MessageHelper messageHelper;
+
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-	
-	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		/**
-		 *  Create MessageHelper to communicate with other component
-		 */
-		messageHelper = new MessageReceiveDBHelper(context);
+		messageDBHelper = app.getMessageDBHelper();
+		messageHelper = app.getMessageHelper();
 	}
 
 
@@ -48,7 +48,7 @@ public class SquareChatFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
 
-		
+
 		/*
 		 * Set UI component
 		 */
@@ -108,7 +108,7 @@ public class SquareChatFragment extends AhFragment{
 				messageEditText.setText("");
 
 				// Send message to server
-				//				serviceClient.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+				//				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 				//
 				//					@Override
 				//					public void onCompleted(AhMessage entity) {
@@ -128,8 +128,8 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		List<AhMessage> messagesFromBuffer = messageHelper.getAllMessages();
-		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		List<AhMessage> messagesFromBuffer = messageDBHelper.getAllMessages();
+		messageDBHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {

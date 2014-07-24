@@ -34,6 +34,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	private final String AGE = "age";
 	private final String SQUARE_ID = "square_id";
 
+	
 	public UserDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}

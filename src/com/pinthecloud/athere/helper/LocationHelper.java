@@ -15,7 +15,7 @@ import android.util.Log;
 
 public class LocationHelper extends Service implements LocationListener {
 
-	private final Context mContext;
+	private final Context context;
 
 	// flag for GPS status
 	boolean isGPSEnabled = false;
@@ -41,13 +41,13 @@ public class LocationHelper extends Service implements LocationListener {
 
 
 	public LocationHelper(Context context) {
-		this.mContext = context;
+		this.context = context;
 		getLocation();
 	}
 
 
 	public Location getLocation() {
-		locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+		locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
 
 		// getting GPS status
 		isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -153,7 +153,7 @@ public class LocationHelper extends Service implements LocationListener {
 	 * On pressing Settings button will lauch Settings Options
 	 * */
 	public void showSettingsAlert(){
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 
 		// Setting Dialog Title
 		alertDialog.setTitle("GPS is settings");
@@ -165,7 +165,7 @@ public class LocationHelper extends Service implements LocationListener {
 		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int which) {
 				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				mContext.startActivity(intent);
+				context.startActivity(intent);
 			}
 		});
 

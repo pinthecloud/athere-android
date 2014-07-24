@@ -1,4 +1,4 @@
-package com.pinthecloud.athere;
+package com.pinthecloud.athere.push;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,17 +20,23 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.R.drawable;
 import com.pinthecloud.athere.activity.SplashActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.MessageReceiveDBHelper;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class AhIntentService extends IntentService {
 
-	private AtomicInteger i = new AtomicInteger();
-	private MessageReceiveDBHelper messageHelper;
+	private AhApplication app;
+	private AtomicInteger atomicInteger;
+	private MessageDBHelper messageDBHelper;
+
 
 	public AhIntentService() {
 		this("AhIntentService");
@@ -38,7 +44,9 @@ public class AhIntentService extends IntentService {
 
 	public AhIntentService(String name) {
 		super(name);
-		messageHelper = new MessageReceiveDBHelper(getBaseContext());
+		app = AhApplication.getInstance();
+		atomicInteger = new AtomicInteger();
+		messageDBHelper = app.getMessageDBHelper();
 	}
 
 	@Override
@@ -53,11 +61,11 @@ public class AhIntentService extends IntentService {
 
 		if(isRunning(getBaseContext())){
 			// if the app is running, add the message to the chat room.
-			messageHelper.triggerMessageEvent(message);
+			messageDBHelper.triggerMessageEvent(message);
 		} else {
 			// if the app is not running, send a notification
 			// Add the message to the buffer
-			messageHelper.addMessage(message);
+			messageDBHelper.addMessage(message);
 
 			// Creates an explicit intent for an Activity in your app
 			Intent resultIntent = new Intent(this, SquareActivity.class);
@@ -86,14 +94,14 @@ public class AhIntentService extends IntentService {
 			//.setLargeIcon(ImageConverter.convertToImage(message.get));
 			.setContentTitle(message.getSender())
 			.setAutoCancel(true)
-			.setContentText(message.getContent() +" : "+i.get());
+			.setContentText(message.getContent() +" : "+atomicInteger.get());
 
 			mBuilder.setContentIntent(resultPendingIntent);
 
 			NotificationManager mNotificationManager =
 					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			// mId allows you to update the notification later on.
-			mNotificationManager.notify(i.getAndIncrement(), mBuilder.build());
+			mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
 			Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 			v.vibrate(800);
 
@@ -106,12 +114,12 @@ public class AhIntentService extends IntentService {
 		}
 	}
 
-	private boolean isRunning(Context ctx) {
-		ActivityManager activityManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+	private boolean isRunning(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
 
 		for (RunningTaskInfo task : tasks) {
-			if (ctx.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
+			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
 				return true;                                  
 		}
 		return false;

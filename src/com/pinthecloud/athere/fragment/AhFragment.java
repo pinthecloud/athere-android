@@ -1,35 +1,31 @@
 package com.pinthecloud.athere.fragment;
 
-import java.net.MalformedURLException;
-
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.helper.PreferenceHelper;
-import com.pinthecloud.athere.helper.ServiceClient;
 
 
 public class AhFragment extends Fragment{
 
-	protected ServiceClient serviceClient;
+	protected AhApplication app;
 	protected Context context;
-	protected Activity activity;
+	protected AhActivity activity;
 	protected PreferenceHelper pref;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/*
+		 * Set static value
+		 */
+		app = AhApplication.getInstance();
 		context = getActivity();
-		activity = (Activity) context;
-		try {
-			serviceClient = new ServiceClient(context);
-		} catch (MalformedURLException e) {
-			Log.d(AhGlobalVariable.LOG_TAG, "AhFragment onCreate : " + e.getMessage());
-		}
-		pref = new PreferenceHelper(context);
+		activity = (AhActivity) context;
+		pref = app.getPref();
 	}
 }

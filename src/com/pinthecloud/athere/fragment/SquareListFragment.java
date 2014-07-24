@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.helper.LocationHelper;
+import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 
@@ -29,7 +29,18 @@ public class SquareListFragment extends AhFragment{
 	private ListView squareListView;
 	private ProgressBar mProgressBar;
 
+	private SquareHelper squareHelper;
+	
 	private ArrayList<Square> squares = new ArrayList<Square>();
+
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		// Set Helper
+		squareHelper = app.getSquareHelper();
+	}
 
 
 	@Override
@@ -43,7 +54,7 @@ public class SquareListFragment extends AhFragment{
 		squareListView = (ListView)view.findViewById(R.id.square_list_frag_list);
 		mProgressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
 
-		
+
 		/*
 		 * Set square list view
 		 */
@@ -66,26 +77,11 @@ public class SquareListFragment extends AhFragment{
 
 
 	private void getNearSquare(){
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				List<Square> list = serviceClient.getSquareListSync(37.401572, 127.1101709);
-				
-				for(Square square : list){
-					Log.e("ERROR",square.getName());
-				}
-			}
-			
-		}).start();
-		
-		
 		mProgressBar.setVisibility(View.VISIBLE);
 
-		LocationHelper mLocationHelper = new LocationHelper(context);
+		LocationHelper mLocationHelper = new LocationHelper(app);
 		Location loc = mLocationHelper.getLocation();
-		serviceClient.getSquareListAsync(loc, new AhListCallback<Square>() {
+		squareHelper.getSquareListAsync(loc, new AhListCallback<Square>() {
 
 			@Override
 			public void onCompleted(List<Square> list, int count) {

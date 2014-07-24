@@ -1,4 +1,4 @@
-package com.pinthecloud.athere;
+package com.pinthecloud.athere.interfaces;
 
 public class AhException extends RuntimeException {
 	
