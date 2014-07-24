@@ -40,7 +40,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <receiver
-            android:name=".AhBroadCastReceiver"
+            android:name="com.pinthecloud.athere.push.AhBroadCastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -74,7 +74,7 @@
             android:name=".activity.SquareActivity"
             android:windowSoftInputMode="stateHidden" />
 
-        <service android:name=".AhIntentService" >
+        <service android:name="com.pinthecloud.athere.push.AhIntentService" >
         </service>
     </application>
 

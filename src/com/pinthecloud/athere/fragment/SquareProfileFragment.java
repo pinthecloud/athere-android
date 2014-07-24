@@ -63,6 +63,8 @@ public class SquareProfileFragment extends AhFragment{
 	private NumberPicker numberPicker;
 	private Button completeButton;
 
+	private UserHelper userHelper;
+
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
 		@Override
@@ -89,7 +91,7 @@ public class SquareProfileFragment extends AhFragment{
 					fos.write(data);
 					fos.close();
 					Bitmap pictureBitmap = BitmapFactory.decodeStream
-							(context.getContentResolver().openInputStream(pictureFileUri));
+							(app.getContentResolver().openInputStream(pictureFileUri));
 
 					// Crop picture
 					// Rotate picture
@@ -110,8 +112,8 @@ public class SquareProfileFragment extends AhFragment{
 					profilePictureView.setImageBitmap(pictureBitmap);
 
 					// Save picture to internal storage
-					FileUtil.saveImageToInternalStorage(context, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
-					FileUtil.saveImageToInternalStorage(context, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
+					FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
+					FileUtil.saveImageToInternalStorage(app, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
@@ -134,6 +136,9 @@ public class SquareProfileFragment extends AhFragment{
 		// Get parameter from previous activity intent
 		intent = getActivity().getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
+
+		// Set Helper
+		userHelper = app.getUserHelper();
 	}
 
 
@@ -245,7 +250,7 @@ public class SquareProfileFragment extends AhFragment{
 		}else{
 			try {
 				// Set taken picture to view
-				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
 				profilePictureView.setImageBitmap(pictureBitmap);
 			} catch (FileNotFoundException e) {
 				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onResume : " + e.getMessage());
@@ -295,10 +300,9 @@ public class SquareProfileFragment extends AhFragment{
 	private void enterSquare(){
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
-		
-		UserHelper userHelper = new UserHelper(context);
+
 		User user = userHelper.getUser();
-		serviceClient.enterSquareAsync(user, new AhEntityCallback<Boolean>() {
+		userHelper.enterSquareAsync(user, new AhEntityCallback<Boolean>() {
 
 			@Override
 			public void onCompleted(Boolean entity) {

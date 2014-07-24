@@ -23,7 +23,9 @@ public class SplashActivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
-		// Get device resolution and set it
+		/*
+		 * Get device resolution and set it
+		 */
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
@@ -31,15 +33,21 @@ public class SplashActivity extends AhActivity {
 		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 		AhGlobalVariable.APP_NAME = getResources().getString(R.string.app_name);
-		
+
+		/*
+		 * Exception for hongkun
+		 */
 		String httpAgent = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		if (httpAgent.equals(System.getProperty("http.agent"))){
 			startActivity(new Intent(SplashActivity.this, HongkunTestAcitivity.class));
 			return;
 		}
-		// Show splash image and move to next page
+
+		/*
+		 * Show splash image and move to next page
+		 */
 		new Handler().postDelayed(new Runnable(){
-			
+
 			@Override
 			public void run() {
 				boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
@@ -54,9 +62,9 @@ public class SplashActivity extends AhActivity {
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
 				} else{
 					// Has entered a square
-//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+					//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
 					intent.setClass(SplashActivity.this, SquareListActivity.class);
-//					intent.setClass(SplashActivity.this, SquareActivity.class);
+					//					intent.setClass(SplashActivity.this, SquareActivity.class);
 				}
 				startActivity(intent);
 			}

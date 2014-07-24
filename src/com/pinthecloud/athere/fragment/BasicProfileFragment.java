@@ -138,6 +138,7 @@ public class BasicProfileFragment extends AhFragment{
 					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, isMale);
 					pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
 					pref.putInt(AhGlobalVariable.AGE_KEY, age);
+					
 					Intent intent = new Intent(context, SquareListActivity.class);
 					startActivity(intent);
 					activity.finish();

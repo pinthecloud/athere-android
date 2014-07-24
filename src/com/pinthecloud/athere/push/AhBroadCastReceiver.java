@@ -1,4 +1,4 @@
-package com.pinthecloud.athere;
+package com.pinthecloud.athere.push;
 
 import android.app.Activity;
 import android.content.ComponentName;

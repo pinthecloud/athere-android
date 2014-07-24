@@ -80,12 +80,9 @@ public class HongkunTestAcitivity extends AhActivity {
 				message.setReceiver("receiver name");
 				message.setReceiverId(result);
 				Log.e("ERROR", message.getReceiverId());
-
-				boolean re = serviceClient.sendMessageSync(message);
-
-				Log.e("ERROR","result : "+re);
+				//				boolean re = serviceClient.sendMessageSync(message);
+//				Log.e("ERROR","result : "+re);
 			}
 		}).start();
-
 	}
 }
