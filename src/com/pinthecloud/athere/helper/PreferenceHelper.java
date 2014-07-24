@@ -9,10 +9,9 @@ public class PreferenceHelper {
 
 	private SharedPreferences pref;
 
-	public static final String DEFAULT_STRING = null;
+	public static final String DEFAULT_STRING = "DEFAULT_STRING";
 	public static final int DEFAULT_INT = 0;
 	public static final boolean DEFAULT_BOOLEAN = false;
-
 
 	public PreferenceHelper(Context context){
 		this.pref = PreferenceManager.getDefaultSharedPreferences(context);

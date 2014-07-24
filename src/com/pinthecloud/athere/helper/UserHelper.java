@@ -46,12 +46,12 @@ public class UserHelper {
 	 * Methods name
 	 */
 	private final String ENTER_SQUARE = "enter_square";
-	
+
 	/*
 	 * GCM server key
 	 */
 	private final String GCM_SENDER_ID = "838051405989";
-	
+
 
 	public UserHelper() {
 		super();
@@ -60,79 +60,6 @@ public class UserHelper {
 		this.pref = app.getPref();
 		this.lock = app.getLock();
 		this.userTable = app.getUserTable();
-	}
-
-	
-	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
-		userTable.insert(user, new TableOperationCallback<User>() {
-
-			@Override
-			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
-				if (exception == null) {
-					callback.onCompleted(true);
-				} else {
-					throw new AhException(exception, "enterSquareAsync");
-				}
-			}
-		});
-	}
-
-
-	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
-
-		userTable.delete(squareId, new TableDeleteCallback() {
-
-			@Override
-			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
-				if (exception == null) {
-					callback.onCompleted(true);
-				} else {
-					throw new AhException(exception, "exitSquareAsync");
-				}
-			}
-		});
-
-	}
-	
-	
-	public boolean enterSquareSync(User user) throws AhException, InterruptedException {
-		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
-
-		JsonObject jo = user.toJson();
-
-		Gson g = new Gson();
-		JsonElement requestJson = g.fromJson(jo, JsonElement.class);
-
-		mClient.invokeApi(ENTER_SQUARE, requestJson, new ApiJsonOperationCallback() {
-
-			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				if (exception == null){
-					List<User> list = JsonConverter.convertToUserList(json);
-					carrier.load(list);
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					throw new AhException(exception, "enterSquareSync");
-				}
-
-			}
-		});
-
-		synchronized (lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-				throw e;
-			}
-		}
-
-		UserDBHelper userHelper = app.getUserDBHelper();
-		userHelper.addAllUsers(carrier.getItem());
-
-		return true;
 	}
 
 
@@ -165,8 +92,79 @@ public class UserHelper {
 
 		return carrier.getItem();
 	}
-	
-	
+
+
+	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
+
+		userTable.delete(squareId, new TableDeleteCallback() {
+
+			@Override
+			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
+				if (exception == null) {
+					callback.onCompleted(true);
+				} else {
+					throw new AhException(exception, "exitSquareAsync");
+				}
+			}
+		});
+
+	}
+
+
+	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
+		userTable.insert(user, new TableOperationCallback<User>() {
+
+			@Override
+			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+				if (exception == null) {
+					callback.onCompleted(true);
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
+			}
+		});
+	}
+
+
+	public boolean enterSquareSync(User user) throws AhException, InterruptedException {
+		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
+
+		JsonObject jo = user.toJson();
+
+		Gson g = new Gson();
+		JsonElement requestJson = g.fromJson(jo, JsonElement.class);
+
+		mClient.invokeApi(ENTER_SQUARE, requestJson, new ApiJsonOperationCallback() {
+
+			@Override
+			public void onCompleted(JsonElement json, Exception exception,
+					ServiceFilterResponse response) {
+				if (exception == null){
+					List<User> list = JsonConverter.convertToUserList(json);
+					carrier.load(list);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "enterSquareSync");
+				}
+			}
+		});
+
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				throw e;
+			}
+		}
+
+		UserDBHelper userHelper = app.getUserDBHelper();
+		userHelper.addAllUsers(carrier.getItem());
+		return true;
+	}
+
+
 	public User getUser() {
 		Bitmap pictureBitmap = null;
 		try {
@@ -182,6 +180,7 @@ public class UserHelper {
 		User user = new User();
 		user.setNickName(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 		user.setProfilePic(profilePic);
+		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
 		user.setSquareId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
 		user.setMale(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
 		user.setAge(pref.getInt(AhGlobalVariable.AGE_KEY));
@@ -190,7 +189,7 @@ public class UserHelper {
 		return user;
 	}
 
-	
+
 	public String getRegistrationIdSync(){
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
 		String registrationId = "";
@@ -202,7 +201,7 @@ public class UserHelper {
 		return registrationId;
 	}
 
-	
+
 	//	public void isAvailableNickName(User user, final AhEntityCallback<Boolean> callback) throws AhException {
 	//	
 	//	userTable.where().field("nickName").eq(val(true)).execute(new TableQueryCallback<User>() {
