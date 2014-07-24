@@ -1,17 +1,16 @@
 package com.pinthecloud.athere.helper;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -21,7 +20,6 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
-import com.microsoft.windowsazure.notifications.NotificationsHandler;
 import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.interfaces.AhCarrier;
@@ -67,6 +65,12 @@ public class ServiceClient {
 	private MobileServiceTable<User> userTable;
 	private MobileServiceTable<Square> squareTable;
 	private Object lock = new Object();
+	
+	
+	/*
+	 * GCM server key
+	 */
+	private final String GCM_SENDER_ID = "838051405989";
 
 	public MobileServiceClient getClient() { return mClient; }
 	public Context getContext() { return context; }
@@ -500,33 +504,19 @@ public class ServiceClient {
 		});
 	}
 	
-	public void handleMessageReceive(AhEntityCallback<AhMessage> callback){
-		PreferenceHelper pref = new PreferenceHelper(context);
-
-		pref.putString("test222", callback.getClass().getName());
-		Log.e("ERROR","class Name : " + callback.getClass().getName());
-	}
-	
-	public void triggerMessage(){
-		PreferenceHelper pref = new PreferenceHelper(context);
-		String className = pref.getString("test222");
-		AhEntityCallback<AhMessage> obj = null;
-		if (true || className.equals(PreferenceHelper.DEFAULT_STRING)) {
-			try {
-				Class<?> clazz = Class.forName("com.pinthecloud.athere.interfaces.AhEntityCallback<E>");
-				obj = (AhEntityCallback<AhMessage>)clazz.newInstance();
-				AhMessage message = new AhMessage();
-				message.setContent("succeed!!");
-				obj.onCompleted(message);
-			} catch (Exception e) {
-				Log.e("ERROR",e.toString());
-			}
-		} else {
-			Log.e("ERROR","className default");
-		}
+	public String getRegistrationIdSync(){
 		
+		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
+		String registrationId = "";
+		try {
+			registrationId = gcm.register(GCM_SENDER_ID);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new AhException(e,"getRegistrationId");
+		}
+		return registrationId;
 	}
-	
 
 	//	public void isAvailableNickName(User user, final AhEntityCallback<Boolean> callback) throws AhException {
 	//	
