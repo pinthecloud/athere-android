@@ -35,12 +35,13 @@
     <string name="number_of_persons">Number of persons</string>
 
     <!-- Sentence -->
-    <string name="bad_camera_message">Camera didn\'t work. Please try it again.</string>
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
     <string name="max_nick_name_message">Please type in less then 16 letters.</string>
+    <string name="bad_camera_message">Camera met error. Please try it again.</string>
     <string name="bad_nick_name_message">This is invalid nick name.</string>
-    <string name="bad_gallery_message">You couldn\'t get image from gallery. Please try it again.</string>
+    <string name="bad_gallery_message">Loading image from gallery met error. Please try it again.</string>
+    <string name="bad_enter_square_message">Entering the square met error. Please try it again.</string>
     <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
     <string name="no_profile_picture_message">Please take a profile picture.</string>
 
@@ -55,4 +56,5 @@
         <item>Chat</item>
         <item>Chupa</item>
     </string-array>
+
 </resources>

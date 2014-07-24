@@ -10,10 +10,10 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
 public class JsonConverter {
-	
+
 	public static List<Square> convertToSquareList(JsonArray jsonArray) {
 		List<Square> list = new ArrayList<Square>();
-		
+
 		try{
 			for (int i = 0 ; i < jsonArray.size() ; i++) {
 				JsonElement jsonElement = jsonArray.get(i);
@@ -25,7 +25,7 @@ public class JsonConverter {
 				double longitude = jo.get("longitude").getAsDouble();
 				int participants = jo.get("participants").getAsInt();
 				int distance = jo.get("distance").getAsInt();
-			
+
 				Square square = new Square();
 				square.setId(id);
 				square.setWhoMade(whoMade);
@@ -36,17 +36,15 @@ public class JsonConverter {
 				square.setDistance(distance);
 				list.add(square);
 			}
-		} catch (Exception ex){
-			return null;
+		} catch (Exception e){
+			throw e;
 		}
-		
 		return list;
 	}
-	
+
 	public static List<User> convertToUserList(JsonElement json){
-		
 		List<User> list = new ArrayList<User>();
-		
+
 		JsonObject userListJson = json.getAsJsonObject();
 		JsonArray jsonArray = userListJson.getAsJsonArray();
 		for(int i = 0 ; i < jsonArray.size() ; i++){
@@ -62,10 +60,9 @@ public class JsonConverter {
 			user.setCompanyNum(jo.get("companyNum").getAsInt());
 			user.setAge(jo.get("age").getAsInt());
 			user.setSquareId(jo.get("squareId").getAsString());
-			
+
 			list.add(user);
 		}
-		
 		return list;
 	}
 }

@@ -31,8 +31,8 @@ import android.widget.Toast;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
@@ -301,19 +301,47 @@ public class SquareProfileFragment extends AhFragment{
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
-		User user = userHelper.getUser();
-		userHelper.enterSquareAsync(user, new AhEntityCallback<Boolean>() {
+		new Thread(new Runnable() {
 
 			@Override
-			public void onCompleted(Boolean entity) {
-				progressBar.setVisibility(View.GONE);
+			public void run() {
+				// If user haven't got registration key, get it
+				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
+						.equals(PreferenceHelper.DEFAULT_STRING)){
+					String registrationId = userHelper.getRegistrationIdSync();
+					pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+				}
 
-				intent.setClass(context, SquareActivity.class);
-				intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intent);
+				// Get a user object from preference settings
+				User user = userHelper.getUser();
+
+				//				try {
+				// Enter a square with the user
+				//				userHelper.enterSquareSync(user);
+
+				activity.runOnUiThread(new Runnable(){
+
+					@Override
+					public void run() {
+						// Dimiss progress bar
+						progressBar.setVisibility(View.GONE);
+
+						// Set and move to next activity after clear previous activity
+						intent.setClass(context, SquareActivity.class);
+						intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
+					}
+				});
+				//				} catch (AhException | InterruptedException e) {
+				//					Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
+				//
+				//					String message = getResources().getString(R.string.bad_enter_square_message);
+				//					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+				//					toast.show();
+				//				}
 			}
-		});
+		}).start();
 	}
 
 
