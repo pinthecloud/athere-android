@@ -125,7 +125,7 @@ public class UserHelper {
 	}
 
 
-	public boolean enterSquareSync(User user) throws AhException, InterruptedException {
+	public boolean enterSquareSync(User user) throws AhException {
 		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
 
 		JsonObject jo = user.toJson();
@@ -154,7 +154,7 @@ public class UserHelper {
 			try {
 				lock.wait();
 			} catch (InterruptedException e) {
-				throw e;
+				throw new AhException(e, "enterSquareSync");
 			}
 		}
 

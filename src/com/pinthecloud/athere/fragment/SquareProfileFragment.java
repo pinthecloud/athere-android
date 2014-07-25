@@ -317,7 +317,7 @@ public class SquareProfileFragment extends AhFragment{
 
 				//				try {
 				// Enter a square with the user
-				//				userHelper.enterSquareSync(user);
+				userHelper.enterSquareSync(user);
 
 				activity.runOnUiThread(new Runnable(){
 

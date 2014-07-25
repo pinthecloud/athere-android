@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
@@ -37,7 +38,7 @@ public class JsonConverter {
 				list.add(square);
 			}
 		} catch (Exception e){
-			throw e;
+			throw new AhException(e,"convertToSquareList");
 		}
 		return list;
 	}
@@ -46,20 +47,21 @@ public class JsonConverter {
 		List<User> list = new ArrayList<User>();
 
 		JsonObject userListJson = json.getAsJsonObject();
-		JsonArray jsonArray = userListJson.getAsJsonArray();
+		JsonElement userList = userListJson.get("userList");
+		JsonArray jsonArray = userList.getAsJsonArray();
 		for(int i = 0 ; i < jsonArray.size() ; i++){
 			JsonElement jsonElement = jsonArray.get(i);
 			JsonObject jo = jsonElement.getAsJsonObject();
 			User user = new User();
 			user.setId(jo.get("id").getAsString());
-			user.setNickName(jo.get("nickName").getAsString());
-			user.setProfilePic(jo.get("profilePic").getAsString());
-			user.setMobileId(jo.get("mobileId").getAsString());
-			user.setRegistrationId(jo.get("registrationId").getAsString());
-			user.setMale(jo.get("isMale").getAsBoolean());
-			user.setCompanyNum(jo.get("companyNum").getAsInt());
+			user.setNickName(jo.get("nickname").getAsString());
+			user.setProfilePic(jo.get("profilepic").getAsString());
+			user.setMobileId(jo.get("mobileid").getAsString());
+			user.setRegistrationId(jo.get("registrationid").getAsString());
+			user.setMale(jo.get("ismale").getAsBoolean());
+			user.setCompanyNum(jo.get("companynum").getAsInt());
 			user.setAge(jo.get("age").getAsInt());
-			user.setSquareId(jo.get("squareId").getAsString());
+			user.setSquareId(jo.get("squareid").getAsString());
 
 			list.add(user);
 		}
