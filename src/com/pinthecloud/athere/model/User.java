@@ -187,7 +187,7 @@ public class User implements Parcelable{
 
 		jo.addProperty("nickName", this.nickName);
 		jo.addProperty("profilePic", this.profilePic);
-		jo.addProperty("mobileId", this.profilePic);
+		jo.addProperty("mobileId", this.mobileId);
 		jo.addProperty("registrationId", this.registrationId);
 		jo.addProperty("isMale", this.isMale);
 		jo.addProperty("companyNum", this.companyNum);

@@ -110,19 +110,19 @@ public class UserHelper {
 	}
 
 
-	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
-		userTable.insert(user, new TableOperationCallback<User>() {
-
-			@Override
-			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
-				if (exception == null) {
-					callback.onCompleted(true);
-				} else {
-					throw new AhException(exception, "enterSquareAsync");
-				}
-			}
-		});
-	}
+//	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
+//		userTable.insert(user, new TableOperationCallback<User>() {
+//
+//			@Override
+//			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+//				if (exception == null) {
+//					callback.onCompleted(true);
+//				} else {
+//					throw new AhException(exception, "enterSquareAsync");
+//				}
+//			}
+//		});
+//	}
 
 
 	public boolean enterSquareSync(User user) throws AhException {

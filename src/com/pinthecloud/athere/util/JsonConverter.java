@@ -26,6 +26,9 @@ public class JsonConverter {
 				double longitude = jo.get("longitude").getAsDouble();
 				int participants = jo.get("participants").getAsInt();
 				int distance = jo.get("distance").getAsInt();
+				String code = "";
+				if (jo.get("code") != null)
+					code = jo.get("code").getAsString();
 
 				Square square = new Square();
 				square.setId(id);
@@ -35,6 +38,8 @@ public class JsonConverter {
 				square.setLongitude(longitude);
 				square.setParticipants(participants);
 				square.setDistance(distance);
+				square.setCode(code);
+				
 				list.add(square);
 			}
 		} catch (Exception e){

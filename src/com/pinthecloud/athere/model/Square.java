@@ -26,6 +26,8 @@ public class Square implements Parcelable {
 	private boolean isAdmin;
 	@com.google.gson.annotations.SerializedName("distance")
 	private int distance;
+	@com.google.gson.annotations.SerializedName("code")
+	private String code;
 	
 	public String getId() {
 		return id;
@@ -75,7 +77,12 @@ public class Square implements Parcelable {
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
 	}
-	
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
 	
 	
 	public static Parcelable.Creator<Square> getCreator() {
@@ -96,6 +103,7 @@ public class Square implements Parcelable {
 		dest.writeInt(participants);
 		dest.writeInt(distance);
 		dest.writeInt(isAdmin? 1: 0);
+		dest.writeString(code);
 	}
 	
 	public void readToParcel(Parcel in){
@@ -107,6 +115,7 @@ public class Square implements Parcelable {
 		participants = in.readInt();
 		distance = in.readInt();
 		isAdmin = in.readInt() == 1;
+		code = in.readString();
 	}
 	
 	public static final Parcelable.Creator<Square> CREATOR = new Creator<Square>(){
