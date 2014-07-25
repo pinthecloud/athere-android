@@ -2,7 +2,7 @@ package com.pinthecloud.athere.helper;
 
 import java.util.List;
 
-import android.location.Location;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -32,7 +32,7 @@ public class SquareHelper {
 	 * Model tables
 	 */
 	private MobileServiceTable<Square> squareTable;
-	
+
 	/*
 	 * Methods name
 	 */
@@ -52,10 +52,6 @@ public class SquareHelper {
 		this.pref = app.getPref();
 		this.lock = app.getLock();
 		this.squareTable = app.getSquareTable();
-	}
-
-	public List<Square> getSquareListSync(Location loc) throws AhException {
-		return this.getSquareListSync(loc.getLatitude(), loc.getLongitude());
 	}
 
 	public List<Square> getSquareListSync(double latitude, double longitude) throws AhException {
@@ -156,15 +152,14 @@ public class SquareHelper {
 	//		});
 	//	}
 
-	
-	/**
+
+	/*
 	 *  Async Task Methods
-	 * 
 	 */
-	public void getSquareListAsync(Location loc, final AhListCallback<Square> callback) throws AhException {
+	public void getSquareListAsync(double latitude, double longitude, final AhListCallback<Square> callback) throws AhException {
 		JsonObject jo = new JsonObject();
-		jo.addProperty(currentLatitude, loc.getLatitude());
-		jo.addProperty(currentLongitude, loc.getLongitude());
+		jo.addProperty(currentLatitude, latitude);
+		jo.addProperty(currentLongitude, longitude);
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
@@ -215,5 +210,12 @@ public class SquareHelper {
 				}
 			}
 		});
+	}
+
+	public Square getSquare(){
+		Square square = new Square();
+		square.setId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
+		square.setName(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
+		return square;
 	}
 }

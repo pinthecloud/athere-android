@@ -3,7 +3,6 @@ package com.pinthecloud.athere.activity;
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -14,15 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
+import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.model.Square;
 
 public class SquareActivity extends AhActivity{
 
-	private Intent intent;
 	private Square square;
 
 	private ActionBar mActionBar;
@@ -37,15 +35,21 @@ public class SquareActivity extends AhActivity{
 	private View mFragmentView;
 	private SquareDrawerFragment mSquareDrawerFragment;
 
+	private SquareHelper squareHelper;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
 
-		// Get parameter from previous activity intent
-		intent = getIntent();
-		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
+
+		/*
+		 * Set Helper and get square
+		 */
+		squareHelper = app.getSquareHelper();
+		square = squareHelper.getSquare();
+
 
 		/*
 		 * Set UI Component
@@ -66,13 +70,14 @@ public class SquareActivity extends AhActivity{
 		 */
 		mActionBar.setDisplayShowCustomEnabled(true);
 		mActionBar.setDisplayShowHomeEnabled(false);
+		mTitleTextView.setText(square.getName());
 
 
 		/*
 		 * Set tab
 		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		SquareTabFragment mSquareTabFragment = new SquareTabFragment();
+		SquareTabFragment mSquareTabFragment = new SquareTabFragment(square);
 		fragmentTransaction.add(R.id.square_tab_layout, mSquareTabFragment);
 		fragmentTransaction.commit();
 

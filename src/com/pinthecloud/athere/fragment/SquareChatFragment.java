@@ -20,6 +20,7 @@ import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 
 public class SquareChatFragment extends AhFragment{
@@ -33,7 +34,14 @@ public class SquareChatFragment extends AhFragment{
 	private MessageHelper messageHelper;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
+	
+	private Square square;
 
+	
+	public SquareChatFragment(Square square) {
+		super();
+		this.square = square;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,10 +72,9 @@ public class SquareChatFragment extends AhFragment{
 				(context, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
 		List<AhMessage> messagesFromBuffer = messageDBHelper.getAllMessages();
-		for(int i=0 ; i<messagesFromBuffer.size() ; i++){
-			messageList.add(messagesFromBuffer.get(i));
-		}
+		messageList.addAll(messagesFromBuffer);
 		messageListAdapter.notifyDataSetChanged();
+		messageListView.setSelection(messageListView.getCount() - 1);
 
 
 		/*
@@ -105,23 +112,23 @@ public class SquareChatFragment extends AhFragment{
 				final AhMessage message = new AhMessage();
 				message.setContent(messageEditText.getText().toString());
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
-				//				message.setReceiverId("38A0D350-ABCA-4E9A-9249-4ACE9D571CE8");
+				message.setSenderId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
+				message.setReceiverId(square.getId());
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
 				messageListAdapter.notifyDataSetChanged();
+				messageListView.setSelection(messageListView.getCount() - 1);
 				messageEditText.setText("");
 
 				// Send message to server
-				//				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-				//
-				//					@Override
-				//					public void onCompleted(AhMessage entity) {
-				//						Log.d(AhGlobalVariable.LOG_TAG, "sent message");
-				//						message.setStatus(AhMessage.SENT);
-				//						messageListAdapter.notifyDataSetChanged();
-				//					}
-				//				});
+				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+
+					@Override
+					public void onCompleted(AhMessage entity) {
+						message.setStatus(AhMessage.SENT);
+						messageListAdapter.notifyDataSetChanged();
+					}
+				});
 			}
 		});
 
@@ -136,9 +143,16 @@ public class SquareChatFragment extends AhFragment{
 		messageDBHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
-			public void onCompleted(AhMessage message) {
-				messageList.add(message);
-				messageListAdapter.notifyDataSetChanged();
+			public void onCompleted(final AhMessage message) {
+				activity.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						messageList.add(message);
+						messageListAdapter.notifyDataSetChanged();
+						messageListView.setSelection(messageListView.getCount() - 1);
+					}
+				});
 			}
 		});
 

@@ -6,10 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.model.Square;
 
 public class SquareChupaFragment extends AhFragment{
 
-	
+	private Square square;
+
+
+	public SquareChupaFragment(Square square) {
+		super();
+		this.square = square;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.JsonObject;
+import com.pinthecloud.athere.AhGlobalVariable;
 
 public class User implements Parcelable{
 	@com.google.gson.annotations.SerializedName("id")
@@ -15,7 +16,7 @@ public class User implements Parcelable{
 	@com.google.gson.annotations.SerializedName("profilePic")
 	private String profilePic;
 	@com.google.gson.annotations.SerializedName("mobileId")
-	private String mobileId = "Android";
+	private String mobileId = AhGlobalVariable.ANDROID;
 	@com.google.gson.annotations.SerializedName("registrationId")
 	private String registrationId;
 	@com.google.gson.annotations.SerializedName("isMale")
@@ -37,7 +38,6 @@ public class User implements Parcelable{
 	};
 
 	public User() {
-
 	}
 	public User(String id, String nickName, String profilePic, String mobileId,
 			String registrationId, boolean isMale, int companyNum, int age,

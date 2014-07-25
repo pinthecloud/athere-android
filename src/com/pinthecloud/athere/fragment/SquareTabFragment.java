@@ -11,13 +11,21 @@ import android.view.ViewGroup;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
 import com.pinthecloud.athere.interfaces.PagerSlidingTabStrip;
+import com.pinthecloud.athere.model.Square;
 
 public class SquareTabFragment extends AhFragment{
 
 	private ViewPager mViewPager;
 	private SquarePagerAdapter mSquarePagerAdapter;
 	private PagerSlidingTabStrip tabs;
+	
+	private Square square;
 
+	
+	public SquareTabFragment(Square square) {
+		super();
+		this.square = square;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,13 +45,15 @@ public class SquareTabFragment extends AhFragment{
 		 */
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager());
+		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager.setAdapter(mSquarePagerAdapter);
 		int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
 				getResources().getDisplayMetrics());
 		mViewPager.setPageMargin(pageMargin);
+		
+		// Set up tabs with the view pager
 		tabs.setViewPager(mViewPager);
 		tabs.setOnPageChangeListener(new OnPageChangeListener() {
 

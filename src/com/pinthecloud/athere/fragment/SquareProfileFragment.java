@@ -43,7 +43,8 @@ import com.pinthecloud.athere.util.FileUtil;
 public class SquareProfileFragment extends AhFragment{
 
 	private final int MIN_NUMBER_PERSON = 1;
-	private final int MAX_NUMBER_PERSON = 30;
+	private final int MAX_NUMBER_PERSON = 10;
+	private final int DEFAULT_NUMBER_PERSON = 2;
 
 	private Intent intent;
 	private Square square;
@@ -166,6 +167,7 @@ public class SquareProfileFragment extends AhFragment{
 		 */
 		numberPicker.setMinValue(MIN_NUMBER_PERSON);
 		numberPicker.setMaxValue(MAX_NUMBER_PERSON);
+		numberPicker.setValue(DEFAULT_NUMBER_PERSON);
 
 
 		/*
@@ -223,13 +225,14 @@ public class SquareProfileFragment extends AhFragment{
 					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 					toast.show();
 				} else {
-					// Proper nick name
-					// Save this setting and go to next activity
-					int companyNumber = numberPicker.getValue();
-					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-					pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-					pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+					// Disable complete button for preventing double click
+					completeButton.setEnabled(false);
 
+					// Save this setting
+					int companyNumber = numberPicker.getValue();
+					pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+					pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+					pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 					enterSquare();
 				}
 			}
@@ -315,7 +318,6 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				User user = userHelper.getUser();
 
-				//				try {
 				// Enter a square with the user
 				userHelper.enterSquareSync(user);
 
@@ -326,20 +328,15 @@ public class SquareProfileFragment extends AhFragment{
 						// Dimiss progress bar
 						progressBar.setVisibility(View.GONE);
 
+						// Save this setting and go to next activity
+						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);
-						intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
 				});
-				//				} catch (AhException | InterruptedException e) {
-				//					Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
-				//
-				//					String message = getResources().getString(R.string.bad_enter_square_message);
-				//					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-				//					toast.show();
-				//				}
 			}
 		}).start();
 	}
