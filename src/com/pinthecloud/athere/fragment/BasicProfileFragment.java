@@ -24,6 +24,7 @@ public class BasicProfileFragment extends AhFragment{
 
 	private final int MIN_YEAR = 1950;
 	private final int MAX_YEAR = 2000;
+	private final int DEFAULT_YEAR = 1990;
 
 	private EditText nickNameEditText;
 	private ToggleButton maleButton;
@@ -111,6 +112,7 @@ public class BasicProfileFragment extends AhFragment{
 		 */
 		yearPicker.setMinValue(MIN_YEAR);
 		yearPicker.setMaxValue(MAX_YEAR);
+		yearPicker.setValue(DEFAULT_YEAR);
 
 
 		/*
@@ -128,6 +130,9 @@ public class BasicProfileFragment extends AhFragment{
 					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 					toast.show();
 				} else{
+					// Disable complete button for preventing double click
+					completeButton.setEnabled(false);
+
 					// Proper nick name
 					// Save this setting and go to next activity
 					int birthYear = yearPicker.getValue();
@@ -138,7 +143,7 @@ public class BasicProfileFragment extends AhFragment{
 					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, isMale);
 					pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
 					pref.putInt(AhGlobalVariable.AGE_KEY, age);
-					
+
 					Intent intent = new Intent(context, SquareListActivity.class);
 					startActivity(intent);
 					activity.finish();

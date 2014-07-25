@@ -8,6 +8,7 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 
 public class AhActivity extends Activity {
 
+	protected AhApplication app;
 	protected PreferenceHelper pref;
 
 	@Override
@@ -17,7 +18,7 @@ public class AhActivity extends Activity {
 		/*
 		 * Set static value
 		 */
-		AhApplication app = AhApplication.getInstance();
+		app = AhApplication.getInstance();
 		pref = app.getPref();
 	}
 }

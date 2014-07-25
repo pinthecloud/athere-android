@@ -58,7 +58,7 @@ public class AhIntentService extends IntentService {
 			return;
 		}
 
-		if(isRunning(getBaseContext())){
+		if(isRunning(app)){
 			// if the app is running, add the message to the chat room.
 			messageDBHelper.triggerMessageEvent(message);
 		} else {

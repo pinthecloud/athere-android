@@ -53,7 +53,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 						context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 				// Inflate different layout by user
-				if(message.isMine(pref.getString(AhGlobalVariable.NICK_NAME_KEY))){
+				if(message.isMine(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY))){
 					this.layoutId = R.layout.row_square_chat_list_send;
 				} else{
 					this.layoutId = R.layout.row_square_chat_list_receive;
@@ -74,7 +74,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
 				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
 				progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
-				
+
 				/*
 				 * Set UI component only in send list
 				 */

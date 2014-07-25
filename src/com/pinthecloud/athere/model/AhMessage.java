@@ -8,7 +8,7 @@ public class AhMessage implements Parcelable {
 	public static final int SENDING = 0;
 	public static final int SENT = 1;
 	public static final int FAIL = -1;
-	
+
 	public enum MESSAGE_TYPE { 
 		SQUARE("SQUARE"), ROOM("ROOM"), SHOUTING("SHOUTING"); 
 
@@ -135,7 +135,6 @@ public class AhMessage implements Parcelable {
 
 
 	public boolean isMine(String id){
-		return this.sender == id;
-		// TODO return this.senderId == id;
+		return this.senderId.equals(id);
 	}
 }

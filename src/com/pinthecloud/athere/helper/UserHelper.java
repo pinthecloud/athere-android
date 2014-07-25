@@ -95,7 +95,6 @@ public class UserHelper {
 
 
 	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
-
 		userTable.delete(squareId, new TableDeleteCallback() {
 
 			@Override
@@ -180,11 +179,10 @@ public class UserHelper {
 		user.setNickName(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 		user.setProfilePic(profilePic);
 		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
-		user.setSquareId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-		user.setMale(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
-		user.setAge(pref.getInt(AhGlobalVariable.AGE_KEY));
-		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
 		user.setCompanyNum(pref.getInt(AhGlobalVariable.COMPANY_NUMBER_KEY));
+		user.setAge(pref.getInt(AhGlobalVariable.AGE_KEY));
+		user.setMale(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
+		user.setSquareId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
 		return user;
 	}
 
