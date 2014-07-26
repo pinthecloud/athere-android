@@ -8,7 +8,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.model.User;
 
 public class UserDBHelper extends SQLiteOpenHelper {
@@ -39,9 +41,13 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
-	// Creating Tables
+	/*
+	 * Creating Tables(non-Javadoc)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+		Log.d(AhGlobalVariable.LOG_TAG, "UserDbHelper onCreate");
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
 				"("
 				+ ID + " TEXT PRIMARY KEY," 
@@ -57,9 +63,14 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
-	// Upgrading database
+	/*
+	 * Upgrading database(non-Javadoc)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
+	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		Log.d(AhGlobalVariable.LOG_TAG, "UserDbHelper onUpgrade");
+
 		// Drop older table if existed
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
@@ -121,7 +132,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public User getUser(String id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(TABLE_NAME, null, REGISTRATION_ID + "=?",
+		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
 				new String[] { id }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
@@ -163,23 +174,30 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return users;
 	}
 
-	//    // Updating single contact
-	//    public int updateContact(String userId, User user) {
-	//        SQLiteDatabase db = this.getWritableDatabase();
-	// 
-	//        ContentValues values = new ContentValues();
-	//        values.put(NICK_NAME, user.getNickName());
-	// 
-	//        // updating row
-	//        return db.update(TABLE_NAME, values, ID + " = ?",
-	//                new String[] { String.valueOf(userId) });
-	//    }
+	// Updating single contact
+	public void updateUser(User user) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(ID, user.getId());
+		values.put(NICK_NAME, user.getNickName());
+		values.put(PROFILE_PIC, user.getProfilePic());
+		values.put(MOBILE_ID, user.getMobileId());
+		values.put(REGISTRATION_ID, user.getRegistrationId());
+		values.put(IS_MALE, user.isMale());
+		values.put(COMPANY_NUM, user.getCompanyNum());
+		values.put(AGE, user.getAge());
+		values.put(SQUARE_ID, user.getSquareId());
+
+		// Inserting Row
+		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });
+		db.close(); // Closing database connection
+	}
 
 	// Deleting single contact
-	public void deleteUser(String userId) {
+	public void deleteUser(String id) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_NAME, ID + " = ?",
-				new String[] { String.valueOf(userId) });
+		db.delete(TABLE_NAME, ID + " = ?", new String[] { id });
 		db.close();
 	}
 }

@@ -58,14 +58,14 @@ public class JsonConverter {
 			JsonObject jo = jsonElement.getAsJsonObject();
 			User user = new User();
 			user.setId(jo.get("id").getAsString());
-			user.setNickName(jo.get("nickname").getAsString());
-			user.setProfilePic(jo.get("profilepic").getAsString());
-			user.setMobileId(jo.get("mobileid").getAsString());
-			user.setRegistrationId(jo.get("registrationid").getAsString());
-			user.setMale(jo.get("ismale").getAsBoolean());
-			user.setCompanyNum(jo.get("companynum").getAsInt());
+			user.setNickName(jo.get("nickName").getAsString());
+			user.setProfilePic(jo.get("profilePic").getAsString());
+			user.setMobileId(jo.get("mobileId").getAsString());
+			user.setRegistrationId(jo.get("registrationId").getAsString());
+			user.setMale(jo.get("isMale").getAsBoolean());
+			user.setCompanyNum(jo.get("companyNum").getAsInt());
 			user.setAge(jo.get("age").getAsInt());
-			user.setSquareId(jo.get("squareid").getAsString());
+			user.setSquareId(jo.get("squareId").getAsString());
 
 			list.add(user);
 		}

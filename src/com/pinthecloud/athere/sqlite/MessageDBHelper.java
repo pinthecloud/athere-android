@@ -11,9 +11,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhEntityPairCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.User;
 
 public class MessageDBHelper  extends SQLiteOpenHelper {
 
@@ -165,19 +166,19 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 
 	///////////////////////////////////////////////////////////////
 
-	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
+	private Map<String, AhEntityPairCallback<AhMessage,User>> map = new HashMap<String, AhEntityPairCallback<AhMessage,User>>();
 
 	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
 	//public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 
-	public void setMessageHandler(AhEntityCallback<AhMessage> callback){
+	public void setMessageHandler(AhEntityPairCallback<AhMessage, User> callback){
 		map.put(MESSAGE_RECEIVED, callback);
 	}
 
-	public void triggerMessageEvent(AhMessage message){
-		AhEntityCallback<AhMessage> callback = map.get(MESSAGE_RECEIVED);
+	public void triggerMessageEvent(AhMessage message, User user){
+		AhEntityPairCallback<AhMessage, User> callback = map.get(MESSAGE_RECEIVED);
 		if(callback != null)
-			callback.onCompleted(message);
+			callback.onCompleted(message, user);
 		else 
 			throw new AhException("No such Event : triggerMessageEvent");
 	}
