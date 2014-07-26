@@ -1,7 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -34,10 +33,10 @@ public class SquareChatFragment extends AhFragment{
 	private MessageHelper messageHelper;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-	
+
 	private Square square;
 
-	
+
 	public SquareChatFragment(Square square) {
 		super();
 		this.square = square;
@@ -71,10 +70,6 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
-		List<AhMessage> messagesFromBuffer = messageDBHelper.getAllMessages();
-		messageList.addAll(messagesFromBuffer);
-		messageListAdapter.notifyDataSetChanged();
-		messageListView.setSelection(messageListView.getCount() - 1);
 
 
 		/*
@@ -145,7 +140,7 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				activity.runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						messageList.add(message);

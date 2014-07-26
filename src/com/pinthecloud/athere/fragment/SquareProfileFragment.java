@@ -308,17 +308,18 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void run() {
-				// If user haven't got registration key, get it
+				/*
+				 * If user haven't got registration key, get it
+				 */
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
-					String registrationId = userHelper.getRegistrationIdSync();
+					String registrationId = app.getUserHelper().getRegistrationIdSync();
 					pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 				}
 
 				// Get a user object from preference settings
-				User user = userHelper.getUser();
-
 				// Enter a square with the user
+				User user = userHelper.getUser();
 				userHelper.enterSquareSync(user);
 
 				activity.runOnUiThread(new Runnable(){

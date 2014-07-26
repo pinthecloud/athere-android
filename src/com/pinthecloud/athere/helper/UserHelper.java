@@ -17,7 +17,6 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -109,19 +108,19 @@ public class UserHelper {
 	}
 
 
-//	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
-//		userTable.insert(user, new TableOperationCallback<User>() {
-//
-//			@Override
-//			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
-//				if (exception == null) {
-//					callback.onCompleted(true);
-//				} else {
-//					throw new AhException(exception, "enterSquareAsync");
-//				}
-//			}
-//		});
-//	}
+	//	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
+	//		userTable.insert(user, new TableOperationCallback<User>() {
+	//
+	//			@Override
+	//			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+	//				if (exception == null) {
+	//					callback.onCompleted(true);
+	//				} else {
+	//					throw new AhException(exception, "enterSquareAsync");
+	//				}
+	//			}
+	//		});
+	//	}
 
 
 	public boolean enterSquareSync(User user) throws AhException {

@@ -29,6 +29,7 @@ public class AhGlobalVariable{
 	public static final String PROFILE_PICTURE_NAME = "profile_picture_name.png";
 	public static final String PROFILE_PICTURE_CIRCLE_NAME = "profile_picture_circle_name.png";
 	public static final String ANDROID = "Android";
+	public static final String NULL = "NULL";
 	
 	
 	/*

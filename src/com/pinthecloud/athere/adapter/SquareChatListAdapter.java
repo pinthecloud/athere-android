@@ -1,13 +1,12 @@
 package com.pinthecloud.athere.adapter;
 
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,28 +15,35 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.util.FileUtil;
+import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
-	private Context context;
 	private int layoutId;
 	private ArrayList<AhMessage> items;
 
+	private AhApplication app;
+	private LayoutInflater inflater;
 	private PreferenceHelper pref;
+	private UserDBHelper userDBHelper;
 
 
 	public SquareChatListAdapter(Context context, int layoutId, ArrayList<AhMessage> items) {
 		super(context, layoutId, items);
-		this.context = context;
 		this.layoutId = layoutId;
 		this.items = items;
 
+		this.app = AhApplication.getInstance(); 
+		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.pref = new PreferenceHelper(context);
+		this.userDBHelper = app.getUserDBHelper();
 	}
 
 
@@ -47,20 +53,13 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		AhMessage message = items.get(position);
 		if (message != null) {
-			// If the view is new, inflate it
-			if (view == null) {
-				LayoutInflater inflater = (LayoutInflater)
-						context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-				// Inflate different layout by user
-				if(message.isMine(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY))){
-					this.layoutId = R.layout.row_square_chat_list_send;
-				} else{
-					this.layoutId = R.layout.row_square_chat_list_receive;
-				}
-				view = inflater.inflate(this.layoutId, parent, false);
+			// Inflate different layout by user
+			if(message.isMine(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY))){
+				this.layoutId = R.layout.row_square_chat_list_send;
+			} else{
+				this.layoutId = R.layout.row_square_chat_list_receive;
 			}
-
+			view = inflater.inflate(this.layoutId, parent, false);
 
 			/*
 			 * Find UI component
@@ -68,12 +67,11 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			TextView nickNameText = null;
 			TextView messageText = null;
 			TextView timeText = null;
-			ProgressBar progressBar = null;
 			if(this.layoutId == R.layout.row_square_chat_list_send){
 				nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_send_nickname);
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
 				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
-				progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
+				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
 
 				/*
 				 * Set UI component only in send list
@@ -98,11 +96,10 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 * Set UI component only in receive list
 				 */
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
-				try {
-					profileImage.setImageBitmap(FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME));
-				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareChatListAdapter getView : " + e.getMessage());
-				}
+				User user = userDBHelper.getUser(message.getSenderId());
+				app.getUserHelper().getUser();
+				Bitmap pictureBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
+				profileImage.setImageBitmap(pictureBitmap);
 			}
 
 
@@ -110,7 +107,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Set Shared UI component
 			 */
 			messageText.setText(message.getContent());
-			nickNameText.setText(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
+			nickNameText.setText(message.getSender());
 
 			Calendar calendar = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);

@@ -2,8 +2,6 @@ package com.pinthecloud.athere.helper;
 
 import java.util.List;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -95,7 +93,7 @@ public class SquareHelper {
 	public Square createSquareSync(String name, double latitude, double longitude) throws AhException {
 		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 
-		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
+		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
 			throw new AhException("createSquare NO Registration");
 		}
 		Square square = new Square();
@@ -184,7 +182,7 @@ public class SquareHelper {
 	public void createSquareAsync(String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
 		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 
-		if (whoMade == PreferenceHelper.DEFAULT_STRING) {
+		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
 			throw new AhException("createSquare NO Registration");
 		}
 
