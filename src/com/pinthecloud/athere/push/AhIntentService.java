@@ -28,7 +28,6 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class AhIntentService extends IntentService {
 
@@ -51,8 +50,10 @@ public class AhIntentService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		AhMessage message;
+		User user;
 		try {
-			message = parseIntent(intent);
+			message = parseMessageIntent(intent);
+			user = parseUserIntent(intent);
 		} catch (JSONException e) {
 			Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent : " + e.getMessage());
 			return;
@@ -60,7 +61,7 @@ public class AhIntentService extends IntentService {
 
 		if(isRunning(app)){
 			// if the app is running, add the message to the chat room.
-			messageDBHelper.triggerMessageEvent(message);
+			messageDBHelper.triggerMessageEvent(message, user);
 		} else {
 			// if the app is not running, send a notification
 			// Add the message to the buffer
@@ -103,13 +104,6 @@ public class AhIntentService extends IntentService {
 			mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
 			Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 			v.vibrate(800);
-
-			UserDBHelper userHelper = new UserDBHelper(this);
-
-			List<User> userList = userHelper.getAllUsers();
-			for(User user : userList){
-				Log.e("ERROR",user.toString());
-			}
 		}
 	}
 
@@ -124,40 +118,70 @@ public class AhIntentService extends IntentService {
 		return false;
 	}
 
-	private AhMessage parseIntent(Intent intent) throws JSONException {
+	private AhMessage parseMessageIntent(Intent intent) throws JSONException {
 		AhMessage message = new AhMessage();
 		Bundle b = intent.getExtras();
 		String jsonStr = b.getString("message");
 
 		JSONObject jo = null;
 
-		String type = "";
-		String content = "";
-		String sender = "";
-		String senderId = "";
-		String receiver = "";
-		String receiverId = "";
 		try {
 			jo = new JSONObject(jsonStr);
 
-			type = jo.getString("type");
-			content = jo.getString("content");
-			sender = jo.getString("sender");
-			senderId = jo.getString("senderId");
-			receiver = jo.getString("receiver");
-			receiverId = jo.getString("receiverId");
+			String type = jo.getString("type");
+			String content = jo.getString("content");
+			String sender = jo.getString("sender");
+			String senderId = jo.getString("senderId");
+			String receiver = jo.getString("receiver");
+			String receiverId = jo.getString("receiverId");
+
+			message.setType(type);
+			message.setContent(content);
+			message.setSender(sender);
+			message.setSenderId(senderId);
+			message.setReceiver(receiver);
+			message.setReceiverId(receiverId);
 		} catch (JSONException e) {
 			throw e;
 		}
 
-		message.setType(type);
-		message.setContent(content);
-		message.setSender(sender);
-		message.setSenderId(senderId);
-		message.setReceiver(receiver);
-		message.setReceiverId(receiverId);
-
 		return message;
+	}
+
+	private User parseUserIntent(Intent intent) throws JSONException {
+		User user = new User();
+		Bundle b = intent.getExtras();
+		String jsonStr = b.getString("userData");
+
+		JSONObject jo = null;
+
+		try {
+			jo = new JSONObject(jsonStr);
+
+			String id = jo.getString("id");
+			String nickName = jo.getString("nickName");
+			String profilePic = jo.getString("profilePic");
+			String mobileId = jo.getString("mobileId");
+			String registrationId = jo.getString("registrationId");
+			boolean isMale = jo.getBoolean("isMale");
+			int companyNum = jo.getInt("companyNum");
+			int age = jo.getInt("age");
+			String squareId = jo.getString("squareId");
+
+			user.setId(id);
+			user.setNickName(nickName);
+			user.setProfilePic(profilePic);
+			user.setMobileId(mobileId);
+			user.setRegistrationId(registrationId);
+			user.setMale(isMale);
+			user.setCompanyNum(companyNum);
+			user.setAge(age);
+			user.setSquareId(squareId);
+		} catch (JSONException e) {
+			throw e;
+		}
+
+		return user;
 	}
 
 	private static boolean isRunning3(Context context) {

@@ -54,7 +54,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		AhMessage message = items.get(position);
 		if (message != null) {
 			// Inflate different layout by user
-			if(message.isMine(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY))){
+			if(message.isMine(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY))){
 				this.layoutId = R.layout.row_square_chat_list_send;
 			} else{
 				this.layoutId = R.layout.row_square_chat_list_receive;
@@ -97,7 +97,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				User user = userDBHelper.getUser(message.getSenderId());
-				app.getUserHelper().getUser();
 				Bitmap pictureBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
 				profileImage.setImageBitmap(pictureBitmap);
 			}

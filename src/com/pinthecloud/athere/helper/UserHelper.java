@@ -9,30 +9,25 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
+import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
+import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
-import com.pinthecloud.athere.util.JsonConverter;
 
 public class UserHelper {
 
 	private AhApplication app;
-	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
 	private Object lock;
 
@@ -40,11 +35,6 @@ public class UserHelper {
 	 * Model tables
 	 */
 	private MobileServiceTable<User> userTable;
-
-	/*
-	 * Methods name
-	 */
-	private final String ENTER_SQUARE = "enter_square";
 
 	/*
 	 * GCM server key
@@ -55,7 +45,6 @@ public class UserHelper {
 	public UserHelper() {
 		super();
 		this.app = AhApplication.getInstance();
-		this.mClient = app.getmClient();
 		this.pref = app.getPref();
 		this.lock = app.getLock();
 		this.userTable = app.getUserTable();
@@ -108,42 +97,35 @@ public class UserHelper {
 	}
 
 
-	//	public void enterSquareAsync(User user, final AhEntityCallback<Boolean> callback) throws AhException {
-	//		userTable.insert(user, new TableOperationCallback<User>() {
-	//
-	//			@Override
-	//			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
-	//				if (exception == null) {
-	//					callback.onCompleted(true);
-	//				} else {
-	//					throw new AhException(exception, "enterSquareAsync");
-	//				}
-	//			}
-	//		});
-	//	}
-
-
-	public boolean enterSquareSync(User user) throws AhException {
-		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
-
-		JsonObject jo = user.toJson();
-
-		Gson g = new Gson();
-		JsonElement requestJson = g.fromJson(jo, JsonElement.class);
-
-		mClient.invokeApi(ENTER_SQUARE, requestJson, new ApiJsonOperationCallback() {
+	public void enterSquareAsync(User user, final AhEntityCallback<String> callback) throws AhException {
+		userTable.insert(user, new TableOperationCallback<User>() {
 
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				if (exception == null){
-					List<User> list = JsonConverter.convertToUserList(json);
-					carrier.load(list);
+			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+				if (exception == null) {
+					callback.onCompleted(entity.getId());
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
+			}
+		});
+	}
+
+
+	public String enterSquareSync(User user) throws AhException {
+		final AhCarrier<String> carrier = new AhCarrier<String>();
+
+		userTable.insert(user, new TableOperationCallback<User>() {
+
+			@Override
+			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+				if (exception == null) {
+					carrier.load(entity.getId());
 					synchronized (lock) {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "enterSquareSync");
+					throw new AhException(exception, "enterSquareAsync");
 				}
 			}
 		});
@@ -156,9 +138,136 @@ public class UserHelper {
 			}
 		}
 
-		UserDBHelper userHelper = app.getUserDBHelper();
-		userHelper.addAllUsers(carrier.getItem());
-		return true;
+		return carrier.getItem();
+
+		//		JsonObject jo = user.toJson();
+		//
+		//		Gson g = new Gson();
+		//		JsonElement requestJson = g.fromJson(jo, JsonElement.class);
+		//
+		//		mClient.invokeApi(ENTER_SQUARE, requestJson, new ApiJsonOperationCallback() {
+		//
+		//			@Override
+		//			public void onCompleted(JsonElement json, Exception exception,
+		//					ServiceFilterResponse response) {
+		//				if (exception == null){
+		//					List<User> list = JsonConverter.convertToUserList(json);
+		//					carrier.load(list);
+		//					synchronized (lock) {
+		//						lock.notify();
+		//					}
+		//				} else {
+		//					throw new AhException(exception, "enterSquareSync");
+		//				}
+		//			}
+		//		});
+		//
+		//		synchronized (lock) {
+		//			try {
+		//				lock.wait();
+		//			} catch (InterruptedException e) {
+		//				throw new AhException(e, "enterSquareSync");
+		//			}
+		//		}
+		//
+		//		UserDBHelper userDBHelper = app.getUserDBHelper();
+		//		userDBHelper.addAllUsers(carrier.getItem());
+		//		return true;
+	}
+
+
+	public void getUserListAsync(String squareId, final AhListCallback<User> callback){
+		userTable.where().field("squareId").eq(squareId).execute(new TableQueryCallback<User>() {
+
+			@Override
+			public void onCompleted(List<User> result, int count, Exception exception,
+					ServiceFilterResponse reponse) {
+				if (exception == null) {
+					callback.onCompleted(result, count);
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
+			}
+		});
+	}
+
+
+	public List<User> getUserListSync(String squareId){
+		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
+
+		userTable.where().field("squareId").eq(squareId).execute(new TableQueryCallback<User>() {
+
+			@Override
+			public void onCompleted(List<User> result, int count, Exception exception,
+					ServiceFilterResponse reponse) {
+				if (exception == null) {
+					carrier.load(result);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
+
+			}
+		});
+
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				throw new AhException(e, "enterSquareSync");
+			}
+		}
+
+		return carrier.getItem();
+	}
+
+
+	public void getUserAsync(String id, final AhEntityCallback<User> callback) {
+		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
+
+			@Override
+			public void onCompleted(List<User> result, int count, Exception exception,
+					ServiceFilterResponse reponse) {
+				if (exception == null) {
+					callback.onCompleted(result.get(0));
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
+			}
+		});
+	}
+
+
+	public User getUserSync(String id) {
+		final AhCarrier<User> carrier = new AhCarrier<User>();
+
+		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
+
+			@Override
+			public void onCompleted(List<User> result, int count, Exception exception,
+					ServiceFilterResponse reponse) {
+				if (exception == null) {
+					carrier.load(result.get(0));
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
+			}
+		});
+
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				throw new AhException(e, "enterSquareSync");
+			}
+		}
+
+		return carrier.getItem();
 	}
 
 
@@ -186,13 +295,13 @@ public class UserHelper {
 	}
 
 
-	public String getRegistrationIdSync(){
+	public String getRegistrationIdSync() throws IOException{
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
 		String registrationId = "";
 		try {
 			registrationId = gcm.register(GCM_SENDER_ID);
 		} catch (IOException e) {
-			throw new AhException(e, "getRegistrationIdSync");
+			throw e;
 		}
 		return registrationId;
 	}

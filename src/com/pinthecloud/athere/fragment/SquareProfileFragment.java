@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,9 +34,11 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -65,6 +68,7 @@ public class SquareProfileFragment extends AhFragment{
 	private Button completeButton;
 
 	private UserHelper userHelper;
+	private UserDBHelper userDBHelper;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -140,6 +144,7 @@ public class SquareProfileFragment extends AhFragment{
 
 		// Set Helper
 		userHelper = app.getUserHelper();
+		userDBHelper = app.getUserDBHelper();
 	}
 
 
@@ -313,14 +318,23 @@ public class SquareProfileFragment extends AhFragment{
 				 */
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
-					String registrationId = app.getUserHelper().getRegistrationIdSync();
-					pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+					try {
+						String registrationId = app.getUserHelper().getRegistrationIdSync();
+						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+					} catch (IOException e) {
+						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
+						throw new AhException(e, "SquareProfileFragment enterSquare");
+					}
 				}
 
 				// Get a user object from preference settings
 				// Enter a square with the user
 				User user = userHelper.getUser();
-				userHelper.enterSquareSync(user);
+				String id = userHelper.enterSquareSync(user);
+				pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
+
+				List<User> userList = userHelper.getUserListSync(square.getId());
+				userDBHelper.addAllUsers(userList);
 
 				activity.runOnUiThread(new Runnable(){
 

@@ -18,9 +18,12 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhEntityPairCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -28,7 +31,8 @@ public class SquareChatFragment extends AhFragment{
 	private SquareChatListAdapter messageListAdapter;
 	private EditText messageEditText;
 	private Button sendButton;
-
+	
+	private UserDBHelper userDBHelper;
 	private MessageDBHelper messageDBHelper;
 	private MessageHelper messageHelper;
 
@@ -107,7 +111,7 @@ public class SquareChatFragment extends AhFragment{
 				final AhMessage message = new AhMessage();
 				message.setContent(messageEditText.getText().toString());
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				message.setSenderId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
+				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
 				message.setReceiverId(square.getId());
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
@@ -135,10 +139,12 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageDBHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		messageDBHelper.setMessageHandler(new AhEntityPairCallback<AhMessage, User>() {
 
 			@Override
-			public void onCompleted(final AhMessage message) {
+			public void onCompleted(final AhMessage message, final User user) {
+				userDBHelper.updateUser(user);
+				
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
