@@ -60,7 +60,8 @@ public class AhIntentService extends IntentService {
 		User user = null;
 		try {
 			message = parseMessageIntent(intent);
-			user = parseUserIntent(intent);
+//			if (!AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType()))
+//					user = parseUserIntent(intent);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent : " + e.getMessage());
@@ -197,6 +198,7 @@ public class AhIntentService extends IntentService {
 		User user = new User();
 		Bundle b = intent.getExtras();
 		String jsonStr = b.getString("userData");
+		Log.e("ERROR", "jsonStr : "+jsonStr);
 		if (jsonStr == null) return null;
 		
 		JSONObject jo = null;

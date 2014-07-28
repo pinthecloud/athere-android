@@ -335,45 +335,37 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final User user = userHelper.getUser();
-				userHelper.enterSquareAsync(user, new AhEntityCallback<String>() {
+				String id = userHelper.enterSquareSync(user);
+
+				pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
+				AhMessage message = new AhMessage();
+				message.setContent("Enter Square");
+				message.setSender(user.getNickName());
+				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
+				message.setReceiverId(square.getId());
+				message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+				
+				// Send message to server
+				messageHelper.sendMessageSync(message);
+
+				List<User> userList = userHelper.getUserListSync(square.getId());
+				userDBHelper.addAllUsers(userList);
+				
+				activity.runOnUiThread(new Runnable(){
 
 					@Override
-					public void onCompleted(String id) {
-						// TODO Auto-generated method stub
-						pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
-						AhMessage message = new AhMessage();
-						message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
-						message.setContent("Enter Square");
-						message.setSender(user.getNickName());
-						message.setSenderId(id);
-						message.setReceiverId(square.getId());
+					public void run() {
 						
-						messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-							
-							@Override
-							public void onCompleted(AhMessage entity) {
-								// TODO Auto-generated method stub
-								List<User> userList = userHelper.getUserListSync(square.getId());
-								userDBHelper.addAllUsers(userList);
-								activity.runOnUiThread(new Runnable(){
+						// Dimiss progress bar
+						progressBar.setVisibility(View.GONE);
 
-									@Override
-									public void run() {
-										
-										// Dimiss progress bar
-										progressBar.setVisibility(View.GONE);
+						// Save this setting and go to next activity
+						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
 
-										// Save this setting and go to next activity
-										pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-
-										// Set and move to next activity after clear previous activity
-										intent.setClass(context, SquareActivity.class);
-										intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-										startActivity(intent);
-									}
-								});
-							}
-						});
+						// Set and move to next activity after clear previous activity
+						intent.setClass(context, SquareActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
 					}
 				});
 			}
