@@ -53,7 +53,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		Log.d(AhGlobalVariable.LOG_TAG, "UserDbHelper onCreate");
+		Log.d(AhGlobalVariable.LOG_TAG, "UserDBHelper onCreate");
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
 				"("
 				+ ID + " TEXT PRIMARY KEY," 

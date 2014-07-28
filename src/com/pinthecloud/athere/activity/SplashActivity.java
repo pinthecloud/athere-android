@@ -67,6 +67,7 @@ public class SplashActivity extends AhActivity {
 					intent.setClass(SplashActivity.this, SquareActivity.class);
 				}
 				startActivity(intent);
+				finish();
 			}
 
 		}, SPLASH_TIME);

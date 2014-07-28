@@ -41,6 +41,7 @@
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="com.pinthecloud.athere" />
             </intent-filter>
@@ -64,7 +65,9 @@
             android:name=".activity.SquareProfileActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.HongkunTestAcitivity" />
-        <activity android:name=".activity.SquareListActivity" />
+        <activity
+            android:name=".activity.SquareListActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.AhActivity" />
         <activity android:name=".activity.BasicProfileActivity" />
         <activity

@@ -2,7 +2,6 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,8 +24,6 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -34,12 +31,9 @@ public class SquareChatFragment extends AhFragment{
 	private SquareChatListAdapter messageListAdapter;
 	private EditText messageEditText;
 	private Button sendButton;
-	
 	private Button tempBackButton;
-	
-	private UserDBHelper userDBHelper;
+
 	private UserHelper userHelper;
-	private MessageDBHelper messageDBHelper;
 	private MessageHelper messageHelper;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
@@ -54,10 +48,8 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//messageDBHelper = app.getMessageDBHelper();
 		messageHelper = app.getMessageHelper();
 		userHelper = app.getUserHelper();
-		
 	}
 
 
@@ -118,7 +110,7 @@ public class SquareChatFragment extends AhFragment{
 				final AhMessage message = new AhMessage();
 				message.setContent(messageEditText.getText().toString());
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
+				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 				message.setReceiverId(square.getId());
 				message.setType(AhMessage.MESSAGE_TYPE.TALK);
 				message.setStatus(AhMessage.SENDING);
@@ -151,7 +143,7 @@ public class SquareChatFragment extends AhFragment{
 				final AhMessage message = new AhMessage();
 				message.setContent("Exit Square");
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
+				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 				message.setReceiverId(square.getId());
 				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
 				message.setStatus(AhMessage.SENDING);
@@ -162,12 +154,10 @@ public class SquareChatFragment extends AhFragment{
 					public void onCompleted(AhMessage entity) {
 						message.setStatus(AhMessage.SENT);
 						Log.e("ERROR","complete sendMessageAsync / before exitSquareAsync");
-						userHelper.exitSquareAsync(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY), new AhEntityCallback<Boolean>() {
+						userHelper.exitSquareAsync(pref.getString(AhGlobalVariable.USER_ID_KEY), new AhEntityCallback<Boolean>() {
 							
 							@Override
 							public void onCompleted(Boolean entity) {
-								// TODO Auto-generated method stub
-								
 								Log.e("ERROR","exit Square Succeed / before startActivity(intent)");
 								pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, false);
 								
@@ -175,11 +165,9 @@ public class SquareChatFragment extends AhFragment{
 
 									@Override
 									public void run() {
-										// TODO Auto-generated method stub
 										Intent i = new Intent(context, SquareListActivity.class);
 										context.startActivity(i);
 									}
-									
 								});
 							}
 						});
@@ -187,8 +175,9 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
+		
 		///////////////////////////////////////////////////////////////////////////////////
-
+		
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -200,7 +189,6 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
 				activity.runOnUiThread(new Runnable() {
 
 					@Override

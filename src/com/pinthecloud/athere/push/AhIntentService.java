@@ -39,7 +39,7 @@ public class AhIntentService extends IntentService {
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 	private AtomicInteger atomicInteger;
-	
+
 	public AhIntentService() {
 		this("AhIntentService");
 	}
@@ -55,13 +55,15 @@ public class AhIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.e("ERROR","onHadnlerIntent");
+		Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent");
+
 		AhMessage message = null;
 		User user = null;
+
 		try {
 			message = parseMessageIntent(intent);
-//			if (!AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType()))
-//					user = parseUserIntent(intent);
+			//			if (!AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType()))
+			//					user = parseUserIntent(intent);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent : " + e.getMessage());
@@ -69,12 +71,14 @@ public class AhIntentService extends IntentService {
 		}
 		Log.e("ERROR","received Message Type : " + message.getType());
 		if(isRunning(app)){
+			Log.d(AhGlobalVariable.LOG_TAG, "is running");
 			// if the app is running, add the message to the chat room.
 			userDBHelper.addIfNotExistOrUpdate(user);
 			messageHelper.triggerMessageEvent(message);
 		} else {
 			String title = "";
 			String content = "";
+
 			// if the app is not running, send a notification
 			if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
 				//return; // do nothing
@@ -85,13 +89,13 @@ public class AhIntentService extends IntentService {
 					userDBHelper.deleteUser(user.getId());
 				return;
 			} 
-			
+
 			else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())){
 				messageDBHelper.addMessage(message);
 				userDBHelper.addIfNotExistOrUpdate(user);
 				title = message.getSender() +"님께서 추파를 보내셨습니다.";
 				content = message.getContent();
-				
+
 			} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())){
 				messageDBHelper.addMessage(message);
 				userDBHelper.addIfNotExistOrUpdate(user);
@@ -103,7 +107,7 @@ public class AhIntentService extends IntentService {
 				title = message.getSender() +"님께서 입장하셨습니다.";
 				content = "빠큐머겅ㅗ";
 			} 
-			
+
 			// Creates an explicit intent for an Activity in your app
 			Intent resultIntent = new Intent(this, SquareActivity.class);
 
@@ -124,7 +128,7 @@ public class AhIntentService extends IntentService {
 							PendingIntent.FLAG_UPDATE_CURRENT
 							);
 			User sentUser = userDBHelper.getUser(message.getSenderId());
-			
+
 			if (sentUser == null){
 				Log.e("ERROR","no sentUser error");
 				return;
@@ -144,7 +148,7 @@ public class AhIntentService extends IntentService {
 					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			// mId allows you to update the notification later on.
 			mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
-			
+
 			AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
 			if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
 				((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
@@ -200,7 +204,7 @@ public class AhIntentService extends IntentService {
 		String jsonStr = b.getString("userData");
 		Log.e("ERROR", "jsonStr : "+jsonStr);
 		if (jsonStr == null) return null;
-		
+
 		JSONObject jo = null;
 
 		try {

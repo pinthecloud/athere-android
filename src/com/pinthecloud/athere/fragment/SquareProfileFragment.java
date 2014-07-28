@@ -35,8 +35,6 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
@@ -235,8 +233,9 @@ public class SquareProfileFragment extends AhFragment{
 					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 					toast.show();
 				} else {
-					// Disable complete button for preventing double click
+					// Disable complete button and picker for preventing double action
 					completeButton.setEnabled(false);
+					numberPicker.setEnabled(false);
 
 					// Save this setting
 					int companyNumber = numberPicker.getValue();
@@ -324,24 +323,23 @@ public class SquareProfileFragment extends AhFragment{
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
 					try {
-						String registrationId = app.getUserHelper().getRegistrationIdSync();
+						String registrationId = userHelper.getRegistrationIdSync();
 						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 					} catch (IOException e) {
 						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
-						throw new AhException(e, "SquareProfileFragment enterSquare");
 					}
 				}
 				
 				// Get a user object from preference settings
 				// Enter a square with the user
-				final User user = userHelper.getUser();
+				final User user = userHelper.getUser(false);
 				String id = userHelper.enterSquareSync(user);
-
-				pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
+				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
+				
 				AhMessage message = new AhMessage();
 				message.setContent("Enter Square");
 				message.setSender(user.getNickName());
-				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
+				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 				message.setReceiverId(square.getId());
 				message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
 				

@@ -53,7 +53,7 @@ public class UserHelper {
 
 	public boolean exitSquareSync(String userId) throws AhException {
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
-		
+
 		userTable.delete(userId, new TableDeleteCallback() {
 
 			@Override
@@ -68,7 +68,7 @@ public class UserHelper {
 				}
 			}
 		});
-		
+
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -85,11 +85,11 @@ public class UserHelper {
 		userTable.delete(userId, new TableDeleteCallback() {
 
 			@Override
-			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
-				if (exception == null) {
+			public void onCompleted(Exception e, ServiceFilterResponse response) {
+				if (e == null) {
 					callback.onCompleted(true);
 				} else {
-					throw new AhException(exception, "exitSquareAsync");
+					throw new AhException(e, "exitSquareAsync : " + e.getMessage());
 				}
 			}
 		});
@@ -113,18 +113,18 @@ public class UserHelper {
 
 	public String enterSquareSync(User user) throws AhException {
 		final AhCarrier<String> carrier = new AhCarrier<String>();
-		
+
 		userTable.insert(user, new TableOperationCallback<User>() {
 
 			@Override
-			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
-				if (exception == null) {
+			public void onCompleted(User entity, Exception e, ServiceFilterResponse response) {
+				if (e == null) {
 					carrier.load(entity.getId());
 					synchronized (lock) {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "enterSquareAsync");
+					throw new AhException(e, "enterSquareAsync : " + e.getMessage());
 				}
 			}
 		});
@@ -175,7 +175,7 @@ public class UserHelper {
 				}
 			}
 		});
-		
+
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -222,7 +222,7 @@ public class UserHelper {
 				}
 			}
 		});
-		
+
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -235,19 +235,21 @@ public class UserHelper {
 	}
 
 
-	public User getUser() {
+	public User getUser(boolean hasId) {
 		Bitmap pictureBitmap = null;
 		try {
 			pictureBitmap = FileUtil.getImageFromInternalStorage
 					(app, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 		} catch (FileNotFoundException e) {
-			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.profile_default_image);
+			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.ic_splash);
 			pictureBitmap = BitmapUtil.cropRound(pictureBitmap);
 			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
 		}
 		String profilePic = BitmapUtil.convertToString(pictureBitmap);
 
 		User user = new User();
+		if(hasId)
+			user.setId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 		user.setNickName(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 		user.setProfilePic(profilePic);
 		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
