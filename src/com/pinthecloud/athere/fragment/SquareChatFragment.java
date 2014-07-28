@@ -31,7 +31,7 @@ public class SquareChatFragment extends AhFragment{
 	private SquareChatListAdapter messageListAdapter;
 	private EditText messageEditText;
 	private Button sendButton;
-	
+
 	private UserDBHelper userDBHelper;
 	private MessageDBHelper messageDBHelper;
 	private MessageHelper messageHelper;
@@ -49,6 +49,7 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		userDBHelper = app.getUserDBHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		messageHelper = app.getMessageHelper();
 	}
@@ -111,7 +112,7 @@ public class SquareChatFragment extends AhFragment{
 				final AhMessage message = new AhMessage();
 				message.setContent(messageEditText.getText().toString());
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
+				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 				message.setReceiverId(square.getId());
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
@@ -144,7 +145,7 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message, final User user) {
 				userDBHelper.updateUser(user);
-				
+
 				activity.runOnUiThread(new Runnable() {
 
 					@Override

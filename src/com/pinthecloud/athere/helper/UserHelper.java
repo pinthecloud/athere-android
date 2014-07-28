@@ -82,15 +82,15 @@ public class UserHelper {
 	}
 
 
-	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
-		userTable.delete(squareId, new TableDeleteCallback() {
+	public void exitSquareAsync(String id, final AhEntityCallback<Boolean> callback) throws AhException {
+		userTable.delete(id, new TableDeleteCallback() {
 
 			@Override
-			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
-				if (exception == null) {
+			public void onCompleted(Exception e, ServiceFilterResponse response) {
+				if (e == null) {
 					callback.onCompleted(true);
 				} else {
-					throw new AhException(exception, "exitSquareAsync");
+					throw new AhException(e, "exitSquareAsync : " + e.getMessage());
 				}
 			}
 		});
@@ -118,14 +118,14 @@ public class UserHelper {
 		userTable.insert(user, new TableOperationCallback<User>() {
 
 			@Override
-			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
-				if (exception == null) {
+			public void onCompleted(User entity, Exception e, ServiceFilterResponse response) {
+				if (e == null) {
 					carrier.load(entity.getId());
 					synchronized (lock) {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "enterSquareAsync");
+					throw new AhException(e, "enterSquareAsync : " + e.getMessage());
 				}
 			}
 		});
@@ -271,7 +271,7 @@ public class UserHelper {
 	}
 
 
-	public User getUser() {
+	public User getUser(boolean hasId) {
 		Bitmap pictureBitmap = null;
 		try {
 			pictureBitmap = FileUtil.getImageFromInternalStorage
@@ -284,6 +284,8 @@ public class UserHelper {
 		String profilePic = BitmapUtil.convertToString(pictureBitmap);
 
 		User user = new User();
+		if(hasId)
+			user.setId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 		user.setNickName(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 		user.setProfilePic(profilePic);
 		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));

@@ -3,6 +3,7 @@ package com.pinthecloud.athere.activity;
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -11,21 +12,29 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.SquareHelper;
+import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.model.User;
 
-public class SquareActivity extends AhActivity{
+public class SquareActivity extends AhActivity implements SquareDrawerFragment.SquareDrawerFragmentCallbacks{
 
 	private Square square;
+	private User user;
 
 	private ActionBar mActionBar;
 	private View mCustomActionBarView;
 	private TextView mTitleTextView;
+
+	private ProgressBar progressBar;
 
 	private FragmentManager fragmentManager;
 
@@ -36,6 +45,7 @@ public class SquareActivity extends AhActivity{
 	private SquareDrawerFragment mSquareDrawerFragment;
 
 	private SquareHelper squareHelper;
+	private UserHelper userHelper;
 
 
 	@Override
@@ -47,7 +57,9 @@ public class SquareActivity extends AhActivity{
 		/*
 		 * Set Helper and get square
 		 */
+		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
+		user = userHelper.getUser(true);
 		square = squareHelper.getSquare();
 
 
@@ -59,6 +71,7 @@ public class SquareActivity extends AhActivity{
 		mCustomActionBarView = mActionBar.getCustomView();
 		mTitleTextView = (TextView) mCustomActionBarView.findViewById(R.id.action_bar_general_title);
 
+		progressBar = (ProgressBar) findViewById(R.id.square_progress_bar);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_layout);
 		mFragmentView = findViewById(R.id.square_drawer_fragment);
 		fragmentManager = getFragmentManager();
@@ -163,5 +176,28 @@ public class SquareActivity extends AhActivity{
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+
+	@Override
+	public void exitSquare() {
+		progressBar.setVisibility(View.VISIBLE);
+
+		userHelper.exitSquareAsync(user.getId(), new AhEntityCallback<Boolean>() {
+
+			@Override
+			public void onCompleted(Boolean entity) {
+				progressBar.setVisibility(View.GONE);
+
+				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+				pref.removePref(AhGlobalVariable.USER_ID_KEY);
+				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+
+				Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
 	}
 }

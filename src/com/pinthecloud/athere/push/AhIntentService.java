@@ -49,6 +49,8 @@ public class AhIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+		Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent");
+		
 		AhMessage message;
 		User user;
 		try {
@@ -60,9 +62,11 @@ public class AhIntentService extends IntentService {
 		}
 
 		if(isRunning(app)){
+			Log.d(AhGlobalVariable.LOG_TAG, "is running");
 			// if the app is running, add the message to the chat room.
 			messageDBHelper.triggerMessageEvent(message, user);
 		} else {
+			Log.d(AhGlobalVariable.LOG_TAG, "is not running");
 			// if the app is not running, send a notification
 			// Add the message to the buffer
 			messageDBHelper.addMessage(message);

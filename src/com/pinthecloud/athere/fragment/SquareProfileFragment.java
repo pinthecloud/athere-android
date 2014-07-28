@@ -34,7 +34,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
@@ -230,8 +229,9 @@ public class SquareProfileFragment extends AhFragment{
 					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 					toast.show();
 				} else {
-					// Disable complete button for preventing double click
+					// Disable complete button and picker for preventing double action
 					completeButton.setEnabled(false);
+					numberPicker.setEnabled(false);
 
 					// Save this setting
 					int companyNumber = numberPicker.getValue();
@@ -319,19 +319,18 @@ public class SquareProfileFragment extends AhFragment{
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
 					try {
-						String registrationId = app.getUserHelper().getRegistrationIdSync();
+						String registrationId = userHelper.getRegistrationIdSync();
 						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 					} catch (IOException e) {
 						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
-						throw new AhException(e, "SquareProfileFragment enterSquare");
 					}
 				}
 
 				// Get a user object from preference settings
 				// Enter a square with the user
-				User user = userHelper.getUser();
+				User user = userHelper.getUser(false);
 				String id = userHelper.enterSquareSync(user);
-				pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
+				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 
 				List<User> userList = userHelper.getUserListSync(square.getId());
 				userDBHelper.addAllUsers(userList);

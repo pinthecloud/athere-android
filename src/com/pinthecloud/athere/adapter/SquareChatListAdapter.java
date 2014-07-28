@@ -54,7 +54,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		AhMessage message = items.get(position);
 		if (message != null) {
 			// Inflate different layout by user
-			if(message.isMine(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY))){
+			if(message.isMine(pref.getString(AhGlobalVariable.USER_ID_KEY))){
 				this.layoutId = R.layout.row_square_chat_list_send;
 			} else{
 				this.layoutId = R.layout.row_square_chat_list_receive;

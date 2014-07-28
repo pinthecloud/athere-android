@@ -25,7 +25,7 @@ public class AhGlobalVariable{
 	 * String
 	 */
 	public static String APP_NAME;
-	public static final String LOG_TAG = "Debug";
+	public static final String LOG_TAG = "AtHere";
 	public static final String PROFILE_PICTURE_NAME = "profile_picture_name.png";
 	public static final String PROFILE_PICTURE_CIRCLE_NAME = "profile_picture_circle_name.png";
 	public static final String ANDROID = "Android";
@@ -53,7 +53,7 @@ public class AhGlobalVariable{
 	public static final String IS_MALE_KEY = "IS_MALE_KEY";
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
-	public static final String UNIQUE_ID_KEY = "UNIQUE_ID_KEY";
+	public static final String USER_ID_KEY = "USER_ID_KEY";
 	
 	public static final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
 	public static final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
