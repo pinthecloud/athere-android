@@ -82,20 +82,37 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(ID, message.getId());
-		values.put(TYPE, message.getType());
-		values.put(CONTENT, message.getContent());
-		values.put(SENDER, message.getSender());
-		values.put(SENDER_ID, message.getSenderId());
-		values.put(RECEIVER, message.getReceiver());
-		values.put(RECEIVER_ID, message.getReceiverId());
+		//values.put(ID, message.getId());
+		//putValueWithoutNull(values, ID, message.getId());
+		
+		//values.put(TYPE, message.getType());
+		putValueWithoutNull(values, TYPE, message.getType());
+		
+		//values.put(CONTENT, message.getContent());
+		putValueWithoutNull(values, CONTENT, message.getContent());
+		
+		//values.put(SENDER, message.getSender());
+		putValueWithoutNull(values, SENDER, message.getSender());
+		
+		//values.put(SENDER_ID, message.getSenderId());
+		putValueWithoutNull(values, SENDER_ID, message.getSenderId());
+		
+		//values.put(RECEIVER, message.getReceiver());
+		putValueWithoutNull(values, RECEIVER, message.getReceiver());
+		
+		//values.put(RECEIVER_ID, message.getReceiverId());
+		putValueWithoutNull(values, RECEIVER_ID, message.getReceiverId());
 
 		// Inserting Row
 		db.insert(TABLE_NAME, null, values);
 		db.close(); // Closing database connection
 	}
-
-
+	
+	private void putValueWithoutNull(ContentValues contentValue, String id, String value){
+		if (value == null) value = "";
+		contentValue.put(id, value);
+	}
+	
 	// Getting single contact
 	public AhMessage getMessage(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();

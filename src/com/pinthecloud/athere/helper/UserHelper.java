@@ -51,10 +51,10 @@ public class UserHelper {
 	}
 
 
-	public boolean exitSquareSync(String squareId) throws AhException {
+	public boolean exitSquareSync(String userId) throws AhException {
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 		
-		userTable.delete(squareId, new TableDeleteCallback() {
+		userTable.delete(userId, new TableDeleteCallback() {
 
 			@Override
 			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
@@ -81,8 +81,8 @@ public class UserHelper {
 	}
 
 
-	public void exitSquareAsync(String squareId, final AhEntityCallback<Boolean> callback) throws AhException {
-		userTable.delete(squareId, new TableDeleteCallback() {
+	public void exitSquareAsync(String userId, final AhEntityCallback<Boolean> callback) throws AhException {
+		userTable.delete(userId, new TableDeleteCallback() {
 
 			@Override
 			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
@@ -166,6 +166,7 @@ public class UserHelper {
 			public void onCompleted(List<User> result, int count, Exception exception,
 					ServiceFilterResponse reponse) {
 				if (exception == null) {
+					carrier.load(result);
 					synchronized (lock) {
 						lock.notify();
 					}

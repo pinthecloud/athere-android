@@ -56,12 +56,13 @@ public class AhIntentService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Log.e("ERROR","onHadnlerIntent");
-		AhMessage message;
-		User user;
+		AhMessage message = null;
+		User user = null;
 		try {
 			message = parseMessageIntent(intent);
 			user = parseUserIntent(intent);
 		} catch (JSONException e) {
+			e.printStackTrace();
 			Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent : " + e.getMessage());
 			return;
 		}
@@ -75,10 +76,12 @@ public class AhIntentService extends IntentService {
 			String content = "";
 			// if the app is not running, send a notification
 			if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
-				return; // do nothing
+				//return; // do nothing
 			} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())){
 				messageDBHelper.addMessage(message);
-				userDBHelper.addIfNotExistOrUpdate(user);
+				Log.e("ERROR","user : " + (user==null));
+				if (user != null)
+					userDBHelper.deleteUser(user.getId());
 				return;
 			} 
 			
@@ -119,7 +122,7 @@ public class AhIntentService extends IntentService {
 							0,
 							PendingIntent.FLAG_UPDATE_CURRENT
 							);
-			User sentUser = userDBHelper.getUser(user.getId());
+			User sentUser = userDBHelper.getUser(message.getSenderId());
 			
 			if (sentUser == null){
 				Log.e("ERROR","no sentUser error");
@@ -183,6 +186,7 @@ public class AhIntentService extends IntentService {
 			message.setReceiver(receiver);
 			message.setReceiverId(receiverId);
 		} catch (JSONException e) {
+			e.printStackTrace();
 			throw e;
 		}
 
@@ -220,7 +224,8 @@ public class AhIntentService extends IntentService {
 			user.setAge(age);
 			user.setSquareId(squareId);
 		} catch (JSONException e) {
-			return null;
+			e.printStackTrace();
+			throw e;
 		}
 
 		return user;

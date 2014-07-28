@@ -2,6 +2,7 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,7 +18,7 @@ import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.SquareProfileActivity;
+import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
@@ -45,7 +46,6 @@ public class SquareChatFragment extends AhFragment{
 
 	private Square square;
 
-
 	public SquareChatFragment(Square square) {
 		super();
 		this.square = square;
@@ -57,6 +57,7 @@ public class SquareChatFragment extends AhFragment{
 		//messageDBHelper = app.getMessageDBHelper();
 		messageHelper = app.getMessageHelper();
 		userHelper = app.getUserHelper();
+		
 	}
 
 
@@ -64,8 +65,7 @@ public class SquareChatFragment extends AhFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-
-
+		
 		/*
 		 * Set UI component
 		 */
@@ -149,28 +149,38 @@ public class SquareChatFragment extends AhFragment{
 			public void onClick(View v) {
 				// Make message and send it
 				final AhMessage message = new AhMessage();
-				message.setContent(messageEditText.getText().toString());
+				message.setContent("Exit Square");
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
 				message.setReceiverId(square.getId());
 				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
 				message.setStatus(AhMessage.SENDING);
-				
-				userHelper.exitSquareAsync(square.getId(), new AhEntityCallback<Boolean>() {
+				Log.e("ERROR","before sendMessageAsync");
+				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 
 					@Override
-					public void onCompleted(Boolean entity) {
-						// TODO Auto-generated method stub
-						Log.e("ERROR","exit Square Succeed");
-						
-						messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-
+					public void onCompleted(AhMessage entity) {
+						message.setStatus(AhMessage.SENT);
+						Log.e("ERROR","complete sendMessageAsync / before exitSquareAsync");
+						userHelper.exitSquareAsync(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY), new AhEntityCallback<Boolean>() {
+							
 							@Override
-							public void onCompleted(AhMessage entity) {
-								message.setStatus(AhMessage.SENT);
+							public void onCompleted(Boolean entity) {
+								// TODO Auto-generated method stub
 								
-								Intent i = new Intent(context, SquareProfileActivity.class);
-								startActivity(i);
+								Log.e("ERROR","exit Square Succeed / before startActivity(intent)");
+								pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, false);
+								
+								activity.runOnUiThread(new Runnable(){
+
+									@Override
+									public void run() {
+										// TODO Auto-generated method stub
+										Intent i = new Intent(context, SquareListActivity.class);
+										context.startActivity(i);
+									}
+									
+								});
 							}
 						});
 					}

@@ -35,6 +35,7 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
@@ -333,35 +334,46 @@ public class SquareProfileFragment extends AhFragment{
 				
 				// Get a user object from preference settings
 				// Enter a square with the user
-				User user = userHelper.getUser();
-				String id = userHelper.enterSquareSync(user);
-				pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
-				
-				AhMessage message = new AhMessage();
-				message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
-				message.setContent("");
-				message.setSender(user.getNickName());
-				message.setSenderId(id);
-				message.setReceiverId(square.getId());
-				
-				messageHelper.sendMessageSync(message);
-				List<User> userList = userHelper.getUserListSync(square.getId());
-				userDBHelper.addAllUsers(userList);
-				activity.runOnUiThread(new Runnable(){
+				final User user = userHelper.getUser();
+				userHelper.enterSquareAsync(user, new AhEntityCallback<String>() {
 
 					@Override
-					public void run() {
+					public void onCompleted(String id) {
+						// TODO Auto-generated method stub
+						pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
+						AhMessage message = new AhMessage();
+						message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+						message.setContent("Enter Square");
+						message.setSender(user.getNickName());
+						message.setSenderId(id);
+						message.setReceiverId(square.getId());
 						
-						// Dimiss progress bar
-						progressBar.setVisibility(View.GONE);
+						messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+							
+							@Override
+							public void onCompleted(AhMessage entity) {
+								// TODO Auto-generated method stub
+								List<User> userList = userHelper.getUserListSync(square.getId());
+								userDBHelper.addAllUsers(userList);
+								activity.runOnUiThread(new Runnable(){
 
-						// Save this setting and go to next activity
-						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+									@Override
+									public void run() {
+										
+										// Dimiss progress bar
+										progressBar.setVisibility(View.GONE);
 
-						// Set and move to next activity after clear previous activity
-						intent.setClass(context, SquareActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
+										// Save this setting and go to next activity
+										pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+
+										// Set and move to next activity after clear previous activity
+										intent.setClass(context, SquareActivity.class);
+										intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+										startActivity(intent);
+									}
+								});
+							}
+						});
 					}
 				});
 			}

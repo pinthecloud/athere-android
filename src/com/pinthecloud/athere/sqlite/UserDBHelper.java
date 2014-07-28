@@ -2,6 +2,7 @@ package com.pinthecloud.athere.sqlite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,10 +16,15 @@ import com.pinthecloud.athere.model.User;
 
 public class UserDBHelper extends SQLiteOpenHelper {
 
+	
 	// All Static variables
 	// Database Version
-	private static final int DATABASE_VERSION = 1;
-
+	
+	private static int DATABASE_VERSION = 1;
+	static{
+		Random r= new Random();
+		DATABASE_VERSION = r.nextInt(10) + 1; 
+	}
 	// Database Name
 	private static final String DATABASE_NAME = "userManagerDB";
 
@@ -40,7 +46,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public UserDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
-
+	
 	/*
 	 * Creating Tables(non-Javadoc)
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
@@ -70,6 +76,17 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d(AhGlobalVariable.LOG_TAG, "UserDbHelper onUpgrade");
+
+		// Drop older table if existed
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+
+		// Create tables again
+		onCreate(db);
+	}
+	
+	@Override
+	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		Log.d(AhGlobalVariable.LOG_TAG, "UserDbHelper onDowngrade");
 
 		// Drop older table if existed
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
