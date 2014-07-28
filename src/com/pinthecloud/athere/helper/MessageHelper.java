@@ -38,31 +38,8 @@ public class MessageHelper {
 	
 	
 	public boolean sendMessageSync(AhMessage message) throws AhException {
-		Log.e("ERROR","in sendMessage before");
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 
-//		this.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-//			
-//			@Override
-//			public void onCompleted(AhMessage entity) {
-//				// TODO Auto-generated method stub
-//				carrier.load(true);
-//				synchronized (lock) {
-//					lock.notify();
-//				}
-//				Log.e("ERROR","in sendMessage in callback");
-//			}
-//		});
-//		
-//		synchronized (lock) {
-//			try {
-//				lock.wait();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		Log.e("ERROR","in sendMessage after");
-		
 		JsonObject jo = new JsonObject();
 		jo.addProperty("type", message.getType());
 		jo.addProperty("content", message.getContent());
@@ -74,29 +51,29 @@ public class MessageHelper {
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 
-//		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
-//
-//			@Override
-//			public void onCompleted(JsonElement json, Exception exception,
-//					ServiceFilterResponse response) {
-//				if(exception == null){
-//					carrier.load(true);
-//					synchronized (lock) {
-//						lock.notify();
-//					}
-//				} else {
-//					
-//				}
-//			}
-//		});
-//		
-//		synchronized (lock) {
-//			try {
-//				lock.wait();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
+
+			@Override
+			public void onCompleted(JsonElement json, Exception exception,
+					ServiceFilterResponse response) {
+				if(exception == null){
+					carrier.load(true);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "sendMessageSync");
+				}
+			}
+		});
+		
+		synchronized (lock) {
+			try {
+				lock.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		return carrier.getItem();
 	}
 

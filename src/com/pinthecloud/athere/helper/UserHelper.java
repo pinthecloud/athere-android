@@ -54,18 +54,21 @@ public class UserHelper {
 	public boolean exitSquareSync(String squareId) throws AhException {
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 		
-		this.exitSquareAsync(squareId, new AhEntityCallback<Boolean>() {
+		userTable.delete(squareId, new TableDeleteCallback() {
 
 			@Override
-			public void onCompleted(Boolean entity) {
-				// TODO Auto-generated method stub
-				carrier.load(true);
-				synchronized (lock) {
-					lock.notify();
+			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
+				if (exception == null) {
+					carrier.load(true);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "exitSquareAsync");
 				}
 			}
 		});
-
+		
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -111,15 +114,21 @@ public class UserHelper {
 	public String enterSquareSync(User user) throws AhException {
 		final AhCarrier<String> carrier = new AhCarrier<String>();
 		
-		this.enterSquareAsync(user, new AhEntityCallback<String>() {
+		userTable.insert(user, new TableOperationCallback<User>() {
 
 			@Override
-			public void onCompleted(String entity) {
-				// TODO Auto-generated method stub
-				carrier.load(entity);
+			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
+				if (exception == null) {
+					carrier.load(entity.getId());
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
+				}
 			}
 		});
-		
+
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -129,40 +138,6 @@ public class UserHelper {
 		}
 
 		return carrier.getItem();
-
-		//		JsonObject jo = user.toJson();
-		//
-		//		Gson g = new Gson();
-		//		JsonElement requestJson = g.fromJson(jo, JsonElement.class);
-		//
-		//		mClient.invokeApi(ENTER_SQUARE, requestJson, new ApiJsonOperationCallback() {
-		//
-		//			@Override
-		//			public void onCompleted(JsonElement json, Exception exception,
-		//					ServiceFilterResponse response) {
-		//				if (exception == null){
-		//					List<User> list = JsonConverter.convertToUserList(json);
-		//					carrier.load(list);
-		//					synchronized (lock) {
-		//						lock.notify();
-		//					}
-		//				} else {
-		//					throw new AhException(exception, "enterSquareSync");
-		//				}
-		//			}
-		//		});
-		//
-		//		synchronized (lock) {
-		//			try {
-		//				lock.wait();
-		//			} catch (InterruptedException e) {
-		//				throw new AhException(e, "enterSquareSync");
-		//			}
-		//		}
-		//
-		//		UserDBHelper userDBHelper = app.getUserDBHelper();
-		//		userDBHelper.addAllUsers(carrier.getItem());
-		//		return true;
 	}
 
 
@@ -185,18 +160,21 @@ public class UserHelper {
 	public List<User> getUserListSync(String squareId){
 		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
 
-		this.getUserListAsync(squareId, new AhListCallback<User>() {
+		userTable.where().field("squareId").eq(squareId).execute(new TableQueryCallback<User>() {
 
 			@Override
-			public void onCompleted(List<User> list, int count) {
-				// TODO Auto-generated method stub
-				carrier.load(list);
-				synchronized (lock) {
-					lock.notify();
+			public void onCompleted(List<User> result, int count, Exception exception,
+					ServiceFilterResponse reponse) {
+				if (exception == null) {
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
 				}
 			}
 		});
-
+		
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -228,34 +206,22 @@ public class UserHelper {
 	public User getUserSync(String id) {
 		final AhCarrier<User> carrier = new AhCarrier<User>();
 
-		this.getUserAsync(id, new AhEntityCallback<User>() {
+		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
 
 			@Override
-			public void onCompleted(User entity) {
-				// TODO Auto-generated method stub
-				carrier.load(entity);
-				synchronized (lock) {
-					lock.notify();
+			public void onCompleted(List<User> result, int count, Exception exception,
+					ServiceFilterResponse reponse) {
+				if (exception == null) {
+					carrier.load(result.get(0));
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "enterSquareAsync");
 				}
 			}
 		});
 		
-//		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
-//
-//			@Override
-//			public void onCompleted(List<User> result, int count, Exception exception,
-//					ServiceFilterResponse reponse) {
-//				if (exception == null) {
-//					carrier.load(result.get(0));
-//					synchronized (lock) {
-//						lock.notify();
-//					}
-//				} else {
-//					throw new AhException(exception, "enterSquareAsync");
-//				}
-//			}
-//		});
-
 		synchronized (lock) {
 			try {
 				lock.wait();

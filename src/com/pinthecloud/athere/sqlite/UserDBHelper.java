@@ -135,9 +135,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
 				new String[] { id }, null, null, null, null);
 		if (cursor != null)
-			cursor.moveToFirst();
+			if(cursor.moveToFirst())
+				return convertToUser(cursor);
 
-		return convertToUser(cursor);
+		return null;
 	}
 	
 	public boolean isUserExist(String userId){

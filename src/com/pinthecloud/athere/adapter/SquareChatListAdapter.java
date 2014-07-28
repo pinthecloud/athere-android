@@ -97,8 +97,13 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				User user = userDBHelper.getUser(message.getSenderId());
-				Bitmap pictureBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
-				profileImage.setImageBitmap(pictureBitmap);
+				
+				// TODO need to be changed!!
+				if(user != null){
+					Bitmap pictureBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
+					profileImage.setImageBitmap(pictureBitmap);
+				}
+				
 			}
 
 

@@ -2,9 +2,11 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,13 +17,13 @@ import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.MessageBox;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
@@ -32,7 +34,10 @@ public class SquareChatFragment extends AhFragment{
 	private EditText messageEditText;
 	private Button sendButton;
 	
+	private Button tempBackButton;
+	
 	private UserDBHelper userDBHelper;
+	private UserHelper userHelper;
 	private MessageDBHelper messageDBHelper;
 	private MessageHelper messageHelper;
 
@@ -51,6 +56,7 @@ public class SquareChatFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 		//messageDBHelper = app.getMessageDBHelper();
 		messageHelper = app.getMessageHelper();
+		userHelper = app.getUserHelper();
 	}
 
 
@@ -66,7 +72,8 @@ public class SquareChatFragment extends AhFragment{
 		messageListView = (ListView) view.findViewById(R.id.square_chat_frag_list);
 		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
 		sendButton = (Button) view.findViewById(R.id.square_chat_frag_send_button);
-
+		tempBackButton = (Button) view.findViewById(R.id.square_chat_frag_option_button);
+		
 
 		/*
 		 * Set message list view
@@ -113,6 +120,7 @@ public class SquareChatFragment extends AhFragment{
 				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
 				message.setReceiverId(square.getId());
+				message.setType(AhMessage.MESSAGE_TYPE.TALK);
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
 				messageListAdapter.notifyDataSetChanged();
@@ -130,7 +138,46 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
+		
+		
+		/**
+		 * temp Button for getting out of the chat Room
+		 */
+		tempBackButton.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				// Make message and send it
+				final AhMessage message = new AhMessage();
+				message.setContent(messageEditText.getText().toString());
+				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
+				message.setSenderId(pref.getString(AhGlobalVariable.UNIQUE_ID_KEY));
+				message.setReceiverId(square.getId());
+				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
+				message.setStatus(AhMessage.SENDING);
+				
+				userHelper.exitSquareAsync(square.getId(), new AhEntityCallback<Boolean>() {
+
+					@Override
+					public void onCompleted(Boolean entity) {
+						// TODO Auto-generated method stub
+						Log.e("ERROR","exit Square Succeed");
+						
+						messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+
+							@Override
+							public void onCompleted(AhMessage entity) {
+								message.setStatus(AhMessage.SENT);
+								
+								Intent i = new Intent(context, SquareProfileActivity.class);
+								startActivity(i);
+							}
+						});
+					}
+				});
+			}
+		});
+		///////////////////////////////////////////////////////////////////////////////////
 
 		/**
 		 * See 

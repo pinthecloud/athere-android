@@ -55,6 +55,7 @@ public class AhIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+		Log.e("ERROR","onHadnlerIntent");
 		AhMessage message;
 		User user;
 		try {
@@ -64,7 +65,7 @@ public class AhIntentService extends IntentService {
 			Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent : " + e.getMessage());
 			return;
 		}
-
+		Log.e("ERROR","received Message Type : " + message.getType());
 		if(isRunning(app)){
 			// if the app is running, add the message to the chat room.
 			userDBHelper.addIfNotExistOrUpdate(user);

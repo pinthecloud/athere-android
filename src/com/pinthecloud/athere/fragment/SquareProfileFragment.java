@@ -343,12 +343,10 @@ public class SquareProfileFragment extends AhFragment{
 				message.setSender(user.getNickName());
 				message.setSenderId(id);
 				message.setReceiverId(square.getId());
-				Log.e("ERROR","here1");
+				
 				messageHelper.sendMessageSync(message);
-				Log.e("ERROR","here2");
 				List<User> userList = userHelper.getUserListSync(square.getId());
 				userDBHelper.addAllUsers(userList);
-				Log.e("ERROR","here3");
 				activity.runOnUiThread(new Runnable(){
 
 					@Override
@@ -366,7 +364,6 @@ public class SquareProfileFragment extends AhFragment{
 						startActivity(intent);
 					}
 				});
-				Log.e("ERROR","here4");
 			}
 		}).start();
 	}
