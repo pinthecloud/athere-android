@@ -32,10 +32,12 @@ import android.widget.Toast;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.CameraPreview;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
@@ -69,6 +71,7 @@ public class SquareProfileFragment extends AhFragment{
 
 	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
+	private MessageHelper messageHelper;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -145,6 +148,7 @@ public class SquareProfileFragment extends AhFragment{
 		// Set Helper
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
+		messageHelper = app.getMessageHelper();
 	}
 
 
@@ -326,20 +330,30 @@ public class SquareProfileFragment extends AhFragment{
 						throw new AhException(e, "SquareProfileFragment enterSquare");
 					}
 				}
-
+				
 				// Get a user object from preference settings
 				// Enter a square with the user
 				User user = userHelper.getUser();
 				String id = userHelper.enterSquareSync(user);
 				pref.putString(AhGlobalVariable.UNIQUE_ID_KEY, id);
-
+				
+				AhMessage message = new AhMessage();
+				message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+				message.setContent("");
+				message.setSender(user.getNickName());
+				message.setSenderId(id);
+				message.setReceiverId(square.getId());
+				Log.e("ERROR","here1");
+				messageHelper.sendMessageSync(message);
+				Log.e("ERROR","here2");
 				List<User> userList = userHelper.getUserListSync(square.getId());
 				userDBHelper.addAllUsers(userList);
-
+				Log.e("ERROR","here3");
 				activity.runOnUiThread(new Runnable(){
 
 					@Override
 					public void run() {
+						
 						// Dimiss progress bar
 						progressBar.setVisibility(View.GONE);
 
@@ -352,6 +366,7 @@ public class SquareProfileFragment extends AhFragment{
 						startActivity(intent);
 					}
 				});
+				Log.e("ERROR","here4");
 			}
 		}).start();
 	}

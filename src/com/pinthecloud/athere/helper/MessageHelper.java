@@ -1,5 +1,10 @@
 package com.pinthecloud.athere.helper;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -33,8 +38,31 @@ public class MessageHelper {
 	
 	
 	public boolean sendMessageSync(AhMessage message) throws AhException {
-
+		Log.e("ERROR","in sendMessage before");
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
+
+//		this.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+//			
+//			@Override
+//			public void onCompleted(AhMessage entity) {
+//				// TODO Auto-generated method stub
+//				carrier.load(true);
+//				synchronized (lock) {
+//					lock.notify();
+//				}
+//				Log.e("ERROR","in sendMessage in callback");
+//			}
+//		});
+//		
+//		synchronized (lock) {
+//			try {
+//				lock.wait();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		Log.e("ERROR","in sendMessage after");
+		
 		JsonObject jo = new JsonObject();
 		jo.addProperty("type", message.getType());
 		jo.addProperty("content", message.getContent());
@@ -46,31 +74,29 @@ public class MessageHelper {
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 
-		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
-
-			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				if (exception == null){
-					carrier.load(true);
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					throw new AhException(exception, "sendMessageSync");
-				}
-
-			}
-		});
-
-		synchronized (lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
+//		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
+//
+//			@Override
+//			public void onCompleted(JsonElement json, Exception exception,
+//					ServiceFilterResponse response) {
+//				if(exception == null){
+//					carrier.load(true);
+//					synchronized (lock) {
+//						lock.notify();
+//					}
+//				} else {
+//					
+//				}
+//			}
+//		});
+//		
+//		synchronized (lock) {
+//			try {
+//				lock.wait();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		return carrier.getItem();
 	}
 
@@ -102,5 +128,23 @@ public class MessageHelper {
 				callback.onCompleted(null);
 			}
 		});
+	}
+	
+	
+	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
+
+	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
+	//public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
+
+	public void setMessageHandler(AhEntityCallback<AhMessage> callback){
+		map.put(MESSAGE_RECEIVED, callback);
+	}
+
+	public void triggerMessageEvent(AhMessage message){
+		AhEntityCallback<AhMessage> callback = map.get(MESSAGE_RECEIVED);
+		if(callback != null)
+			callback.onCompleted(message);
+		else 
+			throw new AhException("No such Event : triggerMessageEvent");
 	}
 }

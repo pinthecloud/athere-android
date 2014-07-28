@@ -18,8 +18,8 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhEntityPairCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.MessageBox;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -49,7 +49,7 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		messageDBHelper = app.getMessageDBHelper();
+		//messageDBHelper = app.getMessageDBHelper();
 		messageHelper = app.getMessageHelper();
 	}
 
@@ -139,11 +139,10 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageDBHelper.setMessageHandler(new AhEntityPairCallback<AhMessage, User>() {
+		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
-			public void onCompleted(final AhMessage message, final User user) {
-				userDBHelper.updateUser(user);
+			public void onCompleted(final AhMessage message) {
 				
 				activity.runOnUiThread(new Runnable() {
 

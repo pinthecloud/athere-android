@@ -163,23 +163,4 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		db.delete(TABLE_NAME, null ,null);
 		db.close();
 	}
-
-	///////////////////////////////////////////////////////////////
-
-	private Map<String, AhEntityPairCallback<AhMessage,User>> map = new HashMap<String, AhEntityPairCallback<AhMessage,User>>();
-
-	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
-	//public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
-
-	public void setMessageHandler(AhEntityPairCallback<AhMessage, User> callback){
-		map.put(MESSAGE_RECEIVED, callback);
-	}
-
-	public void triggerMessageEvent(AhMessage message, User user){
-		AhEntityPairCallback<AhMessage, User> callback = map.get(MESSAGE_RECEIVED);
-		if(callback != null)
-			callback.onCompleted(message, user);
-		else 
-			throw new AhException("No such Event : triggerMessageEvent");
-	}
 }

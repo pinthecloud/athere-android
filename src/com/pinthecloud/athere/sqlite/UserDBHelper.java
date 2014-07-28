@@ -139,6 +139,26 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		return convertToUser(cursor);
 	}
+	
+	public boolean isUserExist(String userId){
+		boolean isExist = false;
+		SQLiteDatabase db = this.getReadableDatabase();
+		
+		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
+				new String[] { userId }, null, null, null, null);
+		if (cursor != null) return cursor.moveToFirst();
+		
+		return isExist;
+	}
+	
+	public void addIfNotExistOrUpdate(User user){
+		if (user == null) return;
+		
+		if (this.isUserExist(user.getId()))
+			this.updateUser(user);
+		else 
+			this.addUser(user);
+	}
 
 	private User convertToUser(Cursor cursor) {
 		String _id = cursor.getString(0);
@@ -176,6 +196,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Updating single contact
 	public void updateUser(User user) {
+		
+		if (user == null) return;
+		
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();

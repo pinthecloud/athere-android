@@ -53,19 +53,15 @@ public class UserHelper {
 
 	public boolean exitSquareSync(String squareId) throws AhException {
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
-
-		userTable.delete(squareId, new TableDeleteCallback() {
+		
+		this.exitSquareAsync(squareId, new AhEntityCallback<Boolean>() {
 
 			@Override
-			public void onCompleted(Exception exception, ServiceFilterResponse arg1) {
-				if (exception == null) {
-					carrier.load(true);
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					carrier.load(false);
-					throw new AhException(exception, "exitSquareAsync");
+			public void onCompleted(Boolean entity) {
+				// TODO Auto-generated method stub
+				carrier.load(true);
+				synchronized (lock) {
+					lock.notify();
 				}
 			}
 		});
@@ -114,22 +110,16 @@ public class UserHelper {
 
 	public String enterSquareSync(User user) throws AhException {
 		final AhCarrier<String> carrier = new AhCarrier<String>();
-
-		userTable.insert(user, new TableOperationCallback<User>() {
+		
+		this.enterSquareAsync(user, new AhEntityCallback<String>() {
 
 			@Override
-			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
-				if (exception == null) {
-					carrier.load(entity.getId());
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					throw new AhException(exception, "enterSquareAsync");
-				}
+			public void onCompleted(String entity) {
+				// TODO Auto-generated method stub
+				carrier.load(entity);
 			}
 		});
-
+		
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -195,20 +185,15 @@ public class UserHelper {
 	public List<User> getUserListSync(String squareId){
 		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
 
-		userTable.where().field("squareId").eq(squareId).execute(new TableQueryCallback<User>() {
+		this.getUserListAsync(squareId, new AhListCallback<User>() {
 
 			@Override
-			public void onCompleted(List<User> result, int count, Exception exception,
-					ServiceFilterResponse reponse) {
-				if (exception == null) {
-					carrier.load(result);
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					throw new AhException(exception, "enterSquareAsync");
+			public void onCompleted(List<User> list, int count) {
+				// TODO Auto-generated method stub
+				carrier.load(list);
+				synchronized (lock) {
+					lock.notify();
 				}
-
 			}
 		});
 
@@ -243,21 +228,33 @@ public class UserHelper {
 	public User getUserSync(String id) {
 		final AhCarrier<User> carrier = new AhCarrier<User>();
 
-		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
+		this.getUserAsync(id, new AhEntityCallback<User>() {
 
 			@Override
-			public void onCompleted(List<User> result, int count, Exception exception,
-					ServiceFilterResponse reponse) {
-				if (exception == null) {
-					carrier.load(result.get(0));
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					throw new AhException(exception, "enterSquareAsync");
+			public void onCompleted(User entity) {
+				// TODO Auto-generated method stub
+				carrier.load(entity);
+				synchronized (lock) {
+					lock.notify();
 				}
 			}
 		});
+		
+//		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
+//
+//			@Override
+//			public void onCompleted(List<User> result, int count, Exception exception,
+//					ServiceFilterResponse reponse) {
+//				if (exception == null) {
+//					carrier.load(result.get(0));
+//					synchronized (lock) {
+//						lock.notify();
+//					}
+//				} else {
+//					throw new AhException(exception, "enterSquareAsync");
+//				}
+//			}
+//		});
 
 		synchronized (lock) {
 			try {
@@ -305,23 +302,4 @@ public class UserHelper {
 		}
 		return registrationId;
 	}
-
-
-	//	public void isAvailableNickName(User user, final AhEntityCallback<Boolean> callback) throws AhException {
-	//	
-	//	userTable.where().field("nickName").eq(val(true)).execute(new TableQueryCallback<User>() {
-	//
-	//		@Override
-	//		public void onCompleted(List<User> result, int count, Exception exception, ServiceFilterResponse response) {
-	//			// Succeed
-	//			if (exception == null) {
-	//				if (count > 0) callback.onCompleted(false);
-	//				else callback.onCompleted(true);
-	//			// failed
-	//			} else {
-	//				throw new AhException(exception, "isAvailableNickName");
-	//			}
-	//		}
-	//	});
-	//}
 }

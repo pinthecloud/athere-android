@@ -39,8 +39,8 @@ public class SplashActivity extends AhActivity {
 		 */
 		String httpAgent = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		if (httpAgent.equals(System.getProperty("http.agent"))){
-//			startActivity(new Intent(SplashActivity.this, HongkunTestAcitivity.class));
-//			return;
+//			startActivity(new Intent(SplashActivity.this, HongkunTestAcitivity.class)); return;
+			
 		}
 
 		/*

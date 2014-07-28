@@ -14,6 +14,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
@@ -22,20 +23,23 @@ import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SplashActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.BitmapUtil;
 
 public class AhIntentService extends IntentService {
 
 	private AhApplication app;
-	private AtomicInteger atomicInteger;
+	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
-
-
+	private UserDBHelper userDBHelper;
+	private AtomicInteger atomicInteger;
+	
 	public AhIntentService() {
 		this("AhIntentService");
 	}
@@ -43,8 +47,10 @@ public class AhIntentService extends IntentService {
 	public AhIntentService(String name) {
 		super(name);
 		app = AhApplication.getInstance();
-		atomicInteger = new AtomicInteger();
+		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
+		userDBHelper = app.getUserDBHelper();
+		atomicInteger = new AtomicInteger();
 	}
 
 	@Override
@@ -61,12 +67,38 @@ public class AhIntentService extends IntentService {
 
 		if(isRunning(app)){
 			// if the app is running, add the message to the chat room.
-			messageDBHelper.triggerMessageEvent(message, user);
+			userDBHelper.addIfNotExistOrUpdate(user);
+			messageHelper.triggerMessageEvent(message);
 		} else {
+			String title = "";
+			String content = "";
 			// if the app is not running, send a notification
-			// Add the message to the buffer
-			messageDBHelper.addMessage(message);
-
+			if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
+				return; // do nothing
+			} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())){
+				messageDBHelper.addMessage(message);
+				userDBHelper.addIfNotExistOrUpdate(user);
+				return;
+			} 
+			
+			else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())){
+				messageDBHelper.addMessage(message);
+				userDBHelper.addIfNotExistOrUpdate(user);
+				title = message.getSender() +"님께서 추파를 보내셨습니다.";
+				content = message.getContent();
+				
+			} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())){
+				messageDBHelper.addMessage(message);
+				userDBHelper.addIfNotExistOrUpdate(user);
+				title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
+				content = message.getContent();
+			} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())){
+				messageDBHelper.addMessage(message);
+				userDBHelper.addIfNotExistOrUpdate(user);
+				title = message.getSender() +"님께서 입장하셨습니다.";
+				content = "빠큐머겅ㅗ";
+			} 
+			
 			// Creates an explicit intent for an Activity in your app
 			Intent resultIntent = new Intent(this, SquareActivity.class);
 
@@ -86,15 +118,20 @@ public class AhIntentService extends IntentService {
 							0,
 							PendingIntent.FLAG_UPDATE_CURRENT
 							);
-
+			User sentUser = userDBHelper.getUser(user.getId());
+			
+			if (sentUser == null){
+				Log.e("ERROR","no sentUser error");
+				return;
+			}
 			// Set Notification
 			NotificationCompat.Builder mBuilder =
 					new NotificationCompat.Builder(this)
-			.setSmallIcon(R.drawable.ic_launcher)
-			//.setLargeIcon(ImageConverter.convertToImage(message.get));
-			.setContentTitle(message.getSender())
-			.setAutoCancel(true)
-			.setContentText(message.getContent() +" : "+atomicInteger.get());
+			//.setSmallIcon(R.drawable.ic_launcher)
+			.setLargeIcon(BitmapUtil.convertToBitmap(sentUser.getProfilePic()))
+			.setContentTitle(title)
+			.setContentText(content)
+			.setAutoCancel(true);
 
 			mBuilder.setContentIntent(resultPendingIntent);
 
@@ -102,8 +139,11 @@ public class AhIntentService extends IntentService {
 					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			// mId allows you to update the notification later on.
 			mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
-			Vibrator v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-			v.vibrate(800);
+			
+			AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+			if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
+				((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
+			}
 		}
 	}
 
@@ -152,7 +192,8 @@ public class AhIntentService extends IntentService {
 		User user = new User();
 		Bundle b = intent.getExtras();
 		String jsonStr = b.getString("userData");
-
+		if (jsonStr == null) return null;
+		
 		JSONObject jo = null;
 
 		try {
@@ -178,7 +219,7 @@ public class AhIntentService extends IntentService {
 			user.setAge(age);
 			user.setSquareId(squareId);
 		} catch (JSONException e) {
-			throw e;
+			return null;
 		}
 
 		return user;

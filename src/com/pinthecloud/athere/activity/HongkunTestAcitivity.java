@@ -1,32 +1,21 @@
 package com.pinthecloud.athere.activity;
 
-import java.io.IOException;
-import java.util.List;
-
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.interfaces.AhCarrier;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.model.AhMessage.MESSAGE_TYPE;
-import com.pinthecloud.athere.util.JsonConverter;
+import com.pinthecloud.athere.model.User;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn;
@@ -80,6 +69,19 @@ public class HongkunTestAcitivity extends AhActivity {
 		user.setRegistrationId("registID");
 		user.setSquareId("38A0D350-ABCA-4E9A-9249-4ACE9D571CE8");
 		
+		
+		MobileServiceClient mClient = AhApplication.getInstance().getmClient();
+		
+		mClient.invokeApi("enter_square", new ApiJsonOperationCallback() {
+			
+			@Override
+			public void onCompleted(JsonElement arg0, Exception arg1,
+					ServiceFilterResponse arg2) {
+				// TODO Auto-generated method stub
+				Log.e("ERROR","DONE");
+			}
+		});
+		
 //		AhApplication.getInstance().getUserHelper().enterSquareAsync(user, new AhEntityCallback<Boolean>() {
 //
 //			@Override
@@ -90,15 +92,15 @@ public class HongkunTestAcitivity extends AhActivity {
 //			
 //		});
 		
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				AhApplication.getInstance().getUserHelper().enterSquareSync(user);
-			}
-			
-		}).start();
+//		new Thread(new Runnable(){
+//
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				AhApplication.getInstance().getUserHelper().enterSquareSync(user);
+//			}
+//			
+//		}).start();
 		
 		
 		boolean var = true;
@@ -115,7 +117,7 @@ public class HongkunTestAcitivity extends AhActivity {
 
 				AhMessage message = new AhMessage();
 
-				message.setType(MESSAGE_TYPE.SQUARE);
+				//message.setType(MESSAGE_TYPE.SQUARE);
 				message.setContent("message contents");
 				message.setSender("bobNick");
 				//				message.setSenderId(pref.getRegistrationId());

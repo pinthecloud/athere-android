@@ -9,8 +9,16 @@ public class AhMessage implements Parcelable {
 	public static final int SENT = 1;
 	public static final int FAIL = -1;
 
-	public enum MESSAGE_TYPE { 
-		SQUARE("SQUARE"), ROOM("ROOM"), SHOUTING("SHOUTING"); 
+	public enum MESSAGE_TYPE {
+		// No user Update
+		TALK("TALK"),			// To Square Users
+		SHOUTING("SHOUTING"),	// To Square Users
+		CHUPA("CHUPA"),			// To Individual
+		
+		// User Update
+		ENTER_SQUARE("ENTER_SQUARE"),	// To Square Users
+		EXIT_SQUARE("EXIT_SQUARE"),		// To Square Users
+		UPDATE_USER_INFO("UPDATE_USER_INFO"); // To Square Users  
 
 		private final String value;
 
@@ -120,6 +128,7 @@ public class AhMessage implements Parcelable {
 		dest.writeString(senderId);
 		dest.writeString(receiver);
 		dest.writeString(receiverId);
+		dest.writeInt(status);
 	}
 
 
@@ -131,10 +140,22 @@ public class AhMessage implements Parcelable {
 		senderId = in.readString();
 		receiver = in.readString();
 		receiverId = in.readString();
+		status = in.readInt();
 	}
 
 
 	public boolean isMine(String id){
 		return this.senderId.equals(id);
+	}
+	
+	public static class MessageBuilder {
+		
+//		private String type = "";
+//		private String content = "";
+//		private String sender = "";
+//		private String senderId = "";
+//		private String receiver = "";
+//		private String receiverId = "";
+		
 	}
 }

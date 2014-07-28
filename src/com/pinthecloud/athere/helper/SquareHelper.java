@@ -54,30 +54,36 @@ public class SquareHelper {
 
 	public List<Square> getSquareListSync(double latitude, double longitude) throws AhException {
 		final AhCarrier<List<Square>> carrier = new AhCarrier<List<Square>>();
-		JsonObject jo = new JsonObject();
-		jo.addProperty(currentLatitude, latitude);
-		jo.addProperty(currentLongitude, longitude);
-
-		Gson g = new Gson();
-		JsonElement json = g.fromJson(jo, JsonElement.class);
-
-		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
+		
+		this.getSquareListAsync(latitude, longitude, new AhListCallback<Square>() {
 
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				if ( exception == null) {
-					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
-					if (list == null) throw new AhException(exception, "getSquareList");
-					carrier.load(list);
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					throw new AhException(exception, "getSquareListSync");
+			public void onCompleted(List<Square> list, int count) {
+				// TODO Auto-generated method stub
+				carrier.load(list);
+				synchronized (lock) {
+					lock.notify();
 				}
 			}
 		});
+
+//		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
+//
+//			@Override
+//			public void onCompleted(JsonElement json, Exception exception,
+//					ServiceFilterResponse response) {
+//				if ( exception == null) {
+//					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
+//					if (list == null) throw new AhException(exception, "getSquareList");
+//					carrier.load(list);
+//					synchronized (lock) {
+//						lock.notify();
+//					}
+//				} else {
+//					throw new AhException(exception, "getSquareListSync");
+//				}
+//			}
+//		});
 
 		synchronized (lock) {
 			try {
@@ -135,20 +141,6 @@ public class SquareHelper {
 
 		return carrier.getItem();
 	}
-
-	//	public void updateSquareAsync(Square square, final AhEntityCallback<Square> callback) throws AhException {
-	//		squareTable.update(square, new TableOperationCallback<Square>() {
-	//
-	//			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
-	//				
-	//				if (exception == null) {
-	//					callback.onCompleted(entity);
-	//				} else {
-	//					throw new AhException(exception, "updateSquare");
-	//				}
-	//			}
-	//		});
-	//	}
 
 
 	/*
