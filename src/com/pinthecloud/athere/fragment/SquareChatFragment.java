@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,9 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -35,6 +39,8 @@ public class SquareChatFragment extends AhFragment{
 
 	private UserHelper userHelper;
 	private MessageHelper messageHelper;
+	private MessageDBHelper messageDBHelper;
+	private UserInfoFetchBuffer userInfoFetchBuffer;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
@@ -49,7 +55,9 @@ public class SquareChatFragment extends AhFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		messageHelper = app.getMessageHelper();
+		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
+		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
 	}
 
 
@@ -189,6 +197,13 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
+				
+//				List<String> userIdList = userInfoFetchBuffer.popAllUsersId();
+//				
+//				for(String id : userIdList) {
+//					UserDBHelper. userHelper.getUserSync(id);
+//				}
+				
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -200,6 +215,22 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
+		
+		if (!messageDBHelper.isEmpty()) {
+			final List<AhMessage> messageListFromBuffer = messageDBHelper.popAllMessages();
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					
+					for (AhMessage message : messageListFromBuffer) {
+						messageList.add(message);
+						messageListAdapter.notifyDataSetChanged();
+						messageListView.setSelection(messageListView.getCount() - 1);
+					}
+				}
+			});
+		}
 
 		return view;
 	}

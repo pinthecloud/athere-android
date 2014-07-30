@@ -1,27 +1,23 @@
-package com.pinthecloud.athere.activity;
+package com.pinthecloud.athere.fragment;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.HongkunTestFragment;
-import com.pinthecloud.athere.fragment.SquareListFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
-public class HongkunTestAcitivity extends AhActivity {
+public class HongkunTestFragment extends AhFragment {
+
 	Button btn01;
 	Button btn02;
 	Button btn03;
@@ -43,33 +39,59 @@ public class HongkunTestAcitivity extends AhActivity {
 	UserInfoFetchBuffer buffer;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		setContentView(R.layout.activity_hongkun_test_acitivity);
-		btn01 = (Button)findViewById(R.id.button1);
-		btn02 = (Button)findViewById(R.id.button2);
-		btn03 = (Button)findViewById(R.id.button3);
-		btn04 = (Button)findViewById(R.id.button4);
-		
+
+		// Set Helper
+		squareHelper = app.getSquareHelper();
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
 		
 		who = "test user";
 		
-		/*
-		 * Set Fragment to container
-		 */
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-		//SquareListFragment squareListFragment = new SquareListFragment();
-		HongkunTestFragment hongFrag = new HongkunTestFragment();
-		fragmentTransaction.add(R.id.hongkun_test_container, hongFrag);
-		fragmentTransaction.commit();
 	}
-	/*
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
+		
+		btn01 = (Button)view.findViewById(R.id.button1);
+		btn02 = (Button)view.findViewById(R.id.button2);
+		btn03 = (Button)view.findViewById(R.id.button3);
+		btn04 = (Button)view.findViewById(R.id.button4);
+		
+		
+		btn04.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new Thread(new Runnable(){
+
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						AhMessage message = new AhMessage();
+						message.setContent("Exit Square");
+						message.setSender(who);
+						message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
+						message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
+						message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
+						
+						// Send message to server
+						messageHelper.sendMessageSync(message);
+						Log.e("ERROR","complete!");
+					}
+					
+				}).start();
+			}
+		});
+
+		return view;
+	}
+	
 	public void addItem(View view) {
 		
 		AhMessage message = new AhMessage();
@@ -132,25 +154,7 @@ public class HongkunTestAcitivity extends AhActivity {
 	
 	public void addItem04(View view) {
 	
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				AhMessage message = new AhMessage();
-				message.setContent("Exit Square");
-				message.setSender(who);
-				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-				message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
-				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
-				
-				// Send message to server
-				messageHelper.sendMessageSync(message);
-				Log.e("ERROR","complete!");
-			}
-			
-		}).start();
+		
 		
 	}
-	*/
 }

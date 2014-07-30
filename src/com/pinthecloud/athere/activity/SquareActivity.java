@@ -59,7 +59,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		 */
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
-		user = userHelper.getUser(true);
+		user = userHelper.getMyUserInfo(true);
 		square = squareHelper.getSquare();
 
 

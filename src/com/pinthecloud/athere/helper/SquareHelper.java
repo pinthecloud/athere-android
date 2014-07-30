@@ -55,35 +55,30 @@ public class SquareHelper {
 	public List<Square> getSquareListSync(double latitude, double longitude) throws AhException {
 		final AhCarrier<List<Square>> carrier = new AhCarrier<List<Square>>();
 		
-		this.getSquareListAsync(latitude, longitude, new AhListCallback<Square>() {
+		JsonObject jo = new JsonObject();
+		jo.addProperty(currentLatitude, latitude);
+		jo.addProperty(currentLongitude, longitude);
+
+		Gson g = new Gson();
+		JsonElement json = g.fromJson(jo, JsonElement.class);
+
+		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
 
 			@Override
-			public void onCompleted(List<Square> list, int count) {
-				// TODO Auto-generated method stub
-				carrier.load(list);
-				synchronized (lock) {
-					lock.notify();
+			public void onCompleted(JsonElement json, Exception exception,
+					ServiceFilterResponse response) {
+				if ( exception == null) {
+					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
+					if (list == null) throw new AhException(exception, "getSquareList");
+					carrier.load(list);
+					synchronized (lock) {
+						lock.notify();
+					}
+				} else {
+					throw new AhException(exception, "getSquareListSync");
 				}
 			}
 		});
-
-//		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
-//
-//			@Override
-//			public void onCompleted(JsonElement json, Exception exception,
-//					ServiceFilterResponse response) {
-//				if ( exception == null) {
-//					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
-//					if (list == null) throw new AhException(exception, "getSquareList");
-//					carrier.load(list);
-//					synchronized (lock) {
-//						lock.notify();
-//					}
-//				} else {
-//					throw new AhException(exception, "getSquareListSync");
-//				}
-//			}
-//		});
 
 		synchronized (lock) {
 			try {

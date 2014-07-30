@@ -56,7 +56,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		Log.d(AhGlobalVariable.LOG_TAG, "UserDBHelper onCreate");
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
 				"("
-				+ ID + " TEXT PRIMARY KEY," 
+				+ ID + " TEXT PRIMARY KEY,"
 				+ NICK_NAME + " TEXT,"
 				+ PROFILE_PIC + " TEXT,"
 				+ MOBILE_ID + " TEXT,"
@@ -106,6 +106,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Adding new contact
 	public void addUser(User user) {
+		
+		if (user == null) return;
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();

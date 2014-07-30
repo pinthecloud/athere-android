@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,11 +39,25 @@ public class SplashActivity extends AhActivity {
 		/*
 		 * Exception for hongkun
 		 */
+		//////////////////////////////////////////////////////
+		// Erase Later
 		String httpAgent = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		if (httpAgent.equals(System.getProperty("http.agent"))){
-//			startActivity(new Intent(SplashActivity.this, HongkunTestAcitivity.class)); return;
-		}
-
+			new AlertDialog.Builder(this)
+		    .setTitle("Routing Dialog")
+		    .setMessage("Want to Go to HongkunTest?")
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		        	startActivity(new Intent(SplashActivity.this, HongkunTestAcitivity.class)); 
+		        	finish();
+		        	return;
+		        }
+		     })
+		    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // do nothing
+    	//////////////////////////////////////////////////////
+		        	
 		/*
 		 * Show splash image and move to next page
 		 */
@@ -71,5 +87,14 @@ public class SplashActivity extends AhActivity {
 			}
 
 		}, SPLASH_TIME);
+		
+		//////////////////////////////////////////////////////
+		// Erase Later
+		        }
+		     })
+		    .setIcon(android.R.drawable.ic_dialog_alert)
+		     .show();
+		}
+		//////////////////////////////////////////////////////
 	}
 }

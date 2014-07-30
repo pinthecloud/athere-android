@@ -194,7 +194,7 @@ public class UserHelper {
 			@Override
 			public void onCompleted(List<User> result, int count, Exception exception,
 					ServiceFilterResponse reponse) {
-				if (exception == null) {
+				if (exception == null && result.size() == 1) {
 					callback.onCompleted(result.get(0));
 				} else {
 					throw new AhException(exception, "enterSquareAsync");
@@ -205,6 +205,8 @@ public class UserHelper {
 
 
 	public User getUserSync(String id) {
+		
+		if (id == null) return null;
 		final AhCarrier<User> carrier = new AhCarrier<User>();
 
 		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
@@ -212,7 +214,7 @@ public class UserHelper {
 			@Override
 			public void onCompleted(List<User> result, int count, Exception exception,
 					ServiceFilterResponse reponse) {
-				if (exception == null) {
+				if (exception == null && result.size() == 1) {
 					carrier.load(result.get(0));
 					synchronized (lock) {
 						lock.notify();
@@ -233,9 +235,8 @@ public class UserHelper {
 
 		return carrier.getItem();
 	}
-
-
-	public User getUser(boolean hasId) {
+	
+	public User getMyUserInfo(boolean hasId) {
 		Bitmap pictureBitmap = null;
 		try {
 			pictureBitmap = FileUtil.getImageFromInternalStorage

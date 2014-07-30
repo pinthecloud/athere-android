@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.pinthecloud.athere.interfaces.AhEntityPairCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
@@ -152,7 +151,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + ID;
 
-		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
 		// looping through all rows and adding to list
@@ -162,6 +161,35 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 			} while (cursor.moveToNext());
 		}
 
+		// return contact list
+		return messages;
+	}
+	
+	public boolean isEmpty() {
+		String selectQuery = "SELECT * FROM " + TABLE_NAME;
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		return !cursor.moveToFirst();
+	}
+	
+	public List<AhMessage> popAllMessages() {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + ID;
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				messages.add(convertToMessage(cursor));
+			} while (cursor.moveToNext());
+		}
+		this.deleteAllMessages();
 		// return contact list
 		return messages;
 	}

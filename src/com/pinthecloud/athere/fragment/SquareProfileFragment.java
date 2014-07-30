@@ -332,7 +332,7 @@ public class SquareProfileFragment extends AhFragment{
 				
 				// Get a user object from preference settings
 				// Enter a square with the user
-				final User user = userHelper.getUser(false);
+				final User user = userHelper.getMyUserInfo(false);
 				String id = userHelper.enterSquareSync(user);
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 				

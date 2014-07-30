@@ -19,6 +19,7 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class AhApplication extends Application{
 
@@ -45,6 +46,7 @@ public class AhApplication extends Application{
 	// DB
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
+	private static UserInfoFetchBuffer userInfoFetchBuffer;
 
 	@Override
 	public void onCreate() {
@@ -72,6 +74,7 @@ public class AhApplication extends Application{
 
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
+		userInfoFetchBuffer = new UserInfoFetchBuffer(this);
 	}
 
 	public static AhApplication getInstance(){
@@ -97,6 +100,9 @@ public class AhApplication extends Application{
 	}
 	public MessageDBHelper getMessageDBHelper() {
 		return messageDBHelper;
+	}
+	public UserInfoFetchBuffer getUserInfoFetchBuffer() {
+		return userInfoFetchBuffer;
 	}
 	public UserHelper getUserHelper() {
 		return userHelper;

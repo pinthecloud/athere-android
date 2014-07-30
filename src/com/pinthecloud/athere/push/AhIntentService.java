@@ -14,6 +14,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -23,13 +27,17 @@ import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SplashActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class AhIntentService extends IntentService {
@@ -38,6 +46,10 @@ public class AhIntentService extends IntentService {
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
+	private UserInfoFetchBuffer userInfoFetchBuffer;
+	private UserHelper userHelper;
+	private Context _this;
+	
 	private AtomicInteger atomicInteger;
 
 	public AhIntentService() {
@@ -50,109 +62,142 @@ public class AhIntentService extends IntentService {
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
+		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
+		userHelper = app.getUserHelper();
+		
 		atomicInteger = new AtomicInteger();
+		
+		_this = this;
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent");
-
 		AhMessage message = null;
-		User user = null;
-
+		String userId = null; 
+		Log.e("ERROR","onHandleIntent start");
+		// Parsing the data from server
 		try {
 			message = parseMessageIntent(intent);
-			//			if (!AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType()))
-			//					user = parseUserIntent(intent);
+			userId = parseUserIdIntent(intent);
 		} catch (JSONException e) {
 			e.printStackTrace();
-			Log.d(AhGlobalVariable.LOG_TAG, "AhIntentService onHandleIntent : " + e.getMessage());
+			Log.d(AhGlobalVariable.LOG_TAG, "Error while parsing Message Intent : " + e.getMessage());
 			return;
 		}
 		Log.e("ERROR","received Message Type : " + message.getType());
-		if(isRunning(app)){
-			Log.d(AhGlobalVariable.LOG_TAG, "is running");
+		
+		if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())) {
+			
+		} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())) {
+			
+		} else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())) {
+			
+		} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
+			//User updateUser = userHelper.getUserSync(userId);
+			//userDBHelper.addUser(updateUser);
+			//userInfoFetchBuffer.addUserId(userId);
+		} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
+			userDBHelper.deleteUser(userId);
+		} else if (AhMessage.MESSAGE_TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
+//			User updatedUser = userHelper.getUserSync(userId);
+//			userDBHelper.updateUser(updatedUser);
+			userInfoFetchBuffer.addUserId(userId);
+		}
+		final String _userId = userId;
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				User updateUser = userHelper.getUserSync(_userId);
+				userDBHelper.addUser(updateUser);
+				Log.e("ERROR","complete");
+			}
+			
+		}).start();
+		
+		
+		if (isRunning(app)) {
 			// if the app is running, add the message to the chat room.
-			userDBHelper.addIfNotExistOrUpdate(user);
 			messageHelper.triggerMessageEvent(message);
+			return;
+		}
+		
+		if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
+			return; // do nothing
+		} 
+		
+		String title = "";
+		String content = "";
+		
+		messageDBHelper.addMessage(message);
+		
+		if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())){
+			title = message.getSender() +"님께서 추파를 보내셨습니다.";
+			content = message.getContent();
+		} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())){
+			title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
+			content = message.getContent();
+		} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())){
+			title = message.getSender() +"님께서 입장하셨습니다.";
+			content = "빠큐머겅ㅗ";
+		} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())){
+			return;
+		} 
+
+		// Creates an explicit intent for an Activity in your app
+		Intent resultIntent = new Intent(_this, SquareActivity.class);
+
+		// The stack builder object will contain an artificial back stack for the
+		// started Activity.
+		// This ensures that navigating backward from the Activity leads out of
+		// your application to the Home screen.
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(_this);
+
+		// Adds the back stack for the Intent (but not the Intent itself)
+		stackBuilder.addParentStack(SplashActivity.class);
+
+		// Adds the Intent that starts the Activity to the top of the stack
+		stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent =
+				stackBuilder.getPendingIntent(
+						0,
+						PendingIntent.FLAG_UPDATE_CURRENT
+						);
+		User sentUser = userDBHelper.getUser(message.getSenderId());
+		Bitmap bm = null;
+		if (sentUser == null){
+			Log.e("ERROR","no sentUser error");
+			
+			Drawable myDrawable = getResources().getDrawable(R.drawable.ic_launcher);
+			Bitmap anImage = ((BitmapDrawable) myDrawable).getBitmap();
+			
+			Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+			
+			bm = icon;
 		} else {
-			String title = "";
-			String content = "";
+			bm = BitmapUtil.convertToBitmap(sentUser.getProfilePic());
+		}
+		
+		// Set Notification
+		NotificationCompat.Builder mBuilder =
+				new NotificationCompat.Builder(_this)
+		.setSmallIcon(R.drawable.ic_launcher)
+		//.setLargeIcon(bm)
+		.setContentTitle(title)
+		.setContentText(content)
+		.setAutoCancel(true);
 
-			// if the app is not running, send a notification
-			if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
-				//return; // do nothing
-			} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())){
-				messageDBHelper.addMessage(message);
-				Log.e("ERROR","user : " + (user==null));
-				if (user != null)
-					userDBHelper.deleteUser(user.getId());
-				return;
-			} 
+		mBuilder.setContentIntent(resultPendingIntent);
 
-			else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())){
-				messageDBHelper.addMessage(message);
-				userDBHelper.addIfNotExistOrUpdate(user);
-				title = message.getSender() +"님께서 추파를 보내셨습니다.";
-				content = message.getContent();
+		NotificationManager mNotificationManager =
+				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		// mId allows you to update the notification later on.
+		mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
 
-			} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())){
-				messageDBHelper.addMessage(message);
-				userDBHelper.addIfNotExistOrUpdate(user);
-				title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
-				content = message.getContent();
-			} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())){
-				messageDBHelper.addMessage(message);
-				userDBHelper.addIfNotExistOrUpdate(user);
-				title = message.getSender() +"님께서 입장하셨습니다.";
-				content = "빠큐머겅ㅗ";
-			} 
-
-			// Creates an explicit intent for an Activity in your app
-			Intent resultIntent = new Intent(this, SquareActivity.class);
-
-			// The stack builder object will contain an artificial back stack for the
-			// started Activity.
-			// This ensures that navigating backward from the Activity leads out of
-			// your application to the Home screen.
-			TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-
-			// Adds the back stack for the Intent (but not the Intent itself)
-			stackBuilder.addParentStack(SplashActivity.class);
-
-			// Adds the Intent that starts the Activity to the top of the stack
-			stackBuilder.addNextIntent(resultIntent);
-			PendingIntent resultPendingIntent =
-					stackBuilder.getPendingIntent(
-							0,
-							PendingIntent.FLAG_UPDATE_CURRENT
-							);
-			User sentUser = userDBHelper.getUser(message.getSenderId());
-
-			if (sentUser == null){
-				Log.e("ERROR","no sentUser error");
-				return;
-			}
-			// Set Notification
-			NotificationCompat.Builder mBuilder =
-					new NotificationCompat.Builder(this)
-			//.setSmallIcon(R.drawable.ic_launcher)
-			.setLargeIcon(BitmapUtil.convertToBitmap(sentUser.getProfilePic()))
-			.setContentTitle(title)
-			.setContentText(content)
-			.setAutoCancel(true);
-
-			mBuilder.setContentIntent(resultPendingIntent);
-
-			NotificationManager mNotificationManager =
-					(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			// mId allows you to update the notification later on.
-			mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
-
-			AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-			if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
-				((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
-			}
+		AudioManager audioManager = (AudioManager) _this.getSystemService(Context.AUDIO_SERVICE);
+		if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
+			((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
 		}
 	}
 
@@ -196,6 +241,10 @@ public class AhIntentService extends IntentService {
 		}
 
 		return message;
+	}
+	
+	private String parseUserIdIntent(Intent intent){
+		return intent.getExtras().getString("userId");
 	}
 
 	private User parseUserIntent(Intent intent) throws JSONException {
