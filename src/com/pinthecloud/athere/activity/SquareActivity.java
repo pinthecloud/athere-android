@@ -104,7 +104,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 				mDrawerLayout, /* DrawerLayout object */
-				R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+				R.drawable.drawer, /* nav drawer image to replace 'Up' caret */
 				R.string.des_drawer_open, /* "open drawer" description for accessibility */
 				R.string.des_drawer_close /* "close drawer" description for accessibility */
 				)

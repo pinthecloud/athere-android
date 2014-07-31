@@ -111,7 +111,7 @@ public class HongkunTestAcitivity extends AhActivity {
 			public void run() {
 				//String result = serviceClient.createSquareWithoutFuture();
 				String result = "38A0D350-ABCA-4E9A-9249-4ACE9D571CE8";
-				Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.ic_splash);
+				Bitmap img = BitmapFactory.decodeResource(getResources(), R.drawable.splash);
 				//				serviceClient.enterSquareSync(result, img, 3, "Android");
 
 				AhMessage message = new AhMessage();
