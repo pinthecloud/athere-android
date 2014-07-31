@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -30,7 +30,7 @@ public class BasicProfileFragment extends AhFragment{
 	private ToggleButton maleButton;
 	private ToggleButton femaleButton;
 	private NumberPicker yearPicker; 
-	private Button completeButton;
+	private ImageButton completeButton;
 
 	private boolean isMale = true;
 
@@ -47,7 +47,7 @@ public class BasicProfileFragment extends AhFragment{
 		maleButton = (ToggleButton) view.findViewById(R.id.basic_profile_frag_male_button);
 		femaleButton = (ToggleButton) view.findViewById(R.id.basic_profile_frag_female_button);
 		yearPicker = (NumberPicker) view.findViewById(R.id.basic_profile_frag_year_picker);
-		completeButton = (Button) view.findViewById(R.id.basic_profile_frag_start_button);
+		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
 
 
 		/*
@@ -72,7 +72,7 @@ public class BasicProfileFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
-
+		
 
 		/*
 		 * Set gender button

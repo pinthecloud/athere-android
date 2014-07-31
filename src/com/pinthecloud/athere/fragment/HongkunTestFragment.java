@@ -31,7 +31,7 @@ public class HongkunTestFragment extends AhFragment {
 	UserHelper userHelper;
 	MessageHelper messageHelper;
 	SquareHelper squareHelper;
-	
+
 	private String who;
 	private String content;
 
@@ -47,32 +47,32 @@ public class HongkunTestFragment extends AhFragment {
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
-		
+
 		who = "test user";
-		
+
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
-		
+
 		btn01 = (Button)view.findViewById(R.id.button1);
 		btn02 = (Button)view.findViewById(R.id.button2);
 		btn03 = (Button)view.findViewById(R.id.button3);
 		btn04 = (Button)view.findViewById(R.id.button4);
-		
+
 		btn01.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				addItem01(v);
 			}
 		});
-		
+
 		btn02.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -81,16 +81,16 @@ public class HongkunTestFragment extends AhFragment {
 		});
 
 		btn03.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				addItem03(v);
 			}
 		});
-		
+
 		btn04.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -100,16 +100,16 @@ public class HongkunTestFragment extends AhFragment {
 
 		return view;
 	}
-	
+
 	public void addItem01(View view) {
-		
+
 		AhMessage message = new AhMessage();
 		message.setContent("Enter Square");
 		message.setSender(who);
 		message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 		message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
 		message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
-		
+
 		// Send message to server
 		messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 
@@ -121,16 +121,16 @@ public class HongkunTestFragment extends AhFragment {
 			}
 		});
 	}
-	
+
 	public void addItem02(View view) {
-		
+
 		AhMessage message = new AhMessage();
 		message.setContent("Exit Square");
 		message.setSender(who);
 		message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 		message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
 		message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
-		
+
 		// Send message to server
 		messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 
@@ -142,16 +142,16 @@ public class HongkunTestFragment extends AhFragment {
 			}
 		});
 	}
-	
+
 	public void addItem03(View view) {
-		
+
 		AhMessage message = new AhMessage();
 		message.setContent("talk talk");
 		message.setSender(who);
 		message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 		message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
 		message.setType(AhMessage.MESSAGE_TYPE.TALK);
-		
+
 		// Send message to server
 		messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 
@@ -163,7 +163,7 @@ public class HongkunTestFragment extends AhFragment {
 			}
 		});
 	}
-	
+
 	public void addItem04(View view) {
 		new Thread(new Runnable(){
 
@@ -176,12 +176,12 @@ public class HongkunTestFragment extends AhFragment {
 				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 				message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
 				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
-				
+
 				// Send message to server
 				messageHelper.sendMessageSync(message);
 				Log.e("ERROR","complete!");
 			}
-			
+
 		}).start();
 	}
 }

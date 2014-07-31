@@ -125,6 +125,8 @@ public class SquareProfileFragment extends AhFragment{
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
 					takePicture = false;
+					cameraButton.setEnabled(true);
+					selfCameraButton.setEnabled(true);
 					completeButton.setEnabled(true);
 				} catch (FileNotFoundException e) {
 					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment mPicutureListener : " + e.getMessage());
@@ -186,6 +188,8 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void onClick(View v) {
 				if(takePicture){
+					cameraButton.setEnabled(false);
+					selfCameraButton.setEnabled(false);
 					mCamera.autoFocus(new AutoFocusCallback(){
 
 						@Override
