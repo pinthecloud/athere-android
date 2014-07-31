@@ -32,7 +32,6 @@ import com.pinthecloud.athere.activity.SplashActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -118,9 +117,9 @@ public class AhIntentService extends IntentService {
 			return;
 		}
 		
-		//////////////////////////////
+		////////////////////////////////
 		// if the App is NOT Running
-		//////////////////////////////
+		////////////////////////////////
 		if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
 			return; // do nothing
 		} 
@@ -159,9 +158,9 @@ public class AhIntentService extends IntentService {
 		stackBuilder.addNextIntent(resultIntent);
 		PendingIntent resultPendingIntent =
 				stackBuilder.getPendingIntent(
-						0,
-						PendingIntent.FLAG_UPDATE_CURRENT
-						);
+					0,
+					PendingIntent.FLAG_UPDATE_CURRENT
+				);
 		User sentUser = userDBHelper.getUser(message.getSenderId());
 		Bitmap bm = null;
 		if (sentUser == null){
@@ -237,6 +236,7 @@ public class AhIntentService extends IntentService {
 			String senderId = jo.getString("senderId");
 			String receiver = jo.getString("receiver");
 			String receiverId = jo.getString("receiverId");
+			String timeStamp = jo.getString("timeStamp");
 
 			message.setType(type);
 			message.setContent(content);
@@ -244,6 +244,7 @@ public class AhIntentService extends IntentService {
 			message.setSenderId(senderId);
 			message.setReceiver(receiver);
 			message.setReceiverId(receiverId);
+			message.setTimeStamp(timeStamp);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw e;
@@ -256,77 +257,77 @@ public class AhIntentService extends IntentService {
 		return intent.getExtras().getString("userId");
 	}
 
-	private User parseUserIntent(Intent intent) throws JSONException {
-		User user = new User();
-		Bundle b = intent.getExtras();
-		String jsonStr = b.getString("userData");
-		Log.e("ERROR", "jsonStr : "+jsonStr);
-		if (jsonStr == null) return null;
-
-		JSONObject jo = null;
-
-		try {
-			jo = new JSONObject(jsonStr);
-
-			String id = jo.getString("id");
-			String nickName = jo.getString("nickName");
-			String profilePic = jo.getString("profilePic");
-			String mobileId = jo.getString("mobileId");
-			String registrationId = jo.getString("registrationId");
-			boolean isMale = jo.getBoolean("isMale");
-			int companyNum = jo.getInt("companyNum");
-			int age = jo.getInt("age");
-			String squareId = jo.getString("squareId");
-
-			user.setId(id);
-			user.setNickName(nickName);
-			user.setProfilePic(profilePic);
-			user.setMobileId(mobileId);
-			user.setRegistrationId(registrationId);
-			user.setMale(isMale);
-			user.setCompanyNum(companyNum);
-			user.setAge(age);
-			user.setSquareId(squareId);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			throw e;
-		}
-
-		return user;
-	}
-
-	private static boolean isRunning3(Context context) {
-		ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
-
-		List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
-
-		boolean isServiceFound = false;
-
-		for (int i = 0; i < services.size(); i++) {
-
-			//Log.e("ERROR",services.get(i).service.getPackageName());
-			Log.e("ERROR",services.get(i).service.getClassName());
-		}
-
-		return isServiceFound;
-	}
-
-	private void print(Context context){
-		ActivityManager activityManager = (ActivityManager)context.getSystemService (Context.ACTIVITY_SERVICE); 
-		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE); 
-
-		Log.e("ERROR","==================================");
-		Log.e("ERROR","context.applicationName  : "+ context.getApplicationInfo().name);
-		Log.e("ERROR","context.getPackageName() : "+ context.getPackageName());
-		Log.e("ERROR","context.toString() : "+ context.toString());
-
-		for (RunningTaskInfo task : tasks) {
-			Log.e("ERROR","task : "+ task);
-			Log.e("ERROR","task.baseActivity : "+ task.baseActivity);
-			Log.e("ERROR","task.topActivity : "+ task.topActivity);
-			Log.e("ERROR","task.describeContents() : "+ task.describeContents());
-			Log.e("ERROR","task.description : "+ task.description);
-			Log.e("ERROR","task.id : "+ task.id);
-		} 
-	}
+//	private User parseUserIntent(Intent intent) throws JSONException {
+//		User user = new User();
+//		Bundle b = intent.getExtras();
+//		String jsonStr = b.getString("userData");
+//		Log.e("ERROR", "jsonStr : "+jsonStr);
+//		if (jsonStr == null) return null;
+//
+//		JSONObject jo = null;
+//
+//		try {
+//			jo = new JSONObject(jsonStr);
+//
+//			String id = jo.getString("id");
+//			String nickName = jo.getString("nickName");
+//			String profilePic = jo.getString("profilePic");
+//			String mobileId = jo.getString("mobileId");
+//			String registrationId = jo.getString("registrationId");
+//			boolean isMale = jo.getBoolean("isMale");
+//			int companyNum = jo.getInt("companyNum");
+//			int age = jo.getInt("age");
+//			String squareId = jo.getString("squareId");
+//
+//			user.setId(id);
+//			user.setNickName(nickName);
+//			user.setProfilePic(profilePic);
+//			user.setMobileId(mobileId);
+//			user.setRegistrationId(registrationId);
+//			user.setMale(isMale);
+//			user.setCompanyNum(companyNum);
+//			user.setAge(age);
+//			user.setSquareId(squareId);
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//			throw e;
+//		}
+//
+//		return user;
+//	}
+//
+//	private static boolean isRunning3(Context context) {
+//		ActivityManager activityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
+//
+//		List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+//
+//		boolean isServiceFound = false;
+//
+//		for (int i = 0; i < services.size(); i++) {
+//
+//			//Log.e("ERROR",services.get(i).service.getPackageName());
+//			Log.e("ERROR",services.get(i).service.getClassName());
+//		}
+//
+//		return isServiceFound;
+//	}
+//
+//	private void print(Context context){
+//		ActivityManager activityManager = (ActivityManager)context.getSystemService (Context.ACTIVITY_SERVICE); 
+//		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE); 
+//
+//		Log.e("ERROR","==================================");
+//		Log.e("ERROR","context.applicationName  : "+ context.getApplicationInfo().name);
+//		Log.e("ERROR","context.getPackageName() : "+ context.getPackageName());
+//		Log.e("ERROR","context.toString() : "+ context.toString());
+//
+//		for (RunningTaskInfo task : tasks) {
+//			Log.e("ERROR","task : "+ task);
+//			Log.e("ERROR","task.baseActivity : "+ task.baseActivity);
+//			Log.e("ERROR","task.topActivity : "+ task.topActivity);
+//			Log.e("ERROR","task.describeContents() : "+ task.describeContents());
+//			Log.e("ERROR","task.description : "+ task.description);
+//			Log.e("ERROR","task.id : "+ task.id);
+//		} 
+//	}
 }

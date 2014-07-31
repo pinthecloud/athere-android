@@ -3,6 +3,7 @@ package com.pinthecloud.athere.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.activity.AhActivity;
@@ -27,5 +28,10 @@ public class AhFragment extends Fragment{
 		context = getActivity();
 		activity = (AhActivity) context;
 		pref = app.getPref();
+	}
+	
+	protected void Log(String... params){
+		for(String str : params)
+			Log.e("ERROR", str);
 	}
 }

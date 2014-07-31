@@ -45,6 +45,7 @@ public class MessageHelper {
 		jo.addProperty("senderId", message.getSenderId());
 		jo.addProperty("receiver", message.getReceiver());
 		jo.addProperty("receiverId", message.getReceiverId());
+		jo.addProperty("timeStamp", message.getTimeStamp());
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
@@ -91,6 +92,7 @@ public class MessageHelper {
 		jo.addProperty("senderId", message.getSenderId());
 		jo.addProperty("receiver", message.getReceiver());
 		jo.addProperty("receiverId", message.getReceiverId());
+		jo.addProperty("timeStamp", message.getTimeStamp());
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);

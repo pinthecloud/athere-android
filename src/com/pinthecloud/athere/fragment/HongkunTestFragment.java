@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.List;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class HongkunTestFragment extends AhFragment {
@@ -25,6 +28,8 @@ public class HongkunTestFragment extends AhFragment {
 	Button btn04;
 	Button btn05;
 	Button btn06;
+	
+	Button[] btnArr;
 	TextView messageText;
 	int count = 0;
 	int b1Count = 0;
@@ -33,14 +38,17 @@ public class HongkunTestFragment extends AhFragment {
 	int b4Count = 0;
 	int b5Count = 0;
 	int b6Count = 0;
+	int[] countArr;
 	StringBuilder squareId = new StringBuilder();
 	UserHelper userHelper;
 	MessageHelper messageHelper;
 	SquareHelper squareHelper;
-	
+	MessageDBHelper messageDB;
 	private String who;
 	private String content;
-
+	
+	MyOnClick[] handler;
+	MyOnClick myHandler;
 	public static final String SENDER_ID = "838051405989";
 	UserInfoFetchBuffer buffer;
 
@@ -53,9 +61,8 @@ public class HongkunTestFragment extends AhFragment {
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
-		
+		messageDB = app.getMessageDBHelper();
 		who = "test user";
-		
 	}
 
 	@Override
@@ -63,67 +70,105 @@ public class HongkunTestFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
 		
-		btn01 = (Button)view.findViewById(R.id.button1);
-		btn02 = (Button)view.findViewById(R.id.button2);
-		btn03 = (Button)view.findViewById(R.id.button3);
-		btn04 = (Button)view.findViewById(R.id.button4);
-		btn05 = (Button)view.findViewById(R.id.button5);
-		btn06 = (Button)view.findViewById(R.id.button6);
+		countArr = new int[6];
+		handler = new MyOnClick[6];
+		btnArr = new Button[6];
+		btnArr[0] = (Button)view.findViewById(R.id.button1);
+		btnArr[1] = (Button)view.findViewById(R.id.button2);
+		btnArr[2] = (Button)view.findViewById(R.id.button3);
+		btnArr[3] = (Button)view.findViewById(R.id.button4);
+		btnArr[4] = (Button)view.findViewById(R.id.button5);
+		btnArr[5] = (Button)view.findViewById(R.id.button6);
 		messageText = (TextView)view.findViewById(R.id.message_text);
 		
-		btn01.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				addItem01(v);
-			}
-		});
+		for(int i = 0 ; i < 6 ; i++){
+			final int j = i;
+			btnArr[i].setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Button b = (Button)v;
+					if (b.getId() == btnArr[0].getId()) {
+						messageDB.addMessage(AhMessage.buildMessage(AhMessage.MESSAGE_TYPE.ENTER_SQUARE));
+						messageDB.addMessage(AhMessage.buildMessage(AhMessage.MESSAGE_TYPE.ENTER_SQUARE));
+						messageDB.addMessage(AhMessage.buildMessage(AhMessage.MESSAGE_TYPE.ENTER_SQUARE));
+						messageDB.addMessage(AhMessage.buildMessage(AhMessage.MESSAGE_TYPE.EXIT_SQUARE));
+						messageDB.addMessage(AhMessage.buildMessage(AhMessage.MESSAGE_TYPE.ENTER_SQUARE));
+						
+					} else if (b.getId() == btnArr[1].getId()) {
+						List<AhMessage> list = messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+						Log(list.toString());
+					} else if (b.getId() == btnArr[2].getId()) {
+						Log(messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.EXIT_SQUARE).toString());
+						messageDB.deleteAllMessages(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+						Log(messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.ENTER_SQUARE).toString());
+						Log(messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.EXIT_SQUARE).toString());
+					} else if (b.getId() == btnArr[3].getId()) {
+						
+					} else if (b.getId() == btnArr[4].getId()) {
+						
+					} else if (b.getId() == btnArr[5].getId()) {
+						
+					}
+					messageText.setText(b.getText());
+				}
+			});
+		}
 		
-		btn02.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				addItem02(v);
-			}
-		});
-
-		btn03.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				addItem03(v);
-			}
-		});
-		
-		btn04.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				addItem04(v);
-			}
-		});
-		
-		btn05.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				addItem05(v);
-			}
-		});
-		
-		btn06.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				addItem06(v);
-			}
-		});
+//		btn01.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				addItem01(v);
+//			}
+//		});
+//		
+//		btn02.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				addItem02(v);
+//			}
+//		});
+//
+//		btn03.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				addItem03(v);
+//			}
+//		});
+//		
+//		btn04.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				addItem04(v);
+//			}
+//		});
+//		
+//		btn05.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				addItem05(v);
+//			}
+//		});
+//		
+//		btn06.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				addItem06(v);
+//			}
+//		});
 		
 		return view;
 	}
@@ -283,5 +328,9 @@ public class HongkunTestFragment extends AhFragment {
 			}
 			
 		}).start();
+	}
+	
+	public interface MyOnClick {
+		public void myOnClick(View v);
 	}
 }
