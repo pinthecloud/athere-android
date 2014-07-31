@@ -3,6 +3,7 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,15 +19,16 @@ import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.fragment.SquareDrawerFragment.SquareDrawerFragmentCallbacks;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class SquareChatFragment extends AhFragment{
@@ -41,6 +43,8 @@ public class SquareChatFragment extends AhFragment{
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserInfoFetchBuffer userInfoFetchBuffer;
+	
+	SquareDrawerFragmentCallbacks callbacks;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
@@ -155,34 +159,24 @@ public class SquareChatFragment extends AhFragment{
 				message.setReceiverId(square.getId());
 				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
 				message.setStatus(AhMessage.SENDING);
-				Log.e("ERROR","before sendMessageAsync");
 				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
 						message.setStatus(AhMessage.SENT);
-						Log.e("ERROR","complete sendMessageAsync / before exitSquareAsync");
-						userHelper.exitSquareAsync(pref.getString(AhGlobalVariable.USER_ID_KEY), new AhEntityCallback<Boolean>() {
-							
-							@Override
-							public void onCompleted(Boolean entity) {
-								Log.e("ERROR","exit Square Succeed / before startActivity(intent)");
-								pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, false);
-								
-								activity.runOnUiThread(new Runnable(){
+						
+						activity.runOnUiThread(new Runnable(){
 
-									@Override
-									public void run() {
-										Intent i = new Intent(context, SquareListActivity.class);
-										context.startActivity(i);
-									}
-								});
+							@Override
+							public void run() {
+								callbacks.exitSquare();
 							}
 						});
 					}
 				});
 			}
 		});
+		
 		
 		///////////////////////////////////////////////////////////////////////////////////
 		
@@ -233,5 +227,11 @@ public class SquareChatFragment extends AhFragment{
 		}
 
 		return view;
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		callbacks = (SquareDrawerFragmentCallbacks) activity;
 	}
 }

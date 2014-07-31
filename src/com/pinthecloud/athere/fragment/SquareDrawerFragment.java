@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
+import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.User;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -76,8 +77,9 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				progressBar.setVisibility(View.VISIBLE);
-				callbacks.exitSquare();
+				throw new AhException("This method needs to send Message to the Server **ask hongkun**");
+//				progressBar.setVisibility(View.VISIBLE);
+//				callbacks.exitSquare();
 			}
 		});
 

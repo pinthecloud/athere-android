@@ -22,6 +22,7 @@ import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
@@ -178,11 +179,11 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		}
 	}
 
-
 	@Override
 	public void exitSquare() {
+		
 		progressBar.setVisibility(View.VISIBLE);
-
+		
 		userHelper.exitSquareAsync(user.getId(), new AhEntityCallback<Boolean>() {
 
 			@Override

@@ -19,6 +19,7 @@
 
         <Button
             android:id="@+id/square_chat_frag_option_button"
+            android:text="tmp Exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

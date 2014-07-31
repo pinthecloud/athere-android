@@ -67,6 +67,7 @@
         <Button
             android:id="@+id/square_drawer_frag_exit_button"
             android:layout_width="match_parent"
+            android:text="don't use this exit btn"
             android:layout_height="wrap_content" />
     </LinearLayout>
 

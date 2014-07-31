@@ -17,7 +17,6 @@
         android:layout_below="@+id/textView1"
         android:layout_marginTop="55dp"
         android:layout_toRightOf="@+id/textView1"
-        android:onClick="addItem"
         android:text="Enter" />
 
     <Button
@@ -27,7 +26,6 @@
         android:layout_alignLeft="@+id/button1"
         android:layout_below="@+id/button1"
         android:layout_marginTop="16dp"
-        android:onClick="addItem02"
         android:text="Exit" />
 
     <Button
@@ -36,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/button2"
         android:layout_centerVertical="true"
-        android:onClick="addItem03"
         android:text="Talk" />
 
     <Button

@@ -42,7 +42,7 @@ public class SplashActivity extends AhActivity {
 		//////////////////////////////////////////////////////
 		// Erase Later
 		String httpAgent = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-		if (httpAgent.equals(System.getProperty("http.agent"))){
+		if (true || httpAgent.equals(System.getProperty("http.agent"))){
 			new AlertDialog.Builder(this)
 		    .setTitle("Routing Dialog")
 		    .setMessage("Want to Go to HongkunTest?")

@@ -62,37 +62,46 @@ public class HongkunTestFragment extends AhFragment {
 		btn03 = (Button)view.findViewById(R.id.button3);
 		btn04 = (Button)view.findViewById(R.id.button4);
 		
+		btn01.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				addItem01(v);
+			}
+		});
+		
+		btn02.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				addItem02(v);
+			}
+		});
+
+		btn03.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				addItem03(v);
+			}
+		});
 		
 		btn04.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new Thread(new Runnable(){
-
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						AhMessage message = new AhMessage();
-						message.setContent("Exit Square");
-						message.setSender(who);
-						message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-						message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
-						message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
-						
-						// Send message to server
-						messageHelper.sendMessageSync(message);
-						Log.e("ERROR","complete!");
-					}
-					
-				}).start();
+				addItem04(v);
 			}
 		});
 
 		return view;
 	}
 	
-	public void addItem(View view) {
+	public void addItem01(View view) {
 		
 		AhMessage message = new AhMessage();
 		message.setContent("Enter Square");
@@ -107,7 +116,8 @@ public class HongkunTestFragment extends AhFragment {
 			@Override
 			public void onCompleted(AhMessage entity) {
 				// TODO Auto-generated method stub
-				btn01.setText(btn01.getText().toString() + (b1Count++));
+				btn01.setText("Enter" + (b1Count++));
+				Log.e("ERROR","Enter succeed");
 			}
 		});
 	}
@@ -127,7 +137,8 @@ public class HongkunTestFragment extends AhFragment {
 			@Override
 			public void onCompleted(AhMessage entity) {
 				// TODO Auto-generated method stub
-				btn02.setText(btn02.getText().toString() + (b2Count++));
+				btn02.setText("Exit" + (b2Count++));
+				Log.e("ERROR","Exit succeed");
 			}
 		});
 	}
@@ -147,14 +158,30 @@ public class HongkunTestFragment extends AhFragment {
 			@Override
 			public void onCompleted(AhMessage entity) {
 				// TODO Auto-generated method stub
-				btn03.setText(btn03.getText().toString() + (b3Count++));
+				btn03.setText("Talk" + (b3Count++));
+				Log.e("ERROR","talk succeed");
 			}
 		});
 	}
 	
 	public void addItem04(View view) {
-	
-		
-		
+		new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				AhMessage message = new AhMessage();
+				message.setContent("Exit Square");
+				message.setSender(who);
+				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
+				message.setReceiverId("326BFDF8-BC82-4C98-B3D8-56A70B29D53E");
+				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
+				
+				// Send message to server
+				messageHelper.sendMessageSync(message);
+				Log.e("ERROR","complete!");
+			}
+			
+		}).start();
 	}
 }

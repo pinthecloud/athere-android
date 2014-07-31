@@ -72,20 +72,28 @@ public class AhIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		AhMessage message = null;
-		String userId = null; 
+		AhMessage _message = null;
+		String _userId = null; 
 		Log.e("ERROR","onHandleIntent start");
 		// Parsing the data from server
 		try {
-			message = parseMessageIntent(intent);
-			userId = parseUserIdIntent(intent);
+			_message = parseMessageIntent(intent);
+			_userId = parseUserIdIntent(intent);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			Log.d(AhGlobalVariable.LOG_TAG, "Error while parsing Message Intent : " + e.getMessage());
 			return;
 		}
-		Log.e("ERROR","received Message Type : " + message.getType());
+		Log.e("ERROR","received Message Type : " + _message.getType());
+		Log.e("ERROR","start Thread");
 		
+		final AhMessage message = _message;
+		final String userId = _userId;
+		
+		new Thread(new Runnable(){
+			public void run(){
+		///////////////////////////////////
+				
 		if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())) {
 			
 		} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())) {
@@ -93,36 +101,26 @@ public class AhIntentService extends IntentService {
 		} else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())) {
 			
 		} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
-			//User updateUser = userHelper.getUserSync(userId);
-			//userDBHelper.addUser(updateUser);
-			//userInfoFetchBuffer.addUserId(userId);
+			User updateUser = userHelper.getUserSync(userId);
+			userDBHelper.addUser(updateUser);
+//			userInfoFetchBuffer.addUserId(userId);
 		} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
 			userDBHelper.deleteUser(userId);
 		} else if (AhMessage.MESSAGE_TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
 //			User updatedUser = userHelper.getUserSync(userId);
 //			userDBHelper.updateUser(updatedUser);
-			userInfoFetchBuffer.addUserId(userId);
+//			userInfoFetchBuffer.addUserId(userId);
 		}
-		final String _userId = userId;
-		new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				User updateUser = userHelper.getUserSync(_userId);
-				userDBHelper.addUser(updateUser);
-				Log.e("ERROR","complete");
-			}
-			
-		}).start();
-		
 		
 		if (isRunning(app)) {
-			// if the app is running, add the message to the chat room.
+			// if the App is running, add the message to the chat room.
 			messageHelper.triggerMessageEvent(message);
 			return;
 		}
 		
+		//////////////////////////////
+		// if the App is NOT Running
+		//////////////////////////////
 		if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
 			return; // do nothing
 		} 
@@ -176,6 +174,10 @@ public class AhIntentService extends IntentService {
 			
 			bm = icon;
 		} else {
+			Log.e("ERROR","Get User from server successfully");
+			Log.e("ERROR","message.getSenderId() : " + message.getSenderId());
+			Log.e("ERROR","userId : " + userId);
+			Log.e("ERROR","sentUser.getId() : " + sentUser.getId());
 			bm = BitmapUtil.convertToBitmap(sentUser.getProfilePic());
 		}
 		
@@ -183,7 +185,7 @@ public class AhIntentService extends IntentService {
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(_this)
 		.setSmallIcon(R.drawable.ic_launcher)
-		//.setLargeIcon(bm)
+		.setLargeIcon(bm)
 		.setContentTitle(title)
 		.setContentText(content)
 		.setAutoCancel(true);
@@ -199,6 +201,13 @@ public class AhIntentService extends IntentService {
 		if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
 			((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
 		}
+		
+		Log.e("ERROR","End Thread");
+		//////////END thread//////////////
+		}
+		}).start();
+		///////////////////////////////////
+		Log.e("ERROR","End onHandleIntent");
 	}
 
 	private boolean isRunning(Context context) {
