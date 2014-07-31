@@ -78,8 +78,8 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				throw new AhException("This method needs to send Message to the Server **ask hongkun**");
-//				progressBar.setVisibility(View.VISIBLE);
-//				callbacks.exitSquare();
+				//				progressBar.setVisibility(View.VISIBLE);
+				//				callbacks.exitSquare();
 			}
 		});
 

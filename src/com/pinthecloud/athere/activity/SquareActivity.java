@@ -22,7 +22,6 @@ import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
@@ -105,7 +104,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 				mDrawerLayout, /* DrawerLayout object */
-				R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+				R.drawable.drawer, /* nav drawer image to replace 'Up' caret */
 				R.string.des_drawer_open, /* "open drawer" description for accessibility */
 				R.string.des_drawer_close /* "close drawer" description for accessibility */
 				)
@@ -181,9 +180,9 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 
 	@Override
 	public void exitSquare() {
-		
+
 		progressBar.setVisibility(View.VISIBLE);
-		
+
 		userHelper.exitSquareAsync(user.getId(), new AhEntityCallback<Boolean>() {
 
 			@Override

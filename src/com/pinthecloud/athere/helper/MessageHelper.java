@@ -3,8 +3,6 @@ package com.pinthecloud.athere.helper;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,7 +16,7 @@ import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class MessageHelper {
-	
+
 	private AhApplication app;
 	private MobileServiceClient mClient;
 	private Object lock;
@@ -35,8 +33,8 @@ public class MessageHelper {
 		this.mClient = app.getmClient();
 		this.lock = app.getLock();
 	}
-	
-	
+
+
 	public boolean sendMessageSync(AhMessage message) throws AhException {
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 
@@ -66,7 +64,7 @@ public class MessageHelper {
 				}
 			}
 		});
-		
+
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -106,8 +104,8 @@ public class MessageHelper {
 			}
 		});
 	}
-	
-	
+
+
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
 
 	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";

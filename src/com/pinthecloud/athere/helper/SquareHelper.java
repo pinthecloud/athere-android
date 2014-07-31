@@ -152,14 +152,14 @@ public class SquareHelper {
 		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
 
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
+			public void onCompleted(JsonElement json, Exception e,
 					ServiceFilterResponse response) {
-				if (exception == null) {
+				if (e == null) {
 					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
-					if (list == null) throw new AhException(exception, "getSquareList");
+					if (list == null) throw new AhException(e, "getSquareList");
 					callback.onCompleted(list, list.size());
 				} else {
-					throw new AhException(exception, "getSquareListAsync");
+					throw new AhException(e, "SquareHelper getSquareListAsync : " + e.getMessage());
 				}
 			}
 		});

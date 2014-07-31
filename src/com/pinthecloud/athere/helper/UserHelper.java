@@ -242,7 +242,7 @@ public class UserHelper {
 			pictureBitmap = FileUtil.getImageFromInternalStorage
 					(app, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 		} catch (FileNotFoundException e) {
-			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.ic_splash);
+			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 			pictureBitmap = BitmapUtil.cropRound(pictureBitmap);
 			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
 		}

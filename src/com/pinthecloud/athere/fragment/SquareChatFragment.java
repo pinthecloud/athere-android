@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,8 +17,6 @@ import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.SquareActivity;
-import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment.SquareDrawerFragmentCallbacks;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -43,7 +39,7 @@ public class SquareChatFragment extends AhFragment{
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserInfoFetchBuffer userInfoFetchBuffer;
-	
+
 	SquareDrawerFragmentCallbacks callbacks;
 
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
@@ -69,7 +65,7 @@ public class SquareChatFragment extends AhFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-		
+
 		/*
 		 * Set UI component
 		 */
@@ -77,7 +73,7 @@ public class SquareChatFragment extends AhFragment{
 		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
 		sendButton = (Button) view.findViewById(R.id.square_chat_frag_send_button);
 		tempBackButton = (Button) view.findViewById(R.id.square_chat_frag_option_button);
-		
+
 
 		/*
 		 * Set message list view
@@ -142,8 +138,8 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
-		
-		
+
+
 		/**
 		 * temp Button for getting out of the chat Room
 		 */
@@ -164,7 +160,7 @@ public class SquareChatFragment extends AhFragment{
 					@Override
 					public void onCompleted(AhMessage entity) {
 						message.setStatus(AhMessage.SENT);
-						
+
 						activity.runOnUiThread(new Runnable(){
 
 							@Override
@@ -176,10 +172,10 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
-		
-		
+
+
 		///////////////////////////////////////////////////////////////////////////////////
-		
+
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -191,13 +187,13 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
-//				List<String> userIdList = userInfoFetchBuffer.popAllUsersId();
-//				
-//				for(String id : userIdList) {
-//					UserDBHelper. userHelper.getUserSync(id);
-//				}
-				
+
+				//				List<String> userIdList = userInfoFetchBuffer.popAllUsersId();
+				//				
+				//				for(String id : userIdList) {
+				//					UserDBHelper. userHelper.getUserSync(id);
+				//				}
+
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -209,14 +205,14 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
-		
+
 		if (!messageDBHelper.isEmpty()) {
 			final List<AhMessage> messageListFromBuffer = messageDBHelper.popAllMessages();
 			activity.runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
-					
+
 					for (AhMessage message : messageListFromBuffer) {
 						messageList.add(message);
 						messageListAdapter.notifyDataSetChanged();
@@ -228,7 +224,7 @@ public class SquareChatFragment extends AhFragment{
 
 		return view;
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
