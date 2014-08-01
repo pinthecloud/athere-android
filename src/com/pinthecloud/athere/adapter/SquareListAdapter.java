@@ -42,12 +42,14 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			 * Find UI component
 			 */
 			TextView squareNameText = (TextView)view.findViewById(R.id.row_square_list_name);
+			TextView peopleNumText = (TextView)view.findViewById(R.id.row_square_list_people_number);
 
 
 			/*
 			 * Set UI component
 			 */
 			squareNameText.setText(square.getName());
+			peopleNumText.setText(""+square.getParticipants());
 		}
 		return view;
 	}

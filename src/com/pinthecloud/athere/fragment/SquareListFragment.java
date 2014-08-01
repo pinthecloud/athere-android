@@ -3,6 +3,7 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.pinthecloud.athere.model.Square;
 
 public class SquareListFragment extends AhFragment{
 
+	private ActionBar mActionBar;
 	private SquareListAdapter squareListAdapter;
 	private ListView squareListView;
 	private ProgressBar mProgressBar;
@@ -49,8 +51,15 @@ public class SquareListFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
+		mActionBar = activity.getActionBar();
 		squareListView = (ListView)view.findViewById(R.id.square_list_frag_list);
 		mProgressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
+
+
+		/*
+		 * Set Action Bar
+		 */
+		mActionBar.setTitle(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 
 
 		/*

@@ -47,6 +47,8 @@
             </intent-filter>
         </receiver>
 
+        <service android:name="com.pinthecloud.athere.push.AhIntentService" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -54,28 +56,27 @@
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.AhActivity" />
+        <activity
+            android:name=".activity.BasicProfileActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.SquareProfileActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
         <activity android:name=".activity.HongkunTestAcitivity" />
         <activity
             android:name=".activity.SquareListActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.AhActivity" />
-        <activity android:name=".activity.BasicProfileActivity" />
         <activity
             android:name=".activity.SquareActivity"
             android:windowSoftInputMode="stateHidden" />
-
-        <service android:name="com.pinthecloud.athere.push.AhIntentService" >
-        </service>
     </application>
-
 </manifest>
