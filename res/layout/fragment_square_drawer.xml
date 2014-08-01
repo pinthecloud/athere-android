@@ -47,7 +47,7 @@
                 android:id="@+id/square_drawer_frag_profile_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/des_profile_image" />
+                android:contentDescription="@string/profile_image" />
 
             <Button
                 android:id="@+id/square_drawer_frag_profile_image_setting_button"

@@ -16,18 +16,19 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -46,10 +47,6 @@ import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareProfileFragment extends AhFragment{
 
-	private final int MIN_NUMBER_PERSON = 1;
-	private final int MAX_NUMBER_PERSON = 10;
-	private final int DEFAULT_NUMBER_PERSON = 2;
-
 	private Intent intent;
 	private Square square;
 	private ProgressBar progressBar;
@@ -58,15 +55,16 @@ public class SquareProfileFragment extends AhFragment{
 	private CameraPreview mCameraPreview;
 	private FrameLayout cameraView;
 	private ImageView profilePictureView;
-	private Button cameraButton;
-	private Button selfCameraButton;
+	private ImageButton cameraButton;
+	private ImageButton cameraRotateButton;
 
 	private int cameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
-	private boolean takePicture = true;
+	private boolean isTookPicture = false;
+	private boolean isTypedMember = false;
 
 	private LinearLayout profileInfoLayout;
-	private NumberPicker numberPicker;
-	private Button completeButton;
+	private EditText numberText;
+	private ImageButton completeButton;
 
 	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
@@ -124,10 +122,11 @@ public class SquareProfileFragment extends AhFragment{
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
-					takePicture = false;
+					isTookPicture = true;
 					cameraButton.setEnabled(true);
-					selfCameraButton.setEnabled(true);
-					completeButton.setEnabled(true);
+					cameraButton.setImageResource(R.drawable.camera_take_re);
+					cameraRotateButton.setEnabled(true);
+					completeButton.setEnabled(isCompleteButtonEnable());
 				} catch (FileNotFoundException e) {
 					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment mPicutureListener : " + e.getMessage());
 				} catch (IOException e) {
@@ -164,20 +163,37 @@ public class SquareProfileFragment extends AhFragment{
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.square_profile_frag_progress_bar);
 		cameraView = (FrameLayout) view.findViewById(R.id.square_profile_frag_camera_view);
-		cameraButton = (Button) view.findViewById(R.id.square_profile_frag_camera_button);
-		selfCameraButton = (Button) view.findViewById(R.id.square_profile_frag_self_camera_button);
+		cameraButton = (ImageButton) view.findViewById(R.id.square_profile_frag_camera_button);
+		cameraRotateButton = (ImageButton) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_picture);
-		numberPicker = (NumberPicker) view.findViewById(R.id.square_profile_frag_number_picker);
-		completeButton = (Button) view.findViewById(R.id.square_profile_frag_start_button);
+		numberText = (EditText) view.findViewById(R.id.square_profile_frag_number_text);
+		completeButton = (ImageButton) view.findViewById(R.id.square_profile_frag_start_button);
 
 
 		/*
-		 * Set Number Picker
+		 * Set event on EditText
 		 */
-		numberPicker.setMinValue(MIN_NUMBER_PERSON);
-		numberPicker.setMaxValue(MAX_NUMBER_PERSON);
-		numberPicker.setValue(DEFAULT_NUMBER_PERSON);
+		numberText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String memberNumber = s.toString().trim();
+				if(memberNumber.length() < 1){
+					isTypedMember = false;
+				}else{
+					isTypedMember = true;
+				}
+				completeButton.setEnabled(isCompleteButtonEnable());
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 
 
 		/*
@@ -187,9 +203,9 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
-				if(takePicture){
+				if(!isTookPicture){
 					cameraButton.setEnabled(false);
-					selfCameraButton.setEnabled(false);
+					cameraRotateButton.setEnabled(false);
 					mCamera.autoFocus(new AutoFocusCallback(){
 
 						@Override
@@ -202,12 +218,13 @@ public class SquareProfileFragment extends AhFragment{
 					});
 				}else{
 					openCameraAndSetView();
-					takePicture = true;
+					isTookPicture = false;
+					cameraButton.setImageResource(R.drawable.camera_take);
 					completeButton.setEnabled(false);
 				}
 			}
 		});
-		selfCameraButton.setOnClickListener(new OnClickListener() {
+		cameraRotateButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -220,7 +237,8 @@ public class SquareProfileFragment extends AhFragment{
 				// Set new camera by facing direction
 				releaseCameraAndRemoveView();
 				openCameraAndSetView();
-				takePicture = true;
+				isTookPicture = false;
+				cameraButton.setImageResource(R.drawable.camera_take);
 			}
 		});
 		completeButton.setOnClickListener(new OnClickListener() {
@@ -231,26 +249,22 @@ public class SquareProfileFragment extends AhFragment{
 				 * Check whether user took profile picture or not
 				 * Check nick name edit text and save setting
 				 */
-				if(takePicture){
-					// Has to take profile picture
-					String message = getResources().getString(R.string.no_profile_picture_message);
-					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-					toast.show();
-				} else {
-					// Disable complete button and picker for preventing double action
-					completeButton.setEnabled(false);
-					numberPicker.setEnabled(false);
+				// Disable UI component for preventing double action
+				completeButton.setEnabled(false);
+				cameraButton.setEnabled(false);
+				cameraRotateButton.setEnabled(false);
+				numberText.setEnabled(false);
 
-					// Save this setting
-					int companyNumber = numberPicker.getValue();
-					pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-					pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-					pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
-					enterSquare();
-				}
+				// Save this setting
+				int memberNumber = Integer.parseInt(numberText.getText().toString());
+				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, memberNumber);
+				enterSquare();
 			}
 		});
-
+		completeButton.setEnabled(false);
+		
 		return view;
 	}
 
@@ -261,7 +275,7 @@ public class SquareProfileFragment extends AhFragment{
 
 		// Set camera for taking picture OR
 		// Set taken picture to image view
-		if(takePicture){
+		if(!isTookPicture){
 			openCameraAndSetView();
 		}else{
 			try {
@@ -333,31 +347,31 @@ public class SquareProfileFragment extends AhFragment{
 						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
 					}
 				}
-				
+
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final User user = userHelper.getMyUserInfo(false);
 				String id = userHelper.enterSquareSync(user);
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
-				
+
 				AhMessage message = new AhMessage();
 				message.setContent("Enter Square");
 				message.setSender(user.getNickName());
 				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 				message.setReceiverId(square.getId());
 				message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
-				
+
 				// Send message to server
 				messageHelper.sendMessageSync(message);
 
 				List<User> userList = userHelper.getUserListSync(square.getId());
 				userDBHelper.addAllUsers(userList);
-				
+
 				activity.runOnUiThread(new Runnable(){
 
 					@Override
 					public void run() {
-						
+
 						// Dimiss progress bar
 						progressBar.setVisibility(View.GONE);
 
@@ -372,6 +386,11 @@ public class SquareProfileFragment extends AhFragment{
 				});
 			}
 		}).start();
+	}
+
+
+	private boolean isCompleteButtonEnable(){
+		return isTookPicture && isTypedMember;
 	}
 
 

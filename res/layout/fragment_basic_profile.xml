@@ -12,8 +12,8 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="26dp"
-        android:contentDescription="@string/des_logo"
+        android:layout_marginBottom="@dimen/basic_profile_logo_margin_bottom"
+        android:contentDescription="@string/logo"
         android:src="@drawable/setup" />
 
     <EditText
@@ -21,11 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:gravity="center"
-        android:hint="@string/nickname"
+        android:gravity="center|bottom"
+        android:hint="@string/nick_name"
         android:inputType="text"
         android:maxLength="15"
-        android:textSize="14sp" />
+        android:textSize="@dimen/font_normal" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:id="@+id/basic_profile_frag_male_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/basic_profile_gender_toggle_background"
+            android:background="@drawable/basic_profile_gender_toggle_bg"
             android:checked="true"
             android:enabled="false"
             android:textOff=""
@@ -46,7 +46,7 @@
             android:id="@+id/basic_profile_frag_female_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/basic_profile_gender_toggle_background"
+            android:background="@drawable/basic_profile_gender_toggle_bg"
             android:textOff=""
             android:textOn="" />
     </LinearLayout>
@@ -56,10 +56,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:gravity="center"
+        android:gravity="center|bottom"
         android:hint="@string/birth_of_year"
         android:inputType="date"
-        android:textSize="14sp" />
+        android:textSize="@dimen/font_normal" />
 
     <NumberPicker
         android:id="@+id/basic_profile_frag_year_picker"

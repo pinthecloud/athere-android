@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/menu_square_drawer"
-        android:icon="@drawable/sidebar"
-        android:title="@string/drawer"
+        android:id="@+id/menu_setting"
+        android:icon="@drawable/actionbar_setting"
+        android:title="@string/settings"
         android:showAsAction="always" />
 
 </menu>
