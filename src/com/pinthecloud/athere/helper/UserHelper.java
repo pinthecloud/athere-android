@@ -258,6 +258,7 @@ public class UserHelper {
 		user.setAge(pref.getInt(AhGlobalVariable.AGE_KEY));
 		user.setMale(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
 		user.setSquareId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
+		user.setChupaEnable(pref.getBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY));
 		return user;
 	}
 

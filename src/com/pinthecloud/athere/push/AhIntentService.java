@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -16,8 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -36,7 +33,6 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class AhIntentService extends IntentService {
@@ -45,7 +41,7 @@ public class AhIntentService extends IntentService {
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
-	private UserInfoFetchBuffer userInfoFetchBuffer;
+//	private UserInfoFetchBuffer userInfoFetchBuffer;
 	private UserHelper userHelper;
 	private Context _this;
 	
@@ -61,7 +57,7 @@ public class AhIntentService extends IntentService {
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
-		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
+//		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
 		userHelper = app.getUserHelper();
 		
 		atomicInteger = new AtomicInteger();
@@ -73,7 +69,6 @@ public class AhIntentService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		AhMessage _message = null;
 		String _userId = null; 
-		Log.e("ERROR","onHandleIntent start");
 		// Parsing the data from server
 		try {
 			_message = parseMessageIntent(intent);
@@ -84,129 +79,113 @@ public class AhIntentService extends IntentService {
 			return;
 		}
 		Log.e("ERROR","received Message Type : " + _message.getType());
-		Log.e("ERROR","start Thread");
 		
 		final AhMessage message = _message;
 		final String userId = _userId;
 		
 		new Thread(new Runnable(){
 			public void run(){
-		///////////////////////////////////
+						
+				if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())) {
+					
+				} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())) {
+					
+				} else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())) {
+					
+				} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
+					User updateUser = userHelper.getUserSync(userId);
+					userDBHelper.addUser(updateUser);
+				} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
+					userDBHelper.deleteUser(userId);
+				} else if (AhMessage.MESSAGE_TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
+		//			User updatedUser = userHelper.getUserSync(userId);
+		//			userDBHelper.updateUser(updatedUser);
+				}
 				
-		if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())) {
-			
-		} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())) {
-			
-		} else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())) {
-			
-		} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
-			User updateUser = userHelper.getUserSync(userId);
-			userDBHelper.addUser(updateUser);
-//			userInfoFetchBuffer.addUserId(userId);
-		} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
-			userDBHelper.deleteUser(userId);
-		} else if (AhMessage.MESSAGE_TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
-//			User updatedUser = userHelper.getUserSync(userId);
-//			userDBHelper.updateUser(updatedUser);
-//			userInfoFetchBuffer.addUserId(userId);
-		}
+				if (isRunning(app)) {
+					// if the App is running, add the message to the chat room.
+					messageHelper.triggerMessageEvent(message);
+					return;
+				}
+				
+				////////////////////////////////
+				// if the App is NOT Running
+				////////////////////////////////
+				if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
+					return; // do nothing
+				} 
+				
+				String title = "";
+				String content = "";
+				
+				messageDBHelper.addMessage(message);
+				
+				if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())){
+					title = message.getSender() +"님께서 회원님에게 추파를 보내셨습니다.";
+					content = message.getContent();
+				} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())){
+					title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
+					content = message.getContent();
+				} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())){
+					title = message.getSender() +"님께서 입장하셨습니다.";
+					content = message.getContent();
+				} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())){
+					return;
+				} 
 		
-		if (isRunning(app)) {
-			// if the App is running, add the message to the chat room.
-			messageHelper.triggerMessageEvent(message);
-			return;
-		}
+				// Creates an explicit intent for an Activity in your app
+				Intent resultIntent = new Intent(_this, SquareActivity.class);
 		
-		////////////////////////////////
-		// if the App is NOT Running
-		////////////////////////////////
-		if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
-			return; // do nothing
-		} 
+				// The stack builder object will contain an artificial back stack for the
+				// started Activity.
+				// This ensures that navigating backward from the Activity leads out of
+				// your application to the Home screen.
+				TaskStackBuilder stackBuilder = TaskStackBuilder.create(_this);
 		
-		String title = "";
-		String content = "";
+				// Adds the back stack for the Intent (but not the Intent itself)
+				stackBuilder.addParentStack(SplashActivity.class);
 		
-		messageDBHelper.addMessage(message);
+				// Adds the Intent that starts the Activity to the top of the stack
+				stackBuilder.addNextIntent(resultIntent);
+				PendingIntent resultPendingIntent =
+						stackBuilder.getPendingIntent(
+							0,
+							PendingIntent.FLAG_UPDATE_CURRENT
+						);
+				User sentUser = userDBHelper.getUser(message.getSenderId());
+				Bitmap bm = null;
+				if (sentUser == null){
+					Log.e("ERROR","no sentUser error");
+		//			Drawable myDrawable = getResources().getDrawable(R.drawable.ic_launcher);
+		//			Bitmap anImage = ((BitmapDrawable) myDrawable).getBitmap();
+					
+					bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
+				} else {
+					bm = BitmapUtil.convertToBitmap(sentUser.getProfilePic());
+				}
+				
+				// Set Notification
+				NotificationCompat.Builder mBuilder =
+						new NotificationCompat.Builder(_this)
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setLargeIcon(bm)
+				.setContentTitle(title)
+				.setContentText(content)
+				.setAutoCancel(true);
 		
-		if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())){
-			title = message.getSender() +"님께서 추파를 보내셨습니다.";
-			content = message.getContent();
-		} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())){
-			title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
-			content = message.getContent();
-		} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())){
-			title = message.getSender() +"님께서 입장하셨습니다.";
-			content = "빠큐머겅ㅗ";
-		} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())){
-			return;
-		} 
-
-		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(_this, SquareActivity.class);
-
-		// The stack builder object will contain an artificial back stack for the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(_this);
-
-		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(SplashActivity.class);
-
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent =
-				stackBuilder.getPendingIntent(
-					0,
-					PendingIntent.FLAG_UPDATE_CURRENT
-				);
-		User sentUser = userDBHelper.getUser(message.getSenderId());
-		Bitmap bm = null;
-		if (sentUser == null){
-			Log.e("ERROR","no sentUser error");
-			
-			Drawable myDrawable = getResources().getDrawable(R.drawable.ic_launcher);
-			Bitmap anImage = ((BitmapDrawable) myDrawable).getBitmap();
-			
-			Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
-			
-			bm = icon;
-		} else {
-			Log.e("ERROR","Get User from server successfully");
-			Log.e("ERROR","message.getSenderId() : " + message.getSenderId());
-			Log.e("ERROR","userId : " + userId);
-			Log.e("ERROR","sentUser.getId() : " + sentUser.getId());
-			bm = BitmapUtil.convertToBitmap(sentUser.getProfilePic());
-		}
+				mBuilder.setContentIntent(resultPendingIntent);
 		
-		// Set Notification
-		NotificationCompat.Builder mBuilder =
-				new NotificationCompat.Builder(_this)
-		.setSmallIcon(R.drawable.ic_launcher)
-		.setLargeIcon(bm)
-		.setContentTitle(title)
-		.setContentText(content)
-		.setAutoCancel(true);
-
-		mBuilder.setContentIntent(resultPendingIntent);
-
-		NotificationManager mNotificationManager =
-				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		// mId allows you to update the notification later on.
-		mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
-
-		AudioManager audioManager = (AudioManager) _this.getSystemService(Context.AUDIO_SERVICE);
-		if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
-			((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
-		}
+				NotificationManager mNotificationManager =
+						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				// mId allows you to update the notification later on.
+				mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
 		
-		Log.e("ERROR","End Thread");
-		//////////END thread//////////////
-		}
+				AudioManager audioManager = (AudioManager) _this.getSystemService(Context.AUDIO_SERVICE);
+				if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
+					((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
+				}
+			}
 		}).start();
-		///////////////////////////////////
-		Log.e("ERROR","End onHandleIntent");
 	}
 
 	private boolean isRunning(Context context) {

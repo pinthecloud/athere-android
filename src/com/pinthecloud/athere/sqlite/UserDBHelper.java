@@ -41,6 +41,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	private final String COMPANY_NUM = "company_num";
 	private final String AGE = "age";
 	private final String SQUARE_ID = "square_id";
+	private final String IS_CHUPA_ENABLE = "is_chupa_enable";
 
 
 	public UserDBHelper(Context context) {
@@ -55,7 +56,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		Log.d(AhGlobalVariable.LOG_TAG, "UserDBHelper onCreate");
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
-				"("
+			"("
 				+ ID + " TEXT PRIMARY KEY,"
 				+ NICK_NAME + " TEXT,"
 				+ PROFILE_PIC + " TEXT,"
@@ -64,8 +65,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				+ IS_MALE + " INTEGER,"
 				+ COMPANY_NUM + " INTEGER,"
 				+ AGE + " INTEGER,"
-				+ SQUARE_ID + " TEXT"
-				+")";
+				+ SQUARE_ID + " TEXT,"
+				+ IS_CHUPA_ENABLE + " INTEGER"
+			+")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
@@ -120,6 +122,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		values.put(COMPANY_NUM, user.getCompanyNum());
 		values.put(AGE, user.getAge());
 		values.put(SQUARE_ID, user.getSquareId());
+		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
 
 		// Inserting Row
 		db.insert(TABLE_NAME, null, values);
@@ -140,7 +143,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 			values.put(COMPANY_NUM, user.getCompanyNum());
 			values.put(AGE, user.getAge());
 			values.put(SQUARE_ID, user.getSquareId());
-
+			values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
+			
 			// Inserting Row
 			db.insert(TABLE_NAME, null, values);
 		}
@@ -181,6 +185,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 
 	private User convertToUser(Cursor cursor) {
+		User user = new User();
 		String _id = cursor.getString(0);
 		String nickName = cursor.getString(1);
 		String profilePic = cursor.getString(2);
@@ -190,8 +195,20 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		int companyNum = cursor.getInt(6);
 		int age = cursor.getInt(7);
 		String squareId = cursor.getString(8);
-
-		return new User(_id,nickName,profilePic,mobileId,registrationId,isMale,companyNum,age,squareId);
+		boolean chupaEnable = cursor.getInt(9) == 1;
+		
+		user.setId(_id);
+		user.setNickName(nickName);
+		user.setProfilePic(profilePic);
+		user.setMobileId(mobileId);
+		user.setRegistrationId(registrationId);
+		user.setMale(isMale);
+		user.setCompanyNum(companyNum);
+		user.setAge(age);
+		user.setSquareId(squareId);
+		user.setChupaEnable(chupaEnable);
+		//return new User(_id,nickName,profilePic,mobileId,registrationId,isMale,companyNum,age,squareId);
+		return user;
 	}
 
 	// Getting All Contacts
@@ -231,7 +248,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		values.put(COMPANY_NUM, user.getCompanyNum());
 		values.put(AGE, user.getAge());
 		values.put(SQUARE_ID, user.getSquareId());
-
+		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
+		
 		// Inserting Row
 		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });
 		db.close(); // Closing database connection
@@ -241,6 +259,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public void deleteUser(String id) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_NAME, ID + " = ?", new String[] { id });
+		db.close();
+	}
+	
+	public void deleteAllUsers() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TABLE_NAME, null, null);
 		db.close();
 	}
 }

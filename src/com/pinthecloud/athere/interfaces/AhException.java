@@ -21,7 +21,7 @@ public class AhException extends RuntimeException {
 	public AhException(String string) {
 		// TODO Auto-generated constructor stub
 		this.ex = new Exception(string);
-		this.message = "";
+		this.message = string;
 	}
 
 	public String getMessage() {

@@ -25,6 +25,7 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class SquareChatFragment extends AhFragment{
@@ -36,6 +37,7 @@ public class SquareChatFragment extends AhFragment{
 	private Button tempBackButton;
 
 	private UserHelper userHelper;
+	private UserDBHelper userDBHelper;
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserInfoFetchBuffer userInfoFetchBuffer;
@@ -57,6 +59,7 @@ public class SquareChatFragment extends AhFragment{
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
+		userDBHelper = app.getUserDBHelper();
 		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
 	}
 
@@ -155,6 +158,7 @@ public class SquareChatFragment extends AhFragment{
 				message.setReceiverId(square.getId());
 				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
 				message.setStatus(AhMessage.SENDING);
+				userDBHelper.deleteAllUsers();
 				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 
 					@Override

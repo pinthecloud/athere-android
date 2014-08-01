@@ -123,7 +123,7 @@ public class AhMessage implements Parcelable {
 	public String getTimeStamp() {
 		return timeStamp;
 	}
-	private void setTimeStamp(String timeStamp) {
+	public void setTimeStamp(String timeStamp) {
 		this.timeStamp = timeStamp;
 	}
 	@Override

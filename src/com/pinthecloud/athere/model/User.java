@@ -27,6 +27,8 @@ public class User implements Parcelable{
 	private int age;
 	@com.google.gson.annotations.SerializedName("squareId")
 	private String squareId;
+	@com.google.gson.annotations.SerializedName("chupaEnable")
+	private boolean chupaEnable;
 
 	public static final Parcelable.Creator<User> CREATOR = new Creator<User>(){
 		public User createFromParcel(Parcel in){
@@ -38,20 +40,7 @@ public class User implements Parcelable{
 	};
 
 	public User() {
-	}
-	public User(String id, String nickName, String profilePic, String mobileId,
-			String registrationId, boolean isMale, int companyNum, int age,
-			String squareId) {
-		super();
-		this.id = id;
-		this.nickName = nickName;
-		this.profilePic = profilePic;
-		this.mobileId = mobileId;
-		this.registrationId = registrationId;
-		this.isMale = isMale;
-		this.companyNum = companyNum;
-		this.age = age;
-		this.squareId = squareId;
+		
 	}
 	public User(Parcel in){
 		readToParcel(in);
@@ -110,6 +99,12 @@ public class User implements Parcelable{
 	public void setSquareId(String squareId) {
 		this.squareId = squareId;
 	}
+	public boolean isChupaEnable() {
+		return chupaEnable;
+	}
+	public void setChupaEnable(boolean chupaEnable) {
+		this.chupaEnable = chupaEnable;
+	}
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -125,7 +120,8 @@ public class User implements Parcelable{
 		dest.writeInt(isMale? 1 : 0);	
 		dest.writeInt(companyNum);	
 		dest.writeInt(age);	
-		dest.writeString(squareId);	
+		dest.writeString(squareId);
+		dest.writeInt(chupaEnable? 1 : 0);
 	}
 	public void readToParcel(Parcel in){
 		id = in.readString();
@@ -137,6 +133,7 @@ public class User implements Parcelable{
 		companyNum = in.readInt();
 		age = in.readInt();
 		squareId = in.readString();
+		chupaEnable = in.readInt() == 1;
 	}
 
 	public static User addUserTest(){
@@ -150,6 +147,7 @@ public class User implements Parcelable{
 		user.companyNum = getRandomInt();
 		user.age = getRandomInt();
 		user.squareId = getRandomString();
+		user.chupaEnable = getRandomInt() < 20;
 		return user;
 	}
 

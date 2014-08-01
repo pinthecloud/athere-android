@@ -341,7 +341,7 @@ public class SquareProfileFragment extends AhFragment{
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 				
 				AhMessage message = new AhMessage();
-				message.setContent("Enter Square");
+				message.setContent("인원 : " + user.getCompanyNum() + "명");
 				message.setSender(user.getNickName());
 				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 				message.setReceiverId(square.getId());
@@ -352,6 +352,7 @@ public class SquareProfileFragment extends AhFragment{
 
 				List<User> userList = userHelper.getUserListSync(square.getId());
 				userDBHelper.addAllUsers(userList);
+				userDBHelper.deleteUser(id);
 				
 				activity.runOnUiThread(new Runnable(){
 
