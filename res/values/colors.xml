@@ -2,5 +2,5 @@
 <resources>
     <color name="square_tab_bg_pressed">#6633B5E5</color>
     <color name="line">#dbdbdb</color>
-    <color name="row_square_list_selector_bg_pressed">#ff0047</color>
+    <color name="red">#ff0047</color>
 </resources>

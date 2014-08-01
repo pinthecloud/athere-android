@@ -67,7 +67,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		 * Set UI Component
 		 */
 		mActionBar = getActionBar();
-		mActionBar.setCustomView(R.layout.action_bar_general);
+		mActionBar.setCustomView(R.layout.action_bar_square);
 		mCustomActionBarView = mActionBar.getCustomView();
 		mTitleTextView = (TextView) mCustomActionBarView.findViewById(R.id.action_bar_general_title);
 
