@@ -34,21 +34,27 @@
                 android:id="@+id/square_profile_frag_profile_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/des_profile_image" />
+                android:contentDescription="@string/profile_image" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/square_profile_frag_self_camera_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/square_profile_frag_profile_picture"
-                android:layout_alignTop="@+id/square_profile_frag_profile_picture" />
+                android:layout_alignTop="@+id/square_profile_frag_profile_picture"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/rotate"
+                android:src="@drawable/camera_rotate" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/square_profile_frag_camera_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/square_profile_frag_profile_picture"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/take"
+                android:src="@drawable/camera_take" />
         </RelativeLayout>
 
         <LinearLayout
@@ -59,31 +65,23 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+            <EditText
+                android:id="@+id/square_profile_frag_number_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center|bottom"
+                android:hint="@string/number_of_member"
+                android:inputType="number"
+                android:textSize="@dimen/font_normal" />
 
-                <NumberPicker
-                    android:id="@+id/square_profile_frag_number_picker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/square_profile_frag_number_picker"
-                    android:text="@string/number_of_persons" />
-            </RelativeLayout>
-
-            <Button
+            <ImageButton
                 android:id="@+id/square_profile_frag_start_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="@string/complete" />
+                android:background="@android:color/transparent"
+                android:contentDescription="@android:string/ok"
+                android:src="@drawable/ok_image_button_bg" />
         </LinearLayout>
     </LinearLayout>
 

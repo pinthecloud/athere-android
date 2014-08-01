@@ -36,6 +36,7 @@ public class SplashActivity extends AhActivity {
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 		AhGlobalVariable.APP_NAME = getResources().getString(R.string.app_name);
 
+
 		/*
 		 * Exception for hongkun
 		 */
@@ -82,7 +83,6 @@ public class SplashActivity extends AhActivity {
 								intent.setClass(SplashActivity.this, SquareActivity.class);
 							}
 							startActivity(intent);
-							finish();
 						}
 
 					}, SPLASH_TIME);
@@ -108,16 +108,15 @@ public class SplashActivity extends AhActivity {
 						intent.setClass(SplashActivity.this, BasicProfileActivity.class);
 					} else if(!isLooggedInSquare){
 						// Already logged in
-						//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+						//						intent.setClass(SplashActivity.this, BasicProfileActivity.class);
 						intent.setClass(SplashActivity.this, SquareListActivity.class);
 					} else{
 						// Has entered a square
 						//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
-						intent.setClass(SplashActivity.this, SquareListActivity.class);
-						//					intent.setClass(SplashActivity.this, SquareActivity.class);
+						//						intent.setClass(SplashActivity.this, SquareListActivity.class);
+						intent.setClass(SplashActivity.this, SquareActivity.class);
 					}
 					startActivity(intent);
-					finish();
 				}
 
 			}, SPLASH_TIME);

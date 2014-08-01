@@ -1,18 +1,25 @@
 <resources>
-    
+
     <!-- Screen -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="action_bar_divider_height">1dp</dimen>
+    <dimen name="tab_height">48dp</dimen>
+    <dimen name="drawer_width">300dp</dimen>
 
-    <!-- Drawer -->
-    <dimen name="drawer_width">320dp</dimen>
+    <!-- Temp -->
     <dimen name="square_drawer_profile_height">120dp</dimen>
 
-    <!-- Tab -->
-    <dimen name="tab_height">48dp</dimen>
-
-    <!-- Profile Image -->
+    <!-- General UI -->
     <dimen name="square_chat_profile_width">48dp</dimen>
     <dimen name="square_chat_profile_height">48dp</dimen>
+    <dimen name="square_list_height">88dp</dimen>
+    <dimen name="square_list_row_line_left">48dp</dimen>
+    <dimen name="square_list_row_line_right">48dp</dimen>
+    <dimen name="basic_profile_logo_margin_bottom">26dp</dimen>
+    
+    <!-- Font size -->
+    <dimen name="font_small">12sp</dimen>
+    <dimen name="font_normal">14sp</dimen>
 
 </resources>

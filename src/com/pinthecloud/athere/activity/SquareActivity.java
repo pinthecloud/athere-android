@@ -67,7 +67,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		 * Set UI Component
 		 */
 		mActionBar = getActionBar();
-		mActionBar.setCustomView(R.layout.action_bar_general);
+		mActionBar.setCustomView(R.layout.action_bar_square);
 		mCustomActionBarView = mActionBar.getCustomView();
 		mTitleTextView = (TextView) mCustomActionBarView.findViewById(R.id.action_bar_general_title);
 
@@ -104,9 +104,9 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 				mDrawerLayout, /* DrawerLayout object */
-				R.drawable.drawer, /* nav drawer image to replace 'Up' caret */
-				R.string.des_drawer_open, /* "open drawer" description for accessibility */
-				R.string.des_drawer_close /* "close drawer" description for accessibility */
+				R.drawable.sidebar, /* nav drawer image to replace 'Up' caret */
+				R.string.drawer_open, /* "open drawer" description for accessibility */
+				R.string.drawer_close /* "close drawer" description for accessibility */
 				)
 		{
 			@Override
@@ -166,7 +166,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
-		case R.id.square_menu_drawer:
+		case R.id.menu_square_drawer:
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{

@@ -12,15 +12,12 @@
     <string name="title_activity_hongkun_test_acitivity">HongkunTestAcitivity</string>
     <string name="title_activity_ah">AhActivity</string>
     <string name="title_activity_current_location">CurrentLocation</string>
-    <string name="title_square_menu_drawer">Square Drawer</string>
-
-    <!-- Description -->
-    <string name="des_drawer_open">Open drawer</string>
-    <string name="des_drawer_close">Close drawer</string>
-    <string name="des_logo">Chupa Logo</string>
-    <string name="des_profile_image">Profile Image</string>
 
     <!-- Word -->
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
+    <string name="logo">Logo</string>
+    <string name="profile_image">Profile Image</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="male">Male</string>
@@ -32,9 +29,13 @@
     <string name="profile">Profile</string>
     <string name="gender">Gender</string>
     <string name="birth_of_year">Birth of Year</string>
-    <string name="number_of_persons">Number of persons</string>
+    <string name="number_of_member">Number of Member</string>
     <string name="location_consent">Location Consent</string>
-    <string name="nickname">Nickname</string>
+    <string name="nick_name">Nick Name</string>
+    <string name="drawer">Drawer</string>
+    <string name="people_number">People Number</string>
+    <string name="rotate">Rotate</string>
+    <string name="take">take</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
