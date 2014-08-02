@@ -33,10 +33,13 @@
             <requestFocus />
         </EditText>
 
-        <Button
+        <ImageButton
             android:id="@+id/square_chat_frag_send_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/send_image_button_bg"
+            android:contentDescription="@string/send"
             android:enabled="false" />
     </LinearLayout>
 

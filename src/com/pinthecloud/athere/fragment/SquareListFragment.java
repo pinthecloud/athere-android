@@ -77,7 +77,7 @@ public class SquareListFragment extends AhFragment{
 				startActivity(intent);
 			}
 		});
-		getNearSquare();
+		getNearSquares();
 
 		return view;
 	}
@@ -87,7 +87,7 @@ public class SquareListFragment extends AhFragment{
 	 * Get square near from user
 	 * Now it just gets all squares cause of location law. (lati and longi is 0)
 	 */
-	private void getNearSquare(){
+	private void getNearSquares(){
 		mProgressBar.setVisibility(View.VISIBLE);
 
 		squareHelper.getSquareListAsync(0, 0, new AhListCallback<Square>() {
