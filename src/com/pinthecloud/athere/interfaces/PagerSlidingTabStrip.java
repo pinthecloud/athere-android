@@ -89,14 +89,19 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private int tabTextSize = 12;
 	private int tabTextColor = 0xFF666666;
+	private int tabDeactivateTextColor = 0xFFCCCCCC;
+
 	private Typeface tabTypeface = null;
 	private int tabTypefaceStyle = Typeface.BOLD;
 
 	private int lastScrollX = 0;
 
 	private int tabBackgroundResId = R.drawable.tab_bg;
+	private int transparentColorId = android.R.color.transparent;
 
 	private Locale locale;
+
+	private boolean tabSwitch;
 
 	public PagerSlidingTabStrip(Context context) {
 		this(context, null);
@@ -151,6 +156,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		shouldExpand = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldExpand, shouldExpand);
 		scrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsScrollOffset, scrollOffset);
 		textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
+		tabSwitch = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTabSwitch, tabSwitch);
+		tabTextColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsActivateTextColor, tabTextColor);
+		tabDeactivateTextColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsDeactivateTextColor, tabDeactivateTextColor);
 
 		a.recycle();
 
@@ -262,14 +270,14 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 			View v = tabsContainer.getChildAt(i);
 
-			v.setBackgroundResource(tabBackgroundResId);
+			v.setBackgroundResource(!tabSwitch ? tabBackgroundResId : transparentColorId);
 
 			if (v instanceof TextView) {
 
 				TextView tab = (TextView) v;
 				tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
 				tab.setTypeface(tabTypeface, tabTypefaceStyle);
-				tab.setTextColor(tabTextColor);
+				tab.setTextColor(tabSwitch && i != 0 ? tabDeactivateTextColor : tabTextColor);
 
 				// setAllCaps() is only available from API 14, so the upper case is made manually if we are on a
 				// pre-ICS-build
@@ -280,9 +288,24 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 						tab.setText(tab.getText().toString().toUpperCase(locale));
 					}
 				}
+			} else if(v instanceof ImageButton){
+				ImageButton tab = (ImageButton) v;
+				tab.setSelected(tabSwitch && i == 0 ? true : false);
 			}
 		}
+	}
 
+	private void updateActivateTab(final int position) {
+		for (int i = 0; i < tabCount; i++) {
+			View v = tabsContainer.getChildAt(i);
+
+			if (v instanceof TextView) {
+				TextView tab = (TextView) v;
+				tab.setTextColor(position == i ? tabTextColor : tabDeactivateTextColor); 
+			} else {
+				v.setSelected(position == i ? true : false);
+			}
+		}
 	}
 
 	private void scrollToChild(int position, int offset) {
@@ -380,6 +403,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 		@Override
 		public void onPageSelected(int position) {
+			if (tabSwitch) {
+				updateActivateTab(position);
+			}
 			if (delegatePageListener != null) {
 				delegatePageListener.onPageSelected(position);
 			}
@@ -526,6 +552,21 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	public int getTabPaddingLeftRight() {
 		return tabPadding;
+	}
+
+	public void setTabSwitch(boolean tabSwitch) {
+		this.tabSwitch = tabSwitch;
+		updateTabStyles();
+	}
+
+	public void setActivateTextColor(int activateTextColor) {
+		this.tabTextColor = activateTextColor;
+		updateTabStyles();
+	}
+
+	public void setDeactivateTextColor(int deactivateTextColor) {
+		this.tabDeactivateTextColor = deactivateTextColor;
+		updateTabStyles();
 	}
 
 	@Override

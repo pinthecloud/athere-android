@@ -36,7 +36,7 @@
             android:id="@+id/basic_profile_frag_male_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/basic_profile_gender_toggle_bg"
+            android:background="@drawable/gender_toggle_bg"
             android:checked="true"
             android:enabled="false"
             android:textOff=""
@@ -46,7 +46,7 @@
             android:id="@+id/basic_profile_frag_female_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/basic_profile_gender_toggle_bg"
+            android:background="@drawable/gender_toggle_bg"
             android:textOff=""
             android:textOn="" />
     </LinearLayout>

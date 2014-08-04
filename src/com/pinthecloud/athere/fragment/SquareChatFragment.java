@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -30,11 +31,15 @@ import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class SquareChatFragment extends AhFragment{
 
+	private Square square;
+
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
 	private EditText messageEditText;
-	private Button sendButton;
+	private ImageButton sendButton;
 	private Button tempBackButton;
+
+	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
 	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
@@ -42,11 +47,8 @@ public class SquareChatFragment extends AhFragment{
 	private MessageDBHelper messageDBHelper;
 	private UserInfoFetchBuffer userInfoFetchBuffer;
 
-	SquareDrawerFragmentCallbacks callbacks;
+	private SquareDrawerFragmentCallbacks callbacks;
 
-	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-
-	private Square square;
 
 	public SquareChatFragment(Square square) {
 		super();
@@ -74,7 +76,7 @@ public class SquareChatFragment extends AhFragment{
 		 */
 		messageListView = (ListView) view.findViewById(R.id.square_chat_frag_list);
 		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
-		sendButton = (Button) view.findViewById(R.id.square_chat_frag_send_button);
+		sendButton = (ImageButton) view.findViewById(R.id.square_chat_frag_send_button);
 		tempBackButton = (Button) view.findViewById(R.id.square_chat_frag_option_button);
 
 
@@ -141,6 +143,7 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
+		sendButton.setEnabled(false);
 
 
 		/**

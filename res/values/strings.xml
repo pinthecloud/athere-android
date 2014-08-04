@@ -36,6 +36,7 @@
     <string name="people_number">People Number</string>
     <string name="rotate">Rotate</string>
     <string name="take">take</string>
+    <string name="send">send</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>

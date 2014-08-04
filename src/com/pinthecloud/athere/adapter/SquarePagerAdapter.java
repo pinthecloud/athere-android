@@ -7,7 +7,7 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
-import com.pinthecloud.athere.fragment.SquareChupaFragment;
+import com.pinthecloud.athere.fragment.SquareChupaListFragment;
 import com.pinthecloud.athere.model.Square;
 
 public class SquarePagerAdapter extends FragmentStatePagerAdapter {
@@ -29,7 +29,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 		case 0:
 			return fragment = new SquareChatFragment(square);
 		case 1:
-			return fragment = new SquareChupaFragment(square);
+			return fragment = new SquareChupaListFragment(square);
 		}
 		return fragment;
 	}
