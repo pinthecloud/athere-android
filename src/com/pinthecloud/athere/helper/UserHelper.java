@@ -156,7 +156,6 @@ public class UserHelper {
 		});
 	}
 
-
 	public List<User> getUserListSync(String squareId){
 		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
 
