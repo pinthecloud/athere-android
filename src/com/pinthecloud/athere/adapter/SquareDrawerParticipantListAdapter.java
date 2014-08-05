@@ -3,11 +3,11 @@ package com.pinthecloud.athere.adapter;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +25,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 	private TextView age;
 	private TextView companyNum;
 	private TextView isMale;
+	private Button chupaBtn;
 
 	public SquareDrawerParticipantListAdapter(Context context, 
 			int layoutId, List<User> items) {
@@ -52,12 +53,22 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			age = (TextView)view.findViewById(R.id.drawer_user_age);
 			companyNum = (TextView)view.findViewById(R.id.drawer_user_company_num);
 			isMale = (TextView)view.findViewById(R.id.drawer_user_is_male);
+			chupaBtn = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
 			
 			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
 			nickName.setText(user.getNickName());
 			age.setText(""+user.getAge());
 			companyNum.setText(""+user.getCompanyNum());
 			isMale.setText(user.isMale() ? "M" : "F");
+			
+			chupaBtn.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 		}
 		return view;
 	}

@@ -42,4 +42,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:paddingRight="10dp" />
 
+    <Button
+        android:id="@+id/drawer_user_chupa_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chupa" />
+
 </LinearLayout>

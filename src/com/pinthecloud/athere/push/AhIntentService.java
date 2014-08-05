@@ -200,7 +200,7 @@ public class AhIntentService extends IntentService {
 	}
 
 	private AhMessage parseMessageIntent(Intent intent) throws JSONException {
-		AhMessage message = new AhMessage();
+		AhMessage.Builder messageBuilder = new AhMessage.Builder();
 		Bundle b = intent.getExtras();
 		String jsonStr = b.getString("message");
 
@@ -216,20 +216,23 @@ public class AhIntentService extends IntentService {
 			String receiver = jo.getString("receiver");
 			String receiverId = jo.getString("receiverId");
 			String timeStamp = jo.getString("timeStamp");
+			String chupaCommunId = jo.getString("chupaCommunId");
 
-			message.setType(type);
-			message.setContent(content);
-			message.setSender(sender);
-			message.setSenderId(senderId);
-			message.setReceiver(receiver);
-			message.setReceiverId(receiverId);
-			message.setTimeStamp(timeStamp);
+			messageBuilder.setType(type);
+			messageBuilder.setContent(content);
+			messageBuilder.setSender(sender);
+			messageBuilder.setSenderId(senderId);
+			messageBuilder.setReceiver(receiver);
+			messageBuilder.setReceiverId(receiverId);
+			messageBuilder.setTimeStamp(timeStamp);
+			messageBuilder.setChupaCommunId(chupaCommunId);
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw e;
 		}
 
-		return message;
+		return messageBuilder.build();
 	}
 	
 	private String parseUserIdIntent(Intent intent){

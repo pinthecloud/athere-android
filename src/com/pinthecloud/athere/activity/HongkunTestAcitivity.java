@@ -38,7 +38,7 @@ public class HongkunTestAcitivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_hongkun_test_acitivity);
-		btn01 = (Button)findViewById(R.id.button1);
+		btn01 = (Button)findViewById(R.id.drawer_user_chupa_btn);
 		btn02 = (Button)findViewById(R.id.button2);
 		btn03 = (Button)findViewById(R.id.button3);
 		btn04 = (Button)findViewById(R.id.button4);

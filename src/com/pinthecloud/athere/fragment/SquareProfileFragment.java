@@ -40,6 +40,7 @@ import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhMessage.Builder;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
@@ -354,13 +355,13 @@ public class SquareProfileFragment extends AhFragment{
 				String id = userHelper.enterSquareSync(user);
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 
-				AhMessage message = new AhMessage();
-				message.setContent("인원 : " + user.getCompanyNum() + "명");
-				message.setSender(user.getNickName());
-				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-				message.setReceiverId(square.getId());
-				message.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
-
+				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+				messageBuilder.setContent("인원 : " + user.getCompanyNum() + "명");
+				messageBuilder.setSender(user.getNickName());
+				messageBuilder.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
+				messageBuilder.setReceiverId(square.getId());
+				messageBuilder.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+				AhMessage message = messageBuilder.build();
 				// Send message to server
 				messageHelper.sendMessageSync(message);
 

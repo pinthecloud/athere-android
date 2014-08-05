@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 
+import com.pinthecloud.athere.AhGlobalVariable;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -47,6 +49,7 @@ public class AhMessage implements Parcelable {
 	private String receiver = "";
 	private String receiverId = "";
 	private String timeStamp = "";
+	private String chupaCommunId;
 	private int status = 0;
 
 
@@ -59,11 +62,8 @@ public class AhMessage implements Parcelable {
 		}
 	};
 
-	public AhMessage() {
-		Calendar calendar = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
-		String time = sdf.format(calendar.getTime());
-		this.setTimeStamp(time);
+	private AhMessage() {
+		
 	}
 	public AhMessage(Parcel in){
 		this();
@@ -72,48 +72,48 @@ public class AhMessage implements Parcelable {
 	public String getId() {
 		return id;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
+//	public void setId(String id) {
+//		this.id = id;
+//	}
 	public String getType() {
 		return type;
 	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public void setType(MESSAGE_TYPE type) {
-		this.type = type.toString();
-	}
+//	public void setType(String type) {
+//		this.type = type;
+//	}
+//	public void setType(MESSAGE_TYPE type) {
+//		this.type = type.toString();
+//	}
 	public String getContent() {
 		return content;
 	}
-	public void setContent(String content) {
-		this.content = content;
-	}
+//	public void setContent(String content) {
+//		this.content = content;
+//	}
 	public String getSender() {
 		return sender;
 	}
-	public void setSender(String sender) {
-		this.sender = sender;
-	}
+//	public void setSender(String sender) {
+//		this.sender = sender;
+//	}
 	public String getSenderId() {
 		return senderId;
 	}
-	public void setSenderId(String senderId) {
-		this.senderId = senderId;
-	}
+//	public void setSenderId(String senderId) {
+//		this.senderId = senderId;
+//	}
 	public String getReceiver() {
 		return receiver;
 	}
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
+//	public void setReceiver(String receiver) {
+//		this.receiver = receiver;
+//	}
 	public String getReceiverId() {
 		return receiverId;
 	}
-	public void setReceiverId(String receiverId) {
-		this.receiverId = receiverId;
-	}
+//	public void setReceiverId(String receiverId) {
+//		this.receiverId = receiverId;
+//	}
 	public int getStatus() {
 		return status;
 	}
@@ -123,9 +123,15 @@ public class AhMessage implements Parcelable {
 	public String getTimeStamp() {
 		return timeStamp;
 	}
-	public void setTimeStamp(String timeStamp) {
-		this.timeStamp = timeStamp;
+//	public void setTimeStamp(String timeStamp) {
+//		this.timeStamp = timeStamp;
+//	}
+	public String getChupaCommunId() {
+		return chupaCommunId;
 	}
+//	public void setChupaCommunId(String chupaCommunId) {
+//		this.chupaCommunId = chupaCommunId;
+//	}
 	@Override
 	public String toString() {
 		return this.id + " : " + 
@@ -135,7 +141,8 @@ public class AhMessage implements Parcelable {
 				this.senderId + " : " +
 				this.receiver + " : " + 
 				this.receiverId + " : " +
-				this.timeStamp;
+				this.timeStamp + " : " +
+				this.chupaCommunId;
 	}
 	@Override
 	public int describeContents() {
@@ -152,6 +159,7 @@ public class AhMessage implements Parcelable {
 		dest.writeString(receiverId);
 		dest.writeInt(status);
 		dest.writeString(timeStamp);
+		dest.writeString(chupaCommunId);
 	}
 
 	public void readToParcel(Parcel in){
@@ -164,6 +172,7 @@ public class AhMessage implements Parcelable {
 		receiverId = in.readString();
 		status = in.readInt();
 		timeStamp = in.readString();
+		chupaCommunId = in.readString();
 	}
 
 	public boolean isMine(String id){
@@ -174,13 +183,13 @@ public class AhMessage implements Parcelable {
 	public static AhMessage buildMessage(String type){
 		AhMessage message = new AhMessage();
 		
-		message.setId("id-"+(count));
-		message.setType(type);
-		message.setContent("Content-" + (count));
-		message.setSender("sender-"+count);
-		message.setSenderId("senderId-"+count);
-		message.setReceiver("receiver-"+count);
-		message.setReceiverId("receiverId-"+count);
+		message.id = ("id-"+(count));
+		message.type = (type);
+		message.content = ("Content-" + (count));
+		message.sender = ("sender-"+count);
+		message.senderId = ("senderId-"+count);
+		message.receiver = ("receiver-"+count);
+		message.receiverId = ("receiverId-"+count);
 		count++;
 		
 		return message;
@@ -206,5 +215,94 @@ public class AhMessage implements Parcelable {
 		}
 		
 		return buildMessage(type);
+	}
+	
+	public static class Builder {
+		
+		private static final String DEFAULT_STRING = "DEFAULT_STRING";
+		
+		private String id = "";
+		private String type = "";
+		private String content = "";
+		private String sender = "";
+		private String senderId = "";
+		private String receiver = "";
+		private String receiverId = "";
+		private String timeStamp = DEFAULT_STRING;
+		private String chupaCommunId = DEFAULT_STRING;
+		
+		public Builder setId(String id) {
+			this.id = id;
+			return this;
+		}
+		public Builder setType(String type) {
+			this.type = type;
+			return this;
+		}
+		public Builder setType(AhMessage.MESSAGE_TYPE type) {
+			this.type = type.toString();
+			return this;
+		}
+		public Builder setContent(String content) {
+			this.content = content;
+			return this;
+		}
+		public Builder setSender(String sender) {
+			this.sender = sender;
+			return this;
+		}
+		public Builder setSenderId(String senderId) {
+			this.senderId = senderId;
+			return this;
+		}
+		public Builder setReceiver(String receiver) {
+			this.receiver = receiver;
+			return this;
+		}
+		public Builder setReceiverId(String receiverId) {
+			this.receiverId = receiverId;
+			return this;
+		}
+		public Builder setTimeStamp(String timeStamp) {
+			this.timeStamp = timeStamp;
+			return this;
+		}
+		public Builder setChupaCommunId(String chupaCommunId) {
+			this.chupaCommunId = chupaCommunId;
+			return this;
+		}
+		
+		public AhMessage build(){
+			AhMessage message = new AhMessage();
+			
+			message.id = id;
+			message.type = type;
+			message.content = content;
+			message.sender = sender;
+			message.senderId = senderId;
+			message.receiver = receiver;
+			message.receiverId = receiverId;
+			
+			if (this.timeStamp.equals(DEFAULT_STRING)){
+				Calendar calendar = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
+				String time = sdf.format(calendar.getTime());
+				message.timeStamp = time;
+			} else {
+				message.timeStamp = timeStamp;
+			}
+			
+			if (this.chupaCommunId.equals(DEFAULT_STRING)){
+				if (this.senderId.compareTo(this.receiverId) > 0) {
+					message.chupaCommunId = message.senderId + message.receiverId;
+				} else {
+					message.chupaCommunId = message.receiverId + message.senderId;
+				}
+			} else {
+				message.chupaCommunId = chupaCommunId;
+			}
+			
+			return message;
+		}
 	}
 }

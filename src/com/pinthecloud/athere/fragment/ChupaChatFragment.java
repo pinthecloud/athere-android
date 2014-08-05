@@ -3,14 +3,13 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,65 +18,53 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
-import com.pinthecloud.athere.fragment.SquareDrawerFragment.SquareDrawerFragmentCallbacks;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.model.AhMessage.Builder;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
-public class SquareChatFragment extends AhFragment{
-
-	private Square square;
-
-	private ListView messageListView;
+public class ChupaChatFragment extends AhFragment {
+	
+	ListView messageListView;
+	EditText messageEditText;
+	ImageButton sendButton;
+	
+	
+	MessageHelper messageHelper;
+	MessageDBHelper messageDBHelper;
+	UserHelper userHelper;
+	UserDBHelper userDBHelper;
+	
+	
 	private SquareChatListAdapter messageListAdapter;
-	private EditText messageEditText;
-	private ImageButton sendButton;
-	private Button tempBackButton;
-
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-
-	private UserHelper userHelper;
-	private UserDBHelper userDBHelper;
-	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
-	private UserInfoFetchBuffer userInfoFetchBuffer;
-
-	private SquareDrawerFragmentCallbacks callbacks;
-
-
-	public SquareChatFragment(Square square) {
-		super();
-		this.square = square;
-	}
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
-		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
+		
 	}
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
-
+		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
+		
 		/*
 		 * Set UI component
 		 */
-		messageListView = (ListView) view.findViewById(R.id.square_chat_frag_list);
-		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
-		sendButton = (ImageButton) view.findViewById(R.id.square_chat_frag_send_button);
-		tempBackButton = (Button) view.findViewById(R.id.square_chat_frag_option_button);
+		messageListView = (ListView) view.findViewById(R.id.chupa_chat_frag_list);
+		messageEditText = (EditText) view.findViewById(R.id.chupa_chat_frag_message_text);
+		sendButton = (ImageButton) view.findViewById(R.id.chupa_chat_frag_send_button);
+		//tempBackButton = (Button) view.findViewById(R.id.chupa_chat_frag_option_button);
 
 
 		/*
@@ -124,8 +111,8 @@ public class SquareChatFragment extends AhFragment{
 				messageBuilder.setContent(messageEditText.getText().toString());
 				messageBuilder.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 				messageBuilder.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-				messageBuilder.setReceiverId(square.getId());
-				messageBuilder.setType(AhMessage.MESSAGE_TYPE.TALK);
+				messageBuilder.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
+				messageBuilder.setType(AhMessage.MESSAGE_TYPE.CHUPA);
 				
 				final AhMessage message = messageBuilder.build();
 				message.setStatus(AhMessage.SENDING);
@@ -146,41 +133,6 @@ public class SquareChatFragment extends AhFragment{
 			}
 		});
 		sendButton.setEnabled(false);
-
-
-		/**
-		 * temp Button for getting out of the chat Room
-		 */
-//		tempBackButton.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// Make message and send it
-//				final AhMessage message = new AhMessage();
-//				message.setContent("Exit Square");
-//				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-//				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-//				message.setReceiverId(square.getId());
-//				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
-//				message.setStatus(AhMessage.SENDING);
-//				userDBHelper.deleteAllUsers();
-//				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-//
-//					@Override
-//					public void onCompleted(AhMessage entity) {
-//						message.setStatus(AhMessage.SENT);
-//
-//						activity.runOnUiThread(new Runnable(){
-//
-//							@Override
-//							public void run() {
-//								callbacks.exitSquare();
-//							}
-//						});
-//					}
-//				});
-//			}
-//		});
 
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -230,13 +182,9 @@ public class SquareChatFragment extends AhFragment{
 				}
 			});
 		}
-
+		
 		return view;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		callbacks = (SquareDrawerFragmentCallbacks) activity;
-	}
+
 }

@@ -2,6 +2,7 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
 import com.pinthecloud.athere.model.Square;
 
@@ -27,6 +30,14 @@ public class SquareChupaListFragment extends AhFragment{
 	public SquareChupaListFragment(Square square) {
 		super();
 		this.square = square;
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		
 	}
 
 	@Override
@@ -49,6 +60,8 @@ public class SquareChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				Intent i = new Intent(getActivity(), ChupaChatActivity.class);
+				startActivity(i);
 			}
 		});
 		getChupas();

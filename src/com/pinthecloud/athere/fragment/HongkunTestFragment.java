@@ -61,7 +61,7 @@ public class HongkunTestFragment extends AhFragment {
 		
 		countArr = new int[6];
 		btnArr = new Button[6];
-		btnArr[0] = (Button)view.findViewById(R.id.button1);
+		btnArr[0] = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
 		btnArr[1] = (Button)view.findViewById(R.id.button2);
 		btnArr[2] = (Button)view.findViewById(R.id.button3);
 		btnArr[3] = (Button)view.findViewById(R.id.button4);
