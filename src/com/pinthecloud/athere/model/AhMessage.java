@@ -5,8 +5,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 
-import com.pinthecloud.athere.AhGlobalVariable;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,7 +14,7 @@ public class AhMessage implements Parcelable {
 	public static final int SENT = 1;
 	public static final int FAIL = -1;
 
-	public enum MESSAGE_TYPE {
+	public enum TYPE {
 		// No user Update
 		TALK("TALK"),			// To Square Users
 		SHOUTING("SHOUTING"),	// To Square Users
@@ -29,7 +27,7 @@ public class AhMessage implements Parcelable {
 
 		private final String value;
 
-		private MESSAGE_TYPE(final String value) {
+		private TYPE(final String value) {
 			this.value = value;
 		}
 		public String getValue() {
@@ -195,23 +193,23 @@ public class AhMessage implements Parcelable {
 		return message;
 	}
 	
-	public static AhMessage buildMessage(AhMessage.MESSAGE_TYPE type){
+	public static AhMessage buildMessage(AhMessage.TYPE type){
 		return buildMessage(type.toString());
 	}
 	
 	public static AhMessage buildMessage(){
-		AhMessage.MESSAGE_TYPE type;
+		AhMessage.TYPE type;
 		Random r = new Random();
 		
 		int _count = r.nextInt(6);
 		switch(_count){
-			case 0: type = AhMessage.MESSAGE_TYPE.TALK; break;
-			case 1: type = AhMessage.MESSAGE_TYPE.CHUPA; break;
-			case 2: type = AhMessage.MESSAGE_TYPE.SHOUTING; break;
-			case 3: type = AhMessage.MESSAGE_TYPE.ENTER_SQUARE; break;
-			case 4: type = AhMessage.MESSAGE_TYPE.EXIT_SQUARE; break;
-			case 5: type = AhMessage.MESSAGE_TYPE.UPDATE_USER_INFO; break;
-			default: type = AhMessage.MESSAGE_TYPE.CHUPA; break;
+			case 0: type = AhMessage.TYPE.TALK; break;
+			case 1: type = AhMessage.TYPE.CHUPA; break;
+			case 2: type = AhMessage.TYPE.SHOUTING; break;
+			case 3: type = AhMessage.TYPE.ENTER_SQUARE; break;
+			case 4: type = AhMessage.TYPE.EXIT_SQUARE; break;
+			case 5: type = AhMessage.TYPE.UPDATE_USER_INFO; break;
+			default: type = AhMessage.TYPE.CHUPA; break;
 		}
 		
 		return buildMessage(type);
@@ -239,7 +237,7 @@ public class AhMessage implements Parcelable {
 			this.type = type;
 			return this;
 		}
-		public Builder setType(AhMessage.MESSAGE_TYPE type) {
+		public Builder setType(AhMessage.TYPE type) {
 			this.type = type.toString();
 			return this;
 		}

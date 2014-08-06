@@ -78,5 +78,6 @@
         <activity
             android:name=".activity.SquareActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.ChupaChatActivity"></activity>
     </application>
 </manifest>

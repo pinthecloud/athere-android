@@ -25,6 +25,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
@@ -47,6 +48,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerFragmentCallbacks callbacks;
 	
 	private UserDBHelper userDBHelper;
+	private UserHelper userHelper;
 	private MessageHelper messageHelper;
 	
 	public SquareDrawerFragment _this;
@@ -55,6 +57,7 @@ public class SquareDrawerFragment extends AhFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		userDBHelper = app.getUserDBHelper();
+		userHelper = app.getUserHelper();
 		messageHelper = app.getMessageHelper();
 		userList = userDBHelper.getAllUsers();
 		Log("userList : ",userList.toString());
@@ -84,6 +87,15 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				final User user = userList.get(position);
+				
+				new AlertDialog.Builder(_this.context)
+				.setTitle("User Information")
+				.setMessage("Show User Detail Info")
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.show();
+				
+				
 //				final User user = userList.get(position);
 //				final EditText et = new EditText(_this.context);
 //				
@@ -143,11 +155,11 @@ public class SquareDrawerFragment extends AhFragment {
 				
 				progressBar.setVisibility(View.VISIBLE);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent("Exit Square");
-				messageBuilder.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				messageBuilder.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-				messageBuilder.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-				messageBuilder.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
+				messageBuilder.setContent("Exit Square")
+				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+				.setType(AhMessage.TYPE.EXIT_SQUARE);
 				
 				final AhMessage message = messageBuilder.build();
 				message.setStatus(AhMessage.SENDING);
@@ -165,6 +177,23 @@ public class SquareDrawerFragment extends AhFragment {
 								callbacks.exitSquare();
 							}
 						});
+					}
+				});
+			}
+		});
+		
+		userHelper.setUserHandler(new AhEntityCallback<User>() {
+
+			@Override
+			public void onCompleted(final User user) {
+				// TODO Auto-generated method stub
+				activity.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						participantListAdapter.add(user);
+						participantListAdapter.notifyDataSetChanged();
 					}
 				});
 			}

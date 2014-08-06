@@ -3,6 +3,7 @@ package com.pinthecloud.athere.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 
@@ -45,7 +49,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
 
-		User user = items.get(position);
+		final User user = items.get(position);
 		if (user != null) {
 			// TODO
 			profilePic = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
@@ -66,7 +70,10 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+					Intent intent = new Intent(context.getApplicationContext(), ChupaChatActivity.class);
 					
+					intent.putExtra("user", user);
+					context.startActivity(intent);
 				}
 			});
 		}

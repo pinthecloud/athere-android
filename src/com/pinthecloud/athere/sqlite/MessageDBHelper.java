@@ -16,7 +16,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
-	private static int DATABASE_VERSION = 1;
+	private static int DATABASE_VERSION = 2;
 //	static{
 //		Random r= new Random();
 //		DATABASE_VERSION = r.nextInt(10) + 1; 
@@ -157,15 +157,16 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
 		
 		
-		messageBuilder.setId(_id);
-		messageBuilder.setType(type);
-		messageBuilder.setContent(content);
-		messageBuilder.setSender(sender);
-		messageBuilder.setSenderId(senderId);
-		messageBuilder.setReceiver(receiver);
-		messageBuilder.setReceiverId(receiverId);
-		messageBuilder.setTimeStamp(timeStamp);
-		messageBuilder.setChupaCommunId(chupaCommunId);
+		messageBuilder.setId(_id)
+		.setType(type)
+		.setContent(content)
+		.setSender(sender)
+		.setSenderId(senderId)
+		.setReceiver(receiver)
+		.setReceiverId(receiverId)
+		.setTimeStamp(timeStamp)
+		.setChupaCommunId(chupaCommunId);
+		
 		return messageBuilder.build();
 	}
 
@@ -211,7 +212,25 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		return messages;
 	}
 	
-	public List<AhMessage> getAllMessages(AhMessage.MESSAGE_TYPE type) {
+	public List<AhMessage> getAllMessages(String... types) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+		
+		for(String type : types){
+			messages.addAll(this.getAllMessages(type));
+		}
+		return messages;
+	}
+	
+	public List<AhMessage> getAllMessages(AhMessage.TYPE... types) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+		
+		for(AhMessage.TYPE type : types){
+			messages.addAll(this.getAllMessages(type));
+		}
+		return messages;
+	}
+	
+	public List<AhMessage> getAllMessages(AhMessage.TYPE type) {
 		return this.getAllMessages(type.toString());
 	}
 	
@@ -233,7 +252,21 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		return !cursor.moveToFirst();
 	}
 	
-	public boolean isEmpty(AhMessage.MESSAGE_TYPE type) {
+	public boolean isEmpty(String... types){
+		for (String type : types) {
+			if(!this.isEmpty(type)) return false;
+		}
+		return true;
+	}
+	
+	public boolean isEmpty(AhMessage.TYPE... types){
+		for (AhMessage.TYPE type : types) {
+			if(!this.isEmpty(type)) return false;
+		}
+		return true;
+	}
+	
+	public boolean isEmpty(AhMessage.TYPE type) {
 		return this.isEmpty(type.toString());
 	}
 	
@@ -275,11 +308,31 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 			} while (cursor.moveToNext());
 		}
 		this.deleteAllMessages(type);
-		// return contact list
+		// return message list
 		return messages;
 	}
 	
-	public List<AhMessage> popAllMessages(AhMessage.MESSAGE_TYPE type) {
+	public List<AhMessage> popAllMessages(String... types) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		for(String type : types){
+			messages.addAll(this.popAllMessages(type));
+		}
+		
+		return messages;
+	}
+	
+	public List<AhMessage> popAllMessages(AhMessage.TYPE... types) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		for(AhMessage.TYPE type : types){
+			messages.addAll(this.popAllMessages(type));
+		}
+		
+		return messages;
+	}
+	
+	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
 		return this.popAllMessages(type.toString());
 	}
 
@@ -303,7 +356,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		db.close();
 	}
 	
-	public void deleteAllMessages(AhMessage.MESSAGE_TYPE type) {
+	public void deleteAllMessages(AhMessage.TYPE type) {
 		this.deleteAllMessages(type.toString());
 	}
 	
@@ -318,7 +371,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 				" ORDER BY id";
 		
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.MESSAGE_TYPE.CHUPA.toString()});
+		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString()});
 
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {
@@ -339,7 +392,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 			" ORDER BY id";
 		
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.MESSAGE_TYPE.CHUPA.toString(), chupaCommunId});
+		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString(), chupaCommunId});
 
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {

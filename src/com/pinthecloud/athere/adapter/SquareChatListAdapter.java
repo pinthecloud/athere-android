@@ -109,11 +109,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 */
 			messageText.setText(message.getContent());
 			nickNameText.setText(message.getSender());
-
-//			Calendar calendar = Calendar.getInstance();
-//			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
-//			String time = sdf.format(calendar.getTime());
-//			timeText.setText(time);
 			timeText.setText(message.getTimeStamp());
 		}
 		return view;

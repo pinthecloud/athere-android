@@ -94,6 +94,7 @@ public class MessageHelper {
 		jo.addProperty("receiver", message.getReceiver());
 		jo.addProperty("receiverId", message.getReceiverId());
 		jo.addProperty("timeStamp", message.getTimeStamp());
+		jo.addProperty("chupaCommunId", message.getChupaCommunId());
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);

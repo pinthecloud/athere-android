@@ -21,10 +21,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	// Database Version
 	
 	private static int DATABASE_VERSION = 1;
-	static{
-		Random r= new Random();
-		DATABASE_VERSION = r.nextInt(10) + 1; 
-	}
+//	static{
+//		Random r= new Random();
+//		DATABASE_VERSION = r.nextInt(10) + 1; 
+//	}
 	// Database Name
 	private static final String DATABASE_NAME = "userManagerDB";
 

@@ -356,11 +356,11 @@ public class SquareProfileFragment extends AhFragment{
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent("인원 : " + user.getCompanyNum() + "명");
-				messageBuilder.setSender(user.getNickName());
-				messageBuilder.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-				messageBuilder.setReceiverId(square.getId());
-				messageBuilder.setType(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+				messageBuilder.setContent("인원 : " + user.getCompanyNum() + "명")
+				.setSender(user.getNickName())
+				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setReceiverId(square.getId())
+				.setType(AhMessage.TYPE.ENTER_SQUARE);
 				AhMessage message = messageBuilder.build();
 				// Send message to server
 				messageHelper.sendMessageSync(message);

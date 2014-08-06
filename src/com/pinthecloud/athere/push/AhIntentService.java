@@ -25,6 +25,7 @@ import android.util.Log;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SplashActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -85,19 +86,19 @@ public class AhIntentService extends IntentService {
 		
 		new Thread(new Runnable(){
 			public void run(){
-						
-				if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())) {
+				User user = null;
+				if (AhMessage.TYPE.TALK.toString().equals(message.getType())) {
 					
-				} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())) {
+				} else if (AhMessage.TYPE.SHOUTING.toString().equals(message.getType())) {
 					
-				} else if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())) {
-					
-				} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
-					User updateUser = userHelper.getUserSync(userId);
-					userDBHelper.addUser(updateUser);
-				} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
+				} else if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())) {
+					messageDBHelper.addMessage(message);
+				} else if (AhMessage.TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
+					user = userHelper.getUserSync(userId);
+					userDBHelper.addUser(user);
+				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
 					userDBHelper.deleteUser(userId);
-				} else if (AhMessage.MESSAGE_TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
+				} else if (AhMessage.TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
 		//			User updatedUser = userHelper.getUserSync(userId);
 		//			userDBHelper.updateUser(updatedUser);
 				}
@@ -105,13 +106,14 @@ public class AhIntentService extends IntentService {
 				if (isRunning(app)) {
 					// if the App is running, add the message to the chat room.
 					messageHelper.triggerMessageEvent(message);
+					userHelper.triggerUserEvent(user);
 					return;
 				}
 				
 				////////////////////////////////
 				// if the App is NOT Running
 				////////////////////////////////
-				if (AhMessage.MESSAGE_TYPE.TALK.toString().equals(message.getType())){
+				if (AhMessage.TYPE.TALK.toString().equals(message.getType())){
 					return; // do nothing
 				} 
 				
@@ -119,23 +121,27 @@ public class AhIntentService extends IntentService {
 				String content = "";
 				
 				messageDBHelper.addMessage(message);
-				
-				if (AhMessage.MESSAGE_TYPE.CHUPA.toString().equals(message.getType())){
+				Class<?> clazz = SquareActivity.class;
+				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
 					title = message.getSender() +"님께서 회원님에게 추파를 보내셨습니다.";
 					content = message.getContent();
-				} else if (AhMessage.MESSAGE_TYPE.SHOUTING.toString().equals(message.getType())){
+					clazz = ChupaChatActivity.class;
+				} else if (AhMessage.TYPE.SHOUTING.toString().equals(message.getType())){
 					title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
 					content = message.getContent();
-				} else if (AhMessage.MESSAGE_TYPE.ENTER_SQUARE.toString().equals(message.getType())){
+				} else if (AhMessage.TYPE.ENTER_SQUARE.toString().equals(message.getType())){
 					title = message.getSender() +"님께서 입장하셨습니다.";
 					content = message.getContent();
-				} else if (AhMessage.MESSAGE_TYPE.EXIT_SQUARE.toString().equals(message.getType())){
+				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())){
 					return;
 				} 
 		
 				// Creates an explicit intent for an Activity in your app
-				Intent resultIntent = new Intent(_this, SquareActivity.class);
-		
+				Intent resultIntent = new Intent(_this, clazz);
+				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
+					User u = userDBHelper.getUser(userId);
+					resultIntent.putExtra("user", u);
+				}
 				// The stack builder object will contain an artificial back stack for the
 				// started Activity.
 				// This ensures that navigating backward from the Activity leads out of
@@ -156,8 +162,8 @@ public class AhIntentService extends IntentService {
 				Bitmap bm = null;
 				if (sentUser == null){
 					Log.e("ERROR","no sentUser error");
-		//			Drawable myDrawable = getResources().getDrawable(R.drawable.ic_launcher);
-		//			Bitmap anImage = ((BitmapDrawable) myDrawable).getBitmap();
+//					Drawable myDrawable = getResources().getDrawable(R.drawable.ic_launcher);
+//					Bitmap anImage = ((BitmapDrawable) myDrawable).getBitmap();
 					
 					bm = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher);
 				} else {
@@ -218,14 +224,14 @@ public class AhIntentService extends IntentService {
 			String timeStamp = jo.getString("timeStamp");
 			String chupaCommunId = jo.getString("chupaCommunId");
 
-			messageBuilder.setType(type);
-			messageBuilder.setContent(content);
-			messageBuilder.setSender(sender);
-			messageBuilder.setSenderId(senderId);
-			messageBuilder.setReceiver(receiver);
-			messageBuilder.setReceiverId(receiverId);
-			messageBuilder.setTimeStamp(timeStamp);
-			messageBuilder.setChupaCommunId(chupaCommunId);
+			messageBuilder.setType(type)
+			.setContent(content)
+			.setSender(sender)
+			.setSenderId(senderId)
+			.setReceiver(receiver)
+			.setReceiverId(receiverId)
+			.setTimeStamp(timeStamp)
+			.setChupaCommunId(chupaCommunId);
 			
 		} catch (JSONException e) {
 			e.printStackTrace();

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -121,11 +123,11 @@ public class SquareChatFragment extends AhFragment{
 			public void onClick(View v) {
 				// Make message and send it
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(messageEditText.getText().toString());
-				messageBuilder.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				messageBuilder.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-				messageBuilder.setReceiverId(square.getId());
-				messageBuilder.setType(AhMessage.MESSAGE_TYPE.TALK);
+				messageBuilder.setContent(messageEditText.getText().toString())
+				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setReceiverId(square.getId())
+				.setType(AhMessage.TYPE.TALK);
 				
 				final AhMessage message = messageBuilder.build();
 				message.setStatus(AhMessage.SENDING);
@@ -196,13 +198,7 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-
-				//				List<String> userIdList = userInfoFetchBuffer.popAllUsersId();
-				//				
-				//				for(String id : userIdList) {
-				//					UserDBHelper. userHelper.getUserSync(id);
-				//				}
-
+				
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -215,8 +211,8 @@ public class SquareChatFragment extends AhFragment{
 			}
 		});
 
-		if (!messageDBHelper.isEmpty()) {
-			final List<AhMessage> messageListFromBuffer = messageDBHelper.popAllMessages();
+		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE)) {
+			final List<AhMessage> messageListFromBuffer = messageDBHelper.popAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE);
 			activity.runOnUiThread(new Runnable() {
 
 				@Override

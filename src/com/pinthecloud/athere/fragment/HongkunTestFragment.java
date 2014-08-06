@@ -79,13 +79,13 @@ public class HongkunTestFragment extends AhFragment {
 					if (b.getId() == btnArr[0].getId()) {
 						
 					} else if (b.getId() == btnArr[1].getId()) {
-						List<AhMessage> list = messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
+						List<AhMessage> list = messageDB.getAllMessages(AhMessage.TYPE.ENTER_SQUARE);
 						Log(list.toString());
 					} else if (b.getId() == btnArr[2].getId()) {
-						Log(messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.EXIT_SQUARE).toString());
-						messageDB.deleteAllMessages(AhMessage.MESSAGE_TYPE.ENTER_SQUARE);
-						Log(messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.ENTER_SQUARE).toString());
-						Log(messageDB.getAllMessages(AhMessage.MESSAGE_TYPE.EXIT_SQUARE).toString());
+						Log(messageDB.getAllMessages(AhMessage.TYPE.EXIT_SQUARE).toString());
+						messageDB.deleteAllMessages(AhMessage.TYPE.ENTER_SQUARE);
+						Log(messageDB.getAllMessages(AhMessage.TYPE.ENTER_SQUARE).toString());
+						Log(messageDB.getAllMessages(AhMessage.TYPE.EXIT_SQUARE).toString());
 					} else if (b.getId() == btnArr[3].getId()) {
 						
 					} else if (b.getId() == btnArr[4].getId()) {

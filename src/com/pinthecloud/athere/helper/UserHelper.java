@@ -2,7 +2,9 @@ package com.pinthecloud.athere.helper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +23,7 @@ import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.AhListCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -271,5 +274,22 @@ public class UserHelper {
 			throw e;
 		}
 		return registrationId;
+	}
+	
+	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
+
+	private final String USER_RECEIVED = "USER_RECEIVED";
+	//public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
+
+	public void setUserHandler(AhEntityCallback<User> callback){
+		map.put(USER_RECEIVED, callback);
+	}
+
+	public void triggerUserEvent(User user){
+		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
+		if(callback != null)
+			callback.onCompleted(user);
+		else 
+			throw new AhException("No such Event : triggerUserEvent");
 	}
 }

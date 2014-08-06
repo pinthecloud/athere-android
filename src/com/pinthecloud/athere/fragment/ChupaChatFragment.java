@@ -8,9 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -21,8 +20,9 @@ import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.AhMessage.Builder;
+import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
@@ -38,6 +38,7 @@ public class ChupaChatFragment extends AhFragment {
 	UserHelper userHelper;
 	UserDBHelper userDBHelper;
 	
+	User user;
 	
 	private SquareChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
@@ -50,7 +51,7 @@ public class ChupaChatFragment extends AhFragment {
 		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
-		
+		user = getActivity().getIntent().getExtras().getParcelable("user");
 	}
 
 	@Override
@@ -108,11 +109,11 @@ public class ChupaChatFragment extends AhFragment {
 			public void onClick(View v) {
 				// Make message and send it
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(messageEditText.getText().toString());
-				messageBuilder.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-				messageBuilder.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-				messageBuilder.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-				messageBuilder.setType(AhMessage.MESSAGE_TYPE.CHUPA);
+				messageBuilder.setContent(messageEditText.getText().toString())
+				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setReceiverId(user.getId())
+				.setType(AhMessage.TYPE.CHUPA);
 				
 				final AhMessage message = messageBuilder.build();
 				message.setStatus(AhMessage.SENDING);
@@ -120,7 +121,6 @@ public class ChupaChatFragment extends AhFragment {
 				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 				messageEditText.setText("");
-
 				// Send message to server
 				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
 
@@ -149,12 +149,6 @@ public class ChupaChatFragment extends AhFragment {
 			@Override
 			public void onCompleted(final AhMessage message) {
 
-				//				List<String> userIdList = userInfoFetchBuffer.popAllUsersId();
-				//				
-				//				for(String id : userIdList) {
-				//					UserDBHelper. userHelper.getUserSync(id);
-				//				}
-
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -166,22 +160,27 @@ public class ChupaChatFragment extends AhFragment {
 				});
 			}
 		});
+		
+		String chupaCommunId = new AhMessage.Builder()
+					.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+					.setReceiverId(pref.getString(user.getId()))
+					.build().getChupaCommunId();
+		
+		if(chupaCommunId == null || "".equals(chupaCommunId)) throw new AhException("No chupaCommunId");
+		
+		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
+		activity.runOnUiThread(new Runnable() {
 
-		if (!messageDBHelper.isEmpty()) {
-			final List<AhMessage> messageListFromBuffer = messageDBHelper.popAllMessages();
-			activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
 
-				@Override
-				public void run() {
-
-					for (AhMessage message : messageListFromBuffer) {
-						messageList.add(message);
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
-					}
+				for (AhMessage message : chupas) {
+					messageList.add(message);
+					messageListAdapter.notifyDataSetChanged();
+					messageListView.setSelection(messageListView.getCount() - 1);
 				}
-			});
-		}
+			}
+		});
 		
 		return view;
 	}
