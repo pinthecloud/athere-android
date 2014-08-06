@@ -2,13 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_list_frag_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white" >
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/action_bar_divider_height"
-        android:background="@color/line" />
+    android:layout_height="match_parent" >
 
     <ProgressBar
         android:id="@+id/square_list_frag_progress_bar"
@@ -18,11 +12,30 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <ListView
-        android:id="@+id/square_list_frag_list"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:listSelector="@drawable/list_selector_bg" >
-    </ListView>
+        android:orientation="vertical" >
+
+        <View
+            android:id="@+id/square_list_frag_action_bar_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/action_bar_divider_height"
+            android:background="@color/line" />
+
+        <ListView
+            android:id="@+id/square_list_frag_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:listSelector="@drawable/list_selector_bg" >
+        </ListView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.6"
+            android:background="@color/gray_background" />
+    </LinearLayout>
 
 </RelativeLayout>

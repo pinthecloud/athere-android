@@ -1,38 +1,41 @@
 package com.pinthecloud.athere.fragment;
 
-import java.util.Calendar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.NumberPicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
+import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 public class BasicProfileFragment extends AhFragment{
 
-	private final int MIN_YEAR = 1950;
-	private final int MAX_YEAR = 2000;
-	private final int DEFAULT_YEAR = 1990;
-
 	private EditText nickNameEditText;
+	private EditText birthYearEditText;
+	private NumberPickerDialog yearPickerDialog;
+
 	private ToggleButton maleButton;
 	private ToggleButton femaleButton;
-	private NumberPicker yearPicker; 
+
 	private ImageButton completeButton;
 
 	private boolean isMale = true;
+	private boolean isTypedNickName = false;
+	private boolean isPickedBirthYear = false;
 
 
 	@Override
@@ -44,9 +47,9 @@ public class BasicProfileFragment extends AhFragment{
 		 * Find UI component
 		 */
 		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_edit_text);
+		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_year_text);
 		maleButton = (ToggleButton) view.findViewById(R.id.basic_profile_frag_male_button);
 		femaleButton = (ToggleButton) view.findViewById(R.id.basic_profile_frag_female_button);
-		yearPicker = (NumberPicker) view.findViewById(R.id.basic_profile_frag_year_picker);
 		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
 
 
@@ -59,10 +62,11 @@ public class BasicProfileFragment extends AhFragment{
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				String nickName = s.toString().trim();
 				if(nickName.length() < 1){
-					completeButton.setEnabled(false);
+					isTypedNickName = false;
 				}else{
-					completeButton.setEnabled(true);
+					isTypedNickName = true;
 				}
+				completeButton.setEnabled(isCompleteButtonEnable());
 			}
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -72,7 +76,63 @@ public class BasicProfileFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		
+
+
+		/*
+		 * Set birth year edit text and year picker dialog
+		 */
+		yearPickerDialog = new NumberPickerDialog(new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing() {
+				// Save year setting
+				int birthYear = pref.getInt(AhGlobalVariable.BIRTH_YEAR_KEY);
+				birthYearEditText.setText("" + birthYear);
+			}
+
+			@Override
+			public void doNegativeThing() {
+				// do nothing				
+			}
+		});
+		birthYearEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String birthYear = s.toString().trim();
+				if(birthYear.length() < 1){
+					isPickedBirthYear = false;
+				}else{
+					isPickedBirthYear = true;
+				}
+				completeButton.setEnabled(isCompleteButtonEnable());
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+		birthYearEditText.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				yearPickerDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
+		birthYearEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus){
+					yearPickerDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				}
+			}
+		});
+		birthYearEditText.setInputType(InputType.TYPE_NULL);
+
 
 		/*
 		 * Set gender button
@@ -108,22 +168,19 @@ public class BasicProfileFragment extends AhFragment{
 
 
 		/*
-		 * Set birth year picker
-		 */
-		yearPicker.setMinValue(MIN_YEAR);
-		yearPicker.setMaxValue(MAX_YEAR);
-		yearPicker.setValue(DEFAULT_YEAR);
-
-
-		/*
 		 * Set Start Button
 		 */
 		completeButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				// Remove blank of along side.
+				String nickName = nickNameEditText.getText().toString().trim();
+				nickNameEditText.setText(nickName);
+				nickNameEditText.setSelection(nickName.length());
+
 				// Save gender and birth year infomation to preference
-				String message = checkNickNameEditText(nickNameEditText);
+				String message = checkNickName(nickName);
 				if(!message.equals("")){
 					// Unproper nick name
 					// Show warning toast for each situation
@@ -135,14 +192,9 @@ public class BasicProfileFragment extends AhFragment{
 
 					// Proper nick name
 					// Save this setting and go to next activity
-					int birthYear = yearPicker.getValue();
-					Calendar c = Calendar.getInstance();
-					int age = c.get(Calendar.YEAR) - (birthYear - 1);
 					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
 					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
 					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, isMale);
-					pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
-					pref.putInt(AhGlobalVariable.AGE_KEY, age);
 					pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
 
 					Intent intent = new Intent(context, SquareListActivity.class);
@@ -151,6 +203,7 @@ public class BasicProfileFragment extends AhFragment{
 				}
 			}
 		});
+		completeButton.setEnabled(false);
 
 		return view;
 	}
@@ -159,11 +212,8 @@ public class BasicProfileFragment extends AhFragment{
 	/*
 	 * Check nick name EditText
 	 */
-	private String checkNickNameEditText(EditText editText){
-		// Remove blank of along side.
-		String nickName = editText.getText().toString().trim();
-		editText.setText(nickName);
-		editText.setSelection(nickName.length());
+	private String checkNickName(String nickName){
+		Log.d(AhGlobalVariable.LOG_TAG, "BasicProfileFragment checkNickNameEditText");
 
 		// Set regular expression for checking nick name
 		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
@@ -183,5 +233,10 @@ public class BasicProfileFragment extends AhFragment{
 			message = getResources().getString(R.string.max_nick_name_message);
 		}
 		return message;
+	}
+
+
+	private boolean isCompleteButtonEnable(){
+		return isTypedNickName && isPickedBirthYear;
 	}
 }

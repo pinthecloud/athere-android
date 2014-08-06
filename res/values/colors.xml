@@ -4,4 +4,6 @@
     <color name="line">#dbdbdb</color>
     <color name="tab_text_unselected">#959595</color>
     <color name="red">#ff0047</color>
+    <color name="blue">#14a0cc</color>
+    <color name="gray_background">#eaeaea</color>
 </resources>
