@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.adapter;
 
+import java.util.List;
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -8,18 +10,22 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
 import com.pinthecloud.athere.fragment.SquareChupaListFragment;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 
 public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 
 	private String[] titles;
 	private Square square;
-
-
+	SquareChatFragment squareChatFragment = null;
+	SquareChupaListFragment squareChupaListFragment = null;
+	
 	public SquarePagerAdapter(Context context, FragmentManager fm, Square square) {
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);
 		this.square = square;
+		squareChatFragment = new SquareChatFragment(square);
+		squareChupaListFragment = new SquareChupaListFragment(square);
 	}
 
 	@Override
@@ -27,9 +33,11 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 		Fragment fragment = null;
 		switch(position){
 		case 0:
-			return fragment = new SquareChatFragment(square);
+			//return fragment = new SquareChatFragment(square);
+			return this.squareChatFragment;
 		case 1:
-			return fragment = new SquareChupaListFragment(square);
+			//return fragment = new SquareChupaListFragment(square);
+			return this.squareChupaListFragment;
 		}
 		return fragment;
 	}
@@ -43,5 +51,13 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return this.titles[position];
+	}
+	
+	@Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+		this.titles[1] = " New";
+		squareChupaListFragment.updateList();
 	}
 }

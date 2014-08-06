@@ -8,20 +8,24 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
@@ -46,6 +50,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 
 	private SquareHelper squareHelper;
 	private UserHelper userHelper;
+	private MessageHelper messageHelper;
 
 
 	@Override
@@ -61,7 +66,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		squareHelper = app.getSquareHelper();
 		user = userHelper.getMyUserInfo(true);
 		square = squareHelper.getSquare();
-
+		messageHelper = app.getMessageHelper();
 
 		/*
 		 * Set UI Component

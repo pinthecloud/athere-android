@@ -3,6 +3,8 @@ package com.pinthecloud.athere.helper;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -112,18 +114,18 @@ public class MessageHelper {
 
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
 
-	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
-	//public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
+//	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
+//	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 
-	public void setMessageHandler(AhEntityCallback<AhMessage> callback){
-		map.put(MESSAGE_RECEIVED, callback);
+	public void setMessageHandler(AhMessage.TYPE type, AhEntityCallback<AhMessage> callback){
+		map.put(type.toString(), callback);
 	}
 
 	public void triggerMessageEvent(AhMessage message){
-		AhEntityCallback<AhMessage> callback = map.get(MESSAGE_RECEIVED);
+		AhEntityCallback<AhMessage> callback = map.get(message.getType());
 		if(callback != null)
 			callback.onCompleted(message);
 		else 
-			throw new AhException("No such Event : triggerMessageEvent");
+			Log.e("ERROR","message.getType() :" + message.getType());;//throw new AhException("No such Event : triggerMessageEvent");
 	}
 }

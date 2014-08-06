@@ -368,7 +368,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 				" JOIN (SELECT MAX(id) id FROM " + TABLE_NAME +
 				" GROUP BY " + CHUPA_COMMUN_ID + ") t2 on t1.id = t2.id" +
 				" WHERE " + TYPE + " = ?" +
-				" ORDER BY id";
+				" ORDER BY id DESC";
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString()});

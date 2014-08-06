@@ -27,10 +27,10 @@ public class SquareChupaListFragment extends AhFragment{
 
 	private Square square;
 
-	private SquareChupaListAdapter squareChupaListAdapter;
+	public SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
 
-	private List<Map<String,String>> lastChupaCommunList;
+	public List<Map<String,String>> lastChupaCommunList;
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 
@@ -97,16 +97,30 @@ public class SquareChupaListFragment extends AhFragment{
 				startActivity(i);
 			}
 		});
-		getChupas();
 
 		return view;
 	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		updateList();
+	}
 
-
-	/*
-	 * Get square near from user
-	 * Now it just gets all squares cause of location law. (lati and longi is 0)
-	 */
-	private void getChupas(){
+	public void updateList() {
+		activity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
+				lastChupaCommunList = convertToMap(lastChupaList);
+				Log(lastChupaCommunList.get(0).get("content"));
+				squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+				squareChupaListView.setAdapter(squareChupaListAdapter);
+			}
+		});
 	}
 }

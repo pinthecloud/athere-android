@@ -30,6 +30,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 	
 	public SquareChupaListAdapter(Context context, int layoutId, List<Map<String,String>> items) {
 		super(context, layoutId, items);
+		this.context = context;
 		this.layoutId = layoutId;
 		this.items = items;
 	}

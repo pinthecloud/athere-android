@@ -6,6 +6,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -144,7 +145,7 @@ public class ChupaChatFragment extends AhFragment {
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(AhMessage.TYPE.CHUPA, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
@@ -163,11 +164,10 @@ public class ChupaChatFragment extends AhFragment {
 		
 		String chupaCommunId = new AhMessage.Builder()
 					.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-					.setReceiverId(pref.getString(user.getId()))
+					.setReceiverId((user.getId()))
 					.build().getChupaCommunId();
 		
 		if(chupaCommunId == null || "".equals(chupaCommunId)) throw new AhException("No chupaCommunId");
-		
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		activity.runOnUiThread(new Runnable() {
 
