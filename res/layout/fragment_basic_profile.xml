@@ -32,23 +32,21 @@
         android:layout_height="wrap_content"
         android:gravity="center" >
 
-        <ToggleButton
+        <ImageButton
             android:id="@+id/basic_profile_frag_male_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gender_toggle_bg"
-            android:checked="true"
-            android:enabled="false"
-            android:textOff=""
-            android:textOn="" />
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/male"
+            android:src="@drawable/gender_male_toggle_bg" />
 
-        <ToggleButton
+        <ImageButton
             android:id="@+id/basic_profile_frag_female_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/gender_toggle_bg"
-            android:textOff=""
-            android:textOn="" />
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/female"
+            android:src="@drawable/gender_female_toggle_bg" />
     </LinearLayout>
 
     <EditText

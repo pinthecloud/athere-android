@@ -141,7 +141,7 @@ public class SquareHelper {
 	/*
 	 *  Async Task Methods
 	 */
-	public void getSquareListAsync(double latitude, double longitude, final AhListCallback<Square> callback) throws AhException {
+	public void getSquareListAsync(double latitude, double longitude, final AhListCallback<Square> callback) throws AhException{
 		JsonObject jo = new JsonObject();
 		jo.addProperty(currentLatitude, latitude);
 		jo.addProperty(currentLongitude, longitude);

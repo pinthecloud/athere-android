@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.dialog;
 
-import java.util.Calendar;
-
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,30 +9,29 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 public class NumberPickerDialog extends DialogFragment {
 
-	private final int MIN_YEAR = 1950;
-	private final int MAX_YEAR = 2000;
-	private final int DEFAULT_YEAR = 1990;
-
-	private AhDialogCallback ahDialogCallback;
-	private AhApplication app;
-	private PreferenceHelper pref;
-	
 	private NumberPicker yearPicker;
 
+	private AhDialogCallback ahDialogCallback;
+	private String title;
+	private int min;
+	private int max;
+	private int defaultValue;
 
-	public NumberPickerDialog(AhDialogCallback ahDialogCallback) {
+
+	public NumberPickerDialog(String title, int min, int max, int defaultValue, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
-		this.app = AhApplication.getInstance();
-		this.pref = app.getPref();
+		this.title = title;
+		this.min = min;
+		this.max = max;
+		this.defaultValue = defaultValue;
+
 	}
 
 
@@ -47,7 +44,7 @@ public class NumberPickerDialog extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getDialog().setTitle(getResources().getString(R.string.birth_of_year));
+		getDialog().setTitle(title);
 		View view = inflater.inflate(R.layout.dialog_nimber_picker, container, false);
 
 		// Find UI Component
@@ -58,9 +55,9 @@ public class NumberPickerDialog extends DialogFragment {
 		/*
 		 * Set birth year picker
 		 */
-		yearPicker.setMinValue(MIN_YEAR);
-		yearPicker.setMaxValue(MAX_YEAR);
-		yearPicker.setValue(DEFAULT_YEAR);
+		yearPicker.setMinValue(min);
+		yearPicker.setMaxValue(max);
+		yearPicker.setValue(defaultValue);
 
 
 		/*
@@ -70,14 +67,10 @@ public class NumberPickerDialog extends DialogFragment {
 
 			@Override
 			public void onClick(View v) {
-				// Save year setting
 				int year = yearPicker.getValue();
-				Calendar c = Calendar.getInstance();
-				int age = c.get(Calendar.YEAR) - (year - 1);
-				pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, year);
-				pref.putInt(AhGlobalVariable.AGE_KEY, age);
-				
-				ahDialogCallback.doPositiveThing();
+				Bundle bundle = new Bundle();
+				bundle.putInt(AhGlobalVariable.NUMBER_PICKER_VALUE_KEY, year);
+				ahDialogCallback.doPositiveThing(bundle);
 				dismiss();
 			}
 		});

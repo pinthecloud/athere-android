@@ -8,14 +8,12 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -24,10 +22,10 @@ import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareActivity extends AhActivity implements SquareDrawerFragment.SquareDrawerFragmentCallbacks{
 
@@ -38,18 +36,17 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 	private View mCustomActionBarView;
 	private TextView mTitleTextView;
 
-	private ProgressBar progressBar;
-
 	private FragmentManager fragmentManager;
-
 	private DrawerLayout mDrawerLayout; 
 	private ActionBarDrawerToggle mDrawerToggle;
-
 	private View mFragmentView;
 	private SquareDrawerFragment mSquareDrawerFragment;
 
+	private ProgressBar progressBar;
+
 	private SquareHelper squareHelper;
 	private UserHelper userHelper;
+	private UserDBHelper userDBHelper;
 	private MessageHelper messageHelper;
 
 
@@ -58,15 +55,16 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
 
-
 		/*
 		 * Set Helper and get square
 		 */
 		userHelper = app.getUserHelper();
+		userDBHelper = app.getUserDBHelper();
 		squareHelper = app.getSquareHelper();
+		messageHelper = app.getMessageHelper();
 		user = userHelper.getMyUserInfo(true);
 		square = squareHelper.getSquare();
-		messageHelper = app.getMessageHelper();
+
 
 		/*
 		 * Set UI Component
@@ -82,14 +80,12 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		fragmentManager = getFragmentManager();
 		mSquareDrawerFragment = (SquareDrawerFragment) fragmentManager.findFragmentById(R.id.square_drawer_fragment);
 
-
 		/*
 		 * Set Action Bar
 		 */
 		mActionBar.setDisplayShowCustomEnabled(true);
 		mActionBar.setDisplayShowHomeEnabled(false);
 		mTitleTextView.setText(square.getName());
-
 
 		/*
 		 * Set tab
@@ -185,24 +181,45 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 
 	@Override
 	public void exitSquare() {
-
 		progressBar.setVisibility(View.VISIBLE);
 
-		userHelper.exitSquareAsync(user.getId(), new AhEntityCallback<Boolean>() {
+		new Thread(new Runnable() {
 
 			@Override
-			public void onCompleted(Boolean entity) {
-				progressBar.setVisibility(View.GONE);
+			public void run() {
+				userHelper.exitSquareSync(user.getId());
+				userDBHelper.deleteAllUsers();
 
-				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-				pref.removePref(AhGlobalVariable.USER_ID_KEY);
-				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+				String exitMessage = getResources().getString(R.string.exit_square_message);
+				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+				messageBuilder.setContent(nickName + exitMessage)
+				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+				.setType(AhMessage.TYPE.EXIT_SQUARE);
+				AhMessage message = messageBuilder.build();
+				messageHelper.sendMessageSync(message);
 
-				Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
-				startActivity(intent);
-				finish();
+				runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						progressBar.setVisibility(View.GONE);
+
+						pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+						pref.removePref(AhGlobalVariable.USER_ID_KEY);
+						pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+
+						Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
+						startActivity(intent);
+						finish();
+					}
+				});
 			}
-		});
+		}).start();
 	}
 }

@@ -23,7 +23,6 @@ import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.AhListCallback;
-import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -207,7 +206,7 @@ public class UserHelper {
 
 
 	public User getUserSync(String id) {
-		
+
 		if (id == null) return null;
 		final AhCarrier<User> carrier = new AhCarrier<User>();
 
@@ -237,7 +236,7 @@ public class UserHelper {
 
 		return carrier.getItem();
 	}
-	
+
 	public User getMyUserInfo(boolean hasId) {
 		Bitmap pictureBitmap = null;
 		try {
@@ -275,7 +274,7 @@ public class UserHelper {
 		}
 		return registrationId;
 	}
-	
+
 	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
 
 	private final String USER_RECEIVED = "USER_RECEIVED";

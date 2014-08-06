@@ -27,27 +27,23 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class SquareChatFragment extends AhFragment{
 
 	private Square square;
+	private SquareDrawerFragmentCallbacks callbacks;
 
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
 	private EditText messageEditText;
 	private ImageButton sendButton;
-	private Button tempBackButton;
-
-	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
 	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
-	private UserInfoFetchBuffer userInfoFetchBuffer;
 
-	private SquareDrawerFragmentCallbacks callbacks;
+	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
 
 
 	public SquareChatFragment(Square square) {
@@ -62,7 +58,6 @@ public class SquareChatFragment extends AhFragment{
 		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
-		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
 	}
 
 
@@ -77,15 +72,6 @@ public class SquareChatFragment extends AhFragment{
 		messageListView = (ListView) view.findViewById(R.id.square_chat_frag_list);
 		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.square_chat_frag_send_button);
-		tempBackButton = (Button) view.findViewById(R.id.square_chat_frag_option_button);
-
-
-		/*
-		 * Set message list view
-		 */
-		messageListAdapter = new SquareChatListAdapter
-				(context, R.layout.row_square_chat_list_send, messageList);
-		messageListView.setAdapter(messageListAdapter);
 
 
 		/*
@@ -148,42 +134,13 @@ public class SquareChatFragment extends AhFragment{
 		sendButton.setEnabled(false);
 
 
-		/**
-		 * temp Button for getting out of the chat Room
+		/*
+		 * Set message list view
 		 */
-		//		tempBackButton.setOnClickListener(new OnClickListener() {
-		//
-		//			@Override
-		//			public void onClick(View v) {
-		//				// Make message and send it
-		//				final AhMessage message = new AhMessage();
-		//				message.setContent("Exit Square");
-		//				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-		//				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-		//				message.setReceiverId(square.getId());
-		//				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
-		//				message.setStatus(AhMessage.SENDING);
-		//				userDBHelper.deleteAllUsers();
-		//				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-		//
-		//					@Override
-		//					public void onCompleted(AhMessage entity) {
-		//						message.setStatus(AhMessage.SENT);
-		//
-		//						activity.runOnUiThread(new Runnable(){
-		//
-		//							@Override
-		//							public void run() {
-		//								callbacks.exitSquare();
-		//							}
-		//						});
-		//					}
-		//				});
-		//			}
-		//		});
+		messageListAdapter = new SquareChatListAdapter
+				(context, R.layout.row_square_chat_list_send, messageList);
+		messageListView.setAdapter(messageListAdapter);
 
-
-		///////////////////////////////////////////////////////////////////////////////////
 
 		/**
 		 * See 

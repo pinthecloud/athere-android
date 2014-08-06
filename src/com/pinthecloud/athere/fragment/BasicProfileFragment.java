@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.Calendar;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -28,8 +29,8 @@ public class BasicProfileFragment extends AhFragment{
 	private EditText birthYearEditText;
 	private NumberPickerDialog yearPickerDialog;
 
-	private ToggleButton maleButton;
-	private ToggleButton femaleButton;
+	private ImageButton maleButton;
+	private ImageButton femaleButton;
 
 	private ImageButton completeButton;
 
@@ -48,8 +49,8 @@ public class BasicProfileFragment extends AhFragment{
 		 */
 		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_edit_text);
 		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_year_text);
-		maleButton = (ToggleButton) view.findViewById(R.id.basic_profile_frag_male_button);
-		femaleButton = (ToggleButton) view.findViewById(R.id.basic_profile_frag_female_button);
+		maleButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_male_button);
+		femaleButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_female_button);
 		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
 
 
@@ -81,17 +82,18 @@ public class BasicProfileFragment extends AhFragment{
 		/*
 		 * Set birth year edit text and year picker dialog
 		 */
-		yearPickerDialog = new NumberPickerDialog(new AhDialogCallback() {
+		String title = getResources().getString(R.string.birth_of_year);
+		yearPickerDialog = new NumberPickerDialog(title, 1950, 2000, 1990, new AhDialogCallback() {
 
 			@Override
-			public void doPositiveThing() {
-				// Save year setting
-				int birthYear = pref.getInt(AhGlobalVariable.BIRTH_YEAR_KEY);
+			public void doPositiveThing(Bundle bundle) {
+				// Set edit text to birth year use picked
+				int birthYear = bundle.getInt(AhGlobalVariable.NUMBER_PICKER_VALUE_KEY);
 				birthYearEditText.setText("" + birthYear);
 			}
 
 			@Override
-			public void doNegativeThing() {
+			public void doNegativeThing(Bundle bundle) {
 				// do nothing				
 			}
 		});
@@ -141,30 +143,21 @@ public class BasicProfileFragment extends AhFragment{
 
 			@Override
 			public void onClick(View view) {
-				boolean on = ((ToggleButton) view).isChecked();
-
-				if(on){
-					isMale = true;
-					maleButton.setEnabled(false);
-					femaleButton.setEnabled(true);
-					femaleButton.setChecked(false);
-				}
+				isMale = true;
+				maleButton.setEnabled(false);
+				femaleButton.setEnabled(true);
 			}
 		});
 		femaleButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				boolean on = ((ToggleButton) view).isChecked();
-
-				if(on){
-					isMale = false;
-					maleButton.setEnabled(true);
-					maleButton.setChecked(false);
-					femaleButton.setEnabled(false);
-				}
+				isMale = false;
+				maleButton.setEnabled(true);
+				femaleButton.setEnabled(false);
 			}
 		});
+		maleButton.setEnabled(false);
 
 
 		/*
@@ -187,15 +180,20 @@ public class BasicProfileFragment extends AhFragment{
 					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
 					toast.show();
 				} else{
+					// Proper nick name
 					// Disable complete button for preventing double click
 					completeButton.setEnabled(false);
 
-					// Proper nick name
 					// Save this setting and go to next activity
+					int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
+					Calendar c = Calendar.getInstance();
+					int age = c.get(Calendar.YEAR) - (birthYear - 1);
+					pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
+					pref.putInt(AhGlobalVariable.AGE_KEY, age);
+					
 					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
 					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, isMale);
-					pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
+					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
 
 					Intent intent = new Intent(context, SquareListActivity.class);
 					startActivity(intent);
