@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -128,7 +126,7 @@ public class SquareChatFragment extends AhFragment{
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.TALK);
-				
+
 				final AhMessage message = messageBuilder.build();
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
@@ -153,36 +151,36 @@ public class SquareChatFragment extends AhFragment{
 		/**
 		 * temp Button for getting out of the chat Room
 		 */
-//		tempBackButton.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// Make message and send it
-//				final AhMessage message = new AhMessage();
-//				message.setContent("Exit Square");
-//				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-//				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-//				message.setReceiverId(square.getId());
-//				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
-//				message.setStatus(AhMessage.SENDING);
-//				userDBHelper.deleteAllUsers();
-//				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-//
-//					@Override
-//					public void onCompleted(AhMessage entity) {
-//						message.setStatus(AhMessage.SENT);
-//
-//						activity.runOnUiThread(new Runnable(){
-//
-//							@Override
-//							public void run() {
-//								callbacks.exitSquare();
-//							}
-//						});
-//					}
-//				});
-//			}
-//		});
+		//		tempBackButton.setOnClickListener(new OnClickListener() {
+		//
+		//			@Override
+		//			public void onClick(View v) {
+		//				// Make message and send it
+		//				final AhMessage message = new AhMessage();
+		//				message.setContent("Exit Square");
+		//				message.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
+		//				message.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY));
+		//				message.setReceiverId(square.getId());
+		//				message.setType(AhMessage.MESSAGE_TYPE.EXIT_SQUARE);
+		//				message.setStatus(AhMessage.SENDING);
+		//				userDBHelper.deleteAllUsers();
+		//				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+		//
+		//					@Override
+		//					public void onCompleted(AhMessage entity) {
+		//						message.setStatus(AhMessage.SENT);
+		//
+		//						activity.runOnUiThread(new Runnable(){
+		//
+		//							@Override
+		//							public void run() {
+		//								callbacks.exitSquare();
+		//							}
+		//						});
+		//					}
+		//				});
+		//			}
+		//		});
 
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -198,7 +196,7 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
+
 				activity.runOnUiThread(new Runnable() {
 
 					@Override

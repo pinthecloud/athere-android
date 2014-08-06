@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
-import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 
@@ -58,20 +56,20 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			companyNum = (TextView)view.findViewById(R.id.drawer_user_company_num);
 			isMale = (TextView)view.findViewById(R.id.drawer_user_is_male);
 			chupaBtn = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
-			
+
 			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
 			nickName.setText(user.getNickName());
 			age.setText(""+user.getAge());
 			companyNum.setText(""+user.getCompanyNum());
 			isMale.setText(user.isMale() ? "M" : "F");
-			
+
 			chupaBtn.setOnClickListener(new View.OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Intent intent = new Intent(context.getApplicationContext(), ChupaChatActivity.class);
-					
+
 					intent.putExtra("user", user);
 					context.startActivity(intent);
 				}
