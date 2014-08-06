@@ -40,7 +40,6 @@ import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.model.AhMessage.Builder;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;

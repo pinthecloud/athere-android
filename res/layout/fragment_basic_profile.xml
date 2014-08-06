@@ -58,13 +58,7 @@
         android:ems="10"
         android:gravity="center|bottom"
         android:hint="@string/birth_of_year"
-        android:inputType="date"
         android:textSize="@dimen/font_normal" />
-
-    <NumberPicker
-        android:id="@+id/basic_profile_frag_year_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <ImageButton
         android:id="@+id/basic_profile_frag_start_button"
@@ -72,6 +66,6 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
-        android:src="@drawable/okay_active" />
+        android:src="@drawable/ok_image_button_bg" />
 
 </LinearLayout>
