@@ -10,7 +10,6 @@ import com.pinthecloud.athere.fragment.HongkunTestFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.sqlite.UserInfoFetchBuffer;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn01;
@@ -31,8 +30,8 @@ public class HongkunTestAcitivity extends AhActivity {
 	private String content;
 
 	public static final String SENDER_ID = "838051405989";
-	UserInfoFetchBuffer buffer;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

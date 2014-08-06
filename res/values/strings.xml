@@ -33,7 +33,6 @@
     <string name="location_consent">Location Consent</string>
     <string name="nick_name">Nick Name</string>
     <string name="drawer">Drawer</string>
-    <string name="people_number">People Number</string>
     <string name="rotate">Rotate</string>
     <string name="take">take</string>
     <string name="send">send</string>
@@ -51,6 +50,7 @@
     <string name="no_profile_picture_message">Please take a profile picture.</string>
     <string name="offline_message">Network access is unavailable. Please check network status.</string>
     <string name="location_consent_message">"Chupa" will use current location information. Do you agree?</string>
+    <string name="exit_square_message"> leaves ground.</string>
 
     <!-- String Array -->
 

@@ -34,12 +34,12 @@ public class LocationConsentDialog extends DialogFragment {
 		altBuilder.setMessage(locConsentMessage);
 		altBuilder.setPositiveButton(yes, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int which) {
-				ahDialogCallback.doPositiveThing();
+				ahDialogCallback.doPositiveThing(null);
 			}
 		});
 		altBuilder.setNegativeButton(no, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				ahDialogCallback.doNegativeThing();
+				ahDialogCallback.doNegativeThing(null);
 			}
 		});
 		AlertDialog alertDialog = altBuilder.create();

@@ -28,20 +28,20 @@ import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class ChupaChatFragment extends AhFragment {
 	
-	ListView messageListView;
-	EditText messageEditText;
-	ImageButton sendButton;
+	private ListView messageListView;
+	private EditText messageEditText;
+	private ImageButton sendButton;
 	
+	private MessageHelper messageHelper;
+	private MessageDBHelper messageDBHelper;
+	private UserHelper userHelper;
+	private UserDBHelper userDBHelper;
 	
-	MessageHelper messageHelper;
-	MessageDBHelper messageDBHelper;
-	UserHelper userHelper;
-	UserDBHelper userDBHelper;
-	
-	User user;
+	private User user;
 	
 	private SquareChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -184,6 +184,4 @@ public class ChupaChatFragment extends AhFragment {
 		
 		return view;
 	}
-
-
 }

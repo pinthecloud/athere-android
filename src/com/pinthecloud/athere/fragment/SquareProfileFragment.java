@@ -17,11 +17,13 @@ import android.hardware.Camera.ShutterCallback;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -33,9 +35,11 @@ import android.widget.ProgressBar;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
@@ -63,8 +67,9 @@ public class SquareProfileFragment extends AhFragment{
 	private boolean isTypedMember = false;
 
 	private LinearLayout profileInfoLayout;
-	private EditText numberText;
 	private ImageButton completeButton;
+	private NumberPickerDialog companyNumberPickerDialog;
+	private EditText companyNumberEditText;
 
 	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
@@ -167,14 +172,29 @@ public class SquareProfileFragment extends AhFragment{
 		cameraRotateButton = (ImageButton) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_picture);
-		numberText = (EditText) view.findViewById(R.id.square_profile_frag_number_text);
+		companyNumberEditText = (EditText) view.findViewById(R.id.square_profile_frag_company_text);
 		completeButton = (ImageButton) view.findViewById(R.id.square_profile_frag_start_button);
 
 
 		/*
 		 * Set event on EditText
 		 */
-		numberText.addTextChangedListener(new TextWatcher() {
+		String title = getResources().getString(R.string.number_of_member);
+		companyNumberPickerDialog = new NumberPickerDialog(title, 1, 10, 2, new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				// Set edit text to birth year use picked
+				int companyNumber = bundle.getInt(AhGlobalVariable.NUMBER_PICKER_VALUE_KEY);
+				companyNumberEditText.setText("" + companyNumber);
+			}
+
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				// do nothing				
+			}
+		});
+		companyNumberEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -194,6 +214,23 @@ public class SquareProfileFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
+		companyNumberEditText.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				companyNumberPickerDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
+		companyNumberEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus){
+					companyNumberPickerDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				}
+			}
+		});
+		companyNumberEditText.setInputType(InputType.TYPE_NULL);
 
 
 		/*
@@ -253,18 +290,14 @@ public class SquareProfileFragment extends AhFragment{
 				completeButton.setEnabled(false);
 				cameraButton.setEnabled(false);
 				cameraRotateButton.setEnabled(false);
-				numberText.setEnabled(false);
+				companyNumberEditText.setEnabled(false);
 
-				// Save this setting
-				int memberNumber = Integer.parseInt(numberText.getText().toString());
-				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, memberNumber);
+				// Enter Square
 				enterSquare();
 			}
 		});
 		completeButton.setEnabled(false);
-		
+
 		return view;
 	}
 
@@ -354,30 +387,36 @@ public class SquareProfileFragment extends AhFragment{
 				String id = userHelper.enterSquareSync(user);
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 
-				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent("인원 : " + user.getCompanyNum() + "명")
-				.setSender(user.getNickName())
-				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-				.setReceiverId(square.getId())
-				.setType(AhMessage.TYPE.ENTER_SQUARE);
-				AhMessage message = messageBuilder.build();
-				// Send message to server
-				messageHelper.sendMessageSync(message);
-
+				// Get user list in the square and save it without me
 				List<User> userList = userHelper.getUserListSync(square.getId());
 				userDBHelper.addAllUsers(userList);
 				userDBHelper.deleteUser(id);
 				
+				// Send message to server for notifying entering
+				String numOfMem = getResources().getString(R.string.number_of_member);
+				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+				messageBuilder.setContent(numOfMem + " : " + user.getCompanyNum())
+				.setSender(user.getNickName())
+				.setSenderId(id)
+				.setReceiverId(square.getId())
+				.setType(AhMessage.TYPE.ENTER_SQUARE);
+				AhMessage message = messageBuilder.build();
+				messageHelper.sendMessageSync(message);
+
 				activity.runOnUiThread(new Runnable(){
 
 					@Override
 					public void run() {
-
 						// Dimiss progress bar
 						progressBar.setVisibility(View.GONE);
 
 						// Save this setting and go to next activity
+						int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
+						pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+						pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
 
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);

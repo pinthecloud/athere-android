@@ -37,6 +37,7 @@ public class AhGlobalVariable{
 	 */
 	public static final String DIALOG_KEY = "DIALOG_KEY";
 	public static final String SQUARE_KEY = "SQUARE_KEY";
+	public static final String NUMBER_PICKER_VALUE_KEY = "NUMBER_PICKER_VALUE_KEY";
 
 	
 	/*

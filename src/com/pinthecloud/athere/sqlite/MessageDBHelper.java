@@ -2,7 +2,6 @@ package com.pinthecloud.athere.sqlite;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,10 +16,10 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 	// All Static variables
 	// Database Version
 	private static int DATABASE_VERSION = 2;
-//	static{
-//		Random r= new Random();
-//		DATABASE_VERSION = r.nextInt(10) + 1; 
-//	}
+	//	static{
+	//		Random r= new Random();
+	//		DATABASE_VERSION = r.nextInt(10) + 1; 
+	//	}
 
 	// Database Name
 	private static final String DATABASE_NAME = "messageReceivedDB";
@@ -48,7 +47,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
-			"("
+				"("
 				+ ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
 				+ TYPE + " TEXT,"
 				+ CONTENT + " TEXT,"
@@ -58,7 +57,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 				+ RECEIVER_ID + " TEXT,"
 				+ TIME_STAMP + " TEXT,"
 				+ CHUPA_COMMUN_ID + " TEXT"
-			+")";
+				+")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
@@ -71,7 +70,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		// Create tables again
 		onCreate(db);
 	}
-	
+
 	@Override
 	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Drop older table if existed
@@ -97,40 +96,40 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		//values.put(ID, message.getId());
 		//putValueWithoutNull(values, ID, message.getId());
-		
+
 		//values.put(TYPE, message.getType());
 		putValueWithoutNull(values, TYPE, message.getType());
-		
+
 		//values.put(CONTENT, message.getContent());
 		putValueWithoutNull(values, CONTENT, message.getContent());
-		
+
 		//values.put(SENDER, message.getSender());
 		putValueWithoutNull(values, SENDER, message.getSender());
-		
+
 		//values.put(SENDER_ID, message.getSenderId());
 		putValueWithoutNull(values, SENDER_ID, message.getSenderId());
-		
+
 		//values.put(RECEIVER, message.getReceiver());
 		putValueWithoutNull(values, RECEIVER, message.getReceiver());
-		
+
 		//values.put(RECEIVER_ID, message.getReceiverId());
 		putValueWithoutNull(values, RECEIVER_ID, message.getReceiverId());
 
 		//values.put(TIME_STAMP, message.getTimeStamp());
 		putValueWithoutNull(values, TIME_STAMP, message.getTimeStamp());
-		
+
 		putValueWithoutNull(values, CHUPA_COMMUN_ID, message.getChupaCommunId());
-		
+
 		// Inserting Row
 		db.insert(TABLE_NAME, null, values);
 		db.close(); // Closing database connection
 	}
-	
+
 	private void putValueWithoutNull(ContentValues contentValue, String id, String value){
 		if (value == null) value = "";
 		contentValue.put(id, value);
 	}
-	
+
 	// Getting single contact
 	public AhMessage getMessage(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -155,8 +154,8 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		String chupaCommunId = cursor.getString(8);
 
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		
-		
+
+
 		messageBuilder.setId(_id)
 		.setType(type)
 		.setContent(content)
@@ -166,7 +165,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		.setReceiverId(receiverId)
 		.setTimeStamp(timeStamp)
 		.setChupaCommunId(chupaCommunId);
-		
+
 		return messageBuilder.build();
 	}
 
@@ -190,7 +189,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		// return contact list
 		return messages;
 	}
-	
+
 	public List<AhMessage> getAllMessages(String type) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
@@ -211,29 +210,29 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		// return contact list
 		return messages;
 	}
-	
+
 	public List<AhMessage> getAllMessages(String... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
-		
+
 		for(String type : types){
 			messages.addAll(this.getAllMessages(type));
 		}
 		return messages;
 	}
-	
+
 	public List<AhMessage> getAllMessages(AhMessage.TYPE... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
-		
+
 		for(AhMessage.TYPE type : types){
 			messages.addAll(this.getAllMessages(type));
 		}
 		return messages;
 	}
-	
+
 	public List<AhMessage> getAllMessages(AhMessage.TYPE type) {
 		return this.getAllMessages(type.toString());
 	}
-	
+
 	public boolean isEmpty() {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME;
 
@@ -242,7 +241,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 
 		return !cursor.moveToFirst();
 	}
-	
+
 	public boolean isEmpty(String type) {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + TYPE + " = ?";
 
@@ -251,25 +250,25 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 
 		return !cursor.moveToFirst();
 	}
-	
+
 	public boolean isEmpty(String... types){
 		for (String type : types) {
 			if(!this.isEmpty(type)) return false;
 		}
 		return true;
 	}
-	
+
 	public boolean isEmpty(AhMessage.TYPE... types){
 		for (AhMessage.TYPE type : types) {
 			if(!this.isEmpty(type)) return false;
 		}
 		return true;
 	}
-	
+
 	public boolean isEmpty(AhMessage.TYPE type) {
 		return this.isEmpty(type.toString());
 	}
-	
+
 	public List<AhMessage> popAllMessages() {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
@@ -297,7 +296,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + TYPE + " = ?" +
 				" ORDER BY " + ID;
-		
+
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -311,27 +310,27 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		// return message list
 		return messages;
 	}
-	
+
 	public List<AhMessage> popAllMessages(String... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
 		for(String type : types){
 			messages.addAll(this.popAllMessages(type));
 		}
-		
+
 		return messages;
 	}
-	
+
 	public List<AhMessage> popAllMessages(AhMessage.TYPE... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
 		for(AhMessage.TYPE type : types){
 			messages.addAll(this.popAllMessages(type));
 		}
-		
+
 		return messages;
 	}
-	
+
 	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
 		return this.popAllMessages(type.toString());
 	}
@@ -349,27 +348,27 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		db.delete(TABLE_NAME, null ,null);
 		db.close();
 	}
-	
+
 	public void deleteAllMessages(String strType) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_NAME, TYPE + " = ?", new String[]{ strType });
 		db.close();
 	}
-	
+
 	public void deleteAllMessages(AhMessage.TYPE type) {
 		this.deleteAllMessages(type.toString());
 	}
-	
+
 	public List<AhMessage> getLastChupas(){
 		List<AhMessage> list = new ArrayList<AhMessage>();
-		
+
 		// Select All Query
 		String selectQuery = "SELECT t1.* FROM " + TABLE_NAME + " t1" +
 				" JOIN (SELECT MAX(id) id FROM " + TABLE_NAME +
 				" GROUP BY " + CHUPA_COMMUN_ID + ") t2 on t1.id = t2.id" +
 				" WHERE " + TYPE + " = ?" +
 				" ORDER BY id";
-		
+
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString()});
 
@@ -379,18 +378,18 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 				list.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		
+
 		return list;
 	}
-	
+
 	public List<AhMessage> getChupasByCommunId(String chupaCommunId){
 		List<AhMessage> list = new ArrayList<AhMessage>();
-		
+
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
-			" WHERE " + TYPE + " = ?" + " AND " + CHUPA_COMMUN_ID + " = ?" +
-			" ORDER BY id";
-		
+				" WHERE " + TYPE + " = ?" + " AND " + CHUPA_COMMUN_ID + " = ?" +
+				" ORDER BY id";
+
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString(), chupaCommunId});
 
@@ -400,7 +399,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 				list.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		
+
 		return list;
 	}
 }

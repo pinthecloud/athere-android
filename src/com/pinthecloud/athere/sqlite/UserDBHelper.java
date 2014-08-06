@@ -2,7 +2,6 @@ package com.pinthecloud.athere.sqlite;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -16,15 +15,15 @@ import com.pinthecloud.athere.model.User;
 
 public class UserDBHelper extends SQLiteOpenHelper {
 
-	
+
 	// All Static variables
 	// Database Version
-	
+
 	private static int DATABASE_VERSION = 1;
-//	static{
-//		Random r= new Random();
-//		DATABASE_VERSION = r.nextInt(10) + 1; 
-//	}
+	//	static{
+	//		Random r= new Random();
+	//		DATABASE_VERSION = r.nextInt(10) + 1; 
+	//	}
 	// Database Name
 	private static final String DATABASE_NAME = "userManagerDB";
 
@@ -47,7 +46,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public UserDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
-	
+
 	/*
 	 * Creating Tables(non-Javadoc)
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
@@ -56,7 +55,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		Log.d(AhGlobalVariable.LOG_TAG, "UserDBHelper onCreate");
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
-			"("
+				"("
 				+ ID + " TEXT PRIMARY KEY,"
 				+ NICK_NAME + " TEXT,"
 				+ PROFILE_PIC + " TEXT,"
@@ -67,7 +66,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				+ AGE + " INTEGER,"
 				+ SQUARE_ID + " TEXT,"
 				+ IS_CHUPA_ENABLE + " INTEGER"
-			+")";
+				+")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
@@ -85,7 +84,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		// Create tables again
 		onCreate(db);
 	}
-	
+
 	@Override
 	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.d(AhGlobalVariable.LOG_TAG, "UserDbHelper onDowngrade");
@@ -108,7 +107,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Adding new contact
 	public void addUser(User user) {
-		
+
 		if (user == null) return;
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -144,7 +143,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 			values.put(AGE, user.getAge());
 			values.put(SQUARE_ID, user.getSquareId());
 			values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
-			
+
 			// Inserting Row
 			db.insert(TABLE_NAME, null, values);
 		}
@@ -163,21 +162,21 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		return null;
 	}
-	
+
 	public boolean isUserExist(String userId){
 		boolean isExist = false;
 		SQLiteDatabase db = this.getReadableDatabase();
-		
+
 		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) return cursor.moveToFirst();
-		
+
 		return isExist;
 	}
-	
+
 	public void addIfNotExistOrUpdate(User user){
 		if (user == null) return;
-		
+
 		if (this.isUserExist(user.getId()))
 			this.updateUser(user);
 		else 
@@ -196,7 +195,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		int age = cursor.getInt(7);
 		String squareId = cursor.getString(8);
 		boolean chupaEnable = cursor.getInt(9) == 1;
-		
+
 		user.setId(_id);
 		user.setNickName(nickName);
 		user.setProfilePic(profilePic);
@@ -233,9 +232,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Updating single contact
 	public void updateUser(User user) {
-		
+
 		if (user == null) return;
-		
+
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -249,7 +248,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		values.put(AGE, user.getAge());
 		values.put(SQUARE_ID, user.getSquareId());
 		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
-		
+
 		// Inserting Row
 		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });
 		db.close(); // Closing database connection
@@ -261,7 +260,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.delete(TABLE_NAME, ID + " = ?", new String[] { id });
 		db.close();
 	}
-	
+
 	public void deleteAllUsers() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_NAME, null, null);
