@@ -16,10 +16,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
+import com.pinthecloud.athere.dialog.ExitSquareConsentDialog;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
@@ -157,8 +160,20 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				progressBar.setVisibility(View.VISIBLE);
-				callbacks.exitSquare();
+				ExitSquareConsentDialog escDialog = new ExitSquareConsentDialog(new AhDialogCallback() {
+					
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						progressBar.setVisibility(View.VISIBLE);
+						callbacks.exitSquare();
+					}
+					
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				});
+				escDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
 

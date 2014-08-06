@@ -147,7 +147,7 @@ public class SquareProfileFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 
 		// Get parameter from previous activity intent
-		intent = getActivity().getIntent();
+		intent = activity.getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
 
 		// Set Helper
@@ -291,7 +291,7 @@ public class SquareProfileFragment extends AhFragment{
 				cameraButton.setEnabled(false);
 				cameraRotateButton.setEnabled(false);
 				companyNumberEditText.setEnabled(false);
-
+				
 				// Enter Square
 				enterSquare();
 			}
@@ -381,6 +381,10 @@ public class SquareProfileFragment extends AhFragment{
 					}
 				}
 
+				// Save info for user
+				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
+				
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final User user = userHelper.getMyUserInfo(false);
@@ -413,10 +417,8 @@ public class SquareProfileFragment extends AhFragment{
 						// Save this setting and go to next activity
 						int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
 						pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
-						pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-						pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
 
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);

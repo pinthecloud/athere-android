@@ -15,12 +15,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageButton
             android:id="@+id/square_chat_frag_option_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/shout"
+            android:src="@drawable/chat_shout_off" />
 
         <EditText
             android:id="@+id/square_chat_frag_message_text"
@@ -38,9 +42,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/send_image_button_bg"
             android:contentDescription="@string/send"
-            android:enabled="false" />
+            android:enabled="false"
+            android:src="@drawable/send_image_button_bg" />
     </LinearLayout>
 
 </LinearLayout>

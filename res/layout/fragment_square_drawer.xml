@@ -3,7 +3,7 @@
     android:id="@+id/square_drawer_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cccc" >
+    android:background="@android:color/white" >
 
     <ProgressBar
         android:id="@+id/square_drawer_frag_progress_bar"
@@ -67,8 +67,10 @@
         <Button
             android:id="@+id/square_drawer_frag_exit_button"
             android:layout_width="match_parent"
-            android:text="Exit Ground"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:background="@android:color/transparent"
+            android:text="@string/exit_square" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
@@ -25,8 +26,6 @@ import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareChupaListFragment extends AhFragment{
 
-	private Square square;
-
 	public SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
 
@@ -34,24 +33,61 @@ public class SquareChupaListFragment extends AhFragment{
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 
+	
 	public SquareChupaListFragment(Square square) {
 		super();
-		this.square = square;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		lastChupaCommunList = convertToMap(lastChupaList);
 	}
 
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_square_chupa_list, container, false);
+
+		/*
+		 * Set UI component
+		 */
+		squareChupaListView = (ListView)view.findViewById(R.id.square_chupa_list_frag_list);
+
+
+		/*
+		 * Set square chupa list view
+		 */
+		squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+		squareChupaListView.setAdapter(squareChupaListAdapter);
+		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent intent = new Intent(activity, ChupaChatActivity.class);
+				intent.putExtra(AhGlobalVariable.USER_KEY, userDBHelper.getUser(lastChupaCommunList.get(position).get("senderId")));
+				startActivity(intent);
+			}
+		});
+
+		return view;
+	}
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateList();
+	}
+
+
 	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
-		// TODO Auto-generated method stub
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){
 			Map<String, String> map = new HashMap<String, String>();
@@ -64,60 +100,19 @@ public class SquareChupaListFragment extends AhFragment{
 			map.put("content", message.getContent());
 			map.put("timeStamp", message.getTimeStamp());
 			map.put("chupaCommunId", message.getChupaCommunId());
-			
 			list.add(map);
 		}
-		
 		return list;
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_square_chupa_list, container, false);
-
-		/*
-		 * Set UI component
-		 */
-		squareChupaListView = (ListView)view.findViewById(R.id.square_chupa_list_frag_list);
-
-		/*
-		 * Set square chupa list view
-		 */
-		squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
-		squareChupaListView.setAdapter(squareChupaListAdapter);
-		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Intent i = new Intent(getActivity(), ChupaChatActivity.class);
-				i.putExtra("user", userDBHelper.getUser(lastChupaCommunList.get(position).get("senderId")));
-				
-				startActivity(i);
-			}
-		});
-
-		return view;
-	}
-	
-	@Override
-	public void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		
-		updateList();
-	}
 
 	public void updateList() {
 		activity.runOnUiThread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 				lastChupaCommunList = convertToMap(lastChupaList);
-				Log(lastChupaCommunList.get(0).get("content"));
 				squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
 				squareChupaListView.setAdapter(squareChupaListAdapter);
 			}

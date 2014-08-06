@@ -37,6 +37,8 @@
     <string name="take">take</string>
     <string name="send">send</string>
     <string name="dash">&#160;-&#160;</string>
+    <string name="shout">shout</string>
+    <string name="exit_square">Leave Ground</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -51,6 +53,7 @@
     <string name="offline_message">Network access is unavailable. Please check network status.</string>
     <string name="location_consent_message">"Chupa" will use current location information. Do you agree?</string>
     <string name="exit_square_message"> leaves ground.</string>
+    <string name="exit_square_consent_message">Every chats and chupas you have will be deleted. Do you leave ground?</string>
 
     <!-- String Array -->
 

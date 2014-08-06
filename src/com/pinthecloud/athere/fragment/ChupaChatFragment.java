@@ -3,10 +3,10 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,12 +47,12 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
-		user = getActivity().getIntent().getExtras().getParcelable("user");
+		Intent intent = activity.getIntent();
+		user = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
 
 	@Override
@@ -66,7 +66,6 @@ public class ChupaChatFragment extends AhFragment {
 		messageListView = (ListView) view.findViewById(R.id.chupa_chat_frag_list);
 		messageEditText = (EditText) view.findViewById(R.id.chupa_chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chupa_chat_frag_send_button);
-		//tempBackButton = (Button) view.findViewById(R.id.chupa_chat_frag_option_button);
 
 
 		/*
@@ -134,9 +133,6 @@ public class ChupaChatFragment extends AhFragment {
 			}
 		});
 		sendButton.setEnabled(false);
-
-
-		///////////////////////////////////////////////////////////////////////////////////
 
 		/**
 		 * See 
