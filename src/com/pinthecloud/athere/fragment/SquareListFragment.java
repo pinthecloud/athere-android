@@ -37,8 +37,6 @@ public class SquareListFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// Set Helper
 		squareHelper = app.getSquareHelper();
 	}
 
@@ -94,9 +92,10 @@ public class SquareListFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(List<Square> list, int count) {
+				mProgressBar.setVisibility(View.GONE);
+
 				squares.addAll(list);
 				squareListAdapter.notifyDataSetChanged();
-				mProgressBar.setVisibility(View.GONE);
 			}
 		});
 	}

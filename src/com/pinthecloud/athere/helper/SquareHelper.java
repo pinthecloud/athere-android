@@ -148,7 +148,7 @@ public class SquareHelper {
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
-
+		
 		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
 
 			@Override
@@ -159,7 +159,7 @@ public class SquareHelper {
 					if (list == null) throw new AhException(e, "getSquareList");
 					callback.onCompleted(list, list.size());
 				} else {
-					throw new AhException(e, "SquareHelper getSquareListAsync : " + e.getMessage());
+					throw new AhException(e, "SquareHelper getSquareListAsync");
 				}
 			}
 		});

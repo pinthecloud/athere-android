@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_chupa_list_frag_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <ListView
         android:id="@+id/square_chupa_list_frag_list"
@@ -11,4 +12,10 @@
         android:listSelector="@drawable/list_selector_bg" >
     </ListView>
 
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:background="@color/gray_background" />
+
+</LinearLayout>

@@ -28,22 +28,22 @@ import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class ChupaChatFragment extends AhFragment {
-	
+
 	private ListView messageListView;
 	private EditText messageEditText;
 	private ImageButton sendButton;
-	
+
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
-	
+
 	private User user;
-	
+
 	private SquareChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
-	
-	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class ChupaChatFragment extends AhFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
-		
+
 		/*
 		 * Set UI component
 		 */
@@ -114,7 +114,7 @@ public class ChupaChatFragment extends AhFragment {
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 				.setReceiverId(user.getId())
 				.setType(AhMessage.TYPE.CHUPA);
-				
+
 				final AhMessage message = messageBuilder.build();
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
@@ -157,12 +157,12 @@ public class ChupaChatFragment extends AhFragment {
 				});
 			}
 		});
-		
+
 		String chupaCommunId = new AhMessage.Builder()
-					.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-					.setReceiverId((user.getId()))
-					.build().getChupaCommunId();
-		
+		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+		.setReceiverId((user.getId()))
+		.build().getChupaCommunId();
+
 		if(chupaCommunId == null || "".equals(chupaCommunId)) throw new AhException("No chupaCommunId");
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		activity.runOnUiThread(new Runnable() {
@@ -177,7 +177,7 @@ public class ChupaChatFragment extends AhFragment {
 				}
 			}
 		});
-		
+
 		return view;
 	}
 }

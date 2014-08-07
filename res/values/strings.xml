@@ -2,8 +2,7 @@
 <resources>
 
     <!-- Default -->
-    <string name="app_name">Chupa</string>
-    <string name="hello_world">Hellow World!</string>
+    <string name="app_name">chupa</string>
 
     <!-- Title -->
     <string name="title_activity_splash">SplashActivity</string>
@@ -45,6 +44,7 @@
     <string name="chat_alarm">Chat Alarm</string>
     <string name="get_chupa">Get Chupa</string>
     <string name="profile_settings">Profile Settings</string>
+    <string name="member">Member</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>

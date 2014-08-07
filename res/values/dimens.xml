@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Common -->
-    <dimen name="action_bar_divider_height">1dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
 
     <!-- Basic Profile -->
     <dimen name="basic_profile_logo_bottom_margin">26.5dp</dimen>
@@ -23,20 +23,31 @@
     <dimen name="square_drawer_participant_list_left_margin">20dp</dimen>
     <dimen name="square_drawer_participant_list_right_margin">20dp</dimen>
     <dimen name="square_drawer_participant_list_height">56dp</dimen>
-    <dimen name="square_drawer_profile_height">120dp</dimen>
+    <dimen name="square_drawer_profile_height">166.5dp</dimen>
     <dimen name="square_drawer_toggle_button_left_margin">8dp</dimen>
     <dimen name="square_drawer_toggle_button_width">40dp</dimen>
     <dimen name="square_drawer_toggle_button_height">20dp</dimen>
     <dimen name="square_drawer_toggle_bar_height">48dp</dimen>
+    <dimen name="square_drawer_member_number_bar_height">48dp</dimen>
+    <dimen name="square_drawer_member_number_bar_left_margin">23.5dp</dimen>
+    <dimen name="square_drawer_member_title_right_margin">8dp</dimen>
 
     <!-- Square chat -->
     <dimen name="square_chat_profile_width">34dp</dimen>
     <dimen name="square_chat_profile_height">34dp</dimen>
+    <dimen name="square_chat_left_margin">10.5dp</dimen>
+    <dimen name="square_chat_height">48dp</dimen>
 
     <!-- Square list -->
     <dimen name="square_list_height">88dp</dimen>
     <dimen name="square_list_line_left_margin">48dp</dimen>
     <dimen name="square_list_line_right_margin">48dp</dimen>
+    
+    <!-- Square chupa list -->
+    <dimen name="square_chupa_list_height">88dp</dimen>
+    <dimen name="square_chupa_list_left_margin">48dp</dimen>
+    <dimen name="square_chupa_list_right_margin">48dp</dimen>
+    <dimen name="square_chupa_list_profile_text_margin">16dp</dimen>
 
     <!-- Font size -->
     <dimen name="font_small">12sp</dimen>

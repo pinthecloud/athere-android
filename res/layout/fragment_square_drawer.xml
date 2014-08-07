@@ -17,8 +17,8 @@
     <View
         android:id="@+id/square_drawer_frag_action_bar_divider"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/action_bar_divider_height"
-        android:background="@color/line" />
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/gray_line" />
 
     <LinearLayout
         android:id="@+id/square_drawer_frag_toggle_bar_layout"
@@ -96,18 +96,54 @@
         android:id="@+id/square_drawer_frag_profile_setting_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/profile_settings"
-        android:background="@android:color/transparent"
-        android:src="@drawable/sidebar_profile_edit"
         android:layout_alignRight="@+id/square_drawer_frag_profile_image"
-        android:layout_alignTop="@+id/square_drawer_frag_profile_image" />
+        android:layout_alignTop="@+id/square_drawer_frag_profile_image"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/profile_settings"
+        android:src="@drawable/sidebar_profile_edit" />
+
+    <LinearLayout
+        android:id="@+id/square_drawer_frag_member_number_bar_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/square_drawer_member_number_bar_height"
+        android:layout_below="@+id/square_drawer_frag_profile_image"
+        android:gravity="center" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/square_drawer_member_number_bar_left_margin"
+            android:layout_marginRight="@dimen/square_drawer_member_title_right_margin"
+            android:text="@string/member"
+            android:textSize="@dimen/font_small" />
+
+        <TextView
+            android:id="@+id/square_drawer_frag_member_male_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/font_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dash"
+            android:textSize="@dimen/font_small" />
+
+        <TextView
+            android:id="@+id/square_drawer_frag_member_female_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/square_drawer_frag_participant_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/square_drawer_frag_exit_button"
-        android:layout_below="@+id/square_drawer_frag_profile_image"
+        android:layout_below="@+id/square_drawer_frag_member_number_bar_layout"
         android:divider="@null" >
     </ListView>
 

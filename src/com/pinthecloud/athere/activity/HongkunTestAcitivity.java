@@ -31,7 +31,7 @@ public class HongkunTestAcitivity extends AhActivity {
 
 	public static final String SENDER_ID = "838051405989";
 
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

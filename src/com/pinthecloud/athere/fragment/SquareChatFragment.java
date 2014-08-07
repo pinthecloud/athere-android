@@ -3,7 +3,6 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -19,7 +17,6 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
-import com.pinthecloud.athere.fragment.SquareDrawerFragment.SquareDrawerFragmentCallbacks;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -31,7 +28,6 @@ import com.pinthecloud.athere.sqlite.UserDBHelper;
 public class SquareChatFragment extends AhFragment{
 
 	private Square square;
-	private SquareDrawerFragmentCallbacks callbacks;
 
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
@@ -183,11 +179,5 @@ public class SquareChatFragment extends AhFragment{
 		}
 
 		return view;
-	}
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		callbacks = (SquareDrawerFragmentCallbacks) activity;
 	}
 }
