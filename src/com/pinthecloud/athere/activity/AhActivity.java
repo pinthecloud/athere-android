@@ -7,6 +7,12 @@ import android.util.Log;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
+/**
+ *  Base class for every activity.
+ *  Provides AhApplication reference for subclasses.
+ *  Every Activity is a container for each Fragment.
+ *  Fragments do the real works.
+ */
 public class AhActivity extends Activity {
 
 	protected AhApplication app;
@@ -23,6 +29,7 @@ public class AhActivity extends Activity {
 		pref = app.getPref();
 	}
 	
+	// Logging Method
 	protected void Log(String... params){
 		for(String str : params)
 			Log.e("ERROR", str);

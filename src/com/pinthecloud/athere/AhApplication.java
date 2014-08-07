@@ -20,9 +20,16 @@ import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
+/**
+ * 
+ * Base Application class
+ * This class is made for the instances that are needed globally.
+ * The instances will be initialized at here and can be referenced in AhActivity and AhFragment
+ *
+ */
 public class AhApplication extends Application{
 
-	// String
+	// Windows Azure Mobile Service Keys
 	private final String APP_URL = "https://athere.azure-mobile.net/";
 	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
 
@@ -31,7 +38,7 @@ public class AhApplication extends Application{
 	private static PreferenceHelper pref;
 	private static Object lock;
 
-	// Mobile Service
+	// Mobile Service instances
 	private static MobileServiceClient mClient;
 	private static MobileServiceTable<User> userTable;
 	private static MobileServiceTable<Square> squareTable;
@@ -111,10 +118,14 @@ public class AhApplication extends Application{
 		return locationHelper;
 	}
 
+	/**
+	 * @return true, if the App is connected with Internet.
+	 */
 	public boolean isOnline(){
 		ConnectivityManager cm = 
 				(ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
 }

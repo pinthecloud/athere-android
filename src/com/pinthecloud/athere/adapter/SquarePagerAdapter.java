@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.List;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -10,7 +8,6 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
 import com.pinthecloud.athere.fragment.SquareChupaListFragment;
-import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 
 public class SquarePagerAdapter extends FragmentStatePagerAdapter {
@@ -57,7 +54,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 	public void notifyDataSetChanged() {
 		// TODO Auto-generated method stub
 		super.notifyDataSetChanged();
-		this.titles[1] = " New";
+//		this.titles[1] = " New";
 		squareChupaListFragment.updateList();
 	}
 }

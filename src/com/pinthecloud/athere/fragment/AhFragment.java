@@ -9,7 +9,11 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
-
+/**
+ *  Basic Fragment class for At here application
+ *  Provides each instances that are needed in fragments
+ * 
+ */
 public class AhFragment extends Fragment{
 
 	protected AhApplication app;

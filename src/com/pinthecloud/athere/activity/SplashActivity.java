@@ -11,10 +11,12 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 
 /**
- * @author hongkunyoo
  * 
- * First Page
- *
+ *  First Page
+ *  Routes the page
+ *  	to BasicProfileActivity if AhGlobalVariable.IS_LOGGED_IN_USER_KEY is false
+ *  	to SquareListActivity   if AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY is false
+ *  	to SquareActivity 		else
  */
 public class SplashActivity extends AhActivity {
 

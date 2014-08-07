@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.R;
@@ -86,9 +87,11 @@ public class SquareTabFragment extends AhFragment{
 					@Override
 					public void run() {
 						tabs.setTextColor(Color.YELLOW);
+						EditText et = new EditText(context);
+						tabs.addView(et, 1);
 						Toast toast = Toast.makeText(activity.getApplicationContext(),
 								   "Handle in Square Activity", Toast.LENGTH_LONG);
-								toast.show();
+						toast.show();
 					}
 				});
 			}

@@ -16,6 +16,12 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 
+/**
+ * 
+ * @author hongkunyoo
+ * Test Fragment for hongkunyoo's own experiments
+ */
+
 public class HongkunTestFragment extends AhFragment {
 
 
