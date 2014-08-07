@@ -15,6 +15,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -29,12 +30,9 @@ public class BasicProfileFragment extends AhFragment{
 	private EditText birthYearEditText;
 	private NumberPickerDialog yearPickerDialog;
 
-	private ImageButton maleButton;
-	private ImageButton femaleButton;
-
+	private RadioButton maleButton;
 	private ImageButton completeButton;
 
-	private boolean isMale = true;
 	private boolean isTypedNickName = false;
 	private boolean isPickedBirthYear = false;
 
@@ -49,9 +47,8 @@ public class BasicProfileFragment extends AhFragment{
 		 */
 		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_edit_text);
 		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_year_text);
-		maleButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_male_button);
-		femaleButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_female_button);
-		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
+		maleButton = (RadioButton) view.findViewById(R.id.basic_profile_frag_male_button);
+		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_complete_button);
 
 
 		/*
@@ -137,30 +134,6 @@ public class BasicProfileFragment extends AhFragment{
 
 
 		/*
-		 * Set gender button
-		 */
-		maleButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				isMale = true;
-				maleButton.setEnabled(false);
-				femaleButton.setEnabled(true);
-			}
-		});
-		femaleButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				isMale = false;
-				maleButton.setEnabled(true);
-				femaleButton.setEnabled(false);
-			}
-		});
-		maleButton.setEnabled(false);
-
-
-		/*
 		 * Set Start Button
 		 */
 		completeButton.setOnClickListener(new OnClickListener() {
@@ -190,9 +163,9 @@ public class BasicProfileFragment extends AhFragment{
 					int age = c.get(Calendar.YEAR) - (birthYear - 1);
 					pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
 					pref.putInt(AhGlobalVariable.AGE_KEY, age);
-					
+
 					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, isMale);
+					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
 					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
 
 					Intent intent = new Intent(context, SquareListActivity.class);

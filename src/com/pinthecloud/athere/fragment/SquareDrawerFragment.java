@@ -15,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -34,6 +35,8 @@ public class SquareDrawerFragment extends AhFragment {
 	private View mFragmentView;
 	private SquareDrawerParticipantListAdapter participantListAdapter; 
 
+	private ToggleButton chatOnButton;
+	private ToggleButton chupaOnButton;
 	private ProgressBar progressBar;
 	private ListView participantListView;
 	private Button exitButton;
@@ -63,6 +66,8 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set Ui Component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
+		chatOnButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_on_button);
+		chupaOnButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_on_button);
 		participantListView = (ListView) view.findViewById(R.id.square_drawer_frag_participant_list);
 		exitButton = (Button) view.findViewById(R.id.square_drawer_frag_exit_button);
 
@@ -161,13 +166,13 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				ExitSquareConsentDialog escDialog = new ExitSquareConsentDialog(new AhDialogCallback() {
-					
+
 					@Override
 					public void doPositiveThing(Bundle bundle) {
 						progressBar.setVisibility(View.VISIBLE);
 						callbacks.exitSquare();
 					}
-					
+
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						// Do nothing

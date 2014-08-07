@@ -8,10 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.model.User;
@@ -22,15 +23,14 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 	private Context context;
 	private int layoutId;
 	private List<User> items;
+
 	private ImageView profilePic;
 	private TextView nickName;
-	private TextView age;
-	private TextView companyNum;
-	private TextView isMale;
-	private Button chupaBtn;
+	private ImageView isMale;
+	private ImageButton chupaBtn;
 
-	public SquareDrawerParticipantListAdapter(Context context, 
-			int layoutId, List<User> items) {
+
+	public SquareDrawerParticipantListAdapter(Context context, int layoutId, List<User> items) {
 		super(context, layoutId, items);
 		this.context = context;
 		this.layoutId = layoutId;
@@ -49,28 +49,34 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 
 		final User user = items.get(position);
 		if (user != null) {
-			// TODO
+			/*
+			 * Find UI Component
+			 */
 			profilePic = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
 			nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
-			age = (TextView)view.findViewById(R.id.drawer_user_age);
-			companyNum = (TextView)view.findViewById(R.id.drawer_user_company_num);
-			isMale = (TextView)view.findViewById(R.id.drawer_user_is_male);
-			chupaBtn = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
+			isMale = (ImageView)view.findViewById(R.id.drawer_user_is_male);
+			chupaBtn = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
 
+			/*
+			 * Set image
+			 */
 			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
 			nickName.setText(user.getNickName());
-			age.setText(""+user.getAge());
-			companyNum.setText(""+user.getCompanyNum());
-			isMale.setText(user.isMale() ? "M" : "F");
+			if(user.isMale()){
+				isMale.setImageResource(R.drawable.sidebar_member_gender_m);
+			}else{
+				isMale.setImageResource(R.drawable.sidebar_member_gender_w);
+			}
 
+			/*
+			 * Set event on button
+			 */
 			chupaBtn.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					Intent intent = new Intent(context.getApplicationContext(), ChupaChatActivity.class);
-
-					intent.putExtra("user", user);
+					Intent intent = new Intent(context, ChupaChatActivity.class);
+					intent.putExtra(AhGlobalVariable.USER_KEY, user);
 					context.startActivity(intent);
 				}
 			});

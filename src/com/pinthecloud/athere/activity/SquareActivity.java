@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -33,8 +32,6 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 	private User user;
 
 	private ActionBar mActionBar;
-	private View mCustomActionBarView;
-	private TextView mTitleTextView;
 
 	private FragmentManager fragmentManager;
 	private DrawerLayout mDrawerLayout; 
@@ -70,9 +67,6 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		 * Set UI Component
 		 */
 		mActionBar = getActionBar();
-		mActionBar.setCustomView(R.layout.action_bar_square);
-		mCustomActionBarView = mActionBar.getCustomView();
-		mTitleTextView = (TextView) mCustomActionBarView.findViewById(R.id.action_bar_general_title);
 
 		progressBar = (ProgressBar) findViewById(R.id.square_progress_bar);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_layout);
@@ -83,9 +77,8 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		/*
 		 * Set Action Bar
 		 */
-		mActionBar.setDisplayShowCustomEnabled(true);
 		mActionBar.setDisplayShowHomeEnabled(false);
-		mTitleTextView.setText(square.getName());
+		mActionBar.setTitle(square.getName());
 
 		/*
 		 * Set tab
