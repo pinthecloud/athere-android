@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/square_drawer_fragment"
         android:name="com.pinthecloud.athere.fragment.SquareDrawerFragment"
-        android:layout_width="@dimen/drawer_width"
+        android:layout_width="@dimen/square_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="right"
         tools:layout="@layout/fragment_square_drawer" />

@@ -14,12 +14,12 @@
     <com.pinthecloud.athere.interfaces.PagerSlidingTabStrip
         android:id="@+id/square_tab_frag_tab"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_height"
+        android:layout_height="@dimen/square_tab_height"
         app:pstsActivateTextColor="@android:color/white"
         app:pstsDeactivateTextColor="@color/tab_text_unselected"
         app:pstsDividerColor="@android:color/transparent"
         app:pstsIndicatorColor="@color/red"
-        app:pstsIndicatorHeight="@dimen/tab_height"
+        app:pstsIndicatorHeight="@dimen/square_tab_height"
         app:pstsShouldExpand="true"
         app:pstsTabSwitch="true"
         app:pstsTextAllCaps="false" />

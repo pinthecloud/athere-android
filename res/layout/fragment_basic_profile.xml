@@ -1,69 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/basic_profile_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:gravity="center"
     android:orientation="vertical" >
-
-    <ImageView
-        android:id="@+id/drawer_user_pro_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/basic_profile_logo_margin_bottom"
-        android:contentDescription="@string/logo"
-        android:src="@drawable/setup" />
-
-    <EditText
-        android:id="@+id/basic_profile_frag_nick_name_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="center|bottom"
-        android:hint="@string/nick_name"
-        android:inputType="text"
-        android:maxLength="15"
-        android:textSize="@dimen/font_normal" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" >
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical" >
 
-        <ImageButton
-            android:id="@+id/basic_profile_frag_male_button"
+        <ImageView
+            android:id="@+id/drawer_user_pro_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/male"
-            android:src="@drawable/gender_male_toggle_bg" />
+            android:layout_marginBottom="@dimen/basic_profile_logo_bottom_margin"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/setup" />
 
-        <ImageButton
-            android:id="@+id/basic_profile_frag_female_button"
+        <EditText
+            android:id="@+id/basic_profile_frag_nick_name_edit_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/female"
-            android:src="@drawable/gender_female_toggle_bg" />
+            android:layout_height="@dimen/basic_profile_text_height"
+            android:ems="10"
+            android:gravity="center|bottom"
+            android:hint="@string/nick_name"
+            android:inputType="text"
+            android:maxLength="15"
+            android:textSize="@dimen/font_normal" >
+
+            <requestFocus />
+        </EditText>
+
+        <RadioGroup
+            android:id="@+id/basic_profile_frag_gender_button_group"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/basic_profile_gender_radio_height"
+            android:checkedButton="@+id/basic_profile_frag_male_button"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/basic_profile_frag_male_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/basic_profile_gender_radio_margin"
+                android:background="@drawable/gender_male_toggle_bg"
+                android:button="@android:color/transparent" />
+
+            <RadioButton
+                android:id="@+id/basic_profile_frag_female_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gender_female_toggle_bg"
+                android:button="@android:color/transparent" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/basic_profile_frag_year_text"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/basic_profile_text_height"
+            android:ems="10"
+            android:gravity="center|bottom"
+            android:hint="@string/birth_of_year"
+            android:textSize="@dimen/font_normal" />
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/basic_profile_frag_year_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="center|bottom"
-        android:hint="@string/birth_of_year"
-        android:textSize="@dimen/font_normal" />
-
     <ImageButton
-        android:id="@+id/basic_profile_frag_start_button"
+        android:id="@+id/basic_profile_frag_complete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/basic_profile_complete_button_bottom_margin"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
         android:src="@drawable/ok_image_button_bg" />
 
-</LinearLayout>
+</RelativeLayout>

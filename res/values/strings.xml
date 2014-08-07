@@ -20,6 +20,8 @@
     <string name="profile_image">Profile Image</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="delete">Delete</string>
@@ -39,6 +41,10 @@
     <string name="dash">&#160;-&#160;</string>
     <string name="shout">shout</string>
     <string name="exit_square">Leave Ground</string>
+    <string name="chupa">Chupa</string>
+    <string name="chat_alarm">Chat Alarm</string>
+    <string name="get_chupa">Get Chupa</string>
+    <string name="profile_settings">Profile Settings</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>

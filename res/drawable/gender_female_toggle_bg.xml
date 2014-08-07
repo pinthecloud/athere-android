@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/setup_gender_w_selected" android:state_enabled="false"/>
-    <item android:drawable="@drawable/setup_gender_w"/>
+    <item android:drawable="@drawable/setup_gender_w_selected" android:state_checked="true"/>
+    <item android:drawable="@drawable/setup_gender_w" android:state_checked="false"/>
+
 </selector>
