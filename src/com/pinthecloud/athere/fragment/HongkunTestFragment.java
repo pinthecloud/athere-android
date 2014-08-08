@@ -1,7 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
-import java.util.List;
-
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +9,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.util.BitmapUtil;
 
 /**
  * 
@@ -36,6 +40,7 @@ public class HongkunTestFragment extends AhFragment {
 	MessageDBHelper messageDB;
 	private String who;
 	private String content;
+	
 
 	public static final String SENDER_ID = "838051405989";
 
@@ -78,13 +83,54 @@ public class HongkunTestFragment extends AhFragment {
 					if (b.getId() == btnArr[0].getId()) {
 
 					} else if (b.getId() == btnArr[1].getId()) {
-						List<AhMessage> list = messageDB.getAllMessages(AhMessage.TYPE.ENTER_SQUARE);
-						Log(list.toString());
+						
+						Square square = new Square();
+						square.setWhoMade(pref.getString(AhGlobalVariable.USER_ID_KEY));
+						square.setName("Main Ground");
+						square.setLatitude(0);
+						square.setLongitude(0);
+						square.setMaleNum(0);
+						square.setFemaleNum(0);
+						square.setAdmin(false);
+						square.setDistance(0);
+						square.setCode("");
+						square.setCode(false);
+						
+						squareHelper.createSquareAsync(square, new AhEntityCallback<Square>() {
+
+							@Override
+							public void onCompleted(Square entity) {
+								// TODO Auto-generated method stub
+								squareId.append(entity.getId());
+								Log("onComple createSquare");
+							}
+						});
+						
+						
+						
 					} else if (b.getId() == btnArr[2].getId()) {
-						Log(messageDB.getAllMessages(AhMessage.TYPE.EXIT_SQUARE).toString());
-						messageDB.deleteAllMessages(AhMessage.TYPE.ENTER_SQUARE);
-						Log(messageDB.getAllMessages(AhMessage.TYPE.ENTER_SQUARE).toString());
-						Log(messageDB.getAllMessages(AhMessage.TYPE.EXIT_SQUARE).toString());
+						Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), com.pinthecloud.athere.R.drawable.splash);
+						String profilePic = BitmapUtil.convertToString(largeIcon);
+						User user = new User();
+						
+						user.setNickName("Bob");
+						user.setProfilePic(profilePic);
+						user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
+						user.setMale(true);
+						user.setCompanyNum(2);
+						user.setAge(24);
+						user.setSquareId(squareId.toString());
+						user.setChupaEnable(true);
+						
+						userHelper.enterSquareAsync(user, new AhEntityCallback<String>() {
+							
+							@Override
+							public void onCompleted(String entity) {
+								// TODO Auto-generated method stub
+								Log("succeed enterSquare");
+							}
+						});
+						
 					} else if (b.getId() == btnArr[3].getId()) {
 
 					} else if (b.getId() == btnArr[4].getId()) {
@@ -97,59 +143,6 @@ public class HongkunTestFragment extends AhFragment {
 			});
 		}
 
-		//		btn01.setOnClickListener(new View.OnClickListener() {
-		//			
-		//			@Override
-		//			public void onClick(View v) {
-		//				// TODO Auto-generated method stub
-		//				addItem01(v);
-		//			}
-		//		});
-		//		
-		//		btn02.setOnClickListener(new View.OnClickListener() {
-		//			
-		//			@Override
-		//			public void onClick(View v) {
-		//				// TODO Auto-generated method stub
-		//				addItem02(v);
-		//			}
-		//		});
-		//
-		//		btn03.setOnClickListener(new View.OnClickListener() {
-		//			
-		//			@Override
-		//			public void onClick(View v) {
-		//				// TODO Auto-generated method stub
-		//				addItem03(v);
-		//			}
-		//		});
-		//		
-		//		btn04.setOnClickListener(new View.OnClickListener() {
-		//			
-		//			@Override
-		//			public void onClick(View v) {
-		//				// TODO Auto-generated method stub
-		//				addItem04(v);
-		//			}
-		//		});
-		//		
-		//		btn05.setOnClickListener(new View.OnClickListener() {
-		//			
-		//			@Override
-		//			public void onClick(View v) {
-		//				// TODO Auto-generated method stub
-		//				addItem05(v);
-		//			}
-		//		});
-		//		
-		//		btn06.setOnClickListener(new View.OnClickListener() {
-		//			
-		//			@Override
-		//			public void onClick(View v) {
-		//				// TODO Auto-generated method stub
-		//				addItem06(v);
-		//			}
-		//		});
 
 		return view;
 	}

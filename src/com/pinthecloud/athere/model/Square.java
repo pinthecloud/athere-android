@@ -20,8 +20,10 @@ public class Square implements Parcelable {
 	private double latitude;
 	@com.google.gson.annotations.SerializedName("longitude")
 	private double longitude;
-	@com.google.gson.annotations.SerializedName("participants")
-	private int participants;
+	@com.google.gson.annotations.SerializedName("maleNum")
+	private int maleNum;
+	@com.google.gson.annotations.SerializedName("femaleNum")
+	private int femaleNum;
 	@com.google.gson.annotations.SerializedName("isAdmin")
 	private boolean isAdmin;
 	@com.google.gson.annotations.SerializedName("distance")
@@ -61,11 +63,17 @@ public class Square implements Parcelable {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
-	public int getParticipants() {
-		return participants;
+	public int getMaleNum() {
+		return maleNum;
 	}
-	public void setParticipants(int participants) {
-		this.participants = participants;
+	public void setMaleNum(int maleNum) {
+		this.maleNum = maleNum;
+	}
+	public int getFemaleNum() {
+		return femaleNum;
+	}
+	public void setFemaleNum(int femaleNum) {
+		this.femaleNum = femaleNum;
 	}
 	public int getDistance() {
 		return distance;
@@ -107,7 +115,8 @@ public class Square implements Parcelable {
 		dest.writeString(name);
 		dest.writeDouble(latitude);
 		dest.writeDouble(longitude);
-		dest.writeInt(participants);
+		dest.writeInt(maleNum);
+		dest.writeInt(femaleNum);
 		dest.writeInt(distance);
 		dest.writeInt(isAdmin? 1: 0);
 		dest.writeString(code);
@@ -120,7 +129,8 @@ public class Square implements Parcelable {
 		name = in.readString();
 		latitude = in.readDouble();
 		longitude = in.readDouble();
-		participants = in.readInt();
+		maleNum = in.readInt();
+		femaleNum = in.readInt();
 		distance = in.readInt();
 		isAdmin = in.readInt() == 1;
 		code = in.readString();

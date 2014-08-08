@@ -22,7 +22,8 @@ public class JsonConverter {
 			double latitude = jo.get("latitude").getAsDouble();
 			double longitude = jo.get("longitude").getAsDouble();
 			String whoMade = jo.get("whoMade").getAsString();
-			int participants = jo.get("participants").getAsInt();
+			int maleNum = jo.get("maleNum").getAsInt();
+			int femaleNum = jo.get("femaleNum").getAsInt();
 			int distance = jo.get("distance").getAsInt();
 			boolean isAdmin = jo.get("isAdmin").getAsBoolean();
 			boolean isCode = jo.get("isCode").getAsBoolean();
@@ -37,7 +38,8 @@ public class JsonConverter {
 			square.setName(name);
 			square.setLatitude(latitude);
 			square.setLongitude(longitude);
-			square.setParticipants(participants);
+			square.setMaleNum(maleNum);
+			square.setFemaleNum(femaleNum);
 			square.setDistance(distance);
 			square.setAdmin(isAdmin);
 			square.setCode(code);

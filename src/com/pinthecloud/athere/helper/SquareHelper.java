@@ -103,6 +103,15 @@ public class SquareHelper {
 		square.setLatitude(latitude);
 		square.setLongitude(longitude);
 		square.setWhoMade(whoMade);
+		
+		int maleNum = 0;
+		int femaleNum = 0;
+		
+		if(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY)) maleNum++;
+		else femaleNum++;
+		
+		square.setMaleNum(maleNum);
+		square.setFemaleNum(femaleNum);
 
 		return this.createSquareSync(square);
 	}
@@ -179,6 +188,15 @@ public class SquareHelper {
 		square.setLongitude(longitude);
 		square.setWhoMade(whoMade);
 
+		int maleNum = 0;
+		int femaleNum = 0;
+		
+		if(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY)) maleNum++;
+		else femaleNum++;
+		
+		square.setMaleNum(maleNum);
+		square.setFemaleNum(femaleNum);
+		
 		this.createSquareAsync(square, callback);
 	}
 

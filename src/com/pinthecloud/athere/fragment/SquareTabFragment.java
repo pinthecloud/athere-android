@@ -81,14 +81,11 @@ public class SquareTabFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				mSquarePagerAdapter.notifyDataSetChanged();
-				
+				Log("in setMessageHandler in Square Tab Fragment");
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						tabs.setTextColor(Color.YELLOW);
-						EditText et = new EditText(context);
-						tabs.addView(et, 1);
 						Toast toast = Toast.makeText(activity.getApplicationContext(),
 								   "Handle in Square Activity", Toast.LENGTH_LONG);
 						toast.show();

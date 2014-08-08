@@ -50,8 +50,8 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			 * Set UI component
 			 */
 			squareNameText.setText(square.getName());
-			maleNumText.setText(""+square.getParticipants());
-			femaleNumText.setText(""+square.getParticipants());
+			maleNumText.setText(""+square.getMaleNum());
+			femaleNumText.setText(""+square.getFemaleNum());
 		}
 		return view;
 	}

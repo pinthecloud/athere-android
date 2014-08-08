@@ -128,6 +128,7 @@ public class ChupaChatFragment extends AhFragment {
 					public void onCompleted(AhMessage entity) {
 						message.setStatus(AhMessage.SENT);
 						messageListAdapter.notifyDataSetChanged();
+						messageDBHelper.addMessage(message);
 					}
 				});
 			}
@@ -145,7 +146,7 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-
+				Log("in handler : " + message.getChupaCommunId());
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -171,6 +172,7 @@ public class ChupaChatFragment extends AhFragment {
 			public void run() {
 
 				for (AhMessage message : chupas) {
+					message.setStatus(AhMessage.SENT);
 					messageList.add(message);
 					messageListAdapter.notifyDataSetChanged();
 					messageListView.setSelection(messageListView.getCount() - 1);

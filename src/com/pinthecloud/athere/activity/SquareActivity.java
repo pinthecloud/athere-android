@@ -24,6 +24,7 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareActivity extends AhActivity implements SquareDrawerFragment.SquareDrawerFragmentCallbacks{
@@ -45,6 +46,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
 	private MessageHelper messageHelper;
+	private MessageDBHelper messageDBHelper;
 
 
 	@Override
@@ -57,6 +59,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		 */
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
+		messageDBHelper = app.getMessageDBHelper();
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
 		user = userHelper.getMyUserInfo(true);
@@ -182,7 +185,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 			public void run() {
 				userHelper.exitSquareSync(user.getId());
 				userDBHelper.deleteAllUsers();
-
+				messageDBHelper.deleteAllMessages();
 				String exitMessage = getResources().getString(R.string.exit_square_message);
 				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
