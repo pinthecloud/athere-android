@@ -78,7 +78,6 @@ public class HongkunTestFragment extends AhFragment {
 
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
 
