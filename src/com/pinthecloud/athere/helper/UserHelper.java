@@ -152,7 +152,7 @@ public class UserHelper {
 				if (exception == null) {
 					callback.onCompleted(result, count);
 				} else {
-					throw new AhException(exception, "enterSquareAsync");
+					throw new AhException(exception, "getUserListAsync");
 				}
 			}
 		});

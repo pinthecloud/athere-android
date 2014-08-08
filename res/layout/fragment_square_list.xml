@@ -20,8 +20,8 @@
         <View
             android:id="@+id/square_list_frag_action_bar_divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/action_bar_divider_height"
-            android:background="@color/line" />
+            android:layout_height="@dimen/divider_height"
+            android:background="@color/gray_line" />
 
         <ListView
             android:id="@+id/square_list_frag_list"
@@ -34,7 +34,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.6"
+            android:alpha="0.4"
             android:background="@color/gray_background" />
     </LinearLayout>
 

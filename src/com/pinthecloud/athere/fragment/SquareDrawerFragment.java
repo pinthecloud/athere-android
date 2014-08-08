@@ -13,8 +13,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -35,6 +40,11 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerParticipantListAdapter participantListAdapter; 
 
 	private ProgressBar progressBar;
+	private ToggleButton chatOnButton;
+	private ToggleButton chupaOnButton;
+	private ImageButton profileSettingButton;
+	private TextView maleNumText;
+	private TextView femaleNumText;
 	private ListView participantListView;
 	private Button exitButton;
 
@@ -63,8 +73,21 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set Ui Component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
+		chatOnButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_on_button);
+		chupaOnButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_on_button);
+		profileSettingButton = (ImageButton) view.findViewById(R.id.square_drawer_frag_profile_setting_button);
+		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
+		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
 		participantListView = (ListView) view.findViewById(R.id.square_drawer_frag_participant_list);
 		exitButton = (Button) view.findViewById(R.id.square_drawer_frag_exit_button);
+
+
+		/*
+		 * Set member number text
+		 * TODO set proper male and female member number text
+		 */
+		maleNumText.setText("" + userList.size());
+		femaleNumText.setText("" + userList.size());
 
 
 		/*
@@ -154,6 +177,19 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 		/*
+		 * Set setting toggle button
+		 */
+		chupaOnButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// TODO send push
+				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
+			}
+		});
+
+
+		/*
 		 * Set Button
 		 */
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -161,19 +197,26 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				ExitSquareConsentDialog escDialog = new ExitSquareConsentDialog(new AhDialogCallback() {
-					
+
 					@Override
 					public void doPositiveThing(Bundle bundle) {
 						progressBar.setVisibility(View.VISIBLE);
 						callbacks.exitSquare();
 					}
-					
+
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						// Do nothing
 					}
 				});
 				escDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
+		profileSettingButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO setting profile
 			}
 		});
 

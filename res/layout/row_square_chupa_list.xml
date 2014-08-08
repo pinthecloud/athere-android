@@ -1,49 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row_square_chupa_list_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:layout_height="@dimen/square_list_height"
+    android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/square_chupa_list_left_margin"
+        android:layout_marginRight="@dimen/square_chupa_list_right_margin"
+        android:layout_weight="1" >
 
         <ImageView
             android:id="@+id/square_chupa_list_profile_pic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/actionbar_logo" />
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/profile_image" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/square_chupa_list_profile_text_margin"
+            android:layout_toRightOf="@+id/square_chupa_list_profile_pic"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/square_chupa_list_sender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FromWho" />
+                android:textSize="@dimen/font_normal" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/square_chupa_list_content"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:id="@+id/square_chupa_list_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="content" />
-
-                <TextView
-                    android:id="@+id/square_chupa_list_timestamp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="when" />
-            </LinearLayout>
-
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_small" />
         </LinearLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/square_chupa_list_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@color/gray_line"
+            android:textSize="@dimen/font_small" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_marginLeft="@dimen/square_chupa_list_left_margin"
+        android:layout_marginRight="@dimen/square_chupa_list_right_margin"
+        android:background="@color/gray_line" />
 
 </LinearLayout>
