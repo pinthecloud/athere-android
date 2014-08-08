@@ -2,11 +2,14 @@ package com.pinthecloud.athere.fragment;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -56,11 +59,28 @@ public class SquareTabFragment extends AhFragment{
 		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
 
 		// Set up the ViewPager with the sections adapter.
+		int startTab = pref.getInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
 		mViewPager.setAdapter(mSquarePagerAdapter);
+		mViewPager.setCurrentItem(startTab);
+
 		// Set up tabs with the view pager
+		tabs.setStartTab(startTab);
 		tabs.setViewPager(mViewPager);
-
-
+		tabs.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int position) {
+				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, position);
+			}
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			}
+			@Override
+			public void onPageScrollStateChanged(int state) {
+			}
+		});
+		
+		
 		/*
 		 *  Need to set Handler for Chupa on app running state.
 		 */

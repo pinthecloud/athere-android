@@ -100,7 +100,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 					Bitmap pictureBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
 					profileImage.setImageBitmap(pictureBitmap);
 				}
-				
 			}
 
 

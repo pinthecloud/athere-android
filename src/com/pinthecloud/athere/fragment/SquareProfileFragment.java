@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -117,15 +118,18 @@ public class SquareProfileFragment extends AhFragment{
 						pictureBitmap = BitmapUtil.flip(pictureBitmap);
 					}
 
-					// Crop picture in round
-					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
-
 					// Set taken picture to view
 					profilePictureView.setImageBitmap(pictureBitmap);
 
-					// Save picture to internal storage
+					// Crop picture in round
+					// Blur picture
+					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
+					Bitmap pictureBlurBitmap = BitmapUtil.blur(context, pictureBitmap, 25);
+
+					// Save pictures to internal storage
 					FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
 					FileUtil.saveImageToInternalStorage(app, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
+					FileUtil.saveImageToInternalStorage(app, pictureBlurBitmap, AhGlobalVariable.PROFILE_PICTURE_BLUR_NAME);
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
@@ -203,8 +207,8 @@ public class SquareProfileFragment extends AhFragment{
 			}
 		});
 		nickNameEditText.setText(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-		
-		
+
+
 		/*
 		 * Set event on Company EditText
 		 */
@@ -261,7 +265,7 @@ public class SquareProfileFragment extends AhFragment{
 		});
 		companyNumberEditText.setInputType(InputType.TYPE_NULL);
 
-		
+
 		/*
 		 * Set event on button
 		 */
@@ -311,19 +315,35 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
+
 				/*
 				 * Check whether user took profile picture or not
 				 * Check nick name edit text and save setting
 				 */
-				// Disable UI component for preventing double action
-				completeButton.setEnabled(false);
-				cameraButton.setEnabled(false);
-				cameraRotateButton.setEnabled(false);
-				nickNameEditText.setEnabled(false);
-				companyNumberEditText.setEnabled(false);
-				
-				// Enter Square
-				enterSquare();
+
+				// Remove blank of along side.
+				String nickName = nickNameEditText.getText().toString().trim();
+				nickNameEditText.setText(nickName);
+				nickNameEditText.setSelection(nickName.length());
+
+				// Save gender and birth year infomation to preference
+				String message = checkNickName(nickName);
+				if(!message.equals("")){
+					// Unproper nick name
+					// Show warning toast for each situation
+					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+					toast.show();
+				} else{
+					// Disable UI component for preventing double action
+					completeButton.setEnabled(false);
+					cameraButton.setEnabled(false);
+					cameraRotateButton.setEnabled(false);
+					nickNameEditText.setEnabled(false);
+					companyNumberEditText.setEnabled(false);
+
+					// Enter Square
+					enterSquare();
+				}
 			}
 		});
 		completeButton.setEnabled(false);
@@ -418,18 +438,22 @@ public class SquareProfileFragment extends AhFragment{
 				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-				
+				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
+
+
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final User user = userHelper.getMyUserInfo(false);
 				String id = userHelper.enterSquareSync(user);
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 
+
 				// Get user list in the square and save it without me
 				List<User> userList = userHelper.getUserListSync(square.getId());
 				userDBHelper.addAllUsers(userList);
 				userDBHelper.deleteUser(id);
-				
+
+
 				// Send message to server for notifying entering
 				String numOfMem = getResources().getString(R.string.number_of_member);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
@@ -451,6 +475,7 @@ public class SquareProfileFragment extends AhFragment{
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, AhGlobalVariable.SQUARE_CHAT_TAB);
 
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);

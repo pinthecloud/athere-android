@@ -95,7 +95,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		/*
 		 * Set Drawer
 		 */
-		mSquareDrawerFragment.setUp(mFragmentView, mDrawerLayout);
+		mSquareDrawerFragment.setUp(mFragmentView, mDrawerLayout, user);
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
@@ -209,6 +209,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
 						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+						pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
 
 						Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
 						startActivity(intent);

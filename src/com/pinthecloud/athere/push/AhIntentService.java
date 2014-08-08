@@ -42,7 +42,6 @@ public class AhIntentService extends IntentService {
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
-	//	private UserInfoFetchBuffer userInfoFetchBuffer;
 	private UserHelper userHelper;
 	private Context _this;
 
@@ -58,11 +57,8 @@ public class AhIntentService extends IntentService {
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
-		//		userInfoFetchBuffer = app.getUserInfoFetchBuffer();
 		userHelper = app.getUserHelper();
-
 		atomicInteger = new AtomicInteger();
-
 		_this = this;
 	}
 
@@ -70,6 +66,8 @@ public class AhIntentService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		AhMessage _message = null;
 		String _userId = null; 
+		
+		
 		// Parsing the data from server
 		try {
 			_message = parseMessageIntent(intent);

@@ -8,12 +8,12 @@
     <dimen name="basic_profile_gender_radio_height">48dp</dimen>
     <dimen name="basic_profile_gender_radio_margin">20dp</dimen>
     <dimen name="basic_profile_text_height">48dp</dimen>
-    <dimen name="basic_profile_complete_button_bottom_margin">16dp</dimen>
+    <dimen name="basic_profile_complete_button_bottom_margin">48dp</dimen>
 
     <!-- Square -->
     <dimen name="square_title_left_margin">16dp</dimen>
     <dimen name="square_tab_height">48dp</dimen>
-    <dimen name="square_drawer_width">300dp</dimen>
+    <dimen name="square_drawer_width">260dp</dimen>
 
     <!-- square drawer -->
     <dimen name="square_drawer_participant_list_profile_width">34dp</dimen>
@@ -23,7 +23,13 @@
     <dimen name="square_drawer_participant_list_left_margin">20dp</dimen>
     <dimen name="square_drawer_participant_list_right_margin">20dp</dimen>
     <dimen name="square_drawer_participant_list_height">56dp</dimen>
-    <dimen name="square_drawer_profile_height">166.5dp</dimen>
+    <dimen name="square_drawer_profile_blur_height">166.5dp</dimen>
+    <dimen name="square_drawer_profile_circle_width">66.5dp</dimen>
+    <dimen name="square_drawer_profile_circle_height">66.5dp</dimen>
+    <dimen name="square_drawer_profile_circle_top_margin">29.5dp</dimen>
+    <dimen name="square_drawer_profile_nick_name_top_margin">12dp</dimen>
+    <dimen name="square_drawer_profile_age_company_top_margin">6.5dp</dimen>
+    <dimen name="square_drawer_profile_age_company_margin">10dp</dimen>
     <dimen name="square_drawer_toggle_button_left_margin">8dp</dimen>
     <dimen name="square_drawer_toggle_button_width">40dp</dimen>
     <dimen name="square_drawer_toggle_button_height">20dp</dimen>

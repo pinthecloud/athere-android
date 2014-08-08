@@ -6,14 +6,14 @@ public class AhGlobalVariable{
 	/*
 	 * Int
 	 */
-	public static final int OK_MODE = 0;
-	public static final int OK_CANCEL_MODE = 1;
 	public static final int MALE = 1;
 	public static final int FEMALE = 2;
 	public static final int ANGLE_0 = 0;
 	public static final int ANGLE_90 = 90;
 	public static final int ANGLE_180 = 180;
 	public static final int ANGLE_270 = 270;
+	public static final int SQUARE_CHAT_TAB = 0;
+	public static final int SQUARE_CHUPA_TAB = 1;
 	
 	public static int DEVICE_WIDTH;
 	public static int DEVICE_HEIGHT;
@@ -28,6 +28,7 @@ public class AhGlobalVariable{
 	public static final String LOG_TAG = "AtHere";
 	public static final String PROFILE_PICTURE_NAME = "profile_picture_name.png";
 	public static final String PROFILE_PICTURE_CIRCLE_NAME = "profile_picture_circle_name.png";
+	public static final String PROFILE_PICTURE_BLUR_NAME = "profile_picture_blur_name.png";
 	public static final String ANDROID = "Android";
 	public static final String NULL = "NULL";
 	
@@ -54,6 +55,8 @@ public class AhGlobalVariable{
 	public static final String AGE_KEY = "AGE_KEY";
 	public static final String IS_MALE_KEY = "IS_MALE_KEY";
 	public static final String IS_CHUPA_ENABLE_KEY = "IS_CHUPA_ENABLE_KEY";
+	public static final String IS_CHAT_ALARM_ENABLE_KEY = "IS_CHAT_ALARM_ENABLE_KEY";
+	public static final String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
 	public static final String USER_ID_KEY = "USER_ID_KEY";

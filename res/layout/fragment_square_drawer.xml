@@ -86,27 +86,77 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/square_drawer_frag_profile_image"
+        android:id="@+id/square_drawer_frag_profile_blur_image"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/square_drawer_profile_height"
+        android:layout_height="@dimen/square_drawer_profile_blur_height"
         android:layout_below="@+id/square_drawer_frag_toggle_bar_layout"
-        android:contentDescription="@string/profile_image" />
+        android:alpha="0.2"
+        android:contentDescription="@string/profile_image"
+        android:scaleType="fitXY" />
 
     <ImageButton
         android:id="@+id/square_drawer_frag_profile_setting_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/square_drawer_frag_profile_image"
-        android:layout_alignTop="@+id/square_drawer_frag_profile_image"
+        android:layout_alignRight="@+id/square_drawer_frag_profile_blur_image"
+        android:layout_alignTop="@+id/square_drawer_frag_profile_blur_image"
         android:background="@android:color/transparent"
         android:contentDescription="@string/profile_settings"
         android:src="@drawable/sidebar_profile_edit" />
+
+    <ImageView
+        android:id="@+id/square_drawer_frag_profile_circle_image"
+        android:layout_width="@dimen/square_drawer_profile_circle_width"
+        android:layout_height="@dimen/square_drawer_profile_circle_height"
+        android:layout_alignTop="@+id/square_drawer_frag_profile_blur_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/square_drawer_profile_circle_top_margin"
+        android:contentDescription="@string/profile_image" />
+
+    <ImageView
+        android:id="@+id/square_drawer_frag_profile_gender_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/square_drawer_frag_profile_circle_image"
+        android:layout_alignRight="@+id/square_drawer_frag_profile_circle_image"
+        android:contentDescription="@string/profile_image" />
+
+    <TextView
+        android:id="@+id/square_drawer_frag_profile_nick_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/square_drawer_frag_profile_circle_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/square_drawer_profile_nick_name_top_margin"
+        android:textSize="@dimen/font_x_large" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/square_drawer_frag_profile_nick_name_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/square_drawer_profile_age_company_top_margin" >
+
+        <TextView
+            android:id="@+id/square_drawer_frag_profile_age_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/square_drawer_profile_age_company_margin"
+            android:textSize="@dimen/font_medium" />
+
+        <TextView
+            android:id="@+id/square_drawer_frag_profile_company_number_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/peoplenum"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/square_drawer_frag_member_number_bar_layout"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/square_drawer_member_number_bar_height"
-        android:layout_below="@+id/square_drawer_frag_profile_image"
+        android:layout_below="@+id/square_drawer_frag_profile_blur_image"
         android:gravity="center"
         android:paddingLeft="@dimen/square_drawer_member_number_bar_left_margin" >
 
@@ -154,6 +204,7 @@
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:text="@string/exit_square"
+        android:textSize="@dimen/font_large"
         android:textColor="@color/red" />
 
 </RelativeLayout>

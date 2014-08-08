@@ -1,12 +1,16 @@
 package com.pinthecloud.athere.fragment;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,6 +21,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +29,7 @@ import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.ExitSquareConsentDialog;
 import com.pinthecloud.athere.helper.UserHelper;
@@ -32,6 +38,7 @@ import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
 
@@ -46,6 +53,13 @@ public class SquareDrawerFragment extends AhFragment {
 	private TextView maleNumText;
 	private TextView femaleNumText;
 	private Button exitButton;
+
+	private ImageView profileBlurImage;
+	private ImageView profileCircleImage;
+	private ImageView profileGenderImage;
+	private TextView profileNickNameText;
+	private TextView profileAgeText;
+	private TextView profileCompanyNumText;
 
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
@@ -76,6 +90,12 @@ public class SquareDrawerFragment extends AhFragment {
 		profileSettingButton = (ImageButton) view.findViewById(R.id.square_drawer_frag_profile_setting_button);
 		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
 		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
+		profileBlurImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_blur_image);
+		profileCircleImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_circle_image);
+		profileGenderImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_gender_image);
+		profileNickNameText= (TextView) view.findViewById(R.id.square_drawer_frag_profile_nick_name_text);
+		profileAgeText = (TextView) view.findViewById(R.id.square_drawer_frag_profile_age_text);
+		profileCompanyNumText = (TextView) view.findViewById(R.id.square_drawer_frag_profile_company_number_text);
 		participantListView = (ListView) view.findViewById(R.id.square_drawer_frag_participant_list);
 		exitButton = (Button) view.findViewById(R.id.square_drawer_frag_exit_button);
 
@@ -160,7 +180,8 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO setting profile
+				Intent intent = new Intent(context, SquareProfileActivity.class);
+				startActivity(intent);
 			}
 		});
 
@@ -181,16 +202,53 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	public void setUp(View fragmentView, DrawerLayout drawerLayout) {
+	public void setUp(View fragmentView, DrawerLayout drawerLayout, User user) {
 		this.mFragmentView = fragmentView;
 		this.mDrawerLayout = drawerLayout;
-		//		this.square = square;
+
+		/*
+		 * Set profile images 
+		 */
+		try {
+			Bitmap blurProfile = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_BLUR_NAME);
+			Bitmap circleProfile = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
+			profileBlurImage.setImageBitmap(blurProfile);
+			profileCircleImage.setImageBitmap(circleProfile);
+		} catch (FileNotFoundException e) {
+			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
+		}
+		if(user.isMale()){
+			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
+		} else{
+			profileGenderImage.setImageResource(R.drawable.profile_gender_w);
+		}
+
+
+		/*
+		 * Set profile infomation text
+		 */
+		profileNickNameText.setText(user.getNickName());
+		profileAgeText.setText("" + user.getAge());
+		profileCompanyNumText.setText("" + user.getCompanyNum());
 	}
 
 
-	public static interface SquareDrawerFragmentCallbacks {
-		public void exitSquare();
+	private void updateUserList() {
+		/*
+		 * Set participant list view
+		 */
+		userList.clear();
+		userList.addAll(userDBHelper.getAllUsers());
+		participantListAdapter.notifyDataSetChanged();
+
+
+		/*
+		 * Set member number text
+		 */
+		maleNumText.setText("" + getMaleNum(userList));
+		femaleNumText.setText("" + getFemaleNum(userList));
 	}
+
 
 	private int getMaleNum(List<User> list){
 		int count = 0;
@@ -200,6 +258,8 @@ public class SquareDrawerFragment extends AhFragment {
 		}
 		return count;
 	}
+
+
 	private int getFemaleNum(List<User> list){
 		int count = 0;
 
@@ -210,18 +270,7 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	private void updateUserList() {
-		/*
-		 * Set participant list view
-		 */
-		userList = userDBHelper.getAllUsers();
-		participantListAdapter.notifyDataSetChanged();
-
-
-		/*
-		 * Set member number text
-		 */
-		maleNumText.setText("" + getMaleNum(userList));
-		femaleNumText.setText("" + getFemaleNum(userList));
+	public static interface SquareDrawerFragmentCallbacks {
+		public void exitSquare();
 	}
 }

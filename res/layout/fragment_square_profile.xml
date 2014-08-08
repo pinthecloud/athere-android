@@ -73,6 +73,8 @@
                 android:ems="10"
                 android:gravity="center|bottom"
                 android:hint="@string/nick_name"
+                android:inputType="text"
+                android:maxLength="15"
                 android:textSize="@dimen/font_x_large" >
             </EditText>
 
