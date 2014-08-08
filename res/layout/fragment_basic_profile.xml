@@ -32,8 +32,6 @@
             android:inputType="text"
             android:maxLength="15"
             android:textSize="@dimen/font_x_large" >
-
-            <requestFocus />
         </EditText>
 
         <RadioGroup
