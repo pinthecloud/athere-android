@@ -86,7 +86,7 @@ public class HongkunTestFragment extends AhFragment {
 						
 						Square square = new Square();
 						square.setWhoMade(pref.getString(AhGlobalVariable.USER_ID_KEY));
-						square.setName("Main Ground");
+						square.setName("Hongkunyoo Ground");
 						square.setLatitude(0);
 						square.setLongitude(0);
 						square.setMaleNum(0);
@@ -119,7 +119,7 @@ public class HongkunTestFragment extends AhFragment {
 						user.setMale(true);
 						user.setCompanyNum(2);
 						user.setAge(24);
-						user.setSquareId(squareId.toString());
+						user.setSquareId("29F4F376-D083-4600-8D77-B616B96F29F5");
 						user.setChupaEnable(true);
 						
 						userHelper.enterSquareAsync(user, new AhEntityCallback<String>() {

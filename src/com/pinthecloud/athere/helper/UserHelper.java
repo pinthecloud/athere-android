@@ -97,7 +97,6 @@ public class UserHelper {
 		});
 	}
 
-
 	public void enterSquareAsync(User user, final AhEntityCallback<String> callback) throws AhException {
 		userTable.insert(user, new TableOperationCallback<User>() {
 
