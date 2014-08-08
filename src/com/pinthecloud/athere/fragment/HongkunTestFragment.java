@@ -40,11 +40,11 @@ public class HongkunTestFragment extends AhFragment {
 	MessageDBHelper messageDB;
 	private String who;
 	private String content;
-	
+
 
 	public static final String SENDER_ID = "838051405989";
 
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -82,7 +82,7 @@ public class HongkunTestFragment extends AhFragment {
 					if (b.getId() == btnArr[0].getId()) {
 
 					} else if (b.getId() == btnArr[1].getId()) {
-						
+
 						Square square = new Square();
 						square.setWhoMade(pref.getString(AhGlobalVariable.USER_ID_KEY));
 						square.setName("Hongkunyoo Ground");
@@ -94,7 +94,7 @@ public class HongkunTestFragment extends AhFragment {
 						square.setDistance(0);
 						square.setCode("");
 						square.setCode(false);
-						
+
 						squareHelper.createSquareAsync(square, new AhEntityCallback<Square>() {
 
 							@Override
@@ -104,14 +104,14 @@ public class HongkunTestFragment extends AhFragment {
 								Log("onComple createSquare");
 							}
 						});
-						
-						
-						
+
+
+
 					} else if (b.getId() == btnArr[2].getId()) {
 						Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), com.pinthecloud.athere.R.drawable.splash);
 						String profilePic = BitmapUtil.convertToString(largeIcon);
 						User user = new User();
-						
+
 						user.setNickName("Bob");
 						user.setProfilePic(profilePic);
 						user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
@@ -120,16 +120,16 @@ public class HongkunTestFragment extends AhFragment {
 						user.setAge(24);
 						user.setSquareId("29F4F376-D083-4600-8D77-B616B96F29F5");
 						user.setChupaEnable(true);
-						
+
 						userHelper.enterSquareAsync(user, new AhEntityCallback<String>() {
-							
+
 							@Override
 							public void onCompleted(String entity) {
 								// TODO Auto-generated method stub
 								Log("succeed enterSquare");
 							}
 						});
-						
+
 					} else if (b.getId() == btnArr[3].getId()) {
 
 					} else if (b.getId() == btnArr[4].getId()) {

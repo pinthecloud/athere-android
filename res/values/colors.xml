@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="square_tab_bg_pressed">#6633B5E5</color>
     <color name="gray_tab_text_unselected">#959595</color>
     <color name="red">#ff0047</color>
     <color name="blue">#14a0cc</color>

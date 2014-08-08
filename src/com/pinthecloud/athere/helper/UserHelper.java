@@ -25,7 +25,6 @@ import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.AhMessage.TYPE;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -276,8 +275,8 @@ public class UserHelper {
 		}
 		return registrationId;
 	}
-	
-	
+
+
 	private Map<String, AhPairEntityCallback<AhMessage.TYPE, User>> map = new HashMap<String, AhPairEntityCallback<AhMessage.TYPE, User>>();
 
 	private final String USER_RECEIVED = "USER_RECEIVED";
@@ -291,7 +290,7 @@ public class UserHelper {
 		Log.e("ERROR","in triggerUserEvent");
 		if(callback != null)
 			callback.onCompleted(type, user);
-//		else 
-//			throw new AhException("No such Event : triggerUserEvent");
+		//		else 
+		//			throw new AhException("No such Event : triggerUserEvent");
 	}
 }

@@ -6,11 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
-        android:background="@color/gray_line" />
-
     <com.pinthecloud.athere.interfaces.PagerSlidingTabStrip
         android:id="@+id/square_tab_frag_tab"
         android:layout_width="match_parent"
@@ -18,11 +13,12 @@
         android:textSize="@dimen/font_x_large"
         app:pstsActivateTextColor="@android:color/white"
         app:pstsDeactivateTextColor="@color/gray_tab_text_unselected"
+        app:pstsActivateTabBackground="@android:color/transparent"
+        app:pstsDeactivateTabBackground="@color/gray_background"
         app:pstsDividerColor="@android:color/transparent"
         app:pstsIndicatorColor="@color/red"
         app:pstsIndicatorHeight="@dimen/square_tab_height"
         app:pstsShouldExpand="true"
-        app:pstsTabBackground="@drawable/bg_tabbar"
         app:pstsTabSwitch="true"
         app:pstsTextAllCaps="false" />
 

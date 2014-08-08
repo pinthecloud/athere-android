@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -19,21 +20,17 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.ExitSquareConsentDialog;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -41,7 +38,6 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerFragmentCallbacks callbacks;
 	private DrawerLayout mDrawerLayout;
 	private View mFragmentView;
-	private SquareDrawerParticipantListAdapter participantListAdapter; 
 
 	private ProgressBar progressBar;
 	private ToggleButton chatOnButton;
@@ -49,14 +45,14 @@ public class SquareDrawerFragment extends AhFragment {
 	private ImageButton profileSettingButton;
 	private TextView maleNumText;
 	private TextView femaleNumText;
-	private ListView participantListView;
 	private Button exitButton;
 
-	private List<User> userList;
+	private ListView participantListView;
+	private SquareDrawerParticipantListAdapter participantListAdapter;
+	private List<User> userList = new ArrayList<User>();
 
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
-	private MessageHelper messageHelper;
 
 
 	@Override
@@ -64,8 +60,6 @@ public class SquareDrawerFragment extends AhFragment {
 		super.onCreate(savedInstanceState);
 		userDBHelper = app.getUserDBHelper();
 		userHelper = app.getUserHelper();
-		messageHelper = app.getMessageHelper();
-		userList = userDBHelper.getAllUsers();
 	}
 
 	@Override
@@ -86,7 +80,28 @@ public class SquareDrawerFragment extends AhFragment {
 		exitButton = (Button) view.findViewById(R.id.square_drawer_frag_exit_button);
 
 
+		/*
+		 * Set user list
+		 */
+		participantListAdapter = new SquareDrawerParticipantListAdapter
+				(context, R.layout.row_square_drawer_participant_list, userList);
+		participantListView.setAdapter(participantListAdapter);
+		participantListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO
+				User user = userList.get(position);
+				new AlertDialog.Builder(context)
+				.setTitle("User Information")
+				.setMessage("Show User Detail Info")
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.show();
+			}
+		});
 		updateUserList();
+
 
 		/*
 		 * Set handler for refresh new and old user
@@ -99,9 +114,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void run() {
-						
 						updateUserList();
-						
 					}
 				});
 			}
@@ -115,7 +128,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				// TODO send push
 				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
 			}
 		});
@@ -145,7 +157,7 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 		profileSettingButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO setting profile
@@ -172,16 +184,17 @@ public class SquareDrawerFragment extends AhFragment {
 	public void setUp(View fragmentView, DrawerLayout drawerLayout) {
 		this.mFragmentView = fragmentView;
 		this.mDrawerLayout = drawerLayout;
+		//		this.square = square;
 	}
 
 
 	public static interface SquareDrawerFragmentCallbacks {
 		public void exitSquare();
 	}
-	
+
 	private int getMaleNum(List<User> list){
 		int count = 0;
-		
+
 		for(User user : list){
 			if (user.isMale()) count++;
 		}
@@ -189,43 +202,25 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 	private int getFemaleNum(List<User> list){
 		int count = 0;
-		
+
 		for(User user : list){
 			if (!user.isMale()) count++;
 		}
 		return count;
 	}
-	
+
+
 	private void updateUserList() {
-		// TODO Auto-generated method stub
-		final List<User> userList = userDBHelper.getAllUsers();
-		
 		/*
 		 * Set participant list view
 		 */
-		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, R.layout.row_square_drawer_participant_list, userList);
-		participantListView.setAdapter(participantListAdapter);
-		participantListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				User user = userList.get(position);
-				new AlertDialog.Builder(context)
-				.setTitle("User Information")
-				.setMessage("Show User Detail Info")
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.show();
-			}
-		});
-		
+		userList = userDBHelper.getAllUsers();
 		participantListAdapter.notifyDataSetChanged();
-		
+
+
 		/*
 		 * Set member number text
 		 */
-		
 		maleNumText.setText("" + getMaleNum(userList));
 		femaleNumText.setText("" + getFemaleNum(userList));
 	}

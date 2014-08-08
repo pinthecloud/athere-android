@@ -1,6 +1,6 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,7 +24,7 @@ import com.pinthecloud.athere.util.BitmapUtil;
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	private int layoutId;
-	private ArrayList<AhMessage> items;
+	private List<AhMessage> items;
 
 	private AhApplication app;
 	private LayoutInflater inflater;
@@ -32,7 +32,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	private UserDBHelper userDBHelper;
 
 
-	public SquareChatListAdapter(Context context, int layoutId, ArrayList<AhMessage> items) {
+	public SquareChatListAdapter(Context context, int layoutId, List<AhMessage> items) {
 		super(context, layoutId, items);
 		this.layoutId = layoutId;
 		this.items = items;

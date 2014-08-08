@@ -1,6 +1,6 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,10 +16,10 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 
 	private Context context;
 	private int layoutId;
-	private ArrayList<Square> items;
+	private List<Square> items;
 
 
-	public SquareListAdapter(Context context, int layoutId, ArrayList<Square> items) {
+	public SquareListAdapter(Context context, int layoutId, List<Square> items) {
 		super(context, layoutId, items);
 		this.context = context;
 		this.layoutId = layoutId;

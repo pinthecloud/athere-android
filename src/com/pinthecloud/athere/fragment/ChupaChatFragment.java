@@ -19,13 +19,11 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class ChupaChatFragment extends AhFragment {
 
@@ -35,8 +33,6 @@ public class ChupaChatFragment extends AhFragment {
 
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
-	private UserHelper userHelper;
-	private UserDBHelper userDBHelper;
 
 	private User user;
 
@@ -49,8 +45,6 @@ public class ChupaChatFragment extends AhFragment {
 		super.onCreate(savedInstanceState);
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
-		userHelper = app.getUserHelper();
-		userDBHelper = app.getUserDBHelper();
 		Intent intent = activity.getIntent();
 		user = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}

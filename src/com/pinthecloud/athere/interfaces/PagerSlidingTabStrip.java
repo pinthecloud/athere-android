@@ -96,8 +96,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private int lastScrollX = 0;
 
-	private int tabBackgroundResId = R.drawable.tab_bg;
-	private int transparentColorId = android.R.color.transparent;
+	private int tabBackgroundResId = android.R.color.transparent;
+	private int tabDeactivateBackgroundResId = android.R.color.transparent;
 
 	private Locale locale;
 
@@ -159,6 +159,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		tabSwitch = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTabSwitch, tabSwitch);
 		tabTextColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsActivateTextColor, tabTextColor);
 		tabDeactivateTextColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsDeactivateTextColor, tabDeactivateTextColor);
+		tabBackgroundResId = a.getResourceId(R.styleable.PagerSlidingTabStrip_pstsActivateTabBackground, tabBackgroundResId);
+		tabDeactivateBackgroundResId = a.getResourceId(R.styleable.PagerSlidingTabStrip_pstsDeactivateTabBackground, tabDeactivateBackgroundResId);
+
 
 		a.recycle();
 
@@ -270,7 +273,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 			View v = tabsContainer.getChildAt(i);
 
-			v.setBackgroundResource(!tabSwitch ? tabBackgroundResId : transparentColorId);
+			v.setBackgroundResource(tabSwitch && i != 0 ? tabDeactivateBackgroundResId : tabBackgroundResId);
 
 			if (v instanceof TextView) {
 
@@ -298,6 +301,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	private void updateActivateTab(final int position) {
 		for (int i = 0; i < tabCount; i++) {
 			View v = tabsContainer.getChildAt(i);
+
+			v.setBackgroundResource(position == i ? tabBackgroundResId : tabDeactivateBackgroundResId);
 
 			if (v instanceof TextView) {
 				TextView tab = (TextView) v;
@@ -566,6 +571,16 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	public void setDeactivateTextColor(int deactivateTextColor) {
 		this.tabDeactivateTextColor = deactivateTextColor;
+		updateTabStyles();
+	}
+
+	public void setActivateTabBackground(int activateTabBackground) {
+		this.tabBackgroundResId = activateTabBackground;
+		updateTabStyles();
+	}
+
+	public void setDeactivateTabBackground(int deactivateTabBackground) {
+		this.tabDeactivateBackgroundResId = deactivateTabBackground;
 		updateTabStyles();
 	}
 

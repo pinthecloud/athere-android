@@ -42,6 +42,8 @@
     <dimen name="square_list_height">88dp</dimen>
     <dimen name="square_list_line_left_margin">48dp</dimen>
     <dimen name="square_list_line_right_margin">48dp</dimen>
+    <dimen name="square_list_people_num_left_margin">8dp</dimen>
+    <dimen name="square_list_people_num_right_margin">16dp</dimen>
     
     <!-- Square chupa list -->
     <dimen name="square_chupa_list_height">88dp</dimen>

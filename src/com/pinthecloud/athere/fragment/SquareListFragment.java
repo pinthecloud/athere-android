@@ -25,13 +25,13 @@ import com.pinthecloud.athere.model.Square;
 public class SquareListFragment extends AhFragment{
 
 	private ActionBar mActionBar;
-	private SquareListAdapter squareListAdapter;
-	private ListView squareListView;
 	private ProgressBar mProgressBar;
 
-	private SquareHelper squareHelper;
+	private ListView squareListView;
+	private SquareListAdapter squareListAdapter;
+	private List<Square> squares = new ArrayList<Square>();
 
-	private ArrayList<Square> squares = new ArrayList<Square>();
+	private SquareHelper squareHelper;
 
 
 	@Override

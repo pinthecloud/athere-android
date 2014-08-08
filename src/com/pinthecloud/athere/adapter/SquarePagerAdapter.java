@@ -13,14 +13,13 @@ import com.pinthecloud.athere.model.Square;
 public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 
 	private String[] titles;
-	private Square square;
-	SquareChatFragment squareChatFragment = null;
-	SquareChupaListFragment squareChupaListFragment = null;
+	private SquareChatFragment squareChatFragment;
+	private SquareChupaListFragment squareChupaListFragment;
+
 	
 	public SquarePagerAdapter(Context context, FragmentManager fm, Square square) {
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);
-		this.square = square;
 		squareChatFragment = new SquareChatFragment(square);
 		squareChupaListFragment = new SquareChupaListFragment(square);
 	}
@@ -30,10 +29,8 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 		Fragment fragment = null;
 		switch(position){
 		case 0:
-			//return fragment = new SquareChatFragment(square);
 			return this.squareChatFragment;
 		case 1:
-			//return fragment = new SquareChupaListFragment(square);
 			return this.squareChupaListFragment;
 		}
 		return fragment;
@@ -49,12 +46,10 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter {
 	public CharSequence getPageTitle(int position) {
 		return this.titles[position];
 	}
-	
+
 	@Override
 	public void notifyDataSetChanged() {
-		// TODO Auto-generated method stub
 		super.notifyDataSetChanged();
-//		this.titles[1] = " New";
 		squareChupaListFragment.updateList();
 	}
 }

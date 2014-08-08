@@ -18,28 +18,24 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
 	private Square square;
 
-	private ListView messageListView;
-	private SquareChatListAdapter messageListAdapter;
 	private EditText messageEditText;
 	private ImageButton sendButton;
 
-	private UserHelper userHelper;
-	private UserDBHelper userDBHelper;
+	private ListView messageListView;
+	private SquareChatListAdapter messageListAdapter;
+	private List<AhMessage> messageList = new ArrayList<AhMessage>();
+
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
-
-	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
 
 
 	public SquareChatFragment(Square square) {
@@ -52,8 +48,6 @@ public class SquareChatFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
-		userHelper = app.getUserHelper();
-		userDBHelper = app.getUserDBHelper();
 	}
 
 
