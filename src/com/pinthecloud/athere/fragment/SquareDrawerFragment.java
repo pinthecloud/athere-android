@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -29,6 +30,8 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
@@ -83,48 +86,22 @@ public class SquareDrawerFragment extends AhFragment {
 		exitButton = (Button) view.findViewById(R.id.square_drawer_frag_exit_button);
 
 
-		/*
-		 * Set member number text
-		 * TODO set proper male and female member number text
-		 */
-		maleNumText.setText("" + userList.size());
-		femaleNumText.setText("" + userList.size());
-
-
-		/*
-		 * Set participant list view
-		 */
-		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, R.layout.row_square_drawer_participant_list, userList);
-		participantListView.setAdapter(participantListAdapter);
-		participantListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				User user = userList.get(position);
-				new AlertDialog.Builder(context)
-				.setTitle("User Information")
-				.setMessage("Show User Detail Info")
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.show();
-			}
-		});
-
+		updateUserList();
 
 		/*
 		 * Set handler for refresh new and old user
 		 */
-		userHelper.setUserHandler(new AhEntityCallback<User>() {
+		userHelper.setUserHandler(new AhPairEntityCallback<AhMessage.TYPE, User>() {
 
 			@Override
-			public void onCompleted(final User user) {
+			public void onCompleted(final AhMessage.TYPE type, final User user) {
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						participantListAdapter.add(user);
-						participantListAdapter.notifyDataSetChanged();
+						
+						updateUserList();
+						
 					}
 				});
 			}
@@ -200,5 +177,56 @@ public class SquareDrawerFragment extends AhFragment {
 
 	public static interface SquareDrawerFragmentCallbacks {
 		public void exitSquare();
+	}
+	
+	private int getMaleNum(List<User> list){
+		int count = 0;
+		
+		for(User user : list){
+			if (user.isMale()) count++;
+		}
+		return count;
+	}
+	private int getFemaleNum(List<User> list){
+		int count = 0;
+		
+		for(User user : list){
+			if (!user.isMale()) count++;
+		}
+		return count;
+	}
+	
+	private void updateUserList() {
+		// TODO Auto-generated method stub
+		final List<User> userList = userDBHelper.getAllUsers();
+		
+		/*
+		 * Set participant list view
+		 */
+		participantListAdapter = new SquareDrawerParticipantListAdapter
+				(context, R.layout.row_square_drawer_participant_list, userList);
+		participantListView.setAdapter(participantListAdapter);
+		participantListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				User user = userList.get(position);
+				new AlertDialog.Builder(context)
+				.setTitle("User Information")
+				.setMessage("Show User Detail Info")
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.show();
+			}
+		});
+		
+		participantListAdapter.notifyDataSetChanged();
+		
+		/*
+		 * Set member number text
+		 */
+		
+		maleNumText.setText("" + getMaleNum(userList));
+		femaleNumText.setText("" + getFemaleNum(userList));
 	}
 }

@@ -83,4 +83,5 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 		}
 		return view;
 	}
+	
 }

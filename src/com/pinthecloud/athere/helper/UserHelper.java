@@ -23,6 +23,9 @@ import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.AhListCallback;
+import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AhMessage.TYPE;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -273,21 +276,22 @@ public class UserHelper {
 		}
 		return registrationId;
 	}
-
-	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
+	
+	
+	private Map<String, AhPairEntityCallback<AhMessage.TYPE, User>> map = new HashMap<String, AhPairEntityCallback<AhMessage.TYPE, User>>();
 
 	private final String USER_RECEIVED = "USER_RECEIVED";
-	//public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 
-	public void setUserHandler(AhEntityCallback<User> callback){
+	public void setUserHandler(AhPairEntityCallback<AhMessage.TYPE, User> callback){
 		map.put(USER_RECEIVED, callback);
 	}
 
-	public void triggerUserEvent(User user){
-		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
+	public void triggerUserEvent(AhMessage.TYPE type, User user){
+		AhPairEntityCallback<AhMessage.TYPE, User> callback = map.get(USER_RECEIVED);
+		Log.e("ERROR","in triggerUserEvent");
 		if(callback != null)
-			callback.onCompleted(user);
-		else 
-			throw new AhException("No such Event : triggerUserEvent");
+			callback.onCompleted(type, user);
+//		else 
+//			throw new AhException("No such Event : triggerUserEvent");
 	}
 }

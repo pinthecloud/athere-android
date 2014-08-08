@@ -97,16 +97,17 @@ public class AhIntentService extends IntentService {
 					user = userHelper.getUserSync(userId);
 					userDBHelper.addUser(user);
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
+					Log.e("ERROR","in AhIntent userId : " + userId);
 					userDBHelper.deleteUser(userId);
 				} else if (AhMessage.TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
-					//			User updatedUser = userHelper.getUserSync(userId);
-					//			userDBHelper.updateUser(updatedUser);
+					user = userHelper.getUserSync(userId);
+					userDBHelper.updateUser(user);
 				}
 
 				if (isRunning(app)) {
 					// if the App is running, add the message to the chat room.
 					messageHelper.triggerMessageEvent(message);
-					userHelper.triggerUserEvent(user);
+					userHelper.triggerUserEvent(AhMessage.TYPE.valueOf(message.getType()), user);
 					return;
 				}
 

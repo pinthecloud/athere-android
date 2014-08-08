@@ -146,7 +146,6 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				Log("in handler : " + message.getChupaCommunId());
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
