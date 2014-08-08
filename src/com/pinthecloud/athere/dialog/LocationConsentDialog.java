@@ -43,6 +43,7 @@ public class LocationConsentDialog extends DialogFragment {
 			}
 		});
 		AlertDialog alertDialog = altBuilder.create();
+		alertDialog.setCanceledOnTouchOutside(true);
 		return alertDialog;
 	}
 }

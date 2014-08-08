@@ -64,11 +64,13 @@ public class SquareProfileFragment extends AhFragment{
 
 	private int cameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 	private boolean isTookPicture = false;
+	private boolean isTypedNickName = false;
 	private boolean isTypedMember = false;
 
 	private LinearLayout profileInfoLayout;
 	private ImageButton completeButton;
 	private NumberPickerDialog companyNumberPickerDialog;
+	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 
 	private UserHelper userHelper;
@@ -172,12 +174,39 @@ public class SquareProfileFragment extends AhFragment{
 		cameraRotateButton = (ImageButton) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_picture);
+		nickNameEditText = (EditText) view.findViewById(R.id.square_profile_frag_nick_name_text);
 		companyNumberEditText = (EditText) view.findViewById(R.id.square_profile_frag_company_text);
 		completeButton = (ImageButton) view.findViewById(R.id.square_profile_frag_start_button);
 
 
 		/*
-		 * Set event on EditText
+		 * Set event on nick name text
+		 */
+		nickNameEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String nickName = s.toString().trim();
+				if(nickName.length() < 1){
+					isTypedNickName = false;
+				}else{
+					isTypedNickName = true;
+				}
+				completeButton.setEnabled(isCompleteButtonEnable());
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+		nickNameEditText.setText(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
+		
+		
+		/*
+		 * Set event on Company EditText
 		 */
 		String title = getResources().getString(R.string.number_of_member);
 		companyNumberPickerDialog = new NumberPickerDialog(title, 1, 10, 2, new AhDialogCallback() {
@@ -232,7 +261,7 @@ public class SquareProfileFragment extends AhFragment{
 		});
 		companyNumberEditText.setInputType(InputType.TYPE_NULL);
 
-
+		
 		/*
 		 * Set event on button
 		 */
@@ -290,6 +319,7 @@ public class SquareProfileFragment extends AhFragment{
 				completeButton.setEnabled(false);
 				cameraButton.setEnabled(false);
 				cameraRotateButton.setEnabled(false);
+				nickNameEditText.setEnabled(false);
 				companyNumberEditText.setEnabled(false);
 				
 				// Enter Square
@@ -382,6 +412,10 @@ public class SquareProfileFragment extends AhFragment{
 				}
 
 				// Save info for user
+				String nickName = nickNameEditText.getText().toString();
+				int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
+				pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
+				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
 				
@@ -415,8 +449,6 @@ public class SquareProfileFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save this setting and go to next activity
-						int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-						pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
 
@@ -432,7 +464,7 @@ public class SquareProfileFragment extends AhFragment{
 
 
 	private boolean isCompleteButtonEnable(){
-		return isTookPicture && isTypedMember;
+		return isTookPicture && isTypedMember && isTypedNickName;
 	}
 
 

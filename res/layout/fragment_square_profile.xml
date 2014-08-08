@@ -52,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/square_profile_frag_profile_picture"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/square_profile_camera_button_bottom_margin"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/take"
                 android:src="@drawable/camera_take" />
@@ -66,13 +67,23 @@
             android:orientation="vertical" >
 
             <EditText
+                android:id="@+id/square_profile_frag_nick_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/square_profile_text_height"
+                android:ems="10"
+                android:gravity="center|bottom"
+                android:hint="@string/nick_name"
+                android:textSize="@dimen/font_x_large" >
+            </EditText>
+
+            <EditText
                 android:id="@+id/square_profile_frag_company_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/square_profile_text_height"
                 android:ems="10"
                 android:gravity="center|bottom"
                 android:hint="@string/number_of_member"
-                android:textSize="@dimen/font_normal" />
+                android:textSize="@dimen/font_x_large" />
 
             <ImageButton
                 android:id="@+id/square_profile_frag_start_button"
