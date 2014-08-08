@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/square_drawer_participant_list_height"
+    android:paddingLeft="@dimen/square_drawer_participant_list_left_margin"
+    android:paddingRight="@dimen/square_drawer_participant_list_right_margin"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/square_drawer_participant_list_left_margin"
-        android:layout_marginRight="@dimen/square_drawer_participant_list_right_margin"
         android:layout_weight="1" >
 
         <ImageView
@@ -50,8 +50,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:layout_marginLeft="@dimen/square_drawer_participant_list_left_margin"
-        android:layout_marginRight="@dimen/square_drawer_participant_list_right_margin"
         android:background="@color/gray_line" />
 
 </LinearLayout>

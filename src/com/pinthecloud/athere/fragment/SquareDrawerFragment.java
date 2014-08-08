@@ -29,8 +29,8 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -38,7 +38,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerFragmentCallbacks callbacks;
 	private DrawerLayout mDrawerLayout;
 	private View mFragmentView;
-	private SquareDrawerParticipantListAdapter participantListAdapter; 
+	private Square square;
 
 	private ProgressBar progressBar;
 	private ToggleButton chatOnButton;
@@ -50,6 +50,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private Button exitButton;
 
 	private List<User> userList;
+	private SquareDrawerParticipantListAdapter participantListAdapter;
 
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
@@ -87,8 +88,8 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set member number text
 		 * TODO set proper male and female member number text
 		 */
-		maleNumText.setText("" + userList.size());
-		femaleNumText.setText("" + userList.size());
+//		maleNumText.setText("" + square.getMaleNum());
+//		femaleNumText.setText("" + square.getFemaleNum());
 
 
 		/*
@@ -168,7 +169,7 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 		profileSettingButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO setting profile
@@ -195,6 +196,7 @@ public class SquareDrawerFragment extends AhFragment {
 	public void setUp(View fragmentView, DrawerLayout drawerLayout) {
 		this.mFragmentView = fragmentView;
 		this.mDrawerLayout = drawerLayout;
+//		this.square = square;
 	}
 
 

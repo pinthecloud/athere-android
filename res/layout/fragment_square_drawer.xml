@@ -107,12 +107,12 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/square_drawer_member_number_bar_height"
         android:layout_below="@+id/square_drawer_frag_profile_image"
-        android:gravity="center" >
+        android:gravity="center"
+        android:paddingLeft="@dimen/square_drawer_member_number_bar_left_margin" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/square_drawer_member_number_bar_left_margin"
             android:layout_marginRight="@dimen/square_drawer_member_title_right_margin"
             android:text="@string/member"
             android:textSize="@dimen/font_large" />
