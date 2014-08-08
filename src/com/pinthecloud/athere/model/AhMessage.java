@@ -132,15 +132,15 @@ public class AhMessage implements Parcelable {
 //	}
 	@Override
 	public String toString() {
-		return this.id + " : " + 
-				this.type + " : " +
-				this.content + " : " + 
-				this.sender + " : " + 
-				this.senderId + " : " +
-				this.receiver + " : " + 
-				this.receiverId + " : " +
-				this.timeStamp + " : " +
-				this.chupaCommunId;
+		return "{ id : "+this.id + " \n " + 
+			   " type : "+this.type + " \n " +
+			   " content : "+this.content + " \n " + 
+			   " sender : "+this.sender + " \n " + 
+			   " senderId : "+this.senderId + " \n " +
+			   " receiver : "+this.receiver + " \n " + 
+			   " receiverId : "+this.receiverId  + " \n " +
+			   " timeStamp : "+this.timeStamp  + " \n " +
+			   " chupaCommunId : "+this.chupaCommunId + " }";
 	}
 	@Override
 	public int describeContents() {

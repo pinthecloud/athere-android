@@ -169,15 +169,15 @@ public class User implements Parcelable{
 	}
 
 	public String toString() {
-		return this.id + " / "+
-				this.nickName + " / "+
-				this.profilePic + " / "+
-				this.mobileId + " / "+
-				this.registrationId + " / "+
-				this.isMale + " / "+
-				this.companyNum + " / "+
-				this.age + " / "+
-				this.squareId;
+		return 
+				"{ id : "+this.id + " \n "+
+				" nickName : "+this.nickName + " \n "+
+				" mobileId : "+this.mobileId + " \n "+
+				" registrationId : "+this.registrationId.substring(0, 20) + " \n "+
+				" isMale : "+this.isMale + " \n "+
+				" companyNum : "+this.companyNum + " \n "+
+				" age : "+this.age + " \n "+
+				" squareId : "+this.squareId + " }";
 	}
 
 	public JsonObject toJson() {

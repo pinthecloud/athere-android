@@ -46,6 +46,7 @@ public class SquareChupaListFragment extends AhFragment{
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
+		
 		lastChupaCommunList = convertToMap(lastChupaList);
 	}
 
@@ -92,8 +93,8 @@ public class SquareChupaListFragment extends AhFragment{
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){
 			Map<String, String> map = new HashMap<String, String>();
-			Log(message.getSenderId());
 			User user = userDBHelper.getUser(message.getSenderId());
+			if (user == null) user = userDBHelper.getUser(message.getReceiverId());
 			if( user != null){
 				map.put("profilePic", user.getProfilePic());
 				map.put("sender", message.getSender());
@@ -106,7 +107,6 @@ public class SquareChupaListFragment extends AhFragment{
 			} else {
 				throw new AhException("convertToMap user NULL");
 			}
-		
 			
 			list.add(map);
 		}

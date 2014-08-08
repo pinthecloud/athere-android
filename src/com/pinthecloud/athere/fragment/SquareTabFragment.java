@@ -81,13 +81,13 @@ public class SquareTabFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				mSquarePagerAdapter.notifyDataSetChanged();
-				Log("in setMessageHandler in Square Tab Fragment");
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
 						Toast toast = Toast.makeText(activity.getApplicationContext(),
-								   "Handle in Square Activity", Toast.LENGTH_LONG);
+								   "Seungmin You should handle chupa receive at Here!\n"
+								   + "(chupa badge and new 1)", Toast.LENGTH_LONG);
 						toast.show();
 					}
 				});
