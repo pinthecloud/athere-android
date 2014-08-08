@@ -31,7 +31,7 @@
                 android:id="@+id/square_chupa_list_sender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_normal" />
+                android:textSize="@dimen/font_x_large" />
 
             <TextView
                 android:id="@+id/square_chupa_list_content"
@@ -47,7 +47,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:textColor="@color/gray_line"
-            android:textSize="@dimen/font_small" />
+            android:textSize="@dimen/font_medium" />
     </RelativeLayout>
 
     <View

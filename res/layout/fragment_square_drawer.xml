@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/chat_alarm"
-                android:textSize="@dimen/font_normal" />
+                android:textSize="@dimen/font_large" />
 
             <ToggleButton
                 android:id="@+id/square_drawer_frag_chat_on_button"
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/get_chupa"
-                android:textSize="@dimen/font_normal" />
+                android:textSize="@dimen/font_large" />
 
             <ToggleButton
                 android:id="@+id/square_drawer_frag_chupa_on_button"
@@ -115,27 +115,27 @@
             android:layout_marginLeft="@dimen/square_drawer_member_number_bar_left_margin"
             android:layout_marginRight="@dimen/square_drawer_member_title_right_margin"
             android:text="@string/member"
-            android:textSize="@dimen/font_small" />
+            android:textSize="@dimen/font_large" />
 
         <TextView
             android:id="@+id/square_drawer_frag_member_male_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/blue"
-            android:textSize="@dimen/font_small" />
+            android:textSize="@dimen/font_large" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dash"
-            android:textSize="@dimen/font_small" />
+            android:textSize="@dimen/font_large" />
 
         <TextView
             android:id="@+id/square_drawer_frag_member_female_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/red"
-            android:textSize="@dimen/font_small" />
+            android:textSize="@dimen/font_large" />
     </LinearLayout>
 
     <ListView

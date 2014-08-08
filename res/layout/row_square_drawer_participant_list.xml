@@ -25,7 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/square_drawer_participant_list_profile_nick_margin"
             android:layout_toRightOf="@+id/drawer_user_pro_pic"
-            android:textSize="@dimen/font_normal" />
+            android:textSize="@dimen/font_large" />
 
         <ImageView
             android:id="@+id/drawer_user_is_male"
