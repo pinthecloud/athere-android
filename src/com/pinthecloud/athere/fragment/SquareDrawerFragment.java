@@ -134,7 +134,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void run() {
-						updateUserList();
+						updateUserList();		
 					}
 				});
 			}
@@ -149,6 +149,13 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
+			}
+		});
+		chatOnButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, isChecked);
 			}
 		});
 
@@ -270,7 +277,7 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	public static interface SquareDrawerFragmentCallbacks {
+	public interface SquareDrawerFragmentCallbacks {
 		public void exitSquare();
 	}
 }

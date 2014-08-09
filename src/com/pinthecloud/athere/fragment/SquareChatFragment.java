@@ -25,14 +25,14 @@ import com.pinthecloud.athere.sqlite.MessageDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
-	private Square square;
-
 	private EditText messageEditText;
 	private ImageButton sendButton;
 
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
+
+	private Square square;
 
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
@@ -143,7 +143,6 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-
 				activity.runOnUiThread(new Runnable() {
 
 					@Override

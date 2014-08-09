@@ -16,8 +16,6 @@
         <attr name="pstsTabSwitch" format="boolean" />
         <attr name="pstsActivateTextColor" format="color" />
         <attr name="pstsDeactivateTextColor" format="color" />
-        <attr name="pstsActivateTabBackground" format="reference" />
-        <attr name="pstsDeactivateTabBackground" format="reference" />
     </declare-styleable>
 
 </resources>

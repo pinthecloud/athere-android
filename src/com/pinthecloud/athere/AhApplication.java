@@ -47,7 +47,6 @@ public class AhApplication extends Application{
 	private static UserHelper userHelper;
 	private static SquareHelper squareHelper;
 	private static MessageHelper messageHelper; 
-	private static LocationHelper locationHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -75,7 +74,6 @@ public class AhApplication extends Application{
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
-		locationHelper = new LocationHelper(this);
 
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
@@ -113,9 +111,6 @@ public class AhApplication extends Application{
 	}
 	public MessageHelper getMessageHelper() {
 		return messageHelper;
-	}
-	public LocationHelper getLocationHelper() {
-		return locationHelper;
 	}
 
 	/**

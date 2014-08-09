@@ -15,6 +15,11 @@
     <dimen name="square_tab_height">48dp</dimen>
     <dimen name="square_drawer_width">260dp</dimen>
 
+    <!-- Square code dialog -->
+    <dimen name="square_code_dialog_code_enter_button_margin">10dp</dimen>
+    <dimen name="square_code_dialog_top_margin">20dp</dimen>
+    <dimen name="square_code_dialog_bottom_margin">20dp</dimen>
+
     <!-- square drawer -->
     <dimen name="square_drawer_participant_list_profile_width">34dp</dimen>
     <dimen name="square_drawer_participant_list_profile_height">34dp</dimen>
@@ -41,8 +46,18 @@
     <!-- Square chat -->
     <dimen name="square_chat_profile_width">34dp</dimen>
     <dimen name="square_chat_profile_height">34dp</dimen>
-    <dimen name="square_chat_left_margin">10.5dp</dimen>
     <dimen name="square_chat_height">48dp</dimen>
+
+    <!-- Chupa chat -->
+    <dimen name="chupa_chat_other_bar_height">56dp</dimen>
+    <dimen name="chupa_chat_other_bar_left_margin">13.5dp</dimen>
+    <dimen name="chupa_chat_other_profile_nick_margin">13.5dp</dimen>
+    <dimen name="chupa_chat_other_nick_gender_margin">6.5dp</dimen>
+    <dimen name="chupa_chat_other_gender_age_margin">10dp</dimen>
+    <dimen name="chupa_chat_other_age_company_number_margin">3.5dp</dimen>
+    <dimen name="chupa_chat_other_profile_width">33.5dp</dimen>
+    <dimen name="chupa_chat_other_profile_height">33.5dp</dimen>
+    <dimen name="chupa_chat_height">48dp</dimen>
 
     <!-- Square list -->
     <dimen name="square_list_height">88dp</dimen>
@@ -50,13 +65,13 @@
     <dimen name="square_list_line_right_margin">48dp</dimen>
     <dimen name="square_list_people_num_left_margin">8dp</dimen>
     <dimen name="square_list_people_num_right_margin">16dp</dimen>
-    
+
     <!-- Square chupa list -->
     <dimen name="square_chupa_list_height">88dp</dimen>
     <dimen name="square_chupa_list_left_margin">48dp</dimen>
     <dimen name="square_chupa_list_right_margin">48dp</dimen>
     <dimen name="square_chupa_list_profile_text_margin">16dp</dimen>
-    
+
     <!-- Square profile -->
     <dimen name="square_profile_text_height">48dp</dimen>
     <dimen name="square_profile_camera_button_bottom_margin">13.5dp</dimen>

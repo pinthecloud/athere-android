@@ -70,9 +70,35 @@ public class SquareListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				final Square square = squares.get(position);
+
+				// TODO temp
 				Intent intent = new Intent(context, SquareProfileActivity.class);
-				intent.putExtra(AhGlobalVariable.SQUARE_KEY, squares.get(position));
+				intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
 				startActivity(intent);
+
+				// TODO
+				//				SquareCodeDialog codeDialog = new SquareCodeDialog(square, new AhDialogCallback() {
+				//
+				//					@Override
+				//					public void doPositiveThing(Bundle bundle) {
+				//						String code = bundle.getString(AhGlobalVariable.CODE_VALUE_KEY);
+				//						if(code.equals(square.getCode())){
+				//							Intent intent = new Intent(context, SquareProfileActivity.class);
+				//							intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
+				//							startActivity(intent);
+				//						}else{
+				//							String message = getResources().getString(R.string.bad_square_code_message);
+				//							Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+				//							toast.show();
+				//						}
+				//					}
+				//					@Override
+				//					public void doNegativeThing(Bundle bundle) {
+				//						// do nothing						
+				//					}
+				//				});
+				//				codeDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
 		getNearSquares();
@@ -93,7 +119,8 @@ public class SquareListFragment extends AhFragment{
 			@Override
 			public void onCompleted(List<Square> list, int count) {
 				mProgressBar.setVisibility(View.GONE);
-
+				
+				squares.clear();
 				squares.addAll(list);
 				squareListAdapter.notifyDataSetChanged();
 			}

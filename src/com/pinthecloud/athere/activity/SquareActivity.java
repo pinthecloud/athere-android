@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
+import com.pinthecloud.athere.fragment.SquareDrawerFragment.SquareDrawerFragmentCallbacks;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -27,7 +28,7 @@ import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
-public class SquareActivity extends AhActivity implements SquareDrawerFragment.SquareDrawerFragmentCallbacks{
+public class SquareActivity extends AhActivity implements SquareDrawerFragmentCallbacks{
 
 	private Square square;
 	private User user;
@@ -70,7 +71,6 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragment.S
 		 * Set UI Component
 		 */
 		mActionBar = getActionBar();
-
 		progressBar = (ProgressBar) findViewById(R.id.square_progress_bar);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_layout);
 		mFragmentView = findViewById(R.id.square_drawer_fragment);
