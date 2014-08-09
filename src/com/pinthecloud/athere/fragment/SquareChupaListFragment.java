@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -25,6 +26,7 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareChupaListFragment extends AhFragment{
 
@@ -75,17 +77,18 @@ public class SquareChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				
+				
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
 				
-				// Finder other user if he was the sender?
-				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("senderId"));
-				// if not, if he was the receiver?
-				if (user == null)
-					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("receiverId"));
-				if (user == null)
-					user = userHelper.getMyUserInfo(true);
-				if (user == null) throw new AhException("No User exist Error");
+				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"));
 				
+				if (user == null) {
+					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"), true);
+					if (user == null)
+						throw new AhException("No User exist Error");
+				}
+				Log("user before Goto ChupaChatFragment",user);
 				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
@@ -96,8 +99,8 @@ public class SquareChupaListFragment extends AhFragment{
 
 
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
 		updateList();
 	}
 
@@ -106,33 +109,54 @@ public class SquareChupaListFragment extends AhFragment{
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){
 			Map<String, String> map = new HashMap<String, String>();
-			User user = userDBHelper.getUser(message.getSenderId());
-			if (user != null) {
-				map.put("profilePic", user.getProfilePic());
-				map.put("userNickName", message.getSender());
-				map.put("userId", message.getSenderId());
-				Log("sender : ", message.getSender());
-				map.put("content", message.getContent());
-				map.put("timeStamp", message.getTimeStamp());
-				map.put("chupaCommunId", message.getChupaCommunId());
-			}  
-			else {
-				user = userDBHelper.getUser(message.getReceiverId());
-				if (user == null) {
-					Log("message : ", message);
-					Log("user : ", user);
-					Log("my user id : ", pref.getString(AhGlobalVariable.USER_ID_KEY));
-					Log("lastChupaList : ",lastChupaList);
-					throw new AhException("convertToMap user NULL");
-				}
-				map.put("profilePic", user.getProfilePic());
-				map.put("userNickName", message.getReceiver());
-				map.put("userId", message.getReceiverId());
-				Log("receiver : ", message.getReceiver());
-				map.put("content", message.getContent());
-				map.put("timeStamp", message.getTimeStamp());
-				map.put("chupaCommunId", message.getChupaCommunId());
+			
+			String profilePic = "";
+			String userNickName = "";
+			String userId = "";
+			String content = "";
+			String timeStamp = "";
+			String chupaCommunId = "";
+			String isExit = "false";
+			
+			if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getSenderId())) {
+				// the other user is Receiver
+				userId = message.getReceiverId();
+				userNickName = message.getReceiver();
+			} else if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getReceiverId())) {
+				// the other user is Sender
+				userId = message.getSenderId();
+				userNickName = message.getSender();
+			} else {
+				throw new AhException("No User in Sender or Receive");
 			}
+			
+			
+			
+			User user = userDBHelper.getUser(userId);
+			
+			// if there is No such User
+			if (user == null) {
+				// check whether it is exited.
+				if (userDBHelper.isUserExit(userId)) {
+					user = userDBHelper.getUser(userId, true);
+					isExit = "true";
+				} else {
+					throw new AhException("No User in UserDBHelper");
+				}
+			}
+			profilePic = user.getProfilePic();
+			content = message.getContent();
+			timeStamp = message.getTimeStamp();
+			chupaCommunId = message.getChupaCommunId();
+			
+			map.put("profilePic", profilePic);
+			map.put("userNickName", userNickName);
+			map.put("userId", userId);
+			map.put("content", content);
+			map.put("timeStamp", timeStamp);
+			map.put("chupaCommunId", chupaCommunId);
+			map.put("isExit", isExit);
+				
 			
 			list.add(map);
 		}

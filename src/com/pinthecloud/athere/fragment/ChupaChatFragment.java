@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -24,6 +25,7 @@ import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class ChupaChatFragment extends AhFragment {
 
@@ -33,9 +35,10 @@ public class ChupaChatFragment extends AhFragment {
 
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
+	private UserDBHelper userDBHelper;
 
 	private User user;
-
+	
 	private SquareChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
@@ -45,6 +48,7 @@ public class ChupaChatFragment extends AhFragment {
 		super.onCreate(savedInstanceState);
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
+		userDBHelper = app.getUserDBHelper();
 		Intent intent = activity.getIntent();
 		user = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
@@ -102,6 +106,14 @@ public class ChupaChatFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				// Make message and send it
+				
+				if (userDBHelper.isUserExit(user.getId())){
+					Toast toast = Toast.makeText(context,
+							"The User has been Exit", Toast.LENGTH_LONG);
+					toast.show();
+					return;
+				}
+				
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
 				messageBuilder.setContent(messageEditText.getText().toString())
 				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))

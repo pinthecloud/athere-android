@@ -18,6 +18,7 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 /**
@@ -35,12 +36,13 @@ public class HongkunTestFragment extends AhFragment {
 	int[] countArr;
 	StringBuilder squareId = new StringBuilder();
 	UserHelper userHelper;
+	UserDBHelper userDBHelper;
 	MessageHelper messageHelper;
 	SquareHelper squareHelper;
 	MessageDBHelper messageDB;
 	private String who;
 	private String content;
-
+	String __id = "";
 
 	public static final String SENDER_ID = "838051405989";
 
@@ -52,6 +54,7 @@ public class HongkunTestFragment extends AhFragment {
 		// Set Helper
 		squareHelper = app.getSquareHelper();
 		userHelper = app.getUserHelper();
+		userDBHelper = app.getUserDBHelper();
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
 		messageDB = app.getMessageDBHelper();
@@ -78,64 +81,31 @@ public class HongkunTestFragment extends AhFragment {
 
 				@Override
 				public void onClick(View v) {
+					
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
-
+						
+						User user = User.addUserTest();
+						__id = user.getId();
+						userDBHelper.addUser(user);
+						Log("add User id : ", __id);
 					} else if (b.getId() == btnArr[1].getId()) {
-
-						Square square = new Square();
-						square.setWhoMade(pref.getString(AhGlobalVariable.USER_ID_KEY));
-						square.setName("Hongkunyoo Ground");
-						square.setLatitude(0);
-						square.setLongitude(0);
-						square.setMaleNum(0);
-						square.setFemaleNum(0);
-						square.setAdmin(false);
-						square.setDistance(0);
-						square.setCode("");
-						square.setCode(false);
-
-						squareHelper.createSquareAsync(square, new AhEntityCallback<Square>() {
-
-							@Override
-							public void onCompleted(Square entity) {
-								// TODO Auto-generated method stub
-								squareId.append(entity.getId());
-								Log("onComple createSquare");
-							}
-						});
-
-
-
+						User user = userDBHelper.getUser(__id);
+						Log("id : ",__id, "getUser : ", user);
+						userDBHelper.exitUser(__id);
+						Log("exitUser");
 					} else if (b.getId() == btnArr[2].getId()) {
-						Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), com.pinthecloud.athere.R.drawable.splash);
-						String profilePic = BitmapUtil.convertToString(largeIcon);
-						User user = new User();
-
-						user.setNickName("Bob");
-						user.setProfilePic(profilePic);
-						user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
-						user.setMale(true);
-						user.setCompanyNum(2);
-						user.setAge(24);
-						user.setSquareId("29F4F376-D083-4600-8D77-B616B96F29F5");
-						user.setChupaEnable(true);
-
-						userHelper.enterSquareAsync(user, new AhEntityCallback<String>() {
-
-							@Override
-							public void onCompleted(String entity) {
-								// TODO Auto-generated method stub
-								Log("succeed enterSquare");
-							}
-						});
-
+						User user = userDBHelper.getUser(__id);
+						Log("getUser(id) : ",user);
 					} else if (b.getId() == btnArr[3].getId()) {
-
+						User user = userDBHelper.getUser(__id, true);
+						Log("getUser(id, true) : ",user);
+						
 					} else if (b.getId() == btnArr[4].getId()) {
-
+						User user = userDBHelper.getUser(__id, false);
+						Log("getUser(id, false) : ",user);
 					} else if (b.getId() == btnArr[5].getId()) {
-
+						Log("isUserExit : ", userDBHelper.isUserExit(__id));
 					}
 					messageText.setText(b.getText());
 				}

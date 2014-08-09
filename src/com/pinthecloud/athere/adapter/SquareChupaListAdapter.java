@@ -51,10 +51,14 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
 		Map<String,String> lastChupaMap = items.get(position);
 		if (lastChupaMap != null) {
-
+			String isExit = lastChupaMap.get("isExit");
+			String userNickName = lastChupaMap.get("userNickName");
+			if (isExit.equals("true")) {
+				userNickName += "has been Exit";
+			}
 			String picStr = lastChupaMap.get("profilePic");
 			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
-			sender.setText(lastChupaMap.get("userNickName"));
+			sender.setText(userNickName);
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 		}

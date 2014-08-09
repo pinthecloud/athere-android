@@ -155,7 +155,7 @@ public class User implements Parcelable{
 		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 		StringBuilder sb = new StringBuilder();
 		Random random = new Random();
-		for (int i = 0; i < random.nextInt(20); i++) {
+		for (int i = 0; i < random.nextInt(25); i++) {
 			char c = chars[random.nextInt(chars.length)];
 			sb.append(c);
 		}
@@ -173,7 +173,8 @@ public class User implements Parcelable{
 				"{ id : "+this.id + " \n "+
 				" nickName : "+this.nickName + " \n "+
 				" mobileId : "+this.mobileId + " \n "+
-				" registrationId : "+this.registrationId.substring(0, 20) + " \n "+
+				" registrationId : "+ (this.registrationId.length() < 20 ? 
+						this.registrationId.substring(0, this.registrationId.length() - 1) : this.registrationId.substring(0, 20)) + " \n "+
 				" isMale : "+this.isMale + " \n "+
 				" companyNum : "+this.companyNum + " \n "+
 				" age : "+this.age + " \n "+

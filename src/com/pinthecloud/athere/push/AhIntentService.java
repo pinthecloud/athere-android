@@ -95,8 +95,8 @@ public class AhIntentService extends IntentService {
 					user = userHelper.getUserSync(userId);
 					userDBHelper.addUser(user);
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
-					Log.e("ERROR","in AhIntent userId : " + userId);
-					userDBHelper.deleteUser(userId);
+//					userDBHelper.deleteUser(userId);
+					userDBHelper.exitUser(userId);
 				} else if (AhMessage.TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
 					user = userHelper.getUserSync(userId);
 					userDBHelper.updateUser(user);
