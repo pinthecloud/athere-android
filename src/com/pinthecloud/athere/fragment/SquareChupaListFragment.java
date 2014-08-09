@@ -18,6 +18,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
@@ -30,9 +31,10 @@ public class SquareChupaListFragment extends AhFragment{
 	public SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
 
-	public List<Map<String,String>> lastChupaCommunList;
+	public List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
+	private UserHelper userHelper;
 
 	
 	public SquareChupaListFragment(Square square) {
@@ -45,9 +47,10 @@ public class SquareChupaListFragment extends AhFragment{
 
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
+		userHelper = app.getUserHelper();
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		
-		lastChupaCommunList = convertToMap(lastChupaList);
+		lastChupaCommunList.addAll(convertToMap(lastChupaList));
 	}
 
 
@@ -73,7 +76,17 @@ public class SquareChupaListFragment extends AhFragment{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, userDBHelper.getUser(lastChupaCommunList.get(position).get("senderId")));
+				
+				// Finder other user if he was the sender?
+				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("senderId"));
+				// if not, if he was the receiver?
+				if (user == null)
+					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("receiverId"));
+				if (user == null)
+					user = userHelper.getMyUserInfo(true);
+				if (user == null) throw new AhException("No User exist Error");
+				
+				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
 		});
@@ -94,18 +107,31 @@ public class SquareChupaListFragment extends AhFragment{
 		for(AhMessage message : lastChupaList){
 			Map<String, String> map = new HashMap<String, String>();
 			User user = userDBHelper.getUser(message.getSenderId());
-			if (user == null) user = userDBHelper.getUser(message.getReceiverId());
-			if( user != null){
+			if (user != null) {
 				map.put("profilePic", user.getProfilePic());
-				map.put("sender", message.getSender());
-				map.put("senderId", message.getSenderId());
-				map.put("receiver", message.getReceiver());
-				map.put("receiverId", message.getReceiverId());
+				map.put("userNickName", message.getSender());
+				map.put("userId", message.getSenderId());
+				Log("sender : ", message.getSender());
 				map.put("content", message.getContent());
 				map.put("timeStamp", message.getTimeStamp());
 				map.put("chupaCommunId", message.getChupaCommunId());
-			} else {
-				throw new AhException("convertToMap user NULL");
+			}  
+			else {
+				user = userDBHelper.getUser(message.getReceiverId());
+				if (user == null) {
+					Log("message : ", message);
+					Log("user : ", user);
+					Log("my user id : ", pref.getString(AhGlobalVariable.USER_ID_KEY));
+					Log("lastChupaList : ",lastChupaList);
+					throw new AhException("convertToMap user NULL");
+				}
+				map.put("profilePic", user.getProfilePic());
+				map.put("userNickName", message.getReceiver());
+				map.put("userId", message.getReceiverId());
+				Log("receiver : ", message.getReceiver());
+				map.put("content", message.getContent());
+				map.put("timeStamp", message.getTimeStamp());
+				map.put("chupaCommunId", message.getChupaCommunId());
 			}
 			
 			list.add(map);
@@ -115,14 +141,21 @@ public class SquareChupaListFragment extends AhFragment{
 
 
 	public void updateList() {
+		Log("updateList");
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
+				
 				List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-				lastChupaCommunList = convertToMap(lastChupaList);
-				squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
-				squareChupaListView.setAdapter(squareChupaListAdapter);
+				lastChupaCommunList.clear();
+				List<Map<String, String>> list = convertToMap(lastChupaList);
+				lastChupaCommunList.addAll(list);
+				squareChupaListAdapter.clear();
+				squareChupaListAdapter.addAll(list);
+				//squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+				squareChupaListAdapter.notifyDataSetChanged();
+				//squareChupaListView.setAdapter(squareChupaListAdapter);
 			}
 		});
 	}

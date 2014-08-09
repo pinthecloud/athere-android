@@ -137,8 +137,8 @@ public class AhIntentService extends IntentService {
 				// Creates an explicit intent for an Activity in your app
 				Intent resultIntent = new Intent(_this, clazz);
 				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
-					User u = userDBHelper.getUser(message.getSenderId());
-					resultIntent.putExtra("user", u);
+					User chupaUser = userDBHelper.getUser(message.getSenderId());
+					resultIntent.putExtra(AhGlobalVariable.USER_KEY, chupaUser);
 				}
 				// The stack builder object will contain an artificial back stack for the
 				// started Activity.

@@ -106,6 +106,7 @@ public class ChupaChatFragment extends AhFragment {
 				messageBuilder.setContent(messageEditText.getText().toString())
 				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setReceiver(user.getNickName())
 				.setReceiverId(user.getId())
 				.setType(AhMessage.TYPE.CHUPA);
 
@@ -166,6 +167,7 @@ public class ChupaChatFragment extends AhFragment {
 
 				for (AhMessage message : chupas) {
 					message.setStatus(AhMessage.SENT);
+					Log(message.toString());
 					messageList.add(message);
 					messageListAdapter.notifyDataSetChanged();
 					messageListView.setSelection(messageListView.getCount() - 1);

@@ -52,18 +52,9 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 		Map<String,String> lastChupaMap = items.get(position);
 		if (lastChupaMap != null) {
 
-			//			map.put("profilePic", user.getProfilePic());
-			//			map.put("sender", message.getSender());
-			//			map.put("senderId", message.getSenderId());
-			//			map.put("receiver", message.getReceiver());
-			//			map.put("receiverId", message.getReceiverId());
-			//			map.put("content", message.getContent());
-			//			map.put("timeStamp", message.getTimeStamp());
-			//			map.put("chupaCommunId", message.getChupaCommunId());
-
 			String picStr = lastChupaMap.get("profilePic");
 			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
-			sender.setText(lastChupaMap.get("sender"));
+			sender.setText(lastChupaMap.get("userNickName"));
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 		}

@@ -36,9 +36,24 @@ public class AhFragment extends Fragment{
 		pref = app.getPref();
 	}
 	
+	protected void Log(Object... params){
+		for(Object str : params) {
+			if (str == null) {
+				Log.e("ERROR", "null");
+				continue;
+			}
+			Log.e("ERROR", str.toString());
+		}
+	}
+	
 	protected void Log(String... params){
-		for(String str : params)
+		for(String str : params) {
+			if (str == null) {
+				Log.e("ERROR", "null");
+				continue;
+			}
 			Log.e("ERROR", str);
+		}
 	}
 	
 	
