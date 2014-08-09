@@ -124,8 +124,6 @@ public class SquareChupaListFragment extends AhFragment{
 				throw new AhException("No User in Sender or Receive");
 			}
 
-
-
 			User user = userDBHelper.getUser(userId);
 
 			// if there is No such User
@@ -138,6 +136,7 @@ public class SquareChupaListFragment extends AhFragment{
 					throw new AhException("No User in UserDBHelper");
 				}
 			}
+			
 			profilePic = user.getProfilePic();
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
@@ -151,7 +150,6 @@ public class SquareChupaListFragment extends AhFragment{
 			map.put("chupaCommunId", chupaCommunId);
 			map.put("isExit", isExit);
 
-
 			list.add(map);
 		}
 		return list;
@@ -164,16 +162,13 @@ public class SquareChupaListFragment extends AhFragment{
 
 			@Override
 			public void run() {
-
 				List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-				lastChupaCommunList.clear();
 				List<Map<String, String>> list = convertToMap(lastChupaList);
+				lastChupaCommunList.clear();
 				lastChupaCommunList.addAll(list);
-				squareChupaListAdapter.clear();
-				squareChupaListAdapter.addAll(list);
-				//squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+				squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+				squareChupaListView.setAdapter(squareChupaListAdapter);
 				squareChupaListAdapter.notifyDataSetChanged();
-				//squareChupaListView.setAdapter(squareChupaListAdapter);
 			}
 		});
 	}
