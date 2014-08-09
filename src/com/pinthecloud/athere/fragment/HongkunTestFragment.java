@@ -82,24 +82,17 @@ public class HongkunTestFragment extends AhFragment {
 						User user = User.addUserTest();
 						__id = user.getId();
 						userDBHelper.addUser(user);
-						Log("add User id : ", __id);
 					} else if (b.getId() == btnArr[1].getId()) {
 						User user = userDBHelper.getUser(__id);
-						Log("id : ",__id, "getUser : ", user);
 						userDBHelper.exitUser(__id);
-						Log("exitUser");
 					} else if (b.getId() == btnArr[2].getId()) {
 						User user = userDBHelper.getUser(__id);
-						Log("getUser(id) : ",user);
 					} else if (b.getId() == btnArr[3].getId()) {
 						User user = userDBHelper.getUser(__id, true);
-						Log("getUser(id, true) : ",user);
 
 					} else if (b.getId() == btnArr[4].getId()) {
 						User user = userDBHelper.getUser(__id, false);
-						Log("getUser(id, false) : ",user);
 					} else if (b.getId() == btnArr[5].getId()) {
-						Log("isUserExit : ", userDBHelper.isUserExit(__id));
 					}
 					messageText.setText(b.getText());
 				}

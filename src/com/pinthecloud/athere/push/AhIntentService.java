@@ -1,7 +1,6 @@
 package com.pinthecloud.athere.push;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +25,6 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
-import com.pinthecloud.athere.activity.SplashActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
@@ -45,7 +43,6 @@ public class AhIntentService extends IntentService {
 	private UserHelper userHelper;
 	private Context _this;
 
-	private AtomicInteger atomicInteger;
 
 	public AhIntentService() {
 		this("AhIntentService");
@@ -58,7 +55,6 @@ public class AhIntentService extends IntentService {
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 		userHelper = app.getUserHelper();
-		atomicInteger = new AtomicInteger();
 		_this = this;
 	}
 
@@ -95,7 +91,7 @@ public class AhIntentService extends IntentService {
 					user = userHelper.getUserSync(userId);
 					userDBHelper.addUser(user);
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
-//					userDBHelper.deleteUser(userId);
+					//userDBHelper.deleteUser(userId);
 					userDBHelper.exitUser(userId);
 				} else if (AhMessage.TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
 					user = userHelper.getUserSync(userId);
@@ -109,25 +105,28 @@ public class AhIntentService extends IntentService {
 					return;
 				}
 
-				////////////////////////////////
-				// if the App is NOT Running
-				////////////////////////////////
+				/////////////////////////////////////
+				// if the Application is NOT Running
+				/////////////////////////////////////
 				if (AhMessage.TYPE.TALK.toString().equals(message.getType())){
 					return; // do nothing
 				} 
 
 				String title = "";
 				String content = "";
-				messageDBHelper.addMessage(message);
+				
 				Class<?> clazz = SquareActivity.class;
+				
 				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
 					title = message.getSender() +"님께서 회원님에게 추파를 보내셨습니다.";
 					content = message.getContent();
 					clazz = ChupaChatActivity.class;
 				} else if (AhMessage.TYPE.SHOUTING.toString().equals(message.getType())){
+					messageDBHelper.addMessage(message);
 					title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
 					content = message.getContent();
 				} else if (AhMessage.TYPE.ENTER_SQUARE.toString().equals(message.getType())){
+					messageDBHelper.addMessage(message);
 					title = message.getSender() +"님께서 입장하셨습니다.";
 					content = message.getContent();
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())){
@@ -147,15 +146,17 @@ public class AhIntentService extends IntentService {
 				TaskStackBuilder stackBuilder = TaskStackBuilder.create(_this);
 
 				// Adds the back stack for the Intent (but not the Intent itself)
-				stackBuilder.addParentStack(SplashActivity.class);
-
+				stackBuilder.addParentStack(ChupaChatActivity.class);
+				
+//				stackBuilder.addNextIntent(new Intent(_this, SquareActivity.class));
+				
 				// Adds the Intent that starts the Activity to the top of the stack
 				stackBuilder.addNextIntent(resultIntent);
+//				stackBuilder.addNextIntentWithParentStack(resultIntent);
+				
+				
 				PendingIntent resultPendingIntent =
-						stackBuilder.getPendingIntent(
-								0,
-								PendingIntent.FLAG_UPDATE_CURRENT
-								);
+					stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 				User sentUser = userDBHelper.getUser(message.getSenderId());
 				Bitmap bm = null;
 				if (sentUser == null){
@@ -179,8 +180,7 @@ public class AhIntentService extends IntentService {
 				NotificationManager mNotificationManager =
 						(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				// mId allows you to update the notification later on.
-				mNotificationManager.notify(atomicInteger.getAndIncrement(), mBuilder.build());
-
+				mNotificationManager.notify(1, mBuilder.build());
 				AudioManager audioManager = (AudioManager) _this.getSystemService(Context.AUDIO_SERVICE);
 				if(AudioManager.RINGER_MODE_SILENT != audioManager.getRingerMode()){
 					((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);

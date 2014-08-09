@@ -1,6 +1,8 @@
 package com.pinthecloud.athere.activity;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +28,9 @@ public class SplashActivity extends AhActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-
+		NotificationManager mNotificationManager =
+				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(1);
 		/*
 		 * Get device resolution and set it
 		 */

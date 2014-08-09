@@ -83,23 +83,30 @@ public class SquareTabFragment extends AhFragment{
 		/*
 		 *  Need to set Handler for Chupa on app running state.
 		 */
-		messageHelper.setMessageHandler(AhMessage.TYPE.CHUPA, new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				mSquarePagerAdapter.notifyDataSetChanged();
-				activity.runOnUiThread(new Runnable() {
+				
+				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())){
+					mSquarePagerAdapter.notifyDataSetChanged();
 
-					@Override
-					public void run() {
-						Toast toast = Toast.makeText(context,
-								"Seungmin You should handle chupa receive at Here!\n"
-										+ "(chupa badge and new 1)", Toast.LENGTH_LONG);
-						toast.show();
-					}
-				});
+					activity.runOnUiThread(new Runnable() {
+	
+						@Override
+						public void run() {
+							Toast toast = Toast.makeText(context,
+									"Seungmin You should handle chupa receive at Here!\n"
+											+ "(chupa badge and new 1)", Toast.LENGTH_LONG);
+							toast.show();
+						}
+					});
+				} else if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
+					mSquarePagerAdapter.notifyDataSetChanged();
+				}
 			}
 		});
+		
 
 		return view;
 	}

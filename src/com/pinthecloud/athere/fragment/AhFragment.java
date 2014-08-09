@@ -22,7 +22,8 @@ public class AhFragment extends Fragment{
 	protected Context context;
 	protected AhActivity activity;
 	protected PreferenceHelper pref;
-
+	protected AhFragment _thisFragment;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,9 +35,13 @@ public class AhFragment extends Fragment{
 		context = getActivity();
 		activity = (AhActivity) context;
 		pref = app.getPref();
+		_thisFragment = this;
 	}
 	
-	protected void Log(Object... params){
+	
+	protected void Log(AhFragment fragment, Object... params){
+		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
 		for(Object str : params) {
 			if (str == null) {
 				Log.e("ERROR", "null");
@@ -44,18 +49,8 @@ public class AhFragment extends Fragment{
 			}
 			Log.e("ERROR", str.toString());
 		}
+		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
-	
-	protected void Log(String... params){
-		for(String str : params) {
-			if (str == null) {
-				Log.e("ERROR", "null");
-				continue;
-			}
-			Log.e("ERROR", str);
-		}
-	}
-	
 	
 	/*
 	 * Check nick name EditText

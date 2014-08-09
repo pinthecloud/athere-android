@@ -114,11 +114,15 @@ public class MessageHelper {
 
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
 
-//	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
+	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
 //	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 
 	public void setMessageHandler(AhMessage.TYPE type, AhEntityCallback<AhMessage> callback){
 		map.put(type.toString(), callback);
+	}
+	
+	public void setMessageHandler(AhEntityCallback<AhMessage> callback){
+		map.put(MESSAGE_RECEIVED, callback);
 	}
 
 	public void triggerMessageEvent(AhMessage message){
@@ -126,6 +130,12 @@ public class MessageHelper {
 		if(callback != null)
 			callback.onCompleted(message);
 		else 
-			Log.e("ERROR","message.getType() :" + message.getType());;//throw new AhException("No such Event : triggerMessageEvent");
+			Log.e("ERROR","message.getType() :" + message.getType());
+		
+		callback = map.get(MESSAGE_RECEIVED);
+		if(callback != null)
+			callback.onCompleted(message);
+		else 
+			Log.e("ERROR","map.get(MESSAGE_RECEIVED); :" + message.getType());
 	}
 }

@@ -219,4 +219,11 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragmentCa
 			}
 		}).start();
 	}
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		Log(this, "Square Activity onStart");
+	}
 }

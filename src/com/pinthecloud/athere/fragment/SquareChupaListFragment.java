@@ -82,7 +82,7 @@ public class SquareChupaListFragment extends AhFragment{
 					if (user == null)
 						throw new AhException("No User exist Error");
 				}
-				Log("user before Goto ChupaChatFragment",user);
+				Log(_thisFragment, "user before Goto ChupaChatFragment",user);
 				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
@@ -157,7 +157,6 @@ public class SquareChupaListFragment extends AhFragment{
 
 
 	public void updateList() {
-		Log("updateList");
 		activity.runOnUiThread(new Runnable() {
 
 			@Override

@@ -30,8 +30,16 @@ public class AhActivity extends Activity {
 	}
 	
 	// Logging Method
-	protected void Log(String... params){
-		for(String str : params)
-			Log.e("ERROR", str);
+	protected void Log(AhActivity activity, Object... params){
+		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		Log.e("ERROR", activity.getClass().getName());
+		for(Object str : params) {
+			if (str == null) {
+				Log.e("ERROR", "null");
+				continue;
+			}
+			Log.e("ERROR", str.toString());
+		}
+		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
 }

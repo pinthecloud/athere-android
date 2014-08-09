@@ -189,22 +189,27 @@ public class ChupaChatFragment extends AhFragment {
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageHelper.setMessageHandler(AhMessage.TYPE.CHUPA, new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						messageList.add(message);
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
-					}
-				});
+				
+				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString()) 
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())) {
+					
+					activity.runOnUiThread(new Runnable() {
+	
+						@Override
+						public void run() {
+							messageList.add(message);
+							messageListAdapter.notifyDataSetChanged();
+							messageListView.setSelection(messageListView.getCount() - 1);
+						}
+					});
+				}
 			}
 		});
-
+		
 
 		/*
 		 * 
@@ -223,7 +228,6 @@ public class ChupaChatFragment extends AhFragment {
 
 				for (AhMessage message : chupas) {
 					message.setStatus(AhMessage.SENT);
-					Log(message.toString());
 					messageList.add(message);
 					messageListAdapter.notifyDataSetChanged();
 					messageListView.setSelection(messageListView.getCount() - 1);

@@ -80,7 +80,11 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ChupaChatActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+		        android:name="android.support.PARENT_ACTIVITY"
+		        android:value=".activity.SquareActivity" />
+        </activity>
     </application>
 
 </manifest>
