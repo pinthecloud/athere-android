@@ -3,7 +3,8 @@
     android:id="@+id/square_drawer_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white" >
+    android:background="@android:color/white"
+    android:clickable="true" >
 
     <ProgressBar
         android:id="@+id/square_drawer_frag_progress_bar"
@@ -204,7 +205,7 @@
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
         android:text="@string/exit_square"
-        android:textSize="@dimen/font_large"
-        android:textColor="@color/red" />
+        android:textColor="@color/red"
+        android:textSize="@dimen/font_large" />
 
 </RelativeLayout>

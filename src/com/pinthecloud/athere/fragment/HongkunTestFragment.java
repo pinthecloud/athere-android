@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,17 +7,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.util.BitmapUtil;
 
 /**
  * 
@@ -81,10 +75,10 @@ public class HongkunTestFragment extends AhFragment {
 
 				@Override
 				public void onClick(View v) {
-					
+
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
-						
+
 						User user = User.addUserTest();
 						__id = user.getId();
 						userDBHelper.addUser(user);
@@ -100,7 +94,7 @@ public class HongkunTestFragment extends AhFragment {
 					} else if (b.getId() == btnArr[3].getId()) {
 						User user = userDBHelper.getUser(__id, true);
 						Log("getUser(id, true) : ",user);
-						
+
 					} else if (b.getId() == btnArr[4].getId()) {
 						User user = userDBHelper.getUser(__id, false);
 						Log("getUser(id, false) : ",user);

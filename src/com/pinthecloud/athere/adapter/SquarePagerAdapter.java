@@ -5,21 +5,18 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
-import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
 import com.pinthecloud.athere.fragment.SquareChupaListFragment;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.Square;
 
-public class SquarePagerAdapter extends FragmentStatePagerAdapter {
+public class SquarePagerAdapter extends FragmentStatePagerAdapter{
 
 	private String[] titles;
 	private SquareChatFragment squareChatFragment;
 	private SquareChupaListFragment squareChupaListFragment;
 
-	
+
 	public SquarePagerAdapter(Context context, FragmentManager fm, Square square) {
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);

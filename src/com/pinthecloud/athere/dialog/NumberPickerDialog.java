@@ -1,6 +1,5 @@
 package com.pinthecloud.athere.dialog;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +12,9 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
-public class NumberPickerDialog extends DialogFragment {
+public class NumberPickerDialog extends AhDialogFragment {
 
 	private NumberPicker yearPicker;
-
-	private AhDialogCallback ahDialogCallback;
 	private String title;
 	private int min;
 	private int max;
@@ -31,7 +28,6 @@ public class NumberPickerDialog extends DialogFragment {
 		this.min = min;
 		this.max = max;
 		this.defaultValue = defaultValue;
-
 	}
 
 

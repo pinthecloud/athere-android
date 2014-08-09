@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -19,14 +18,12 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareChupaListFragment extends AhFragment{
 
@@ -36,9 +33,8 @@ public class SquareChupaListFragment extends AhFragment{
 	public List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
-	private UserHelper userHelper;
 
-	
+
 	public SquareChupaListFragment(Square square) {
 		super();
 	}
@@ -49,9 +45,7 @@ public class SquareChupaListFragment extends AhFragment{
 
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
-		userHelper = app.getUserHelper();
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-		
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));
 	}
 
@@ -77,12 +71,12 @@ public class SquareChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
-				
+
+
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				
+
 				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"));
-				
+
 				if (user == null) {
 					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"), true);
 					if (user == null)
@@ -109,7 +103,7 @@ public class SquareChupaListFragment extends AhFragment{
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){
 			Map<String, String> map = new HashMap<String, String>();
-			
+
 			String profilePic = "";
 			String userNickName = "";
 			String userId = "";
@@ -117,7 +111,7 @@ public class SquareChupaListFragment extends AhFragment{
 			String timeStamp = "";
 			String chupaCommunId = "";
 			String isExit = "false";
-			
+
 			if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getSenderId())) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -129,11 +123,11 @@ public class SquareChupaListFragment extends AhFragment{
 			} else {
 				throw new AhException("No User in Sender or Receive");
 			}
-			
-			
-			
+
+
+
 			User user = userDBHelper.getUser(userId);
-			
+
 			// if there is No such User
 			if (user == null) {
 				// check whether it is exited.
@@ -148,7 +142,7 @@ public class SquareChupaListFragment extends AhFragment{
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
 			chupaCommunId = message.getChupaCommunId();
-			
+
 			map.put("profilePic", profilePic);
 			map.put("userNickName", userNickName);
 			map.put("userId", userId);
@@ -156,8 +150,8 @@ public class SquareChupaListFragment extends AhFragment{
 			map.put("timeStamp", timeStamp);
 			map.put("chupaCommunId", chupaCommunId);
 			map.put("isExit", isExit);
-				
-			
+
+
 			list.add(map);
 		}
 		return list;
@@ -170,7 +164,7 @@ public class SquareChupaListFragment extends AhFragment{
 
 			@Override
 			public void run() {
-				
+
 				List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 				lastChupaCommunList.clear();
 				List<Map<String, String>> list = convertToMap(lastChupaList);

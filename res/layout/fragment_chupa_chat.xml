@@ -3,7 +3,57 @@
     android:id="@+id/chupa_chat_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/chupa_chat_frag_other_bar_layour"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chupa_chat_other_bar_height"
+        android:gravity="left|center"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/chupa_chat_other_bar_left_margin" >
+
+        <ImageView
+            android:id="@+id/chupa_chat_frag_other_profile"
+            android:layout_width="@dimen/chupa_chat_other_profile_width"
+            android:layout_height="@dimen/chupa_chat_other_profile_height"
+            android:layout_marginRight="@dimen/chupa_chat_other_profile_nick_margin"
+            android:contentDescription="@string/profile_image" />
+
+        <TextView
+            android:id="@+id/chupa_chat_frag_other_nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/chupa_chat_other_nick_gender_margin"
+            android:textSize="@dimen/font_x_large" />
+
+        <ImageView
+            android:id="@+id/chupa_chat_frag_other_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/chupa_chat_other_gender_age_margin"
+            android:contentDescription="@string/gender" />
+
+        <TextView
+            android:id="@+id/chupa_chat_frag_other_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/chupa_chat_other_age_company_number_margin"
+            android:textSize="@dimen/font_medium" />
+
+        <TextView
+            android:id="@+id/chupa_chat_frag_other_company_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/peoplenum"
+            android:textSize="@dimen/font_medium" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/gray_line" />
 
     <ListView
         android:id="@+id/chupa_chat_frag_list"
@@ -14,13 +64,10 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/chupa_chat_height"
+        android:alpha="0.9"
+        android:gravity="center"
         android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/chupa_chat_frag_option_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <EditText
             android:id="@+id/chupa_chat_frag_message_text"
@@ -39,9 +86,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:src="@drawable/send_image_button_bg"
             android:contentDescription="@string/send"
-            android:enabled="false" />
+            android:enabled="false"
+            android:src="@drawable/send_image_button_bg" />
     </LinearLayout>
 
 </LinearLayout>

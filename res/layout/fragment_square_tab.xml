@@ -10,17 +10,17 @@
         android:id="@+id/square_tab_frag_tab"
         android:layout_width="match_parent"
         android:layout_height="@dimen/square_tab_height"
+        android:background="@drawable/tabbar_bg"
         android:textSize="@dimen/font_x_large"
         app:pstsActivateTextColor="@android:color/white"
         app:pstsDeactivateTextColor="@color/gray_tab_text_unselected"
-        app:pstsActivateTabBackground="@android:color/transparent"
-        app:pstsDeactivateTabBackground="@color/gray_background"
         app:pstsDividerColor="@android:color/transparent"
         app:pstsIndicatorColor="@color/red"
         app:pstsIndicatorHeight="@dimen/square_tab_height"
         app:pstsShouldExpand="true"
         app:pstsTabSwitch="true"
-        app:pstsTextAllCaps="false" />
+        app:pstsTextAllCaps="false"
+        app:pstsUnderlineColor="@android:color/transparent" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/square_tab_frag_pager"

@@ -14,13 +14,13 @@ public class AhGlobalVariable{
 	public static final int ANGLE_270 = 270;
 	public static final int SQUARE_CHAT_TAB = 0;
 	public static final int SQUARE_CHUPA_TAB = 1;
-	
+
 	public static int DEVICE_WIDTH;
 	public static int DEVICE_HEIGHT;
 	public static int DEVICE_DPI;
 	public static float DEVICE_DENSITY;
-	
-	
+
+
 	/*
 	 * String
 	 */
@@ -30,9 +30,8 @@ public class AhGlobalVariable{
 	public static final String PROFILE_PICTURE_CIRCLE_NAME = "profile_picture_circle_name.png";
 	public static final String PROFILE_PICTURE_BLUR_NAME = "profile_picture_blur_name.png";
 	public static final String ANDROID = "Android";
-	public static final String NULL = "NULL";
-	
-	
+
+
 	/*
 	 * String Key
 	 */
@@ -40,16 +39,15 @@ public class AhGlobalVariable{
 	public static final String SQUARE_KEY = "SQUARE_KEY";
 	public static final String USER_KEY = "USER_KEY";
 	public static final String NUMBER_PICKER_VALUE_KEY = "NUMBER_PICKER_VALUE_KEY";
+	public static final String CODE_VALUE_KEY = "CODE_VALUE_KEY";
 
-	
+
 	/*
 	 * SharedPreference Key
 	 */
-	public static final String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
-	
 	public static final String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";
 	public static final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
-	
+
 	public static final String NICK_NAME_KEY = "NICK_NAME_KEY";
 	public static final String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";
 	public static final String AGE_KEY = "AGE_KEY";
@@ -60,7 +58,7 @@ public class AhGlobalVariable{
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
 	public static final String USER_ID_KEY = "USER_ID_KEY";
-	
+
 	public static final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
 	public static final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
 }

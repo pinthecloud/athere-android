@@ -19,15 +19,6 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/square_chat_frag_option_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/square_chat_left_margin"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/shout"
-            android:src="@drawable/chat_shout_off" />
-
         <EditText
             android:id="@+id/square_chat_frag_message_text"
             android:layout_width="0dp"
