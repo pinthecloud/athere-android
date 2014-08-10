@@ -2,10 +2,13 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -15,19 +18,23 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.dialog.ProfileDialog;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 
 	private Context context;
+	private Fragment fragment;
 	private int layoutId;
 	private List<User> items;
 
 
-	public SquareDrawerParticipantListAdapter(Context context, int layoutId, List<User> items) {
+	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<User> items) {
 		super(context, layoutId, items);
 		this.context = context;
+		this.fragment = fragment;
 		this.layoutId = layoutId;
 		this.items = items;
 	}
@@ -54,15 +61,35 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 
 
 			/*
-			 * Set image
+			 * Set UI component
 			 */
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
 			nickName.setText(user.getNickName());
 			if(user.isMale()){
 				isMale.setImageResource(R.drawable.sidebar_member_gender_m);
 			}else{
 				isMale.setImageResource(R.drawable.sidebar_member_gender_w);
 			}
+			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
+			profilePic.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							Intent intent = new Intent(context, ChupaChatActivity.class);
+							intent.putExtra(AhGlobalVariable.USER_KEY, user);
+							context.startActivity(intent);
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							// do nothing
+						}
+					});
+					profileDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				}
+			});
 
 
 			/*

@@ -8,6 +8,7 @@
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="logo">Logo</string>
+    <string name="profile">Profile</string>
     <string name="profile_image">Profile Image</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -18,7 +19,6 @@
     <string name="delete">Delete</string>
     <string name="select">Select</string>
     <string name="settings">Settings</string>
-    <string name="profile">Profile</string>
     <string name="gender">Gender</string>
     <string name="birth_of_year">Birth of Year</string>
     <string name="number_of_member">Number of Member</string>
@@ -29,6 +29,7 @@
     <string name="send">send</string>
     <string name="dash">&#160;-&#160;</string>
     <string name="exit_square">Leave Ground</string>
+    <string name="send_chupa">Send chupa</string>
     <string name="chupa">Chupa</string>
     <string name="chat_alarm">Chat Alarm</string>
     <string name="get_chupa">Get Chupa</string>

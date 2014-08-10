@@ -207,10 +207,12 @@ public class UserHelper {
 
 
 	public User getUserSync(String id) {
-
+		Log.d(AhGlobalVariable.LOG_TAG, "UserHelper getUserSync");
+		
 		if (id == null) return null;
 		final AhCarrier<User> carrier = new AhCarrier<User>();
-
+		
+//		MobileServiceTable<User> userTable = app.getmClient().getTable(User.class);
 		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
 
 			@Override
@@ -246,7 +248,6 @@ public class UserHelper {
 			@Override
 			public void onCompleted(User entity, Exception exception,
 					ServiceFilterResponse response) {
-				// TODO Auto-generated method stub
 				if (exception == null) {
 					callback.onCompleted(entity);
 				} else {

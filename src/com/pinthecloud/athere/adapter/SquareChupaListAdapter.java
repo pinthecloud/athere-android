@@ -32,8 +32,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareChupaListAdapter getView");
-		
 		View view = convertView;
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) 
@@ -42,9 +40,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 		} 
 
 		Map<String,String> lastChupaMap = items.get(position);
-		
-		Log.d(AhGlobalVariable.LOG_TAG, "last contents" + lastChupaMap.get("content"));
-		
 		if (lastChupaMap != null) {
 			/*
 			 * Find UI component

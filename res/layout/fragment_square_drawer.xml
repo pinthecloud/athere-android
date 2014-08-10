@@ -27,7 +27,8 @@
         android:layout_height="@dimen/square_drawer_toggle_bar_height"
         android:layout_below="@+id/square_drawer_frag_action_bar_divider"
         android:baselineAligned="false"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -103,7 +104,8 @@
         android:layout_alignTop="@+id/square_drawer_frag_profile_blur_image"
         android:background="@android:color/transparent"
         android:contentDescription="@string/profile_settings"
-        android:src="@drawable/sidebar_profile_edit" />
+        android:src="@drawable/sidebar_profile_edit"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/square_drawer_frag_profile_circle_image"

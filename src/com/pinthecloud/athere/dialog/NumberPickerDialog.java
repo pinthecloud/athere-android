@@ -32,16 +32,10 @@ public class NumberPickerDialog extends AhDialogFragment {
 
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		getDialog().setTitle(title);
-		View view = inflater.inflate(R.layout.dialog_nimber_picker, container, false);
+		View view = inflater.inflate(R.layout.dialog_number_picker, container, false);
 
 		// Find UI Component
 		yearPicker = (NumberPicker) view.findViewById(R.id.number_picker_dialog_picker);

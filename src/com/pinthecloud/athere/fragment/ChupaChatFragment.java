@@ -61,7 +61,7 @@ public class ChupaChatFragment extends AhFragment {
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
-		
+
 		Intent intent = activity.getIntent();
 		otherUser = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
@@ -194,12 +194,12 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
+
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString()) 
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())) {
-					
+
 					activity.runOnUiThread(new Runnable() {
-	
+
 						@Override
 						public void run() {
 							messageList.add(message);
@@ -210,7 +210,7 @@ public class ChupaChatFragment extends AhFragment {
 				}
 			}
 		});
-		
+
 
 		/*
 		 * Set sent and received chupas to list view 

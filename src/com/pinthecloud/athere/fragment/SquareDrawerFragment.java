@@ -32,7 +32,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.ExitSquareConsentDialog;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -106,7 +105,7 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set user list
 		 */
 		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, R.layout.row_square_drawer_participant_list, userList);
+				(context, this, R.layout.row_square_drawer_participant_list, userList);
 		participantListView.setAdapter(participantListAdapter);
 		participantListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -149,14 +148,13 @@ public class SquareDrawerFragment extends AhFragment {
 		chupaOnButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
+			public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
 				progressBar.setVisibility(View.VISIBLE);
+				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
 				userHelper.updateMyUserAsync(new AhEntityCallback<User>() {
-					
+
 					@Override
 					public void onCompleted(User entity) {
-						// TODO Auto-generated method stub
 						Log(_thisFragment, "updateMyUser complete");
 						progressBar.setVisibility(View.GONE);
 					}
@@ -271,7 +269,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 	private int getMaleNum(List<User> list){
 		int count = 0;
-
 		for(User user : list){
 			if (user.isMale()) count++;
 		}
@@ -281,7 +278,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 	private int getFemaleNum(List<User> list){
 		int count = 0;
-
 		for(User user : list){
 			if (!user.isMale()) count++;
 		}

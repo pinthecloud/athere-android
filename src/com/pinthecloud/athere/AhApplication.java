@@ -19,7 +19,7 @@ import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 
-/**
+/*
  * 
  * Base Application class
  * This class is made for the instances that are needed globally.
@@ -45,7 +45,7 @@ public class AhApplication extends Application{
 	// Helper
 	private static UserHelper userHelper;
 	private static SquareHelper squareHelper;
-	private static MessageHelper messageHelper; 
+	private static MessageHelper messageHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -67,15 +67,15 @@ public class AhApplication extends Application{
 		pref = new PreferenceHelper(this);
 		lock = new Object();
 
+		userDBHelper = new UserDBHelper(this);
+		messageDBHelper = new MessageDBHelper(this);
+		
 		userTable = mClient.getTable(User.class);
 		squareTable = mClient.getTable(Square.class);
-
+		
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
-
-		userDBHelper = new UserDBHelper(this);
-		messageDBHelper = new MessageDBHelper(this);
 	}
 
 	public static AhApplication getInstance(){
@@ -112,8 +112,8 @@ public class AhApplication extends Application{
 		return messageHelper;
 	}
 
-	
-	/**
+
+	/*
 	 * @return true, if the App is connected with Internet.
 	 */
 	public boolean isOnline(){

@@ -52,7 +52,7 @@
     <dimen name="square_chat_list_receive_top_margin">5.5dp</dimen>
     <dimen name="square_chat_list_receive_profile_nick_name_margin">6.5dp</dimen>
     <dimen name="square_chat_list_receive_message_layout_left_margin">16.5dp</dimen>
-    <dimen name="square_chat_list_receive_message_layout_top_margin">16.5dp</dimen>
+    <dimen name="square_chat_list_receive_message_layout_top_margin">23.5dp</dimen>
     <dimen name="square_chat_list_receive_message_left_margin">23.5dp</dimen>
     <dimen name="square_chat_list_receive_message_right_margin">13.5dp</dimen>
     <dimen name="square_chat_list_send_right_margin">13.5dp</dimen>
@@ -93,13 +93,28 @@
 
     <!-- Square chupa list -->
     <dimen name="square_chupa_list_height">88dp</dimen>
+    <dimen name="square_chupa_list_profile_width">53.5dp</dimen>
+    <dimen name="square_chupa_list_profile_height">53.5dp</dimen>
     <dimen name="square_chupa_list_left_margin">48dp</dimen>
     <dimen name="square_chupa_list_right_margin">48dp</dimen>
     <dimen name="square_chupa_list_profile_text_margin">16dp</dimen>
+    <dimen name="square_chupa_list_nick_name_content_margin">8dp</dimen>
 
     <!-- Square profile -->
     <dimen name="square_profile_text_height">48dp</dimen>
     <dimen name="square_profile_camera_button_bottom_margin">13.5dp</dimen>
+
+    <!-- Profile Dialog -->
+    <dimen name="profile_dialog_top_margin">53.5dp</dimen>
+    <dimen name="profile_dialog_left_margin">100dp</dimen>
+    <dimen name="profile_dialog_right_margin">100dp</dimen>
+    <dimen name="profile_dialog_profile_width">86.5dp</dimen>
+    <dimen name="profile_dialog_profile_height">86.5dp</dimen>
+    <dimen name="profile_dialog_send_button_height">48dp</dimen>
+    <dimen name="profile_dialog_profile_nick_name_margin">13.5dp</dimen>
+    <dimen name="profile_dialog_nick_name_info_margin">6.5dp</dimen>
+    <dimen name="profile_dialog_age_company_number_margin">10dp</dimen>
+    <dimen name="profile_dialog_info_send_button_margin">48dp</dimen>
 
     <!-- Font size -->
     <dimen name="font_x_large">22sp</dimen>

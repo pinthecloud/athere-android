@@ -3,9 +3,9 @@
     android:id="@+id/row_square_chupa_list_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/square_list_height"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/square_chupa_list_left_margin"
-    android:paddingRight="@dimen/square_chupa_list_right_margin"
-    android:orientation="vertical" >
+    android:paddingRight="@dimen/square_chupa_list_right_margin" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/square_chupa_list_profile_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/square_chupa_list_profile_width"
+            android:layout_height="@dimen/square_chupa_list_profile_height"
             android:layout_centerVertical="true"
             android:contentDescription="@string/profile_image" />
 
@@ -31,6 +31,7 @@
                 android:id="@+id/square_chupa_list_sender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/square_chupa_list_nick_name_content_margin"
                 android:textSize="@dimen/font_x_large" />
 
             <TextView
