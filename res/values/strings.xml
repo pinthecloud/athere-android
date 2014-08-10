@@ -35,6 +35,7 @@
     <string name="profile_settings">Profile Settings</string>
     <string name="member">Member</string>
     <string name="code">Code</string>
+    <string name="shout">Shout</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>

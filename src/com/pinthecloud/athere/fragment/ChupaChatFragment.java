@@ -61,6 +61,7 @@ public class ChupaChatFragment extends AhFragment {
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
+		
 		Intent intent = activity.getIntent();
 		otherUser = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
@@ -212,28 +213,35 @@ public class ChupaChatFragment extends AhFragment {
 		
 
 		/*
-		 * 
+		 * Set sent and received chupas to list view 
 		 */
 		String chupaCommunId = new AhMessage.Builder()
 		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 		.setReceiverId((otherUser.getId()))
 		.build().getChupaCommunId();
 
-		if(chupaCommunId == null || "".equals(chupaCommunId)) throw new AhException("No chupaCommunId");
+		if(chupaCommunId == null || "".equals(chupaCommunId)) 
+			throw new AhException("No chupaCommunId");
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
-		activity.runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-
-				for (AhMessage message : chupas) {
-					message.setStatus(AhMessage.SENT);
-					messageList.add(message);
-					messageListAdapter.notifyDataSetChanged();
-					messageListView.setSelection(messageListView.getCount() - 1);
-				}
-			}
-		});
+		for (AhMessage message : chupas) {
+			message.setStatus(AhMessage.SENT);
+			messageList.add(message);
+		}
+		messageListAdapter.notifyDataSetChanged();
+		messageListView.setSelection(messageListView.getCount() - 1);
+		
+//		activity.runOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				for (AhMessage message : chupas) {
+//					message.setStatus(AhMessage.SENT);
+//					messageList.add(message);
+//					messageListAdapter.notifyDataSetChanged();
+//					messageListView.setSelection(messageListView.getCount() - 1);
+//				}
+//			}
+//		});
 
 		return view;
 	}

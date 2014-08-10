@@ -78,6 +78,10 @@ public class AhIntentService extends IntentService {
 		final AhMessage message = _message;
 		final String userId = _userId;
 
+		
+		/*
+		 * Process by message type
+		 */
 		new Thread(new Runnable(){
 			public void run(){
 				User user = null;
@@ -98,16 +102,21 @@ public class AhIntentService extends IntentService {
 					userDBHelper.updateUser(user);
 				}
 
+				
+				/*
+				 * if the App is running, add the message to the chat room.
+				 */
 				if (isRunning(app)) {
-					// if the App is running, add the message to the chat room.
 					messageHelper.triggerMessageEvent(message);
 					userHelper.triggerUserEvent(AhMessage.TYPE.valueOf(message.getType()), user);
 					return;
 				}
 
-				/////////////////////////////////////
-				// if the Application is NOT Running
-				/////////////////////////////////////
+				
+				/*
+				 * if the Application is NOT Running
+				 * TODO string
+				 */
 				if (AhMessage.TYPE.TALK.toString().equals(message.getType())){
 					return; // do nothing
 				} 
@@ -133,12 +142,14 @@ public class AhIntentService extends IntentService {
 					return;
 				} 
 
+				
 				// Creates an explicit intent for an Activity in your app
 				Intent resultIntent = new Intent(_this, clazz);
 				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
 					User chupaUser = userDBHelper.getUser(message.getSenderId());
 					resultIntent.putExtra(AhGlobalVariable.USER_KEY, chupaUser);
 				}
+				
 				// The stack builder object will contain an artificial back stack for the
 				// started Activity.
 				// This ensures that navigating backward from the Activity leads out of
@@ -154,7 +165,6 @@ public class AhIntentService extends IntentService {
 				stackBuilder.addNextIntent(resultIntent);
 //				stackBuilder.addNextIntentWithParentStack(resultIntent);
 				
-				
 				PendingIntent resultPendingIntent =
 					stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 				User sentUser = userDBHelper.getUser(message.getSenderId());
@@ -166,7 +176,9 @@ public class AhIntentService extends IntentService {
 					bm = BitmapUtil.convertToBitmap(sentUser.getProfilePic());
 				}
 
-				// Set Notification
+				/*
+				 * Set Notification
+				 */
 				NotificationCompat.Builder mBuilder =
 						new NotificationCompat.Builder(_this)
 				.setSmallIcon(R.drawable.launcher)
@@ -189,6 +201,7 @@ public class AhIntentService extends IntentService {
 		}).start();
 	}
 
+	
 	private boolean isRunning(Context context) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
@@ -200,6 +213,7 @@ public class AhIntentService extends IntentService {
 		return false;
 	}
 
+	
 	private AhMessage parseMessageIntent(Intent intent) throws JSONException {
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
 		Bundle b = intent.getExtras();
@@ -236,10 +250,12 @@ public class AhIntentService extends IntentService {
 		return messageBuilder.build();
 	}
 
+	
 	private String parseUserIdIntent(Intent intent){
 		return intent.getExtras().getString("userId");
 	}
 
+	
 	//	private User parseUserIntent(Intent intent) throws JSONException {
 	//		User user = new User();
 	//		Bundle b = intent.getExtras();

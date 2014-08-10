@@ -19,17 +19,29 @@
         android:gravity="center"
         android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/square_chat_frag_message_text"
+        <LinearLayout
+            android:id="@+id/square_chat_chat_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/square_chat_left_margin"
             android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:textSize="@dimen/font_small" >
+            android:background="@drawable/bg_inputbar_highlight"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/square_chat_left_margin" >
 
-            <requestFocus />
-        </EditText>
+            <EditText
+                android:id="@+id/square_chat_frag_message_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:textSize="@dimen/font_large" >
+
+                <requestFocus />
+            </EditText>
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/square_chat_frag_send_button"

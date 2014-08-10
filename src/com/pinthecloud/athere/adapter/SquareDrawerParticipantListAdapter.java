@@ -24,11 +24,6 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 	private int layoutId;
 	private List<User> items;
 
-	private ImageView profilePic;
-	private TextView nickName;
-	private ImageView isMale;
-	private ImageButton chupaBtn;
-
 
 	public SquareDrawerParticipantListAdapter(Context context, int layoutId, List<User> items) {
 		super(context, layoutId, items);
@@ -52,10 +47,11 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			/*
 			 * Find UI Component
 			 */
-			profilePic = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
-			nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
-			isMale = (ImageView)view.findViewById(R.id.drawer_user_is_male);
-			chupaBtn = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
+			ImageView profilePic = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
+			TextView nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
+			ImageView isMale = (ImageView)view.findViewById(R.id.drawer_user_is_male);
+			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
+
 
 			/*
 			 * Set image
@@ -68,10 +64,11 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 				isMale.setImageResource(R.drawable.sidebar_member_gender_w);
 			}
 
+
 			/*
 			 * Set event on button
 			 */
-			chupaBtn.setOnClickListener(new View.OnClickListener() {
+			chupaButton.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -83,5 +80,5 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 		}
 		return view;
 	}
-	
+
 }

@@ -3,6 +3,7 @@ package com.pinthecloud.athere.fragment;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,13 @@ public class SquareTabFragment extends AhFragment{
 			}
 		});
 
+		return view;
+	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		
 		/*
 		 *  Need to set Handler for Chupa on app running state.
 		 */
@@ -87,14 +94,12 @@ public class SquareTabFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())){
-					mSquarePagerAdapter.notifyDataSetChanged();
-
 					activity.runOnUiThread(new Runnable() {
-	
+
 						@Override
 						public void run() {
+							mSquarePagerAdapter.notifyDataSetChanged();
 							Toast toast = Toast.makeText(context,
 									"Seungmin You should handle chupa receive at Here!\n"
 											+ "(chupa badge and new 1)", Toast.LENGTH_LONG);
@@ -102,12 +107,15 @@ public class SquareTabFragment extends AhFragment{
 						}
 					});
 				} else if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-					mSquarePagerAdapter.notifyDataSetChanged();
+					activity.runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							mSquarePagerAdapter.notifyDataSetChanged();
+						}
+					});
 				}
 			}
 		});
-		
-
-		return view;
 	}
 }

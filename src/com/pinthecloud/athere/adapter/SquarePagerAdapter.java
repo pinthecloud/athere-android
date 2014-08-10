@@ -50,6 +50,6 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter{
 	@Override
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();
-		squareChupaListFragment.updateList();
+		squareChupaListFragment.updateChupaList();
 	}
 }

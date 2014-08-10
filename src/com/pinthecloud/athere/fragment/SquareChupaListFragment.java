@@ -27,10 +27,10 @@ import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareChupaListFragment extends AhFragment{
 
-	public SquareChupaListAdapter squareChupaListAdapter;
+	private SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
+	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 
-	public List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 
@@ -42,11 +42,8 @@ public class SquareChupaListFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
-		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-		lastChupaCommunList.addAll(convertToMap(lastChupaList));
 	}
 
 
@@ -71,8 +68,6 @@ public class SquareChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-
-
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
 
 				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"));
@@ -93,9 +88,9 @@ public class SquareChupaListFragment extends AhFragment{
 
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		updateList();
+	public void onResume() {
+		super.onResume();
+		updateChupaList();
 	}
 
 
@@ -136,7 +131,7 @@ public class SquareChupaListFragment extends AhFragment{
 					throw new AhException("No User in UserDBHelper");
 				}
 			}
-			
+
 			profilePic = user.getProfilePic();
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
@@ -156,19 +151,10 @@ public class SquareChupaListFragment extends AhFragment{
 	}
 
 
-	public void updateList() {
-		activity.runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-				List<Map<String, String>> list = convertToMap(lastChupaList);
-				lastChupaCommunList.clear();
-				lastChupaCommunList.addAll(list);
-				squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
-				squareChupaListView.setAdapter(squareChupaListAdapter);
-				squareChupaListAdapter.notifyDataSetChanged();
-			}
-		});
+	public void updateChupaList() {
+		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
+		lastChupaCommunList.clear();
+		lastChupaCommunList.addAll(convertToMap(lastChupaList));
+		squareChupaListAdapter.notifyDataSetChanged();
 	}
 }

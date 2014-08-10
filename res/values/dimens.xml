@@ -47,7 +47,8 @@
     <dimen name="square_chat_profile_width">34dp</dimen>
     <dimen name="square_chat_profile_height">34dp</dimen>
     <dimen name="square_chat_height">48dp</dimen>
-
+    <dimen name="square_chat_left_margin">10.5dp</dimen>
+    
     <!-- Chupa chat -->
     <dimen name="chupa_chat_other_bar_height">56dp</dimen>
     <dimen name="chupa_chat_other_bar_left_margin">13.5dp</dimen>
@@ -58,6 +59,7 @@
     <dimen name="chupa_chat_other_profile_width">33.5dp</dimen>
     <dimen name="chupa_chat_other_profile_height">33.5dp</dimen>
     <dimen name="chupa_chat_height">48dp</dimen>
+    <dimen name="chupa_chat_left_margin">10.5dp</dimen>
 
     <!-- Square list -->
     <dimen name="square_list_height">88dp</dimen>
