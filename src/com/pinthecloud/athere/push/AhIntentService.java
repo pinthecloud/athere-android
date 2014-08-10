@@ -91,6 +91,7 @@ public class AhIntentService extends IntentService {
 
 				} else if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())) {
 					messageDBHelper.addMessage(message);
+					messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
 				} else if (AhMessage.TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
 					user = userHelper.getUserSync(userId);
 					userDBHelper.addUser(user);

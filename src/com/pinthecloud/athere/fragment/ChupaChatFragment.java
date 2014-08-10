@@ -223,6 +223,7 @@ public class ChupaChatFragment extends AhFragment {
 		if(chupaCommunId == null || "".equals(chupaCommunId)) 
 			throw new AhException("No chupaCommunId");
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
+		messageDBHelper.clearBadgeNum(chupaCommunId);
 		for (AhMessage message : chupas) {
 			message.setStatus(AhMessage.SENT);
 			messageList.add(message);

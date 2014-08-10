@@ -5,9 +5,12 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 
 import com.pinthecloud.athere.model.AhMessage;
 
@@ -38,9 +41,10 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 	private final String TIME_STAMP = "timestamp";
 	private final String CHUPA_COMMUN_ID = "chupaCommunId";
 
-
+	private Context context;
 	public MessageDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.context = context;
 	}
 
 	// Creating Tables
@@ -400,5 +404,26 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		}
 
 		return list;
+	}
+	
+	public void increaseBadgeNum(String chupaCommunId) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		int val = pref.getInt("communBageNum" + chupaCommunId, 0);
+		val++;
+		Editor editor = pref.edit();
+		editor.putInt("communBageNum" + chupaCommunId, val);
+		editor.commit();
+	}
+	
+	public int getBadgeNum(String chupaCommunId) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		int val = pref.getInt("communBageNum" + chupaCommunId, 0);
+		return val;
+	}
+	public void clearBadgeNum(String chupaCommunId) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor editor = pref.edit();
+		editor.putInt("communBageNum" + chupaCommunId, 0);
+		editor.commit();
 	}
 }

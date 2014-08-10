@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.util.BitmapUtil;
 
@@ -32,7 +30,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareChupaListAdapter getView");
 		
 		View view = convertView;
 		if (view == null) {
@@ -43,8 +40,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
 		Map<String,String> lastChupaMap = items.get(position);
 		
-		Log.d(AhGlobalVariable.LOG_TAG, "last contents" + lastChupaMap.get("content"));
-		
 		if (lastChupaMap != null) {
 			/*
 			 * Find UI component
@@ -53,7 +48,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			TextView sender = (TextView)view.findViewById(R.id.square_chupa_list_sender);
 			TextView content = (TextView)view.findViewById(R.id.square_chupa_list_content);
 			TextView timeStamp = (TextView)view.findViewById(R.id.square_chupa_list_timestamp);
-			
+			TextView badgeNum = (TextView)view.findViewById(R.id.square_chupa_list_badge_num);
 			
 			/*
 			 * Set UI component
@@ -68,6 +63,13 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			sender.setText(userNickName);
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
+			String chupaBadge = lastChupaMap.get("chupaBadge");
+			if (chupaBadge.equals("0")) {
+				chupaBadge = "";
+				badgeNum.setVisibility(View.GONE);
+			}
+			badgeNum.setText(chupaBadge);
+			
 		}
 
 		return view;

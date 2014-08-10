@@ -48,6 +48,15 @@
             android:layout_centerVertical="true"
             android:textColor="@color/gray_line"
             android:textSize="@dimen/font_medium" />
+
+        <TextView
+            android:id="@+id/square_chupa_list_badge_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/square_chupa_list_profile_pic"
+            android:layout_toLeftOf="@+id/square_chupa_list_timestamp"
+            android:text="1" />
+
     </RelativeLayout>
 
     <View

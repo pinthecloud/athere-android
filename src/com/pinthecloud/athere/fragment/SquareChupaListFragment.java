@@ -78,6 +78,7 @@ public class SquareChupaListFragment extends AhFragment{
 						throw new AhException("No User exist Error");
 				}
 				Log(_thisFragment, "user before Goto ChupaChatFragment",user);
+				
 				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
@@ -106,7 +107,7 @@ public class SquareChupaListFragment extends AhFragment{
 			String timeStamp = "";
 			String chupaCommunId = "";
 			String isExit = "false";
-
+			String chupaBadge = "";
 			if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getSenderId())) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -136,7 +137,7 @@ public class SquareChupaListFragment extends AhFragment{
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
 			chupaCommunId = message.getChupaCommunId();
-
+			chupaBadge = ""+ messageDBHelper.getBadgeNum(message.getChupaCommunId());
 			map.put("profilePic", profilePic);
 			map.put("userNickName", userNickName);
 			map.put("userId", userId);
@@ -144,6 +145,7 @@ public class SquareChupaListFragment extends AhFragment{
 			map.put("timeStamp", timeStamp);
 			map.put("chupaCommunId", chupaCommunId);
 			map.put("isExit", isExit);
+			map.put("chupaBadge", chupaBadge);
 
 			list.add(map);
 		}
