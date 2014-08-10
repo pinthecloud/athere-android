@@ -139,10 +139,11 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageHelper.setMessageHandler(AhMessage.TYPE.TALK, new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
+				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) return;
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
