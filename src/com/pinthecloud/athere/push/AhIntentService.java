@@ -125,7 +125,6 @@ public class AhIntentService extends IntentService {
 				String content = "";
 				
 				Class<?> clazz = SquareActivity.class;
-				
 				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
 					title = message.getSender() +"님께서 회원님에게 추파를 보내셨습니다.";
 					content = message.getContent();
@@ -148,6 +147,7 @@ public class AhIntentService extends IntentService {
 				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
 					User chupaUser = userDBHelper.getUser(message.getSenderId());
 					resultIntent.putExtra(AhGlobalVariable.USER_KEY, chupaUser);
+					resultIntent.putExtra("gotoChupa", true);
 				}
 				
 				// The stack builder object will contain an artificial back stack for the
@@ -166,7 +166,8 @@ public class AhIntentService extends IntentService {
 //				stackBuilder.addNextIntentWithParentStack(resultIntent);
 				
 				PendingIntent resultPendingIntent =
-					stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+					stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT
+							 | PendingIntent.FLAG_ONE_SHOT);
 				User sentUser = userDBHelper.getUser(message.getSenderId());
 				Bitmap bm = null;
 				if (sentUser == null){

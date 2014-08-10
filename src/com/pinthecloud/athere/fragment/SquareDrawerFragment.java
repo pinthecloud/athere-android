@@ -32,8 +32,10 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.ExitSquareConsentDialog;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
@@ -149,6 +151,16 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
+				progressBar.setVisibility(View.VISIBLE);
+				userHelper.updateMyUserAsync(new AhEntityCallback<User>() {
+					
+					@Override
+					public void onCompleted(User entity) {
+						// TODO Auto-generated method stub
+						Log(_thisFragment, "updateMyUser complete");
+						progressBar.setVisibility(View.GONE);
+					}
+				});
 			}
 		});
 		chatOnButton.setOnCheckedChangeListener(new OnCheckedChangeListener() {

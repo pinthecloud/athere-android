@@ -237,6 +237,29 @@ public class UserHelper {
 
 		return carrier.getItem();
 	}
+	
+	
+	public void updateUserAsync(User user, final AhEntityCallback<User> callback){
+
+		userTable.update(user, new TableOperationCallback<User>() {
+
+			@Override
+			public void onCompleted(User entity, Exception exception,
+					ServiceFilterResponse response) {
+				// TODO Auto-generated method stub
+				if (exception == null) {
+					callback.onCompleted(entity);
+				} else {
+					throw new AhException(exception, "updateUserAsync");
+				}
+			}
+		});
+	}
+	
+	public void updateMyUserAsync(AhEntityCallback<User> callback){
+		User user = this.getMyUserInfo(true);
+		this.updateUserAsync(user, callback);
+	}
 
 	public User getMyUserInfo(boolean hasId) {
 		Bitmap pictureBitmap = null;

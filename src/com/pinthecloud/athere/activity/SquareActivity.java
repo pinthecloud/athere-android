@@ -136,6 +136,16 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragmentCa
 
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		
+//		Intent prevIntent = getIntent();
+//		boolean gotoChupa = prevIntent.getBooleanExtra("gotoChupa", false);
+//		
+//		if (gotoChupa) {
+//			Intent intent = new Intent(this, ChupaChatActivity.class);
+//			User chupaUser = prevIntent.getParcelableExtra(AhGlobalVariable.USER_KEY);
+//			intent.putExtra(AhGlobalVariable.USER_KEY, chupaUser);
+//			startActivity(intent);
+//		}
 	}
 
 
