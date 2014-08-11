@@ -38,7 +38,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 		} 
 
 		Map<String,String> lastChupaMap = items.get(position);
-		
 		if (lastChupaMap != null) {
 			/*
 			 * Find UI component
@@ -48,27 +47,27 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			TextView content = (TextView)view.findViewById(R.id.square_chupa_list_content);
 			TextView timeStamp = (TextView)view.findViewById(R.id.square_chupa_list_timestamp);
 			TextView badgeNum = (TextView)view.findViewById(R.id.square_chupa_list_badge_num);
-			
+
+
 			/*
 			 * Set UI component
 			 */
 			String isExit = lastChupaMap.get("isExit");
 			String userNickName = lastChupaMap.get("userNickName");
-			if (isExit.equals("true")) {
-				userNickName += "has been Exit";
-			}
 			String picStr = lastChupaMap.get("profilePic");
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
+			String chupaBadge = lastChupaMap.get("chupaBadge");
+
+			if (isExit.equals("true")) {
+				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
+			}
 			sender.setText(userNickName);
+			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
-			String chupaBadge = lastChupaMap.get("chupaBadge");
-			if (chupaBadge.equals("0")) {
-				chupaBadge = "";
-				badgeNum.setVisibility(View.GONE);
+			if (!chupaBadge.equals("0")) {
+				badgeNum.setText(chupaBadge);
+				badgeNum.setVisibility(View.VISIBLE);
 			}
-			badgeNum.setText(chupaBadge);
-			
 		}
 
 		return view;

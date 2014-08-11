@@ -455,9 +455,9 @@ public class SquareProfileFragment extends AhFragment{
 
 
 				// Send message to server for notifying entering
-				String numOfMem = getResources().getString(R.string.number_of_member);
+				String enterMessage = getResources().getString(R.string.enter_square_message);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(numOfMem + " : " + user.getCompanyNum())
+				messageBuilder.setContent(nickName + " : " + enterMessage)
 				.setSender(user.getNickName())
 				.setSenderId(id)
 				.setReceiverId(square.getId())

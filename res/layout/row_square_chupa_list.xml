@@ -31,7 +31,7 @@
                 android:id="@+id/square_chupa_list_sender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/square_chupa_list_nick_name_content_margin"
+                android:layout_marginBottom="@dimen/square_chupa_list_content_margin"
                 android:textSize="@dimen/font_x_large" />
 
             <TextView
@@ -41,23 +41,31 @@
                 android:textSize="@dimen/font_small" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/square_chupa_list_timestamp"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="@color/gray_line"
-            android:textSize="@dimen/font_medium" />
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/square_chupa_list_badge_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/square_chupa_list_profile_pic"
-            android:layout_toLeftOf="@+id/square_chupa_list_timestamp"
-            android:text="1" />
+            <TextView
+                android:id="@+id/square_chupa_list_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/square_chupa_list_content_margin"
+                android:textColor="@color/gray_line"
+                android:textSize="@dimen/font_medium" />
 
+            <TextView
+                android:id="@+id/square_chupa_list_badge_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_tabbar_badge"
+                android:gravity="center"
+                android:textColor="@color/red"
+                android:textSize="@dimen/font_medium"
+                android:visibility="gone" />
+        </LinearLayout>
     </RelativeLayout>
 
     <View

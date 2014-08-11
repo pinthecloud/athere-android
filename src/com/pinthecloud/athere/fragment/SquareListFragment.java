@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,15 +13,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
-import com.pinthecloud.athere.dialog.SquareCodeDialog;
 import com.pinthecloud.athere.helper.SquareHelper;
-import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 
@@ -80,27 +76,27 @@ public class SquareListFragment extends AhFragment{
 				intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
 				startActivity(intent);
 
-				SquareCodeDialog codeDialog = new SquareCodeDialog(square, new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						String code = bundle.getString(AhGlobalVariable.CODE_VALUE_KEY);
-						if(code.equals(square.getCode())){
-							Intent intent = new Intent(context, SquareProfileActivity.class);
-							intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
-							startActivity(intent);
-						}else{
-							String message = getResources().getString(R.string.bad_square_code_message);
-							Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-							toast.show();
-						}
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// do nothing						
-					}
-				});
-				codeDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				//				SquareCodeDialog codeDialog = new SquareCodeDialog(square, new AhDialogCallback() {
+				//
+				//					@Override
+				//					public void doPositiveThing(Bundle bundle) {
+				//						String code = bundle.getString(AhGlobalVariable.CODE_VALUE_KEY);
+				//						if(code.equals(square.getCode())){
+				//							Intent intent = new Intent(context, SquareProfileActivity.class);
+				//							intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
+				//							startActivity(intent);
+				//						}else{
+				//							String message = getResources().getString(R.string.bad_square_code_message);
+				//							Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+				//							toast.show();
+				//						}
+				//					}
+				//					@Override
+				//					public void doNegativeThing(Bundle bundle) {
+				//						// do nothing						
+				//					}
+				//				});
+				//				codeDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
 		getNearSquares();
