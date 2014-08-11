@@ -98,7 +98,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Get other user and find UI component
 				 */
-				final User user = userDBHelper.getUser(message.getSenderId());
+				final User user = userDBHelper.getUser(message.getSenderId(), true);
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_message);
 				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
 

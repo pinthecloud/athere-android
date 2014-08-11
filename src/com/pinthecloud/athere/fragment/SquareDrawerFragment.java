@@ -155,7 +155,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void onCompleted(User entity) {
-						Log(_thisFragment, "updateMyUser complete");
 						progressBar.setVisibility(View.GONE);
 					}
 				});

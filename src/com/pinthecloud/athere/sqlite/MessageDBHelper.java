@@ -390,11 +390,12 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
-				" WHERE " + TYPE + " = ?" + " AND " + CHUPA_COMMUN_ID + " = ?" +
+				" WHERE (" + TYPE + "=? OR " + TYPE + " = ?)" + " AND " + CHUPA_COMMUN_ID + " = ?" +
 				" ORDER BY id";
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString(), chupaCommunId});
+		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString(), 
+				AhMessage.TYPE.EXIT_SQUARE.toString(), chupaCommunId});
 
 		// looping through all rows and adding to list
 		if (cursor.moveToFirst()) {

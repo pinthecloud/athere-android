@@ -27,6 +27,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -42,6 +43,7 @@ public class AhIntentService extends IntentService {
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
+	private PreferenceHelper pref;
 	private Context _this;
 
 
@@ -56,6 +58,7 @@ public class AhIntentService extends IntentService {
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 		userHelper = app.getUserHelper();
+		pref = app.getPref();
 		_this = this;
 	}
 
@@ -96,6 +99,7 @@ public class AhIntentService extends IntentService {
 					userDBHelper.addUser(user);
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
 					//userDBHelper.deleteUser(userId);
+					messageDBHelper.addMessage(message);
 					userDBHelper.exitUser(userId);
 				} else if (AhMessage.TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
 					user = userHelper.getUserSync(userId);
@@ -136,6 +140,9 @@ public class AhIntentService extends IntentService {
 					messageDBHelper.addMessage(message);
 					title = message.getSender() +"님께서 입장하셨습니다.";
 					content = message.getContent();
+					if(!pref.getBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY)){
+						return;
+					}
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())){
 					return;
 				} 
