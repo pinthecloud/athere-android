@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.dialog;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,6 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set UI Component
 		 */
-		profileImage.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
 		}else{
@@ -63,7 +63,20 @@ public class ProfileDialog extends AhDialogFragment{
 		ageText.setText("" + user.getAge());
 		companyNumberText.setText("" + user.getCompanyNum());
 
-
+		
+		/*
+		 * Set profile image
+		 */
+		Bitmap circleProfile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(user.getProfilePic()));
+		profileImage.setImageBitmap(circleProfile);
+		profileImage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+			}
+		});
+		
 		/*
 		 * Set eventon button
 		 */

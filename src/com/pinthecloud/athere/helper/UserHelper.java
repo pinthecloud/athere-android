@@ -212,7 +212,6 @@ public class UserHelper {
 		if (id == null) return null;
 		final AhCarrier<User> carrier = new AhCarrier<User>();
 
-		//		MobileServiceTable<User> userTable = app.getmClient().getTable(User.class);
 		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
 
 			@Override
@@ -265,8 +264,7 @@ public class UserHelper {
 	public User getMyUserInfo(boolean hasId) {
 		Bitmap pictureBitmap = null;
 		try {
-			pictureBitmap = FileUtil.getImageFromInternalStorage
-					(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+			pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
 		} catch (FileNotFoundException e) {
 			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());

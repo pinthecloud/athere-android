@@ -162,7 +162,6 @@ public class SquareChatFragment extends AhFragment{
 
 				@Override
 				public void run() {
-
 					for (AhMessage message : messageListFromBuffer) {
 						messageList.add(message);
 						messageListAdapter.notifyDataSetChanged();

@@ -24,13 +24,16 @@ public class SplashActivity extends AhActivity {
 
 	private final int SPLASH_TIME = 500;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+		
 		NotificationManager mNotificationManager =
 				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
+		
 		/*
 		 * Get device resolution and set it
 		 */
@@ -112,12 +115,9 @@ public class SplashActivity extends AhActivity {
 						intent.setClass(SplashActivity.this, BasicProfileActivity.class);
 					} else if(!isLooggedInSquare){
 						// Already logged in
-						//						intent.setClass(SplashActivity.this, BasicProfileActivity.class);
 						intent.setClass(SplashActivity.this, SquareListActivity.class);
 					} else{
 						// Has entered a square
-						//					intent.setClass(SplashActivity.this, BasicProfileActivity.class);
-						//						intent.setClass(SplashActivity.this, SquareListActivity.class);
 						intent.setClass(SplashActivity.this, SquareActivity.class);
 					}
 					startActivity(intent);

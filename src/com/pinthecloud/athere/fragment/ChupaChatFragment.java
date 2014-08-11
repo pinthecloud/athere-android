@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -96,7 +97,8 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set other bar
 		 */
-		otherProfileImage.setImageBitmap(BitmapUtil.convertToBitmap(otherUser.getProfilePic()));
+		Bitmap circleProfile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(otherUser.getProfilePic()));
+		otherProfileImage.setImageBitmap(circleProfile);
 		otherNickName.setText(otherUser.getNickName());
 		otherAge.setText("" + otherUser.getAge());
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
