@@ -99,7 +99,7 @@ public class AhIntentService extends IntentService {
 					userDBHelper.addUser(user);
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
 					//userDBHelper.deleteUser(userId);
-					messageDBHelper.addMessage(message);
+					//messageDBHelper.addMessage(message);
 					userDBHelper.exitUser(userId);
 				} else if (AhMessage.TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
 					user = userHelper.getUserSync(userId);

@@ -7,10 +7,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
@@ -79,9 +81,9 @@ public class HongkunTestFragment extends AhFragment {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
 
-						User user = User.addUserTest();
-						__id = user.getId();
-						userDBHelper.addUser(user);
+						throw new AhException("Test Exception");
+						
+						
 					} else if (b.getId() == btnArr[1].getId()) {
 						User user = userDBHelper.getUser(__id);
 						userDBHelper.exitUser(__id);

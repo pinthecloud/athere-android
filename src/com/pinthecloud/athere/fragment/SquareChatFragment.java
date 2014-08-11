@@ -132,6 +132,19 @@ public class SquareChatFragment extends AhFragment{
 		messageListView.setAdapter(messageListAdapter);
 
 
+		
+
+		return view;
+	}
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		setHandlers();
+	}
+	
+	public void setHandlers(){
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -171,7 +184,5 @@ public class SquareChatFragment extends AhFragment{
 				}
 			});
 		}
-
-		return view;
 	}
 }

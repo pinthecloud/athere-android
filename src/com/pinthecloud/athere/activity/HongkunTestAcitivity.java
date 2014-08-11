@@ -10,6 +10,7 @@ import com.pinthecloud.athere.fragment.HongkunTestFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhException;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn01;
@@ -51,13 +52,18 @@ public class HongkunTestAcitivity extends AhActivity {
 		/*
 		 * Set Fragment to container
 		 */
-		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		try{
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-		//SquareListFragment squareListFragment = new SquareListFragment();
-		HongkunTestFragment hongFrag = new HongkunTestFragment();
-		fragmentTransaction.add(R.id.hongkun_test_container, hongFrag);
-		fragmentTransaction.commit();
+			//SquareListFragment squareListFragment = new SquareListFragment();
+			HongkunTestFragment hongFrag = new HongkunTestFragment();
+			fragmentTransaction.add(R.id.hongkun_test_container, hongFrag);
+			fragmentTransaction.commit();
+		} catch(AhException ex){
+			Log(this,"HERE : ",ex);
+		}
+		
 	}
 	/*
 	public void addItem(View view) {
