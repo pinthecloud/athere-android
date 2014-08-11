@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.util.BitmapUtil;
 
@@ -48,19 +46,20 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			TextView sender = (TextView)view.findViewById(R.id.square_chupa_list_sender);
 			TextView content = (TextView)view.findViewById(R.id.square_chupa_list_content);
 			TextView timeStamp = (TextView)view.findViewById(R.id.square_chupa_list_timestamp);
-			
-			
+
+
 			/*
 			 * Set UI component
 			 */
 			String isExit = lastChupaMap.get("isExit");
 			String userNickName = lastChupaMap.get("userNickName");
-			if (isExit.equals("true")) {
-				userNickName += "has been Exit";
-			}
 			String picStr = lastChupaMap.get("profilePic");
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
+
+			if (isExit.equals("true")) {
+				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
+			}
 			sender.setText(userNickName);
+			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 		}

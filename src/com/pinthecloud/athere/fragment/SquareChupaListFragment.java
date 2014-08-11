@@ -69,9 +69,7 @@ public class SquareChupaListFragment extends AhFragment{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-
 				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"));
-
 				if (user == null) {
 					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"), true);
 					if (user == null)

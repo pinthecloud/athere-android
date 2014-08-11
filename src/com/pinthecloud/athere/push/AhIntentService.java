@@ -12,6 +12,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -28,7 +29,6 @@ import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -77,7 +77,7 @@ public class AhIntentService extends IntentService {
 		final AhMessage message = _message;
 		final String userId = _userId;
 
-		
+
 		/*
 		 * Process by message type
 		 */
@@ -114,7 +114,6 @@ public class AhIntentService extends IntentService {
 
 				/*
 				 * if the Application is NOT Running
-				 * TODO string
 				 */
 				if (AhMessage.TYPE.TALK.toString().equals(message.getType())){
 					return; // do nothing
@@ -123,17 +122,18 @@ public class AhIntentService extends IntentService {
 				String title = "";
 				String content = "";
 				Class<?> clazz = SquareActivity.class;
+				Resources resources = _this.getResources();
 				if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())){
-					title = message.getSender() +"님께서 회원님에게 추파를 보내셨습니다.";
+					title = message.getSender() +" " + resources.getString(R.string.send_chupa_notification_title);
 					content = message.getContent();
 					clazz = ChupaChatActivity.class;
 				} else if (AhMessage.TYPE.SHOUTING.toString().equals(message.getType())){
 					messageDBHelper.addMessage(message);
-					title = message.getSender() +"님께서 전체 공지를 보내셨습니다.";
+					title = message.getSender() + " " + resources.getString(R.string.shout_notification_title);
 					content = message.getContent();
 				} else if (AhMessage.TYPE.ENTER_SQUARE.toString().equals(message.getType())){
 					messageDBHelper.addMessage(message);
-					title = message.getSender() +"님께서 입장하셨습니다.";
+					title = message.getSender() + " " + resources.getString(R.string.enter_square_message);
 					content = message.getContent();
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())){
 					return;
@@ -174,7 +174,7 @@ public class AhIntentService extends IntentService {
 					bm = BitmapUtil.convertToBitmap(sentUser.getProfilePic());
 				}
 
-				
+
 				/*
 				 * Set Notification
 				 */
@@ -187,7 +187,7 @@ public class AhIntentService extends IntentService {
 				mBuilder.setContentIntent(resultPendingIntent);
 
 				NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-				
+
 				// mId allows you to update the notification later on.
 				mNotificationManager.notify(1, mBuilder.build());
 				AudioManager audioManager = (AudioManager) _this.getSystemService(Context.AUDIO_SERVICE);

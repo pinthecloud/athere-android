@@ -12,14 +12,6 @@
         android:layout_height="match_parent" >
     </FrameLayout>
 
-    <ProgressBar
-        android:id="@+id/square_profile_frag_progress_bar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -56,6 +48,14 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/take"
                 android:src="@drawable/camera_take" />
+
+            <ProgressBar
+                android:id="@+id/square_profile_frag_progress_bar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <LinearLayout

@@ -50,8 +50,11 @@
     <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
     <string name="no_profile_picture_message">Please take a profile picture.</string>
     <string name="offline_message">Network access is unavailable. Please check network status.</string>
-    <string name="exit_square_message"> leaves ground.</string>
+    <string name="exit_square_message">leaves ground.</string>
+    <string name="enter_square_message">enters ground.</string>
     <string name="exit_square_consent_message">Every chats and chupas you have will be deleted. Do you leave ground?</string>
+    <string name="send_chupa_notification_title">sends you a chupa.</string>
+    <string name="shout_notification_title">shouts.</string>
 
     <!-- String Array -->
 
