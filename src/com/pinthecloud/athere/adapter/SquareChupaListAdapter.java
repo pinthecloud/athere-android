@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,8 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
 			}
 			sender.setText(userNickName);
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
+			Bitmap circleProfile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(picStr));
+			profilePic.setImageBitmap(circleProfile);
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 			if (!chupaBadge.equals("0")) {

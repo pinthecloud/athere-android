@@ -122,7 +122,7 @@ public class ChupaChatFragment extends AhFragment {
 		.setReceiverId((otherUser.getId()))
 		.build().getChupaCommunId();
 
-		if(chupaCommunId == null || "".equals(chupaCommunId)) 
+		if(chupaCommunId == null || "".equals(chupaCommunId))
 			throw new AhException("No chupaCommunId");
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		for (AhMessage message : chupas) {

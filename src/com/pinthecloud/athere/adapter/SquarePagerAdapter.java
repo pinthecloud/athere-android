@@ -21,7 +21,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter{
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);
 		squareChatFragment = new SquareChatFragment(square);
-		squareChupaListFragment = new SquareChupaListFragment(square);
+		squareChupaListFragment = new SquareChupaListFragment();
 	}
 
 	@Override

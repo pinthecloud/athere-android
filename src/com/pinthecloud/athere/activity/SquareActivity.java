@@ -200,7 +200,7 @@ public class SquareActivity extends AhActivity implements SquareDrawerFragmentCa
 				String exitMessage = getResources().getString(R.string.exit_square_message);
 				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(nickName + " " + exitMessage)
+				messageBuilder.setContent(nickName + " : " + exitMessage)
 				.setSender(nickName)
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))

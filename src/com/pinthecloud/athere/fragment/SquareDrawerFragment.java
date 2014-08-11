@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -39,6 +37,7 @@ import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -107,39 +106,6 @@ public class SquareDrawerFragment extends AhFragment {
 		participantListAdapter = new SquareDrawerParticipantListAdapter
 				(context, this, R.layout.row_square_drawer_participant_list, userList);
 		participantListView.setAdapter(participantListAdapter);
-		participantListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO
-				User user = userList.get(position);
-				new AlertDialog.Builder(context)
-				.setTitle("User Information")
-				.setMessage("Show User Detail Info")
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.show();
-			}
-		});
-		updateUserList();
-
-
-		/*
-		 * Set handler for refresh new and old user
-		 */
-		userHelper.setUserHandler(new AhPairEntityCallback<AhMessage.TYPE, User>() {
-
-			@Override
-			public void onCompleted(final AhMessage.TYPE type, final User user) {
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						updateUserList();		
-					}
-				});
-			}
-		});
 
 
 		/*
@@ -206,10 +172,36 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		updateUserList();
+
+
+		/*
+		 * Set handler for refresh new and old user
+		 */
+		userHelper.setUserHandler(new AhPairEntityCallback<AhMessage.TYPE, User>() {
+
+			@Override
+			public void onCompleted(final AhMessage.TYPE type, final User user) {
+				activity.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						updateUserList();
+					}
+				});
+			}
+		});
+	}
+
+
+	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		callbacks = (SquareDrawerFragmentCallbacks) activity;
 	}
+
 
 	@Override
 	public void onDetach() {
@@ -225,14 +217,15 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set profile images 
 		 */
+		Bitmap profileBitmap = null;
 		try {
-			Bitmap blurProfile = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_BLUR_NAME);
-			Bitmap circleProfile = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
-			profileBlurImage.setImageBitmap(blurProfile);
-			profileCircleImage.setImageBitmap(circleProfile);
+			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
 		} catch (FileNotFoundException e) {
+			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
 		}
+		profileBlurImage.setImageBitmap(BitmapUtil.blur(context, profileBitmap, 25));
+		profileCircleImage.setImageBitmap(BitmapUtil.cropRound(profileBitmap));
 		if(user.isMale()){
 			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
 		} else{

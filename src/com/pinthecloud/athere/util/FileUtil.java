@@ -41,15 +41,14 @@ public class FileUtil {
 		// between applications and persist after your app has been uninstalled.
 
 		// Create the storage directory if it does not exist
-		if (! mediaStorageDir.exists()){
-			if (! mediaStorageDir.mkdirs()){
+		if (!mediaStorageDir.exists()){
+			if (!mediaStorageDir.mkdirs()){
 				// failed to create directory
 				return null;
 			}
 		}
 
 		// Create a media file name
-
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 		File mediaFile;
 		if (type == MEDIA_TYPE_IMAGE){

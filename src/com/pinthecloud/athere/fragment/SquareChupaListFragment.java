@@ -20,7 +20,6 @@ import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
 import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
@@ -35,7 +34,7 @@ public class SquareChupaListFragment extends AhFragment{
 	private UserDBHelper userDBHelper;
 
 
-	public SquareChupaListFragment(Square square) {
+	public SquareChupaListFragment() {
 		super();
 	}
 
@@ -68,7 +67,6 @@ public class SquareChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent intent = new Intent(activity, ChupaChatActivity.class);
 				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"));
 				if (user == null) {
 					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"), true);
@@ -77,6 +75,7 @@ public class SquareChupaListFragment extends AhFragment{
 				}
 				Log(_thisFragment, "user before Goto ChupaChatFragment",user);
 				
+				Intent intent = new Intent(activity, ChupaChatActivity.class);
 				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
