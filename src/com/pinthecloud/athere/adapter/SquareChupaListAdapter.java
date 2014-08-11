@@ -30,7 +30,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
 		View view = convertView;
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) 

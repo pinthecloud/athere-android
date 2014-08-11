@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.adapter.ChupaChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
@@ -51,7 +51,7 @@ public class ChupaChatFragment extends AhFragment {
 	private User otherUser;
 
 	private ListView messageListView;
-	private SquareChatListAdapter messageListAdapter;
+	private ChupaChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
 
@@ -61,7 +61,7 @@ public class ChupaChatFragment extends AhFragment {
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
-		
+
 		Intent intent = activity.getIntent();
 		otherUser = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
@@ -109,7 +109,7 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set message list view
 		 */
-		messageListAdapter = new SquareChatListAdapter
+		messageListAdapter = new ChupaChatListAdapter
 				(context, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
 
@@ -194,12 +194,12 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
+
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString()) 
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())) {
-					
+
 					activity.runOnUiThread(new Runnable() {
-	
+
 						@Override
 						public void run() {
 							messageList.add(message);
@@ -210,7 +210,7 @@ public class ChupaChatFragment extends AhFragment {
 				}
 			}
 		});
-		
+
 
 		/*
 		 * Set sent and received chupas to list view 
@@ -230,19 +230,6 @@ public class ChupaChatFragment extends AhFragment {
 		}
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
-		
-//		activity.runOnUiThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				for (AhMessage message : chupas) {
-//					message.setStatus(AhMessage.SENT);
-//					messageList.add(message);
-//					messageListAdapter.notifyDataSetChanged();
-//					messageListView.setSelection(messageListView.getCount() - 1);
-//				}
-//			}
-//		});
 
 		return view;
 	}

@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/chupa_chat_frag_other_bar_layour"
+        android:id="@+id/chupa_chat_frag_other_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/chupa_chat_other_bar_height"
         android:gravity="left|center"

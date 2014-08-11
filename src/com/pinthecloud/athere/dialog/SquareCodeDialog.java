@@ -21,17 +21,11 @@ public class SquareCodeDialog extends AhDialogFragment{
 	private EditText codeText;
 	private ImageButton enterButton;
 
-	
+
 	public SquareCodeDialog(Square square, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
 		this.square = square;
-	}
-
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 	}
 
 
