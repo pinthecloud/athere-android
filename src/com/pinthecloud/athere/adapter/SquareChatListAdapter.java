@@ -2,10 +2,10 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +21,6 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.dialog.ProfileDialog;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
@@ -37,7 +36,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	private List<AhMessage> items;
 
 	private AhApplication app;
-	private PreferenceHelper pref;
 	private UserDBHelper userDBHelper;
 
 
@@ -50,7 +48,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		this.items = items;
 
 		this.app = AhApplication.getInstance(); 
-		this.pref = new PreferenceHelper(context);
 		this.userDBHelper = app.getUserDBHelper();
 	}
 
@@ -62,10 +59,14 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		AhMessage message = items.get(position);
 		if (message != null) {
 			// Inflate different layout by user
-			if(message.isMine(pref.getString(AhGlobalVariable.USER_ID_KEY))){
-				this.layoutId = R.layout.row_square_chat_list_send;
-			} else{
-				this.layoutId = R.layout.row_square_chat_list_receive;
+			if(message.isNotification()){
+				this.layoutId = R.layout.row_chat_notification_list;
+			}else{
+				if(message.isMine()){
+					this.layoutId = R.layout.row_square_chat_list_send;
+				} else{
+					this.layoutId = R.layout.row_square_chat_list_receive;
+				}
 			}
 			view = inflater.inflate(this.layoutId, parent, false);
 
@@ -75,7 +76,10 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 */
 			TextView messageText = null;
 			TextView timeText = null;
-			if(this.layoutId == R.layout.row_square_chat_list_send){
+			if(this.layoutId == R.layout.row_chat_notification_list){
+				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
+				timeText = (TextView)view.findViewById(R.id.row_chat_notification_time);
+			} else if(this.layoutId == R.layout.row_square_chat_list_send){
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
 				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
@@ -94,7 +98,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 					progressBar.setVisibility(View.GONE);
 					break;
 				}
-			} else{
+			} else if(this.layoutId == R.layout.row_square_chat_list_receive){
 				/*
 				 * Get other user and find UI component
 				 */
@@ -117,7 +121,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}else{
 					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.chat_gender_w, 0);	
 				}
-				profileImage.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
+				Bitmap circleProfile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(user.getProfilePic()));
+				profileImage.setImageBitmap(circleProfile);
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {
 

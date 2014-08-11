@@ -10,10 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
@@ -21,7 +18,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	private LayoutInflater inflater;
 	private int layoutId;
 	private List<AhMessage> items;
-	private PreferenceHelper pref;
 
 
 	public ChupaChatListAdapter(Context context, int layoutId, List<AhMessage> items) {
@@ -29,7 +25,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.layoutId = layoutId;
 		this.items = items;
-		this.pref = AhApplication.getInstance().getPref();
 	}
 
 
@@ -40,10 +35,14 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 		AhMessage message = items.get(position);
 		if (message != null) {
 			// Inflate different layout by user
-			if(message.isMine(pref.getString(AhGlobalVariable.USER_ID_KEY))){
-				this.layoutId = R.layout.row_chupa_chat_list_send;
+			if(message.isNotification()){
+				this.layoutId = R.layout.row_chat_notification_list;
 			} else{
-				this.layoutId = R.layout.row_chupa_chat_list_receive;
+				if(message.isMine()){
+					this.layoutId = R.layout.row_chupa_chat_list_send;
+				} else{
+					this.layoutId = R.layout.row_chupa_chat_list_receive;
+				}
 			}
 			view = inflater.inflate(this.layoutId, parent, false);
 
@@ -53,7 +52,10 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 			 */
 			TextView messageText = null;
 			TextView timeText = null;
-			if(this.layoutId == R.layout.row_chupa_chat_list_send){
+			if(this.layoutId == R.layout.row_chat_notification_list){
+				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
+				timeText = (TextView)view.findViewById(R.id.row_chat_notification_time);
+			}else if(this.layoutId == R.layout.row_chupa_chat_list_send){
 				messageText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_message);
 				timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_time);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_chupa_chat_list_send_progress_bar);
@@ -72,7 +74,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 					progressBar.setVisibility(View.GONE);
 					break;
 				}
-			} else{
+			} else if(this.layoutId == R.layout.row_chupa_chat_list_receive){
 				/*
 				 * Get other user and find UI component
 				 */

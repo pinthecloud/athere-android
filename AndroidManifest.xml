@@ -68,22 +68,24 @@
             android:name=".activity.BasicProfileActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
+            android:name=".activity.SquareListActivity"
+            android:icon="@drawable/actionbar_logo"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SquareProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
         <activity android:name=".activity.HongkunTestAcitivity" />
         <activity
-            android:name=".activity.SquareListActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.SquareActivity"
+            android:icon="@drawable/actionbar_logo"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ChupaChatActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
-		        android:name="android.support.PARENT_ACTIVITY"
-		        android:value=".activity.SquareActivity" />
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.SquareActivity" />
         </activity>
     </application>
 

@@ -27,7 +27,8 @@
         android:layout_height="@dimen/square_drawer_toggle_bar_height"
         android:layout_below="@+id/square_drawer_frag_action_bar_divider"
         android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <RelativeLayout
             android:layout_width="match_parent"
