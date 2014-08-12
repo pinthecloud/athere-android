@@ -180,10 +180,10 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set handler for refresh new and old user
 		 */
-		userHelper.setUserHandler(new AhPairEntityCallback<AhMessage.TYPE, User>() {
+		userHelper.setUserHandler(new AhEntityCallback<User>() {
 
 			@Override
-			public void onCompleted(final AhMessage.TYPE type, final User user) {
+			public void onCompleted(final User user) {
 				activity.runOnUiThread(new Runnable() {
 
 					@Override

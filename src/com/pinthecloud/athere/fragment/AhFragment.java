@@ -4,19 +4,25 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.util.ExceptionManager;
+import com.pinthecloud.athere.util.ExceptionManager.ExceptionHandler;
 
 /**
  *  Basic Fragment class for At here application
  *  Provides each instances that are needed in fragments
  * 
  */
-public class AhFragment extends Fragment{
+public class AhFragment extends Fragment implements ExceptionHandler{
 
 	protected AhApplication app;
 	protected Context context;
@@ -36,9 +42,37 @@ public class AhFragment extends Fragment{
 		activity = (AhActivity) context;
 		pref = app.getPref();
 		_thisFragment = this;
+		
+		ExceptionManager.setHandler(this);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreateView(inflater, container, savedInstanceState);
+		View view = null;
+		
+		try {
+			view = onAhCreateView(inflater, container, savedInstanceState);
+		} catch (AhException ex) {
+			Log(this, ex);
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			Log(this, ex);
+		}
+		
+		return view;
 	}
 	
 	
+	
+	protected View onAhCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	protected void Log(AhFragment fragment, Object... params){
 		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
@@ -76,5 +110,17 @@ public class AhFragment extends Fragment{
 			message = getResources().getString(R.string.max_nick_name_message);
 		}
 		return message;
+	}
+
+	@Override
+	public void handleException(AhException ex) {
+		// TODO Auto-generated method stub
+		Log.e("ERROR","AhFragment handler : " + ex);
+	}
+
+	@Override
+	public void handleException(Exception ex) {
+		// TODO Auto-generated method stub
+		
 	}
 }

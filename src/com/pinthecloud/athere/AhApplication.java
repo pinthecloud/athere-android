@@ -18,6 +18,7 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.ExceptionManager;
 
 /*
  * 
@@ -76,6 +77,8 @@ public class AhApplication extends Application{
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
+		
+		
 	}
 
 	public static AhApplication getInstance(){
@@ -116,9 +119,9 @@ public class AhApplication extends Application{
 	/*
 	 * @return true, if the App is connected with Internet.
 	 */
-	public boolean isOnline(){
+	public static boolean isOnline(){
 		ConnectivityManager cm = 
-				(ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+				(ConnectivityManager)app.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}

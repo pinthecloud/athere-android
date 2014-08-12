@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -41,7 +42,6 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
@@ -49,6 +49,7 @@ import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
+import com.pinthecloud.athere.view.CameraPreview;
 
 public class SquareProfileFragment extends AhFragment{
 
@@ -427,7 +428,7 @@ public class SquareProfileFragment extends AhFragment{
 					try {
 						String registrationId = userHelper.getRegistrationIdSync();
 						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-					} catch (IOException e) {
+					} catch (AhException e) {
 						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
 					}
 				}

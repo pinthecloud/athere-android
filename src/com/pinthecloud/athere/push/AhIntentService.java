@@ -112,7 +112,7 @@ public class AhIntentService extends IntentService {
 				 */
 				if (isRunning(app)) {
 					messageHelper.triggerMessageEvent(message);
-					userHelper.triggerUserEvent(AhMessage.TYPE.valueOf(message.getType()), user);
+					userHelper.triggerUserEvent(user);
 					return;
 				}
 

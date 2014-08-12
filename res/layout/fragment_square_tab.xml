@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.pinthecloud.athere.interfaces.PagerSlidingTabStrip
+    <com.pinthecloud.athere.view.PagerSlidingTabStrip
         android:id="@+id/square_tab_frag_tab"
         android:layout_width="match_parent"
         android:layout_height="@dimen/square_tab_height"

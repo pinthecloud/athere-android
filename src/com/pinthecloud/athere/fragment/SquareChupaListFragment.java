@@ -14,11 +14,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -151,6 +151,7 @@ public class SquareChupaListFragment extends AhFragment{
 
 
 	public void updateChupaList() {
+		Log(_thisFragment,"updateChupaList");
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		lastChupaCommunList.clear();
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pinthecloud.athere.interfaces;
+package com.pinthecloud.athere.view;
 
 import java.util.Locale;
 

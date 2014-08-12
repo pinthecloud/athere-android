@@ -19,12 +19,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.ChupaChatListAdapter;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -126,6 +126,11 @@ public class ChupaChatFragment extends AhFragment {
 
 		if(chupaCommunId == null || "".equals(chupaCommunId))
 			throw new AhException("No chupaCommunId");
+		
+		// Clear badge numbers displayed on chupa list
+		messageDBHelper.clearBadgeNum(chupaCommunId);
+		
+		// Get every chupa by chupaCommunId
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		for (AhMessage message : chupas) {
 			message.setStatus(AhMessage.SENT);
