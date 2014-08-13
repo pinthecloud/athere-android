@@ -11,13 +11,13 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.util.ExceptionManager;
 import com.pinthecloud.athere.util.JsonConverter;
 
 public class SquareHelper {
@@ -55,7 +55,10 @@ public class SquareHelper {
 
 	public List<Square> getSquareListSync(double latitude, double longitude) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
 		
 		final AhCarrier<List<Square>> carrier = new AhCarrier<List<Square>>();
 		
@@ -126,7 +129,10 @@ public class SquareHelper {
 
 	public Square createSquareSync(Square square) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
 		final AhCarrier<Square> carrier = new AhCarrier<Square>();
 
 		squareTable.insert(square, new TableOperationCallback<Square>() {
@@ -161,7 +167,10 @@ public class SquareHelper {
 	 */
 	public void getSquareListAsync(double latitude, double longitude, final AhListCallback<Square> callback) throws AhException{
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		JsonObject jo = new JsonObject();
 		jo.addProperty(currentLatitude, latitude);
@@ -218,7 +227,10 @@ public class SquareHelper {
 
 	public void createSquareAsync(Square square, final AhEntityCallback<Square> callback) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		squareTable.insert(square, new TableOperationCallback<Square>() {
 

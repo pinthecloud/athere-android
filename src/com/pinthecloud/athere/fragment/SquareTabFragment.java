@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;

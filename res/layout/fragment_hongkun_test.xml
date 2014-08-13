@@ -27,7 +27,7 @@
         android:layout_marginTop="21dp"
         android:orientation="vertical" >
 
-        <com.pinthecloud.athere.AhButton
+        <com.pinthecloud.athere.view.AhButton
             android:id="@+id/drawer_user_chupa_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

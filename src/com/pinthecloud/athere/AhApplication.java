@@ -1,6 +1,8 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Application;
 import android.content.Context;
@@ -10,6 +12,7 @@ import android.util.Log;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -18,7 +21,6 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.util.ExceptionManager;
 
 /*
  * 
@@ -51,6 +53,8 @@ public class AhApplication extends Application{
 	// DB
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
+	
+	private List<ClassInstancePair> fragClasses = new ArrayList<ClassInstancePair>();
 
 	@Override
 	public void onCreate() {
@@ -114,6 +118,10 @@ public class AhApplication extends Application{
 	public MessageHelper getMessageHelper() {
 		return messageHelper;
 	}
+	public List<ClassInstancePair> getFragClasses() {
+		return fragClasses;
+	}
+
 
 
 	/*

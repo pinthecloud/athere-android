@@ -1,7 +1,13 @@
 package com.pinthecloud.athere.fragment;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,26 +15,37 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.ClassInstancePair;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionHandler;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
-import com.pinthecloud.athere.util.ExceptionManager;
-import com.pinthecloud.athere.util.ExceptionManager.ExceptionHandler;
 
 /**
  *  Basic Fragment class for At here application
  *  Provides each instances that are needed in fragments
  * 
  */
-public class AhFragment extends Fragment implements ExceptionHandler{
+public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 	protected AhApplication app;
 	protected Context context;
 	protected AhActivity activity;
 	protected PreferenceHelper pref;
 	protected AhFragment _thisFragment;
+	
+	
+	public AhFragment(){
+//		_thisFragment = this;
+		_thisFragment = this;
+//		ExceptionManager.setHandler(this);
+		
+		app = AhApplication.getInstance();
+		app.getFragClasses().add(new ClassInstancePair( _thisFragment.getClass(), _thisFragment));
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -37,13 +54,14 @@ public class AhFragment extends Fragment implements ExceptionHandler{
 		/*
 		 * Set static value
 		 */
-		app = AhApplication.getInstance();
+		
 		context = getActivity();
 		activity = (AhActivity) context;
 		pref = app.getPref();
-		_thisFragment = this;
 		
-		ExceptionManager.setHandler(this);
+		
+		
+		ExceptionManager.setHandler(_thisFragment);
 	}
 	
 	@Override
@@ -113,13 +131,67 @@ public class AhFragment extends Fragment implements ExceptionHandler{
 	}
 
 	@Override
-	public void handleException(AhException ex) {
+	public final void handleException(final AhException ex) {
 		// TODO Auto-generated method stub
-		Log.e("ERROR","AhFragment handler : " + ex);
+		
+		
+		for(ClassInstancePair pair : app.getFragClasses()){
+			
+			Method[] ms = pair.getClazz().getMethods();
+			for(Method method : ms) {
+				ExceptionHandler annos = method.getAnnotation(ExceptionHandler.class);
+	            if (annos != null) {
+	                try {
+	                	Class<?> target = annos.target();
+	                	Log(_thisFragment, "target : " + target.getName());
+	                	
+	                	method.invoke(pair.getFrag(), ex);
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                }
+	            }
+			}
+		}
+        
+//        for (Method method : methodList) {
+//        	ExceptionHandler annos = method.getAnnotation(ExceptionHandler.class);
+//            if (annos != null) {
+//                try {
+//                	Class<?> target = annos.target();
+//                	Log(_thisFragment, "target : " + target.getName());
+//                	method.invoke(_thisFragment, ex);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+		
+	}
+
+//	@ExceptionHandler(target = AhFragment.class)
+	public void myhandleException(final AhException ex) {
+		// TODO Auto-generated method stub
+		activity.runOnUiThread(new Runnable() {
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			new AlertDialog.Builder(_thisFragment.getActivity())
+			.setTitle(ex.getType().toString())
+			.setMessage(ex.toString())
+			.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int whichButton) {
+		            //Your action here
+		        	dialog.dismiss();
+		        }
+		    })
+	        .show();
+		}
+	});
 	}
 
 	@Override
-	public void handleException(Exception ex) {
+	public final void handleException(Exception ex) {
 		// TODO Auto-generated method stub
 		
 	}

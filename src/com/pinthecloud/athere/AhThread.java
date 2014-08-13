@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
-import com.pinthecloud.athere.util.ExceptionManager;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 
 public class AhThread extends Thread {
 	

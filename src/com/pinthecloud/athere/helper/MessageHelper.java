@@ -12,12 +12,12 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.util.ExceptionManager;
 
 public class MessageHelper {
 
@@ -41,7 +41,10 @@ public class MessageHelper {
 
 	public boolean sendMessageSync(AhMessage message) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return false;
+		}
 		
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 
@@ -95,7 +98,10 @@ public class MessageHelper {
 
 	public void sendMessageAsync(AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		JsonObject jo = new JsonObject();
 		jo.addProperty("type", message.getType());

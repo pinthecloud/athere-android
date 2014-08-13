@@ -14,11 +14,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;

@@ -9,14 +9,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionHandler;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.view.AhButton;
@@ -58,10 +57,10 @@ public class HongkunTestFragment extends AhFragment {
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
 		messageDB = app.getMessageDBHelper();
+		
 	}
 
-	@Override
-	public View onAhCreateView(LayoutInflater inflater, ViewGroup container,
+	public View _onAhCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
 		
@@ -75,51 +74,6 @@ public class HongkunTestFragment extends AhFragment {
 		messageText = (TextView)view.findViewById(R.id.message_text);
 		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
 		
-		myBtn = (AhButton)view.findViewById(R.id.drawer_user_chupa_btn);
-		
-		myBtn.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-//				new AhThread(new Runnable() {
-//					
-//					@Override
-//					public void run() {
-//						// TODO Auto-generated method stub
-//						throw new AhException("AhView myBtn throw");
-//					}
-//				}).start();
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						AhMessage message = new AhMessage.Builder()
-						.setId("")
-						.build();
-						messageHelper.sendMessageSync(message);
-						Log(_thisFragment, "onCompleted");
-					}
-				}).start();
-				
-				
-			}
-		});
-		
-		return view;
-	}
-	
-	@Override
-	public void handleException(AhException ex) {
-		// TODO Auto-generated method stub
-		Log.e("ERROR","HongkunFragment handler : " + ex);
-	}
-	
-	public View _onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
-
 		countArr = new int[6];
 		btnArr = new Button[6];
 		btnArr[0] = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
@@ -154,16 +108,56 @@ public class HongkunTestFragment extends AhFragment {
 			});
 		}
 
+		
+		return view;
+	}
+	
+	@ExceptionHandler(target=HongkunTestFragment.class)
+	public void myHandleException(AhException ex) {
+		Log(_thisFragment, "in myHandlerException");
+	}
+	
+//	@Override
+//	public void handleException(AhException ex) {
+//		// TODO Auto-generated method stub
+//		Log.e("ERROR","HongkunFragment handler : " + ex);
+//	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
+		
+		myBtn = (AhButton)view.findViewById(R.id.drawer_user_chupa_btn);
+		
+		myBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new AhThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+//						AhMessage message = new AhMessage.Builder()
+//						.setId("")
+//						.build();
+//						messageHelper.sendMessageSync(message);
+//						Log(_thisFragment, "onCompleted");
+						throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+					}
+				}).start();
+				
+				
+			}
+		});
+		
+		
 
 		return view;
 	}
 	
-	class TestA{
-		
-		public void doSomething() {
-			
-		}
-	}
 
 	//	public void addItem01(View view) {
 	//		

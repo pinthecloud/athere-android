@@ -17,9 +17,10 @@ import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhException;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
@@ -27,7 +28,6 @@ import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
-import com.pinthecloud.athere.util.ExceptionManager;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class UserHelper {
@@ -58,7 +58,10 @@ public class UserHelper {
 
 	public boolean exitSquareSync(String userId) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return false;
+		}
 		
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 
@@ -91,7 +94,10 @@ public class UserHelper {
 
 	public void exitSquareAsync(String userId, final AhEntityCallback<Boolean> callback) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		userTable.delete(userId, new TableDeleteCallback() {
 
@@ -108,7 +114,10 @@ public class UserHelper {
 
 	public void enterSquareAsync(User user, final AhEntityCallback<String> callback) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		userTable.insert(user, new TableOperationCallback<User>() {
 
@@ -126,7 +135,10 @@ public class UserHelper {
 
 	public String enterSquareSync(User user) throws AhException {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
 		
 		final AhCarrier<String> carrier = new AhCarrier<String>();
 
@@ -159,7 +171,10 @@ public class UserHelper {
 
 	public void getUserListAsync(String squareId, final AhListCallback<User> callback){
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		userTable.where().field("squareId").eq(squareId).execute(new TableQueryCallback<User>() {
 
@@ -177,7 +192,10 @@ public class UserHelper {
 
 	public List<User> getUserListSync(String squareId){
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
 		
 		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
 
@@ -211,7 +229,10 @@ public class UserHelper {
 
 	public void getUserAsync(String id, final AhEntityCallback<User> callback) {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
 
@@ -230,7 +251,10 @@ public class UserHelper {
 
 	public User getUserSync(String id) {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
 
 		if (id == null) if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.NO_USER_ID);
 		final AhCarrier<User> carrier = new AhCarrier<User>();
@@ -265,7 +289,10 @@ public class UserHelper {
 
 	public void updateUserAsync(User user, final AhEntityCallback<User> callback){
 
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		userTable.update(user, new TableOperationCallback<User>() {
 
@@ -313,7 +340,10 @@ public class UserHelper {
 
 	public String getRegistrationIdSync() {
 		
-		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
 		
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
 		String registrationId = "";

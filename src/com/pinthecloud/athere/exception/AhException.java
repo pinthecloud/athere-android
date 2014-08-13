@@ -1,9 +1,10 @@
-package com.pinthecloud.athere;
+package com.pinthecloud.athere.exception;
+
+import com.pinthecloud.athere.fragment.AhFragment;
 
 public class AhException extends RuntimeException {
 
 	private static final long serialVersionUID = -5944663372661859514L;
-	private String message;
 	private TYPE type;
 
 	public AhException(){
@@ -12,34 +13,31 @@ public class AhException extends RuntimeException {
 	
 	public AhException(String string) {
 		super(string);
-		this.message = string;
 	}
 	
 	public AhException(TYPE type) {
 		this.type = type;
 	}
 	
+	public AhException(TYPE type,AhFragment fragment) {
+		this.type = type;
+	}
+	
 	public AhException(String string, TYPE type) {
 		super(string);
-		this.message = string;
 		this.type = type;
 	}
 
 	public AhException(Exception ex, String message) {
-		super(ex);
-		this.message = message;
+		super(message , ex);
+		//this.message = message;
 	}
 
 	public AhException(Exception ex, String message, TYPE type) {
-		super(ex);
-		this.message = message;
+		super(message, ex);
 		this.type = type;
 	}
 
-	public String getMessage() {
-		return message;
-	}
-	
 	public TYPE getType() {
 		return type;
 	}
@@ -47,13 +45,13 @@ public class AhException extends RuntimeException {
 	@Override
 	public String toString() {
 		String str = "";
-		if (message != null) {
-			str += " [message : " + this.message + "]";
+		if (super.getMessage() != null) {
+			str += " message : " + super.getMessage() + "";
 		}
 		if (type != null) {
-			str += " [type : " + this.type + "]";
+			str += " type : " + this.type + "";
 		}
-		return super.toString() + str;
+		return " { "+ str + " }";
 	}
 	
 	public enum TYPE {
