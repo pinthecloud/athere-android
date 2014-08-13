@@ -1,9 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
@@ -20,7 +16,6 @@ import com.pinthecloud.athere.ClassInstancePair;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.exception.ExceptionHandler;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
@@ -131,68 +126,76 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 	@Override
-	public final void handleException(final AhException ex) {
+	public void handleException(final AhException ex) {
 		// TODO Auto-generated method stub
+		Log(_thisFragment, "in AhFragment : " + ex.toString());
 		
+		activity.runOnUiThread(new Runnable() {
 		
-		for(ClassInstancePair pair : app.getFragClasses()){
-			
-			Method[] ms = pair.getClazz().getMethods();
-			for(Method method : ms) {
-				ExceptionHandler annos = method.getAnnotation(ExceptionHandler.class);
-	            if (annos != null) {
-	                try {
-	                	Class<?> target = annos.target();
-	                	Log(_thisFragment, "target : " + target.getName());
-	                	
-	                	method.invoke(pair.getFrag(), ex);
-	                } catch (Exception e) {
-	                    e.printStackTrace();
-	                }
-	            }
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				new AlertDialog.Builder(_thisFragment.getActivity())
+				.setTitle(ex.getType().toString())
+				.setMessage(ex.toString())
+				.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int whichButton) {
+			            //Your action here
+			        	dialog.dismiss();
+			        }
+			    })
+		        .show();
 			}
-		}
-        
-//        for (Method method : methodList) {
-//        	ExceptionHandler annos = method.getAnnotation(ExceptionHandler.class);
+		});
+	}
+
+	
+	
+	/**
+	 * 
+	 * NOT USING METHOD
+	 * BUT NEED FOR REFERENCE!!
+	 * 
+	 */
+//	@ExceptionHandler(target = AhFragment.class)
+//	public void myhandleException(final AhException ex) {
+//		// TODO Auto-generated method stub
+//		
+//		
+//		
+//		Method[] ms = pair.getClazz().getMethods();
+//		for(Method method : ms) {
+//			ExceptionHandler annos = method.getAnnotation(ExceptionHandler.class);
 //            if (annos != null) {
 //                try {
 //                	Class<?> target = annos.target();
 //                	Log(_thisFragment, "target : " + target.getName());
-//                	method.invoke(_thisFragment, ex);
+//                	
+//                	method.invoke(pair.getFrag(), ex);
 //                } catch (Exception e) {
 //                    e.printStackTrace();
 //                }
 //            }
-//        }
-		
-	}
+//		}
+//	}
+//		
+//		activity.runOnUiThread(new Runnable() {
+//		
+//			@Override
+//			public void run() {
+//				// TODO Auto-generated method stub
+//				new AlertDialog.Builder(_thisFragment.getActivity())
+//				.setTitle(ex.getType().toString())
+//				.setMessage(ex.toString())
+//				.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//			        public void onClick(DialogInterface dialog, int whichButton) {
+//			            //Your action here
+//			        	dialog.dismiss();
+//			        }
+//			    })
+//		        .show();
+//			}
+//		});
+//	}
 
-//	@ExceptionHandler(target = AhFragment.class)
-	public void myhandleException(final AhException ex) {
-		// TODO Auto-generated method stub
-		activity.runOnUiThread(new Runnable() {
-		
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			new AlertDialog.Builder(_thisFragment.getActivity())
-			.setTitle(ex.getType().toString())
-			.setMessage(ex.toString())
-			.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-		        public void onClick(DialogInterface dialog, int whichButton) {
-		            //Your action here
-		        	dialog.dismiss();
-		        }
-		    })
-	        .show();
-		}
-	});
-	}
-
-	@Override
-	public final void handleException(Exception ex) {
-		// TODO Auto-generated method stub
-		
-	}
 }

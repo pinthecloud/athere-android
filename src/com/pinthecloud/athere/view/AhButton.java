@@ -33,7 +33,7 @@ public class AhButton extends Button {
 		} catch (AhException ex) {
 			ExceptionManager.fireException(ex);
 		} catch (Exception ex) {
-			ExceptionManager.fireException(ex);
+			ex.printStackTrace();
 		}
 		return returnValue;
 	}

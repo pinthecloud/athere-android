@@ -7,6 +7,14 @@ import java.lang.annotation.Target;
 
 import com.pinthecloud.athere.fragment.AhFragment;
 
+
+/**
+ * 
+ * NOT USING METHOD
+ * BUT NEED FOR REFERENCE!!
+ *
+ */
+
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface ExceptionHandler {

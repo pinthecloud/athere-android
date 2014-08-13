@@ -18,8 +18,6 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.exception.ExceptionHandler;
-import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -190,8 +188,13 @@ public class SquareChatFragment extends AhFragment{
 		}
 	}
 	
-	@ExceptionHandler(target=SquareChatFragment.class)
-	public void myHandler(AhException ex) {
-		Log(_thisFragment, "in SquareChatFrag handler");
+	@Override
+	public void handleException(AhException ex) {
+		// TODO Auto-generated method stub
+		super.handleException(ex);
+		Log(_thisFragment, "in SquareChatFrag : " + ex.toString());
+		
+//		message.setStatus(AhMessage.SENT);
+//		messageListAdapter.notifyDataSetChanged();
 	}
 }

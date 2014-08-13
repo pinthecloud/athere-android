@@ -38,7 +38,7 @@ public class AhException extends RuntimeException {
 			return "{ message : " + super.getMessage() + " }";
 		}
 		return "{ type : " + type + "," +
-				" from : " + from  + "," +
+				" from : " + from.getClass().getSimpleName()  + "," +
 				" method : " + methodName + " }";
 	}
 	

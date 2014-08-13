@@ -1,7 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.exception.ExceptionHandler;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
@@ -110,11 +108,6 @@ public class HongkunTestFragment extends AhFragment {
 
 		
 		return view;
-	}
-	
-	@ExceptionHandler(target=HongkunTestFragment.class)
-	public void myHandleException(AhException ex) {
-		Log(_thisFragment, "in myHandlerException");
 	}
 	
 //	@Override

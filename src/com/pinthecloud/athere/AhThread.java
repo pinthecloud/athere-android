@@ -20,7 +20,7 @@ public class AhThread extends Thread {
 		} catch (AhException ex) {
 			ExceptionManager.fireException(ex);
 		} catch (Exception ex) {
-			ExceptionManager.fireException(ex);
+			ex.printStackTrace();
 		}
 		
 	}
