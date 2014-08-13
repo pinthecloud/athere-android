@@ -19,12 +19,12 @@ import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.interfaces.AhListCallback;
-import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -55,7 +55,13 @@ public class UserHelper {
 	}
 
 
-	public boolean exitSquareSync(String userId) throws AhException {
+	public boolean exitSquareSync(final AhFragment frag, String userId) throws AhException {
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "exitSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return false;
+		}
+
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 
 		userTable.delete(userId, new TableDeleteCallback() {
@@ -68,7 +74,7 @@ public class UserHelper {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "exitSquareAsync");
+					ExceptionManager.fireException(new AhException(frag, "exitSquareSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -85,7 +91,13 @@ public class UserHelper {
 	}
 
 
-	public void exitSquareAsync(String userId, final AhEntityCallback<Boolean> callback) throws AhException {
+	public void exitSquareAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
 		userTable.delete(userId, new TableDeleteCallback() {
 
 			@Override
@@ -93,13 +105,19 @@ public class UserHelper {
 				if (e == null) {
 					callback.onCompleted(true);
 				} else {
-					throw new AhException(e, "exitSquareAsync : " + e.getMessage());
+					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
 	}
 
-	public void enterSquareAsync(User user, final AhEntityCallback<String> callback) throws AhException {
+	public void enterSquareAsync(final AhFragment frag, User user, final AhEntityCallback<String> callback) throws AhException {
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
 		userTable.insert(user, new TableOperationCallback<User>() {
 
 			@Override
@@ -107,14 +125,20 @@ public class UserHelper {
 				if (exception == null) {
 					callback.onCompleted(entity.getId());
 				} else {
-					throw new AhException(exception, "enterSquareAsync");
+					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
 	}
 
 
-	public String enterSquareSync(User user) throws AhException {
+	public String enterSquareSync(final AhFragment frag, User user) throws AhException {
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "enterSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
+
 		final AhCarrier<String> carrier = new AhCarrier<String>();
 
 		userTable.insert(user, new TableOperationCallback<User>() {
@@ -127,7 +151,7 @@ public class UserHelper {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(e, "enterSquareAsync : " + e.getMessage());
+					ExceptionManager.fireException(new AhException(frag, "enterSquareSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -136,7 +160,7 @@ public class UserHelper {
 			try {
 				lock.wait();
 			} catch (InterruptedException e) {
-				throw new AhException(e, "enterSquareSync");
+				e.printStackTrace();
 			}
 		}
 
@@ -144,7 +168,13 @@ public class UserHelper {
 	}
 
 
-	public void getUserListAsync(String squareId, final AhListCallback<User> callback){
+	public void getUserListAsync(final AhFragment frag, String squareId, final AhListCallback<User> callback){
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
 		userTable.where().field("squareId").eq(squareId).execute(new TableQueryCallback<User>() {
 
 			@Override
@@ -153,13 +183,19 @@ public class UserHelper {
 				if (exception == null) {
 					callback.onCompleted(result, count);
 				} else {
-					throw new AhException(exception, "getUserListAsync");
+					ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
 	}
 
-	public List<User> getUserListSync(String squareId){
+	public List<User> getUserListSync(final AhFragment frag, String squareId){
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getUserListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
+
 		final AhCarrier<List<User>> carrier = new AhCarrier<List<User>>();
 
 		userTable.where().field("squareId").eq(squareId).execute(new TableQueryCallback<User>() {
@@ -173,7 +209,7 @@ public class UserHelper {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "enterSquareAsync");
+					ExceptionManager.fireException(new AhException(frag, "getUserListSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -182,7 +218,7 @@ public class UserHelper {
 			try {
 				lock.wait();
 			} catch (InterruptedException e) {
-				throw new AhException(e, "enterSquareSync");
+				e.printStackTrace();
 			}
 		}
 
@@ -190,7 +226,13 @@ public class UserHelper {
 	}
 
 
-	public void getUserAsync(String id, final AhEntityCallback<User> callback) {
+	public void getUserAsync(final AhFragment frag, String id, final AhEntityCallback<User> callback) {
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
 		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
 
 			@Override
@@ -199,17 +241,23 @@ public class UserHelper {
 				if (exception == null && result.size() == 1) {
 					callback.onCompleted(result.get(0));
 				} else {
-					throw new AhException(exception, "enterSquareAsync");
+					ExceptionManager.fireException(new AhException(frag, "getUserAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
 	}
 
 
-	public User getUserSync(String id) {
-		Log.d(AhGlobalVariable.LOG_TAG, "UserHelper getUserSync");
+	public User getUserSync(final AhFragment frag, String id) {
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getUserSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
 
-		if (id == null) return null;
+		if (id == null) if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getUserSync", AhException.TYPE.NO_USER_ID));
+			return null;
+		}
 		final AhCarrier<User> carrier = new AhCarrier<User>();
 
 		userTable.where().field("id").eq(id).execute(new TableQueryCallback<User>() {
@@ -223,7 +271,7 @@ public class UserHelper {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "enterSquareAsync");
+					ExceptionManager.fireException(new AhException(frag, "getUserSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -232,7 +280,7 @@ public class UserHelper {
 			try {
 				lock.wait();
 			} catch (InterruptedException e) {
-				throw new AhException(e, "enterSquareSync");
+				e.printStackTrace();
 			}
 		}
 
@@ -240,7 +288,12 @@ public class UserHelper {
 	}
 
 
-	public void updateUserAsync(User user, final AhEntityCallback<User> callback){
+	public void updateUserAsync(final AhFragment frag, User user, final AhEntityCallback<User> callback){
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 
 		userTable.update(user, new TableOperationCallback<User>() {
 
@@ -250,15 +303,15 @@ public class UserHelper {
 				if (exception == null) {
 					callback.onCompleted(entity);
 				} else {
-					throw new AhException(exception, "updateUserAsync");
+					ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
 	}
 
-	public void updateMyUserAsync(AhEntityCallback<User> callback){
+	public void updateMyUserAsync(final AhFragment frag, AhEntityCallback<User> callback){
 		User user = this.getMyUserInfo(true);
-		this.updateUserAsync(user, callback);
+		this.updateUserAsync(frag, user, callback);
 	}
 
 	public User getMyUserInfo(boolean hasId) {
@@ -291,32 +344,53 @@ public class UserHelper {
 	}
 
 
-	public String getRegistrationIdSync() throws IOException{
+	public String getRegistrationIdSync(final AhFragment frag) {
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return null;
+		}
+
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
 		String registrationId = "";
 		try {
 			registrationId = gcm.register(GCM_SENDER_ID);
 		} catch (IOException e) {
-			throw e;
+			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+			return null;
 		}
 		return registrationId;
 	}
 
+	public String UnRegistrationIdSync() {
 
-	private Map<String, AhPairEntityCallback<AhMessage.TYPE, User>> map = new HashMap<String, AhPairEntityCallback<AhMessage.TYPE, User>>();
+		//		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+		//		
+		//		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
+		//		String registrationId = "";
+		//		try {
+		//			registrationId = gcm.register(GCM_SENDER_ID);
+		//		} catch (IOException e) {
+		//			throw new AhException(e, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL);
+		//		}
+		//		return registrationId;
+		return null;
+	}
+
+
+	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
 
 	private final String USER_RECEIVED = "USER_RECEIVED";
 
-	public void setUserHandler(AhPairEntityCallback<AhMessage.TYPE, User> callback){
+	public void setUserHandler(AhEntityCallback<User> callback){
 		map.put(USER_RECEIVED, callback);
 	}
 
-	public void triggerUserEvent(AhMessage.TYPE type, User user){
-		AhPairEntityCallback<AhMessage.TYPE, User> callback = map.get(USER_RECEIVED);
-		Log.e("ERROR","in triggerUserEvent");
+	public void triggerUserEvent(User user){
+		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
+		Log.d(AhGlobalVariable.LOG_TAG,"in triggerUserEvent");
 		if(callback != null)
-			callback.onCompleted(type, user);
-		//		else 
-		//			throw new AhException("No such Event : triggerUserEvent");
+			callback.onCompleted(user);
+		else 
+			Log.d(AhGlobalVariable.LOG_TAG, "No Such method in triggerUserEvent");
 	}
 }

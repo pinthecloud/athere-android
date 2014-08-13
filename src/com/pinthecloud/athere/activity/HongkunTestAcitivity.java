@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.HongkunTestFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhException;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn01;

@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.push;
+package com.pinthecloud.athere;
 
 import java.util.List;
 
@@ -22,9 +22,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -95,14 +92,14 @@ public class AhIntentService extends IntentService {
 					messageDBHelper.addMessage(message);
 					messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
 				} else if (AhMessage.TYPE.ENTER_SQUARE.toString().equals(message.getType())) {
-					user = userHelper.getUserSync(userId);
+					user = userHelper.getUserSync(null, userId);
 					userDBHelper.addUser(user);
 				} else if (AhMessage.TYPE.EXIT_SQUARE.toString().equals(message.getType())) {
 					//userDBHelper.deleteUser(userId);
 					//messageDBHelper.addMessage(message);
 					userDBHelper.exitUser(userId);
 				} else if (AhMessage.TYPE.UPDATE_USER_INFO.toString().equals(message.getType())) {
-					user = userHelper.getUserSync(userId);
+					user = userHelper.getUserSync(null, userId);
 					userDBHelper.updateUser(user);
 				}
 
@@ -112,7 +109,7 @@ public class AhIntentService extends IntentService {
 				 */
 				if (isRunning(app)) {
 					messageHelper.triggerMessageEvent(message);
-					userHelper.triggerUserEvent(AhMessage.TYPE.valueOf(message.getType()), user);
+					userHelper.triggerUserEvent(user);
 					return;
 				}
 

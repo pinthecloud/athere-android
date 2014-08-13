@@ -51,6 +51,7 @@ public class AhApplication extends Application{
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
 
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -69,13 +70,15 @@ public class AhApplication extends Application{
 
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
-		
+
 		userTable = mClient.getTable(User.class);
 		squareTable = mClient.getTable(Square.class);
-		
+
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
+
+
 	}
 
 	public static AhApplication getInstance(){
@@ -116,9 +119,9 @@ public class AhApplication extends Application{
 	/*
 	 * @return true, if the App is connected with Internet.
 	 */
-	public boolean isOnline(){
+	public static boolean isOnline(){
 		ConnectivityManager cm = 
-				(ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+				(ConnectivityManager)app.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}

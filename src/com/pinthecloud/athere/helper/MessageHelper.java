@@ -13,9 +13,11 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class MessageHelper {
@@ -38,7 +40,13 @@ public class MessageHelper {
 	}
 
 
-	public boolean sendMessageSync(AhMessage message) throws AhException {
+	public boolean sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return false;
+		}
+
 		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
 
 		JsonObject jo = new JsonObject();
@@ -65,7 +73,8 @@ public class MessageHelper {
 						lock.notify();
 					}
 				} else {
-					throw new AhException(exception, "sendMessageSync");
+					carrier.load(false);
+					ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -88,8 +97,12 @@ public class MessageHelper {
 		return false;
 	}
 
-	public void sendMessageAsync(AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
-		Log.d(AhGlobalVariable.LOG_TAG, "MessageHelper sendMessageAsync");
+	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
+
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 
 		JsonObject jo = new JsonObject();
 		jo.addProperty("type", message.getType());
@@ -104,18 +117,19 @@ public class MessageHelper {
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 
+		mClient.setContext(frag.getActivity());
 		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
 
 			@Override
 			public void onCompleted(JsonElement json, Exception e,
 					ServiceFilterResponse response) {
-				if(e == null){
+				if (e == null)
 					callback.onCompleted(null);
-				} else {
-					throw new AhException(e, "sendMessageAsync");
-				}
+				else
+					ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.SERVER_ERROR));
 			}
 		});
+
 	}
 
 
@@ -137,12 +151,11 @@ public class MessageHelper {
 		if(callback != null)
 			callback.onCompleted(message);
 		else 
-			Log.e("ERROR","message.getType() :" + message.getType());
-
+			Log.d(AhGlobalVariable.LOG_TAG,"message.getType() :" + message.getType());
 		callback = map.get(MESSAGE_RECEIVED);
 		if(callback != null)
 			callback.onCompleted(message);
 		else 
-			Log.e("ERROR","map.get(MESSAGE_RECEIVED); :" + message.getType());
+			Log.d(AhGlobalVariable.LOG_TAG,"map.get(MESSAGE_RECEIVED); :" + message.getType());
 	}
 }

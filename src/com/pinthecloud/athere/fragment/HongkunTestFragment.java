@@ -5,17 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhException;
-import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.view.AhButton;
 
 /**
  * 
@@ -36,9 +37,9 @@ public class HongkunTestFragment extends AhFragment {
 	MessageHelper messageHelper;
 	SquareHelper squareHelper;
 	MessageDBHelper messageDB;
-	private String who;
-	private String content;
 	String __id = "";
+	ImageView img;
+	AhButton myBtn;
 
 	public static final String SENDER_ID = "838051405989";
 
@@ -54,14 +55,23 @@ public class HongkunTestFragment extends AhFragment {
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
 		messageDB = app.getMessageDBHelper();
-		who = "test user";
+		
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View _onAhCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
-
+		
+		btnArr = new Button[6];
+		//btnArr[0] = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
+		btnArr[1] = (Button)view.findViewById(R.id.button2);
+		btnArr[2] = (Button)view.findViewById(R.id.button3);
+		btnArr[3] = (Button)view.findViewById(R.id.button4);
+		btnArr[4] = (Button)view.findViewById(R.id.button5);
+		btnArr[5] = (Button)view.findViewById(R.id.button6);
+		messageText = (TextView)view.findViewById(R.id.message_text);
+		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
+		
 		countArr = new int[6];
 		btnArr = new Button[6];
 		btnArr[0] = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
@@ -71,7 +81,8 @@ public class HongkunTestFragment extends AhFragment {
 		btnArr[4] = (Button)view.findViewById(R.id.button5);
 		btnArr[5] = (Button)view.findViewById(R.id.button6);
 		messageText = (TextView)view.findViewById(R.id.message_text);
-
+		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
+		
 		for(int i = 0 ; i < 6 ; i++){
 			btnArr[i].setOnClickListener(new View.OnClickListener() {
 
@@ -80,20 +91,14 @@ public class HongkunTestFragment extends AhFragment {
 
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
-
+						
 						throw new AhException("Test Exception");
 						
 						
 					} else if (b.getId() == btnArr[1].getId()) {
-						User user = userDBHelper.getUser(__id);
-						userDBHelper.exitUser(__id);
 					} else if (b.getId() == btnArr[2].getId()) {
-						User user = userDBHelper.getUser(__id);
 					} else if (b.getId() == btnArr[3].getId()) {
-						User user = userDBHelper.getUser(__id, true);
-
 					} else if (b.getId() == btnArr[4].getId()) {
-						User user = userDBHelper.getUser(__id, false);
 					} else if (b.getId() == btnArr[5].getId()) {
 					}
 					messageText.setText(b.getText());
@@ -101,9 +106,51 @@ public class HongkunTestFragment extends AhFragment {
 			});
 		}
 
+		
+		return view;
+	}
+	
+//	@Override
+//	public void handleException(AhException ex) {
+//		// TODO Auto-generated method stub
+//		Log.e("ERROR","HongkunFragment handler : " + ex);
+//	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
+		
+		myBtn = (AhButton)view.findViewById(R.id.drawer_user_chupa_btn);
+		
+		myBtn.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				new AhThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+//						AhMessage message = new AhMessage.Builder()
+//						.setId("")
+//						.build();
+//						messageHelper.sendMessageSync(message);
+//						Log(_thisFragment, "onCompleted");
+//						throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+					}
+				}).start();
+				
+				
+			}
+		});
+		
+		
 
 		return view;
 	}
+	
 
 	//	public void addItem01(View view) {
 	//		

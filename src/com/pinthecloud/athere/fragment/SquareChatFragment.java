@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -38,6 +39,7 @@ public class SquareChatFragment extends AhFragment{
 	public SquareChatFragment(Square square) {
 		super();
 		this.square = square;
+		Log(_thisFragment, "in SquareChat");
 	}
 
 	@Override
@@ -107,7 +109,7 @@ public class SquareChatFragment extends AhFragment{
 				messageEditText.setText("");
 
 				// Send message to server
-				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
@@ -175,5 +177,14 @@ public class SquareChatFragment extends AhFragment{
 		//				}
 		//			});
 		//		}
+	}
+
+	@Override
+	public void handleException(AhException ex) {
+		super.handleException(ex);
+		Log(_thisFragment, "in SquareChatFrag : " + ex.toString());
+
+		//		message.setStatus(AhMessage.SENT);
+		//		messageListAdapter.notifyDataSetChanged();
 	}
 }

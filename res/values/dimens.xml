@@ -46,9 +46,6 @@
     <!-- Square chat -->
     <dimen name="square_chat_profile_width">33.5dp</dimen>
     <dimen name="square_chat_profile_height">33.5dp</dimen>
-    <dimen name="square_chat_min_height">48dp</dimen>
-    <dimen name="square_chat_left_margin">10.5dp</dimen>
-    <dimen name="square_chat_right_margin">10.5dp</dimen>
     <dimen name="square_chat_list_receive_left_margin">13.5dp</dimen>
     <dimen name="square_chat_list_receive_top_margin">5.5dp</dimen>
     <dimen name="square_chat_list_receive_profile_nick_name_margin">6.5dp</dimen>

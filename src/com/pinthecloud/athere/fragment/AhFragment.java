@@ -1,14 +1,21 @@
 package com.pinthecloud.athere.fragment;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
@@ -16,29 +23,64 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
  *  Provides each instances that are needed in fragments
  * 
  */
-public class AhFragment extends Fragment{
+public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 	protected AhApplication app;
 	protected Context context;
 	protected AhActivity activity;
 	protected PreferenceHelper pref;
 	protected AhFragment _thisFragment;
-	
+
+
+	public AhFragment(){
+		_thisFragment = this;
+		app = AhApplication.getInstance();
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		/*
 		 * Set static value
 		 */
-		app = AhApplication.getInstance();
+
 		context = getActivity();
 		activity = (AhActivity) context;
 		pref = app.getPref();
-		_thisFragment = this;
+
+
+
+		ExceptionManager.setHandler(_thisFragment);
 	}
-	
-	
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreateView(inflater, container, savedInstanceState);
+		View view = null;
+
+		try {
+			view = onAhCreateView(inflater, container, savedInstanceState);
+		} catch (AhException ex) {
+			Log(this, ex);
+			ex.printStackTrace();
+		} catch (Exception ex) {
+			Log(this, ex);
+		}
+
+		return view;
+	}
+
+
+
+	protected View onAhCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	protected void Log(AhFragment fragment, Object... params){
 		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
@@ -51,7 +93,7 @@ public class AhFragment extends Fragment{
 		}
 		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
-	
+
 	/*
 	 * Check nick name EditText
 	 */
@@ -77,4 +119,78 @@ public class AhFragment extends Fragment{
 		}
 		return message;
 	}
+
+	@Override
+	public void handleException(final AhException ex) {
+		// TODO Auto-generated method stub
+		Log(_thisFragment, "in AhFragment : " + ex.toString());
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				new AlertDialog.Builder(_thisFragment.getActivity())
+				.setTitle(ex.getType().toString())
+				.setMessage(ex.toString())
+				.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						//Your action here
+						dialog.dismiss();
+					}
+				})
+				.show();
+			}
+		});
+	}
+
+
+
+	/**
+	 * 
+	 * NOT USING METHOD
+	 * BUT NEED FOR REFERENCE!!
+	 * 
+	 */
+	//	@ExceptionHandler(target = AhFragment.class)
+	//	public void myhandleException(final AhException ex) {
+	//		// TODO Auto-generated method stub
+	//		
+	//		
+	//		
+	//		Method[] ms = pair.getClazz().getMethods();
+	//		for(Method method : ms) {
+	//			ExceptionHandler annos = method.getAnnotation(ExceptionHandler.class);
+	//            if (annos != null) {
+	//                try {
+	//                	Class<?> target = annos.target();
+	//                	Log(_thisFragment, "target : " + target.getName());
+	//                	
+	//                	method.invoke(pair.getFrag(), ex);
+	//                } catch (Exception e) {
+	//                    e.printStackTrace();
+	//                }
+	//            }
+	//		}
+	//	}
+	//		
+	//		activity.runOnUiThread(new Runnable() {
+	//		
+	//			@Override
+	//			public void run() {
+	//				// TODO Auto-generated method stub
+	//				new AlertDialog.Builder(_thisFragment.getActivity())
+	//				.setTitle(ex.getType().toString())
+	//				.setMessage(ex.toString())
+	//				.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+	//			        public void onClick(DialogInterface dialog, int whichButton) {
+	//			            //Your action here
+	//			        	dialog.dismiss();
+	//			        }
+	//			    })
+	//		        .show();
+	//			}
+	//		});
+	//	}
+
 }

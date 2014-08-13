@@ -34,15 +34,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
@@ -50,6 +51,7 @@ import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
+import com.pinthecloud.athere.view.CameraPreview;
 
 public class SquareProfileFragment extends AhFragment{
 
@@ -413,7 +415,7 @@ public class SquareProfileFragment extends AhFragment{
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
-		new Thread(new Runnable() {
+		new AhThread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -423,9 +425,9 @@ public class SquareProfileFragment extends AhFragment{
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
 					try {
-						String registrationId = userHelper.getRegistrationIdSync();
+						String registrationId = userHelper.getRegistrationIdSync(_thisFragment);
 						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-					} catch (IOException e) {
+					} catch (AhException e) {
 						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
 					}
 				}
@@ -443,12 +445,12 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final User user = userHelper.getMyUserInfo(false);
-				String id = userHelper.enterSquareSync(user);
+				String id = userHelper.enterSquareSync(_thisFragment, user);
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 
 
 				// Get user list in the square and save it without me
-				List<User> userList = userHelper.getUserListSync(square.getId());
+				List<User> userList = userHelper.getUserListSync(_thisFragment, square.getId());
 				userDBHelper.addAllUsers(userList);
 				userDBHelper.deleteUser(id);
 
@@ -462,21 +464,21 @@ public class SquareProfileFragment extends AhFragment{
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.ENTER_SQUARE);
 				AhMessage message = messageBuilder.build();
-				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
-					
+				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+
 					@Override
 					public void onCompleted(AhMessage entity) {
 						// Do nothing
 					}
 				});
-				
+
 				activity.runOnUiThread(new Runnable(){
 
 					@Override
 					public void run() {
 						// Dimiss progress bar
 						progressBar.setVisibility(View.GONE);
-						
+
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);

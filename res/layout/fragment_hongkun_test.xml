@@ -12,6 +12,13 @@
         android:text="Message"
         android:textSize="20sp" />
 
+    <ImageView
+        android:id="@+id/hongkun_id_image_view"
+        android:layout_width="97dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.80"
+        android:src="@drawable/actionbar_logo" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +27,7 @@
         android:layout_marginTop="21dp"
         android:orientation="vertical" >
 
-        <Button
+        <com.pinthecloud.athere.view.AhButton
             android:id="@+id/drawer_user_chupa_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +65,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="UpdateUser" />
-
     </LinearLayout>
 
 </LinearLayout>

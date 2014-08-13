@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pinthecloud.athere.interfaces;
+package com.pinthecloud.athere.view;
 
 import java.util.Locale;
 
@@ -41,7 +41,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
