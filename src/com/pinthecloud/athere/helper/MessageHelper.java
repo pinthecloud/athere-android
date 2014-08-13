@@ -15,6 +15,7 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -39,10 +40,10 @@ public class MessageHelper {
 	}
 
 
-	public boolean sendMessageSync(AhMessage message) throws AhException {
+	public boolean sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
 		
 		if (!AhApplication.isOnline()) {
-			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return false;
 		}
 		
@@ -73,7 +74,7 @@ public class MessageHelper {
 					}
 				} else {
 					carrier.load(false);
-					ExceptionManager.fireException(new AhException(exception, "sendMessageSync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -96,10 +97,10 @@ public class MessageHelper {
 		return false;
 	}
 
-	public void sendMessageAsync(AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
+	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 		
 		if (!AhApplication.isOnline()) {
-			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 		
@@ -116,6 +117,7 @@ public class MessageHelper {
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 		
+		mClient.setContext(frag.getActivity());
 		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
 
 			@Override
@@ -124,7 +126,7 @@ public class MessageHelper {
 				if (exception == null)
 					callback.onCompleted(null);
 				else
-					ExceptionManager.fireException(new AhException(exception, "sendMessageAsync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.SERVER_ERROR));
 			}
 		});
 		

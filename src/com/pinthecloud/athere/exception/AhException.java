@@ -5,53 +5,41 @@ import com.pinthecloud.athere.fragment.AhFragment;
 public class AhException extends RuntimeException {
 
 	private static final long serialVersionUID = -5944663372661859514L;
-	private TYPE type;
-
-	public AhException(){
-		super();
-	}
 	
+	private AhException.TYPE type;
+	private AhFragment from;
+	private String methodName;
+
 	public AhException(String string) {
 		super(string);
 	}
-	
-	public AhException(TYPE type) {
-		this.type = type;
-	}
-	
-	public AhException(TYPE type,AhFragment fragment) {
-		this.type = type;
-	}
-	
-	public AhException(String string, TYPE type) {
-		super(string);
-		this.type = type;
-	}
 
-	public AhException(Exception ex, String message) {
-		super(message , ex);
-		//this.message = message;
-	}
-
-	public AhException(Exception ex, String message, TYPE type) {
-		super(message, ex);
+	public AhException(AhFragment from, String methodName, TYPE type) {
+		this.from = from;
 		this.type = type;
+		this.methodName = methodName;
 	}
 
 	public TYPE getType() {
 		return type;
 	}
+	
+	public AhFragment fromWho() {
+		return from;
+	}
+	
+	public String getMethodName() {
+		return methodName;
+	}
 
 	@Override
 	public String toString() {
-		String str = "";
-		if (super.getMessage() != null) {
-			str += " message : " + super.getMessage() + "";
+		if (super.getMessage() != null) { 
+			return "{ message : " + super.getMessage() + " }";
 		}
-		if (type != null) {
-			str += " type : " + this.type + "";
-		}
-		return " { "+ str + " }";
+		return "{ type : " + type + "," +
+				" from : " + from  + "," +
+				" method : " + methodName + " }";
 	}
 	
 	public enum TYPE {

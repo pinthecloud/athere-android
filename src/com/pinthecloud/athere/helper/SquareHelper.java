@@ -14,6 +14,7 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
@@ -53,10 +54,10 @@ public class SquareHelper {
 		this.squareTable = app.getSquareTable();
 	}
 
-	public List<Square> getSquareListSync(double latitude, double longitude) throws AhException {
+	public List<Square> getSquareListSync(final AhFragment frag, double latitude, double longitude) throws AhException {
 		
 		if (!AhApplication.isOnline()) {
-			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
 		
@@ -77,7 +78,7 @@ public class SquareHelper {
 				if ( exception == null) {
 					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
 					if (list == null) {
-						ExceptionManager.fireException(new AhException(exception, "getSquareList", AhException.TYPE.PARSING_ERROR));
+						ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.PARSING_ERROR));
 						return;
 					}
 					carrier.load(list);
@@ -85,7 +86,7 @@ public class SquareHelper {
 						lock.notify();
 					}
 				} else {
-					ExceptionManager.fireException(new AhException(exception, "getSquareListSync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -100,12 +101,12 @@ public class SquareHelper {
 		return carrier.getItem();
 	}
 
-	public Square createSquareSync(String name, double latitude, double longitude) throws AhException {
+	public Square createSquareSync(AhFragment frag, String name, double latitude, double longitude) throws AhException {
 		
 		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 
 		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
-			throw new AhException("createSquare NO Registration");
+			throw new AhException(frag, "createSquareSync", AhException.TYPE.GCM_REGISTRATION_FAIL);
 		}
 		Square square = new Square();
 
@@ -123,14 +124,14 @@ public class SquareHelper {
 		square.setMaleNum(maleNum);
 		square.setFemaleNum(femaleNum);
 
-		return this.createSquareSync(square);
+		return this.createSquareSync(frag, square);
 	}
 
 
-	public Square createSquareSync(Square square) throws AhException {
+	public Square createSquareSync(final AhFragment frag, Square square) throws AhException {
 		
 		if (!AhApplication.isOnline()) {
-			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
 		final AhCarrier<Square> carrier = new AhCarrier<Square>();
@@ -145,7 +146,7 @@ public class SquareHelper {
 						lock.notify();
 					}
 				} else {
-					ExceptionManager.fireException(new AhException(exception, "createSquareAsync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -165,10 +166,10 @@ public class SquareHelper {
 	/*
 	 *  Async Task Methods
 	 */
-	public void getSquareListAsync(double latitude, double longitude, final AhListCallback<Square> callback) throws AhException{
+	public void getSquareListAsync(final AhFragment frag, double latitude, double longitude, final AhListCallback<Square> callback) throws AhException{
 		
 		if (!AhApplication.isOnline()) {
-			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "getSquareListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 		
@@ -187,23 +188,23 @@ public class SquareHelper {
 				if (exception == null) {
 					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
 					if (list == null) {
-						ExceptionManager.fireException(new AhException(exception, "getSquareListAsync", AhException.TYPE.PARSING_ERROR));
+						ExceptionManager.fireException(new AhException(frag, "getSquareListAsync", AhException.TYPE.PARSING_ERROR));
 						return;
 					}
 					callback.onCompleted(list, list.size());
 				} else {
-					ExceptionManager.fireException(new AhException(exception, "getSquareListAsync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "getSquareListAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
 	}
 
 
-	public void createSquareAsync(String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
+	public void createSquareAsync(AhFragment frag, String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
 		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 
 		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
-			throw new AhException("createSquare NO Registration");
+			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
 		}
 
 		Square square = new Square();
@@ -221,14 +222,14 @@ public class SquareHelper {
 		square.setMaleNum(maleNum);
 		square.setFemaleNum(femaleNum);
 		
-		this.createSquareAsync(square, callback);
+		this.createSquareAsync(frag, square, callback);
 	}
 
 
-	public void createSquareAsync(Square square, final AhEntityCallback<Square> callback) throws AhException {
+	public void createSquareAsync(final AhFragment frag, Square square, final AhEntityCallback<Square> callback) throws AhException {
 		
 		if (!AhApplication.isOnline()) {
-			ExceptionManager.fireException(new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 		
@@ -239,7 +240,7 @@ public class SquareHelper {
 				if (exception == null) {
 					callback.onCompleted(entity);
 				} else {
-					ExceptionManager.fireException(new AhException(exception, "createSquareAsync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
