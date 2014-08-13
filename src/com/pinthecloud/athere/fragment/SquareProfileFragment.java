@@ -426,7 +426,7 @@ public class SquareProfileFragment extends AhFragment{
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
 					try {
-						String registrationId = userHelper.getRegistrationIdSync();
+						String registrationId = userHelper.getRegistrationIdSync(_thisFragment);
 						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 					} catch (AhException e) {
 						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
@@ -446,12 +446,12 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final User user = userHelper.getMyUserInfo(false);
-				String id = userHelper.enterSquareSync(user);
+				String id = userHelper.enterSquareSync(_thisFragment, user);
 				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 
 
 				// Get user list in the square and save it without me
-				List<User> userList = userHelper.getUserListSync(square.getId());
+				List<User> userList = userHelper.getUserListSync(_thisFragment, square.getId());
 				userDBHelper.addAllUsers(userList);
 				userDBHelper.deleteUser(id);
 
@@ -465,7 +465,7 @@ public class SquareProfileFragment extends AhFragment{
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.ENTER_SQUARE);
 				AhMessage message = messageBuilder.build();
-				messageHelper.sendMessageSync(message);
+				messageHelper.sendMessageSync(_thisFragment, message);
 
 				activity.runOnUiThread(new Runnable(){
 

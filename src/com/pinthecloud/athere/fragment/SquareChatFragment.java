@@ -116,7 +116,7 @@ public class SquareChatFragment extends AhFragment{
 				messageEditText.setText("");
 
 				// Send message to server
-				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 					@Override
 					public void onCompleted(AhMessage entity) {

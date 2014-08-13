@@ -145,7 +145,7 @@ public class HongkunTestFragment extends AhFragment {
 //						.build();
 //						messageHelper.sendMessageSync(message);
 //						Log(_thisFragment, "onCompleted");
-						throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
+//						throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
 					}
 				}).start();
 				

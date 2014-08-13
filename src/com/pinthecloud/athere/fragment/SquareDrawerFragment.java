@@ -27,22 +27,23 @@ import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.ExitSquareConsentDialog;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
 
-	private SquareDrawerFragmentCallbacks callbacks;
 	private DrawerLayout mDrawerLayout;
 	private View mFragmentView;
 
@@ -67,6 +68,8 @@ public class SquareDrawerFragment extends AhFragment {
 
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
+	private MessageDBHelper messageDBHelper;
+	private MessageHelper messageHelper;
 
 
 	@Override
@@ -74,6 +77,8 @@ public class SquareDrawerFragment extends AhFragment {
 		super.onCreate(savedInstanceState);
 		userDBHelper = app.getUserDBHelper();
 		userHelper = app.getUserHelper();
+		messageDBHelper = app.getMessageDBHelper();
+		messageHelper = app.getMessageHelper();
 	}
 
 	@Override
@@ -117,7 +122,7 @@ public class SquareDrawerFragment extends AhFragment {
 			public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
 				progressBar.setVisibility(View.VISIBLE);
 				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
-				userHelper.updateMyUserAsync(new AhEntityCallback<User>() {
+				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<User>() {
 
 					@Override
 					public void onCompleted(User entity) {
@@ -147,7 +152,48 @@ public class SquareDrawerFragment extends AhFragment {
 					@Override
 					public void doPositiveThing(Bundle bundle) {
 						progressBar.setVisibility(View.VISIBLE);
-						callbacks.exitSquare();
+
+						new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								User user = userHelper.getMyUserInfo(true);
+								userHelper.exitSquareSync(_thisFragment, user.getId());
+								userDBHelper.deleteAllUsers();
+								messageDBHelper.deleteAllMessages();
+								
+								String exitMessage = getResources().getString(R.string.exit_square_message);
+								String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+								AhMessage.Builder messageBuilder = new AhMessage.Builder();
+								messageBuilder.setContent(nickName + " : " + exitMessage)
+								.setSender(nickName)
+								.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+								.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+								.setType(AhMessage.TYPE.EXIT_SQUARE);
+								AhMessage message = messageBuilder.build();
+								messageHelper.sendMessageSync(_thisFragment, message);
+
+								activity.runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										progressBar.setVisibility(View.GONE);
+
+										pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+										pref.removePref(AhGlobalVariable.USER_ID_KEY);
+										pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+										pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+										pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+										pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+										pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+
+										Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+										startActivity(intent);
+										activity.finish();
+									}
+								});
+							}
+						}).start();
 					}
 
 					@Override
@@ -199,14 +245,6 @@ public class SquareDrawerFragment extends AhFragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		callbacks = (SquareDrawerFragmentCallbacks) activity;
-	}
-
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		callbacks = null;
 	}
 
 
@@ -274,10 +312,5 @@ public class SquareDrawerFragment extends AhFragment {
 			if (!user.isMale()) count++;
 		}
 		return count;
-	}
-
-
-	public interface SquareDrawerFragmentCallbacks {
-		public void exitSquare();
 	}
 }
