@@ -14,6 +14,7 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -46,6 +47,7 @@ public class AhApplication extends Application{
 	private static UserHelper userHelper;
 	private static SquareHelper squareHelper;
 	private static MessageHelper messageHelper;
+	private static VersionHelper versionHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -77,7 +79,7 @@ public class AhApplication extends Application{
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
-
+		versionHelper = new VersionHelper();
 
 	}
 
@@ -114,7 +116,9 @@ public class AhApplication extends Application{
 	public MessageHelper getMessageHelper() {
 		return messageHelper;
 	}
-
+	public VersionHelper getVersionHelper() {
+		return versionHelper;
+	}
 
 	/*
 	 * @return true, if the App is connected with Internet.

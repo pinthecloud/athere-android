@@ -5,12 +5,14 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.helper.VersionHelper;
 
 /**
  * 
@@ -20,15 +22,17 @@ import com.pinthecloud.athere.R;
  *  	to SquareListActivity   if AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY is false
  *  	to SquareActivity 		else
  */
-public class SplashActivity extends AhActivity {
+public class SplashActivity extends AhActivity implements Runnable{
 
 	private final int SPLASH_TIME = 300;
-
+	private VersionHelper versionHelper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+		
+		versionHelper = app.getVersionHelper();
 		
 		NotificationManager mNotificationManager =
 				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -46,19 +50,30 @@ public class SplashActivity extends AhActivity {
 		AhGlobalVariable.APP_NAME = getResources().getString(R.string.app_name);
 
 
-		/*
-		 * Exception for hongkun
-		 */
-		// Erase Later
+		//////////////////////////////////////////////////////////////
+		// Erase Later (Exception for hongkun)
+		//////////////////////////////////////////////////////////////
+		if (!isHongkunTest()) {
+			// Start Chupa Application
+			new AhThread(this).start();
+		}
+		
+		
+	}
+	
+	
+	
+	public boolean isHongkunTest() {
 		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
 		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
 		String httpAgent = System.getProperty("http.agent");
-		if ((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
+		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
 				|| note.equals(httpAgent)) 		// Note 2
-				|| myGal3.equals(httpAgent))	// Galaxy 3
-		{
-			new AlertDialog.Builder(this)
+				|| myGal3.equals(httpAgent)))	// Galaxy 3
+			return false;
+		
+		new AlertDialog.Builder(this)
 			.setTitle("Routing Dialog")
 			.setMessage("Want to Go to HongkunTest?")
 			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -69,66 +84,68 @@ public class SplashActivity extends AhActivity {
 				}
 			})
 			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) { 
-					/*
-					 * Show splash image and move to next page
-					 */
-					new Handler().postDelayed(new Runnable(){
-
-						@Override
-						public void run() {
-							/*
-							 * Move to next activity by user status
-							 */
-							boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
-							boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-
-							Intent intent = new Intent();
-							if (!isLoggedInUser){
-								// New User
-								intent.setClass(SplashActivity.this, BasicProfileActivity.class);
-							} else if(!isLooggedInSquare){
-								// Already logged in
-								intent.setClass(SplashActivity.this, SquareListActivity.class);
-							} else{
-								// Has entered a square
-								intent.setClass(SplashActivity.this, SquareActivity.class);
-							}
-							startActivity(intent);
-						}
-
-					}, SPLASH_TIME);
-					// Erase Later
+				public void onClick(DialogInterface dialog, int which) {
+					new AhThread(SplashActivity.this).start();
+					return;
 				}
 			})
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.show();
-		} else {
-			new Handler().postDelayed(new Runnable(){
+		return true;
+	}
 
+
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		double serverVer = versionHelper.getServerAppVersionSync(null);
+		double clientVer = versionHelper.getClientAppVersion();
+		if (serverVer > clientVer) {
+			SplashActivity.this.runOnUiThread(new Runnable() {
+				
 				@Override
 				public void run() {
-					/*
-					 * Move to next activity by user status
-					 */
-					boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
-					boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-
-					Intent intent = new Intent();
-					if (!isLoggedInUser){
-						// New User
-						intent.setClass(SplashActivity.this, BasicProfileActivity.class);
-					} else if(!isLooggedInSquare){
-						// Already logged in
-						intent.setClass(SplashActivity.this, SquareListActivity.class);
-					} else{
-						// Has entered a square
-						intent.setClass(SplashActivity.this, SquareActivity.class);
-					}
-					startActivity(intent);
+					// TODO Auto-generated method stub
+					new AlertDialog.Builder(SplashActivity.this)
+					.setTitle("Please Update your Application")
+					.setMessage("You need to update your Application")
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					        public void onClick(DialogInterface dialog, int whichButton) {
+					                /* User clicked OK so do some stuff */
+					                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pname:"+AhGlobalVariable.GOOGLE_STORE_APP_ID));
+					                SplashActivity.this.startActivity(intent);
+					        }
+					})
+					.setNegativeButton("Leave", new DialogInterface.OnClickListener() {
+					        public void onClick(DialogInterface dialog, int whichButton) {
+					        	android.os.Process.killProcess(android.os.Process.myPid());
+			                    System.exit(1);
+					        }
+					})
+					.show();
 				}
-
-			}, SPLASH_TIME);
+			});
+			return;
 		}
+		
+		/*
+		 * Move to next activity by user status
+		 */
+		boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
+		boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+
+		Intent intent = new Intent();
+		if (!isLoggedInUser){
+			// New User
+			intent.setClass(SplashActivity.this, BasicProfileActivity.class);
+		} else if(!isLooggedInSquare){
+			// Already logged in
+			intent.setClass(SplashActivity.this, SquareListActivity.class);
+		} else{
+			// Has entered a square
+			intent.setClass(SplashActivity.this, SquareActivity.class);
+		}
+		startActivity(intent);
 	}
 }

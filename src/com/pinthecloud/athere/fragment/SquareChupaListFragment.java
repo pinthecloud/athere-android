@@ -73,7 +73,6 @@ public class SquareChupaListFragment extends AhFragment{
 					if (user == null)
 						throw new AhException("No User exist Error");
 				}
-				Log(_thisFragment, "user before Goto ChupaChatFragment",user);
 				
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
 				intent.putExtra(AhGlobalVariable.USER_KEY, user);
@@ -151,7 +150,6 @@ public class SquareChupaListFragment extends AhFragment{
 
 
 	public void updateChupaList() {
-		Log(_thisFragment,"updateChupaList");
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		lastChupaCommunList.clear();
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));

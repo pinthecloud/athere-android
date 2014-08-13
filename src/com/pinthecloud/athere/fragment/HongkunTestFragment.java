@@ -1,5 +1,9 @@
 package com.pinthecloud.athere.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +12,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.view.AhButton;
@@ -128,21 +134,7 @@ public class HongkunTestFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				new AhThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-//						AhMessage message = new AhMessage.Builder()
-//						.setId("")
-//						.build();
-//						messageHelper.sendMessageSync(message);
-//						Log(_thisFragment, "onCompleted");
-//						throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
-					}
-				}).start();
-				
-				
+				final VersionHelper versionHelper = app.getVersionHelper();
 			}
 		});
 		

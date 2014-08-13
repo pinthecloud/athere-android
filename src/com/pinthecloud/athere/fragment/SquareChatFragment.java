@@ -31,7 +31,8 @@ public class SquareChatFragment extends AhFragment{
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
-
+	private AhMessage message;
+	
 	private Square square;
 	private MessageHelper messageHelper;
 
@@ -39,7 +40,6 @@ public class SquareChatFragment extends AhFragment{
 	public SquareChatFragment(Square square) {
 		super();
 		this.square = square;
-		Log(_thisFragment, "in SquareChat");
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class SquareChatFragment extends AhFragment{
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.TALK);
 
-				final AhMessage message = messageBuilder.build();
+				message = messageBuilder.build();
 				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
 				messageListAdapter.notifyDataSetChanged();
@@ -183,8 +183,10 @@ public class SquareChatFragment extends AhFragment{
 	public void handleException(AhException ex) {
 		super.handleException(ex);
 		Log(_thisFragment, "in SquareChatFrag : " + ex.toString());
-
-		//		message.setStatus(AhMessage.SENT);
-		//		messageListAdapter.notifyDataSetChanged();
+		if (message != null) {
+			message.setStatus(AhMessage.SENT);
+			messageListAdapter.notifyDataSetChanged();
+		}
+		
 	}
 }
