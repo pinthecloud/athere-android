@@ -54,7 +54,6 @@ public class SquareDrawerFragment extends AhFragment {
 	private TextView femaleNumText;
 	private Button exitButton;
 
-	private ImageView profileBlurImage;
 	private ImageView profileCircleImage;
 	private ImageView profileGenderImage;
 	private TextView profileNickNameText;
@@ -90,7 +89,6 @@ public class SquareDrawerFragment extends AhFragment {
 		profileSettingButton = (ImageButton) view.findViewById(R.id.square_drawer_frag_profile_setting_button);
 		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
 		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
-		profileBlurImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_blur_image);
 		profileCircleImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_circle_image);
 		profileGenderImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_gender_image);
 		profileNickNameText= (TextView) view.findViewById(R.id.square_drawer_frag_profile_nick_name_text);
@@ -219,13 +217,13 @@ public class SquareDrawerFragment extends AhFragment {
 		 */
 		Bitmap profileBitmap = null;
 		try {
-			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 		} catch (FileNotFoundException e) {
 			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
+			profileBitmap = BitmapUtil.cropRound(profileBitmap);
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
 		}
-		profileBlurImage.setImageBitmap(BitmapUtil.blur(context, profileBitmap, 25));
-		profileCircleImage.setImageBitmap(BitmapUtil.cropRound(profileBitmap));
+		profileCircleImage.setImageBitmap(profileBitmap);
 		if(user.isMale()){
 			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
 		} else{

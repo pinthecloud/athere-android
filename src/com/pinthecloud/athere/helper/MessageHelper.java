@@ -12,6 +12,7 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhException;
@@ -88,6 +89,8 @@ public class MessageHelper {
 	}
 
 	public void sendMessageAsync(AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
+		Log.d(AhGlobalVariable.LOG_TAG, "MessageHelper sendMessageAsync");
+
 		JsonObject jo = new JsonObject();
 		jo.addProperty("type", message.getType());
 		jo.addProperty("content", message.getContent());
@@ -104,9 +107,13 @@ public class MessageHelper {
 		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
 
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
+			public void onCompleted(JsonElement json, Exception e,
 					ServiceFilterResponse response) {
-				callback.onCompleted(null);
+				if(e == null){
+					callback.onCompleted(null);
+				} else {
+					throw new AhException(e, "sendMessageAsync");
+				}
 			}
 		});
 	}
@@ -115,12 +122,12 @@ public class MessageHelper {
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
 
 	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
-//	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
+	//	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 
 	public void setMessageHandler(AhMessage.TYPE type, AhEntityCallback<AhMessage> callback){
 		map.put(type.toString(), callback);
 	}
-	
+
 	public void setMessageHandler(AhEntityCallback<AhMessage> callback){
 		map.put(MESSAGE_RECEIVED, callback);
 	}
@@ -131,7 +138,7 @@ public class MessageHelper {
 			callback.onCompleted(message);
 		else 
 			Log.e("ERROR","message.getType() :" + message.getType());
-		
+
 		callback = map.get(MESSAGE_RECEIVED);
 		if(callback != null)
 			callback.onCompleted(message);

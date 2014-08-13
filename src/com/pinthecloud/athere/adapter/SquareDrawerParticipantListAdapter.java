@@ -69,7 +69,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			}else{
 				isMale.setImageResource(R.drawable.sidebar_member_gender_w);
 			}
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
+			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfileCirclePic()));
 			profilePic.setOnClickListener(new OnClickListener() {
 
 				@Override

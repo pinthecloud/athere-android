@@ -10,6 +10,7 @@
     <string name="logo">Logo</string>
     <string name="profile">Profile</string>
     <string name="profile_image">Profile Image</string>
+    <string name="blur_image">Blur Image</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="on">On</string>

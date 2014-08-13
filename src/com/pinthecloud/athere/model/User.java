@@ -15,6 +15,8 @@ public class User implements Parcelable{
 	private String nickName;
 	@com.google.gson.annotations.SerializedName("profilePic")
 	private String profilePic;
+	@com.google.gson.annotations.SerializedName("profileCirclePic")
+	private String profileCirclePic;
 	@com.google.gson.annotations.SerializedName("mobileId")
 	private String mobileId = AhGlobalVariable.ANDROID;
 	@com.google.gson.annotations.SerializedName("registrationId")
@@ -27,8 +29,8 @@ public class User implements Parcelable{
 	private int age;
 	@com.google.gson.annotations.SerializedName("squareId")
 	private String squareId;
-	@com.google.gson.annotations.SerializedName("chupaEnable")
-	private boolean chupaEnable;
+	@com.google.gson.annotations.SerializedName("isChupaEnable")
+	private boolean isChupaEnable;
 
 	public static final Parcelable.Creator<User> CREATOR = new Creator<User>(){
 		public User createFromParcel(Parcel in){
@@ -62,6 +64,12 @@ public class User implements Parcelable{
 	}
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
+	}
+	public String getProfileCirclePic() {
+		return profileCirclePic;
+	}
+	public void setProfileCirclePic(String profileCirclePic) {
+		this.profileCirclePic = profileCirclePic;
 	}
 	public String getMobileId() {
 		return mobileId;
@@ -100,14 +108,13 @@ public class User implements Parcelable{
 		this.squareId = squareId;
 	}
 	public boolean isChupaEnable() {
-		return chupaEnable;
+		return isChupaEnable;
 	}
-	public void setChupaEnable(boolean chupaEnable) {
-		this.chupaEnable = chupaEnable;
+	public void setChupaEnable(boolean isChupaEnable) {
+		this.isChupaEnable = isChupaEnable;
 	}
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	@Override
@@ -115,25 +122,27 @@ public class User implements Parcelable{
 		dest.writeString(id);
 		dest.writeString(nickName);
 		dest.writeString(profilePic);
+		dest.writeString(profileCirclePic);
 		dest.writeString(mobileId);	
 		dest.writeString(registrationId);	
 		dest.writeInt(isMale? 1 : 0);	
 		dest.writeInt(companyNum);	
 		dest.writeInt(age);	
 		dest.writeString(squareId);
-		dest.writeInt(chupaEnable? 1 : 0);
+		dest.writeInt(isChupaEnable? 1 : 0);
 	}
 	public void readToParcel(Parcel in){
 		id = in.readString();
 		nickName = in.readString();
 		profilePic = in.readString();
+		profileCirclePic = in.readString();
 		mobileId = in.readString();
 		registrationId = in.readString();
 		isMale = in.readInt() == 1;
 		companyNum = in.readInt();
 		age = in.readInt();
 		squareId = in.readString();
-		chupaEnable = in.readInt() == 1;
+		isChupaEnable = in.readInt() == 1;
 	}
 
 	public static User addUserTest(){
@@ -141,13 +150,14 @@ public class User implements Parcelable{
 		user.id = getRandomString();
 		user.nickName = getRandomString();
 		user.profilePic = getRandomString();
+		user.profileCirclePic = getRandomString();
 		user.mobileId = getRandomString();
 		user.registrationId = getRandomString();
 		user.isMale = getRandomInt() < 20;
 		user.companyNum = getRandomInt();
 		user.age = getRandomInt();
 		user.squareId = getRandomString();
-		user.chupaEnable = getRandomInt() < 20;
+		user.isChupaEnable = getRandomInt() < 20;
 		return user;
 	}
 
@@ -178,6 +188,7 @@ public class User implements Parcelable{
 				" isMale : "+this.isMale + " \n "+
 				" companyNum : "+this.companyNum + " \n "+
 				" age : "+this.age + " \n "+
+				" isChupaEnable : "+this.isChupaEnable + " \n "+
 				" squareId : "+this.squareId + " }";
 	}
 
@@ -186,12 +197,14 @@ public class User implements Parcelable{
 
 		jo.addProperty("nickName", this.nickName);
 		jo.addProperty("profilePic", this.profilePic);
+		jo.addProperty("profileCirclePic", this.profileCirclePic);
 		jo.addProperty("mobileId", this.mobileId);
 		jo.addProperty("registrationId", this.registrationId);
 		jo.addProperty("isMale", this.isMale);
 		jo.addProperty("companyNum", this.companyNum);
 		jo.addProperty("age", this.age);
 		jo.addProperty("squareId", this.squareId);
+		jo.addProperty("isChupaEnable", this.isChupaEnable);
 
 		return jo;
 	}

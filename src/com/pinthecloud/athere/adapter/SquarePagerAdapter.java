@@ -8,11 +8,13 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
 import com.pinthecloud.athere.fragment.SquareChupaListFragment;
+import com.pinthecloud.athere.interfaces.PagerSlidingTabStrip.IconTabProvider;
 import com.pinthecloud.athere.model.Square;
 
-public class SquarePagerAdapter extends FragmentStatePagerAdapter{
+public class SquarePagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider{
 
 	private String[] titles;
+	private int[] titleIcons = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
 	private SquareChatFragment squareChatFragment;
 	private SquareChupaListFragment squareChupaListFragment;
 
@@ -24,6 +26,16 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter{
 		squareChupaListFragment = new SquareChupaListFragment();
 	}
 
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return this.titles[position];
+	}
+
+	@Override
+	public int getPageIconResId(int position) {
+		return this.titleIcons[position];
+	}
+	
 	@Override
 	public Fragment getItem(int position) {
 		Fragment fragment = null;
@@ -40,13 +52,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter{
 	public int getCount() {
 		return this.titles.length;
 	}
-
-
-	@Override
-	public CharSequence getPageTitle(int position) {
-		return this.titles[position];
-	}
-
+	
 	@Override
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();

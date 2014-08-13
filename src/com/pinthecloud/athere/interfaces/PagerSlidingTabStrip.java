@@ -41,6 +41,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
@@ -207,7 +208,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			} else {
 				addTextTab(i, pager.getAdapter().getPageTitle(i).toString());
 			}
-
 		}
 
 		updateTabStyles();
@@ -229,7 +229,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 				scrollToChild(currentPosition, 0);
 			}
 		});
-
 	}
 
 	private void addTextTab(final int position, String title) {
@@ -248,7 +247,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		tab.setImageResource(resId);
 
 		addTab(position, tab);
-
 	}
 
 	private void addTab(final int position, View tab) {
@@ -302,8 +300,9 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			if (v instanceof TextView) {
 				TextView tab = (TextView) v;
 				tab.setTextColor(position == i ? tabTextColor : tabDeactivateTextColor); 
-			} else {
-				v.setSelected(position == i ? true : false);
+			} else if (v instanceof ImageButton){
+				ImageButton tab = (ImageButton) v;
+				tab.setSelected(position == i ? true : false);
 			}
 		}
 	}

@@ -21,7 +21,6 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -33,9 +32,7 @@ public class SquareChatFragment extends AhFragment{
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
 
 	private Square square;
-
 	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
 
 
 	public SquareChatFragment(Square square) {
@@ -47,7 +44,6 @@ public class SquareChatFragment extends AhFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
 	}
 
 
@@ -156,20 +152,20 @@ public class SquareChatFragment extends AhFragment{
 			}
 		});
 
-		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE)) {
-			final List<AhMessage> messageListFromBuffer = messageDBHelper.popAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE);
-			activity.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					for (AhMessage message : messageListFromBuffer) {
-						messageList.add(message);
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
-					}
-				}
-			});
-		}
+		//		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE)) {
+		//			final List<AhMessage> messageListFromBuffer = messageDBHelper.popAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE);
+		//			activity.runOnUiThread(new Runnable() {
+		//
+		//				@Override
+		//				public void run() {
+		//					for (AhMessage message : messageListFromBuffer) {
+		//						messageList.add(message);
+		//						messageListAdapter.notifyDataSetChanged();
+		//						messageListView.setSelection(messageListView.getCount() - 1);
+		//					}
+		//				}
+		//			});
+		//		}
 
 		return view;
 	}

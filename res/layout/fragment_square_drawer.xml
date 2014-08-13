@@ -93,7 +93,7 @@
         android:layout_height="@dimen/square_drawer_profile_blur_height"
         android:layout_below="@+id/square_drawer_frag_toggle_bar_layout"
         android:alpha="0.2"
-        android:contentDescription="@string/profile_image"
+        android:contentDescription="@string/blur_image"
         android:scaleType="fitXY" />
 
     <ImageButton

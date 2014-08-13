@@ -5,7 +5,6 @@ import java.util.List;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,8 +120,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}else{
 					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.chat_gender_w, 0);	
 				}
-				Bitmap circleProfile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(user.getProfilePic()));
-				profileImage.setImageBitmap(circleProfile);
+				profileImage.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfileCirclePic()));
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {
 

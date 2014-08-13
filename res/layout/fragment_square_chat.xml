@@ -14,7 +14,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/square_chat_height"
+        android:layout_height="@dimen/square_chat_max_height"
         android:alpha="0.9"
         android:gravity="center"
         android:orientation="horizontal" >
