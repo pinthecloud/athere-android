@@ -22,7 +22,7 @@ import com.pinthecloud.athere.R;
  */
 public class SplashActivity extends AhActivity {
 
-	private final int SPLASH_TIME = 500;
+	private final int SPLASH_TIME = 300;
 
 	
 	@Override

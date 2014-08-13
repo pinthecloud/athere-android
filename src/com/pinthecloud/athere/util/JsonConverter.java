@@ -26,9 +26,8 @@ public class JsonConverter {
 			int femaleNum = jo.get("femalenum").getAsInt();
 			int distance = jo.get("distance").getAsInt();
 			boolean isAdmin = jo.get("isAdmin").getAsBoolean();
-			boolean isCode = jo.get("isCode").getAsBoolean();
 			String code = "";
-			if(isCode){
+			if(isAdmin){
 				code = jo.get("code").getAsString();
 			}
 
@@ -68,6 +67,7 @@ public class JsonConverter {
 			user.setCompanyNum(jo.get("companyNum").getAsInt());
 			user.setAge(jo.get("age").getAsInt());
 			user.setSquareId(jo.get("squareId").getAsString());
+			user.setChupaEnable(jo.get("isChupaEnable").getAsBoolean());
 
 			list.add(user);
 		}

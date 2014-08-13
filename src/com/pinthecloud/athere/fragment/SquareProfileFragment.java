@@ -41,6 +41,7 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.CameraPreview;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
@@ -123,14 +124,11 @@ public class SquareProfileFragment extends AhFragment{
 					profilePictureView.setImageBitmap(pictureBitmap);
 
 					// Crop picture in round
-					// Blur picture
-					//					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
-					//					Bitmap pictureBlurBitmap = BitmapUtil.blur(context, pictureBitmap, 25);
+					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
 
 					// Save pictures to internal storage
 					FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
-					//					FileUtil.saveImageToInternalStorage(app, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
-					//					FileUtil.saveImageToInternalStorage(app, pictureBlurBitmap, AhGlobalVariable.PROFILE_PICTURE_BLUR_NAME);
+					FileUtil.saveImageToInternalStorage(app, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
@@ -464,15 +462,21 @@ public class SquareProfileFragment extends AhFragment{
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.ENTER_SQUARE);
 				AhMessage message = messageBuilder.build();
-				messageHelper.sendMessageSync(message);
-
+				messageHelper.sendMessageAsync(message, new AhEntityCallback<AhMessage>() {
+					
+					@Override
+					public void onCompleted(AhMessage entity) {
+						// Do nothing
+					}
+				});
+				
 				activity.runOnUiThread(new Runnable(){
 
 					@Override
 					public void run() {
 						// Dimiss progress bar
 						progressBar.setVisibility(View.GONE);
-
+						
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);

@@ -263,19 +263,24 @@ public class UserHelper {
 
 	public User getMyUserInfo(boolean hasId) {
 		Bitmap pictureBitmap = null;
+		Bitmap pictureCircleBitmap = null;
 		try {
 			pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+			pictureCircleBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 		} catch (FileNotFoundException e) {
 			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
+			pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
 			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
 		}
 		String profilePic = BitmapUtil.convertToString(pictureBitmap);
+		String profileCirclePic = BitmapUtil.convertToString(pictureCircleBitmap);
 
 		User user = new User();
 		if(hasId)
 			user.setId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 		user.setNickName(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 		user.setProfilePic(profilePic);
+		user.setProfileCirclePic(profileCirclePic);
 		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
 		user.setCompanyNum(pref.getInt(AhGlobalVariable.COMPANY_NUMBER_KEY));
 		user.setAge(pref.getInt(AhGlobalVariable.AGE_KEY));
