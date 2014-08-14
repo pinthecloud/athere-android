@@ -1,0 +1,107 @@
+package com.pinthecloud.athere.util;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.fragment.AhFragment;
+
+
+/**
+ * 
+ * [ Usage ]
+	AsyncChainer.asyncChain(_thisFragment, new Chainable() {
+		
+		@Override
+		public void doNext(final AhFragment frag) {
+			// TODO Auto-generated method stub
+			messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+				
+				@Override
+				public void onCompleted(AhMessage entity) {
+					// TODO Auto-generated method stub
+					Log(_thisFragment, "on Complete in First" + __id);
+					__id = __id + " after 1";
+				}
+			});
+		}
+	}, new Chainable() {
+		
+		@Override
+		public void doNext(final AhFragment frag) {
+			// TODO Auto-generated method stub
+			messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+				
+				@Override
+				public void onCompleted(AhMessage entity) {
+					// TODO Auto-generated method stub
+					Log(_thisFragment, "on Complete in Second : " + __id);
+					__id = __id + " after 2";
+					try{
+						Thread.sleep(100);
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+	}, new Chainable() {
+		
+		@Override
+		public void doNext(final AhFragment frag) {
+			// TODO Auto-generated method stub
+			messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+				
+				@Override
+				public void onCompleted(AhMessage entity) {
+					// TODO Auto-generated method stub
+					Log(_thisFragment, "on Complete in Third : " + __id);
+				}
+			});
+		}
+	});
+
+ *
+ */
+
+
+
+
+public class AsyncChainer {
+
+	private static final int NUM_OF_QUEUE = 10;
+	private static Map<String, Queue<Chainable>> mapQueue;
+	static {
+		mapQueue = new HashMap<String, Queue<Chainable>>();
+	}
+	
+	public static void asyncChain(AhFragment frag, Chainable...chains) {
+		Queue<Chainable> queue = mapQueue.get(frag.getClass().getName());
+		if (queue == null) {
+			mapQueue.put(frag.getClass().getName(), new ArrayBlockingQueue<Chainable>(NUM_OF_QUEUE));
+			queue = mapQueue.get(frag.getClass().getName());
+		}
+		for(Chainable c : chains) {
+			queue.add(c);
+		}
+		AsyncChainer.notifyNext(frag);
+	}
+	
+	public static void notifyNext(AhFragment frag) {
+		Queue<Chainable> queue = mapQueue.get(frag.getClass().getName());
+		if (queue == null) {
+			throw new AhException("No such Chainable");
+		}
+		if (!queue.isEmpty()) {
+			Chainable c = queue.poll();
+			c.doNext(frag);
+		}
+	}
+	
+	
+	public static interface Chainable {
+		public void doNext(AhFragment frag);
+	}
+}

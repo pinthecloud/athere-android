@@ -15,11 +15,15 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -38,7 +42,7 @@ public class AhApplication extends Application{
 	private final String APP_URL = "https://athere.azure-mobile.net/";
 	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
 	
-	private final String FORCED_LOGOUT = "forced_logout";
+	private static final String FORCED_LOGOUT = "forced_logout";
 
 	// Application
 	private static AhApplication app;
@@ -137,7 +141,12 @@ public class AhApplication extends Application{
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
 	
-	public void forcedLogoutSync () {
+	public static void forcedLogoutSync (final AhFragment frag) {
+		
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
 		
 		JsonObject jo = new JsonObject();
 		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
@@ -145,6 +154,19 @@ public class AhApplication extends Application{
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
+		
+		String exitMessage = app.getResources().getString(R.string.exit_square_message);
+		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+		AhMessage.Builder messageBuilder = new AhMessage.Builder();
+		messageBuilder.setContent(nickName + " : " + exitMessage)
+		.setSender(nickName)
+		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+		.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+		.setType(AhMessage.TYPE.EXIT_SQUARE);
+		final AhMessage message = messageBuilder.build();
+		
+		
+		
 		mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 			
 			@Override
@@ -152,6 +174,15 @@ public class AhApplication extends Application{
 					ServiceFilterResponse arg2) {
 				// TODO Auto-generated method stub
 				
+				messageHelper.sendMessageSync(frag, message);
+				
+				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+				pref.removePref(AhGlobalVariable.USER_ID_KEY);
+				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
 			}
 		});
 	}

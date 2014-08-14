@@ -19,6 +19,7 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.util.AsyncChainer;
 
 public class MessageHelper {
 
@@ -123,8 +124,10 @@ public class MessageHelper {
 			@Override
 			public void onCompleted(JsonElement json, Exception e,
 					ServiceFilterResponse response) {
-				if (e == null)
+				if (e == null) {
 					callback.onCompleted(null);
+					AsyncChainer.notifyNext(frag);
+				}
 				else
 					ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.SERVER_ERROR));
 			}

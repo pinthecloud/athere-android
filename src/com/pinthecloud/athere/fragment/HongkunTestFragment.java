@@ -1,9 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,15 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.helper.VersionHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.view.AhButton;
 
 /**
@@ -134,7 +132,98 @@ public class HongkunTestFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				final VersionHelper versionHelper = app.getVersionHelper();
+				final AhMessage message = new AhMessage.Builder()
+						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+						.setReceiverId("A9320D41-D348-4A11-A6ED-41174EF6FB11")
+						.setType(AhMessage.TYPE.TALK)
+						.build();
+				
+//				new AsyncChainer(new Chainable(){
+//
+//					@Override
+//					public void doNext() {
+//						// TODO Auto-generated method stub
+//						messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+//							
+//							@Override
+//							public void onCompleted(AhMessage entity) {
+//								// TODO Auto-generated method stub
+//								Log(_thisFragment, "on Complete in First");
+//								
+//							}
+//						});
+//					}
+//					
+//					
+//				}, new Chainable() {
+//					
+//					@Override
+//					public void doNext() {
+//						// TODO Auto-generated method stub
+//						messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+//							
+//							@Override
+//							public void onCompleted(AhMessage entity) {
+//								// TODO Auto-generated method stub
+//								Log(_thisFragment, "on Complete in Second");
+//								doNext();
+//							}
+//						});
+//					}
+//					
+//				}).start();
+				
+				AsyncChainer.asyncChain(_thisFragment, new Chainable() {
+					
+					@Override
+					public void doNext(final AhFragment frag) {
+						// TODO Auto-generated method stub
+						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+							
+							@Override
+							public void onCompleted(AhMessage entity) {
+								// TODO Auto-generated method stub
+								Log(_thisFragment, "on Complete in First" + __id);
+								__id = __id + " after 1";
+							}
+						});
+					}
+				}, new Chainable() {
+					
+					@Override
+					public void doNext(final AhFragment frag) {
+						// TODO Auto-generated method stub
+						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+							
+							@Override
+							public void onCompleted(AhMessage entity) {
+								// TODO Auto-generated method stub
+								Log(_thisFragment, "on Complete in Second : " + __id);
+								__id = __id + " after 2";
+								try{
+									Thread.sleep(100);
+								} catch(Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+					}
+				}, new Chainable() {
+					
+					@Override
+					public void doNext(final AhFragment frag) {
+						// TODO Auto-generated method stub
+						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+							
+							@Override
+							public void onCompleted(AhMessage entity) {
+								// TODO Auto-generated method stub
+								Log(_thisFragment, "on Complete in Third : " + __id);
+							}
+						});
+					}
+				});
 			}
 		});
 		
@@ -143,6 +232,11 @@ public class HongkunTestFragment extends AhFragment {
 		return view;
 	}
 	
+	@Override
+	public void handleException(AhException ex) {
+		// TODO Auto-generated method stub
+		Log(_thisFragment, "in handle Hongkunyoo");
+	}
 
 	//	public void addItem01(View view) {
 	//		
