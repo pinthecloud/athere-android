@@ -8,8 +8,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -32,6 +37,8 @@ public class AhApplication extends Application{
 	// Windows Azure Mobile Service Keys
 	private final String APP_URL = "https://athere.azure-mobile.net/";
 	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	
+	private final String FORCED_LOGOUT = "forced_logout";
 
 	// Application
 	private static AhApplication app;
@@ -128,5 +135,24 @@ public class AhApplication extends Application{
 				(ConnectivityManager)app.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+	}
+	
+	public void forcedLogoutSync () {
+		
+		JsonObject jo = new JsonObject();
+		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
+		jo.addProperty("registrationId", pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
+
+		Gson g = new Gson();
+		JsonElement json = g.fromJson(jo, JsonElement.class);
+		mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
+			
+			@Override
+			public void onCompleted(JsonElement arg0, Exception arg1,
+					ServiceFilterResponse arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 }
