@@ -158,6 +158,7 @@ public class SquareDrawerFragment extends AhFragment {
 							public void run() {
 								User user = userHelper.getMyUserInfo(true);
 								userHelper.exitSquareSync(_thisFragment, user.getId());
+								userHelper.unRegisterGcmSync(_thisFragment);
 								userDBHelper.deleteAllUsers();
 								messageDBHelper.deleteAllMessages();
 

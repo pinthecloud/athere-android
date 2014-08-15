@@ -119,10 +119,7 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set sent and received chupas to list view 
 		 */
-		String chupaCommunId = new AhMessage.Builder()
-		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-		.setReceiverId((otherUser.getId()))
-		.build().getChupaCommunId();
+		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 
 		if(chupaCommunId == null || "".equals(chupaCommunId))
 			throw new AhException("No chupaCommunId");

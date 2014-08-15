@@ -1,16 +1,14 @@
 package com.pinthecloud.athere.helper;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
+import java.util.List;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
@@ -18,6 +16,8 @@ import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AppVersion;
+import com.pinthecloud.athere.util.AsyncChainer;
 
 public class VersionHelper {
 	
@@ -25,49 +25,51 @@ public class VersionHelper {
 	private static final String GET_APP_VERSION = "get_app_version";
 	private PreferenceHelper pref;
 	private MobileServiceClient mClient;
+	private MobileServiceTable<AppVersion> appVersionTable;
 	private Object lock;
+	
+	public enum TYPE {
+		MANDATORY,
+		OPTIONAL
+	}
 	
 	public VersionHelper() {
 		AhApplication app = AhApplication.getInstance();
 		pref = app.getPref();
 		mClient = app.getmClient();
 		lock = app.getLock();
+		appVersionTable = mClient.getTable(AppVersion.class);
+				
 	}
 	
-	public double getServerAppVersionSync(final AhFragment frag) {
+	public AppVersion getServerAppVersionSync(final AhFragment frag) {
 		
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return 0;
+			return null;
 		}
 
-		final AhCarrier<Double> carrier = new AhCarrier<Double>();
+		final AhCarrier<AppVersion> carrier = new AhCarrier<AppVersion>();
 		
-		mClient.invokeApi(GET_APP_VERSION, new ApiJsonOperationCallback() {
+		appVersionTable.select("").execute(new TableQueryCallback<AppVersion>() {
 			
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse arg2) {
+			public void onCompleted(List<AppVersion> list, int count, Exception exception,
+					ServiceFilterResponse response) {
 				// TODO Auto-generated method stub
 				if(exception == null){
-					JsonObject jo = json.getAsJsonObject();
-					if (jo != null) {
-						JsonElement je = jo.get("version");
-						if (je != null) {
-							double version = je.getAsDouble();
-							carrier.load(version);
-						} else {
-							ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.PARSING_ERROR));
-						}
+					if (list.size() == 1) {
+						AppVersion appVersion = list.get(0);
+						carrier.load(appVersion);
 					} else {
-						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.PARSING_ERROR));
+						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
 					}
 					
 					synchronized (lock) {
 						lock.notify();
 					}
 				} else {
-					carrier.load(0.0);
+					carrier.load(null);
 					ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
@@ -83,31 +85,25 @@ public class VersionHelper {
 		return carrier.getItem();
 	}
 	
-public void getServerAppVersionAsync(final AhFragment frag, final AhEntityCallback<Double> callback) {
+	public void getServerAppVersionAsync(final AhFragment frag, final AhEntityCallback<AppVersion> callback) {
 		
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 		
-		mClient.invokeApi(GET_APP_VERSION, new ApiJsonOperationCallback() {
+		appVersionTable.select("*").execute(new TableQueryCallback<AppVersion>() {
 			
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse arg2) {
+			public void onCompleted(List<AppVersion> list, int count, Exception exception,
+					ServiceFilterResponse response) {
 				// TODO Auto-generated method stub
 				if(exception == null){
-					JsonObject jo = json.getAsJsonObject();
-					if (jo != null) {
-						JsonElement je = jo.get("version");
-						if (je != null) {
-							double version = je.getAsDouble();
-							callback.onCompleted(version);
-						} else {
-							ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.PARSING_ERROR));
-						}
+					if (list.size() == 1) {
+						callback.onCompleted(list.get(0));
+						AsyncChainer.notifyNext(frag);
 					} else {
-						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.PARSING_ERROR));
+						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
 					}
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));

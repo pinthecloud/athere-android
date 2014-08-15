@@ -15,7 +15,13 @@ public class ExceptionManager {
 	}
 	
 	public static void fireException(AhException ex) {
-		Handler handler = map.get(ex.fromWho().getClass().getName());
+		Class<?> clazz = null;
+		if (ex.fromWho() == null) {
+			clazz = AhFragment.class;
+		} else {
+			clazz = ex.fromWho().getClass();
+		}
+		Handler handler = map.get(clazz.getName());
 		if (handler != null)
 			handler.handleException(ex);
 	}

@@ -166,7 +166,6 @@ public class AhApplication extends Application{
 		final AhMessage message = messageBuilder.build();
 		
 		
-		
 		mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 			
 			@Override
@@ -178,6 +177,7 @@ public class AhApplication extends Application{
 				
 				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 				pref.removePref(AhGlobalVariable.USER_ID_KEY);
+				pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
 				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
 				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);

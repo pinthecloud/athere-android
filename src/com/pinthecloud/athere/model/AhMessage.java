@@ -186,6 +186,14 @@ public class AhMessage implements Parcelable {
 		return (type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString()) 
 				|| type.equals(TYPE.UPDATE_USER_INFO.toString()));
 	}
+	
+	public static String buildChupaCommunId(String id0, String id1) {
+		if (id0.compareTo(id1) > 0) {
+			return  id0 + id1;
+		} else {
+			return id1 + id0;
+		}
+	}
 
 	private static int count = 0;
 	public static AhMessage buildMessage(String type){

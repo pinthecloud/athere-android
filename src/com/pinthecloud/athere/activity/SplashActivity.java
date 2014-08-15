@@ -13,6 +13,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.VersionHelper;
+import com.pinthecloud.athere.model.AppVersion;
 
 /**
  * 
@@ -99,9 +100,9 @@ public class SplashActivity extends AhActivity implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		double serverVer = versionHelper.getServerAppVersionSync(null);
+		final AppVersion serverVer = versionHelper.getServerAppVersionSync(null);
 		double clientVer = versionHelper.getClientAppVersion();
-		if (serverVer > clientVer) {
+		if (serverVer.getVersion() > clientVer) {
 			SplashActivity.this.runOnUiThread(new Runnable() {
 				
 				@Override
@@ -117,10 +118,14 @@ public class SplashActivity extends AhActivity implements Runnable{
 					                SplashActivity.this.startActivity(intent);
 					        }
 					})
-					.setNegativeButton("Leave", new DialogInterface.OnClickListener() {
+					.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
 					        public void onClick(DialogInterface dialog, int whichButton) {
-					        	android.os.Process.killProcess(android.os.Process.myPid());
-			                    System.exit(1);
+					        	if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
+					        		android.os.Process.killProcess(android.os.Process.myPid());
+				                    System.exit(1);
+					        	} else {
+					        		goToNextActivity();
+					        	}
 					        }
 					})
 					.show();
@@ -129,6 +134,11 @@ public class SplashActivity extends AhActivity implements Runnable{
 			return;
 		}
 		
+		goToNextActivity();
+		
+	}
+	
+	public void goToNextActivity() {
 		/*
 		 * Move to next activity by user status
 		 */

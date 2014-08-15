@@ -26,6 +26,7 @@ import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
@@ -104,6 +105,7 @@ public class UserHelper {
 			public void onCompleted(Exception e, ServiceFilterResponse response) {
 				if (e == null) {
 					callback.onCompleted(true);
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
 				}
@@ -124,6 +126,7 @@ public class UserHelper {
 			public void onCompleted(User entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
 					callback.onCompleted(entity.getId());
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
 				}
@@ -182,6 +185,7 @@ public class UserHelper {
 					ServiceFilterResponse reponse) {
 				if (exception == null) {
 					callback.onCompleted(result, count);
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.SERVER_ERROR));
 				}
@@ -240,6 +244,7 @@ public class UserHelper {
 					ServiceFilterResponse reponse) {
 				if (exception == null && result.size() == 1) {
 					callback.onCompleted(result.get(0));
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "getUserAsync", AhException.TYPE.SERVER_ERROR));
 				}
@@ -302,6 +307,7 @@ public class UserHelper {
 					ServiceFilterResponse response) {
 				if (exception == null) {
 					callback.onCompleted(entity);
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.SERVER_ERROR));
 				}
@@ -361,19 +367,21 @@ public class UserHelper {
 		return registrationId;
 	}
 
-	public String UnRegistrationIdSync() {
+	public boolean unRegisterGcmSync(final AhFragment frag) {
 
-		//		if (!AhApplication.isOnline()) throw new AhException(AhException.TYPE.INTERNET_NOT_CONNECTED);
-		//		
-		//		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
-		//		String registrationId = "";
-		//		try {
-		//			registrationId = gcm.register(GCM_SENDER_ID);
-		//		} catch (IOException e) {
-		//			throw new AhException(e, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL);
-		//		}
-		//		return registrationId;
-		return null;
+		if (!AhApplication.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "UnRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return false;
+		}
+		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
+		
+		try {
+			gcm.unregister();
+		} catch (IOException e) {
+			ExceptionManager.fireException(new AhException(frag, "UnRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+			return false;
+		}
+		return true;
 	}
 
 

@@ -8,6 +8,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
@@ -16,6 +24,7 @@ import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.AsyncChainer;
@@ -44,6 +53,8 @@ public class HongkunTestFragment extends AhFragment {
 	String __id = "";
 	ImageView img;
 	AhButton myBtn;
+	MobileServiceClient mClient;
+	
 
 	public static final String SENDER_ID = "838051405989";
 
@@ -59,6 +70,7 @@ public class HongkunTestFragment extends AhFragment {
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
 		messageDB = app.getMessageDBHelper();
+		mClient = app.getmClient();
 		
 	}
 
@@ -132,96 +144,27 @@ public class HongkunTestFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				final AhMessage message = new AhMessage.Builder()
-						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
-						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-						.setReceiverId("A9320D41-D348-4A11-A6ED-41174EF6FB11")
-						.setType(AhMessage.TYPE.TALK)
-						.build();
+//				final AhMessage message = new AhMessage.Builder()
+//						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+//						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+//						.setReceiverId("A9320D41-D348-4A11-A6ED-41174EF6FB11")
+//						.setType(AhMessage.TYPE.TALK)
+//						.build();
 				
-//				new AsyncChainer(new Chainable(){
-//
-//					@Override
-//					public void doNext() {
-//						// TODO Auto-generated method stub
-//						messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-//							
-//							@Override
-//							public void onCompleted(AhMessage entity) {
-//								// TODO Auto-generated method stub
-//								Log(_thisFragment, "on Complete in First");
-//								
-//							}
-//						});
-//					}
-//					
-//					
-//				}, new Chainable() {
-//					
-//					@Override
-//					public void doNext() {
-//						// TODO Auto-generated method stub
-//						messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-//							
-//							@Override
-//							public void onCompleted(AhMessage entity) {
-//								// TODO Auto-generated method stub
-//								Log(_thisFragment, "on Complete in Second");
-//								doNext();
-//							}
-//						});
-//					}
-//					
-//				}).start();
+				JsonObject jo = new JsonObject();
+				jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
+
+				Gson g = new Gson();
+				JsonElement json = g.fromJson(jo, JsonElement.class);
+				String FORCED_LOGOUT = "forced_logout";
 				
-				AsyncChainer.asyncChain(_thisFragment, new Chainable() {
+				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 					
 					@Override
-					public void doNext(final AhFragment frag) {
+					public void onCompleted(JsonElement arg0, Exception arg1,
+							ServiceFilterResponse arg2) {
 						// TODO Auto-generated method stub
-						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-							
-							@Override
-							public void onCompleted(AhMessage entity) {
-								// TODO Auto-generated method stub
-								Log(_thisFragment, "on Complete in First" + __id);
-								__id = __id + " after 1";
-							}
-						});
-					}
-				}, new Chainable() {
-					
-					@Override
-					public void doNext(final AhFragment frag) {
-						// TODO Auto-generated method stub
-						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-							
-							@Override
-							public void onCompleted(AhMessage entity) {
-								// TODO Auto-generated method stub
-								Log(_thisFragment, "on Complete in Second : " + __id);
-								__id = __id + " after 2";
-								try{
-									Thread.sleep(100);
-								} catch(Exception e) {
-									e.printStackTrace();
-								}
-							}
-						});
-					}
-				}, new Chainable() {
-					
-					@Override
-					public void doNext(final AhFragment frag) {
-						// TODO Auto-generated method stub
-						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-							
-							@Override
-							public void onCompleted(AhMessage entity) {
-								// TODO Auto-generated method stub
-								Log(_thisFragment, "on Complete in Third : " + __id);
-							}
-						});
+						Log(_thisFragment,"arg0 : " + arg0, arg1);
 					}
 				});
 			}

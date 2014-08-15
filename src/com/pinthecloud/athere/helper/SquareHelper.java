@@ -19,6 +19,7 @@ import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.JsonConverter;
 
 public class SquareHelper {
@@ -192,6 +193,7 @@ public class SquareHelper {
 						return;
 					}
 					callback.onCompleted(list, list.size());
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "getSquareListAsync", AhException.TYPE.SERVER_ERROR));
 				}
@@ -239,6 +241,7 @@ public class SquareHelper {
 
 				if (exception == null) {
 					callback.onCompleted(entity);
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.SERVER_ERROR));
 				}
