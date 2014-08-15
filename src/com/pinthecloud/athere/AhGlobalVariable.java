@@ -4,7 +4,7 @@ package com.pinthecloud.athere;
 public class AhGlobalVariable{
 
 	public static final int GOOGLE_STORE_APP_ID = 10;
-	public static final double CLIENT_APP_VERSION = 0.01;
+	public static final double CLIENT_APP_VERSION = 0.1;
 	/*
 	 * Int
 	 */

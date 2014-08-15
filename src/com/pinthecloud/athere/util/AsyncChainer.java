@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import com.pinthecloud.athere.exception.AhException;
+import android.util.Log;
+
 import com.pinthecloud.athere.fragment.AhFragment;
 
 
@@ -78,10 +79,17 @@ public class AsyncChainer {
 	}
 	
 	public static void asyncChain(AhFragment frag, Chainable...chains) {
-		Queue<Chainable> queue = mapQueue.get(frag.getClass().getName());
+		Class<?> clazz = null;
+		if (frag == null) {
+			clazz = AhFragment.class;
+		} else {
+			clazz = frag.getClass();
+		}
+		
+		Queue<Chainable> queue = mapQueue.get(clazz.getName());
 		if (queue == null) {
-			mapQueue.put(frag.getClass().getName(), new ArrayBlockingQueue<Chainable>(NUM_OF_QUEUE));
-			queue = mapQueue.get(frag.getClass().getName());
+			mapQueue.put(clazz.getName(), new ArrayBlockingQueue<Chainable>(NUM_OF_QUEUE));
+			queue = mapQueue.get(clazz.getName());
 		}
 		for(Chainable c : chains) {
 			queue.add(c);
@@ -90,9 +98,17 @@ public class AsyncChainer {
 	}
 	
 	public static void notifyNext(AhFragment frag) {
-		Queue<Chainable> queue = mapQueue.get(frag.getClass().getName());
+		Class<?> clazz = null;
+		if (frag == null) {
+			clazz = AhFragment.class;
+		} else {
+			clazz = frag.getClass();
+		}
+		Queue<Chainable> queue = mapQueue.get(clazz.getName());
 		if (queue == null) {
-			throw new AhException("No such Chainable");
+			//throw new AhException("No such Chainable");
+			Log.e("ERROR", "No such Chainable");
+			return;
 		}
 		if (!queue.isEmpty()) {
 			Chainable c = queue.poll();
