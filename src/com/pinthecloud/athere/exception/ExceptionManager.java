@@ -7,7 +7,6 @@ import com.pinthecloud.athere.fragment.AhFragment;
 
 public class ExceptionManager {
 	
-//	private static final String MAP_KEY = "MAP_KEY";
 	private static Map<String, Handler> map = new HashMap<String, ExceptionManager.Handler>();
 	
 	public static void setHandler(AhFragment frag) {

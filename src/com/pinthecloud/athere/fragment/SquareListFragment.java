@@ -58,7 +58,6 @@ public class SquareListFragment extends AhFragment{
 		 * Set Action Bar
 		 */
 		mActionBar.setTitle(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-		mActionBar.setDisplayHomeAsUpEnabled(true);
 
 		
 		/*

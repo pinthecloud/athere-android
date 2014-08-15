@@ -7,11 +7,6 @@
     android:paddingTop="@dimen/profile_dialog_top_margin" >
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/blur_image" />
-
-    <ImageView
         android:id="@+id/profile_dialog_profile"
         android:layout_width="@dimen/profile_dialog_profile_width"
         android:layout_height="@dimen/profile_dialog_profile_height"

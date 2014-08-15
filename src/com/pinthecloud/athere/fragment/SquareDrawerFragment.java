@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
-import com.pinthecloud.athere.dialog.ExitSquareConsentDialog;
+import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -40,7 +41,6 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -146,7 +146,10 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				ExitSquareConsentDialog escDialog = new ExitSquareConsentDialog(new AhDialogCallback() {
+				Resources resources = getResources();
+				String title = resources.getString(R.string.exit_square);
+				String message = resources.getString(R.string.exit_square_consent_message);
+				AhAlertDialog escDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
@@ -195,7 +198,6 @@ public class SquareDrawerFragment extends AhFragment {
 							}
 						}).start();
 					}
-
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						// Do nothing
@@ -257,10 +259,9 @@ public class SquareDrawerFragment extends AhFragment {
 		 */
 		Bitmap profileBitmap = null;
 		try {
-			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
+			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
 		} catch (FileNotFoundException e) {
 			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-			profileBitmap = BitmapUtil.cropRound(profileBitmap);
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
 		}
 		profileCircleImage.setImageBitmap(profileBitmap);
