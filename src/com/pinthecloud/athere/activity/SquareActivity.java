@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.activity;
 
+import javax.crypto.Mac;
+
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;

@@ -24,6 +24,7 @@ import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
@@ -53,6 +54,7 @@ public class AhApplication extends Application{
 	private static MobileServiceClient mClient;
 	private static MobileServiceTable<User> userTable;
 	private static MobileServiceTable<Square> squareTable;
+	private MobileServiceTable<AppVersion> appVersionTable;
 
 	// Helper
 	private static UserHelper userHelper;
@@ -86,6 +88,7 @@ public class AhApplication extends Application{
 
 		userTable = mClient.getTable(User.class);
 		squareTable = mClient.getTable(Square.class);
+		appVersionTable = mClient.getTable(AppVersion.class);
 
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
@@ -111,6 +114,9 @@ public class AhApplication extends Application{
 	}
 	public MobileServiceTable<Square> getSquareTable() {
 		return squareTable;
+	}
+	public MobileServiceTable<AppVersion> getAppVersionTable() {
+		return appVersionTable;
 	}
 	public UserDBHelper getUserDBHelper() {
 		return userDBHelper;
