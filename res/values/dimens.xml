@@ -5,9 +5,9 @@
 
     <!-- Basic Profile -->
     <dimen name="basic_profile_logo_bottom_margin">26.5dp</dimen>
-    <dimen name="basic_profile_gender_radio_height">48dp</dimen>
+    <dimen name="basic_profile_gender_radio_height">50dp</dimen>
     <dimen name="basic_profile_gender_radio_margin">20dp</dimen>
-    <dimen name="basic_profile_text_height">48dp</dimen>
+    <dimen name="basic_profile_text_height">50dp</dimen>
     <dimen name="basic_profile_complete_button_bottom_margin">48dp</dimen>
 
     <!-- Square -->
