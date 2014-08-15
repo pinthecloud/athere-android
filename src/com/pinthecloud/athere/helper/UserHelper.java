@@ -2,9 +2,7 @@ package com.pinthecloud.athere.helper;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -373,23 +371,23 @@ public class UserHelper {
 	}
 
 
-//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
+	//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
 	AhEntityCallback<User> _callback;
-//	private final String USER_RECEIVED = "USER_RECEIVED";
+	//	private final String USER_RECEIVED = "USER_RECEIVED";
 	private int countUserHandler = 0;
 	public void setUserHandler(AhEntityCallback<User> callback){
-//		map.put(USER_RECEIVED, callback);
+		//		map.put(USER_RECEIVED, callback);
 		if (countUserHandler == 0) {
 			_callback = callback;
 			countUserHandler++;
 		} else {
 			throw new AhException("[UserHelper.setUserHandler]");
 		}
-			
+
 	}
 
 	public void triggerUserEvent(User user){
-//		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
+		//		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
 		if(_callback != null)
 			_callback.onCompleted(user);
 		else 

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@android:color/white"
     android:paddingLeft="@dimen/profile_dialog_left_margin"
     android:paddingRight="@dimen/profile_dialog_right_margin"
     android:paddingTop="@dimen/profile_dialog_top_margin" >

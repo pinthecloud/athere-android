@@ -22,9 +22,13 @@ import android.widget.TextView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.adapter.ChupaChatListAdapter;
+import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
@@ -69,6 +73,11 @@ public class ChupaChatFragment extends AhFragment {
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		otherUser = userDBHelper.getUser(userId);
+		if (otherUser == null) {
+			otherUser = userDBHelper.getUser(userId, true);
+			if (otherUser == null)
+				throw new AhException("No User exist Error");
+		}
 	}
 
 	@Override
@@ -101,6 +110,29 @@ public class ChupaChatFragment extends AhFragment {
 		 */
 		Bitmap profile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(otherUser.getProfilePic()));
 		otherProfileImage.setImageBitmap(profile);
+		otherProfileImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ProfileDialog profileDialog = new ProfileDialog(otherUser, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						Intent intent = new Intent(context, ChupaChatActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, otherUser.getId());
+						context.startActivity(intent);
+						activity.finish();
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						Intent intent = new Intent(context, ProfileImageActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, otherUser.getId());
+						context.startActivity(intent);
+					}
+				});
+				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
 		otherNickName.setText(otherUser.getNickName());
 		otherAge.setText("" + otherUser.getAge());
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
@@ -122,12 +154,8 @@ public class ChupaChatFragment extends AhFragment {
 		 * Set sent and received chupas to list view 
 		 */
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-
 		if(chupaCommunId == null || "".equals(chupaCommunId))
 			throw new AhException("No chupaCommunId");
-
-		// Clear badge numbers displayed on chupa list
-		messageDBHelper.clearBadgeNum(chupaCommunId);
 
 		// Get every chupa by chupaCommunId
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
@@ -138,7 +166,10 @@ public class ChupaChatFragment extends AhFragment {
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 
-
+		// Clear badge numbers displayed on chupa list
+		messageDBHelper.clearBadgeNum(chupaCommunId);
+		
+		
 		/*
 		 * If other user exit, add exit message
 		 */
@@ -223,7 +254,14 @@ public class ChupaChatFragment extends AhFragment {
 		});
 		sendButton.setEnabled(false);
 
-
+		return view;
+	}
+	
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -251,11 +289,9 @@ public class ChupaChatFragment extends AhFragment {
 				});
 			}
 		});
-
-		return view;
 	}
 
-
+	
 	private boolean isSenderButtonEnable(){
 		return isTypedMessage && !isOtherUserExit;
 	}

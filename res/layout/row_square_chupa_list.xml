@@ -32,6 +32,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/square_chupa_list_content_margin"
+                android:ellipsize="end"
+                android:maxWidth="@dimen/square_chupa_list_sender_max_width"
+                android:singleLine="true"
                 android:textSize="@dimen/font_x_large" />
 
             <TextView
@@ -53,7 +56,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/square_chupa_list_content_margin"
-                android:textColor="@color/gray_line"
                 android:textSize="@dimen/font_medium" />
 
             <TextView

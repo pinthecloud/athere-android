@@ -59,12 +59,13 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			TextView nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
 			ImageView isMale = (ImageView)view.findViewById(R.id.drawer_user_is_male);
 			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
-
+			TextView companyNumber = (TextView) view.findViewById(R.id.drawer_user_company_num);
 
 			/*
 			 * Set UI component
 			 */
 			nickName.setText(user.getNickName());
+			companyNumber.setText("" + user.getCompanyNum());
 			if(user.isMale()){
 				isMale.setImageResource(R.drawable.sidebar_member_gender_m);
 			}else{

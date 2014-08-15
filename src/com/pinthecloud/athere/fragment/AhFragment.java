@@ -106,7 +106,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 			message = getResources().getString(R.string.min_nick_name_message);
 		} else if(!nickName.matches(nickNameRegx)){
 			message = getResources().getString(R.string.bad_nick_name_message);
-		} else if(nickName.length() > 15){
+		} else if(nickName.length() > 10){
 			message = getResources().getString(R.string.max_nick_name_message);
 		}
 		return message;
