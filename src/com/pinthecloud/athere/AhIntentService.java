@@ -110,6 +110,14 @@ public class AhIntentService extends IntentService {
 		
 	}
 	
+	
+	
+	
+	
+	/**
+	 *  Private Methods for Each Message TYPE (TALK, CHUPA, ENTER... etc)
+	 * 
+	 */
 
 	private void TALK() {
 		messageDBHelper.addMessage(message);
@@ -124,7 +132,7 @@ public class AhIntentService extends IntentService {
 		if (isRunning(app)) {
 			messageHelper.triggerMessageEvent(message);
 		} else {
-			sendNotification(AhMessage.TYPE.SHOUTING);
+			alertNotification(AhMessage.TYPE.SHOUTING);
 		}
 	}
 
@@ -133,31 +141,24 @@ public class AhIntentService extends IntentService {
 		if (isRunning(app)) {
 			messageHelper.triggerMessageEvent(message);
 		} else {
-			sendNotification(AhMessage.TYPE.CHUPA);
+			alertNotification(AhMessage.TYPE.CHUPA);
 		}
 	}
 
 	private void ENTER_SQUARE() {
-		AsyncChainer.asyncChain(null, new Chainable(){
+		userHelper.getUserAsync(null, userId, new AhEntityCallback<User>() {
 
 			@Override
-			public void doNext(AhFragment frag) {
+			public void onCompleted(User user) {
 				// TODO Auto-generated method stub
-				userHelper.getUserAsync(frag, userId, new AhEntityCallback<User>() {
-
-					@Override
-					public void onCompleted(User user) {
-						// TODO Auto-generated method stub
-						userDBHelper.addUser(user);
-						
-						if (isRunning(app)) {
-							messageHelper.triggerMessageEvent(message);
-							userHelper.triggerUserEvent(user);
-						} else {
-							sendNotification(AhMessage.TYPE.ENTER_SQUARE);
-						}
-					}
-				});
+				userDBHelper.addUser(user);
+				
+				if (isRunning(app)) {
+					messageHelper.triggerMessageEvent(message);
+					userHelper.triggerUserEvent(user);
+				} else {
+					alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+				}
 			}
 		});
 	}
@@ -172,23 +173,16 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void UPDATE_USER_INFO() {
-		AsyncChainer.asyncChain(null, new Chainable() {
-			
-			@Override
-			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
-				userHelper.getUserAsync(frag, userId, new AhEntityCallback<User>() {
+		userHelper.getUserAsync(null, userId, new AhEntityCallback<User>() {
 
-					@Override
-					public void onCompleted(User user) {
-						// TODO Auto-generated method stub
-						userDBHelper.updateUser(user);
-						
-						if (isRunning(app)) {
-							userHelper.triggerUserEvent(user);
-						}
-					}
-				});
+			@Override
+			public void onCompleted(User user) {
+				// TODO Auto-generated method stub
+				userDBHelper.updateUser(user);
+				
+				if (isRunning(app)) {
+					userHelper.triggerUserEvent(user);
+				}
 			}
 		});
 	}
@@ -202,7 +196,10 @@ public class AhIntentService extends IntentService {
 	}
 	
 	
-	private void sendNotification(AhMessage.TYPE type){
+	/**
+	 *  Method For alerting notification
+	 */
+	private void alertNotification(AhMessage.TYPE type){
 		String title = "";
 		String content = "";
 		Class<?> clazz = SquareActivity.class;
@@ -221,7 +218,6 @@ public class AhIntentService extends IntentService {
 				return;
 			}
 		} 
-
 
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(_this, clazz);
@@ -284,7 +280,83 @@ public class AhIntentService extends IntentService {
 			((Vibrator)getSystemService(Context.VIBRATOR_SERVICE)).vibrate(800);
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @param Application context
+	 * @return true if the app is Running foreground
+	 * 		   false if the app is turned OFF
+	 */
+	private boolean isRunning(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
 
+		for (RunningTaskInfo task : tasks) {
+			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
+				return true;                                  
+		}
+		return false;
+	}
+
+	
+	/**
+	 * 
+	 * @param intent given from the server
+	 * @return AhMessage sent from the server
+	 */
+	private AhMessage parseMessageIntent(Intent intent) throws JSONException {
+		AhMessage.Builder messageBuilder = new AhMessage.Builder();
+		Bundle b = intent.getExtras();
+		String jsonStr = b.getString("message");
+
+		JSONObject jo = null;
+
+		try {
+			jo = new JSONObject(jsonStr);
+
+			String type = jo.getString("type");
+			String content = jo.getString("content");
+			String sender = jo.getString("sender");
+			String senderId = jo.getString("senderId");
+			String receiver = jo.getString("receiver");
+			String receiverId = jo.getString("receiverId");
+			String timeStamp = jo.getString("timeStamp");
+			String chupaCommunId = jo.getString("chupaCommunId");
+
+			messageBuilder.setType(type)
+			.setContent(content)
+			.setSender(sender)
+			.setSenderId(senderId)
+			.setReceiver(receiver)
+			.setReceiverId(receiverId)
+			.setTimeStamp(timeStamp)
+			.setChupaCommunId(chupaCommunId);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw e;
+		}
+
+		return messageBuilder.build();
+	}
+
+	/**
+	 * 
+	 * @author hongkunyoo
+	 * @param intent given for the server
+	 * @return userId String related to the sent message
+	 */
+	private String parseUserIdIntent(Intent intent){
+		return intent.getExtras().getString("userId");
+	}
+
+	
+	
+	
+//////////////////////////////////////////////////////
+// NOT USING METHODS - NEED FOR REFERENCE
+//////////////////////////////////////////////////////
 //		/*
 //		 * Process by message type
 //		 */
@@ -409,61 +481,6 @@ public class AhIntentService extends IntentService {
 //			}
 //		}).start();
 //	}
-
-
-	private boolean isRunning(Context context) {
-		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
-
-		for (RunningTaskInfo task : tasks) {
-			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
-				return true;                                  
-		}
-		return false;
-	}
-
-
-	private AhMessage parseMessageIntent(Intent intent) throws JSONException {
-		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		Bundle b = intent.getExtras();
-		String jsonStr = b.getString("message");
-
-		JSONObject jo = null;
-
-		try {
-			jo = new JSONObject(jsonStr);
-
-			String type = jo.getString("type");
-			String content = jo.getString("content");
-			String sender = jo.getString("sender");
-			String senderId = jo.getString("senderId");
-			String receiver = jo.getString("receiver");
-			String receiverId = jo.getString("receiverId");
-			String timeStamp = jo.getString("timeStamp");
-			String chupaCommunId = jo.getString("chupaCommunId");
-
-			messageBuilder.setType(type)
-			.setContent(content)
-			.setSender(sender)
-			.setSenderId(senderId)
-			.setReceiver(receiver)
-			.setReceiverId(receiverId)
-			.setTimeStamp(timeStamp)
-			.setChupaCommunId(chupaCommunId);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-			throw e;
-		}
-
-		return messageBuilder.build();
-	}
-
-
-	private String parseUserIdIntent(Intent intent){
-		return intent.getExtras().getString("userId");
-	}
-
 
 	//	private User parseUserIntent(Intent intent) throws JSONException {
 	//		User user = new User();

@@ -237,9 +237,9 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		return messages;
 	}
 
-//	public List<AhMessage> getAllMessages(AhMessage.TYPE type) {
-//		return this.getAllMessages(type.toString());
-//	}
+	public List<AhMessage> getAllMessages(AhMessage.TYPE type) {
+		return this.getAllMessages(type.toString());
+	}
 
 	public boolean isEmpty() {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME;
@@ -297,27 +297,27 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		return messages;
 	}
 
-//	public List<AhMessage> popAllMessages(String type) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		// Select All Query
-//		String selectQuery = "SELECT * FROM " + TABLE_NAME +
-//				" WHERE " + TYPE + " = ?" +
-//				" ORDER BY " + ID;
-//
-//		SQLiteDatabase db = this.getReadableDatabase();
-//		Cursor cursor = db.rawQuery(selectQuery, null);
-//
-//		// looping through all rows and adding to list
-//		if (cursor.moveToFirst()) {
-//			do {
-//				messages.add(convertToMessage(cursor));
-//			} while (cursor.moveToNext());
-//		}
-//		this.deleteAllMessages(type);
-//		// return message list
-//		return messages;
-//	}
+	public List<AhMessage> popAllMessages(String type) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + TABLE_NAME +
+				" WHERE " + TYPE + " = ?" +
+				" ORDER BY " + ID;
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				messages.add(convertToMessage(cursor));
+			} while (cursor.moveToNext());
+		}
+		this.deleteAllMessages(type);
+		// return message list
+		return messages;
+	}
 
 	public List<AhMessage> popAllMessages(String... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
@@ -339,9 +339,9 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		return messages;
 	}
 
-//	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
-//		return this.popAllMessages(type.toString());
-//	}
+	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
+		return this.popAllMessages(type.toString());
+	}
 
 	// Deleting single contact
 	public void deleteMessage(String messageId) {
