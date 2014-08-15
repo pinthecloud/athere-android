@@ -2,9 +2,9 @@ package com.pinthecloud.athere.helper;
 
 import java.util.List;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
+
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
@@ -20,43 +20,46 @@ import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.util.AsyncChainer;
 
 public class VersionHelper {
-	
-	private static final String APP_VERSION_KEY = "APP_VERSION_KEY";
+
+//	private static final String APP_VERSION_KEY = "APP_VERSION_KEY";
 	private static final String GET_APP_VERSION = "get_app_version";
+
+	private AhApplication app;
 	private PreferenceHelper pref;
 	private MobileServiceClient mClient;
-	private MobileServiceTable<AppVersion> appVersionTable;
 	private Object lock;
-	
+
+	/**
+	 * Model tables
+	 */
+	private MobileServiceTable<AppVersion> appVersionTable;
+
+
 	public enum TYPE {
 		MANDATORY,
 		OPTIONAL
 	}
-	
+
 	public VersionHelper() {
-		AhApplication app = AhApplication.getInstance();
+		app = AhApplication.getInstance();
 		pref = app.getPref();
 		mClient = app.getmClient();
 		lock = app.getLock();
-		appVersionTable = mClient.getTable(AppVersion.class);
-				
+		appVersionTable = app.getAppVersionTable();
 	}
-	
+
 	public AppVersion getServerAppVersionSync(final AhFragment frag) {
-		
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
 
 		final AhCarrier<AppVersion> carrier = new AhCarrier<AppVersion>();
-		
 		appVersionTable.select("").execute(new TableQueryCallback<AppVersion>() {
-			
+
 			@Override
 			public void onCompleted(List<AppVersion> list, int count, Exception exception,
 					ServiceFilterResponse response) {
-				// TODO Auto-generated method stub
 				if(exception == null){
 					if (list.size() == 1) {
 						AppVersion appVersion = list.get(0);
@@ -64,7 +67,7 @@ public class VersionHelper {
 					} else {
 						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
 					}
-					
+
 					synchronized (lock) {
 						lock.notify();
 					}
@@ -74,7 +77,7 @@ public class VersionHelper {
 				}
 			}
 		});
-		
+
 		synchronized (lock) {
 			try {
 				lock.wait();
@@ -82,22 +85,21 @@ public class VersionHelper {
 				e.printStackTrace();
 			}
 		}
+
 		return carrier.getItem();
 	}
-	
+
 	public void getServerAppVersionAsync(final AhFragment frag, final AhEntityCallback<AppVersion> callback) {
-		
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
-		
+
 		appVersionTable.select("*").execute(new TableQueryCallback<AppVersion>() {
-			
+
 			@Override
 			public void onCompleted(List<AppVersion> list, int count, Exception exception,
 					ServiceFilterResponse response) {
-				// TODO Auto-generated method stub
 				if(exception == null){
 					if (list.size() == 1) {
 						callback.onCompleted(list.get(0));
@@ -111,11 +113,13 @@ public class VersionHelper {
 			}
 		});
 	}
-	
-	public double getClientAppVersion() {
-		return AhGlobalVariable.CLIENT_APP_VERSION;
+
+	public double getClientAppVersion() throws NameNotFoundException {
+		String versionName = app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName;
+		Log.d(AhGlobalVariable.LOG_TAG, versionName);
+		return Double.parseDouble(versionName);
 	}
-	
+
 }
 
 // get Version from server;
