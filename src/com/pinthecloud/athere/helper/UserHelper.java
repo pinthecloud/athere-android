@@ -57,7 +57,6 @@ public class UserHelper {
 
 
 	public boolean exitSquareSync(final AhFragment frag, String userId) throws AhException {
-
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "exitSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return false;
@@ -93,7 +92,6 @@ public class UserHelper {
 
 
 	public void exitSquareAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
-
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -114,7 +112,6 @@ public class UserHelper {
 	}
 
 	public void enterSquareAsync(final AhFragment frag, User user, final AhEntityCallback<String> callback) throws AhException {
-
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -136,7 +133,6 @@ public class UserHelper {
 
 
 	public String enterSquareSync(final AhFragment frag, User user) throws AhException {
-
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
@@ -172,7 +168,6 @@ public class UserHelper {
 
 
 	public void getUserListAsync(final AhFragment frag, String squareId, final AhListCallback<User> callback){
-
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -194,7 +189,6 @@ public class UserHelper {
 	}
 
 	public List<User> getUserListSync(final AhFragment frag, String squareId){
-
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
@@ -231,7 +225,6 @@ public class UserHelper {
 
 
 	public void getUserAsync(final AhFragment frag, String id, final AhEntityCallback<User> callback) {
-
 		if (!AhApplication.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
