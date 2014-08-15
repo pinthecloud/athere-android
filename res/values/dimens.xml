@@ -53,10 +53,12 @@
     <dimen name="square_chat_list_receive_message_layout_top_margin">23.5dp</dimen>
     <dimen name="square_chat_list_receive_message_left_margin">23.5dp</dimen>
     <dimen name="square_chat_list_receive_message_right_margin">13.5dp</dimen>
-    <dimen name="square_chat_list_send_right_margin">13.5dp</dimen>
-    <dimen name="square_chat_list_send_top_margin">5.5dp</dimen>
-    <dimen name="square_chat_list_send_message_left_margin">13.5dp</dimen>
-    <dimen name="square_chat_list_send_message_right_margin">13.5dp</dimen>
+    <dimen name="square_chat_list_send_time_right_margin">3dp</dimen>
+    <dimen name="square_chat_list_send_time_bottom_margin">1dp</dimen>
+    <dimen name="square_chat_list_send_right_margin">8dp</dimen>
+    <dimen name="square_chat_list_send_top_margin">8dp</dimen>
+    <dimen name="square_chat_list_send_message_left_margin">9dp</dimen>
+    <dimen name="square_chat_list_send_message_right_margin">11dp</dimen>
     <dimen name="square_chat_list_send_progress_width">14dp</dimen>
     <dimen name="square_chat_list_send_progress_height">14dp</dimen>
 
