@@ -69,7 +69,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			}else{
 				isMale.setImageResource(R.drawable.sidebar_member_gender_w);
 			}
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfileCirclePic()));
+			profilePic.setImageBitmap(BitmapUtil.cropRound(BitmapUtil.convertToBitmap(user.getProfilePic())));
 			profilePic.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -95,7 +95,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			/*
 			 * Set event on button
 			 */
-			chupaButton.setOnClickListener(new View.OnClickListener() {
+			chupaButton.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -107,5 +107,4 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 		}
 		return view;
 	}
-
 }

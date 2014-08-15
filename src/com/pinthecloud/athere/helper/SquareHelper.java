@@ -57,7 +57,7 @@ public class SquareHelper {
 
 	public List<Square> getSquareListSync(final AhFragment frag, double latitude, double longitude) throws AhException {
 		
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
@@ -131,7 +131,7 @@ public class SquareHelper {
 
 	public Square createSquareSync(final AhFragment frag, Square square) throws AhException {
 		
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
@@ -168,8 +168,7 @@ public class SquareHelper {
 	 *  Async Task Methods
 	 */
 	public void getSquareListAsync(final AhFragment frag, double latitude, double longitude, final AhListCallback<Square> callback) throws AhException{
-		
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getSquareListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
@@ -230,7 +229,7 @@ public class SquareHelper {
 
 	public void createSquareAsync(final AhFragment frag, Square square, final AhEntityCallback<Square> callback) throws AhException {
 		
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}

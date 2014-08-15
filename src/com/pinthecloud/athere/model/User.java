@@ -15,8 +15,6 @@ public class User implements Parcelable{
 	private String nickName;
 	@com.google.gson.annotations.SerializedName("profilePic")
 	private String profilePic;
-	@com.google.gson.annotations.SerializedName("profileCirclePic")
-	private String profileCirclePic;
 	@com.google.gson.annotations.SerializedName("mobileId")
 	private String mobileId = AhGlobalVariable.ANDROID;
 	@com.google.gson.annotations.SerializedName("registrationId")
@@ -42,7 +40,7 @@ public class User implements Parcelable{
 	};
 
 	public User() {
-		
+
 	}
 	public User(Parcel in){
 		readToParcel(in);
@@ -64,12 +62,6 @@ public class User implements Parcelable{
 	}
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
-	}
-	public String getProfileCirclePic() {
-		return profileCirclePic;
-	}
-	public void setProfileCirclePic(String profileCirclePic) {
-		this.profileCirclePic = profileCirclePic;
 	}
 	public String getMobileId() {
 		return mobileId;
@@ -122,7 +114,6 @@ public class User implements Parcelable{
 		dest.writeString(id);
 		dest.writeString(nickName);
 		dest.writeString(profilePic);
-		dest.writeString(profileCirclePic);
 		dest.writeString(mobileId);	
 		dest.writeString(registrationId);	
 		dest.writeInt(isMale? 1 : 0);	
@@ -135,7 +126,6 @@ public class User implements Parcelable{
 		id = in.readString();
 		nickName = in.readString();
 		profilePic = in.readString();
-		profileCirclePic = in.readString();
 		mobileId = in.readString();
 		registrationId = in.readString();
 		isMale = in.readInt() == 1;
@@ -150,7 +140,6 @@ public class User implements Parcelable{
 		user.id = getRandomString();
 		user.nickName = getRandomString();
 		user.profilePic = getRandomString();
-		user.profileCirclePic = getRandomString();
 		user.mobileId = getRandomString();
 		user.registrationId = getRandomString();
 		user.isMale = getRandomInt() < 20;
@@ -185,11 +174,11 @@ public class User implements Parcelable{
 				" mobileId : "+this.mobileId + " \n "+
 				" registrationId : "+ (this.registrationId.length() < 20 ? 
 						this.registrationId.substring(0, this.registrationId.length() - 1) : this.registrationId.substring(0, 20)) + " \n "+
-				" isMale : "+this.isMale + " \n "+
-				" companyNum : "+this.companyNum + " \n "+
-				" age : "+this.age + " \n "+
-				" isChupaEnable : "+this.isChupaEnable + " \n "+
-				" squareId : "+this.squareId + " }";
+						" isMale : "+this.isMale + " \n "+
+						" companyNum : "+this.companyNum + " \n "+
+						" age : "+this.age + " \n "+
+						" isChupaEnable : "+this.isChupaEnable + " \n "+
+						" squareId : "+this.squareId + " }";
 	}
 
 	public JsonObject toJson() {
@@ -197,7 +186,6 @@ public class User implements Parcelable{
 
 		jo.addProperty("nickName", this.nickName);
 		jo.addProperty("profilePic", this.profilePic);
-		jo.addProperty("profileCirclePic", this.profileCirclePic);
 		jo.addProperty("mobileId", this.mobileId);
 		jo.addProperty("registrationId", this.registrationId);
 		jo.addProperty("isMale", this.isMale);

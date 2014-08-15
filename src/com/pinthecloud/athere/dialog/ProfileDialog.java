@@ -66,7 +66,7 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set profile image
 		 */
-		profileImage.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfileCirclePic()));
+		profileImage.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
 		profileImage.setOnClickListener(new OnClickListener() {
 
 			@Override

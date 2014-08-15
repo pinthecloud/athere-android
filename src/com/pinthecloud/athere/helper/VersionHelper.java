@@ -3,14 +3,11 @@ package com.pinthecloud.athere.helper;
 import java.util.List;
 
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.util.Log;
 
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -21,12 +18,7 @@ import com.pinthecloud.athere.util.AsyncChainer;
 
 public class VersionHelper {
 
-//	private static final String APP_VERSION_KEY = "APP_VERSION_KEY";
-	private static final String GET_APP_VERSION = "get_app_version";
-
 	private AhApplication app;
-	private PreferenceHelper pref;
-	private MobileServiceClient mClient;
 	private Object lock;
 
 	/**
@@ -42,14 +34,12 @@ public class VersionHelper {
 
 	public VersionHelper() {
 		app = AhApplication.getInstance();
-		pref = app.getPref();
-		mClient = app.getmClient();
 		lock = app.getLock();
 		appVersionTable = app.getAppVersionTable();
 	}
 
 	public AppVersion getServerAppVersionSync(final AhFragment frag) {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
@@ -90,7 +80,7 @@ public class VersionHelper {
 	}
 
 	public void getServerAppVersionAsync(final AhFragment frag, final AhEntityCallback<AppVersion> callback) {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
@@ -116,7 +106,6 @@ public class VersionHelper {
 
 	public double getClientAppVersion() throws NameNotFoundException {
 		String versionName = app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName;
-		Log.d(AhGlobalVariable.LOG_TAG, versionName);
 		return Double.parseDouble(versionName);
 	}
 

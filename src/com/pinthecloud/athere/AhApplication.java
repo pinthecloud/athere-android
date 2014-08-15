@@ -42,7 +42,7 @@ public class AhApplication extends Application{
 	// Windows Azure Mobile Service Keys
 	private final String APP_URL = "https://athere.azure-mobile.net/";
 	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
-	
+
 	private static final String FORCED_LOGOUT = "forced_logout";
 
 	// Application
@@ -137,30 +137,31 @@ public class AhApplication extends Application{
 		return versionHelper;
 	}
 
+
 	/*
 	 * @return true, if the App is connected with Internet.
 	 */
-	public static boolean isOnline(){
+	public boolean isOnline(){
 		ConnectivityManager cm = 
 				(ConnectivityManager)app.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
-	
-	public static void forcedLogoutSync (final AhFragment frag) {
-		
-		if (!AhApplication.isOnline()) {
+
+
+	public void forcedLogoutSync (final AhFragment frag) {
+		if (!isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
-		
+
 		JsonObject jo = new JsonObject();
 		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
 		jo.addProperty("registrationId", pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
-		
+
 		String exitMessage = app.getResources().getString(R.string.exit_square_message);
 		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
@@ -170,17 +171,17 @@ public class AhApplication extends Application{
 		.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
 		.setType(AhMessage.TYPE.EXIT_SQUARE);
 		final AhMessage message = messageBuilder.build();
-		
-		
+
+
 		mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
-			
+
 			@Override
 			public void onCompleted(JsonElement arg0, Exception arg1,
 					ServiceFilterResponse arg2) {
 				// TODO Auto-generated method stub
-				
+
 				messageHelper.sendMessageSync(frag, message);
-				
+
 				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 				pref.removePref(AhGlobalVariable.USER_ID_KEY);
 				pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);

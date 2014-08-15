@@ -1,9 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,9 +12,11 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
+import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 /**
  *  Basic Fragment class for At here application
@@ -44,42 +44,33 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		/*
 		 * Set static value
 		 */
-
 		context = getActivity();
 		activity = (AhActivity) context;
 		pref = app.getPref();
-
-
-
 		ExceptionManager.setHandler(_thisFragment);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = null;
-
 		try {
 			view = onAhCreateView(inflater, container, savedInstanceState);
 		} catch (AhException ex) {
 			Log(this, ex);
-			ex.printStackTrace();
 		} catch (Exception ex) {
 			Log(this, ex);
 		}
-
 		return view;
 	}
 
 
-
 	protected View onAhCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	protected void Log(AhFragment fragment, Object... params){
 		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -93,6 +84,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		}
 		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
+
 
 	/*
 	 * Check nick name EditText
@@ -120,30 +112,24 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		return message;
 	}
 
+
 	@Override
 	public void handleException(final AhException ex) {
-		// TODO Auto-generated method stub
 		Log(_thisFragment, "in AhFragment : " + ex.toString());
-
-		activity.runOnUiThread(new Runnable() {
+		AhAlertDialog exceptionDialog = new AhAlertDialog(ex.getType().toString(), ex.toString(), false, 
+				new AhDialogCallback() {
 
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				new AlertDialog.Builder(_thisFragment.getActivity())
-				.setTitle(ex.getType().toString())
-				.setMessage(ex.toString())
-				.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						//Your action here
-						dialog.dismiss();
-					}
-				})
-				.show();
+			public void doPositiveThing(Bundle bundle) {
+				// do nothing
 			}
-		});
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				// Do nothing
+			}
+		}); 
+		exceptionDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
-
 
 
 	/**
