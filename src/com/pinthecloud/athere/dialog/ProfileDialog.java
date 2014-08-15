@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.dialog;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -70,12 +67,14 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set profile image
 		 */
-		final Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
-		profileImage.setImageBitmap(profileBitmap);
+		Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
+		profileImage.setImageBitmap(BitmapUtil.cropRound(profileBitmap));
 		profileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				ahDialogCallback.doNegativeThing(null);
+				dismiss();
 			}
 		});
 

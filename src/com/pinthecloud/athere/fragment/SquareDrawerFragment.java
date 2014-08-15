@@ -29,10 +29,13 @@ import android.widget.ToggleButton;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
+import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -41,6 +44,7 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -250,7 +254,7 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	public void setUp(View fragmentView, DrawerLayout drawerLayout, User user) {
+	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
 		this.mFragmentView = fragmentView;
 		this.mDrawerLayout = drawerLayout;
 
@@ -264,7 +268,29 @@ public class SquareDrawerFragment extends AhFragment {
 			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
 		}
-		profileCircleImage.setImageBitmap(profileBitmap);
+		profileCircleImage.setImageBitmap(BitmapUtil.cropRound(profileBitmap));
+		profileCircleImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						Intent intent = new Intent(context, ChupaChatActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						Intent intent = new Intent(context, ProfileImageActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+				});
+				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
 		if(user.isMale()){
 			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
 		} else{
