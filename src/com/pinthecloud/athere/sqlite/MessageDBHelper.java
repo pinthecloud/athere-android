@@ -1,6 +1,8 @@
 package com.pinthecloud.athere.sqlite;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -221,6 +223,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		for(String type : types){
 			messages.addAll(this.getAllMessages(type));
 		}
+		sortMessages(messages);
 		return messages;
 	}
 
@@ -230,12 +233,13 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		for(AhMessage.TYPE type : types){
 			messages.addAll(this.getAllMessages(type));
 		}
+		sortMessages(messages);
 		return messages;
 	}
 
-	public List<AhMessage> getAllMessages(AhMessage.TYPE type) {
-		return this.getAllMessages(type.toString());
-	}
+//	public List<AhMessage> getAllMessages(AhMessage.TYPE type) {
+//		return this.getAllMessages(type.toString());
+//	}
 
 	public boolean isEmpty() {
 		String selectQuery = "SELECT * FROM " + TABLE_NAME;
@@ -293,27 +297,27 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		return messages;
 	}
 
-	public List<AhMessage> popAllMessages(String type) {
-		List<AhMessage> messages = new ArrayList<AhMessage>();
-
-		// Select All Query
-		String selectQuery = "SELECT * FROM " + TABLE_NAME +
-				" WHERE " + TYPE + " = ?" +
-				" ORDER BY " + ID;
-
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(selectQuery, null);
-
-		// looping through all rows and adding to list
-		if (cursor.moveToFirst()) {
-			do {
-				messages.add(convertToMessage(cursor));
-			} while (cursor.moveToNext());
-		}
-		this.deleteAllMessages(type);
-		// return message list
-		return messages;
-	}
+//	public List<AhMessage> popAllMessages(String type) {
+//		List<AhMessage> messages = new ArrayList<AhMessage>();
+//
+//		// Select All Query
+//		String selectQuery = "SELECT * FROM " + TABLE_NAME +
+//				" WHERE " + TYPE + " = ?" +
+//				" ORDER BY " + ID;
+//
+//		SQLiteDatabase db = this.getReadableDatabase();
+//		Cursor cursor = db.rawQuery(selectQuery, null);
+//
+//		// looping through all rows and adding to list
+//		if (cursor.moveToFirst()) {
+//			do {
+//				messages.add(convertToMessage(cursor));
+//			} while (cursor.moveToNext());
+//		}
+//		this.deleteAllMessages(type);
+//		// return message list
+//		return messages;
+//	}
 
 	public List<AhMessage> popAllMessages(String... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
@@ -321,7 +325,7 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		for(String type : types){
 			messages.addAll(this.popAllMessages(type));
 		}
-
+		sortMessages(messages);
 		return messages;
 	}
 
@@ -331,13 +335,13 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		for(AhMessage.TYPE type : types){
 			messages.addAll(this.popAllMessages(type));
 		}
-
+		sortMessages(messages);
 		return messages;
 	}
 
-	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
-		return this.popAllMessages(type.toString());
-	}
+//	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
+//		return this.popAllMessages(type.toString());
+//	}
 
 	// Deleting single contact
 	public void deleteMessage(String messageId) {
@@ -426,5 +430,16 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		Editor editor = pref.edit();
 		editor.putInt("communBageNum" + chupaCommunId, 0);
 		editor.commit();
+	}
+	
+	private void sortMessages(List<AhMessage> list){
+		Collections.sort(list, new Comparator<AhMessage>() {
+
+			@Override
+			public int compare(AhMessage lhs, AhMessage rhs) {
+				// TODO Auto-generated method stub
+				return lhs.getId().compareTo(rhs.getId());
+			}
+		});
 	}
 }

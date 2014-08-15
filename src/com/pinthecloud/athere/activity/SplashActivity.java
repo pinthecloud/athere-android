@@ -114,7 +114,7 @@ public class SplashActivity extends AhActivity implements Runnable{
 					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					        public void onClick(DialogInterface dialog, int whichButton) {
 					                /* User clicked OK so do some stuff */
-					                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pname:"+AhGlobalVariable.GOOGLE_STORE_APP_ID));
+					                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?id="+AhGlobalVariable.GOOGLE_STORE_APP_ID));
 					                SplashActivity.this.startActivity(intent);
 					        }
 					})

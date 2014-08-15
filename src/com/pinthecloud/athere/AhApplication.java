@@ -141,6 +141,8 @@ public class AhApplication extends Application{
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
 	
+	
+	// TODO : Don't Use NOW
 	public static void forcedLogoutSync (final AhFragment frag) {
 		
 		if (!AhApplication.isOnline()) {

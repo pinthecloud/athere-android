@@ -85,7 +85,7 @@ public class AhIntentService extends IntentService {
 			public void run(){
 				User user = null;
 				if (AhMessage.TYPE.TALK.toString().equals(message.getType())) {
-					// Do nothing
+					messageDBHelper.addMessage(message);
 				} else if (AhMessage.TYPE.SHOUTING.toString().equals(message.getType())) {
 					// Do noghing
 				} else if (AhMessage.TYPE.CHUPA.toString().equals(message.getType())) {

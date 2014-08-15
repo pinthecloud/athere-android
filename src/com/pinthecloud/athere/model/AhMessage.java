@@ -27,7 +27,8 @@ public class AhMessage implements Parcelable {
 		// User Update
 		ENTER_SQUARE("ENTER_SQUARE"),	// To Square Users
 		EXIT_SQUARE("EXIT_SQUARE"),		// To Square Users
-		UPDATE_USER_INFO("UPDATE_USER_INFO"); // To Square Users  
+		UPDATE_USER_INFO("UPDATE_USER_INFO"), // To Square Users
+		MESSAGE_READ("MESSAGE_READ");
 
 		private final String value;
 
