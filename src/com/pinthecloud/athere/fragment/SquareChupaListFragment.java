@@ -67,15 +67,8 @@ public class SquareChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"));
-				if (user == null) {
-					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"), true);
-					if (user == null)
-						throw new AhException("No User exist Error");
-				}
-				
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, user);
+				intent.putExtra(AhGlobalVariable.USER_KEY, lastChupaCommunList.get(position).get("userId"));
 				startActivity(intent);
 			}
 		});
