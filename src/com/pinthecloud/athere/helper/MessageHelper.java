@@ -43,7 +43,7 @@ public class MessageHelper {
 
 	public boolean sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
 
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return false;
 		}
@@ -100,7 +100,7 @@ public class MessageHelper {
 
 	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}

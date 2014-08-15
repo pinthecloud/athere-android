@@ -43,7 +43,6 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
@@ -126,11 +125,11 @@ public class SquareProfileFragment extends AhFragment{
 					profilePictureView.setImageBitmap(pictureBitmap);
 
 					// Crop picture in round
-					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
+					//					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
 
 					// Save pictures to internal storage
 					FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
-					FileUtil.saveImageToInternalStorage(app, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
+					//					FileUtil.saveImageToInternalStorage(app, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();
@@ -464,13 +463,7 @@ public class SquareProfileFragment extends AhFragment{
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.ENTER_SQUARE);
 				AhMessage message = messageBuilder.build();
-				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-
-					@Override
-					public void onCompleted(AhMessage entity) {
-						// Do nothing
-					}
-				});
+				messageHelper.sendMessageSync(_thisFragment, message);
 
 				activity.runOnUiThread(new Runnable(){
 

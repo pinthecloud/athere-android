@@ -20,7 +20,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:textSize="@dimen/font_medium" />
+        android:textColor="@color/light_gray"
+        android:paddingRight="@dimen/square_chat_list_send_time_right_margin"
+        android:paddingBottom="@dimen/square_chat_list_send_time_bottom_margin"
+        android:textSize="@dimen/font_small" />
 
     <TextView
         android:id="@+id/row_square_chat_list_send_message"
@@ -29,7 +32,6 @@
         android:background="@drawable/bg_chat_msg_sent"
         android:paddingLeft="@dimen/square_chat_list_send_message_left_margin"
         android:paddingRight="@dimen/square_chat_list_send_message_right_margin"
-        android:textColor="@android:color/white"
         android:textSize="@dimen/font_large" />
 
 </LinearLayout>

@@ -57,7 +57,7 @@ public class UserHelper {
 
 
 	public boolean exitSquareSync(final AhFragment frag, String userId) throws AhException {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "exitSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return false;
 		}
@@ -92,7 +92,7 @@ public class UserHelper {
 
 
 	public void exitSquareAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
@@ -112,7 +112,7 @@ public class UserHelper {
 	}
 
 	public void enterSquareAsync(final AhFragment frag, User user, final AhEntityCallback<String> callback) throws AhException {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
@@ -133,7 +133,7 @@ public class UserHelper {
 
 
 	public String enterSquareSync(final AhFragment frag, User user) throws AhException {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
@@ -168,7 +168,7 @@ public class UserHelper {
 
 
 	public void getUserListAsync(final AhFragment frag, String squareId, final AhListCallback<User> callback){
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
@@ -189,7 +189,7 @@ public class UserHelper {
 	}
 
 	public List<User> getUserListSync(final AhFragment frag, String squareId){
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
@@ -225,7 +225,7 @@ public class UserHelper {
 
 
 	public void getUserAsync(final AhFragment frag, String id, final AhEntityCallback<User> callback) {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
@@ -247,12 +247,12 @@ public class UserHelper {
 
 
 	public User getUserSync(final AhFragment frag, String id) {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
 
-		if (id == null) if (!AhApplication.isOnline()) {
+		if (id == null) if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserSync", AhException.TYPE.NO_USER_ID));
 			return null;
 		}
@@ -288,7 +288,7 @@ public class UserHelper {
 
 	public void updateUserAsync(final AhFragment frag, User user, final AhEntityCallback<User> callback){
 
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
@@ -315,24 +315,19 @@ public class UserHelper {
 
 	public User getMyUserInfo(boolean hasId) {
 		Bitmap pictureBitmap = null;
-		Bitmap pictureCircleBitmap = null;
 		try {
 			pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-			pictureCircleBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 		} catch (FileNotFoundException e) {
 			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-			pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
 			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
 		}
 		String profilePic = BitmapUtil.convertToString(pictureBitmap);
-		String profileCirclePic = BitmapUtil.convertToString(pictureCircleBitmap);
 
 		User user = new User();
 		if(hasId)
 			user.setId(pref.getString(AhGlobalVariable.USER_ID_KEY));
 		user.setNickName(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
 		user.setProfilePic(profilePic);
-		user.setProfileCirclePic(profileCirclePic);
 		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
 		user.setCompanyNum(pref.getInt(AhGlobalVariable.COMPANY_NUMBER_KEY));
 		user.setAge(pref.getInt(AhGlobalVariable.AGE_KEY));
@@ -344,7 +339,7 @@ public class UserHelper {
 
 
 	public String getRegistrationIdSync(final AhFragment frag) {
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
 		}
@@ -362,12 +357,12 @@ public class UserHelper {
 
 	public boolean unRegisterGcmSync(final AhFragment frag) {
 
-		if (!AhApplication.isOnline()) {
+		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "UnRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return false;
 		}
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
-		
+
 		try {
 			gcm.unregister();
 		} catch (IOException e) {

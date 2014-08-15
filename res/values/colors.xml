@@ -4,6 +4,7 @@
     <color name="red">#d6003b</color>
     <color name="dark_red">#d6003b</color>
     <color name="blue">#14a0cc</color>
-    <color name="gray_line">#bdbdbd</color>
+    <color name="gray_line">#eeeeee</color>
     <color name="gray_background">#eaeaea</color>
+    <color name="light_gray">#bdbdbd</color>
 </resources>

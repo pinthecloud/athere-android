@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -69,7 +70,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			}else{
 				isMale.setImageResource(R.drawable.sidebar_member_gender_w);
 			}
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfileCirclePic()));
+			profilePic.setImageBitmap(BitmapUtil.cropRound(BitmapUtil.convertToBitmap(user.getProfilePic())));
 			profilePic.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -79,7 +80,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 						@Override
 						public void doPositiveThing(Bundle bundle) {
 							Intent intent = new Intent(context, ChupaChatActivity.class);
-							intent.putExtra(AhGlobalVariable.USER_KEY, user);
+							intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 							context.startActivity(intent);
 						}
 						@Override
@@ -95,17 +96,16 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			/*
 			 * Set event on button
 			 */
-			chupaButton.setOnClickListener(new View.OnClickListener() {
+			chupaButton.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(context, ChupaChatActivity.class);
-					intent.putExtra(AhGlobalVariable.USER_KEY, user);
+					intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 					context.startActivity(intent);
 				}
 			});
 		}
 		return view;
 	}
-
 }

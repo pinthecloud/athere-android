@@ -11,8 +11,6 @@
     <string name="profile">Profile</string>
     <string name="profile_image">Profile Image</string>
     <string name="blur_image">Blur Image</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="male">Male</string>
@@ -38,6 +36,7 @@
     <string name="member">Member</string>
     <string name="code">Code</string>
     <string name="shout">Shout</string>
+    <string name="confirm">Confirm</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>

@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.activity;
 
-import javax.crypto.Mac;
-
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -121,7 +119,6 @@ public class SquareActivity extends AhActivity{
 
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
 	}
 
 

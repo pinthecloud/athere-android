@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -13,7 +14,7 @@ import android.util.DisplayMetrics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.dialog.UpdateAppDialog;
+import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AppVersion;
@@ -110,7 +111,10 @@ public class SplashActivity extends AhActivity implements Runnable{
 			clientVer = 0.1;
 		}
 		if (serverVer.getVersion() > clientVer) {
-			UpdateAppDialog updateDialog = new UpdateAppDialog(new AhDialogCallback() {
+			Resources resources = getResources();
+			String title = resources.getString(R.string.update_app_title);
+			String message = resources.getString(R.string.update_app_message);
+			AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
@@ -129,7 +133,7 @@ public class SplashActivity extends AhActivity implements Runnable{
 			});
 			updateDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 		}else{
-			goToNextActivity();	
+			goToNextActivity();
 		}
 	}
 

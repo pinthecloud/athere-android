@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,16 +57,18 @@ public class ChupaChatFragment extends AhFragment {
 	private ChupaChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragment onCreate");
+
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 
 		Intent intent = activity.getIntent();
-		otherUser = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
+		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
+		otherUser = userDBHelper.getUser(userId);
 	}
 
 	@Override
@@ -90,15 +93,14 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set Action Bar
 		 */
-		mActionBar.setDisplayShowHomeEnabled(false);
 		mActionBar.setTitle(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
 
 
 		/*
 		 * Set other bar
 		 */
-		Bitmap circleProfile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(otherUser.getProfilePic()));
-		otherProfileImage.setImageBitmap(circleProfile);
+		Bitmap profile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(otherUser.getProfilePic()));
+		otherProfileImage.setImageBitmap(profile);
 		otherNickName.setText(otherUser.getNickName());
 		otherAge.setText("" + otherUser.getAge());
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
@@ -123,10 +125,10 @@ public class ChupaChatFragment extends AhFragment {
 
 		if(chupaCommunId == null || "".equals(chupaCommunId))
 			throw new AhException("No chupaCommunId");
-		
+
 		// Clear badge numbers displayed on chupa list
 		messageDBHelper.clearBadgeNum(chupaCommunId);
-		
+
 		// Get every chupa by chupaCommunId
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		for (AhMessage message : chupas) {
@@ -263,6 +265,7 @@ public class ChupaChatFragment extends AhFragment {
 
 		return view;
 	}
+
 
 	private boolean isSenderButtonEnable(){
 		return isTypedMessage && !isOtherUserExit;

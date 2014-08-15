@@ -87,21 +87,18 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/square_drawer_frag_profile_blur_image"
+    <View
+        android:id="@+id/square_drawer_frag_profile_image_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/square_drawer_profile_blur_height"
-        android:layout_below="@+id/square_drawer_frag_toggle_bar_layout"
-        android:alpha="0.2"
-        android:contentDescription="@string/blur_image"
-        android:scaleType="fitXY" />
+        android:layout_below="@+id/square_drawer_frag_toggle_bar_layout" />
 
     <ImageButton
         android:id="@+id/square_drawer_frag_profile_setting_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/square_drawer_frag_profile_blur_image"
-        android:layout_alignTop="@+id/square_drawer_frag_profile_blur_image"
+        android:layout_alignRight="@+id/square_drawer_frag_profile_image_view"
+        android:layout_alignTop="@+id/square_drawer_frag_profile_image_view"
         android:background="@android:color/transparent"
         android:contentDescription="@string/profile_settings"
         android:src="@drawable/sidebar_profile_edit"
@@ -111,7 +108,7 @@
         android:id="@+id/square_drawer_frag_profile_circle_image"
         android:layout_width="@dimen/square_drawer_profile_circle_width"
         android:layout_height="@dimen/square_drawer_profile_circle_height"
-        android:layout_alignTop="@+id/square_drawer_frag_profile_blur_image"
+        android:layout_alignTop="@+id/square_drawer_frag_profile_image_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/square_drawer_profile_circle_top_margin"
         android:contentDescription="@string/profile_image" />
@@ -159,7 +156,7 @@
         android:id="@+id/square_drawer_frag_member_number_bar_layout"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/square_drawer_member_number_bar_height"
-        android:layout_below="@+id/square_drawer_frag_profile_blur_image"
+        android:layout_below="@+id/square_drawer_frag_profile_image_view"
         android:gravity="center"
         android:paddingLeft="@dimen/square_drawer_member_number_bar_left_margin" >
 
