@@ -118,7 +118,7 @@ public class MessageHelper {
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 
-		mClient.setContext(frag.getActivity());
+		//mClient.setContext(frag.getActivity());
 		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
 
 			@Override
