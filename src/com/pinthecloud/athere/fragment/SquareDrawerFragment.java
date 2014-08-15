@@ -175,22 +175,20 @@ public class SquareDrawerFragment extends AhFragment {
 								.setType(AhMessage.TYPE.EXIT_SQUARE);
 								AhMessage message = messageBuilder.build();
 								messageHelper.sendMessageSync(_thisFragment, message);
-
+								
+								pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+								pref.removePref(AhGlobalVariable.USER_ID_KEY);
+								pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+								pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+								pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+								pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+								pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+								final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 								activity.runOnUiThread(new Runnable() {
 
 									@Override
 									public void run() {
 										progressBar.setVisibility(View.GONE);
-
-										pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-										pref.removePref(AhGlobalVariable.USER_ID_KEY);
-										pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-										pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-										pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-										pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-										pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-
-										Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 										startActivity(intent);
 										activity.finish();
 									}
@@ -214,17 +212,8 @@ public class SquareDrawerFragment extends AhFragment {
 				startActivity(intent);
 			}
 		});
-
-		return view;
-	}
-
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateUserList();
-
-
+		
+		
 		/*
 		 * Set handler for refresh new and old user
 		 */
@@ -241,6 +230,15 @@ public class SquareDrawerFragment extends AhFragment {
 				});
 			}
 		});
+
+		return view;
+	}
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateUserList();
 	}
 
 

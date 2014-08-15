@@ -464,7 +464,16 @@ public class SquareProfileFragment extends AhFragment{
 				.setType(AhMessage.TYPE.ENTER_SQUARE);
 				AhMessage message = messageBuilder.build();
 				messageHelper.sendMessageSync(_thisFragment, message);
-
+				
+				// Save this setting and go to next activity
+				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, AhGlobalVariable.SQUARE_CHAT_TAB);
+				
+				// Set and move to next activity after clear previous activity
+				intent.setClass(context, SquareActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+				
 				activity.runOnUiThread(new Runnable(){
 
 					@Override
@@ -472,14 +481,6 @@ public class SquareProfileFragment extends AhFragment{
 						// Dimiss progress bar
 						progressBar.setVisibility(View.GONE);
 
-						// Save this setting and go to next activity
-						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, AhGlobalVariable.SQUARE_CHAT_TAB);
-
-						// Set and move to next activity after clear previous activity
-						intent.setClass(context, SquareActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
 				});

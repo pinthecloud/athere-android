@@ -235,31 +235,20 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
+				
+				messageList.add(message);
+				activity.runOnUiThread(new Runnable() {
 
-				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) {
-					activity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							messageList.add(message);
-							messageListAdapter.notifyDataSetChanged();
-							messageListView.setSelection(messageListView.getCount() - 1);
-						}
-					});
-				} else if(message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-					isOtherUserExit = true;
-
-					activity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
+					@Override
+					public void run() {
+						messageListAdapter.notifyDataSetChanged();
+						messageListView.setSelection(messageListView.getCount() - 1);
+						if(message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
+							isOtherUserExit = true;
 							sendButton.setEnabled(false);
-							messageList.add(message);
-							messageListAdapter.notifyDataSetChanged();
-							messageListView.setSelection(messageListView.getCount() - 1);
 						}
-					});
-				}
+					}
+				});
 			}
 		});
 

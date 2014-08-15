@@ -373,19 +373,25 @@ public class UserHelper {
 	}
 
 
-	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
-
-	private final String USER_RECEIVED = "USER_RECEIVED";
-
+//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
+	AhEntityCallback<User> _callback;
+//	private final String USER_RECEIVED = "USER_RECEIVED";
+	private int countUserHandler = 0;
 	public void setUserHandler(AhEntityCallback<User> callback){
-		map.put(USER_RECEIVED, callback);
+//		map.put(USER_RECEIVED, callback);
+		if (countUserHandler == 0) {
+			_callback = callback;
+			countUserHandler++;
+		} else {
+			throw new AhException("[UserHelper.setUserHandler]");
+		}
+			
 	}
 
 	public void triggerUserEvent(User user){
-		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
-		Log.d(AhGlobalVariable.LOG_TAG,"in triggerUserEvent");
-		if(callback != null)
-			callback.onCompleted(user);
+//		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
+		if(_callback != null)
+			_callback.onCompleted(user);
 		else 
 			Log.d(AhGlobalVariable.LOG_TAG, "No Such method in triggerUserEvent");
 	}

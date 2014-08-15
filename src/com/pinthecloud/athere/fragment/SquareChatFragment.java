@@ -132,16 +132,7 @@ public class SquareChatFragment extends AhFragment{
 				(context, this, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
 
-		return view;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		setHandlers();
-	}
-
-	public void setHandlers(){
+		
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -154,29 +145,48 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) return;
+				messageList.add(message);
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						messageList.add(message);
 						messageListAdapter.notifyDataSetChanged();
 						messageListView.setSelection(messageListView.getCount() - 1);
 					}
 				});
 			}
 		});
+		
+		
+		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		// See below
+		notifyMessageDBOnResume();
+	}
+	
+	/**
+	 * @author hongkunyoo
+	 * notify this Method When this Fragment is on Resume
+	 * so that the Message stored in MessageDBHelper can inflate to the view again
+	 */
+	private void notifyMessageDBOnResume(){
 
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
 			final List<AhMessage> messageListFromBuffer = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+			for (AhMessage message : messageListFromBuffer)
+				messageList.add(message);
+			
 			activity.runOnUiThread(new Runnable() {
 
 				@Override
 				public void run() {
-					for (AhMessage message : messageListFromBuffer) {
-						messageList.add(message);
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
-					}
+					messageListAdapter.notifyDataSetChanged();
+					messageListView.setSelection(messageListView.getCount() - 1);
 				}
 			});
 		}

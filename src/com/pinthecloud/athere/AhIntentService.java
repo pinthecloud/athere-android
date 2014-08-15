@@ -25,7 +25,6 @@ import android.util.Log;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
@@ -34,8 +33,6 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class AhIntentService extends IntentService {
@@ -72,7 +69,10 @@ public class AhIntentService extends IntentService {
 		/*
 		 * Parsing the data from server
 		 */
+		String unRegisterd = intent.getExtras().getString("unregistered");
 		
+		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID))
+			return;
 		try {
 			message = parseMessageIntent(intent);
 			userId = parseUserIdIntent(intent);
@@ -139,6 +139,7 @@ public class AhIntentService extends IntentService {
 	private void CHUPA() {
 		messageDBHelper.addMessage(message);
 		if (isRunning(app)) {
+			Log.e("ERROR","in chupa app running");
 			messageHelper.triggerMessageEvent(message);
 		} else {
 			alertNotification(AhMessage.TYPE.CHUPA);
