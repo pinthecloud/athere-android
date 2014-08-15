@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="gray_tab_text_unselected">#959595</color>
-    <color name="red">#ff0047</color>
+    <color name="red">#d6003b</color>
     <color name="dark_red">#d6003b</color>
     <color name="blue">#14a0cc</color>
-    <color name="gray_line">#dbdbdb</color>
+    <color name="gray_line">#bdbdbd</color>
     <color name="gray_background">#eaeaea</color>
 </resources>
