@@ -177,10 +177,8 @@ public class AhApplication extends Application{
 		mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 
 			@Override
-			public void onCompleted(JsonElement arg0, Exception arg1,
-					ServiceFilterResponse arg2) {
-				// TODO Auto-generated method stub
-
+			public void onCompleted(JsonElement json, Exception exception,
+					ServiceFilterResponse response) {
 				messageHelper.sendMessageSync(frag, message);
 
 				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
