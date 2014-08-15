@@ -39,7 +39,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	private final String AGE = "age";
 	private final String SQUARE_ID = "square_id";
 	private final String IS_CHUPA_ENABLE = "is_chupa_enable";
-	
+
 	private final String HAS_BEEN_OUT = "has_been_out";
 
 
@@ -54,7 +54,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
-			"("
+				"("
 				+ ID + " TEXT PRIMARY KEY,"
 				+ NICK_NAME + " TEXT,"
 				+ PROFILE_PIC + " TEXT,"
@@ -66,7 +66,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				+ SQUARE_ID + " TEXT,"
 				+ IS_CHUPA_ENABLE + " INTEGER,"
 				+ HAS_BEEN_OUT + " INTEGER"
-			+")";
+				+")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
@@ -152,29 +152,29 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Getting single contact
 	public User getUser(String id) {
-//		SQLiteDatabase db = this.getReadableDatabase();
-//
-//		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
-//				new String[] { id }, null, null, null, null);
-//		if (cursor != null)
-//			if(cursor.moveToFirst())
-//				return convertToUser(cursor);
-//
-//		return null;
+		//		SQLiteDatabase db = this.getReadableDatabase();
+		//
+		//		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
+		//				new String[] { id }, null, null, null, null);
+		//		if (cursor != null)
+		//			if(cursor.moveToFirst())
+		//				return convertToUser(cursor);
+		//
+		//		return null;
 		return this.getUser(id, false);
 	}
-	
+
 	public User getUser(String id, boolean includingExits){
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String query = ID + "=?";
 		String[] args = new String[] { id };
-		
+
 		if (!includingExits) {
 			query = ID + "=? and " + HAS_BEEN_OUT + "=?";
 			args = new String[] { id, "0" };
 		}
-		
+
 		Cursor cursor = db.query(TABLE_NAME, null, query,
 				args, null, null, null, null);
 		if (cursor != null)
@@ -194,7 +194,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		return isExist;
 	}
-	
+
 	public boolean isUserExit(String userId) {
 		boolean isExit = false;
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -251,26 +251,26 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Getting All Contacts
 	public List<User> getAllUsers() {
-//		List<User> users = new ArrayList<User>();
-//		// Select All Query
-//		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
-//
-//		SQLiteDatabase db = this.getWritableDatabase();
-//		Cursor cursor = db.rawQuery(selectQuery, null);
-//
-//		// looping through all rows and adding to list
-//		if (cursor.moveToFirst()) {
-//			do {
-//				users.add(convertToUser(cursor));
-//			} while (cursor.moveToNext());
-//		}
-//
-//		// return contact list
-//		return users;
-		
+		//		List<User> users = new ArrayList<User>();
+		//		// Select All Query
+		//		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
+		//
+		//		SQLiteDatabase db = this.getWritableDatabase();
+		//		Cursor cursor = db.rawQuery(selectQuery, null);
+		//
+		//		// looping through all rows and adding to list
+		//		if (cursor.moveToFirst()) {
+		//			do {
+		//				users.add(convertToUser(cursor));
+		//			} while (cursor.moveToNext());
+		//		}
+		//
+		//		// return contact list
+		//		return users;
+
 		return this.getAllUsers(false);
 	}
-	
+
 	public List<User> getAllUsers(boolean includingExits) {
 		List<User> users = new ArrayList<User>();
 		// Select All Query
@@ -325,15 +325,15 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.delete(TABLE_NAME, ID + " = ?", new String[] { id });
 		db.close();
 	}
-	
+
 	public void exitUser(String id) {
 		if (id == null || id.equals("")) return;
-		
+
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		User user = this.getUser(id);
 		if (user == null) return;
-		
+
 		ContentValues values = new ContentValues();
 		values.put(ID, user.getId());
 		values.put(NICK_NAME, user.getNickName());

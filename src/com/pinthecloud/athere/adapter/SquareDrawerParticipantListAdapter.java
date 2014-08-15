@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -79,7 +80,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 						@Override
 						public void doPositiveThing(Bundle bundle) {
 							Intent intent = new Intent(context, ChupaChatActivity.class);
-							intent.putExtra(AhGlobalVariable.USER_KEY, user);
+							intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 							context.startActivity(intent);
 						}
 						@Override
@@ -100,7 +101,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 				@Override
 				public void onClick(View v) {
 					Intent intent = new Intent(context, ChupaChatActivity.class);
-					intent.putExtra(AhGlobalVariable.USER_KEY, user);
+					intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 					context.startActivity(intent);
 				}
 			});

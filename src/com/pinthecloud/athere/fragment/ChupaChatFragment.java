@@ -7,11 +7,10 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -58,16 +57,18 @@ public class ChupaChatFragment extends AhFragment {
 	private ChupaChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragment onCreate");
+
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 
 		Intent intent = activity.getIntent();
-		otherUser = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
+		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
+		otherUser = userDBHelper.getUser(userId);
 	}
 
 	@Override
@@ -93,8 +94,6 @@ public class ChupaChatFragment extends AhFragment {
 		 * Set Action Bar
 		 */
 		mActionBar.setTitle(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
-		mActionBar.setDisplayShowHomeEnabled(false);
-		mActionBar.setDisplayHomeAsUpEnabled(true);
 
 
 		/*
@@ -265,18 +264,6 @@ public class ChupaChatFragment extends AhFragment {
 		});
 
 		return view;
-	}
-
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		// Respond to the action bar's Up/Home button
-		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(activity);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 
