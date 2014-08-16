@@ -98,7 +98,7 @@ public class SquareDrawerFragment extends AhFragment {
 		participantListAdapter = new SquareDrawerParticipantListAdapter
 				(context, this, R.layout.row_square_drawer_participant_list, userList);
 		participantListView.setAdapter(participantListAdapter);
-
+		
 
 		/*
 		 * Set Button
@@ -165,7 +165,7 @@ public class SquareDrawerFragment extends AhFragment {
 				escDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
-
+		
 		return view;
 	}
 
@@ -174,7 +174,7 @@ public class SquareDrawerFragment extends AhFragment {
 	public void onResume() {
 		super.onResume();
 		updateUserList();
-
+		
 		/*
 		 * Set handler for refresh new and old user
 		 */

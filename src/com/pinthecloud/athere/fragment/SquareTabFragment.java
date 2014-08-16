@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -15,13 +16,19 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.view.BadgeView;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 
 public class SquareTabFragment extends AhFragment{
 
+	private final int CHUPA_TAB = 1;
+	private final int BADGE_SIZE = 21;
+
 	private ViewPager mViewPager;
 	private SquarePagerAdapter mSquarePagerAdapter;
 	private PagerSlidingTabStrip tabs;
+	private View chupaTabBadge;
+	private BadgeView badge;
 
 	private Square square;
 	private MessageHelper messageHelper;
@@ -51,7 +58,6 @@ public class SquareTabFragment extends AhFragment{
 		mViewPager = (ViewPager) view.findViewById(R.id.square_tab_frag_pager);
 		tabs = (PagerSlidingTabStrip) view.findViewById(R.id.square_tab_frag_tab);
 
-
 		/*
 		 * Set tab
 		 */
@@ -67,6 +73,7 @@ public class SquareTabFragment extends AhFragment{
 		// Set up tabs with the view pager
 		tabs.setStartTab(startTab);
 		tabs.setViewPager(mViewPager);
+		chupaTabBadge = tabs.getTabBadge(CHUPA_TAB);
 		tabs.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
@@ -81,17 +88,30 @@ public class SquareTabFragment extends AhFragment{
 			}
 		});
 
+
+		/*
+		 * Set badge
+		 */
+		badge = new BadgeView(context, chupaTabBadge);
+		badge.setTextColor(Color.RED);
+		badge.setBadgeBackgroundColor(Color.WHITE);
+		badge.setTextSize(BADGE_SIZE);
+		badge.setBadgePosition(BadgeView.POSITION_CENTER_VERTICAL_RIGHT);
+
+		/*
+		 * Set message handle
+		 */
 		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				Log(_thisFragment,"SquareTabFragment setMessageHandler onCompleted");
 				messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())){
 					activity.runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
+							badge.increment(1);
 							mSquarePagerAdapter.notifyDataSetChanged();
 						}
 					});
@@ -100,5 +120,21 @@ public class SquareTabFragment extends AhFragment{
 		});
 
 		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateTab();
+	}
+
+	private void updateTab(){
+		int totalNum = 1;	// TODO get total badge number
+		if(totalNum != 0){
+			badge.setText("" + totalNum);
+			badge.show();	
+		}else{
+			badge.hide();
+		}
 	}
 }
