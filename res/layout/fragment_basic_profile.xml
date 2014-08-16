@@ -26,7 +26,7 @@
 
         <EditText
             android:id="@+id/basic_profile_frag_nick_name_edit_text"
-            android:layout_width="260dp"
+            android:layout_width="@dimen/basic_profile_text_width"
             android:layout_height="@dimen/basic_profile_text_height"
             android:ems="10"
             android:gravity="center"
@@ -62,7 +62,7 @@
 
         <EditText
             android:id="@+id/basic_profile_frag_year_text"
-            android:layout_width="260dp"
+            android:layout_width="@dimen/basic_profile_text_width"
             android:layout_height="@dimen/basic_profile_text_height"
             android:ems="10"
             android:gravity="center"

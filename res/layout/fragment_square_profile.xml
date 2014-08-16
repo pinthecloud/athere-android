@@ -65,32 +65,39 @@
             android:background="#ffffff"
             android:gravity="center"
             android:orientation="vertical" >
+            
+            <ImageView
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:src="@drawable/ground_profile_label"
+            	android:layout_marginBottom="10dp" />
 
             <EditText
                 android:id="@+id/square_profile_frag_nick_name_text"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/square_profile_text_width"
                 android:layout_height="@dimen/square_profile_text_height"
                 android:ems="10"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:hint="@string/nick_name"
                 android:inputType="text"
                 android:maxLength="15"
-                android:textSize="@dimen/font_x_large" >
+                android:textSize="@dimen/font_large" >
             </EditText>
 
             <EditText
                 android:id="@+id/square_profile_frag_company_text"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/square_profile_text_width"
                 android:layout_height="@dimen/square_profile_text_height"
                 android:ems="10"
-                android:gravity="center|bottom"
+                android:gravity="center"
                 android:hint="@string/number_of_member"
-                android:textSize="@dimen/font_x_large" />
+                android:textSize="@dimen/font_large" />
 
             <ImageButton
                 android:id="@+id/square_profile_frag_start_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/squre_profile_button_top_margin"
                 android:background="@android:color/transparent"
                 android:contentDescription="@android:string/ok"
                 android:src="@drawable/ok_image_button_bg" />
