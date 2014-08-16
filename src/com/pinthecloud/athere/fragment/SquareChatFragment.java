@@ -37,6 +37,10 @@ public class SquareChatFragment extends AhFragment{
 	private MessageDBHelper messageDBHelper;
 
 
+	public SquareChatFragment() {
+		super();
+	}
+
 	public SquareChatFragment(Square square) {
 		super();
 		this.square = square;
@@ -48,7 +52,6 @@ public class SquareChatFragment extends AhFragment{
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 	}
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

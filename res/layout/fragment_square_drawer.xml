@@ -131,7 +131,7 @@
         <ListView
             android:id="@+id/square_drawer_frag_participant_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:divider="@null" >
         </ListView>
     </LinearLayout>

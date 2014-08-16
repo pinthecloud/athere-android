@@ -63,7 +63,6 @@ public class HongkunTestAcitivity extends AhActivity {
 		} catch(AhException ex){
 			Log(this,"HERE : ",ex);
 		}
-		
 	}
 	/*
 	public void addItem(View view) {

@@ -129,7 +129,8 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		exceptionDialog = new AhAlertDialog(title, message, false, new AhDialogCallback() {
 			@Override
 			public void doPositiveThing(Bundle bundle) {
-				// do nothing
+				android.os.Process.killProcess(android.os.Process.myPid());
+				System.exit(1);
 			}
 			@Override
 			public void doNegativeThing(Bundle bundle) {

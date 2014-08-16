@@ -60,7 +60,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_time);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_chupa_chat_list_send_progress_bar);
 
-		
+
 				/*
 				 * Set UI component only in send list
 				 */

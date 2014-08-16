@@ -29,9 +29,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Base64;
 import android.util.Log;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.R;
 
 public class BitmapUtil {
 
@@ -176,11 +174,14 @@ public class BitmapUtil {
 
 
 	public static Bitmap convertToBitmap(String str){
-		Context context = AhApplication.getInstance();
-		if (str == null || str.equals("")) 
-			return BitmapFactory.decodeResource(context.getResources(), R.drawable.splash);
-		byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
-		return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+		Bitmap bitmap = null;
+		try{
+			byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
+			bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+		}catch(Exception e){
+			Log.d(AhGlobalVariable.LOG_TAG, "Error of BitmapUtil : " + e.getMessage());
+		}
+		return bitmap;
 
 		//		byte[] bytes;
 		//		try {

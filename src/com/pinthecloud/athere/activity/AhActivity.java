@@ -13,7 +13,7 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
  *  Every Activity is a container for each Fragment.
  *  Fragments do the real works.
  */
-public class AhActivity extends Activity {
+public class AhActivity extends Activity{
 
 	protected AhApplication app;
 	protected PreferenceHelper pref;
@@ -28,7 +28,7 @@ public class AhActivity extends Activity {
 		app = AhApplication.getInstance();
 		pref = app.getPref();
 	}
-	
+
 	// Logging Method
 	protected void Log(AhActivity activity, Object... params){
 		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
