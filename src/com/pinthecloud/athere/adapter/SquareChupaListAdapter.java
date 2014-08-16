@@ -35,7 +35,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			LayoutInflater inflater = (LayoutInflater) 
 					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(this.layoutId, parent, false);
-		} 
+		}
 
 		Map<String,String> lastChupaMap = items.get(position);
 		if (lastChupaMap != null) {
@@ -67,6 +67,8 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			if (!chupaBadge.equals("0")) {
 				badgeNum.setText(chupaBadge);
 				badgeNum.setVisibility(View.VISIBLE);
+			}else{
+				badgeNum.setVisibility(View.GONE);
 			}
 		}
 

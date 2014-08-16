@@ -14,6 +14,7 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 
 public class SquareTabFragment extends AhFragment{
@@ -24,6 +25,7 @@ public class SquareTabFragment extends AhFragment{
 
 	private Square square;
 	private MessageHelper messageHelper;
+	private MessageDBHelper messageDBHelper;
 
 
 	public SquareTabFragment(Square square) {
@@ -35,6 +37,7 @@ public class SquareTabFragment extends AhFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		messageHelper = app.getMessageHelper();
+		messageDBHelper = app.getMessageDBHelper();
 	}
 
 	@Override
@@ -77,12 +80,13 @@ public class SquareTabFragment extends AhFragment{
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
-		
+
 		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				Log(_thisFragment,"in setMessageHandler in TabFrag");
+				Log(_thisFragment,"SquareTabFragment setMessageHandler onCompleted");
+				messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())){
 					activity.runOnUiThread(new Runnable() {
 
@@ -94,8 +98,7 @@ public class SquareTabFragment extends AhFragment{
 				} 
 			}
 		});
-		
+
 		return view;
 	}
-
 }

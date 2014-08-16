@@ -128,7 +128,7 @@ public class SquareChupaListFragment extends AhFragment{
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
 			chupaCommunId = message.getChupaCommunId();
-			chupaBadge = ""+ messageDBHelper.getBadgeNum(message.getChupaCommunId());
+			chupaBadge = ""+messageDBHelper.getBadgeNum(message.getChupaCommunId());
 			map.put("profilePic", profilePic);
 			map.put("userNickName", userNickName);
 			map.put("userId", userId);
