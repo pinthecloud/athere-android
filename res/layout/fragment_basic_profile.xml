@@ -17,7 +17,7 @@
         android:layout_marginTop="@dimen/basic_profile_wrapper_top_margin" >
 
         <ImageView
-            android:id="@+id/drawer_user_pro_pic"
+            android:id="@+id/basic_profile_frag_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/basic_profile_logo_bottom_margin"
@@ -32,7 +32,7 @@
             android:gravity="center"
             android:hint="@string/nick_name"
             android:inputType="text"
-            android:maxLength="15"
+            android:maxLength="10"
             android:textSize="@dimen/font_large" >
         </EditText>
 

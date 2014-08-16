@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -29,10 +28,13 @@ import android.widget.ToggleButton;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
+import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -41,12 +43,10 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
-
-	private DrawerLayout mDrawerLayout;
-	private View mFragmentView;
 
 	private ProgressBar progressBar;
 	private ToggleButton chatOnButton;
@@ -176,21 +176,19 @@ public class SquareDrawerFragment extends AhFragment {
 								AhMessage message = messageBuilder.build();
 								messageHelper.sendMessageSync(_thisFragment, message);
 
+								pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+								pref.removePref(AhGlobalVariable.USER_ID_KEY);
+								pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+								pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+								pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+								pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+								pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+								final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 								activity.runOnUiThread(new Runnable() {
 
 									@Override
 									public void run() {
 										progressBar.setVisibility(View.GONE);
-
-										pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-										pref.removePref(AhGlobalVariable.USER_ID_KEY);
-										pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-										pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-										pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-										pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-										pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-
-										Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 										startActivity(intent);
 										activity.finish();
 									}
@@ -224,7 +222,6 @@ public class SquareDrawerFragment extends AhFragment {
 		super.onResume();
 		updateUserList();
 
-
 		/*
 		 * Set handler for refresh new and old user
 		 */
@@ -244,16 +241,7 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-	}
-
-
-	public void setUp(View fragmentView, DrawerLayout drawerLayout, User user) {
-		this.mFragmentView = fragmentView;
-		this.mDrawerLayout = drawerLayout;
-
+	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
 		/*
 		 * Set profile images 
 		 */
@@ -264,7 +252,29 @@ public class SquareDrawerFragment extends AhFragment {
 			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
 		}
-		profileCircleImage.setImageBitmap(profileBitmap);
+		profileCircleImage.setImageBitmap(BitmapUtil.cropRound(profileBitmap));
+		profileCircleImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						Intent intent = new Intent(context, ChupaChatActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						Intent intent = new Intent(context, ProfileImageActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+				});
+				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
 		if(user.isMale()){
 			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
 		} else{

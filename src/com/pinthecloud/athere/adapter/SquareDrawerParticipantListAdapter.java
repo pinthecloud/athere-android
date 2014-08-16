@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.User;
@@ -59,12 +59,13 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			TextView nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
 			ImageView isMale = (ImageView)view.findViewById(R.id.drawer_user_is_male);
 			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
-
+			TextView companyNumber = (TextView) view.findViewById(R.id.drawer_user_company_num);
 
 			/*
 			 * Set UI component
 			 */
 			nickName.setText(user.getNickName());
+			companyNumber.setText("" + user.getCompanyNum());
 			if(user.isMale()){
 				isMale.setImageResource(R.drawable.sidebar_member_gender_m);
 			}else{
@@ -85,7 +86,9 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 						}
 						@Override
 						public void doNegativeThing(Bundle bundle) {
-							// do nothing
+							Intent intent = new Intent(context, ProfileImageActivity.class);
+							intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+							context.startActivity(intent);
 						}
 					});
 					profileDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);

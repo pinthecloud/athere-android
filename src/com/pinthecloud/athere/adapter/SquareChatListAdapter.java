@@ -19,6 +19,7 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -86,16 +87,13 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Set UI component only in send list
 				 */
-				switch(message.getStatus()){
-				case AhMessage.SENDING:
+				int status = message.getStatus();
+				if(status ==  AhMessage.STATUS.SENDING.getValue()){
 					progressBar.setVisibility(View.VISIBLE);
-					break;
-				case AhMessage.SENT:
+				}else if(status ==  AhMessage.STATUS.SENT.getValue()){
 					progressBar.setVisibility(View.GONE);
-					break;
-				case AhMessage.FAIL:
+				}else if(status ==  AhMessage.STATUS.FAIL.getValue()){
 					progressBar.setVisibility(View.GONE);
-					break;
 				}
 			} else if(this.layoutId == R.layout.row_square_chat_list_receive){
 				/*
@@ -131,12 +129,14 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 							@Override
 							public void doPositiveThing(Bundle bundle) {
 								Intent intent = new Intent(context, ChupaChatActivity.class);
-								intent.putExtra(AhGlobalVariable.USER_KEY, user);
+								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 								context.startActivity(intent);
 							}
 							@Override
 							public void doNegativeThing(Bundle bundle) {
-								// do nothing
+								Intent intent = new Intent(context, ProfileImageActivity.class);
+								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+								context.startActivity(intent);
 							}
 						});
 						profileDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);

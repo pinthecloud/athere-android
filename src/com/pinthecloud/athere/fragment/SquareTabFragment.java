@@ -77,21 +77,12 @@ public class SquareTabFragment extends AhFragment{
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
-
-		return view;
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		/*
-		 *  Need to set Handler for Chupa on app running state.
-		 */
+		
 		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
+				Log(_thisFragment,"in setMessageHandler in TabFrag");
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())){
 					activity.runOnUiThread(new Runnable() {
 
@@ -100,16 +91,11 @@ public class SquareTabFragment extends AhFragment{
 							mSquarePagerAdapter.notifyDataSetChanged();
 						}
 					});
-				} else if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-					activity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							mSquarePagerAdapter.notifyDataSetChanged();
-						}
-					});
-				}
+				} 
 			}
 		});
+		
+		return view;
 	}
+
 }

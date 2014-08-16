@@ -7,6 +7,7 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,15 +68,8 @@ public class SquareChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				User user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"));
-				if (user == null) {
-					user = userDBHelper.getUser(lastChupaCommunList.get(position).get("userId"), true);
-					if (user == null)
-						throw new AhException("No User exist Error");
-				}
-				
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, user);
+				intent.putExtra(AhGlobalVariable.USER_KEY, lastChupaCommunList.get(position).get("userId"));
 				startActivity(intent);
 			}
 		});
@@ -87,6 +81,7 @@ public class SquareChupaListFragment extends AhFragment{
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareChupaListFragment onResume");
 		updateChupaList();
 	}
 

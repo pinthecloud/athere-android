@@ -17,7 +17,6 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
-import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -32,8 +31,7 @@ public class SquareChatFragment extends AhFragment{
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
-	private AhMessage message;
-	
+
 	private Square square;
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
@@ -102,22 +100,24 @@ public class SquareChatFragment extends AhFragment{
 				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 				.setReceiverId(square.getId())
-				.setType(AhMessage.TYPE.TALK);
+				.setType(AhMessage.TYPE.TALK)
+				.setStatus(AhMessage.STATUS.SENDING);
+				final AhMessage message = messageBuilder.build();
 
-				message = messageBuilder.build();
-				message.setStatus(AhMessage.SENDING);
 				messageList.add(message);
 				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 				messageEditText.setText("");
+				final int id = messageDBHelper.addMessage(message);
 
 				// Send message to server
 				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						message.setStatus(AhMessage.SENT);
+						message.setStatus(AhMessage.STATUS.SENT);
 						messageListAdapter.notifyDataSetChanged();
+						messageDBHelper.updateMessages(id, message);
 					}
 				});
 			}
@@ -135,13 +135,12 @@ public class SquareChatFragment extends AhFragment{
 		return view;
 	}
 
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		setHandlers();
-	}
+		loadTalkMessage();
 
-	public void setHandlers(){
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -154,42 +153,43 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) return;
+				messageList.add(message);
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						messageList.add(message);
 						messageListAdapter.notifyDataSetChanged();
 						messageListView.setSelection(messageListView.getCount() - 1);
 					}
 				});
 			}
 		});
+	}
 
+
+	/**
+	 * @author hongkunyoo
+	 * notify this Method When this Fragment is on Resume
+	 * so that the Message stored in MessageDBHelper can inflate to the view again
+	 */
+	private void loadTalkMessage(){
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
-			final List<AhMessage> messageListFromBuffer = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-			activity.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					for (AhMessage message : messageListFromBuffer) {
-						messageList.add(message);
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
-					}
-				}
-			});
-		}
-	}
-
-	@Override
-	public void handleException(AhException ex) {
-		super.handleException(ex);
-		Log(_thisFragment, "in SquareChatFrag : " + ex.toString());
-		if (message != null) {
-			message.setStatus(AhMessage.SENT);
+			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+			messageList.clear();
+			messageList.addAll(talks);
 			messageListAdapter.notifyDataSetChanged();
+			messageListView.setSelection(messageListView.getCount() - 1);
 		}
-		
 	}
+
+
+	//	@Override
+	//	public void handleException(AhException ex) {
+	//		super.handleException(ex);
+	//		Log(_thisFragment, "in SquareChatFrag : " + ex.toString());
+	//		if (message != null) {
+	//			message.setStatus(AhMessage.FAIL);
+	//			messageListAdapter.notifyDataSetChanged();
+	//		}
+	//	}
 }

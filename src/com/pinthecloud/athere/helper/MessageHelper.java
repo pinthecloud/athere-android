@@ -1,6 +1,8 @@
 package com.pinthecloud.athere.helper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.util.Log;
@@ -136,29 +138,32 @@ public class MessageHelper {
 	}
 
 
-	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
-
+	private Map<String, List<AhEntityCallback<AhMessage>>> mapList = new HashMap<String, List<AhEntityCallback<AhMessage>>>();
 	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
 	//	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 
-	public void setMessageHandler(AhMessage.TYPE type, AhEntityCallback<AhMessage> callback){
-		map.put(type.toString(), callback);
-	}
+//	public void setMessageHandler(AhMessage.TYPE type, AhEntityCallback<AhMessage> callback){
+//		map.put(type.toString(), callback);
+//		Log.d(AhGlobalVariable.LOG_TAG,"setMessageHandler :" + type.toString() + callback);
+//	}
 
 	public void setMessageHandler(AhEntityCallback<AhMessage> callback){
-		map.put(MESSAGE_RECEIVED, callback);
+		List<AhEntityCallback<AhMessage>> list = mapList.get(MESSAGE_RECEIVED);
+		if (list == null) {
+			mapList.put(MESSAGE_RECEIVED, new ArrayList<AhEntityCallback<AhMessage>>());
+			list = mapList.get(MESSAGE_RECEIVED);
+		}
+		list.add(callback);
 	}
 
 	public void triggerMessageEvent(AhMessage message){
-		AhEntityCallback<AhMessage> callback = map.get(message.getType());
-		if(callback != null)
-			callback.onCompleted(message);
+		List<AhEntityCallback<AhMessage>> list = mapList.get(MESSAGE_RECEIVED);
+		if(list != null) {
+			for (AhEntityCallback<AhMessage> callback : list) {
+				callback.onCompleted(message);
+			}
+		}
 		else 
-			Log.d(AhGlobalVariable.LOG_TAG,"message.getType() :" + message.getType());
-		callback = map.get(MESSAGE_RECEIVED);
-		if(callback != null)
-			callback.onCompleted(message);
-		else 
-			Log.d(AhGlobalVariable.LOG_TAG,"map.get(MESSAGE_RECEIVED); :" + message.getType());
+			Log.d(AhGlobalVariable.LOG_TAG,"[MessageHelper.triggerMessage] map.get(MESSAGE_RECEIVED); :" + message.getType());
 	}
 }

@@ -7,13 +7,13 @@ import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.preference.PreferenceManager;
 
+import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class MessageDBHelper  extends SQLiteOpenHelper {
@@ -42,11 +42,10 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 	private final String RECEIVER_ID = "receiverId";
 	private final String TIME_STAMP = "timestamp";
 	private final String CHUPA_COMMUN_ID = "chupaCommunId";
+	private final String STATUS = "status";
 
-	private Context context;
 	public MessageDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		this.context = context;
 	}
 
 	// Creating Tables
@@ -62,7 +61,8 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 				+ RECEIVER + " TEXT,"
 				+ RECEIVER_ID + " TEXT,"
 				+ TIME_STAMP + " TEXT,"
-				+ CHUPA_COMMUN_ID + " TEXT"
+				+ CHUPA_COMMUN_ID + " TEXT,"
+				+ STATUS + " INTEGER"
 				+")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
@@ -96,46 +96,54 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 	 */
 
 	// Adding new contact
-	public void addMessage(AhMessage message) {
+	public int addMessage(AhMessage message) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		//values.put(ID, message.getId());
-		//putValueWithoutNull(values, ID, message.getId());
-
-		//values.put(TYPE, message.getType());
 		putValueWithoutNull(values, TYPE, message.getType());
-
-		//values.put(CONTENT, message.getContent());
 		putValueWithoutNull(values, CONTENT, message.getContent());
-
-		//values.put(SENDER, message.getSender());
 		putValueWithoutNull(values, SENDER, message.getSender());
-
-		//values.put(SENDER_ID, message.getSenderId());
 		putValueWithoutNull(values, SENDER_ID, message.getSenderId());
-
-		//values.put(RECEIVER, message.getReceiver());
 		putValueWithoutNull(values, RECEIVER, message.getReceiver());
-
-		//values.put(RECEIVER_ID, message.getReceiverId());
 		putValueWithoutNull(values, RECEIVER_ID, message.getReceiverId());
-
-		//values.put(TIME_STAMP, message.getTimeStamp());
 		putValueWithoutNull(values, TIME_STAMP, message.getTimeStamp());
-
 		putValueWithoutNull(values, CHUPA_COMMUN_ID, message.getChupaCommunId());
+		values.put(STATUS, message.getStatus());
 
 		// Inserting Row
-		db.insert(TABLE_NAME, null, values);
+		long id = db.insert(TABLE_NAME, null, values);
+		db.close(); // Closing database connection
+		return (int)id;
+	}
+
+
+	private void putValueWithoutNull(ContentValues values, String id, String value){
+		if (value == null) value = "";
+		values.put(id, value);
+	}
+
+
+	// Getting All Messages
+	public void updateMessages(int id, AhMessage message) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		putValueWithoutNull(values, TYPE, message.getType());
+		putValueWithoutNull(values, CONTENT, message.getContent());
+		putValueWithoutNull(values, SENDER, message.getSender());
+		putValueWithoutNull(values, SENDER_ID, message.getSenderId());
+		putValueWithoutNull(values, RECEIVER, message.getReceiver());
+		putValueWithoutNull(values, RECEIVER_ID, message.getReceiverId());
+		putValueWithoutNull(values, TIME_STAMP, message.getTimeStamp());
+		putValueWithoutNull(values, CHUPA_COMMUN_ID, message.getChupaCommunId());
+		values.put(STATUS, message.getStatus());
+
+		// Inserting Row
+		db.update(TABLE_NAME, values, ID + " = ?", new String[]{ "" + id });
 		db.close(); // Closing database connection
 	}
-
-	private void putValueWithoutNull(ContentValues contentValue, String id, String value){
-		if (value == null) value = "";
-		contentValue.put(id, value);
-	}
-
+	
+	
 	// Getting single contact
 	public AhMessage getMessage(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -158,10 +166,9 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		String receiverId = cursor.getString(6);
 		String timeStamp = cursor.getString(7);
 		String chupaCommunId = cursor.getString(8);
+		int status = cursor.getInt(9);
 
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-
-
 		messageBuilder.setId(_id)
 		.setType(type)
 		.setContent(content)
@@ -170,10 +177,11 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 		.setReceiver(receiver)
 		.setReceiverId(receiverId)
 		.setTimeStamp(timeStamp)
-		.setChupaCommunId(chupaCommunId);
-
+		.setChupaCommunId(chupaCommunId)
+		.setStatus(status);
 		return messageBuilder.build();
 	}
+
 
 	// Getting All Messages
 	public List<AhMessage> getAllMessages() {
@@ -410,34 +418,30 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 
 		return list;
 	}
-	
+
 	public void increaseBadgeNum(String chupaCommunId) {
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		int val = pref.getInt("communBageNum" + chupaCommunId, 0);
+		PreferenceHelper pref = AhApplication.getInstance().getPref();
+		int val = pref.getInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId);
 		val++;
-		Editor editor = pref.edit();
-		editor.putInt("communBageNum" + chupaCommunId, val);
-		editor.commit();
+		pref.putInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId, val);
 	}
-	
+
 	public int getBadgeNum(String chupaCommunId) {
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		int val = pref.getInt("communBageNum" + chupaCommunId, 0);
+		PreferenceHelper pref = AhApplication.getInstance().getPref();
+		int val = pref.getInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId);
 		return val;
 	}
+
 	public void clearBadgeNum(String chupaCommunId) {
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		Editor editor = pref.edit();
-		editor.putInt("communBageNum" + chupaCommunId, 0);
-		editor.commit();
+		PreferenceHelper pref = AhApplication.getInstance().getPref();
+		pref.putInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId, 0);
 	}
-	
+
 	private void sortMessages(List<AhMessage> list){
 		Collections.sort(list, new Comparator<AhMessage>() {
 
 			@Override
 			public int compare(AhMessage lhs, AhMessage rhs) {
-				// TODO Auto-generated method stub
 				return lhs.getId().compareTo(rhs.getId());
 			}
 		});

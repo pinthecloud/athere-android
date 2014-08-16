@@ -3,8 +3,6 @@ package com.pinthecloud.athere.activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareListFragment;
@@ -29,20 +27,20 @@ public class SquareListActivity extends AhActivity {
 	}
 
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.settings, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()){
-		case R.id.menu_setting :
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
+	//	@Override
+	//	public boolean onCreateOptionsMenu(Menu menu) {
+	//		getMenuInflater().inflate(R.menu.settings, menu);
+	//		return super.onCreateOptionsMenu(menu);
+	//	}
+	//
+	//
+	//	@Override
+	//	public boolean onOptionsItemSelected(MenuItem item) {
+	//		switch(item.getItemId()){
+	//		case R.id.menu_setting :
+	//			return true;
+	//		default:
+	//			return super.onOptionsItemSelected(item);
+	//		}
+	//	}
 }

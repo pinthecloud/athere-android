@@ -60,4 +60,6 @@ public class AhGlobalVariable{
 
 	public static final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
 	public static final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
+	
+	public static final String COMMUN_BADGE_NUM_KEY = "COMMUN_BADGE_NUM_KEY";
 }

@@ -26,6 +26,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/chupa_chat_other_nick_gender_margin"
+            android:ellipsize="end"
+            android:maxWidth="@dimen/chupa_chat_other_nick_max_width"
+            android:singleLine="true"
             android:textSize="@dimen/font_x_large" />
 
         <ImageView
@@ -63,40 +66,29 @@
         android:divider="@null" />
 
     <LinearLayout
+        android:id="@+id/chupa_chat_frag_input_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/chupa_chat_height"
-        android:alpha="0.9"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <LinearLayout
-            android:id="@+id/chupa_chat_chat_layout"
+        <EditText
+            android:id="@+id/chupa_chat_frag_message_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/chupa_chat_left_margin"
             android:layout_weight="1"
             android:background="@drawable/bg_inputbar_highlight"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/chupa_chat_left_margin" >
-
-            <EditText
-                android:id="@+id/chupa_chat_frag_message_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:ems="10"
-                android:inputType="textMultiLine"
-                android:textSize="@dimen/font_large" >
-
-                <requestFocus />
-            </EditText>
-        </LinearLayout>
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:paddingLeft="@dimen/square_chat_input_left_margin"
+            android:paddingRight="@dimen/square_chat_input_right_margin"
+            android:textSize="@dimen/font_large" />
 
         <ImageButton
             android:id="@+id/chupa_chat_frag_send_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:background="@android:color/transparent"
             android:contentDescription="@string/send"
             android:enabled="false"
