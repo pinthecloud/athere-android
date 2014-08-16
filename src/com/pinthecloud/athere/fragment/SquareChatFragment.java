@@ -132,15 +132,6 @@ public class SquareChatFragment extends AhFragment{
 				(context, this, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
 
-		return view;
-	}
-
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		loadTalkMessage();
-
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -152,7 +143,11 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) return;
+				
+				// Chupa & User Update Message can't go through here
+				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
+						||message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
+				
 				messageList.add(message);
 				activity.runOnUiThread(new Runnable() {
 
@@ -164,6 +159,15 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
+		
+		return view;
+	}
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		loadTalkMessage();
 	}
 
 

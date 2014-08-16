@@ -153,6 +153,7 @@ public class MessageHelper {
 			mapList.put(MESSAGE_RECEIVED, new ArrayList<AhEntityCallback<AhMessage>>());
 			list = mapList.get(MESSAGE_RECEIVED);
 		}
+		Log.e("ERROR", "messageHandler : " + list.size());
 		list.add(callback);
 	}
 

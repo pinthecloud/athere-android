@@ -213,15 +213,6 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 
-		return view;
-	}
-
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateUserList();
-
 		/*
 		 * Set handler for refresh new and old user
 		 */
@@ -238,6 +229,15 @@ public class SquareDrawerFragment extends AhFragment {
 				});
 			}
 		});
+		
+		return view;
+	}
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateUserList();
 	}
 
 

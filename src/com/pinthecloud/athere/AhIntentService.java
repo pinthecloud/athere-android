@@ -130,11 +130,13 @@ public class AhIntentService extends IntentService {
 
 	private void CHUPA() {
 		messageDBHelper.addMessage(message);
+		
+		// Always Notify that Chupa has come.
+		alertNotification(AhMessage.TYPE.CHUPA);
 		if (isRunning(app)) {
-			Log.e("ERROR","in chupa app running");
 			messageHelper.triggerMessageEvent(message);
 		} else {
-			alertNotification(AhMessage.TYPE.CHUPA);
+//			alertNotification(AhMessage.TYPE.CHUPA);
 		}
 	}
 

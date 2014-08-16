@@ -82,8 +82,11 @@ public class SquareTabFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				Log(_thisFragment,"in setMessageHandler in TabFrag");
-				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())){
+				
+				// Chupa & Exit Message can go through here
+				// Chupa & Exit Message need to be update visually in ChupaChatList Fragment
+				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					activity.runOnUiThread(new Runnable() {
 
 						@Override

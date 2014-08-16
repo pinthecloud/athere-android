@@ -213,24 +213,7 @@ public class ChupaChatFragment extends AhFragment {
 			}
 		});
 		sendButton.setEnabled(false);
-
-		return view;
-	}
-
-
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		// Set sent and received chupas to list view 
-		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-		loadChupaMessage(chupaCommunId);
-
-
-		// Clear badge numbers displayed on chupa list
-		messageDBHelper.clearBadgeNum(chupaCommunId);
-
-
+		
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -242,6 +225,16 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
+				
+				// Only Chupa & Exit Message can go through
+				if (!(message.getType().equals(AhMessage.TYPE.CHUPA.toString())
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString()))) return;
+				
+				// If Exit Message, Check if it's related Exit (Don't go through other User Exit message)
+				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
+					String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
+					if (!chupaCommunId.equals(message.getChupaCommunId())) return;
+				}
 				messageList.add(message);
 
 				activity.runOnUiThread(new Runnable() {
@@ -258,6 +251,21 @@ public class ChupaChatFragment extends AhFragment {
 				});
 			}
 		});
+
+		return view;
+	}
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Set sent and received chupas to list view 
+		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
+		loadChupaMessage(chupaCommunId);
+
+		// Clear badge numbers displayed on chupa list
+		messageDBHelper.clearBadgeNum(chupaCommunId);
 	}
 
 
