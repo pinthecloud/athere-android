@@ -245,10 +245,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		user.setAge(age);
 		user.setSquareId(squareId);
 		user.setChupaEnable(chupaEnable);
-		//return new User(_id,nickName,profilePic,mobileId,registrationId,isMale,companyNum,age,squareId);
 		return user;
 	}
 
+	
 	// Getting All Contacts
 	public List<User> getAllUsers() {
 		//		List<User> users = new ArrayList<User>();
@@ -267,12 +267,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		//
 		//		// return contact list
 		//		return users;
-
 		return this.getAllUsers(false);
 	}
 
 	public List<User> getAllUsers(boolean includingExits) {
 		List<User> users = new ArrayList<User>();
+		
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
 		String[] args = null;

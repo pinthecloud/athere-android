@@ -125,12 +125,8 @@ public class SquareProfileFragment extends AhFragment{
 					// Set taken picture to view
 					profilePictureView.setImageBitmap(pictureBitmap);
 
-					// Crop picture in round
-					//					Bitmap pictureCircleBitmap = BitmapUtil.cropRound(pictureBitmap);
-
 					// Save pictures to internal storage
 					FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
-					//					FileUtil.saveImageToInternalStorage(app, pictureCircleBitmap, AhGlobalVariable.PROFILE_PICTURE_CIRCLE_NAME);
 
 					// Release camera and set button to re take
 					releaseCameraAndRemoveView();

@@ -13,22 +13,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.view.AhButton;
 
 /**
@@ -39,22 +32,20 @@ import com.pinthecloud.athere.view.AhButton;
 
 public class HongkunTestFragment extends AhFragment {
 
-
-	Button[] btnArr;
-	TextView messageText;
-	int count = 0;
-	int[] countArr;
-	StringBuilder squareId = new StringBuilder();
-	UserHelper userHelper;
-	UserDBHelper userDBHelper;
-	MessageHelper messageHelper;
-	SquareHelper squareHelper;
-	MessageDBHelper messageDB;
-	String __id = "";
-	ImageView img;
-	AhButton myBtn;
-	MobileServiceClient mClient;
-	
+	private Button[] btnArr;
+	private TextView messageText;
+	private int count = 0;
+	private int[] countArr;
+	private StringBuilder squareId = new StringBuilder();
+	private UserHelper userHelper;
+	private UserDBHelper userDBHelper;
+	private MessageHelper messageHelper;
+	private SquareHelper squareHelper;
+	private MessageDBHelper messageDB;
+	private String __id = "";
+	private ImageView img;
+	private AhButton myBtn;
+	private MobileServiceClient mClient;
 
 	public static final String SENDER_ID = "838051405989";
 
@@ -62,8 +53,6 @@ public class HongkunTestFragment extends AhFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// Set Helper
 		squareHelper = app.getSquareHelper();
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
@@ -71,13 +60,12 @@ public class HongkunTestFragment extends AhFragment {
 		messageHelper = app.getMessageHelper();
 		messageDB = app.getMessageDBHelper();
 		mClient = app.getmClient();
-		
 	}
 
 	public View _onAhCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
-		
+
 		btnArr = new Button[6];
 		//btnArr[0] = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
 		btnArr[1] = (Button)view.findViewById(R.id.button2);
@@ -87,7 +75,7 @@ public class HongkunTestFragment extends AhFragment {
 		btnArr[5] = (Button)view.findViewById(R.id.button6);
 		messageText = (TextView)view.findViewById(R.id.message_text);
 		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
-		
+
 		countArr = new int[6];
 		btnArr = new Button[6];
 		btnArr[0] = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
@@ -98,19 +86,15 @@ public class HongkunTestFragment extends AhFragment {
 		btnArr[5] = (Button)view.findViewById(R.id.button6);
 		messageText = (TextView)view.findViewById(R.id.message_text);
 		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
-		
+
 		for(int i = 0 ; i < 6 ; i++){
 			btnArr[i].setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
-						
 						throw new AhException("Test Exception");
-						
-						
 					} else if (b.getId() == btnArr[1].getId()) {
 					} else if (b.getId() == btnArr[2].getId()) {
 					} else if (b.getId() == btnArr[3].getId()) {
@@ -122,44 +106,43 @@ public class HongkunTestFragment extends AhFragment {
 			});
 		}
 
-		
 		return view;
 	}
-	
-//	@Override
-//	public void handleException(AhException ex) {
-//		// TODO Auto-generated method stub
-//		Log.e("ERROR","HongkunFragment handler : " + ex);
-//	}
-	
+
+	//	@Override
+	//	public void handleException(AhException ex) {
+	//		// TODO Auto-generated method stub
+	//		Log.e("ERROR","HongkunFragment handler : " + ex);
+	//	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
-		
+
 		myBtn = (AhButton)view.findViewById(R.id.drawer_user_chupa_btn);
-		
+
 		myBtn.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-//				final AhMessage message = new AhMessage.Builder()
-//						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
-//						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-//						.setReceiverId("A9320D41-D348-4A11-A6ED-41174EF6FB11")
-//						.setType(AhMessage.TYPE.TALK)
-//						.build();
-				
+				//				final AhMessage message = new AhMessage.Builder()
+				//						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+				//						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				//						.setReceiverId("A9320D41-D348-4A11-A6ED-41174EF6FB11")
+				//						.setType(AhMessage.TYPE.TALK)
+				//						.build();
+
 				JsonObject jo = new JsonObject();
 				jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
 
 				Gson g = new Gson();
 				JsonElement json = g.fromJson(jo, JsonElement.class);
 				String FORCED_LOGOUT = "forced_logout";
-				
+
 				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
-					
+
 					@Override
 					public void onCompleted(JsonElement arg0, Exception arg1,
 							ServiceFilterResponse arg2) {
@@ -169,12 +152,12 @@ public class HongkunTestFragment extends AhFragment {
 				});
 			}
 		});
-		
-		
+
+
 
 		return view;
 	}
-	
+
 	@Override
 	public void handleException(AhException ex) {
 		// TODO Auto-generated method stub

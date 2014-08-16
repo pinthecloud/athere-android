@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/square_drawer_participant_list_nick_gender_margin"
+            android:layout_marginRight="@dimen/square_drawer_participant_list_nick_name_gender_margin"
             android:layout_toRightOf="@+id/drawer_user_pro_pic"
             android:ellipsize="end"
             android:maxWidth="@dimen/square_drawer_participant_list_nick_max_width"
@@ -32,11 +32,11 @@
             android:textSize="@dimen/font_large" />
 
         <ImageView
-            android:id="@+id/drawer_user_is_male"
+            android:id="@+id/drawer_user_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/square_drawer_participant_list_gender_company_margin"
+            android:layout_marginRight="@dimen/square_drawer_participant_list_gender_company_number_margin"
             android:layout_toRightOf="@+id/drawer_user_nick_name"
             android:contentDescription="@string/gender" />
 
@@ -45,8 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/drawer_user_is_male"
-            android:drawableLeft="@drawable/peoplenum"
+            android:layout_toRightOf="@+id/drawer_user_gender"
             android:gravity="center"
             android:textSize="@dimen/font_large" />
 

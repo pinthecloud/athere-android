@@ -36,12 +36,14 @@ public class AhAlertDialog extends AhDialogFragment{
 		altBuilder.setPositiveButton(ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int which) {
 				ahDialogCallback.doPositiveThing(null);
+				dismiss();
 			}
 		});
 		if(cancel){
 			altBuilder.setNegativeButton(no, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					ahDialogCallback.doNegativeThing(null);
+					dismiss();
 				}
 			});
 		}

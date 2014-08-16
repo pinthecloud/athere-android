@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.dialog;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,14 +11,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class ProfileDialog extends AhDialogFragment{
 
+	private PreferenceHelper pref;	
 	private User user;
+
 	private ImageView profileImage;
 	private ImageView genderImage;
 	private TextView nickNameText;
@@ -29,6 +35,7 @@ public class ProfileDialog extends AhDialogFragment{
 	public ProfileDialog(User user, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
+		this.pref = AhApplication.getInstance().getPref();
 		this.user = user;
 		setStyle(STYLE_NO_TITLE, 0);
 	}
@@ -53,12 +60,14 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set UI Component
 		 */
+		Resources resources = getResources();
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
+			companyNumberText.setTextColor(resources.getColor(R.color.blue));
 		}else{
 			genderImage.setImageResource(R.drawable.profile_gender_w);
+			companyNumberText.setTextColor(resources.getColor(R.color.dark_red));
 		}
-		genderImage.bringToFront();
 		nickNameText.setText(user.getNickName());
 		ageText.setText("" + user.getAge());
 		companyNumberText.setText("" + user.getCompanyNum());
@@ -68,7 +77,7 @@ public class ProfileDialog extends AhDialogFragment{
 		 * Set profile image
 		 */
 		Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
-		profileImage.setImageBitmap(BitmapUtil.cropRound(profileBitmap));
+		profileImage.setImageBitmap(profileBitmap);
 		profileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -77,6 +86,7 @@ public class ProfileDialog extends AhDialogFragment{
 				dismiss();
 			}
 		});
+
 
 		/*
 		 * Set eventon button
@@ -89,7 +99,10 @@ public class ProfileDialog extends AhDialogFragment{
 				dismiss();
 			}
 		});
+		if(user.getId().equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
+			sendChupaButton.setVisibility(View.GONE);
+		}
 
-		return view;
+			return view;
 	}
 }

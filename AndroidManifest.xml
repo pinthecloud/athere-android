@@ -56,6 +56,7 @@
         <activity
             android:name=".activity.SplashActivity"
             android:noHistory="true"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,6 +68,7 @@
         <activity
             android:name=".activity.BasicProfileActivity"
             android:icon="@drawable/actionbar_logo"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.SquareListActivity"
@@ -81,14 +83,17 @@
         <activity
             android:name=".activity.SquareActivity"
             android:icon="@drawable/actionbar_logo"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ProfileImageActivity"
             android:icon="@drawable/actionbar_logo"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.ChupaChatActivity"
             android:icon="@drawable/actionbar_logo"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
