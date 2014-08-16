@@ -176,17 +176,11 @@ public class BitmapUtil {
 
 
 	public static Bitmap convertToBitmap(String str){
-		Context context = AhApplication.getInstance().getApplicationContext();
+		Context context = AhApplication.getInstance();
 		if (str == null || str.equals("")) 
 			return BitmapFactory.decodeResource(context.getResources(), R.drawable.splash);
-		
-		try{
-			byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
-			Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-			return bitmap;
-		}catch(Exception e){
-			return null;
-		}
+		byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
+		return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 
 		//		byte[] bytes;
 		//		try {
@@ -226,12 +220,12 @@ public class BitmapUtil {
 		//		}
 		//		return returnStr;
 	}
-	
+
 
 	@SuppressLint("NewApi")
 	public static Bitmap blur(Context context, Bitmap sentBitmap, int radius) {
 		Log.d(AhGlobalVariable.LOG_TAG, "BitmapHelper blur");
-		
+
 		if (VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
 			Bitmap bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
 

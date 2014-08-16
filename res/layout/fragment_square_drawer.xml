@@ -15,187 +15,133 @@
         android:layout_centerVertical="true"
         android:visibility="gone" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/square_drawer_frag_exit_button_divider"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/square_drawer_frag_profile_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/square_drawer_bar_height"
+            android:background="@color/gray_background"
+            android:paddingLeft="@dimen/square_drawer_bar_left_margin" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/my_profile"
+                android:textSize="@dimen/font_large" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/square_drawer_frag_profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/square_drawer_profile_height"
+            android:gravity="left|center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/square_drawer_profile_left_margin" >
+
+            <ImageView
+                android:id="@+id/square_drawer_frag_profile_image"
+                android:layout_width="@dimen/square_drawer_profile_circle_width"
+                android:layout_height="@dimen/square_drawer_profile_circle_height"
+                android:layout_marginRight="@dimen/square_drawer_profile_image_info_margin"
+                android:contentDescription="@string/profile_image" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/square_drawer_frag_profile_nick_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/square_drawer_profile_nick_name_bottom_margin"
+                    android:textSize="@dimen/font_large" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center" >
+
+                    <TextView
+                        android:id="@+id/square_drawer_frag_profile_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/square_drawer_profile_age_gender_margin"
+                        android:textSize="@dimen/font_medium" />
+
+                    <ImageView
+                        android:id="@+id/square_drawer_frag_profile_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/square_drawer_profile_gender_company_num_margin"
+                        android:contentDescription="@string/gender" />
+
+                    <TextView
+                        android:id="@+id/square_drawer_frag_profile_company_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/font_medium" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/square_drawer_frag_member_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/square_drawer_bar_height"
+            android:background="@color/gray_background"
+            android:gravity="left|center"
+            android:paddingLeft="@dimen/square_drawer_bar_left_margin" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/square_drawer_member_bar_title_right_margin"
+                android:text="@string/player"
+                android:textSize="@dimen/font_large" />
+
+            <TextView
+                android:id="@+id/square_drawer_frag_member_male_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/square_drawer_member_bar_gender_margin"
+                android:background="@drawable/bg_groundlist_member_m"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_large" />
+
+            <TextView
+                android:id="@+id/square_drawer_frag_member_female_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_groundlist_member_w"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_large" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/square_drawer_frag_participant_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null" >
+        </ListView>
+    </LinearLayout>
+
     <View
-        android:id="@+id/square_drawer_frag_action_bar_divider"
+        android:id="@+id/square_drawer_frag_exit_button_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:background="@color/gray_line" />
-
-    <LinearLayout
-        android:id="@+id/square_drawer_frag_toggle_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/square_drawer_toggle_bar_height"
-        android:layout_below="@+id/square_drawer_frag_action_bar_divider"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:visibility="gone" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/square_drawer_frag_chat_on_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/chat_alarm"
-                android:textSize="@dimen/font_large" />
-
-            <ToggleButton
-                android:id="@+id/square_drawer_frag_chat_on_button"
-                android:layout_width="@dimen/square_drawer_toggle_button_width"
-                android:layout_height="@dimen/square_drawer_toggle_button_height"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/square_drawer_toggle_button_left_margin"
-                android:layout_toRightOf="@+id/square_drawer_frag_chat_on_text"
-                android:background="@drawable/on_off_toggle_bg"
-                android:button="@android:color/transparent"
-                android:checked="true"
-                android:textOff=""
-                android:textOn="" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center" >
-
-            <TextView
-                android:id="@+id/square_drawer_frag_chupa_on_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/get_chupa"
-                android:textSize="@dimen/font_large" />
-
-            <ToggleButton
-                android:id="@+id/square_drawer_frag_chupa_on_button"
-                android:layout_width="@dimen/square_drawer_toggle_button_width"
-                android:layout_height="@dimen/square_drawer_toggle_button_height"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/square_drawer_toggle_button_left_margin"
-                android:layout_toRightOf="@+id/square_drawer_frag_chupa_on_text"
-                android:background="@drawable/on_off_toggle_bg"
-                android:button="@android:color/transparent"
-                android:checked="true"
-                android:textOff=""
-                android:textOn="" />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <View
-        android:id="@+id/square_drawer_frag_profile_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/square_drawer_profile_blur_height"
-        android:layout_below="@+id/square_drawer_frag_toggle_bar_layout" />
-
-    <ImageButton
-        android:id="@+id/square_drawer_frag_profile_setting_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/square_drawer_frag_profile_image_view"
-        android:layout_alignTop="@+id/square_drawer_frag_profile_image_view"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/profile_settings"
-        android:src="@drawable/sidebar_profile_edit"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/square_drawer_frag_profile_circle_image"
-        android:layout_width="@dimen/square_drawer_profile_circle_width"
-        android:layout_height="@dimen/square_drawer_profile_circle_height"
-        android:layout_alignTop="@+id/square_drawer_frag_profile_image_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/square_drawer_profile_circle_top_margin"
-        android:contentDescription="@string/profile_image" />
-
-    <ImageView
-        android:id="@+id/square_drawer_frag_profile_gender_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/square_drawer_frag_profile_circle_image"
-        android:layout_alignRight="@+id/square_drawer_frag_profile_circle_image"
-        android:contentDescription="@string/profile_image" />
-
-    <TextView
-        android:id="@+id/square_drawer_frag_profile_nick_name_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/square_drawer_frag_profile_circle_image"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/square_drawer_profile_nick_name_top_margin"
-        android:textSize="@dimen/font_x_large" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/square_drawer_frag_profile_nick_name_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/square_drawer_profile_age_company_top_margin" >
-
-        <TextView
-            android:id="@+id/square_drawer_frag_profile_age_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/square_drawer_profile_age_company_margin"
-            android:textSize="@dimen/font_medium" />
-
-        <TextView
-            android:id="@+id/square_drawer_frag_profile_company_number_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/peoplenum"
-            android:textSize="@dimen/font_medium" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/square_drawer_frag_member_number_bar_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/square_drawer_member_number_bar_height"
-        android:layout_below="@+id/square_drawer_frag_profile_image_view"
-        android:gravity="center"
-        android:paddingLeft="@dimen/square_drawer_member_number_bar_left_margin" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/square_drawer_member_title_right_margin"
-            android:text="@string/member"
-            android:textSize="@dimen/font_large" />
-
-        <TextView
-            android:id="@+id/square_drawer_frag_member_male_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blue"
-            android:textSize="@dimen/font_large" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dash"
-            android:textSize="@dimen/font_large" />
-
-        <TextView
-            android:id="@+id/square_drawer_frag_member_female_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/red"
-            android:textSize="@dimen/font_large" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/square_drawer_frag_participant_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_above="@+id/square_drawer_frag_exit_button"
-        android:layout_below="@+id/square_drawer_frag_member_number_bar_layout"
-        android:divider="@null" >
-    </ListView>
+        android:background="@color/gray_line" />
 
     <Button
         android:id="@+id/square_drawer_frag_exit_button"

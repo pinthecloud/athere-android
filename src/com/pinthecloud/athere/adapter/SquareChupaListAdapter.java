@@ -61,7 +61,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
 			}
 			sender.setText(userNickName);
-			profilePic.setImageBitmap(BitmapUtil.cropRound(BitmapUtil.convertToBitmap(picStr)));
+			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 			if (!chupaBadge.equals("0")) {

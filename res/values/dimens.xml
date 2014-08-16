@@ -26,25 +26,23 @@
     <dimen name="square_drawer_participant_list_profile_height">34dp</dimen>
     <dimen name="square_drawer_participant_list_profile_nick_margin">12dp</dimen>
     <dimen name="square_drawer_participant_list_nick_max_width">100dp</dimen>
-    <dimen name="square_drawer_participant_list_nick_gender_margin">6.5dp</dimen>
-    <dimen name="square_drawer_participant_list_gender_company_margin">12dp</dimen>
+    <dimen name="square_drawer_participant_list_nick_name_gender_margin">6.5dp</dimen>
+    <dimen name="square_drawer_participant_list_gender_company_number_margin">12dp</dimen>
     <dimen name="square_drawer_participant_list_left_margin">20dp</dimen>
     <dimen name="square_drawer_participant_list_right_margin">20dp</dimen>
     <dimen name="square_drawer_participant_list_height">56dp</dimen>
-    <dimen name="square_drawer_profile_blur_height">166.5dp</dimen>
+    <dimen name="square_drawer_profile_left_margin">23.5dp</dimen>
+    <dimen name="square_drawer_profile_height">135.5dp</dimen>
     <dimen name="square_drawer_profile_circle_width">66.5dp</dimen>
     <dimen name="square_drawer_profile_circle_height">66.5dp</dimen>
-    <dimen name="square_drawer_profile_circle_top_margin">29.5dp</dimen>
-    <dimen name="square_drawer_profile_nick_name_top_margin">12dp</dimen>
-    <dimen name="square_drawer_profile_age_company_top_margin">6.5dp</dimen>
-    <dimen name="square_drawer_profile_age_company_margin">10dp</dimen>
-    <dimen name="square_drawer_toggle_button_left_margin">8dp</dimen>
-    <dimen name="square_drawer_toggle_button_width">40dp</dimen>
-    <dimen name="square_drawer_toggle_button_height">20dp</dimen>
-    <dimen name="square_drawer_toggle_bar_height">48dp</dimen>
-    <dimen name="square_drawer_member_number_bar_height">48dp</dimen>
-    <dimen name="square_drawer_member_number_bar_left_margin">23.5dp</dimen>
-    <dimen name="square_drawer_member_title_right_margin">8dp</dimen>
+    <dimen name="square_drawer_profile_image_info_margin">10dp</dimen>
+    <dimen name="square_drawer_profile_nick_name_bottom_margin">12dp</dimen>
+    <dimen name="square_drawer_profile_age_gender_margin">6.5dp</dimen>
+    <dimen name="square_drawer_profile_gender_company_num_margin">3.5dp</dimen>
+    <dimen name="square_drawer_bar_height">48dp</dimen>
+    <dimen name="square_drawer_bar_left_margin">23.5dp</dimen>
+    <dimen name="square_drawer_member_bar_title_right_margin">8dp</dimen>
+    <dimen name="square_drawer_member_bar_gender_margin">3.5dp</dimen>
 
     <!-- Square chat -->
     <dimen name="square_chat_profile_width">33.5dp</dimen>
@@ -73,9 +71,9 @@
     <dimen name="chupa_chat_other_bar_left_margin">13.5dp</dimen>
     <dimen name="chupa_chat_other_profile_nick_margin">13.5dp</dimen>
     <dimen name="chupa_chat_other_nick_max_width">100dp</dimen>
-    <dimen name="chupa_chat_other_nick_gender_margin">6.5dp</dimen>
-    <dimen name="chupa_chat_other_gender_age_margin">10dp</dimen>
-    <dimen name="chupa_chat_other_age_company_number_margin">3.5dp</dimen>
+    <dimen name="chupa_chat_other_nick_name_gender_margin">6.5dp</dimen>
+    <dimen name="chupa_chat_other_age_gender_margin">10dp</dimen>
+    <dimen name="chupa_chat_other_gender_company_number_margin">3.5dp</dimen>
     <dimen name="chupa_chat_other_profile_width">33.5dp</dimen>
     <dimen name="chupa_chat_other_profile_height">33.5dp</dimen>
     <dimen name="chupa_chat_left_margin">10.5dp</dimen>
@@ -113,14 +111,13 @@
 
     <!-- Profile Dialog -->
     <dimen name="profile_dialog_top_margin">53.5dp</dimen>
-    <dimen name="profile_dialog_left_margin">100dp</dimen>
-    <dimen name="profile_dialog_right_margin">100dp</dimen>
     <dimen name="profile_dialog_profile_width">86.5dp</dimen>
     <dimen name="profile_dialog_profile_height">86.5dp</dimen>
     <dimen name="profile_dialog_send_button_height">48dp</dimen>
     <dimen name="profile_dialog_profile_nick_name_margin">13.5dp</dimen>
     <dimen name="profile_dialog_nick_name_info_margin">6.5dp</dimen>
-    <dimen name="profile_dialog_age_company_number_margin">10dp</dimen>
+    <dimen name="profile_dialog_age_gender_margin">10dp</dimen>
+    <dimen name="profile_dialog_gender_company_number_margin">6.5dp</dimen>
     <dimen name="profile_dialog_info_send_button_margin">48dp</dimen>
 
     <!-- Font size -->
