@@ -106,7 +106,7 @@ public class ChupaChatFragment extends AhFragment {
 
 
 		/*
-		 * Set other bar
+		 * Set other user bar
 		 */
 		Bitmap profile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(otherUser.getProfilePic()));
 		otherProfileImage.setImageBitmap(profile);
@@ -150,47 +150,6 @@ public class ChupaChatFragment extends AhFragment {
 				(context, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
 
-		/*
-		 * Set sent and received chupas to list view 
-		 */
-		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-		if(chupaCommunId == null || "".equals(chupaCommunId))
-			throw new AhException("No chupaCommunId");
-
-		// Get every chupa by chupaCommunId
-		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
-		for (AhMessage message : chupas) {
-			message.setStatus(AhMessage.SENT);
-			messageList.add(message);
-		}
-		messageListAdapter.notifyDataSetChanged();
-		messageListView.setSelection(messageListView.getCount() - 1);
-
-		// Clear badge numbers displayed on chupa list
-		messageDBHelper.clearBadgeNum(chupaCommunId);
-		
-		
-		/*
-		 * If other user exit, add exit message
-		 */
-		if (userDBHelper.isUserExit(otherUser.getId())){
-			isOtherUserExit = true;
-
-			String exitMessage = getResources().getString(R.string.exit_square_message);
-			String nickName = otherUser.getNickName();
-			AhMessage.Builder messageBuilder = new AhMessage.Builder();
-			messageBuilder.setContent(nickName + " " + exitMessage)
-			.setSender(nickName)
-			.setSenderId(otherUser.getId())
-			.setReceiverId(otherUser.getSquareId())
-			.setType(AhMessage.TYPE.EXIT_SQUARE);
-			AhMessage message = messageBuilder.build();
-
-			messageList.add(message);
-			messageListAdapter.notifyDataSetChanged();
-			messageListView.setSelection(messageListView.getCount() - 1);
-		}
-
 
 		/*
 		 * Set edit text
@@ -231,23 +190,24 @@ public class ChupaChatFragment extends AhFragment {
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 				.setReceiver(otherUser.getNickName())
 				.setReceiverId(otherUser.getId())
-				.setType(AhMessage.TYPE.CHUPA);
+				.setType(AhMessage.TYPE.CHUPA)
+				.setStatus(AhMessage.STATUS.SENDING);
 				final AhMessage message = messageBuilder.build();
-				message.setStatus(AhMessage.SENDING);
 
 				messageList.add(message);
 				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 				messageEditText.setText("");
+				final int id = messageDBHelper.addMessage(message);
 
 				// Send message to server
 				messageHelper.sendMessageAsync(_thisFragment,message, new AhEntityCallback<AhMessage>() {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						message.setStatus(AhMessage.SENT);
+						message.setStatus(AhMessage.STATUS.SENT);
 						messageListAdapter.notifyDataSetChanged();
-						messageDBHelper.addMessage(message);
+						messageDBHelper.updateMessages(id, message);
 					}
 				});
 			}
@@ -256,12 +216,21 @@ public class ChupaChatFragment extends AhFragment {
 
 		return view;
 	}
-	
-	
+
+
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
+		// Set sent and received chupas to list view 
+		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
+		loadChupaMessage(chupaCommunId);
+
+
+		// Clear badge numbers displayed on chupa list
+		messageDBHelper.clearBadgeNum(chupaCommunId);
+
+
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -273,8 +242,8 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
 				messageList.add(message);
+
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -291,7 +260,45 @@ public class ChupaChatFragment extends AhFragment {
 		});
 	}
 
-	
+
+	/*
+	 * Set sent and received chupas to list view 
+	 */
+	private void loadChupaMessage(String chupaCommunId){
+		if(chupaCommunId == null || chupaCommunId.equals(""))
+			throw new AhException("No chupaCommunId");
+
+		// Get every chupa by chupaCommunId
+		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
+		messageList.clear();
+		messageList.addAll(chupas);
+		messageListAdapter.notifyDataSetChanged();
+		messageListView.setSelection(messageListView.getCount() - 1);
+
+
+		/*
+		 * If other user exit, add exit message
+		 */
+		if (userDBHelper.isUserExit(otherUser.getId())){
+			isOtherUserExit = true;
+
+			String exitMessage = getResources().getString(R.string.exit_square_message);
+			String nickName = otherUser.getNickName();
+			AhMessage.Builder messageBuilder = new AhMessage.Builder();
+			messageBuilder.setContent(nickName + " " + exitMessage)
+			.setSender(nickName)
+			.setSenderId(otherUser.getId())
+			.setReceiverId(otherUser.getSquareId())
+			.setType(AhMessage.TYPE.EXIT_SQUARE);
+			AhMessage message = messageBuilder.build();
+
+			messageList.add(message);
+			messageListAdapter.notifyDataSetChanged();
+			messageListView.setSelection(messageListView.getCount() - 1);
+		}
+	}
+
+
 	private boolean isSenderButtonEnable(){
 		return isTypedMessage && !isOtherUserExit;
 	}

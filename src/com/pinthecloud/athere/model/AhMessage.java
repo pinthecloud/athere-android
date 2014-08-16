@@ -14,9 +14,20 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 
 public class AhMessage implements Parcelable {
 
-	public static final int SENDING = 0;
-	public static final int SENT = 1;
-	public static final int FAIL = -1;
+	public enum STATUS{
+		FAIL(-1),
+		SENDING(0),
+		SENT(1);
+		
+		private final int value;
+
+		private STATUS(final int value) {
+			this.value = value;
+		}
+		public int getValue() {
+			return value;
+		}
+	}
 
 	public enum TYPE {
 		// No user Update
@@ -44,16 +55,16 @@ public class AhMessage implements Parcelable {
 		}
 	};
 
-	private String id = "";
-	private String type = "";
-	private String content = "";
-	private String sender = "";
-	private String senderId = "";
-	private String receiver = "";
-	private String receiverId = "";
-	private String timeStamp = "";
+	private String id;
+	private String type;
+	private String content;
+	private String sender;
+	private String senderId;
+	private String receiver;
+	private String receiverId;
+	private String timeStamp;
 	private String chupaCommunId;
-	private int status = 0;
+	private int status = STATUS.SENDING.getValue();
 
 
 	public static final Parcelable.Creator<AhMessage> CREATOR = new Creator<AhMessage>(){
@@ -65,8 +76,8 @@ public class AhMessage implements Parcelable {
 		}
 	};
 
+	
 	private AhMessage() {
-
 	}
 	public AhMessage(Parcel in){
 		this();
@@ -75,66 +86,41 @@ public class AhMessage implements Parcelable {
 	public String getId() {
 		return id;
 	}
-	//	public void setId(String id) {
-	//		this.id = id;
-	//	}
 	public String getType() {
 		return type;
 	}
-	//	public void setType(String type) {
-	//		this.type = type;
-	//	}
-	//	public void setType(MESSAGE_TYPE type) {
-	//		this.type = type.toString();
-	//	}
 	public String getContent() {
 		return content;
 	}
-	//	public void setContent(String content) {
-	//		this.content = content;
-	//	}
 	public String getSender() {
 		return sender;
 	}
-	//	public void setSender(String sender) {
-	//		this.sender = sender;
-	//	}
 	public String getSenderId() {
 		return senderId;
 	}
-	//	public void setSenderId(String senderId) {
-	//		this.senderId = senderId;
-	//	}
 	public String getReceiver() {
 		return receiver;
 	}
-	//	public void setReceiver(String receiver) {
-	//		this.receiver = receiver;
-	//	}
 	public String getReceiverId() {
 		return receiverId;
 	}
-	//	public void setReceiverId(String receiverId) {
-	//		this.receiverId = receiverId;
-	//	}
+	public String getTimeStamp() {
+		return timeStamp;
+	}
+	public String getChupaCommunId() {
+		return chupaCommunId;
+	}
 	public int getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public String getTimeStamp() {
-		return timeStamp;
+	public void setStatus(STATUS status) {
+		this.status = status.getValue();
 	}
-	//	public void setTimeStamp(String timeStamp) {
-	//		this.timeStamp = timeStamp;
-	//	}
-	public String getChupaCommunId() {
-		return chupaCommunId;
-	}
-	//	public void setChupaCommunId(String chupaCommunId) {
-	//		this.chupaCommunId = chupaCommunId;
-	//	}
+	
+	
 	@Override
 	public String toString() {
 		return "{ id : "+this.id + " \n " + 
@@ -143,14 +129,17 @@ public class AhMessage implements Parcelable {
 				" sender : "+this.sender + " \n " + 
 				" senderId : "+this.senderId + " \n " +
 				" receiver : "+this.receiver + " \n " + 
-				" receiverId : "+this.receiverId  + " \n " +
-				" timeStamp : "+this.timeStamp  + " \n " +
-				" chupaCommunId : "+this.chupaCommunId + " }";
+				" receiverId : "+this.receiverId + " \n " +
+				" timeStamp : "+this.timeStamp + " \n " +
+				" chupaCommunId : "+this.chupaCommunId  + " \n " +
+				" status : "+this.status + " }";
 	}
+	
 	@Override
 	public int describeContents() {
 		return 0;
 	}
+	
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(id);
@@ -160,11 +149,11 @@ public class AhMessage implements Parcelable {
 		dest.writeString(senderId);
 		dest.writeString(receiver);
 		dest.writeString(receiverId);
-		dest.writeInt(status);
 		dest.writeString(timeStamp);
 		dest.writeString(chupaCommunId);
+		dest.writeInt(status);
 	}
-
+	
 	public void readToParcel(Parcel in){
 		id = in.readString();
 		type = in.readString();
@@ -173,11 +162,11 @@ public class AhMessage implements Parcelable {
 		senderId = in.readString();
 		receiver = in.readString();
 		receiverId = in.readString();
-		status = in.readInt();
 		timeStamp = in.readString();
 		chupaCommunId = in.readString();
+		status = in.readInt();
 	}
-
+	
 	public boolean isMine(){
 		PreferenceHelper pref = AhApplication.getInstance().getPref();
 		return this.senderId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY));
@@ -212,10 +201,12 @@ public class AhMessage implements Parcelable {
 		return message;
 	}
 
+	
 	public static AhMessage buildMessage(AhMessage.TYPE type){
 		return buildMessage(type.toString());
 	}
 
+	
 	public static AhMessage buildMessage(){
 		AhMessage.TYPE type;
 		Random r = new Random();
@@ -234,19 +225,21 @@ public class AhMessage implements Parcelable {
 		return buildMessage(type);
 	}
 
+	
 	public static class Builder {
 
 		private static final String DEFAULT_STRING = "DEFAULT_STRING";
 
-		private String id = "";
-		private String type = "";
-		private String content = "";
-		private String sender = "";
-		private String senderId = "";
-		private String receiver = "";
-		private String receiverId = "";
+		private String id;
+		private String type;
+		private String content;
+		private String sender;
+		private String senderId;
+		private String receiver;
+		private String receiverId;
 		private String timeStamp = DEFAULT_STRING;
 		private String chupaCommunId = DEFAULT_STRING;
+		private int status = STATUS.SENDING.getValue();
 
 		public Builder setId(String id) {
 			this.id = id;
@@ -288,6 +281,14 @@ public class AhMessage implements Parcelable {
 			this.chupaCommunId = chupaCommunId;
 			return this;
 		}
+		public Builder setStatus(int status) {
+			this.status = status;
+			return this;
+		}
+		public Builder setStatus(STATUS status) {
+			this.status = status.getValue();
+			return this;
+		}
 
 		public AhMessage build(){
 			AhMessage message = new AhMessage();
@@ -299,6 +300,7 @@ public class AhMessage implements Parcelable {
 			message.senderId = senderId;
 			message.receiver = receiver;
 			message.receiverId = receiverId;
+			message.status = status;
 
 			if (this.timeStamp.equals(DEFAULT_STRING)){
 				Calendar calendar = Calendar.getInstance();

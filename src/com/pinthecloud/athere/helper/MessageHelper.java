@@ -139,7 +139,6 @@ public class MessageHelper {
 
 
 	private Map<String, List<AhEntityCallback<AhMessage>>> mapList = new HashMap<String, List<AhEntityCallback<AhMessage>>>();
-
 	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
 	//	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 

@@ -60,19 +60,17 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_time);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_chupa_chat_list_send_progress_bar);
 
+		
 				/*
 				 * Set UI component only in send list
 				 */
-				switch(message.getStatus()){
-				case AhMessage.SENDING:
+				int status = message.getStatus();
+				if(status ==  AhMessage.STATUS.SENDING.getValue()){
 					progressBar.setVisibility(View.VISIBLE);
-					break;
-				case AhMessage.SENT:
+				}else if(status ==  AhMessage.STATUS.SENT.getValue()){
 					progressBar.setVisibility(View.GONE);
-					break;
-				case AhMessage.FAIL:
+				}else if(status ==  AhMessage.STATUS.FAIL.getValue()){
 					progressBar.setVisibility(View.GONE);
-					break;
 				}
 			} else if(this.layoutId == R.layout.row_chupa_chat_list_receive){
 				/*

@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.AhThread;
@@ -58,7 +59,7 @@ public class SplashActivity extends AhActivity implements Runnable{
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 		AhGlobalVariable.APP_NAME = getResources().getString(R.string.app_name);
 
-
+		
 		//////////////////////////////////////////////////////////////
 		// Erase Later (Exception for hongkun)
 		//////////////////////////////////////////////////////////////
@@ -108,6 +109,7 @@ public class SplashActivity extends AhActivity implements Runnable{
 		try {
 			clientVer = versionHelper.getClientAppVersion();
 		} catch (NameNotFoundException e) {
+			Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
 			clientVer = 0.1;
 		}
 		if (serverVer.getVersion() > clientVer) {

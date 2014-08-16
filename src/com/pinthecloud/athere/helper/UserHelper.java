@@ -374,17 +374,17 @@ public class UserHelper {
 	//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
 	AhEntityCallback<User> _callback;
 	//	private final String USER_RECEIVED = "USER_RECEIVED";
-	private int countUserHandler = 0;
+	//	private int countUserHandler = 0;
 	public void setUserHandler(AhEntityCallback<User> callback){
 		//		map.put(USER_RECEIVED, callback);
-		if (countUserHandler == 0) {
-			_callback = callback;
-			countUserHandler++;
-		} else {
-			throw new AhException("[UserHelper.setUserHandler]");
-		}
-
+		//		if (countUserHandler == 0) {
+		_callback = callback;
+		//		countUserHandler++;
+		//		} else {
+		//			throw new AhException("[UserHelper.setUserHandler]");
+		//		}
 	}
+
 
 	public void triggerUserEvent(User user){
 		//		AhEntityCallback<User> callback = map.get(USER_RECEIVED);

@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -48,9 +47,6 @@ import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
-
-	private DrawerLayout mDrawerLayout;
-	private View mFragmentView;
 
 	private ProgressBar progressBar;
 	private ToggleButton chatOnButton;
@@ -179,7 +175,7 @@ public class SquareDrawerFragment extends AhFragment {
 								.setType(AhMessage.TYPE.EXIT_SQUARE);
 								AhMessage message = messageBuilder.build();
 								messageHelper.sendMessageSync(_thisFragment, message);
-								
+
 								pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 								pref.removePref(AhGlobalVariable.USER_ID_KEY);
 								pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
@@ -216,8 +212,16 @@ public class SquareDrawerFragment extends AhFragment {
 				startActivity(intent);
 			}
 		});
-		
-		
+
+		return view;
+	}
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateUserList();
+
 		/*
 		 * Set handler for refresh new and old user
 		 */
@@ -234,28 +238,10 @@ public class SquareDrawerFragment extends AhFragment {
 				});
 			}
 		});
-
-		return view;
-	}
-
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateUserList();
-	}
-
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
 	}
 
 
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
-		this.mFragmentView = fragmentView;
-		this.mDrawerLayout = drawerLayout;
-
 		/*
 		 * Set profile images 
 		 */
