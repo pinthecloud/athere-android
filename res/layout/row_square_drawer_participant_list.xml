@@ -48,7 +48,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/drawer_user_gender"
             android:gravity="center"
-            android:textSize="@dimen/font_large" />
+            android:textSize="@dimen/font_medium" />
 
         <ImageButton
             android:id="@+id/drawer_user_chupa_btn"
