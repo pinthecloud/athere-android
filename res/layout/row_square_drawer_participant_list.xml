@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/square_drawer_participant_list_height"
+    android:background="@android:color/white"
     android:orientation="vertical"
     android:paddingLeft="@dimen/square_drawer_participant_list_left_margin"
     android:paddingRight="@dimen/square_drawer_participant_list_right_margin" >
@@ -59,10 +60,5 @@
             android:contentDescription="@string/chupa"
             android:src="@drawable/sidebar_chupa" />
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
-        android:background="@color/gray_tab_text_unselected" />
 
 </LinearLayout>

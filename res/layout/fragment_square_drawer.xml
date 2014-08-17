@@ -3,7 +3,7 @@
     android:id="@+id/square_drawer_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="#f8f4f4f4"
     android:clickable="true" >
 
     <ProgressBar
@@ -26,7 +26,7 @@
             android:id="@+id/square_drawer_frag_profile_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_bar_height"
-            android:background="@color/gray_background"
+            android:background="@android:color/white"
             android:paddingLeft="@dimen/square_drawer_bar_left_margin" >
 
             <TextView
@@ -34,13 +34,22 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/my_profile"
-                android:textSize="@dimen/font_large" />
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/gray_tab_text_unselected" />
         </RelativeLayout>
+        
+        <View
+        	android:id="@+id/square_drawer_frag_exit_button_divider"
+        	android:layout_width="match_parent"
+        	android:layout_height="@dimen/divider_height"
+        	android:layout_above="@+id/square_drawer_frag_exit_button"
+        	android:background="@color/gray_line" />
 
         <LinearLayout
             android:id="@+id/square_drawer_frag_profile_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_profile_height"
+            android:background="@android:color/white"
             android:gravity="left|center"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/square_drawer_profile_left_margin" >
@@ -75,8 +84,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="@dimen/square_drawer_profile_age_gender_margin"
+                        android:layout_marginLeft="@dimen/square_drawer_profile_age_left_margin"
                         android:textSize="@dimen/font_medium" />
-
+                    
                     <ImageView
                         android:id="@+id/square_drawer_frag_profile_gender"
                         android:layout_width="wrap_content"
@@ -97,7 +107,7 @@
             android:id="@+id/square_drawer_frag_member_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_bar_height"
-            android:background="@color/gray_background"
+            android:background="@android:color/white"
             android:gravity="left|center"
             android:paddingLeft="@dimen/square_drawer_bar_left_margin" >
 
@@ -106,27 +116,39 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/square_drawer_member_bar_title_right_margin"
                 android:text="@string/player"
-                android:textSize="@dimen/font_large" />
-
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/gray_tab_text_unselected" />
+				
             <TextView
                 android:id="@+id/square_drawer_frag_member_male_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="18dp"
                 android:layout_marginRight="@dimen/square_drawer_member_bar_gender_margin"
-                android:background="@drawable/bg_groundlist_member_m"
+                android:background="@drawable/bg_sidebar_playernum_m"
+                android:paddingLeft="@dimen/squre_drawer_playernum_margin"
+                android:paddingRight="@dimen/squre_drawer_playernum_margin"
                 android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/font_large" />
+                android:textSize="@dimen/font_medium" />
 
             <TextView
                 android:id="@+id/square_drawer_frag_member_female_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_groundlist_member_w"
+                android:layout_height="18dp"
+                android:background="@drawable/bg_sidebar_playernum_w"
+                android:paddingLeft="@dimen/squre_drawer_playernum_margin"
+                android:paddingRight="@dimen/squre_drawer_playernum_margin"
                 android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/font_large" />
+                android:textSize="@dimen/font_medium" />
         </LinearLayout>
+        
+        <View
+        	android:id="@+id/square_drawer_frag_exit_button_divider"
+        	android:layout_width="match_parent"
+        	android:layout_height="@dimen/divider_height"
+        	android:layout_above="@+id/square_drawer_frag_exit_button"
+        	android:background="@color/gray_line" />
 
         <ListView
             android:id="@+id/square_drawer_frag_participant_list"
@@ -148,7 +170,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/transparent"
+        android:background="@android:color/white"
         android:text="@string/exit_square"
         android:textColor="@color/red"
         android:textSize="@dimen/font_large" />
