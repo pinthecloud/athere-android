@@ -1,6 +1,15 @@
-athere-android (Chupa)
+Chupa Android Project by Pin the Cloud Inc.
 ==============
+It helps to pick up people who are in a same place.
 
-athere application for android
 
-Go to Chupa Managing Page : [http://hongkunyoo.github.io/chupamanager/](http://hongkunyoo.github.io/chupamanager/).
+Homepage
+==============
+www.sendchupa.com
+www.pinthecloud.com
+
+
+License
+==============
+copyright(c)2014
+All rights reserved by Pin the Cloud Inc.
