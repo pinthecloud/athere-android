@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/square_title_left_margin"
+        android:layout_marginStart="@dimen/square_title_left_margin"
         android:textColor="@android:color/black" />
 
 </LinearLayout>

@@ -3,9 +3,12 @@
     android:id="@+id/row_square_chat_list_send_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right"
+    android:gravity="end"
     android:orientation="horizontal"
+    android:paddingEnd="@dimen/square_chat_list_send_right_margin"
+    android:paddingLeft="0dp"
     android:paddingRight="@dimen/square_chat_list_send_right_margin"
+    android:paddingStart="0dp"
     android:paddingTop="@dimen/square_chat_list_send_top_margin" >
 
     <ProgressBar
@@ -20,9 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:textColor="@color/light_gray"
-        android:paddingRight="@dimen/square_chat_list_send_time_right_margin"
         android:paddingBottom="@dimen/square_chat_list_send_time_bottom_margin"
+        android:paddingEnd="@dimen/square_chat_list_send_time_right_margin"
+        android:paddingLeft="0dp"
+        android:paddingRight="@dimen/square_chat_list_send_time_right_margin"
+        android:paddingStart="0dp"
+        android:textColor="@color/gray_light"
         android:textSize="@dimen/font_small" />
 
     <TextView
@@ -30,8 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_chat_msg_sent"
+        android:paddingEnd="@dimen/square_chat_list_send_message_right_margin"
         android:paddingLeft="@dimen/square_chat_list_send_message_left_margin"
         android:paddingRight="@dimen/square_chat_list_send_message_right_margin"
+        android:paddingStart="@dimen/square_chat_list_send_message_left_margin"
         android:textSize="@dimen/font_large" />
 
 </LinearLayout>

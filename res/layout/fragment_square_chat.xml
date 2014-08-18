@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_chat_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/chat_bg"
     android:orientation="vertical" >
 
     <ListView
         android:id="@+id/square_chat_frag_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/square_chat_frag_input_layout"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/chat_bg"
         android:divider="@null" />
 
     <LinearLayout
         android:id="@+id/square_chat_frag_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#d2ffffff"
-        android:layout_alignParentBottom="true"
+        android:background="@color/gray_chat_input"
         android:orientation="horizontal" >
 
         <EditText
@@ -30,10 +29,12 @@
             android:ems="10"
             android:inputType="textMultiLine"
             android:maxLines="3"
+            android:paddingEnd="@dimen/square_chat_input_right_margin"
             android:paddingLeft="@dimen/square_chat_input_left_margin"
             android:paddingRight="@dimen/square_chat_input_right_margin"
+            android:paddingStart="@dimen/square_chat_input_left_margin"
             android:textSize="@dimen/font_large" />
-
+                
         <ImageButton
             android:id="@+id/square_chat_frag_send_button"
             android:layout_width="wrap_content"
@@ -45,4 +46,4 @@
             android:src="@drawable/send_image_button_bg" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

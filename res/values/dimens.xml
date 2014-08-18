@@ -115,7 +115,7 @@
     <dimen name="square_profile_camera_button_bottom_margin">13.5dp</dimen>
     <dimen name="squre_profile_hint_sentence_nick_name_margin">10dp</dimen>
     <dimen name="squre_profile_company_number_start_button_margin">10dp</dimen>
-    
+
     <!-- Profile Dialog -->
     <dimen name="profile_dialog_top_margin">53.5dp</dimen>
     <dimen name="profile_dialog_profile_width">86.5dp</dimen>

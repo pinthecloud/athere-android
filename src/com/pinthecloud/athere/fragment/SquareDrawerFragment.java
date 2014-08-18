@@ -57,7 +57,6 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 	private List<User> userList = new ArrayList<User>();
 
-	private User user;
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
 	private MessageDBHelper messageDBHelper;
@@ -170,14 +169,8 @@ public class SquareDrawerFragment extends AhFragment {
 		return view;
 	}
 
-	
+
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
-		/*
-		 * Set user
-		 */
-		this.user = user;
-
-
 		/*
 		 * Set profile image
 		 */
@@ -264,7 +257,7 @@ public class SquareDrawerFragment extends AhFragment {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onResume");
 		updateUserList();
 
-		
+
 		/*
 		 * Set handler for refresh new and old user
 		 */
@@ -283,7 +276,7 @@ public class SquareDrawerFragment extends AhFragment {
 		});
 	}
 
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -300,30 +293,17 @@ public class SquareDrawerFragment extends AhFragment {
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
 		}
 		profileCircleImage.setImageBitmap(profileBitmap);
-
-
-		/*
-		 * Set profile gender image
-		 */
-		if(user != null){
-			if(user.isMale()){
-				profileGenderImage.setImageResource(R.drawable.profile_gender_m);
-			} else{
-				profileGenderImage.setImageResource(R.drawable.profile_gender_w);
-			}
-		}
 	}
 
 
 	@Override
 	public void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
-		
+
 		/*
 		 * Release image resources
 		 */
 		profileCircleImage.setImageBitmap(null);
-		profileGenderImage.setImageBitmap(null);
 		super.onStop();
 	}
 }

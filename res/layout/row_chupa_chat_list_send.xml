@@ -3,9 +3,12 @@
     android:id="@+id/row_chupa_chat_list_send_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right"
+    android:gravity="end"
     android:orientation="horizontal"
+    android:paddingEnd="@dimen/chupa_chat_list_send_right_margin"
+    android:paddingLeft="0dp"
     android:paddingRight="@dimen/chupa_chat_list_send_right_margin"
+    android:paddingStart="0dp"
     android:paddingTop="@dimen/chupa_chat_list_send_top_margin" >
 
     <ProgressBar
@@ -27,8 +30,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_chupa_sent"
+        android:paddingEnd="@dimen/chupa_chat_list_send_message_right_margin"
         android:paddingLeft="@dimen/chupa_chat_list_send_message_left_margin"
         android:paddingRight="@dimen/chupa_chat_list_send_message_right_margin"
+        android:paddingStart="@dimen/chupa_chat_list_send_message_left_margin"
         android:textColor="@android:color/white"
         android:textSize="@dimen/font_large" />
 

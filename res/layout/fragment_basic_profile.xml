@@ -42,6 +42,7 @@
             android:id="@+id/basic_profile_frag_male_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/basic_profile_gender_radio_margin"
             android:layout_marginRight="@dimen/basic_profile_gender_radio_margin"
             android:background="@drawable/gender_male_toggle_bg"
             android:button="@android:color/transparent" />

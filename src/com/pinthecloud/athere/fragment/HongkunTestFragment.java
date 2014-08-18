@@ -22,7 +22,6 @@ import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.sqlite.UserDBHelper;
-import com.pinthecloud.athere.view.AhButton;
 
 /**
  * 
@@ -44,7 +43,7 @@ public class HongkunTestFragment extends AhFragment {
 	private MessageDBHelper messageDB;
 	private String __id = "";
 	private ImageView img;
-	private AhButton myBtn;
+	private Button myBtn;
 	private MobileServiceClient mClient;
 
 	public static final String SENDER_ID = "838051405989";
@@ -120,8 +119,7 @@ public class HongkunTestFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
 
-		myBtn = (AhButton)view.findViewById(R.id.drawer_user_chupa_btn);
-
+		myBtn = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
 		myBtn.setOnClickListener(new View.OnClickListener() {
 
 			@Override

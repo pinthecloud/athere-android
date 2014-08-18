@@ -55,7 +55,6 @@
 
         <activity
             android:name=".activity.SplashActivity"
-            android:hardwareAccelerated="false"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
@@ -68,37 +67,31 @@
         <activity android:name=".activity.AhActivity" />
         <activity
             android:name=".activity.BasicProfileActivity"
-            android:hardwareAccelerated="false"
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.SquareListActivity"
-            android:hardwareAccelerated="false"
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SquareProfileActivity"
-            android:hardwareAccelerated="false"
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
         <activity android:name=".activity.HongkunTestAcitivity" />
         <activity
             android:name=".activity.SquareActivity"
-            android:hardwareAccelerated="false"
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ProfileImageActivity"
-            android:hardwareAccelerated="false"
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.ChupaChatActivity"
-            android:hardwareAccelerated="false"
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >

@@ -27,7 +27,7 @@ public class ProfileImageFragment extends AhFragment{
 	private User user;
 
 	private ImageView profileImage; 
-
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,22 +64,21 @@ public class ProfileImageFragment extends AhFragment{
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onResume");
 
+		Bitmap profileBitmap = null;
 		if(user != null){
 			// other user
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
-			profileImage.setImageBitmap(profileBitmap);
+			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 		}else{
-			Bitmap profileBitmap = null;
 			try {
 				profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
 			} catch (FileNotFoundException e) {
 				profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 				Log.d(AhGlobalVariable.LOG_TAG, "Error of ProfileImageFragmet : " + e.getMessage());
 			}
-			profileImage.setImageBitmap(profileBitmap);
 		}
+		profileImage.setImageBitmap(profileBitmap);
 	}
 
 
