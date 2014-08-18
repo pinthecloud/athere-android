@@ -15,7 +15,7 @@
         app:pstsActivateTextColor="@android:color/white"
         app:pstsDeactivateTextColor="@color/gray_tab_text_unselected"
         app:pstsDividerColor="@android:color/transparent"
-        app:pstsIndicatorColor="@color/dark_red"
+        app:pstsIndicatorColor="@color/red"
         app:pstsIndicatorHeight="@dimen/square_tab_height"
         app:pstsShouldExpand="true"
         app:pstsTabSwitch="true"
