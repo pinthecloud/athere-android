@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -336,24 +337,37 @@ public class UserHelper {
 	}
 
 
-	public String getRegistrationIdSync(final AhFragment frag) {
+	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return null;
+			return;
 		}
+		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
 
-		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(app);
-		String registrationId = "";
-		try {
-			registrationId = gcm.register(GCM_SENDER_ID);
-		} catch (IOException e) {
-			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL));
-			return null;
-		}
-		return registrationId;
+			@Override
+			protected String doInBackground(GoogleCloudMessaging... params) {
+				// TODO Auto-generated method stub
+				GoogleCloudMessaging gcm = params[0];
+				try {
+					return gcm.register(GCM_SENDER_ID);
+				} catch (IOException e) {
+					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+					return null;
+				}
+			}
+			
+			@Override
+			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				
+				callback.onCompleted(result);
+			}
+		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
+		
 	}
 
-	public boolean unRegisterGcmSync(final AhFragment frag) {
+	public boolean _unRegisterGcmSync(final AhFragment frag) {
 
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "UnRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
