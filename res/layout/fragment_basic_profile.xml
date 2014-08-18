@@ -1,84 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/basic_profile_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical" >
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/basic_profile_wrapper_top_margin" >
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/basic_profile_frag_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/basic_profile_wrapper_top_margin" >
+        android:layout_marginBottom="@dimen/basic_profile_logo_bottom_margin"
+        android:contentDescription="@string/logo"
+        android:src="@drawable/setup" />
 
-        <ImageView
-            android:id="@+id/basic_profile_frag_logo"
+    <EditText
+        android:id="@+id/basic_profile_frag_nick_name_edit_text"
+        android:layout_width="@dimen/basic_profile_text_width"
+        android:layout_height="@dimen/basic_profile_text_height"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/nick_name"
+        android:inputType="text"
+        android:maxLength="10"
+        android:textSize="@dimen/font_large" >
+    </EditText>
+
+    <RadioGroup
+        android:id="@+id/basic_profile_frag_gender_button_group"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/basic_profile_gender_radio_height"
+        android:checkedButton="@+id/basic_profile_frag_male_button"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/basic_profile_frag_male_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/basic_profile_logo_bottom_margin"
-            android:contentDescription="@string/logo"
-            android:src="@drawable/setup" />
+            android:layout_marginRight="@dimen/basic_profile_gender_radio_margin"
+            android:background="@drawable/gender_male_toggle_bg"
+            android:button="@android:color/transparent" />
 
-        <EditText
-            android:id="@+id/basic_profile_frag_nick_name_edit_text"
-            android:layout_width="@dimen/basic_profile_text_width"
-            android:layout_height="@dimen/basic_profile_text_height"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="@string/nick_name"
-            android:inputType="text"
-            android:maxLength="10"
-            android:textSize="@dimen/font_large" >
-        </EditText>
-
-        <RadioGroup
-            android:id="@+id/basic_profile_frag_gender_button_group"
+        <RadioButton
+            android:id="@+id/basic_profile_frag_female_button"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/basic_profile_gender_radio_height"
-            android:checkedButton="@+id/basic_profile_frag_male_button"
-            android:gravity="center"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/gender_female_toggle_bg"
+            android:button="@android:color/transparent" />
+    </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/basic_profile_frag_male_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/basic_profile_gender_radio_margin"
-                android:background="@drawable/gender_male_toggle_bg"
-                android:button="@android:color/transparent" />
-
-            <RadioButton
-                android:id="@+id/basic_profile_frag_female_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gender_female_toggle_bg"
-                android:button="@android:color/transparent" />
-        </RadioGroup>
-
-        <EditText
-            android:id="@+id/basic_profile_frag_year_text"
-            android:layout_width="@dimen/basic_profile_text_width"
-            android:layout_height="@dimen/basic_profile_text_height"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="@string/birth_of_year"
-            android:textSize="@dimen/font_large" />
-    </LinearLayout>
+    <EditText
+        android:id="@+id/basic_profile_frag_year_text"
+        android:layout_width="@dimen/basic_profile_text_width"
+        android:layout_height="@dimen/basic_profile_text_height"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/birth_of_year"
+        android:textSize="@dimen/font_large" />
 
     <ImageButton
         android:id="@+id/basic_profile_frag_complete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/basic_profile_complete_button_bottom_margin"
+        android:layout_marginBottom="@dimen/basic_profile_complete_button_top_margin"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
         android:src="@drawable/ok_image_button_bg" />
 
-</RelativeLayout>
+</LinearLayout>

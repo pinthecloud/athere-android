@@ -76,6 +76,7 @@ public class SquareCodeDialog extends AhDialogFragment{
 				Bundle bundle = new Bundle();
 				bundle.putString(AhGlobalVariable.CODE_VALUE_KEY, code);
 				ahDialogCallback.doPositiveThing(bundle);
+				dismiss();
 			}
 		});
 		enterButton.setEnabled(false);

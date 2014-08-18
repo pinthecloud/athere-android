@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			 */
 			ImageView profilePic = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
 			TextView nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
-			ImageView isMale = (ImageView)view.findViewById(R.id.drawer_user_is_male);
+			ImageView gender = (ImageView)view.findViewById(R.id.drawer_user_gender);
 			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
 			TextView companyNumber = (TextView) view.findViewById(R.id.drawer_user_company_num);
 
@@ -66,12 +67,15 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			 */
 			nickName.setText(user.getNickName());
 			companyNumber.setText("" + user.getCompanyNum());
+			Resources resources = context.getResources();
 			if(user.isMale()){
-				isMale.setImageResource(R.drawable.sidebar_member_gender_m);
+				gender.setImageResource(R.drawable.sidebar_member_gender_m);
+				companyNumber.setTextColor(resources.getColor(R.color.blue));
 			}else{
-				isMale.setImageResource(R.drawable.sidebar_member_gender_w);
+				gender.setImageResource(R.drawable.sidebar_member_gender_w);
+				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
-			profilePic.setImageBitmap(BitmapUtil.cropRound(BitmapUtil.convertToBitmap(user.getProfilePic())));
+			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
 			profilePic.setOnClickListener(new OnClickListener() {
 
 				@Override

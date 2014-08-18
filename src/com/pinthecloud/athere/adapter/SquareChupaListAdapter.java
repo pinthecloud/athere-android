@@ -35,7 +35,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			LayoutInflater inflater = (LayoutInflater) 
 					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(this.layoutId, parent, false);
-		} 
+		}
 
 		Map<String,String> lastChupaMap = items.get(position);
 		if (lastChupaMap != null) {
@@ -61,12 +61,14 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
 			}
 			sender.setText(userNickName);
-			profilePic.setImageBitmap(BitmapUtil.cropRound(BitmapUtil.convertToBitmap(picStr)));
+			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(picStr));
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 			if (!chupaBadge.equals("0")) {
 				badgeNum.setText(chupaBadge);
 				badgeNum.setVisibility(View.VISIBLE);
+			}else{
+				badgeNum.setVisibility(View.GONE);
 			}
 		}
 

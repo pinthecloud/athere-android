@@ -10,6 +10,8 @@
     <string name="logo">Logo</string>
     <string name="profile">Profile</string>
     <string name="profile_image">Profile Image</string>
+    <string name="profile_settings">Profile Settings</string>
+    <string name="my_profile">My Profile</string>
     <string name="blur_image">Blur Image</string>
     <string name="on">On</string>
     <string name="off">Off</string>
@@ -32,11 +34,11 @@
     <string name="chupa">Chupa</string>
     <string name="chat_alarm">Chat Alarm</string>
     <string name="get_chupa">Get Chupa</string>
-    <string name="profile_settings">Profile Settings</string>
-    <string name="member">Member</string>
+    <string name="player">Player</string>
     <string name="code">Code</string>
     <string name="shout">Shout</string>
     <string name="confirm">Confirm</string>
+    <string name="hint">Hint</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -57,6 +59,8 @@
     <string name="shout_notification_title">shouts.</string>
     <string name="update_app_title">Update App</string>
     <string name="update_app_message">There is update. Please update App.</string>
+    <string name="internet_not_connected_title">Internet unavailable</string>
+    <string name="internet_not_connected_message">Internet is bad. Please check your network environment.</string>
     
     <!-- String Array -->
 

@@ -2,6 +2,7 @@ package com.pinthecloud.athere.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,13 +116,21 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 	@Override
 	public void handleException(final AhException ex) {
-		Log(_thisFragment, "in AhFragment : " + ex.toString());
-		AhAlertDialog exceptionDialog = new AhAlertDialog(ex.getType().toString(), ex.toString(), false, 
-				new AhDialogCallback() {
+		Log(_thisFragment, "AhFragment handleException : " + ex.toString());
 
+		AhAlertDialog exceptionDialog = null;
+		Resources resources = getResources();
+		String title = ex.getType().toString();
+		String message = ex.toString();
+		if(ex.getType().equals(AhException.TYPE.INTERNET_NOT_CONNECTED)){
+			title = resources.getString(R.string.internet_not_connected_title);
+			message = resources.getString(R.string.internet_not_connected_message);
+		}
+		exceptionDialog = new AhAlertDialog(title, message, false, new AhDialogCallback() {
 			@Override
 			public void doPositiveThing(Bundle bundle) {
-				// do nothing
+				android.os.Process.killProcess(android.os.Process.myPid());
+				System.exit(1);
 			}
 			@Override
 			public void doNegativeThing(Bundle bundle) {

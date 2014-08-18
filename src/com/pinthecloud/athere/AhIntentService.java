@@ -87,7 +87,6 @@ public class AhIntentService extends IntentService {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				if (AhMessage.TYPE.TALK.equals(type)) {
 					TALK();
 				} else if (AhMessage.TYPE.SHOUTING.equals(type)) {

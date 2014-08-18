@@ -3,8 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:paddingLeft="@dimen/profile_dialog_left_margin"
-    android:paddingRight="@dimen/profile_dialog_right_margin"
     android:paddingTop="@dimen/profile_dialog_top_margin" >
 
     <ImageView
@@ -14,14 +12,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/profile_dialog_profile_nick_name_margin"
         android:contentDescription="@string/profile_image" />
-
-    <ImageView
-        android:id="@+id/profile_dialog_gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/profile_dialog_profile"
-        android:layout_alignRight="@+id/profile_dialog_profile"
-        android:contentDescription="@string/gender" />
 
     <TextView
         android:id="@+id/profile_dialog_nick_name"
@@ -38,28 +28,48 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_dialog_nick_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/profile_dialog_info_send_button_margin" >
+        android:layout_marginBottom="@dimen/profile_dialog_info_send_button_margin"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/profile_dialog_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/profile_dialog_age_company_number_margin"
+            android:layout_marginRight="@dimen/profile_dialog_age_gender_margin"
             android:textSize="@dimen/font_medium" />
-
-        <TextView
-            android:id="@+id/profile_dialog_company_number"
+		<LinearLayout 
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/peoplenum"
-            android:textSize="@dimen/font_medium" />
+            android:layout_height="@dimen/square_drawer_profile_company_num_height"
+            android:background="@drawable/bg_sidebar_member" >
+            
+	        <ImageView
+	            android:id="@+id/profile_dialog_gender"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginRight="@dimen/profile_dialog_gender_company_number_margin"
+	            android:contentDescription="@string/gender" />
+	
+	        <TextView
+	            android:id="@+id/profile_dialog_company_number"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:textSize="@dimen/font_medium" />
+	    </LinearLayout>
     </LinearLayout>
+
+    <View
+        android:id="@+id/profile_dialog_send_button_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:layout_below="@+id/profile_dialog_info_layout"
+        android:background="@color/gray_line" />
 
     <Button
         android:id="@+id/profile_dialog_send_button"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/profile_dialog_send_button_height"
-        android:layout_below="@+id/profile_dialog_info_layout"
+        android:layout_below="@+id/profile_dialog_send_button_divider"
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:text="@string/send_chupa"

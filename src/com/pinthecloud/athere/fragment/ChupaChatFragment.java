@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
@@ -76,7 +77,7 @@ public class ChupaChatFragment extends AhFragment {
 		if (otherUser == null) {
 			otherUser = userDBHelper.getUser(userId, true);
 			if (otherUser == null)
-				throw new AhException("No User exist Error");
+				throw new AhException("No User Error");
 		}
 	}
 
@@ -108,7 +109,7 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set other user bar
 		 */
-		Bitmap profile = BitmapUtil.cropRound(BitmapUtil.convertToBitmap(otherUser.getProfilePic()));
+		Bitmap profile = BitmapUtil.convertToBitmap(otherUser.getProfilePic());
 		otherProfileImage.setImageBitmap(profile);
 		otherProfileImage.setOnClickListener(new OnClickListener() {
 
@@ -136,10 +137,13 @@ public class ChupaChatFragment extends AhFragment {
 		otherNickName.setText(otherUser.getNickName());
 		otherAge.setText("" + otherUser.getAge());
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
+		Resources resources = getResources();
 		if(otherUser.isMale()){
 			otherGender.setImageResource(R.drawable.chupa_gender_m);
+			otherCompanyNumber.setTextColor(resources.getColor(R.color.blue));
 		}else{
 			otherGender.setImageResource(R.drawable.chupa_gender_w);
+			otherCompanyNumber.setTextColor(resources.getColor(R.color.dark_red));
 		}
 
 
