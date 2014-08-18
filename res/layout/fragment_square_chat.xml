@@ -3,6 +3,7 @@
     android:id="@+id/square_chat_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/chat_bg"
     android:orientation="vertical" >
 
     <ListView
@@ -16,6 +17,7 @@
         android:id="@+id/square_chat_frag_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#d2ffffff"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 

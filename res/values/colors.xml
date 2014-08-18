@@ -2,9 +2,10 @@
 <resources>
     <color name="gray_tab_text_unselected">#959595</color>
     <color name="red">#d6003b</color>
-    <color name="dark_red">#d6003b</color>
-    <color name="blue">#14a0cc</color>
+    <color name="dark_red">#a6002e</color>
+    <color name="blue">#0077d3</color>
     <color name="gray_line">#eeeeee</color>
     <color name="gray_background">#eaeaea</color>
+    <color name="drawer_background">#f4f4f4</color>
     <color name="light_gray">#bdbdbd</color>
 </resources>
