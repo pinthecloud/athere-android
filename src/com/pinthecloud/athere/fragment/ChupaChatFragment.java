@@ -50,9 +50,9 @@ public class ChupaChatFragment extends AhFragment {
 	private TextView otherAge;
 	private TextView otherCompanyNumber;
 
-	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
-	private UserDBHelper userDBHelper;
+//	private MessageHelper messageHelper;
+//	private MessageDBHelper messageDBHelper;
+//	private UserDBHelper userDBHelper;
 
 	private User otherUser;
 	private boolean isOtherUserExit = false;
@@ -66,10 +66,6 @@ public class ChupaChatFragment extends AhFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragment onCreate");
-
-		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
-		userDBHelper = app.getUserDBHelper();
 
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);

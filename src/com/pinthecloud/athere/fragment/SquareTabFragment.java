@@ -31,8 +31,6 @@ public class SquareTabFragment extends AhFragment{
 	private BadgeView badge;
 
 	private Square square;
-	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
 
 
 	public SquareTabFragment(Square square) {
@@ -43,8 +41,6 @@ public class SquareTabFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
 	}
 
 	@Override

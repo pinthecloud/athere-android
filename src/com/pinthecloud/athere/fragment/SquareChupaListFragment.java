@@ -33,10 +33,6 @@ public class SquareChupaListFragment extends AhFragment{
 	private ListView squareChupaListView;
 	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 
-	private MessageDBHelper messageDBHelper;
-	private UserDBHelper userDBHelper;
-	private MessageHelper messageHelper;
-
 	public SquareChupaListFragment() {
 		super();
 	}
@@ -44,9 +40,6 @@ public class SquareChupaListFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		messageDBHelper = app.getMessageDBHelper();
-		userDBHelper = app.getUserDBHelper();
-		messageHelper = app.getMessageHelper();
 	}
 
 

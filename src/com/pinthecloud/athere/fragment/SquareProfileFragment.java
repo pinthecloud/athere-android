@@ -77,10 +77,6 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 
-	private UserHelper userHelper;
-	private UserDBHelper userDBHelper;
-	private MessageHelper messageHelper;
-
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
 		@Override
@@ -152,11 +148,6 @@ public class SquareProfileFragment extends AhFragment{
 		// Get parameter from previous activity intent
 		intent = activity.getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
-
-		// Set Helper
-		userHelper = app.getUserHelper();
-		userDBHelper = app.getUserDBHelper();
-		messageHelper = app.getMessageHelper();
 	}
 
 

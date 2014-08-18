@@ -17,11 +17,6 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.SquareHelper;
-import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.view.AhButton;
 
 /**
@@ -37,11 +32,6 @@ public class HongkunTestFragment extends AhFragment {
 	private int count = 0;
 	private int[] countArr;
 	private StringBuilder squareId = new StringBuilder();
-	private UserHelper userHelper;
-	private UserDBHelper userDBHelper;
-	private MessageHelper messageHelper;
-	private SquareHelper squareHelper;
-	private MessageDBHelper messageDB;
 	private String __id = "";
 	private ImageView img;
 	private AhButton myBtn;
@@ -53,12 +43,6 @@ public class HongkunTestFragment extends AhFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		squareHelper = app.getSquareHelper();
-		userHelper = app.getUserHelper();
-		userDBHelper = app.getUserDBHelper();
-		squareHelper = app.getSquareHelper();
-		messageHelper = app.getMessageHelper();
-		messageDB = app.getMessageDBHelper();
 		mClient = app.getmClient();
 	}
 

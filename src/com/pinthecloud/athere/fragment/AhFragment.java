@@ -16,8 +16,13 @@ import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.helper.SquareHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.sqlite.MessageDBHelper;
+import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 /**
  *  Basic Fragment class for At here application
@@ -31,11 +36,23 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected AhActivity activity;
 	protected PreferenceHelper pref;
 	protected AhFragment _thisFragment;
-
+	
+	protected MessageHelper messageHelper;
+	protected MessageDBHelper messageDBHelper;
+	protected UserHelper userHelper;
+	protected UserDBHelper userDBHelper;
+	protected SquareHelper squareHelper;
+	
 
 	public AhFragment(){
 		_thisFragment = this;
 		app = AhApplication.getInstance();
+		messageHelper = app.getMessageHelper();
+		messageDBHelper = app.getMessageDBHelper();
+		userHelper = app.getUserHelper();
+		userDBHelper = app.getUserDBHelper();
+		squareHelper = app.getSquareHelper();
+		pref = app.getPref();
 	}
 
 	@Override
@@ -47,7 +64,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		 */
 		context = getActivity();
 		activity = (AhActivity) context;
-		pref = app.getPref();
 		ExceptionManager.setHandler(_thisFragment);
 	}
 

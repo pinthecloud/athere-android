@@ -58,19 +58,11 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 	private List<User> userList = new ArrayList<User>();
 
-	private UserDBHelper userDBHelper;
-	private UserHelper userHelper;
-	private MessageDBHelper messageDBHelper;
-	private MessageHelper messageHelper;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		userDBHelper = app.getUserDBHelper();
-		userHelper = app.getUserHelper();
-		messageDBHelper = app.getMessageDBHelper();
-		messageHelper = app.getMessageHelper();
 	}
 
 	@Override

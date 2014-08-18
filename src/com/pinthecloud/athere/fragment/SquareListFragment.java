@@ -34,13 +34,9 @@ public class SquareListFragment extends AhFragment{
 	private SquareListAdapter squareListAdapter;
 	private List<Square> squares = new ArrayList<Square>();
 
-	private SquareHelper squareHelper;
-
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		squareHelper = app.getSquareHelper();
 	}
 
 

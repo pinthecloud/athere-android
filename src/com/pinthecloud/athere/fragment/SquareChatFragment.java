@@ -33,8 +33,6 @@ public class SquareChatFragment extends AhFragment{
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
 
 	private Square square;
-	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
 
 
 	public SquareChatFragment() {
@@ -49,8 +47,6 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import com.pinthecloud.athere.util.FileUtil;
 public class ProfileImageFragment extends AhFragment{
 
 	private PreferenceHelper pref;
-	private UserDBHelper userDBHelper;
 	private User user;
 
 	private ImageView profileImageView; 
@@ -33,7 +32,6 @@ public class ProfileImageFragment extends AhFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		pref = app.getPref();
-		userDBHelper = app.getUserDBHelper();
 
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
