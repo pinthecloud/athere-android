@@ -109,8 +109,6 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set other user bar
 		 */
-		Bitmap profile = BitmapUtil.convertToBitmap(otherUser.getProfilePic());
-		otherProfileImage.setImageBitmap(profile);
 		otherProfileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -225,6 +223,7 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onResume");
 
 		// Set sent and received chupas to list view 
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
@@ -262,6 +261,24 @@ public class ChupaChatFragment extends AhFragment {
 				});
 			}
 		});
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStart");
+		int w = otherProfileImage.getWidth();
+		int h = otherProfileImage.getHeight();
+		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
+		otherProfileImage.setImageBitmap(profileBitmap);
+	}
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStop");
+		otherProfileImage.setImageBitmap(null);
+		super.onStop();
 	}
 
 

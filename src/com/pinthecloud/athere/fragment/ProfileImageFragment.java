@@ -26,7 +26,7 @@ public class ProfileImageFragment extends AhFragment{
 	private UserDBHelper userDBHelper;
 	private User user;
 
-	private ImageView profileImageView; 
+	private ImageView profileImage; 
 
 
 	@Override
@@ -53,10 +53,23 @@ public class ProfileImageFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
-		profileImageView = (ImageView) view.findViewById(R.id.profile_image_frag_view);
+		profileImage = (ImageView) view.findViewById(R.id.profile_image_frag_view);
+
+		return view;
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onResume");
+
 		if(user != null){
 			// other user
-			profileImageView.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
+			int w = profileImage.getWidth();
+			int h = profileImage.getHeight();
+			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			profileImage.setImageBitmap(profileBitmap);
 		}else{
 			Bitmap profileBitmap = null;
 			try {
@@ -65,10 +78,15 @@ public class ProfileImageFragment extends AhFragment{
 				profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 				Log.d(AhGlobalVariable.LOG_TAG, "Error of ProfileImageFragmet : " + e.getMessage());
 			}
-			profileImageView.setImageBitmap(profileBitmap);
+			profileImage.setImageBitmap(profileBitmap);
 		}
-
-		return view;
 	}
 
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onResume");
+		profileImage.setImageBitmap(null);
+		super.onStop();
+	}
 }

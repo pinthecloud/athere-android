@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +57,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			/*
 			 * Find UI Component
 			 */
-			ImageView profilePic = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
+			ImageView profileImage = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
 			TextView nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
 			ImageView gender = (ImageView)view.findViewById(R.id.drawer_user_gender);
 			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
@@ -75,8 +76,11 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 				gender.setImageResource(R.drawable.sidebar_member_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
-			profilePic.setOnClickListener(new OnClickListener() {
+			int w = profileImage.getWidth();
+			int h = profileImage.getHeight();
+			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			profileImage.setImageBitmap(profileBitmap);
+			profileImage.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {

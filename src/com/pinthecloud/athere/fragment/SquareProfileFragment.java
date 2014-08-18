@@ -349,36 +349,6 @@ public class SquareProfileFragment extends AhFragment{
 	}
 
 
-	@Override
-	public void onResume() {
-		super.onResume();
-
-		// Set camera for taking picture OR
-		// Set taken picture to image view
-		if(!isTookPicture){
-			openCameraAndSetView();
-		}else{
-			try {
-				// Set taken picture to view
-				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-				profilePictureView.setImageBitmap(pictureBitmap);
-			} catch (FileNotFoundException e) {
-				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onResume : " + e.getMessage());
-			}
-		}
-	}
-
-
-	@Override
-	public void onPause() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onPause");
-		super.onPause();
-
-		// Release camera
-		releaseCameraAndRemoveView();
-	}
-
-
 	/*
 	 * Create our Preview view and set it as the content of our activity.
 	 * Create orientation event listener
@@ -493,6 +463,41 @@ public class SquareProfileFragment extends AhFragment{
 
 	private boolean isCompleteButtonEnable(){
 		return isTookPicture && isTypedMember && isTypedNickName;
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStart");
+
+		/*
+		 * Set camera for taking picture OR
+		 * Set taken picture to image view
+		 */
+		if(!isTookPicture){
+			openCameraAndSetView();
+		}else{
+			try {
+				// Set taken picture to view
+				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+				profilePictureView.setImageBitmap(pictureBitmap);
+			} catch (FileNotFoundException e) {
+				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onStart : " + e.getMessage());
+			}
+		}
+	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStop");
+		
+		/*
+		 * Release resources
+		 */
+		profilePictureView.setImageBitmap(null);
+		releaseCameraAndRemoveView();
+		super.onStop();
 	}
 
 

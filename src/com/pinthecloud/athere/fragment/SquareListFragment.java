@@ -32,7 +32,7 @@ public class SquareListFragment extends AhFragment{
 
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
-	private List<Square> squares = new ArrayList<Square>();
+	private List<Square> squareList = new ArrayList<Square>();
 
 	private SquareHelper squareHelper;
 
@@ -66,14 +66,14 @@ public class SquareListFragment extends AhFragment{
 		/*
 		 * Set square list view
 		 */
-		squareListAdapter = new SquareListAdapter(context, R.layout.row_square_list, squares);
+		squareListAdapter = new SquareListAdapter(context, R.layout.row_square_list, squareList);
 		squareListView.setAdapter(squareListAdapter);
 		squareListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				final Square square = squares.get(position);
+				final Square square = squareList.get(position);
 				if(square.getCode().equals("")){
 					Intent intent = new Intent(context, SquareProfileActivity.class);
 					intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
@@ -96,7 +96,7 @@ public class SquareListFragment extends AhFragment{
 						}
 						@Override
 						public void doNegativeThing(Bundle bundle) {
-							// do nothing						
+							// do nothing		
 						}
 					});
 					codeDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
@@ -122,8 +122,8 @@ public class SquareListFragment extends AhFragment{
 			public void onCompleted(List<Square> list, int count) {
 				mProgressBar.setVisibility(View.GONE);
 
-				squares.clear();
-				squares.addAll(list);
+				squareList.clear();
+				squareList.addAll(list);
 				squareListAdapter.notifyDataSetChanged();
 			}
 		});

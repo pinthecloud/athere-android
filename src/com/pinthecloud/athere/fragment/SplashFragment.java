@@ -164,4 +164,18 @@ public class SplashFragment extends AhFragment implements Runnable{
 		}
 		startActivity(intent);
 	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "SplashFragment onStop");
+		super.onStop();
+	}
+
+
+	@Override
+	public void onDestroy() {
+		Log.d(AhGlobalVariable.LOG_TAG, "SplashFragment onDestroy");
+		super.onDestroy();
+	}
 }

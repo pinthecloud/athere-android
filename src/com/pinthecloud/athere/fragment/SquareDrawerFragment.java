@@ -57,6 +57,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 	private List<User> userList = new ArrayList<User>();
 
+	private User user;
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
 	private MessageDBHelper messageDBHelper;
@@ -98,7 +99,7 @@ public class SquareDrawerFragment extends AhFragment {
 		participantListAdapter = new SquareDrawerParticipantListAdapter
 				(context, this, R.layout.row_square_drawer_participant_list, userList);
 		participantListView.setAdapter(participantListAdapter);
-		
+
 
 		/*
 		 * Set Button
@@ -165,47 +166,21 @@ public class SquareDrawerFragment extends AhFragment {
 				escDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
-		
+
 		return view;
 	}
 
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateUserList();
-		
-		/*
-		 * Set handler for refresh new and old user
-		 */
-		userHelper.setUserHandler(new AhEntityCallback<User>() {
-
-			@Override
-			public void onCompleted(final User user) {
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						updateUserList();
-					}
-				});
-			}
-		});
-	}
-
-
+	
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
 		/*
-		 * Set profile images 
+		 * Set user
 		 */
-		Bitmap profileBitmap = null;
-		try {
-			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-		} catch (FileNotFoundException e) {
-			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
-		}
-		profileCircleImage.setImageBitmap(profileBitmap);
+		this.user = user;
+
+
+		/*
+		 * Set profile image
+		 */
 		profileCircleImage.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -228,6 +203,14 @@ public class SquareDrawerFragment extends AhFragment {
 				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
+
+
+		/*
+		 * Set profile information text and gender image
+		 */
+		profileNickNameText.setText(user.getNickName());
+		profileAgeText.setText("" + user.getAge());
+		profileCompanyNumText.setText("" + user.getCompanyNum());
 		Resources resources = getResources();
 		if(user.isMale()){
 			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
@@ -236,14 +219,6 @@ public class SquareDrawerFragment extends AhFragment {
 			profileGenderImage.setImageResource(R.drawable.profile_gender_w);
 			profileCompanyNumText.setTextColor(resources.getColor(R.color.dark_red));
 		}
-
-
-		/*
-		 * Set profile infomation text
-		 */
-		profileNickNameText.setText(user.getNickName());
-		profileAgeText.setText("" + user.getAge());
-		profileCompanyNumText.setText("" + user.getCompanyNum());
 	}
 
 
@@ -279,5 +254,76 @@ public class SquareDrawerFragment extends AhFragment {
 			if (!user.isMale()) count++;
 		}
 		return count;
+	}
+
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onResume");
+		updateUserList();
+
+		
+		/*
+		 * Set handler for refresh new and old user
+		 */
+		userHelper.setUserHandler(new AhEntityCallback<User>() {
+
+			@Override
+			public void onCompleted(final User user) {
+				activity.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						updateUserList();
+					}
+				});
+			}
+		});
+	}
+
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
+
+		/*
+		 * Set profile images 
+		 */
+		Bitmap profileBitmap = null;
+		try {
+			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+		} catch (FileNotFoundException e) {
+			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
+			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
+		}
+		profileCircleImage.setImageBitmap(profileBitmap);
+
+
+		/*
+		 * Set profile gender image
+		 */
+		if(user != null){
+			if(user.isMale()){
+				profileGenderImage.setImageResource(R.drawable.profile_gender_m);
+			} else{
+				profileGenderImage.setImageResource(R.drawable.profile_gender_w);
+			}
+		}
+	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
+		
+		/*
+		 * Release image resources
+		 */
+		profileCircleImage.setImageBitmap(null);
+		profileGenderImage.setImageBitmap(null);
+		super.onStop();
 	}
 }
