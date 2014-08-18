@@ -419,6 +419,8 @@ public class SquareProfileFragment extends AhFragment{
 							
 						});
 						
+				} else {
+					AsyncChainer.notifyNext(frag);
 				}
 			}
 			
@@ -461,8 +463,8 @@ public class SquareProfileFragment extends AhFragment{
 						// TODO Auto-generated method stub
 						userDBHelper.addAllUsers(list);
 						
-						// Remove My SELF!!
-						//userDBHelper.deleteUser(id);
+						// Remove Me from User DB Table.
+						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
 					}
 				});
 				

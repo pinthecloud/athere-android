@@ -362,6 +362,8 @@ public class UserHelper {
 				super.onPostExecute(result);
 				
 				callback.onCompleted(result);
+				Log.e("ERROR","on complete! GCM get");
+				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
 		
