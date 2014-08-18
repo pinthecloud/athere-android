@@ -54,7 +54,7 @@ public class UserHelper {
 	}
 
 
-	public boolean exitSquareSync(final AhFragment frag, String userId) throws AhException {
+	public boolean _exitSquareSync(final AhFragment frag, String userId) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "exitSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return false;
@@ -130,7 +130,7 @@ public class UserHelper {
 	}
 
 
-	public String enterSquareSync(final AhFragment frag, User user) throws AhException {
+	public String _enterSquareSync(final AhFragment frag, User user) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
@@ -186,7 +186,7 @@ public class UserHelper {
 		});
 	}
 
-	public List<User> getUserListSync(final AhFragment frag, String squareId){
+	public List<User> _getUserListSync(final AhFragment frag, String squareId){
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
@@ -244,7 +244,7 @@ public class UserHelper {
 	}
 
 
-	public User getUserSync(final AhFragment frag, String id) {
+	public User _getUserSync(final AhFragment frag, String id) {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;

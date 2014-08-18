@@ -42,7 +42,7 @@ public class MessageHelper {
 	}
 
 
-	public boolean sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
+	public boolean _sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
 
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
