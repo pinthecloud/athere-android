@@ -11,11 +11,11 @@ import android.view.ViewGroup;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
+import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.view.BadgeView;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 
