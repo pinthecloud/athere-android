@@ -130,10 +130,11 @@ public class AhIntentService extends IntentService {
 	private void CHUPA() {
 		messageDBHelper.addMessage(message);
 		
-		// Always Notify that Chupa has come.
-		alertNotification(AhMessage.TYPE.CHUPA);
 		if (isRunning(app)) {
 			messageHelper.triggerMessageEvent(message);
+			if (!isChupaChatRunning(app)){
+				alertNotification(AhMessage.TYPE.CHUPA);
+			}
 		} else {
 //			alertNotification(AhMessage.TYPE.CHUPA);
 		}
@@ -283,6 +284,18 @@ public class AhIntentService extends IntentService {
 		for (RunningTaskInfo task : tasks) {
 			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
 				return true;                                  
+		}
+		return false;
+	}
+	
+	private boolean isChupaChatRunning(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+		for (RunningTaskInfo task : tasks) {
+			if (task.topActivity.getClassName().equals(ChupaChatActivity.class.getName())) {
+				return true;
+			}
 		}
 		return false;
 	}
