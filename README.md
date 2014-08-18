@@ -1,6 +1,7 @@
-Chupa Android Project by Pin the Cloud Inc.
+chupa by Pin the Cloud Inc.
 ==============
-It helps to pick up people who are in a same place.
+It's chupa android project.
+This application helps to pick up people who are in a same place.
 
 
 Homepage
