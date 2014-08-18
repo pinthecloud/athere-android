@@ -225,7 +225,7 @@ public class ChupaChatFragment extends AhFragment {
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
@@ -236,21 +236,13 @@ public class ChupaChatFragment extends AhFragment {
 				
 				// If Exit Message, Check if it's related Exit (Don't go through other User Exit message)
 				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-					String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-					if (!chupaCommunId.equals(message.getChupaCommunId())) return;
+					if (!otherUser.getId().equals(message.getSenderId())) return;
 				}
-				messageList.add(message);
-
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
-						if(message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-							isOtherUserExit = true;
-							sendButton.setEnabled(false);
-						}
+						refreshView(message.getChupaCommunId());
 					}
 				});
 			}
@@ -261,22 +253,18 @@ public class ChupaChatFragment extends AhFragment {
 
 
 	@Override
-	public void onResume() {
-		super.onResume();
-
+	public void onStart() {
+		super.onStart();
 		// Set sent and received chupas to list view 
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-		loadChupaMessage(chupaCommunId);
-
-		// Clear badge numbers displayed on chupa list
-		messageDBHelper.clearBadgeNum(chupaCommunId);
+		refreshView(chupaCommunId);
 	}
 
 
 	/*
 	 * Set sent and received chupas to list view 
 	 */
-	private void loadChupaMessage(String chupaCommunId){
+	private void refreshView(String chupaCommunId){
 		if(chupaCommunId == null || chupaCommunId.equals(""))
 			throw new AhException("No chupaCommunId");
 
@@ -287,13 +275,13 @@ public class ChupaChatFragment extends AhFragment {
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 
-
 		/*
 		 * If other user exit, add exit message
 		 */
 		if (userDBHelper.isUserExit(otherUser.getId())){
 			isOtherUserExit = true;
-
+			sendButton.setEnabled(false);
+			
 			String exitMessage = getResources().getString(R.string.exit_square_message);
 			String nickName = otherUser.getNickName();
 			AhMessage.Builder messageBuilder = new AhMessage.Builder();
@@ -308,6 +296,9 @@ public class ChupaChatFragment extends AhFragment {
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 		}
+		
+		// Clear badge numbers displayed on chupa list
+		messageDBHelper.clearBadgeNum(chupaCommunId);
 	}
 
 

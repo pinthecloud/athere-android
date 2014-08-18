@@ -1,8 +1,6 @@
 package com.pinthecloud.athere.helper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.util.Log;
@@ -15,6 +13,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -138,8 +137,29 @@ public class MessageHelper {
 	}
 
 
-	private Map<String, List<AhEntityCallback<AhMessage>>> mapList = new HashMap<String, List<AhEntityCallback<AhMessage>>>();
-	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
+	/**
+	 *  ===[The Message Triggering Propagation Mechanism]===
+	 *  When the message pushed by server comes,
+	 *  
+	 *  The message triggers the Activity currently on Top (whether [SquareActivity] or [ChupaChatActivity])
+	 * 	if [SquareActivity]
+	 * 		it  triggers [SquareTabFragment]
+	 * 		and [SquareTabFragment] triggers both [SquareChatFragment] & [SquareChupaListFragment]
+	 * 
+	 *  if [ChupaChatActivity]
+	 *  	it triggers [ChupaChatFragment]
+	 *  
+	 *  
+	 *  ===[The Way to Program in Each Handler]===
+	 *  The handlers SHOULD NOT MODIFY any Database contents.
+	 *  The Database contents will be modified before handlers. (Precisely, in [AhIntentService])
+	 *  The handlers should only refresh the related Views. (typically, refreshView() method)
+	 * 
+	 */
+	
+//	private Map<String, List<AhEntityCallback<AhMessage>>> mapList = new HashMap<String, List<AhEntityCallback<AhMessage>>>();
+	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
+//	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
 	//	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
 
 //	public void setMessageHandler(AhMessage.TYPE type, AhEntityCallback<AhMessage> callback){
@@ -147,22 +167,28 @@ public class MessageHelper {
 //		Log.d(AhGlobalVariable.LOG_TAG,"setMessageHandler :" + type.toString() + callback);
 //	}
 
-	public void setMessageHandler(AhEntityCallback<AhMessage> callback){
-		List<AhEntityCallback<AhMessage>> list = mapList.get(MESSAGE_RECEIVED);
-		if (list == null) {
-			mapList.put(MESSAGE_RECEIVED, new ArrayList<AhEntityCallback<AhMessage>>());
-			list = mapList.get(MESSAGE_RECEIVED);
+	public void setMessageHandler(AhActivity activity, AhEntityCallback<AhMessage> callback){
+		AhEntityCallback<AhMessage> _callback = map.get(activity.getClass().getName());
+		if (_callback == null) {
+			map.put(activity.getClass().getName(), callback);
 		}
-		Log.e("ERROR", "messageHandler : " + list.size());
-		list.add(callback);
+	}
+	public void setMessageHandler(AhFragment frag, AhEntityCallback<AhMessage> callback){
+		AhEntityCallback<AhMessage> _callback = map.get(frag.getClass().getName());
+		if (_callback == null) {
+			map.put(frag.getClass().getName(), callback);
+		}
+	}
+	
+	
+	public void triggerMessageEvent(AhFragment frag, AhMessage message){
+		this.triggerMessageEvent(frag.getClass().getName(), message);
 	}
 
-	public void triggerMessageEvent(AhMessage message){
-		List<AhEntityCallback<AhMessage>> list = mapList.get(MESSAGE_RECEIVED);
-		if(list != null) {
-			for (AhEntityCallback<AhMessage> callback : list) {
-				callback.onCompleted(message);
-			}
+	public void triggerMessageEvent(String key, AhMessage message){
+		AhEntityCallback<AhMessage> _callback = map.get(key);
+		if(_callback != null) {
+			_callback.onCompleted(message);
 		}
 		else 
 			Log.d(AhGlobalVariable.LOG_TAG,"[MessageHelper.triggerMessage] map.get(MESSAGE_RECEIVED); :" + message.getType());

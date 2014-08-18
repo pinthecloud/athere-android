@@ -142,7 +142,7 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
@@ -151,13 +151,11 @@ public class SquareChatFragment extends AhFragment{
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						||message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
 				
-				messageList.add(message);
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
+						refreshView();
 					}
 				});
 			}
@@ -168,9 +166,9 @@ public class SquareChatFragment extends AhFragment{
 
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		loadTalkMessage();
+	public void onStart() {
+		super.onStart();
+		refreshView();
 	}
 
 
@@ -179,7 +177,7 @@ public class SquareChatFragment extends AhFragment{
 	 * notify this Method When this Fragment is on Resume
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
-	private void loadTalkMessage(){
+	private void refreshView(){
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();

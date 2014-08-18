@@ -101,32 +101,23 @@ public class SquareTabFragment extends AhFragment{
 		/*
 		 * Set message handle
 		 */
-		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(_thisFragment, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
 				// Chupa & Exit Message can go through here
 				// Chupa & Exit Message need to be update visually in ChupaChatList Fragment
-				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) {
-					messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
+//				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) {
 					activity.runOnUiThread(new Runnable() {
 
 						@Override
 						public void run() {
-							badge.increment(1);
-							mSquarePagerAdapter.notifyDataSetChanged();
+							refreshView();
 						}
 					});
-				}
-				else if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-					activity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							mSquarePagerAdapter.notifyDataSetChanged();
-						}
-					});
-				}
+//				}
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);
 			}
 		});
 
@@ -134,13 +125,16 @@ public class SquareTabFragment extends AhFragment{
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		updateTab();
+	public void onStart() {
+		super.onStart();
+		refreshView();
 	}
 
-	private void updateTab(){
-		int totalNum = 1;	// TODO get total badge number
+	private void refreshView(){
+		int totalNum = messageDBHelper.getAllBadgeNum();
+		
+//		badge.increment(totalNum);
+		
 		if(totalNum != 0){
 			badge.setText("" + totalNum);
 			badge.show();	

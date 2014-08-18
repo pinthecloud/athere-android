@@ -114,14 +114,16 @@ public class AhIntentService extends IntentService {
 	private void TALK() {
 		messageDBHelper.addMessage(message);
 		if (isRunning(app)) {
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 		}
 	}
 
 	private void SHOUTING() {
 		messageDBHelper.addMessage(message);
 		if (isRunning(app)) {
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 		} else {
 			alertNotification(AhMessage.TYPE.SHOUTING);
 		}
@@ -129,9 +131,10 @@ public class AhIntentService extends IntentService {
 
 	private void CHUPA() {
 		messageDBHelper.addMessage(message);
-		
+		messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
 		if (isRunning(app)) {
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 			if (!isChupaChatRunning(app)){
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
@@ -147,7 +150,8 @@ public class AhIntentService extends IntentService {
 			public void onCompleted(User user) {
 				userDBHelper.addUser(user);
 				if (isRunning(app)) {
-					messageHelper.triggerMessageEvent(message);
+					String currentActivityName = getCurrentRunningActivityName(app);
+					messageHelper.triggerMessageEvent(currentActivityName, message);
 					userHelper.triggerUserEvent(user);
 				} else {
 					alertNotification(AhMessage.TYPE.ENTER_SQUARE);
@@ -160,7 +164,8 @@ public class AhIntentService extends IntentService {
 		userDBHelper.exitUser(userId);
 		User user = userDBHelper.getUser(userId, true);
 		if (isRunning(app)) {
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
 		} 
 	}
@@ -298,6 +303,18 @@ public class AhIntentService extends IntentService {
 			}
 		}
 		return false;
+	}
+	
+	private String getCurrentRunningActivityName(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+		
+		for (RunningTaskInfo task : tasks) {
+			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) {
+				return task.topActivity.getClassName();
+			}
+		}
+		return AhIntentService.class.getName();
 	}
 
 
