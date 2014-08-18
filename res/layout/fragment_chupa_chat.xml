@@ -91,7 +91,10 @@
             android:paddingLeft="@dimen/square_chat_input_left_margin"
             android:paddingRight="@dimen/square_chat_input_right_margin"
             android:paddingStart="@dimen/square_chat_input_left_margin"
-            android:textSize="@dimen/font_large" />
+            android:textSize="@dimen/font_large" >
+
+            <requestFocus />
+        </EditText>
 
         <ImageButton
             android:id="@+id/chupa_chat_frag_send_button"

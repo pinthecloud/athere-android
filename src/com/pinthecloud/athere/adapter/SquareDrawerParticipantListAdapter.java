@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,16 +19,12 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
-import com.pinthecloud.athere.activity.ProfileImageActivity;
-import com.pinthecloud.athere.dialog.ProfileDialog;
-import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 
 	private Context context;
-	private Fragment fragment;
 	private int layoutId;
 	private List<User> items;
 
@@ -37,7 +32,6 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<User> items) {
 		super(context, layoutId, items);
 		this.context = context;
-		this.fragment = fragment;
 		this.layoutId = layoutId;
 		this.items = items;
 	}
@@ -80,28 +74,6 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			int h = profileImage.getHeight();
 			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 			profileImage.setImageBitmap(profileBitmap);
-			profileImage.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							Intent intent = new Intent(context, ChupaChatActivity.class);
-							intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
-							context.startActivity(intent);
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							Intent intent = new Intent(context, ProfileImageActivity.class);
-							intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
-							context.startActivity(intent);
-						}
-					});
-					profileDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-				}
-			});
 
 
 			/*

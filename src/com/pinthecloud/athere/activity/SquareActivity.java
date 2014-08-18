@@ -15,8 +15,11 @@ import android.view.View;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
+import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
 
@@ -34,6 +37,7 @@ public class SquareActivity extends AhActivity{
 	private SquareDrawerFragment mSquareDrawerFragment;
 
 	private SquareHelper squareHelper;
+	private MessageHelper messageHelper;
 	private UserHelper userHelper;
 
 
@@ -47,6 +51,7 @@ public class SquareActivity extends AhActivity{
 		 */
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
+		messageHelper = app.getMessageHelper();
 		user = userHelper.getMyUserInfo(true);
 		square = squareHelper.getSquare();
 
@@ -70,7 +75,7 @@ public class SquareActivity extends AhActivity{
 		 * Set tab
 		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		SquareTabFragment mSquareTabFragment = new SquareTabFragment(square);
+		final SquareTabFragment mSquareTabFragment = new SquareTabFragment(square);
 		fragmentTransaction.add(R.id.square_tab_layout, mSquareTabFragment);
 		fragmentTransaction.commit();
 
@@ -119,6 +124,16 @@ public class SquareActivity extends AhActivity{
 
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+			
+			@Override
+			public void onCompleted(AhMessage message) {
+				// TODO Auto-generated method stub
+				messageHelper.triggerMessageEvent(mSquareTabFragment, message);
+			}
+		});
+		
 	}
 
 

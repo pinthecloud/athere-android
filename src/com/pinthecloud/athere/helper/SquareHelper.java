@@ -55,7 +55,7 @@ public class SquareHelper {
 		this.squareTable = app.getSquareTable();
 	}
 
-	public List<Square> getSquareListSync(final AhFragment frag, double latitude, double longitude) throws AhException {
+	public List<Square> _getSquareListSync(final AhFragment frag, double latitude, double longitude) throws AhException {
 		
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -102,7 +102,7 @@ public class SquareHelper {
 		return carrier.getItem();
 	}
 
-	public Square createSquareSync(AhFragment frag, String name, double latitude, double longitude) throws AhException {
+	public Square _createSquareSync(AhFragment frag, String name, double latitude, double longitude) throws AhException {
 		
 		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 
@@ -125,11 +125,11 @@ public class SquareHelper {
 		square.setMaleNum(maleNum);
 		square.setFemaleNum(femaleNum);
 
-		return this.createSquareSync(frag, square);
+		return this._createSquareSync(frag, square);
 	}
 
 
-	public Square createSquareSync(final AhFragment frag, Square square) throws AhException {
+	public Square _createSquareSync(final AhFragment frag, Square square) throws AhException {
 		
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));

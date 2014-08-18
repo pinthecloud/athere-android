@@ -24,6 +24,8 @@ import android.util.Log;
 
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.database.MessageDBHelper;
+import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
@@ -31,8 +33,6 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class AhIntentService extends IntentService {
@@ -80,7 +80,7 @@ public class AhIntentService extends IntentService {
 			Log.d(AhGlobalVariable.LOG_TAG, "Error while parsing Message Intent : " + e.getMessage());
 			return;
 		}
-		Log.d(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
+		Log.e(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {
@@ -114,14 +114,16 @@ public class AhIntentService extends IntentService {
 	private void TALK() {
 		messageDBHelper.addMessage(message);
 		if (isRunning(app)) {
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 		}
 	}
 
 	private void SHOUTING() {
 		messageDBHelper.addMessage(message);
 		if (isRunning(app)) {
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 		} else {
 			alertNotification(AhMessage.TYPE.SHOUTING);
 		}
@@ -129,9 +131,13 @@ public class AhIntentService extends IntentService {
 
 	private void CHUPA() {
 		messageDBHelper.addMessage(message);
+		messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
 		if (isRunning(app)) {
-			Log.e("ERROR","in chupa app running");
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
+			if (!isChupaChatRunning(app)){
+				alertNotification(AhMessage.TYPE.CHUPA);
+			}
 		} else {
 			alertNotification(AhMessage.TYPE.CHUPA);
 		}
@@ -144,7 +150,8 @@ public class AhIntentService extends IntentService {
 			public void onCompleted(User user) {
 				userDBHelper.addUser(user);
 				if (isRunning(app)) {
-					messageHelper.triggerMessageEvent(message);
+					String currentActivityName = getCurrentRunningActivityName(app);
+					messageHelper.triggerMessageEvent(currentActivityName, message);
 					userHelper.triggerUserEvent(user);
 				} else {
 					alertNotification(AhMessage.TYPE.ENTER_SQUARE);
@@ -157,7 +164,8 @@ public class AhIntentService extends IntentService {
 		userDBHelper.exitUser(userId);
 		User user = userDBHelper.getUser(userId, true);
 		if (isRunning(app)) {
-			messageHelper.triggerMessageEvent(message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
 		} 
 	}
@@ -283,6 +291,30 @@ public class AhIntentService extends IntentService {
 				return true;                                  
 		}
 		return false;
+	}
+	
+	private boolean isChupaChatRunning(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+
+		for (RunningTaskInfo task : tasks) {
+			if (task.topActivity.getClassName().equals(ChupaChatActivity.class.getName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private String getCurrentRunningActivityName(Context context) {
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
+		
+		for (RunningTaskInfo task : tasks) {
+			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) {
+				return task.topActivity.getClassName();
+			}
+		}
+		return AhIntentService.class.getName();
 	}
 
 

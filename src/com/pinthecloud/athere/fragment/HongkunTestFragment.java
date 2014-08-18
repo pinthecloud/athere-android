@@ -17,11 +17,7 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.SquareHelper;
-import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
+
 
 /**
  * 
@@ -36,11 +32,6 @@ public class HongkunTestFragment extends AhFragment {
 	private int count = 0;
 	private int[] countArr;
 	private StringBuilder squareId = new StringBuilder();
-	private UserHelper userHelper;
-	private UserDBHelper userDBHelper;
-	private MessageHelper messageHelper;
-	private SquareHelper squareHelper;
-	private MessageDBHelper messageDB;
 	private String __id = "";
 	private ImageView img;
 	private Button myBtn;
@@ -52,12 +43,6 @@ public class HongkunTestFragment extends AhFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		squareHelper = app.getSquareHelper();
-		userHelper = app.getUserHelper();
-		userDBHelper = app.getUserDBHelper();
-		squareHelper = app.getSquareHelper();
-		messageHelper = app.getMessageHelper();
-		messageDB = app.getMessageDBHelper();
 		mClient = app.getmClient();
 	}
 
@@ -108,11 +93,6 @@ public class HongkunTestFragment extends AhFragment {
 		return view;
 	}
 
-	//	@Override
-	//	public void handleException(AhException ex) {
-	//		// TODO Auto-generated method stub
-	//		Log.e("ERROR","HongkunFragment handler : " + ex);
-	//	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -124,7 +104,6 @@ public class HongkunTestFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//				final AhMessage message = new AhMessage.Builder()
 				//						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
 				//						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
@@ -151,16 +130,15 @@ public class HongkunTestFragment extends AhFragment {
 			}
 		});
 
-
-
 		return view;
 	}
 
+
 	@Override
 	public void handleException(AhException ex) {
-		// TODO Auto-generated method stub
 		Log(_thisFragment, "in handle Hongkunyoo");
 	}
+
 
 	//	public void addItem01(View view) {
 	//		
@@ -176,7 +154,6 @@ public class HongkunTestFragment extends AhFragment {
 	//
 	//			@Override
 	//			public void onCompleted(AhMessage entity) {
-	//				// TODO Auto-generated method stub
 	//				btn01.setText("Enter" + (b1Count++));
 	//				Log.e("ERROR","Enter succeed");
 	//				messageText.setText("Enter succeed");
@@ -198,7 +175,6 @@ public class HongkunTestFragment extends AhFragment {
 	//
 	//			@Override
 	//			public void onCompleted(AhMessage entity) {
-	//				// TODO Auto-generated method stub
 	//				btn02.setText("Exit" + (b2Count++));
 	//				Log.e("ERROR","Exit succeed");
 	//				messageText.setText("Exit succeed");
@@ -220,7 +196,6 @@ public class HongkunTestFragment extends AhFragment {
 	//
 	//			@Override
 	//			public void onCompleted(AhMessage entity) {
-	//				// TODO Auto-generated method stub
 	//				btn03.setText("Talk" + (b3Count++));
 	//				Log.e("ERROR","Talk succeed");
 	//				messageText.setText("Talk succeed");
@@ -233,7 +208,6 @@ public class HongkunTestFragment extends AhFragment {
 	//
 	//			@Override
 	//			public void run() {
-	//				// TODO Auto-generated method stub
 	//				AhMessage message = new AhMessage();
 	//				message.setContent("Chupa");
 	//				message.setSender(who);
@@ -247,7 +221,6 @@ public class HongkunTestFragment extends AhFragment {
 	//					
 	//					@Override
 	//					public void run() {
-	//						// TODO Auto-generated method stub
 	//						btn04.setText("Chupa" + (b4Count++));
 	//						messageText.setText("Chupa succeed");
 	//					}
@@ -264,7 +237,6 @@ public class HongkunTestFragment extends AhFragment {
 	//
 	//			@Override
 	//			public void run() {
-	//				// TODO Auto-generated method stub
 	//				AhMessage message = new AhMessage();
 	//				message.setContent("Shout");
 	//				message.setSender(who);
@@ -279,7 +251,6 @@ public class HongkunTestFragment extends AhFragment {
 	//					
 	//					@Override
 	//					public void run() {
-	//						// TODO Auto-generated method stub
 	//						btn05.setText("Shout" + (b5Count++));
 	//						messageText.setText("Shout succeed");
 	//					}
@@ -294,7 +265,6 @@ public class HongkunTestFragment extends AhFragment {
 	//
 	//			@Override
 	//			public void run() {
-	//				// TODO Auto-generated method stub
 	//				AhMessage message = new AhMessage();
 	//				message.setContent("Update User");
 	//				message.setSender(who);
@@ -309,7 +279,6 @@ public class HongkunTestFragment extends AhFragment {
 	//					
 	//					@Override
 	//					public void run() {
-	//						// TODO Auto-generated method stub
 	//						btn06.setText("Update User" + (b6Count++));
 	//						messageText.setText("Update User succeed");
 	//					}
@@ -318,5 +287,4 @@ public class HongkunTestFragment extends AhFragment {
 	//			
 	//		}).start();
 	//	}
-
 }

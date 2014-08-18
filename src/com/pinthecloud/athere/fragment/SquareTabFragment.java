@@ -12,11 +12,9 @@ import android.view.ViewGroup;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
 import com.pinthecloud.athere.view.BadgeView;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 
@@ -32,8 +30,6 @@ public class SquareTabFragment extends AhFragment{
 	private BadgeView badge;
 
 	private Square square;
-	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
 
 
 	public SquareTabFragment(Square square) {
@@ -44,8 +40,6 @@ public class SquareTabFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
 	}
 
 	@Override
@@ -102,36 +96,41 @@ public class SquareTabFragment extends AhFragment{
 		/*
 		 * Set message handle
 		 */
-		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(_thisFragment, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
-				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())){
-					activity.runOnUiThread(new Runnable() {
+				// Chupa & Exit Message can go through here
+				// Chupa & Exit Message need to be update visually in ChupaChatList Fragment
+				//				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) {
+				activity.runOnUiThread(new Runnable() {
 
-						@Override
-						public void run() {
-							badge.increment(1);
-							mSquarePagerAdapter.notifyDataSetChanged();
-						}
-					});
-				} 
+					@Override
+					public void run() {
+						refreshView();
+					}
+				});
+				Log(_thisFragment, "how about here");
+				//				}
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);
 			}
 		});
 
 		return view;
 	}
 
+	
 	@Override
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareTabFragment onStart");
-		updateTab();
+		refreshView();
 	}
 
-	private void updateTab(){
-		int totalNum = 1;	// TODO get total badge number
+	
+	private void refreshView(){
+		int totalNum = messageDBHelper.getAllBadgeNum();
 		if(totalNum != 0){
 			badge.setText("" + totalNum);
 			badge.show();	

@@ -15,6 +15,8 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.database.MessageDBHelper;
+import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -23,12 +25,13 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 
 /*
  * 
@@ -150,7 +153,7 @@ public class AhApplication extends Application{
 
 
 	//TODO : Don't Use NOW
-	public void forcedLogoutSync (final AhFragment frag) {
+	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<AhMessage> callback) {
 		if (!isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -161,7 +164,7 @@ public class AhApplication extends Application{
 		jo.addProperty("registrationId", pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
 
 		Gson g = new Gson();
-		JsonElement json = g.fromJson(jo, JsonElement.class);
+		final JsonElement json = g.fromJson(jo, JsonElement.class);
 
 		String exitMessage = app.getResources().getString(R.string.exit_square_message);
 		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
@@ -173,23 +176,43 @@ public class AhApplication extends Application{
 		.setType(AhMessage.TYPE.EXIT_SQUARE);
 		final AhMessage message = messageBuilder.build();
 
-
-		mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
+		AsyncChainer.asyncChain(frag, new Chainable(){
 
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				messageHelper.sendMessageSync(frag, message);
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
+				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 
-				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-				pref.removePref(AhGlobalVariable.USER_ID_KEY);
-				pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
-				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+					@Override
+					public void onCompleted(JsonElement json, Exception exception,
+							ServiceFilterResponse response) {
+						pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+						pref.removePref(AhGlobalVariable.USER_ID_KEY);
+						pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
+						pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+						pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+					}
+				});
+			}
+			
+		}, new Chainable() {
+			
+			@Override
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
+				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+					
+					@Override
+					public void onCompleted(AhMessage entity) {
+						// TODO Auto-generated method stub
+						callback.onCompleted(entity);
+					}
+				});
 			}
 		});
+		
 	}
 }

@@ -19,7 +19,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	private int layoutId;
 	private List<AhMessage> items;
 
-
 	public ChupaChatListAdapter(Context context, int layoutId, List<AhMessage> items) {
 		super(context, layoutId, items);
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

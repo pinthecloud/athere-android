@@ -34,20 +34,18 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
-import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -76,10 +74,6 @@ public class SquareProfileFragment extends AhFragment{
 	private NumberPickerDialog companyNumberPickerDialog;
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
-
-	private UserHelper userHelper;
-	private UserDBHelper userDBHelper;
-	private MessageHelper messageHelper;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -152,11 +146,6 @@ public class SquareProfileFragment extends AhFragment{
 		// Get parameter from previous activity intent
 		intent = activity.getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
-
-		// Set Helper
-		userHelper = app.getUserHelper();
-		userDBHelper = app.getUserDBHelper();
-		messageHelper = app.getMessageHelper();
 	}
 
 
@@ -381,23 +370,33 @@ public class SquareProfileFragment extends AhFragment{
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
-		new AhThread(new Runnable() {
+		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
-			public void run() {
-				/*
-				 * If user haven't got registration key, get it
-				 */
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
-					try {
-						String registrationId = userHelper.getRegistrationIdSync(_thisFragment);
-						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-					} catch (AhException e) {
-						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
-					}
-				}
+					userHelper.getRegistrationIdAsync(_thisFragment, new AhEntityCallback<String>(){
 
+						@Override
+						public void onCompleted(String registrationId) {
+							// TODO Auto-generated method stub
+							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+						}
+
+					});
+
+				} else {
+					AsyncChainer.notifyNext(frag);
+				}
+			}
+
+		}, new Chainable() {
+
+			@Override
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
 				// Save info for user
 				String nickName = nickNameEditText.getText().toString();
 				int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
@@ -411,22 +410,45 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final User user = userHelper.getMyUserInfo(false);
-				String id = userHelper.enterSquareSync(_thisFragment, user);
-				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
+				userHelper.enterSquareAsync(_thisFragment, user, new AhEntityCallback<String>() {
 
+					@Override
+					public void onCompleted(String id) {
+						// TODO Auto-generated method stub
+						pref.putString(AhGlobalVariable.USER_ID_KEY, id);
+					}
+				});
+			}
+		}, new Chainable() {
 
-				// Get user list in the square and save it without me
-				List<User> userList = userHelper.getUserListSync(_thisFragment, square.getId());
-				userDBHelper.addAllUsers(userList);
-				userDBHelper.deleteUser(id);
+			@Override
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
+				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<User>() {
 
+					@Override
+					public void onCompleted(List<User> list, int count) {
+						// TODO Auto-generated method stub
+						userDBHelper.addAllUsers(list);
 
+						// Remove Me from User DB Table.
+						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
+					}
+				});
+
+			}
+		}, new Chainable() {
+
+			@Override
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
 				// Send message to server for notifying entering
 				String enterMessage = getResources().getString(R.string.enter_square_message);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(nickName + " : " + enterMessage)
+				User user = userHelper.getMyUserInfo(true);
+				messageBuilder.setContent(user.getNickName() + " : " + enterMessage)
 				.setSender(user.getNickName())
-				.setSenderId(id)
+				.setSenderId(user.getId())
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.ENTER_SQUARE);
 				AhMessage message = messageBuilder.build();
@@ -457,7 +479,91 @@ public class SquareProfileFragment extends AhFragment{
 					}
 				});
 			}
-		}).start();
+		});
+
+
+
+		/**
+		 *  DO NOT REMOVE
+		 *  NEED FOR REFERENCE
+		 */
+		//		new AhThread(new Runnable() {
+		//
+		//			@Override
+		//			public void run() {
+		//				/*
+		//				 * If user haven't got registration key, get it
+		//				 */
+		//				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
+		//						.equals(PreferenceHelper.DEFAULT_STRING)){
+		//					try {
+		//						String registrationId = userHelper.getRegistrationIdSync(_thisFragment);
+		//						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+		//					} catch (AhException e) {
+		//						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
+		//					}
+		//				}
+		//
+		//				// Save info for user
+		//				String nickName = nickNameEditText.getText().toString();
+		//				int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
+		//				pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
+		//				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+		//				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+		//				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
+		//				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
+		//
+		//
+		//				// Get a user object from preference settings
+		//				// Enter a square with the user
+		//				final User user = userHelper.getMyUserInfo(false);
+		//				String id = userHelper.enterSquareSync(_thisFragment, user);
+		//				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
+		//
+		//
+		//				// Get user list in the square and save it without me
+		//				List<User> userList = userHelper.getUserListSync(_thisFragment, square.getId());
+		//				userDBHelper.addAllUsers(userList);
+		//				userDBHelper.deleteUser(id);
+		//
+		//
+		//				// Send message to server for notifying entering
+		//				String enterMessage = getResources().getString(R.string.enter_square_message);
+		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+		//				messageBuilder.setContent(nickName + " : " + enterMessage)
+		//				.setSender(user.getNickName())
+		//				.setSenderId(id)
+		//				.setReceiverId(square.getId())
+		//				.setType(AhMessage.TYPE.ENTER_SQUARE);
+		//				AhMessage message = messageBuilder.build();
+		//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+		//
+		//					@Override
+		//					public void onCompleted(AhMessage entity) {
+		//						// Do nothing
+		//					}
+		//				});
+		//
+		//				// Save this setting and go to next activity
+		//				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+		//				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+		//				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, AhGlobalVariable.SQUARE_CHAT_TAB);
+		//
+		//				// Set and move to next activity after clear previous activity
+		//				intent.setClass(context, SquareActivity.class);
+		//				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+		//
+		//				activity.runOnUiThread(new Runnable(){
+		//
+		//					@Override
+		//					public void run() {
+		//						// Dimiss progress bar
+		//						progressBar.setVisibility(View.GONE);
+		//						startActivity(intent);
+		//					}
+		//				});
+		//			}
+		//		}).start();
 	}
 
 
@@ -491,7 +597,7 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStop");
-		
+
 		/*
 		 * Release resources
 		 */

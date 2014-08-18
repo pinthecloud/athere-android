@@ -21,11 +21,11 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
+import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
@@ -109,15 +109,16 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nickname);
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
+				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
 				/*
 				 * Set UI component only in receive list
 				 */
 				nickNameText.setText(message.getSender());
 				if(user.isMale()){
-					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.chat_gender_m, 0);
-				}else{
-					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.chat_gender_w, 0);	
+					profileGenderImage.setImageResource(R.drawable.chat_gender_m);
+				} else{
+					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();

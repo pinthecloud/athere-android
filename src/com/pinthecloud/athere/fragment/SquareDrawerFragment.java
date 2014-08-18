@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,7 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
@@ -30,14 +31,12 @@ import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.ProfileDialog;
-import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -57,19 +56,11 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 	private List<User> userList = new ArrayList<User>();
 
-	private UserDBHelper userDBHelper;
-	private UserHelper userHelper;
-	private MessageDBHelper messageDBHelper;
-	private MessageHelper messageHelper;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		userDBHelper = app.getUserDBHelper();
-		userHelper = app.getUserHelper();
-		messageDBHelper = app.getMessageDBHelper();
-		messageHelper = app.getMessageHelper();
 	}
 
 	@Override
@@ -98,6 +89,30 @@ public class SquareDrawerFragment extends AhFragment {
 		participantListAdapter = new SquareDrawerParticipantListAdapter
 				(context, this, R.layout.row_square_drawer_participant_list, userList);
 		participantListView.setAdapter(participantListAdapter);
+		participantListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				final User user = userList.get(position);
+				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						Intent intent = new Intent(context, ChupaChatActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						Intent intent = new Intent(context, ProfileImageActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+				});
+				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
 
 
 		/*
@@ -115,48 +130,9 @@ public class SquareDrawerFragment extends AhFragment {
 					@Override
 					public void doPositiveThing(Bundle bundle) {
 						progressBar.setVisibility(View.VISIBLE);
-
-						new AhThread(new Runnable() {
-
-							@Override
-							public void run() {
-								User user = userHelper.getMyUserInfo(true);
-								userHelper.exitSquareSync(_thisFragment, user.getId());
-								userHelper.unRegisterGcmSync(_thisFragment);
-								userDBHelper.deleteAllUsers();
-								messageDBHelper.deleteAllMessages();
-
-								String exitMessage = getResources().getString(R.string.exit_square_message);
-								String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-								AhMessage.Builder messageBuilder = new AhMessage.Builder();
-								messageBuilder.setContent(nickName + " : " + exitMessage)
-								.setSender(nickName)
-								.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-								.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-								.setType(AhMessage.TYPE.EXIT_SQUARE);
-								AhMessage message = messageBuilder.build();
-								messageHelper.sendMessageSync(_thisFragment, message);
-
-								pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-								pref.removePref(AhGlobalVariable.USER_ID_KEY);
-								pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-								pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-								pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-								pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-								pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-								final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
-								activity.runOnUiThread(new Runnable() {
-
-									@Override
-									public void run() {
-										progressBar.setVisibility(View.GONE);
-										startActivity(intent);
-										activity.finish();
-									}
-								});
-							}
-						}).start();
+						exitSquare();
 					}
+
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						// Do nothing
@@ -166,7 +142,163 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 
+
+		/*
+		 * Set handler for refresh new and old user
+		 */
+		userHelper.setUserHandler(new AhEntityCallback<User>() {
+
+			@Override
+			public void onCompleted(final User user) {
+				activity.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						updateUserList();
+					}
+				});
+			}
+		});
+
 		return view;
+	}
+
+	private void exitSquare() {
+		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+
+			@Override
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
+				User user = userHelper.getMyUserInfo(true);
+				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
+
+					@Override
+					public void onCompleted(Boolean entity) {
+						// TODO Auto-generated method stub
+						userDBHelper.deleteAllUsers();
+						messageDBHelper.deleteAllMessages();
+					}
+				});
+			}
+
+		}, new Chainable() {
+
+			@Override
+			public void doNext(AhFragment frag) {
+				String exitMessage = getResources().getString(R.string.exit_square_message);
+				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+				messageBuilder.setContent(nickName + " : " + exitMessage)
+				.setSender(nickName)
+				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+				.setType(AhMessage.TYPE.EXIT_SQUARE);
+				AhMessage message = messageBuilder.build();
+				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+
+					@Override
+					public void onCompleted(AhMessage entity) {
+						// TODO Auto-generated method stub
+						pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+						pref.removePref(AhGlobalVariable.USER_ID_KEY);
+						pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+						pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+						activity.runOnUiThread(new Runnable() {
+
+							@Override
+							public void run() {
+								progressBar.setVisibility(View.GONE);
+								startActivity(intent);
+								activity.finish();
+							}
+						});
+					}
+				});
+			}
+		});
+
+
+		/**
+		 *  DO NOT REMOVE
+		 *  NEED FOR REFERENCE
+		 */
+		//		new AhThread(new Runnable() {
+		//
+		//			@Override
+		//			public void run() {
+		//				User user = userHelper.getMyUserInfo(true);
+		//				userHelper.exitSquareSync(_thisFragment, user.getId());
+		////				userHelper.unRegisterGcmSync(_thisFragment);
+		//				userDBHelper.deleteAllUsers();
+		//				messageDBHelper.deleteAllMessages();
+		//
+		//				String exitMessage = getResources().getString(R.string.exit_square_message);
+		//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+		//				messageBuilder.setContent(nickName + " : " + exitMessage)
+		//				.setSender(nickName)
+		//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+		//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+		//				.setType(AhMessage.TYPE.EXIT_SQUARE);
+		//				AhMessage message = messageBuilder.build();
+		//				messageHelper.sendMessageSync(_thisFragment, message);
+		//
+		//				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+		//				pref.removePref(AhGlobalVariable.USER_ID_KEY);
+		//				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+		//				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+		//				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+		//				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+		//				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+		//				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+		//				activity.runOnUiThread(new Runnable() {
+		//
+		//					@Override
+		//					public void run() {
+		//						progressBar.setVisibility(View.GONE);
+		//						startActivity(intent);
+		//						activity.finish();
+		//					}
+		//				});
+		//			}
+		//		}).start();
+	}	
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
+		updateUserList();
+
+
+		/*
+		 * Set profile images 
+		 */
+		Bitmap profileBitmap = null;
+		try {
+			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+		} catch (FileNotFoundException e) {
+			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
+			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
+		}
+		profileCircleImage.setImageBitmap(profileBitmap);
+	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
+
+		/*
+		 * Release image resources
+		 */
+		profileCircleImage.setImageBitmap(null);
+		super.onStop();
 	}
 
 
@@ -247,63 +379,5 @@ public class SquareDrawerFragment extends AhFragment {
 			if (!user.isMale()) count++;
 		}
 		return count;
-	}
-
-
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onResume");
-		updateUserList();
-
-
-		/*
-		 * Set handler for refresh new and old user
-		 */
-		userHelper.setUserHandler(new AhEntityCallback<User>() {
-
-			@Override
-			public void onCompleted(final User user) {
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						updateUserList();
-					}
-				});
-			}
-		});
-	}
-
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
-
-		/*
-		 * Set profile images 
-		 */
-		Bitmap profileBitmap = null;
-		try {
-			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-		} catch (FileNotFoundException e) {
-			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
-		}
-		profileCircleImage.setImageBitmap(profileBitmap);
-	}
-
-
-	@Override
-	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
-
-		/*
-		 * Release image resources
-		 */
-		profileCircleImage.setImageBitmap(null);
-		super.onStop();
 	}
 }

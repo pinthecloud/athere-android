@@ -27,8 +27,7 @@
         android:hint="@string/nick_name"
         android:inputType="text"
         android:maxLength="10"
-        android:textSize="@dimen/font_large" >
-    </EditText>
+        android:textSize="@dimen/font_large" />
 
     <RadioGroup
         android:id="@+id/basic_profile_frag_gender_button_group"

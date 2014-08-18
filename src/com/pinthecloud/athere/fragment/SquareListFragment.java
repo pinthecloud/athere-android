@@ -20,7 +20,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareCodeDialog;
-import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
@@ -34,13 +33,9 @@ public class SquareListFragment extends AhFragment{
 	private SquareListAdapter squareListAdapter;
 	private List<Square> squareList = new ArrayList<Square>();
 
-	private SquareHelper squareHelper;
-
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		squareHelper = app.getSquareHelper();
 	}
 
 

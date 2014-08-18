@@ -16,24 +16,21 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class ProfileImageFragment extends AhFragment{
 
 	private PreferenceHelper pref;
-	private UserDBHelper userDBHelper;
 	private User user;
 
 	private ImageView profileImage; 
-	
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		pref = app.getPref();
-		userDBHelper = app.getUserDBHelper();
 
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
