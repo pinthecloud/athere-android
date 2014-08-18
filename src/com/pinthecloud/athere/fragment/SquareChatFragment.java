@@ -147,6 +147,7 @@ public class SquareChatFragment extends AhFragment{
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						||message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
 				
+				Log(_thisFragment, "plz work");
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -177,6 +178,7 @@ public class SquareChatFragment extends AhFragment{
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();
+			Log(_thisFragment, "refreshView talks : "+talks.toString());
 			messageList.addAll(talks);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);

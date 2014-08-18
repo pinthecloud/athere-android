@@ -111,6 +111,7 @@ public class SquareTabFragment extends AhFragment{
 							refreshView();
 						}
 					});
+					Log(_thisFragment, "how about here");
 //				}
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);

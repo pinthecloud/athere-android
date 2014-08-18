@@ -139,7 +139,7 @@ public class AhIntentService extends IntentService {
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
 		} else {
-//			alertNotification(AhMessage.TYPE.CHUPA);
+			alertNotification(AhMessage.TYPE.CHUPA);
 		}
 	}
 
