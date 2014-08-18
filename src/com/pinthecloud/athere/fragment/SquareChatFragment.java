@@ -17,11 +17,11 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -33,8 +33,6 @@ public class SquareChatFragment extends AhFragment{
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
 
 	private Square square;
-	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
 
 
 	public SquareChatFragment() {
@@ -49,8 +47,6 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
 	}
 
 	@Override
@@ -135,15 +131,6 @@ public class SquareChatFragment extends AhFragment{
 				(context, this, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
 
-		return view;
-	}
-
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		loadTalkMessage();
-
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -151,22 +138,34 @@ public class SquareChatFragment extends AhFragment{
 		 *  
 		 * This method sets the MessageHandler received on app running
 		 */
-		messageHelper.setMessageHandler(new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) return;
-				messageList.add(message);
+				
+				// Chupa & User Update Message can't go through here
+				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
+						||message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
+				
+				Log(_thisFragment, "plz work");
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
 					public void run() {
-						messageListAdapter.notifyDataSetChanged();
-						messageListView.setSelection(messageListView.getCount() - 1);
+						refreshView();
 					}
 				});
 			}
 		});
+		
+		return view;
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		refreshView();
 	}
 
 
@@ -175,10 +174,11 @@ public class SquareChatFragment extends AhFragment{
 	 * notify this Method When this Fragment is on Resume
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
-	private void loadTalkMessage(){
+	private void refreshView(){
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();
+			Log(_thisFragment, "refreshView talks : "+talks.toString());
 			messageList.addAll(talks);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);

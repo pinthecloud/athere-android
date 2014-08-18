@@ -15,8 +15,8 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 
 	private String[] titles;
 	private int[] titleIcons = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
-	private SquareChatFragment squareChatFragment;
-	private SquareChupaListFragment squareChupaListFragment;
+	public SquareChatFragment squareChatFragment;
+	public SquareChupaListFragment squareChupaListFragment;
 
 
 	public SquarePagerAdapter(Context context, FragmentManager fm, Square square) {
@@ -51,11 +51,5 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 	@Override
 	public int getCount() {
 		return this.titles.length;
-	}
-
-	@Override
-	public void notifyDataSetChanged() {
-		super.notifyDataSetChanged();
-		squareChupaListFragment.updateChupaList();
 	}
 }

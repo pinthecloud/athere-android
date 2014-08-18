@@ -25,9 +25,10 @@ import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AppVersion;
 
-public class SplashFragment extends AhFragment implements Runnable{
+public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
 
@@ -68,7 +69,8 @@ public class SplashFragment extends AhFragment implements Runnable{
 		//////////////////////////////////////////////////////////////
 		if (!isHongkunTest()) {
 			// Start Chupa Application
-			new AhThread(this).start();
+//			new AhThread(this).start();
+			_run();
 		}
 
 		return view;
@@ -84,6 +86,9 @@ public class SplashFragment extends AhFragment implements Runnable{
 				|| note.equals(httpAgent)) 		// Note 2
 				|| myGal3.equals(httpAgent)))	// Galaxy 3
 			return false;
+		
+		boolean val = true;
+		if(val) return false;
 
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
@@ -97,7 +102,7 @@ public class SplashFragment extends AhFragment implements Runnable{
 		})
 		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				new AhThread(SplashFragment.this).start();
+//				new AhThread(SplashFragment.this).start();
 				return;
 			}
 		})
@@ -107,40 +112,45 @@ public class SplashFragment extends AhFragment implements Runnable{
 	}
 
 
-	@Override
-	public void run() {
-		final AppVersion serverVer = versionHelper.getServerAppVersionSync(_thisFragment);
-		double clientVer;
-		try {
-			clientVer = versionHelper.getClientAppVersion();
-		} catch (NameNotFoundException e) {
-			Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
-			clientVer = 0.1;
-		}
-		if (serverVer.getVersion() > clientVer) {
-			Resources resources = getResources();
-			String title = resources.getString(R.string.update_app_title);
-			String message = resources.getString(R.string.update_app_message);
-			AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
+	public void _run() {
+		versionHelper.getServerAppVersionAsync(_thisFragment, new AhEntityCallback<AppVersion>() {
+			
+			@Override
+			public void onCompleted(final AppVersion serverVer) {
+				// TODO Auto-generated method stub
+				double clientVer;
+				try {
+					clientVer = versionHelper.getClientAppVersion();
+				} catch (NameNotFoundException e) {
+					Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
+					clientVer = 0.1;
+				}
+				if (serverVer.getVersion() > clientVer) {
+					Resources resources = getResources();
+					String title = resources.getString(R.string.update_app_title);
+					String message = resources.getString(R.string.update_app_message);
+					AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
 
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pname:" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
-					startActivity(intent);
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pname:" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
+							startActivity(intent);
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
+								activity.finish();
+							} else {
+								goToNextActivity();
+							}
+						}
+					});
+					updateDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				}else{
+					goToNextActivity();
 				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
-						activity.finish();
-					} else {
-						goToNextActivity();
-					}
-				}
-			});
-			updateDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-		}else{
-			goToNextActivity();
-		}
+			}
+		});
 	}
 
 

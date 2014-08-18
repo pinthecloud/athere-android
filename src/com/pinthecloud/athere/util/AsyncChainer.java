@@ -7,6 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import android.util.Log;
 
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.AhFragment;
 
 
@@ -107,7 +108,7 @@ public class AsyncChainer {
 		Queue<Chainable> queue = mapQueue.get(clazz.getName());
 		if (queue == null) {
 			//throw new AhException("No such Chainable");
-			Log.e("ERROR", "No such Chainable");
+			Log.e("ERROR", "No such Chainable : " + frag.getClass().getName());
 			return;
 		}
 		if (!queue.isEmpty()) {

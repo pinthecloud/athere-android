@@ -3,6 +3,7 @@ package com.pinthecloud.athere.helper;
 import java.util.List;
 
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
@@ -38,7 +39,7 @@ public class VersionHelper {
 		appVersionTable = app.getAppVersionTable();
 	}
 
-	public AppVersion getServerAppVersionSync(final AhFragment frag) {
+	public AppVersion _getServerAppVersionSync(final AhFragment frag) {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return null;
@@ -81,11 +82,11 @@ public class VersionHelper {
 
 	public void getServerAppVersionAsync(final AhFragment frag, final AhEntityCallback<AppVersion> callback) {
 		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 
-		appVersionTable.select("*").execute(new TableQueryCallback<AppVersion>() {
+		appVersionTable.select("").execute(new TableQueryCallback<AppVersion>() {
 
 			@Override
 			public void onCompleted(List<AppVersion> list, int count, Exception exception,
@@ -95,10 +96,10 @@ public class VersionHelper {
 						callback.onCompleted(list.get(0));
 						AsyncChainer.notifyNext(frag);
 					} else {
-						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
+						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionAsync", AhException.TYPE.SERVER_ERROR));
 					}
 				} else {
-					ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "getServerAppVersionAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +19,15 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.sqlite.MessageDBHelper;
-import com.pinthecloud.athere.sqlite.UserDBHelper;
 
 public class SquareChupaListFragment extends AhFragment{
 
 	private SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
 	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
-
-	private MessageDBHelper messageDBHelper;
-	private UserDBHelper userDBHelper;
-
 
 	public SquareChupaListFragment() {
 		super();
@@ -42,8 +36,6 @@ public class SquareChupaListFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		messageDBHelper = app.getMessageDBHelper();
-		userDBHelper = app.getUserDBHelper();
 	}
 
 
@@ -73,18 +65,39 @@ public class SquareChupaListFragment extends AhFragment{
 				startActivity(intent);
 			}
 		});
+		
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+			
+			@Override
+			public void onCompleted(AhMessage entity) {
+				// TODO Auto-generated method stub
+				activity.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						refreshView();
+					}
+				});
+			}
+		});
 
 		return view;
 	}
 
 
 	@Override
-	public void onResume() {
-		super.onResume();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareChupaListFragment onResume");
-		updateChupaList();
+	public void onStart() {
+		super.onStart();
+		refreshView();
 	}
-
+	
+	private void refreshView() {
+		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
+		lastChupaCommunList.clear();
+		lastChupaCommunList.addAll(convertToMap(lastChupaList));
+		squareChupaListAdapter.notifyDataSetChanged();
+	}
 
 	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
@@ -141,13 +154,5 @@ public class SquareChupaListFragment extends AhFragment{
 			list.add(map);
 		}
 		return list;
-	}
-
-
-	public void updateChupaList() {
-		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-		lastChupaCommunList.clear();
-		lastChupaCommunList.addAll(convertToMap(lastChupaList));
-		squareChupaListAdapter.notifyDataSetChanged();
 	}
 }

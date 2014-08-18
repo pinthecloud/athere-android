@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.sqlite;
+package com.pinthecloud.athere.database;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,12 +11,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhMessage;
 
-public class MessageDBHelper  extends SQLiteOpenHelper {
+public class MessageDBHelper extends SQLiteOpenHelper {
 
 	// All Static variables
 	// Database Version
@@ -44,8 +41,11 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 	private final String CHUPA_COMMUN_ID = "chupaCommunId";
 	private final String STATUS = "status";
 
+	private BadgeDBHelper badgeDBHelper;
+	
 	public MessageDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		badgeDBHelper = new BadgeDBHelper(context);
 	}
 
 	// Creating Tables
@@ -418,25 +418,8 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 
 		return list;
 	}
-
-	public void increaseBadgeNum(String chupaCommunId) {
-		PreferenceHelper pref = AhApplication.getInstance().getPref();
-		int val = pref.getInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId);
-		val++;
-		pref.putInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId, val);
-	}
-
-	public int getBadgeNum(String chupaCommunId) {
-		PreferenceHelper pref = AhApplication.getInstance().getPref();
-		int val = pref.getInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId);
-		return val;
-	}
-
-	public void clearBadgeNum(String chupaCommunId) {
-		PreferenceHelper pref = AhApplication.getInstance().getPref();
-		pref.putInt(AhGlobalVariable.COMMUN_BADGE_NUM_KEY + chupaCommunId, 0);
-	}
-
+	
+	
 	private void sortMessages(List<AhMessage> list){
 		Collections.sort(list, new Comparator<AhMessage>() {
 
@@ -445,5 +428,160 @@ public class MessageDBHelper  extends SQLiteOpenHelper {
 				return lhs.getId().compareTo(rhs.getId());
 			}
 		});
+	}
+	
+	
+
+	public int getBadgeNum(String chupaCommunId) {
+		return badgeDBHelper.getBadgeNum(chupaCommunId);
+	}
+	
+	public int getAllBadgeNum() {
+		return badgeDBHelper.getAllBadgeNum();
+	}
+	
+	public void increaseBadgeNum(String chupaCommunId) {
+		badgeDBHelper.increaseBadgeNum(chupaCommunId);
+	}
+
+
+	public void clearBadgeNum(String chupaCommunId) {
+		badgeDBHelper.clearBadgeNum(chupaCommunId);
+	}
+	
+	public void cleareAllBadgeNum() {
+		badgeDBHelper.cleareAllBadgeNum();
+	}
+
+	
+	private class BadgeDBHelper extends SQLiteOpenHelper {
+		// Database Version
+		private static final int BADGE_DATABASE_VERSION = 2;
+		//	static{
+		//		Random r= new Random();
+		//		DATABASE_VERSION = r.nextInt(10) + 1; 
+		//	}
+
+		// Database Name
+		private static final String BADGE_DATABASE_NAME = "badge_db";
+
+		// Badges table name
+		private static final String BADGE_TABLE_NAME = "badges";
+
+		// Messages Table Columns names
+		private final String BADGE_ID = "badge_id";
+		private final String BADGE_CHUPA_COMMUN_ID = "badge_chupa_commun_id";
+		private final String COUNT = "count";
+
+		public BadgeDBHelper(Context context) {
+			super(context, BADGE_DATABASE_NAME, null, BADGE_DATABASE_VERSION);
+		}
+
+		// Creating Tables
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			String CREATE_CONTACTS_TABLE = "CREATE TABLE " + BADGE_TABLE_NAME + 
+					"("
+					+ BADGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
+					+ BADGE_CHUPA_COMMUN_ID + " TEXT,"
+					+ COUNT + " INTEGER"
+					+")";
+			db.execSQL(CREATE_CONTACTS_TABLE);
+		}
+
+		// Upgrading database
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			// Drop older table if existed
+			dropTable(db);
+			
+			// Create tables again
+			onCreate(db);
+		}
+
+		@Override
+		public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			// Drop older table if existed
+			dropTable(db);
+
+			// Create tables again
+			onCreate(db);
+		}
+
+		public void dropTable(SQLiteDatabase db) {
+			db.execSQL("DROP TABLE IF EXISTS " + BADGE_TABLE_NAME);
+		}
+		
+		private int createBadge(String chupaCommunId){
+			SQLiteDatabase db = this.getWritableDatabase();
+			
+			ContentValues values = new ContentValues();
+			putValueWithoutNull(values, BADGE_CHUPA_COMMUN_ID, chupaCommunId);
+			values.put(COUNT, 0);
+
+			// Inserting Row
+			long id = db.insert(BADGE_TABLE_NAME, null, values);
+			db.close(); // Closing database connection
+			return (int)id;
+		}
+		private void updateBadge(String chupaCommunId, int count) {
+			SQLiteDatabase db = this.getWritableDatabase();
+			
+			ContentValues values = new ContentValues();
+			values.put(COUNT, count);
+
+			db.update(BADGE_TABLE_NAME, values, BADGE_CHUPA_COMMUN_ID + " = ?", new String[]{ chupaCommunId });
+			db.close(); // Closing database connection
+		}
+		private void deleteBadge(String chupaCommunId) {
+			SQLiteDatabase db = this.getWritableDatabase();
+			db.delete(BADGE_TABLE_NAME, BADGE_CHUPA_COMMUN_ID + " = ?", new String[]{ chupaCommunId });
+			db.close();
+		}
+		private int getBadgeNum(String chupaCommunId) {
+			String selectQuery = "SELECT * FROM " + BADGE_TABLE_NAME +
+					" WHERE " + BADGE_CHUPA_COMMUN_ID + " = ?";
+			SQLiteDatabase db = this.getReadableDatabase();
+			Cursor cursor = db.rawQuery(selectQuery, new String[]{ chupaCommunId });
+
+			// looping through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				return cursor.getInt(2);
+			}
+			return 0;
+		}
+		
+		private int getAllBadgeNum() {
+			String selectQuery = "SELECT * FROM " + BADGE_TABLE_NAME;
+			SQLiteDatabase db = this.getReadableDatabase();
+			Cursor cursor = db.rawQuery(selectQuery, null);
+			int total = 0;
+			// looping through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				do {
+					total += cursor.getInt(2);
+				} while(cursor.moveToNext());
+			}
+			return total;
+		}
+		
+		private void increaseBadgeNum(String chupaCommunId) {
+			int badgeNum = this.getBadgeNum(chupaCommunId);
+			if (badgeNum == 0) {
+				this.createBadge(chupaCommunId);
+			}
+			this.updateBadge(chupaCommunId, badgeNum + 1);
+		}
+
+
+		private void clearBadgeNum(String chupaCommunId) {
+			this.deleteBadge(chupaCommunId);
+		}
+		
+		private void cleareAllBadgeNum() {
+			SQLiteDatabase db = this.getWritableDatabase();
+			db.delete(BADGE_TABLE_NAME, null, null);
+			db.close();
+		}
 	}
 }
