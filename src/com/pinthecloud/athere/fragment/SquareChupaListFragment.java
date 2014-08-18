@@ -7,7 +7,6 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
-import com.pinthecloud.athere.database.MessageDBHelper;
-import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;

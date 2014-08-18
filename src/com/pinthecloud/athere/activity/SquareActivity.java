@@ -131,6 +131,7 @@ public class SquareActivity extends AhActivity{
 			public void onCompleted(AhMessage message) {
 				// TODO Auto-generated method stub
 				messageHelper.triggerMessageEvent(mSquareTabFragment, message);
+				Log(SquareActivity.this, "unless in here");
 			}
 		});
 		

@@ -80,7 +80,7 @@ public class AhIntentService extends IntentService {
 			Log.d(AhGlobalVariable.LOG_TAG, "Error while parsing Message Intent : " + e.getMessage());
 			return;
 		}
-		Log.d(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
+		Log.e(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {

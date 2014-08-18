@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,11 +27,8 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.adapter.ChupaChatListAdapter;
-import com.pinthecloud.athere.database.MessageDBHelper;
-import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -65,7 +63,6 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragment onCreate");
 
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
@@ -81,7 +78,10 @@ public class ChupaChatFragment extends AhFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
-
+		
+		// Remove Notification when the user enters the Chupa chat room.
+		NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(1);
 		/*
 		 * Set UI component
 		 */

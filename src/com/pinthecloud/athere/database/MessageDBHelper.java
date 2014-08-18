@@ -455,9 +455,8 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 	
 	private class BadgeDBHelper extends SQLiteOpenHelper {
-		// All Static variables
 		// Database Version
-		private static final int BADGE_DATABASE_VERSION = 1;
+		private static final int BADGE_DATABASE_VERSION = 2;
 		//	static{
 		//		Random r= new Random();
 		//		DATABASE_VERSION = r.nextInt(10) + 1; 
@@ -466,7 +465,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Database Name
 		private static final String BADGE_DATABASE_NAME = "badge_db";
 
-		// Messages table name
+		// Badges table name
 		private static final String BADGE_TABLE_NAME = "badges";
 
 		// Messages Table Columns names
@@ -517,7 +516,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			SQLiteDatabase db = this.getWritableDatabase();
 			
 			ContentValues values = new ContentValues();
-			putValueWithoutNull(values, CHUPA_COMMUN_ID, chupaCommunId);
+			putValueWithoutNull(values, BADGE_CHUPA_COMMUN_ID, chupaCommunId);
 			values.put(COUNT, 0);
 
 			// Inserting Row
@@ -529,9 +528,9 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			SQLiteDatabase db = this.getWritableDatabase();
 			
 			ContentValues values = new ContentValues();
-			values.put(CHUPA_COMMUN_ID, count);
+			values.put(COUNT, count);
 
-			db.update(BADGE_TABLE_NAME, values, BADGE_CHUPA_COMMUN_ID + " = ?", new String[]{ "" + chupaCommunId });
+			db.update(BADGE_TABLE_NAME, values, BADGE_CHUPA_COMMUN_ID + " = ?", new String[]{ chupaCommunId });
 			db.close(); // Closing database connection
 		}
 		private void deleteBadge(String chupaCommunId) {
@@ -541,7 +540,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 		private int getBadgeNum(String chupaCommunId) {
 			String selectQuery = "SELECT * FROM " + BADGE_TABLE_NAME +
-					" WHERE " + CHUPA_COMMUN_ID + " = ?";
+					" WHERE " + BADGE_CHUPA_COMMUN_ID + " = ?";
 			SQLiteDatabase db = this.getReadableDatabase();
 			Cursor cursor = db.rawQuery(selectQuery, new String[]{ chupaCommunId });
 
@@ -549,7 +548,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			if (cursor.moveToFirst()) {
 				return cursor.getInt(2);
 			}
-			return -1;
+			return 0;
 		}
 		
 		private int getAllBadgeNum() {
@@ -568,9 +567,8 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		
 		private void increaseBadgeNum(String chupaCommunId) {
 			int badgeNum = this.getBadgeNum(chupaCommunId);
-			if (badgeNum == -1) {
+			if (badgeNum == 0) {
 				this.createBadge(chupaCommunId);
-				badgeNum = 0;
 			}
 			this.updateBadge(chupaCommunId, badgeNum + 1);
 		}
