@@ -17,7 +17,7 @@
         android:id="@+id/square_chat_frag_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#d2ffffff"
+        android:background="@color/inputbar_background"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
 

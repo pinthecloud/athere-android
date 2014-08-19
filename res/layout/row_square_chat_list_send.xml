@@ -6,7 +6,8 @@
     android:gravity="right"
     android:orientation="horizontal"
     android:paddingRight="@dimen/square_chat_list_send_right_margin"
-    android:paddingTop="@dimen/square_chat_list_send_top_margin" >
+    android:paddingTop="@dimen/square_chat_list_send_top_margin"
+    android:paddingBottom="@dimen/square_chat_list_send_bottom_margin" >
 
     <ProgressBar
         android:id="@+id/row_square_chat_list_send_progress_bar"
@@ -30,8 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_chat_msg_sent"
-        android:paddingLeft="@dimen/square_chat_list_send_message_left_margin"
-        android:paddingRight="@dimen/square_chat_list_send_message_right_margin"
+        android:textColor="@color/dark_gray"
         android:textSize="@dimen/font_large" />
 
 </LinearLayout>
