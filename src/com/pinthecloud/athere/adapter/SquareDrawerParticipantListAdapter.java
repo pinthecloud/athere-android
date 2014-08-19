@@ -64,10 +64,10 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			companyNumber.setText("" + user.getCompanyNum());
 			Resources resources = context.getResources();
 			if(user.isMale()){
-				gender.setImageResource(R.drawable.sidebar_member_gender_m);
+				gender.setImageResource(R.drawable.profile_gender_m);
 				companyNumber.setTextColor(resources.getColor(R.color.blue));
 			}else{
-				gender.setImageResource(R.drawable.sidebar_member_gender_w);
+				gender.setImageResource(R.drawable.profile_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
 			int w = profileImage.getWidth();

@@ -17,7 +17,10 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
+<<<<<<< HEAD
+=======
 
+>>>>>>> FETCH_HEAD
 
 /**
  * 
@@ -34,7 +37,10 @@ public class HongkunTestFragment extends AhFragment {
 	private StringBuilder squareId = new StringBuilder();
 	private String __id = "";
 	private ImageView img;
+<<<<<<< HEAD
+=======
 	private Button myBtn;
+>>>>>>> FETCH_HEAD
 	private MobileServiceClient mClient;
 
 	public static final String SENDER_ID = "838051405989";
@@ -99,6 +105,8 @@ public class HongkunTestFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
 
+<<<<<<< HEAD
+=======
 		myBtn = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
 		myBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -129,6 +137,7 @@ public class HongkunTestFragment extends AhFragment {
 				});
 			}
 		});
+>>>>>>> FETCH_HEAD
 
 		return view;
 	}

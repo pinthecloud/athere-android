@@ -42,9 +42,10 @@
         </RelativeLayout>
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="@color/gray_line" />
+        	android:layout_width="match_parent"
+        	android:layout_height="@dimen/divider_height"
+        	android:layout_above="@+id/square_drawer_frag_exit_button"
+        	android:background="@color/gray_line" />
 
         <LinearLayout
             android:id="@+id/square_drawer_frag_profile_layout"
@@ -98,6 +99,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/square_drawer_profile_company_num_height"
                         android:background="@drawable/bg_sidebar_member"
+<<<<<<< HEAD
+                        android:orientation="horizontal"
+                        android:gravity="center" >
+                        
+	                    <ImageView
+	                        android:id="@+id/square_drawer_frag_profile_gender"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_marginRight="@dimen/square_drawer_profile_gender_company_num_margin"
+	                        android:contentDescription="@string/gender" />
+	
+	                    <TextView
+	                        android:id="@+id/square_drawer_frag_profile_company_num"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="match_parent"
+	                        android:textSize="@dimen/font_medium"
+	                        android:gravity="center_vertical|left" />
+	                 </LinearLayout>
+=======
                         android:gravity="center" >
 
                         <ImageView
@@ -114,6 +134,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/font_medium" />
                     </LinearLayout>
+>>>>>>> FETCH_HEAD
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -146,8 +167,12 @@
                 android:layout_marginRight="@dimen/square_drawer_member_bar_gender_margin"
                 android:background="@drawable/bg_sidebar_playernum_m"
                 android:gravity="center"
+<<<<<<< HEAD
+                android:paddingBottom="1dp"
+=======
                 android:paddingLeft="@dimen/squre_drawer_playernum_margin"
                 android:paddingRight="@dimen/squre_drawer_playernum_margin"
+>>>>>>> FETCH_HEAD
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/font_medium" />
 
@@ -157,16 +182,26 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_sidebar_playernum_w"
                 android:gravity="center"
+<<<<<<< HEAD
+=======
                 android:paddingLeft="@dimen/squre_drawer_playernum_margin"
                 android:paddingRight="@dimen/squre_drawer_playernum_margin"
+>>>>>>> FETCH_HEAD
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/font_medium" />
         </LinearLayout>
 
         <View
+<<<<<<< HEAD
+        	android:layout_width="match_parent"
+        	android:layout_height="@dimen/divider_height"
+        	android:layout_above="@+id/square_drawer_frag_exit_button"
+        	android:background="@color/gray_line" />
+=======
             android:layout_width="match_parent"
             android:layout_height="@dimen/divider_height"
             android:background="@color/gray_line" />
+>>>>>>> FETCH_HEAD
 
         <ListView
             android:id="@+id/square_drawer_frag_participant_list"

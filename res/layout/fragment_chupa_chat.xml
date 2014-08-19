@@ -3,7 +3,7 @@
     android:id="@+id/chupa_chat_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="#f4ffffff"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -34,7 +34,7 @@
             android:ellipsize="end"
             android:maxWidth="@dimen/chupa_chat_other_nick_max_width"
             android:singleLine="true"
-            android:textSize="@dimen/font_x_large" />
+            android:textSize="@dimen/font_large" />
 
         <TextView
             android:id="@+id/chupa_chat_frag_other_age"
@@ -44,6 +44,13 @@
             android:layout_marginRight="@dimen/chupa_chat_other_age_gender_margin"
             android:textSize="@dimen/font_medium" />
 
+        <LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/chupa_chat_profile_company_num_height"
+            android:background="@drawable/bg_sidebar_member"
+            android:orientation="horizontal"
+            android:gravity="center" >
+            
         <ImageView
             android:id="@+id/chupa_chat_frag_other_gender"
             android:layout_width="wrap_content"
@@ -57,11 +64,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_medium" />
+            
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
+        android:layout_gravity="center"
         android:background="@color/gray_line" />
 
     <ListView
@@ -75,7 +86,7 @@
         android:id="@+id/chupa_chat_frag_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray_chat_input"
+        android:background="@color/inputbar_background"
         android:orientation="horizontal" >
 
         <EditText
@@ -87,7 +98,8 @@
             android:ems="10"
             android:inputType="textMultiLine"
             android:maxLines="3"
-            android:paddingEnd="@dimen/square_chat_input_right_margin"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/square_chat_input_layout_left_margin"
             android:paddingLeft="@dimen/square_chat_input_left_margin"
             android:paddingRight="@dimen/square_chat_input_right_margin"
             android:paddingStart="@dimen/square_chat_input_left_margin"

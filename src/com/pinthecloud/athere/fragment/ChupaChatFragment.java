@@ -130,10 +130,10 @@ public class ChupaChatFragment extends AhFragment {
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 		Resources resources = getResources();
 		if(otherUser.isMale()){
-			otherGender.setImageResource(R.drawable.chupa_gender_m);
+			otherGender.setImageResource(R.drawable.profile_gender_m);
 			otherCompanyNumber.setTextColor(resources.getColor(R.color.blue));
 		}else{
-			otherGender.setImageResource(R.drawable.chupa_gender_w);
+			otherGender.setImageResource(R.drawable.profile_gender_w);
 			otherCompanyNumber.setTextColor(resources.getColor(R.color.dark_red));
 		}
 
