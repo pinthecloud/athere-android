@@ -17,7 +17,6 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.view.AhButton;
 
 /**
  * 
@@ -34,7 +33,6 @@ public class HongkunTestFragment extends AhFragment {
 	private StringBuilder squareId = new StringBuilder();
 	private String __id = "";
 	private ImageView img;
-	private AhButton myBtn;
 	private MobileServiceClient mClient;
 
 	public static final String SENDER_ID = "838051405989";
@@ -103,40 +101,6 @@ public class HongkunTestFragment extends AhFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
-
-		myBtn = (AhButton)view.findViewById(R.id.drawer_user_chupa_btn);
-
-		myBtn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				//				final AhMessage message = new AhMessage.Builder()
-				//						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
-				//						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-				//						.setReceiverId("A9320D41-D348-4A11-A6ED-41174EF6FB11")
-				//						.setType(AhMessage.TYPE.TALK)
-				//						.build();
-
-				JsonObject jo = new JsonObject();
-				jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
-
-				Gson g = new Gson();
-				JsonElement json = g.fromJson(jo, JsonElement.class);
-				String FORCED_LOGOUT = "forced_logout";
-
-				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
-
-					@Override
-					public void onCompleted(JsonElement arg0, Exception arg1,
-							ServiceFilterResponse arg2) {
-						// TODO Auto-generated method stub
-						Log(_thisFragment,"arg0 : " + arg0, arg1);
-					}
-				});
-			}
-		});
-
 
 
 		return view;
