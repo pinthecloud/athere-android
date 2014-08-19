@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_chat_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/chat_bg"
     android:orientation="vertical" >
 
     <ListView
         android:id="@+id/square_chat_frag_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/square_chat_frag_input_layout"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/chat_bg"
         android:divider="@null" />
 
     <LinearLayout
@@ -34,7 +34,11 @@
             android:layout_marginLeft="@dimen/square_chat_input_layout_left_margin"
             android:paddingLeft="@dimen/square_chat_input_left_margin"
             android:paddingRight="@dimen/square_chat_input_right_margin"
-            android:textSize="@dimen/font_large" />
+            android:paddingStart="@dimen/square_chat_input_left_margin"
+            android:textSize="@dimen/font_large" >
+
+            <requestFocus />
+        </EditText>
 
         <ImageButton
             android:id="@+id/square_chat_frag_send_button"
@@ -47,4 +51,4 @@
             android:src="@drawable/send_image_button_bg" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

@@ -151,7 +151,7 @@ public class AhApplication extends Application{
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
 
-	
+
 	//TODO : Don't Use NOW
 	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<AhMessage> callback) {
 		if (!isOnline()) {

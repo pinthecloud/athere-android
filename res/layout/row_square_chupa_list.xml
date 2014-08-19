@@ -2,15 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/row_square_chupa_list_layout"
     android:layout_width="match_parent"
+<<<<<<< HEAD
     android:layout_height="@dimen/square_chupa_list_height"
     android:orientation="vertical" >
+=======
+    android:layout_height="@dimen/square_list_height"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/square_chupa_list_right_margin"
+    android:paddingLeft="@dimen/square_chupa_list_left_margin"
+    android:paddingRight="@dimen/square_chupa_list_right_margin"
+    android:paddingStart="@dimen/square_chupa_list_left_margin" >
+>>>>>>> FETCH_HEAD
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
 
-        <ImageView
+        <com.pinthecloud.athere.view.AhImageView
             android:id="@+id/square_chupa_list_profile_pic"
             android:layout_width="@dimen/square_chupa_list_profile_width"
             android:layout_height="@dimen/square_chupa_list_profile_height"
@@ -23,6 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/square_chupa_list_profile_text_margin"
+            android:layout_marginStart="@dimen/square_chupa_list_profile_text_margin"
+            android:layout_toEndOf="@+id/square_chupa_list_profile_pic"
             android:layout_toRightOf="@+id/square_chupa_list_profile_pic"
             android:orientation="vertical" >
 
@@ -47,6 +58,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/square_chupa_list_time_right_margin"

@@ -6,10 +6,13 @@ import java.util.List;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -17,11 +20,8 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
-import com.pinthecloud.athere.database.MessageDBHelper;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.Square;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -32,16 +32,12 @@ public class SquareChatFragment extends AhFragment{
 	private SquareChatListAdapter messageListAdapter;
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
 
-	private Square square;
+	private String squareId;
 
 
-	public SquareChatFragment() {
+	public SquareChatFragment(String squareId) {
 		super();
-	}
-
-	public SquareChatFragment(Square square) {
-		super();
-		this.square = square;
+		this.squareId = squareId;
 	}
 
 	@Override
@@ -98,7 +94,7 @@ public class SquareChatFragment extends AhFragment{
 				messageBuilder.setContent(messageEditText.getText().toString())
 				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-				.setReceiverId(square.getId())
+				.setReceiverId(squareId)
 				.setType(AhMessage.TYPE.TALK)
 				.setStatus(AhMessage.STATUS.SENDING);
 				final AhMessage message = messageBuilder.build();
@@ -130,6 +126,20 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, this, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
+		
+		messageListView.setOnScrollListener(new OnScrollListener() {
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				// TODO Auto-generated method stub
+				if (firstVisibleItem == 1) {
+					// TODO : Insert messageListView.add(0, messages);
+				}
+			}
+
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				// TODO Auto-generated method stub
+			}
+		});
 
 		/**
 		 * See 
@@ -142,11 +152,10 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
+
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						||message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
-				
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -156,7 +165,7 @@ public class SquareChatFragment extends AhFragment{
 				});
 			}
 		});
-		
+
 		return view;
 	}
 
@@ -164,6 +173,7 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
 		refreshView();
 	}
 

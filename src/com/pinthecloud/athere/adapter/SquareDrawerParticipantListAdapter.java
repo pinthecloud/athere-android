@@ -6,7 +6,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.Bundle;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,16 +19,12 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
-import com.pinthecloud.athere.activity.ProfileImageActivity;
-import com.pinthecloud.athere.dialog.ProfileDialog;
-import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 
 	private Context context;
-	private Fragment fragment;
 	private int layoutId;
 	private List<User> items;
 
@@ -36,7 +32,6 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<User> items) {
 		super(context, layoutId, items);
 		this.context = context;
-		this.fragment = fragment;
 		this.layoutId = layoutId;
 		this.items = items;
 	}
@@ -56,7 +51,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			/*
 			 * Find UI Component
 			 */
-			ImageView profilePic = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
+			ImageView profileImage = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
 			TextView nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
 			ImageView gender = (ImageView)view.findViewById(R.id.drawer_user_gender);
 			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
@@ -75,29 +70,10 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 				gender.setImageResource(R.drawable.profile_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
-			profilePic.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
-			profilePic.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							Intent intent = new Intent(context, ChupaChatActivity.class);
-							intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
-							context.startActivity(intent);
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							Intent intent = new Intent(context, ProfileImageActivity.class);
-							intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
-							context.startActivity(intent);
-						}
-					});
-					profileDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-				}
-			});
+			int w = profileImage.getWidth();
+			int h = profileImage.getHeight();
+			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			profileImage.setImageBitmap(profileBitmap);
 
 
 			/*

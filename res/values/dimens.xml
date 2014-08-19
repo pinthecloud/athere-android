@@ -59,8 +59,16 @@
     <dimen name="square_chat_list_receive_top_margin">5dp</dimen>
     <dimen name="square_chat_list_receive_bottom_margin">5dp</dimen>
     <dimen name="square_chat_list_receive_profile_nick_name_margin">6.5dp</dimen>
+
+    <!-- Hwajung -->
     <dimen name="square_chat_list_receive_message_layout_top_margin">20dp</dimen>
     <dimen name="square_chat_list_receive_message_layout_left_margin">40dp</dimen>
+
+    <!-- Seungmin -->
+    <dimen name="square_chat_list_receive_nick_name_gender_margin">3.5dp</dimen>
+    <dimen name="square_chat_list_receive_message_left_margin">23.5dp</dimen>
+    <dimen name="square_chat_list_receive_message_right_margin">13.5dp</dimen>
+
     <dimen name="square_chat_list_send_time_right_margin">3dp</dimen>
     <dimen name="square_chat_list_send_time_left_margin">3dp</dimen>
     <dimen name="square_chat_list_send_time_bottom_margin">1dp</dimen>
@@ -119,7 +127,7 @@
     <dimen name="square_profile_camera_button_bottom_margin">13.5dp</dimen>
     <dimen name="squre_profile_hint_sentence_nick_name_margin">10dp</dimen>
     <dimen name="squre_profile_company_number_start_button_margin">10dp</dimen>
-    
+
     <!-- Profile Dialog -->
     <dimen name="profile_dialog_top_margin">53.5dp</dimen>
     <dimen name="profile_dialog_profile_width">86.5dp</dimen>

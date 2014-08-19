@@ -139,7 +139,7 @@ public class AhIntentService extends IntentService {
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
 		} else {
-//			alertNotification(AhMessage.TYPE.CHUPA);
+			alertNotification(AhMessage.TYPE.CHUPA);
 		}
 	}
 
@@ -244,12 +244,12 @@ public class AhIntentService extends IntentService {
 		PendingIntent resultPendingIntent =
 				stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		User sentUser = userDBHelper.getUser(message.getSenderId());
-		Bitmap bm = null;
+		Bitmap bitmap = null;
 		if (sentUser == null){
 			Log.e("ERROR","no sentUser error");
-			bm = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
+			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
 		} else {
-			bm = BitmapUtil.convertToBitmap(sentUser.getProfilePic());
+			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
 		}
 
 
@@ -258,7 +258,7 @@ public class AhIntentService extends IntentService {
 		 */
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(_this)
 		.setSmallIcon(R.drawable.launcher)
-		.setLargeIcon(bm)
+		.setLargeIcon(bitmap)
 		.setContentTitle(title)
 		.setContentText(content)
 		.setAutoCancel(true);

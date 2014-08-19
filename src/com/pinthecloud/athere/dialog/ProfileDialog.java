@@ -3,6 +3,7 @@ package com.pinthecloud.athere.dialog;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,10 +63,8 @@ public class ProfileDialog extends AhDialogFragment{
 		 */
 		Resources resources = getResources();
 		if(user.isMale()){
-			genderImage.setImageResource(R.drawable.profile_gender_m);
 			companyNumberText.setTextColor(resources.getColor(R.color.blue));
 		}else{
-			genderImage.setImageResource(R.drawable.profile_gender_w);
 			companyNumberText.setTextColor(resources.getColor(R.color.dark_red));
 		}
 		nickNameText.setText(user.getNickName());
@@ -76,8 +75,6 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set profile image
 		 */
-		Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
-		profileImage.setImageBitmap(profileBitmap);
 		profileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -103,6 +100,36 @@ public class ProfileDialog extends AhDialogFragment{
 			sendChupaButton.setVisibility(View.GONE);
 		}
 
-			return view;
+		return view;
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "ProfileDialog onStart");
+		
+		/*
+		 * Set image
+		 */
+		int w = profileImage.getWidth();
+		int h = profileImage.getHeight();
+		Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+		profileImage.setImageBitmap(profileBitmap);
+		
+		if(user.isMale()){
+			genderImage.setImageResource(R.drawable.profile_gender_m);
+		}else{
+			genderImage.setImageResource(R.drawable.profile_gender_w);
+		}
+	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "ProfileDialog onStop");
+		profileImage.setImageBitmap(null);
+		genderImage.setImageBitmap(null);
+		super.onStop();
 	}
 }

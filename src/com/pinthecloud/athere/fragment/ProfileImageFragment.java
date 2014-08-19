@@ -14,7 +14,6 @@ import android.widget.ImageView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -25,7 +24,7 @@ public class ProfileImageFragment extends AhFragment{
 	private PreferenceHelper pref;
 	private User user;
 
-	private ImageView profileImageView; 
+	private ImageView profileImage; 
 
 
 	@Override
@@ -51,22 +50,39 @@ public class ProfileImageFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
-		profileImageView = (ImageView) view.findViewById(R.id.profile_image_frag_view);
+		profileImage = (ImageView) view.findViewById(R.id.profile_image_frag_view);
+
+		return view;
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onResume");
+
+		Bitmap profileBitmap = null;
 		if(user != null){
 			// other user
-			profileImageView.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
+			int w = profileImage.getWidth();
+			int h = profileImage.getHeight();
+			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 		}else{
-			Bitmap profileBitmap = null;
 			try {
 				profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
 			} catch (FileNotFoundException e) {
 				profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
 				Log.d(AhGlobalVariable.LOG_TAG, "Error of ProfileImageFragmet : " + e.getMessage());
 			}
-			profileImageView.setImageBitmap(profileBitmap);
 		}
-
-		return view;
+		profileImage.setImageBitmap(profileBitmap);
 	}
 
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onResume");
+		profileImage.setImageBitmap(null);
+		super.onStop();
+	}
 }

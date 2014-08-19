@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,10 +48,6 @@ public class ChupaChatFragment extends AhFragment {
 	private ImageView otherGender;
 	private TextView otherAge;
 	private TextView otherCompanyNumber;
-
-//	private MessageHelper messageHelper;
-//	private MessageDBHelper messageDBHelper;
-//	private UserDBHelper userDBHelper;
 
 	private User otherUser;
 	private boolean isOtherUserExit = false;
@@ -105,8 +102,6 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set other user bar
 		 */
-		Bitmap profile = BitmapUtil.convertToBitmap(otherUser.getProfilePic());
-		otherProfileImage.setImageBitmap(profile);
 		otherProfileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -213,6 +208,7 @@ public class ChupaChatFragment extends AhFragment {
 			}
 		});
 		sendButton.setEnabled(false);
+
 		
 		/**
 		 * See 
@@ -247,13 +243,27 @@ public class ChupaChatFragment extends AhFragment {
 		return view;
 	}
 
-
+	
 	@Override
 	public void onStart() {
 		super.onStart();
-		// Set sent and received chupas to list view 
+		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStart");
+		
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		refreshView(chupaCommunId);
+		
+		int w = otherProfileImage.getWidth();
+		int h = otherProfileImage.getHeight();
+		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
+		otherProfileImage.setImageBitmap(profileBitmap);
+	}
+
+	
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStop");
+		otherProfileImage.setImageBitmap(null);
+		super.onStop();
 	}
 
 
@@ -264,13 +274,15 @@ public class ChupaChatFragment extends AhFragment {
 		if(chupaCommunId == null || chupaCommunId.equals(""))
 			throw new AhException("No chupaCommunId");
 
-		// Get every chupa by chupaCommunId
+		/*
+		 * Get every chupa by chupaCommunId
+		 */
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		messageList.clear();
 		messageList.addAll(chupas);
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
-
+		
 		/*
 		 * If other user exit, add exit message
 		 */
@@ -297,7 +309,7 @@ public class ChupaChatFragment extends AhFragment {
 		messageDBHelper.clearBadgeNum(chupaCommunId);
 	}
 
-
+	
 	private boolean isSenderButtonEnable(){
 		return isTypedMessage && !isOtherUserExit;
 	}

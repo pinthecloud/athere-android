@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -33,39 +34,72 @@ import com.pinthecloud.athere.AhGlobalVariable;
 
 public class BitmapUtil {
 
-	public static Bitmap resize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
-		Bitmap bitmapImage = null;
+	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
+		// First decode with inJustDecodeBounds=true to check dimensions
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(context.getContentResolver()
+				.openInputStream(imageUri), null, options);
 
-		try {
-			final BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			BitmapFactory.decodeStream(context.getContentResolver()
-					.openInputStream(imageUri), null, options);
+		// Calculate inSampleSize
+		options.inSampleSize = calculateSize(options, reqWidth, reqHeight);
 
-			options.inSampleSize = calculateSize(options, reqWidth, reqHeight);
-			options.inJustDecodeBounds = false;
-			bitmapImage = BitmapFactory.decodeStream(context.getContentResolver()
-					.openInputStream(imageUri), null, options);
-		} catch (FileNotFoundException e) {
-			throw e;
-		}
-		return bitmapImage;
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeStream(context.getContentResolver()
+				.openInputStream(imageUri), null, options);
 	}
 
 
-	public static int calculateSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	public static Bitmap decodeInSampleSize(Resources res, int resId, int reqWidth, int reqHeight) {
+		// First decode with inJustDecodeBounds=true to check dimensions
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(res, resId, options);
+
+		// Calculate inSampleSize
+		options.inSampleSize = calculateSize(options, reqWidth, reqHeight);
+
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeResource(res, resId, options);
+	}
+
+
+	public static Bitmap decodeInSampleSize(byte[] encodeByte, int reqWidth, int reqHeight) {
+		// First decode with inJustDecodeBounds=true to check dimensions
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length, options);
+
+		// Calculate inSampleSize
+		options.inSampleSize = calculateSize(options, reqWidth, reqHeight);
+
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length, options);
+	}
+
+
+	private static int calculateSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Raw height and width of image
 		final int height = options.outHeight;
 		final int width = options.outWidth;
-		int size = 1;
+		int inSampleSize = 1;
 
 		if (height > reqHeight || width > reqWidth) {
-			if (width > height) {
-				size = Math.round((float) height / (float) reqHeight);
-			} else {
-				size = Math.round((float) width / (float) reqWidth);
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
+
+			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
+			// height and width larger than the requested height and width.
+			while ((halfHeight / inSampleSize) > reqHeight
+					&& (halfWidth / inSampleSize) > reqWidth) {
+				inSampleSize *= 2;
 			}
 		}
-		return size;
+
+		return inSampleSize;
 	}
 
 
@@ -173,11 +207,15 @@ public class BitmapUtil {
 	}
 
 
-	public static Bitmap convertToBitmap(String str){
+	public static Bitmap convertToBitmap(String str, int reqWidth, int reqHeight){
 		Bitmap bitmap = null;
 		try{
 			byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
-			bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+			if(reqWidth == 0 || reqHeight == 0){
+				bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+			}else{
+				bitmap = decodeInSampleSize(encodeByte, reqWidth, reqHeight);	
+			}
 		}catch(Exception e){
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of BitmapUtil : " + e.getMessage());
 		}

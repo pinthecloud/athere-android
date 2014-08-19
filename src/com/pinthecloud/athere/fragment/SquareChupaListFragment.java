@@ -29,10 +29,7 @@ public class SquareChupaListFragment extends AhFragment{
 	private ListView squareChupaListView;
 	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 
-	public SquareChupaListFragment() {
-		super();
-	}
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -112,6 +109,7 @@ public class SquareChupaListFragment extends AhFragment{
 			String chupaCommunId = "";
 			String isExit = "false";
 			String chupaBadge = "";
+			
 			if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getSenderId())) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -123,7 +121,6 @@ public class SquareChupaListFragment extends AhFragment{
 			} else {
 				throw new AhException("No User in Sender or Receive");
 			}
-
 			User user = userDBHelper.getUser(userId);
 
 			// if there is No such User

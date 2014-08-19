@@ -22,7 +22,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 	public SquarePagerAdapter(Context context, FragmentManager fm, Square square) {
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);
-		squareChatFragment = new SquareChatFragment(square);
+		squareChatFragment = new SquareChatFragment(square.getId());
 		squareChupaListFragment = new SquareChupaListFragment();
 	}
 

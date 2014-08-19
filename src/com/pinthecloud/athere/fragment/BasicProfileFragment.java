@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -181,5 +182,19 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
+	}
+	
+	
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "BasicProfileFragment onStop");
+		super.onStop();
+	}
+
+
+	@Override
+	public void onDestroy() {
+		Log.d(AhGlobalVariable.LOG_TAG, "BasicProfileFragment onDestroy");
+		super.onDestroy();
 	}
 }

@@ -9,35 +9,29 @@ import android.util.Log;
 
 import com.pinthecloud.athere.fragment.AhFragment;
 
-
-/**
- * 
+/*
  * [ Usage ]
 	AsyncChainer.asyncChain(_thisFragment, new Chainable() {
-		
+
 		@Override
 		public void doNext(final AhFragment frag) {
-			// TODO Auto-generated method stub
 			messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-				
+
 				@Override
 				public void onCompleted(AhMessage entity) {
-					// TODO Auto-generated method stub
 					Log(_thisFragment, "on Complete in First" + __id);
 					__id = __id + " after 1";
 				}
 			});
 		}
 	}, new Chainable() {
-		
+
 		@Override
 		public void doNext(final AhFragment frag) {
-			// TODO Auto-generated method stub
 			messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-				
+
 				@Override
 				public void onCompleted(AhMessage entity) {
-					// TODO Auto-generated method stub
 					Log(_thisFragment, "on Complete in Second : " + __id);
 					__id = __id + " after 2";
 					try{
@@ -49,25 +43,19 @@ import com.pinthecloud.athere.fragment.AhFragment;
 			});
 		}
 	}, new Chainable() {
-		
+
 		@Override
 		public void doNext(final AhFragment frag) {
-			// TODO Auto-generated method stub
 			messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-				
+
 				@Override
 				public void onCompleted(AhMessage entity) {
-					// TODO Auto-generated method stub
 					Log(_thisFragment, "on Complete in Third : " + __id);
 				}
 			});
 		}
 	});
-
- *
  */
-
-
 
 
 public class AsyncChainer {
@@ -77,7 +65,7 @@ public class AsyncChainer {
 	static {
 		mapQueue = new HashMap<String, Queue<Chainable>>();
 	}
-	
+
 	public static void asyncChain(AhFragment frag, Chainable...chains) {
 		Class<?> clazz = null;
 		if (frag == null) {
@@ -85,7 +73,7 @@ public class AsyncChainer {
 		} else {
 			clazz = frag.getClass();
 		}
-		
+
 		Queue<Chainable> queue = mapQueue.get(clazz.getName());
 		if (queue == null) {
 			mapQueue.put(clazz.getName(), new ArrayBlockingQueue<Chainable>(NUM_OF_QUEUE));
@@ -96,7 +84,7 @@ public class AsyncChainer {
 		}
 		AsyncChainer.notifyNext(frag);
 	}
-	
+
 	public static void notifyNext(AhFragment frag) {
 		Class<?> clazz = null;
 		if (frag == null) {
@@ -107,7 +95,7 @@ public class AsyncChainer {
 		Queue<Chainable> queue = mapQueue.get(clazz.getName());
 		if (queue == null) {
 			//throw new AhException("No such Chainable");
-			Log.e("ERROR", "No such Chainable");
+			Log.e("ERROR", "No such Chainable : " + frag.getClass().getName());
 			return;
 		}
 		if (!queue.isEmpty()) {
@@ -115,8 +103,7 @@ public class AsyncChainer {
 			c.doNext(frag);
 		}
 	}
-	
-	
+
 	public static interface Chainable {
 		public void doNext(AhFragment frag);
 	}

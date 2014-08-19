@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,6 @@ import android.view.ViewGroup;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
-import com.pinthecloud.athere.database.MessageDBHelper;
-import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
@@ -103,15 +102,16 @@ public class SquareTabFragment extends AhFragment{
 			public void onCompleted(final AhMessage message) {
 				// Chupa & Exit Message can go through here
 				// Chupa & Exit Message need to be update visually in ChupaChatList Fragment
-//				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) {
-					activity.runOnUiThread(new Runnable() {
+				//				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())) {
+				activity.runOnUiThread(new Runnable() {
 
-						@Override
-						public void run() {
-							refreshView();
-						}
-					});
-//				}
+					@Override
+					public void run() {
+						refreshView();
+					}
+				});
+				Log(_thisFragment, "how about here");
+				//				}
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);
 			}
@@ -120,17 +120,17 @@ public class SquareTabFragment extends AhFragment{
 		return view;
 	}
 
+	
 	@Override
 	public void onStart() {
 		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareTabFragment onStart");
 		refreshView();
 	}
 
+	
 	private void refreshView(){
 		int totalNum = messageDBHelper.getAllBadgeNum();
-		
-//		badge.increment(totalNum);
-		
 		if(totalNum != 0){
 			badge.setText("" + totalNum);
 			badge.show();	

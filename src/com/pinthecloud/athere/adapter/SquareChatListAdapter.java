@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,17 +109,21 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nickname);
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
+				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
 				/*
 				 * Set UI component only in receive list
 				 */
 				nickNameText.setText(message.getSender());
 				if(user.isMale()){
-					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.chat_gender_m, 0);
-				}else{
-					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.chat_gender_w, 0);	
+					profileGenderImage.setImageResource(R.drawable.chat_gender_m);
+				} else{
+					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
-				profileImage.setImageBitmap(BitmapUtil.convertToBitmap(user.getProfilePic()));
+				int w = profileImage.getWidth();
+				int h = profileImage.getHeight();
+				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+				profileImage.setImageBitmap(profileBitmap);
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {
 

@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -87,7 +89,31 @@ public class SquareDrawerFragment extends AhFragment {
 		participantListAdapter = new SquareDrawerParticipantListAdapter
 				(context, this, R.layout.row_square_drawer_participant_list, userList);
 		participantListView.setAdapter(participantListAdapter);
-		
+		participantListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				final User user = userList.get(position);
+				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						Intent intent = new Intent(context, ChupaChatActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						Intent intent = new Intent(context, ProfileImageActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						context.startActivity(intent);
+					}
+				});
+				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
+
 
 		/*
 		 * Set Button
@@ -106,7 +132,7 @@ public class SquareDrawerFragment extends AhFragment {
 						progressBar.setVisibility(View.VISIBLE);
 						exitSquare();
 					}
-					
+
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						// Do nothing
@@ -116,14 +142,6 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 
-//		profileSettingButton.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(context, SquareProfileActivity.class);
-//				startActivity(intent);
-//			}
-//		});
 
 		/*
 		 * Set handler for refresh new and old user
@@ -141,13 +159,11 @@ public class SquareDrawerFragment extends AhFragment {
 				});
 			}
 		});
-		
+
 		return view;
 	}
-	
+
 	private void exitSquare() {
-		// TODO Auto-generated method stub
-		
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
@@ -164,12 +180,11 @@ public class SquareDrawerFragment extends AhFragment {
 					}
 				});
 			}
-			
+
 		}, new Chainable() {
-			
+
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				String exitMessage = getResources().getString(R.string.exit_square_message);
 				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
@@ -205,63 +220,62 @@ public class SquareDrawerFragment extends AhFragment {
 				});
 			}
 		});
-		
-		
-		
+
+
 		/**
 		 *  DO NOT REMOVE
 		 *  NEED FOR REFERENCE
 		 */
-//		new AhThread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				User user = userHelper.getMyUserInfo(true);
-//				userHelper.exitSquareSync(_thisFragment, user.getId());
-////				userHelper.unRegisterGcmSync(_thisFragment);
-//				userDBHelper.deleteAllUsers();
-//				messageDBHelper.deleteAllMessages();
-//
-//				String exitMessage = getResources().getString(R.string.exit_square_message);
-//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-//				messageBuilder.setContent(nickName + " : " + exitMessage)
-//				.setSender(nickName)
-//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-//				.setType(AhMessage.TYPE.EXIT_SQUARE);
-//				AhMessage message = messageBuilder.build();
-//				messageHelper.sendMessageSync(_thisFragment, message);
-//
-//				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-//				pref.removePref(AhGlobalVariable.USER_ID_KEY);
-//				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-//				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-//				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-//				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-//				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-//				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
-//				activity.runOnUiThread(new Runnable() {
-//
-//					@Override
-//					public void run() {
-//						progressBar.setVisibility(View.GONE);
-//						startActivity(intent);
-//						activity.finish();
-//					}
-//				});
-//			}
-//		}).start();
+		//		new AhThread(new Runnable() {
+		//
+		//			@Override
+		//			public void run() {
+		//				User user = userHelper.getMyUserInfo(true);
+		//				userHelper.exitSquareSync(_thisFragment, user.getId());
+		////				userHelper.unRegisterGcmSync(_thisFragment);
+		//				userDBHelper.deleteAllUsers();
+		//				messageDBHelper.deleteAllMessages();
+		//
+		//				String exitMessage = getResources().getString(R.string.exit_square_message);
+		//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+		//				messageBuilder.setContent(nickName + " : " + exitMessage)
+		//				.setSender(nickName)
+		//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+		//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+		//				.setType(AhMessage.TYPE.EXIT_SQUARE);
+		//				AhMessage message = messageBuilder.build();
+		//				messageHelper.sendMessageSync(_thisFragment, message);
+		//
+		//				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+		//				pref.removePref(AhGlobalVariable.USER_ID_KEY);
+		//				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+		//				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+		//				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+		//				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+		//				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+		//				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+		//				activity.runOnUiThread(new Runnable() {
+		//
+		//					@Override
+		//					public void run() {
+		//						progressBar.setVisibility(View.GONE);
+		//						startActivity(intent);
+		//						activity.finish();
+		//					}
+		//				});
+		//			}
+		//		}).start();
 	}	
 
+
 	@Override
-	public void onResume() {
-		super.onResume();
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
 		updateUserList();
-	}
 
 
-	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
 		/*
 		 * Set profile images 
 		 */
@@ -273,6 +287,25 @@ public class SquareDrawerFragment extends AhFragment {
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
 		}
 		profileCircleImage.setImageBitmap(profileBitmap);
+	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
+
+		/*
+		 * Release image resources
+		 */
+		profileCircleImage.setImageBitmap(null);
+		super.onStop();
+	}
+
+
+	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
+		/*
+		 * Set profile image
+		 */
 		profileCircleImage.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -295,6 +328,14 @@ public class SquareDrawerFragment extends AhFragment {
 				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
+
+
+		/*
+		 * Set profile information text and gender image
+		 */
+		profileNickNameText.setText(user.getNickName());
+		profileAgeText.setText("" + user.getAge());
+		profileCompanyNumText.setText("" + user.getCompanyNum());
 		Resources resources = getResources();
 		if(user.isMale()){
 			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
@@ -303,14 +344,6 @@ public class SquareDrawerFragment extends AhFragment {
 			profileGenderImage.setImageResource(R.drawable.profile_gender_w);
 			profileCompanyNumText.setTextColor(resources.getColor(R.color.dark_red));
 		}
-
-
-		/*
-		 * Set profile infomation text
-		 */
-		profileNickNameText.setText(user.getNickName());
-		profileAgeText.setText("" + user.getAge());
-		profileCompanyNumText.setText("" + user.getCompanyNum());
 	}
 
 
