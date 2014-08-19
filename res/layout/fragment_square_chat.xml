@@ -17,13 +17,16 @@
         android:id="@+id/square_chat_frag_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/gray_chat_input"
+        android:background="@color/inputbar_background"
         android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/square_chat_frag_message_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/square_chat_input_layout_left_margin"
+            android:layout_marginStart="@dimen/square_chat_input_layout_left_margin"
             android:layout_weight="1"
             android:background="@drawable/bg_inputbar_highlight"
             android:ems="10"

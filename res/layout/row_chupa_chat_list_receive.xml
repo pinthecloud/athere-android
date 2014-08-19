@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingBottom="@dimen/chupa_chat_list_receive_bottom_margin"
     android:paddingEnd="0dp"
     android:paddingLeft="@dimen/chupa_chat_list_receive_left_margin"
     android:paddingRight="0dp"
@@ -16,10 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/bg_chupa_recieved"
-        android:paddingEnd="@dimen/chupa_chat_list_receive_message_right_margin"
-        android:paddingLeft="@dimen/chupa_chat_list_receive_message_left_margin"
-        android:paddingRight="@dimen/chupa_chat_list_receive_message_right_margin"
-        android:paddingStart="@dimen/chupa_chat_list_receive_message_left_margin"
         android:textSize="@dimen/font_large" />
 
     <TextView
@@ -27,6 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:textSize="@dimen/font_medium" />
+        android:paddingBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
+        android:layout_marginLeft="@dimen/chupa_chat_list_send_time_left_margin"
+        android:layout_marginStart="@dimen/chupa_chat_list_send_time_left_margin"
+        android:textColor="@color/gray_light"
+        android:textSize="@dimen/font_small" />
 
 </LinearLayout>

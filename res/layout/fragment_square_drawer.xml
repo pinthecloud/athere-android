@@ -98,7 +98,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/square_drawer_profile_company_num_height"
                         android:background="@drawable/bg_sidebar_member"
-                        android:gravity="center" >
+                        android:gravity="center"
+                        android:orientation="horizontal" >
 
                         <ImageView
                             android:id="@+id/square_drawer_frag_profile_gender"
@@ -110,8 +111,9 @@
 
                         <TextView
                             android:id="@+id/square_drawer_frag_profile_company_num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="start|center"
                             android:textSize="@dimen/font_medium" />
                     </LinearLayout>
                 </LinearLayout>
@@ -146,8 +148,7 @@
                 android:layout_marginRight="@dimen/square_drawer_member_bar_gender_margin"
                 android:background="@drawable/bg_sidebar_playernum_m"
                 android:gravity="center"
-                android:paddingLeft="@dimen/squre_drawer_playernum_margin"
-                android:paddingRight="@dimen/squre_drawer_playernum_margin"
+                android:paddingBottom="1dp"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/font_medium" />
 
@@ -157,8 +158,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_sidebar_playernum_w"
                 android:gravity="center"
-                android:paddingLeft="@dimen/squre_drawer_playernum_margin"
-                android:paddingRight="@dimen/squre_drawer_playernum_margin"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/font_medium" />
         </LinearLayout>

@@ -3,6 +3,11 @@
 
     <!-- gray -->
     <color name="gray_tab_text_unselected">#959595</color>
+
+<!-- Hwajung -->
+    <color name="dark_gray">#636363</color>
+    <color name="inputbar_background">#80f4f4f4</color>
+<!-- Seungmin -->
     <color name="gray_background">#eaeaea</color>
     <color name="gray_list_selector">#f4f4f4</color>
     <color name="gray_drawer_background">#f8f4f4f4</color>
