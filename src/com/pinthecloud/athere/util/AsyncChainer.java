@@ -7,6 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import android.util.Log;
 
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.AhFragment;
 
 /*
@@ -100,6 +101,7 @@ public class AsyncChainer {
 		}
 		if (!queue.isEmpty()) {
 			Chainable c = queue.poll();
+			if (c == null) throw new AhException("chain == null");
 			c.doNext(frag);
 		}
 	}

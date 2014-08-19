@@ -314,12 +314,13 @@ public class UserHelper {
 
 	public User getMyUserInfo(boolean hasId) {
 		Bitmap pictureBitmap = null;
-		try {
-			pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-		} catch (FileNotFoundException e) {
-			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
-		}
+		pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//		try {
+//			pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//		} catch (FileNotFoundException e) {
+//			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
+//			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
+//		}
 		String profilePic = BitmapUtil.convertToString(pictureBitmap);
 
 		User user = new User();

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.util.ImageFileUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
 /**
  * 
@@ -77,16 +77,19 @@ public class HongkunTestFragment extends AhFragment {
 					if (b.getId() == btnArr[0].getId()) {
 						
 						Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
-                                R.drawable.splash);
+                                R.drawable.chupa);
 						
-						String str = ImageFileUtil.saveFile(context, "plz", bitmap);
-						
-						Log(_thisFragment, str);
+						String str = FileUtil.saveImageToInternalStorage(context, bitmap, "hong");
+						Log(_thisFragment, "여기 시발 : "+str);
 					} else if (b.getId() == btnArr[1].getId()) {
-						Bitmap bit = ImageFileUtil.readFile(context, "plz");
-						
+//						Bitmap bit = ImageFileUtil.readFile(context, "plz");
+						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong");
 						img.setImageBitmap(bit);
 					} else if (b.getId() == btnArr[2].getId()) {
+						int w = img.getWidth();
+						int h = img.getHeight();
+						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong", w, h);
+						img.setImageBitmap(bit);
 					} else if (b.getId() == btnArr[3].getId()) {
 					} else if (b.getId() == btnArr[4].getId()) {
 					} else if (b.getId() == btnArr[5].getId()) {

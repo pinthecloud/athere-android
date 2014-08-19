@@ -34,6 +34,7 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class AhIntentService extends IntentService {
 
@@ -148,6 +149,10 @@ public class AhIntentService extends IntentService {
 
 			@Override
 			public void onCompleted(User user) {
+//				String imagePath = ImageFileUtil.saveFile(app, user.getId(), user.getProfilePic());
+				Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic(), 0, 0);
+				String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+				user.setProfilePic(imagePath);
 				userDBHelper.addUser(user);
 				if (isRunning(app)) {
 					String currentActivityName = getCurrentRunningActivityName(app);
@@ -249,7 +254,8 @@ public class AhIntentService extends IntentService {
 			Log.e("ERROR","no sentUser error");
 			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
 		} else {
-			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
+//			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
+			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getProfilePic(), 0, 0);
 		}
 
 

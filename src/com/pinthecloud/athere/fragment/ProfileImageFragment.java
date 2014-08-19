@@ -1,10 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
-import java.io.FileNotFoundException;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,14 +63,16 @@ public class ProfileImageFragment extends AhFragment{
 			// other user
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+//			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 		}else{
-			try {
-				profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-			} catch (FileNotFoundException e) {
-				profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-				Log.d(AhGlobalVariable.LOG_TAG, "Error of ProfileImageFragmet : " + e.getMessage());
-			}
+			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//			try {
+//				profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//			} catch (FileNotFoundException e) {
+//				profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
+//				Log.d(AhGlobalVariable.LOG_TAG, "Error of ProfileImageFragmet : " + e.getMessage());
+//			}
 		}
 		profileImage.setImageBitmap(profileBitmap);
 	}

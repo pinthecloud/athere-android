@@ -35,6 +35,7 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
 import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
 
 public class ChupaChatFragment extends AhFragment {
@@ -63,11 +64,9 @@ public class ChupaChatFragment extends AhFragment {
 
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
-		otherUser = userDBHelper.getUser(userId);
+		otherUser = userDBHelper.getUser(userId, true);
 		if (otherUser == null) {
-			otherUser = userDBHelper.getUser(userId, true);
-			if (otherUser == null)
-				throw new AhException("No User Error");
+			throw new AhException("No User Error");
 		}
 	}
 
@@ -254,7 +253,9 @@ public class ChupaChatFragment extends AhFragment {
 		
 		int w = otherProfileImage.getWidth();
 		int h = otherProfileImage.getHeight();
-		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
+		
+//		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
+		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, otherUser.getProfilePic(), w, h);
 		otherProfileImage.setImageBitmap(profileBitmap);
 	}
 

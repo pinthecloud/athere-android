@@ -1,13 +1,11 @@
 package com.pinthecloud.athere.fragment;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -280,12 +278,13 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set profile images 
 		 */
 		Bitmap profileBitmap = null;
-		try {
-			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-		} catch (FileNotFoundException e) {
-			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
-		}
+		profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//		try {
+//			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//		} catch (FileNotFoundException e) {
+//			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
+//			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
+//		}
 		profileCircleImage.setImageBitmap(profileBitmap);
 	}
 

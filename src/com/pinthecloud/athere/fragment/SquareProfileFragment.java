@@ -429,7 +429,13 @@ public class SquareProfileFragment extends AhFragment{
 					@Override
 					public void onCompleted(List<User> list, int count) {
 						// TODO Auto-generated method stub
-						userDBHelper.addAllUsers(list);
+//						userDBHelper.addAllUsers(list);
+						for(User user : list) {
+							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic(), 0, 0);
+							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+							user.setProfilePic(imagePath);
+							userDBHelper.addUser(user);
+						}
 
 						// Remove Me from User DB Table.
 						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
@@ -583,13 +589,15 @@ public class SquareProfileFragment extends AhFragment{
 		if(!isTookPicture){
 			openCameraAndSetView();
 		}else{
-			try {
-				// Set taken picture to view
-				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-				profilePictureView.setImageBitmap(pictureBitmap);
-			} catch (FileNotFoundException e) {
-				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onStart : " + e.getMessage());
-			}
+			Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+			profilePictureView.setImageBitmap(pictureBitmap);
+//			try {
+//				// Set taken picture to view
+//				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//				profilePictureView.setImageBitmap(pictureBitmap);
+//			} catch (FileNotFoundException e) {
+//				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onStart : " + e.getMessage());
+//			}
 		}
 	}
 

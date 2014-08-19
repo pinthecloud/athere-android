@@ -133,6 +133,7 @@ public class SquareChatFragment extends AhFragment{
 				// TODO Auto-generated method stub
 				if (firstVisibleItem == 1) {
 					// TODO : Insert messageListView.add(0, messages);
+					
 				}
 			}
 

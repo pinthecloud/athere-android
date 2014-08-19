@@ -446,7 +446,10 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 			@Override
 			public int compare(AhMessage lhs, AhMessage rhs) {
-				return lhs.getId().compareTo(rhs.getId());
+				int left = Integer.valueOf(lhs.getId());
+				int right = Integer.valueOf(rhs.getId());
+				if (left == right) return 0;
+				return left > right ? 1: -1;
 			}
 		});
 	}
