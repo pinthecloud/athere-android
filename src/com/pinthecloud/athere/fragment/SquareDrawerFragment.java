@@ -168,13 +168,11 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				User user = userHelper.getMyUserInfo(true);
 				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
 
 					@Override
 					public void onCompleted(Boolean entity) {
-						// TODO Auto-generated method stub
 						userDBHelper.deleteAllUsers();
 						messageDBHelper.deleteAllMessages();
 					}
@@ -198,14 +196,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						// TODO Auto-generated method stub
-						pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-						pref.removePref(AhGlobalVariable.USER_ID_KEY);
-						pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+						removeSquarePreference();
 						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 						activity.runOnUiThread(new Runnable() {
 

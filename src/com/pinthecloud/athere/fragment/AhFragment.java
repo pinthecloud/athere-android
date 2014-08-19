@@ -5,9 +5,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -36,13 +33,13 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected AhActivity activity;
 	protected PreferenceHelper pref;
 	protected AhFragment _thisFragment;
-	
+
 	protected MessageHelper messageHelper;
 	protected MessageDBHelper messageDBHelper;
 	protected UserHelper userHelper;
 	protected UserDBHelper userDBHelper;
 	protected SquareHelper squareHelper;
-	
+
 
 	public AhFragment(){
 		_thisFragment = this;
@@ -67,25 +64,31 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		ExceptionManager.setHandler(_thisFragment);
 	}
 
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		super.onCreateView(inflater, container, savedInstanceState);
-		View view = null;
-		try {
-			view = onAhCreateView(inflater, container, savedInstanceState);
-		} catch (AhException ex) {
-			Log(this, ex);
-		} catch (Exception ex) {
-			Log(this, ex);
+	public void handleException(final AhException ex) {
+		Log(_thisFragment, "AhFragment handleException : " + ex.toString());
+
+		AhAlertDialog exceptionDialog = null;
+		Resources resources = getResources();
+		String title = ex.getType().toString();
+		String message = ex.toString();
+		if(ex.getType().equals(AhException.TYPE.INTERNET_NOT_CONNECTED)){
+			title = resources.getString(R.string.internet_not_connected_title);
+			message = resources.getString(R.string.internet_not_connected_message);
 		}
-		return view;
-	}
-
-
-	protected View onAhCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return null;
+		exceptionDialog = new AhAlertDialog(title, message, false, new AhDialogCallback() {
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				android.os.Process.killProcess(android.os.Process.myPid());
+				System.exit(1);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				// Do nothing
+			}
+		}); 
+		exceptionDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 
 
@@ -130,30 +133,19 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 
-	@Override
-	public void handleException(final AhException ex) {
-		Log(_thisFragment, "AhFragment handleException : " + ex.toString());
-
-		AhAlertDialog exceptionDialog = null;
-		Resources resources = getResources();
-		String title = ex.getType().toString();
-		String message = ex.toString();
-		if(ex.getType().equals(AhException.TYPE.INTERNET_NOT_CONNECTED)){
-			title = resources.getString(R.string.internet_not_connected_title);
-			message = resources.getString(R.string.internet_not_connected_message);
-		}
-		exceptionDialog = new AhAlertDialog(title, message, false, new AhDialogCallback() {
-			@Override
-			public void doPositiveThing(Bundle bundle) {
-				android.os.Process.killProcess(android.os.Process.myPid());
-				System.exit(1);
-			}
-			@Override
-			public void doNegativeThing(Bundle bundle) {
-				// Do nothing
-			}
-		}); 
-		exceptionDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+	/*
+	 * Check nick name EditText
+	 */
+	protected void removeSquarePreference(){
+		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+		pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
+		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+		pref.removePref(AhGlobalVariable.USER_ID_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
 	}
 
 

@@ -1,12 +1,10 @@
 package com.pinthecloud.athere.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 import java.util.Random;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.Time;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -18,7 +16,7 @@ public class AhMessage implements Parcelable {
 		FAIL(-1),
 		SENDING(0),
 		SENT(1);
-		
+
 		private final int value;
 
 		private STATUS(final int value) {
@@ -76,7 +74,7 @@ public class AhMessage implements Parcelable {
 		}
 	};
 
-	
+
 	private AhMessage() {
 	}
 	public AhMessage(Parcel in){
@@ -119,8 +117,8 @@ public class AhMessage implements Parcelable {
 	public void setStatus(STATUS status) {
 		this.status = status.getValue();
 	}
-	
-	
+
+
 	@Override
 	public String toString() {
 		return "{ id : "+this.id + " \n " + 
@@ -134,12 +132,12 @@ public class AhMessage implements Parcelable {
 				" chupaCommunId : "+this.chupaCommunId  + " \n " +
 				" status : "+this.status + " }";
 	}
-	
+
 	@Override
 	public int describeContents() {
 		return 0;
 	}
-	
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(id);
@@ -153,7 +151,7 @@ public class AhMessage implements Parcelable {
 		dest.writeString(chupaCommunId);
 		dest.writeInt(status);
 	}
-	
+
 	public void readToParcel(Parcel in){
 		id = in.readString();
 		type = in.readString();
@@ -166,7 +164,7 @@ public class AhMessage implements Parcelable {
 		chupaCommunId = in.readString();
 		status = in.readInt();
 	}
-	
+
 	public boolean isMine(){
 		PreferenceHelper pref = AhApplication.getInstance().getPref();
 		return this.senderId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY));
@@ -176,7 +174,7 @@ public class AhMessage implements Parcelable {
 		return (type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString()) 
 				|| type.equals(TYPE.UPDATE_USER_INFO.toString()));
 	}
-	
+
 	public static String buildChupaCommunId(String id0, String id1) {
 		if (id0.compareTo(id1) > 0) {
 			return  id0 + id1;
@@ -201,12 +199,12 @@ public class AhMessage implements Parcelable {
 		return message;
 	}
 
-	
+
 	public static AhMessage buildMessage(AhMessage.TYPE type){
 		return buildMessage(type.toString());
 	}
 
-	
+
 	public static AhMessage buildMessage(){
 		AhMessage.TYPE type;
 		Random r = new Random();
@@ -225,7 +223,7 @@ public class AhMessage implements Parcelable {
 		return buildMessage(type);
 	}
 
-	
+
 	public static class Builder {
 
 		private static final String DEFAULT_STRING = "DEFAULT_STRING";
@@ -303,10 +301,9 @@ public class AhMessage implements Parcelable {
 			message.status = status;
 
 			if (this.timeStamp.equals(DEFAULT_STRING)){
-				Calendar calendar = Calendar.getInstance();
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.US);
-				String time = sdf.format(calendar.getTime());
-				message.timeStamp = time;
+				Time time = new Time();
+				time.setToNow();
+				message.timeStamp = time.format("%H:%M");
 			} else {
 				message.timeStamp = timeStamp;
 			}
