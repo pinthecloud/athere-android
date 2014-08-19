@@ -44,7 +44,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private TextView femaleNumText;
 	private Button exitButton;
 
-	private ImageView profileCircleImage;
+	private ImageView profileImage;
 	private ImageView profileGenderImage;
 	private TextView profileNickNameText;
 	private TextView profileAgeText;
@@ -72,7 +72,7 @@ public class SquareDrawerFragment extends AhFragment {
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
 		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
 		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
-		profileCircleImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
+		profileImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
 		profileGenderImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_gender);
 		profileNickNameText= (TextView) view.findViewById(R.id.square_drawer_frag_profile_nick_name);
 		profileAgeText = (TextView) view.findViewById(R.id.square_drawer_frag_profile_age);
@@ -92,6 +92,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				Log.d(AhGlobalVariable.LOG_TAG, "click");
 				final User user = userList.get(position);
 				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
 
@@ -128,9 +129,9 @@ public class SquareDrawerFragment extends AhFragment {
 					@Override
 					public void doPositiveThing(Bundle bundle) {
 						progressBar.setVisibility(View.VISIBLE);
+						progressBar.bringToFront();
 						exitSquare();
 					}
-
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						// Do nothing
@@ -166,13 +167,11 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				User user = userHelper.getMyUserInfo(true);
 				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
 
 					@Override
 					public void onCompleted(Boolean entity) {
-						// TODO Auto-generated method stub
 						userDBHelper.deleteAllUsers();
 						messageDBHelper.deleteAllMessages();
 					}
@@ -196,14 +195,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						// TODO Auto-generated method stub
-						pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-						pref.removePref(AhGlobalVariable.USER_ID_KEY);
-						pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+						removeSquarePreference();
 						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 						activity.runOnUiThread(new Runnable() {
 
@@ -279,13 +271,7 @@ public class SquareDrawerFragment extends AhFragment {
 		 */
 		Bitmap profileBitmap = null;
 		profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-//		try {
-//			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-//		} catch (FileNotFoundException e) {
-//			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-//			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
-//		}
-		profileCircleImage.setImageBitmap(profileBitmap);
+		profileImage.setImageBitmap(profileBitmap);
 	}
 
 
@@ -296,7 +282,7 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Release image resources
 		 */
-		profileCircleImage.setImageBitmap(null);
+		profileImage.setImageBitmap(null);
 		super.onStop();
 	}
 
@@ -305,7 +291,7 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set profile image
 		 */
-		profileCircleImage.setOnClickListener(new OnClickListener() {
+		profileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

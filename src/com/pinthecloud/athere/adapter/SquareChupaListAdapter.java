@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
@@ -65,7 +64,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			sender.setText(userNickName);
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(picStr, w, h);
+			//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(picStr, w, h);
 			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, picStr, w, h);
 			profileImage.setImageBitmap(profileBitmap);
 			content.setText(lastChupaMap.get("content"));

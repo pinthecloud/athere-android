@@ -26,7 +26,6 @@ import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
@@ -123,9 +122,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
-//				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+				//				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 				Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
-//				profileImage.setImageBitmap(null);
 				profileImage.setImageBitmap(profileBitmap);
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {

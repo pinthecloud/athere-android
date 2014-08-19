@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -374,14 +375,12 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 						.equals(PreferenceHelper.DEFAULT_STRING)){
 					userHelper.getRegistrationIdAsync(_thisFragment, new AhEntityCallback<String>(){
 
 						@Override
 						public void onCompleted(String registrationId) {
-							// TODO Auto-generated method stub
 							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 						}
 
@@ -396,7 +395,6 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				// Save info for user
 				String nickName = nickNameEditText.getText().toString();
 				int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
@@ -414,7 +412,6 @@ public class SquareProfileFragment extends AhFragment{
 
 					@Override
 					public void onCompleted(String id) {
-						// TODO Auto-generated method stub
 						pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 					}
 				});
@@ -423,16 +420,13 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<User>() {
 
 					@Override
 					public void onCompleted(List<User> list, int count) {
-						// TODO Auto-generated method stub
-//						userDBHelper.addAllUsers(list);
 						for(User user : list) {
-							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic(), 0, 0);
-							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+							Bitmap bitmap = BitmapUtil.convertToBitmap(user.getProfilePic());
+							String imagePath = FileUtil.saveImageToInternalStorage(app, bitmap, user.getId());
 							user.setProfilePic(imagePath);
 							userDBHelper.addUser(user);
 						}
@@ -447,7 +441,6 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				// Send message to server for notifying entering
 				String enterMessage = getResources().getString(R.string.enter_square_message);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
@@ -469,8 +462,12 @@ public class SquareProfileFragment extends AhFragment{
 				// Save this setting and go to next activity
 				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+				Time time = new Time();
+				time.setToNow();
+				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
 				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, AhGlobalVariable.SQUARE_CHAT_TAB);
-
+				
+				
 				// Set and move to next activity after clear previous activity
 				intent.setClass(context, SquareActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

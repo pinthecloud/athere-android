@@ -20,7 +20,6 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
@@ -73,7 +72,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			}
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 			profileImage.setImageBitmap(profileBitmap);
 

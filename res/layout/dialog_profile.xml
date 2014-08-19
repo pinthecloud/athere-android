@@ -43,7 +43,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/square_drawer_profile_company_num_height"
-            android:background="@drawable/bg_sidebar_member" >
+            android:background="@drawable/bg_sidebar_member"
+            android:gravity="center" >
 
             <ImageView
                 android:id="@+id/profile_dialog_gender"

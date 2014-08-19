@@ -34,7 +34,6 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 
@@ -74,7 +73,7 @@ public class ChupaChatFragment extends AhFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
-		
+
 		// Remove Notification when the user enters the Chupa chat room.
 		NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
@@ -208,7 +207,7 @@ public class ChupaChatFragment extends AhFragment {
 		});
 		sendButton.setEnabled(false);
 
-		
+
 		/**
 		 * See 
 		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
@@ -220,11 +219,11 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				
+
 				// Only Chupa & Exit Message can go through
 				if (!(message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString()))) return;
-				
+
 				// If Exit Message, Check if it's related Exit (Don't go through other User Exit message)
 				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					if (!otherUser.getId().equals(message.getSenderId())) return;
@@ -242,24 +241,24 @@ public class ChupaChatFragment extends AhFragment {
 		return view;
 	}
 
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStart");
-		
+
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		refreshView(chupaCommunId);
-		
+
 		int w = otherProfileImage.getWidth();
 		int h = otherProfileImage.getHeight();
-		
-//		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
+
+		//		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
 		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, otherUser.getProfilePic(), w, h);
 		otherProfileImage.setImageBitmap(profileBitmap);
 	}
 
-	
+
 	@Override
 	public void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStop");
@@ -283,14 +282,14 @@ public class ChupaChatFragment extends AhFragment {
 		messageList.addAll(chupas);
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
-		
+
 		/*
 		 * If other user exit, add exit message
 		 */
 		if (userDBHelper.isUserExit(otherUser.getId())){
 			isOtherUserExit = true;
 			sendButton.setEnabled(false);
-			
+
 			String exitMessage = getResources().getString(R.string.exit_square_message);
 			String nickName = otherUser.getNickName();
 			AhMessage.Builder messageBuilder = new AhMessage.Builder();
@@ -305,12 +304,12 @@ public class ChupaChatFragment extends AhFragment {
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 		}
-		
+
 		// Clear badge numbers displayed on chupa list
 		messageDBHelper.clearBadgeNum(chupaCommunId);
 	}
 
-	
+
 	private boolean isSenderButtonEnable(){
 		return isTypedMessage && !isOtherUserExit;
 	}
