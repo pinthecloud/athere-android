@@ -224,6 +224,27 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// return contact list
 		return messages;
 	}
+	
+	public List<AhMessage> getAllMessagesByFifties(int offset, String type) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + TYPE
+				+ " = ?" + " ORDER BY " + ID + " LIMIT 50 OFFSET "
+				+ (offset * 50);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { type });
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				messages.add(convertToMessage(cursor));
+			} while (cursor.moveToNext());
+		}
+		// return contact list
+		return messages;
+	}
 
 	public List<AhMessage> getAllMessages(String... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
