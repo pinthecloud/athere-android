@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingBottom="@dimen/square_chat_list_receive_bottom_margin"
+    android:paddingEnd="0dp"
     android:paddingLeft="@dimen/square_chat_list_receive_left_margin"
     android:paddingRight="0dp"
-    android:paddingTop="@dimen/square_chat_list_receive_top_margin"
-    android:paddingBottom="@dimen/square_chat_list_receive_bottom_margin" >
-
+    android:paddingStart="@dimen/square_chat_list_receive_left_margin"
+    android:paddingTop="@dimen/square_chat_list_receive_top_margin" >
 
     <com.pinthecloud.athere.view.AhImageView
         android:id="@+id/row_square_chat_list_receive_profile"
@@ -38,9 +39,10 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"        android:layout_marginTop="@dimen/square_chat_list_receive_message_layout_top_margin"
-        android:layout_marginLeft="@dimen/square_chat_list_receive_message_layout_left_margin" >
-
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/square_chat_list_receive_message_layout_left_margin"
+        android:layout_marginStart="@dimen/square_chat_list_receive_message_layout_left_margin"
+        android:layout_marginTop="@dimen/square_chat_list_receive_message_layout_top_margin" >
 
         <TextView
             android:id="@+id/row_square_chat_list_receive_message"
@@ -55,10 +57,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:textColor="@color/light_gray"
-	        android:paddingLeft="@dimen/square_chat_list_send_time_left_margin"
-	        android:paddingRight="0dp"
-	        android:paddingBottom="@dimen/square_chat_list_send_time_bottom_margin"
+            android:layout_marginLeft="@dimen/square_chat_list_send_time_left_margin"
+            android:layout_marginStart="@dimen/square_chat_list_send_time_left_margin"
+            android:paddingBottom="@dimen/square_chat_list_send_time_bottom_margin"
+            android:textColor="@color/gray_light"
             android:textSize="@dimen/font_small" />
     </LinearLayout>
 

@@ -44,29 +44,27 @@
             android:layout_marginRight="@dimen/chupa_chat_other_age_gender_margin"
             android:textSize="@dimen/font_medium" />
 
-        <LinearLayout 
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/chupa_chat_profile_company_num_height"
             android:background="@drawable/bg_sidebar_member"
-            android:orientation="horizontal"
-            android:gravity="center" >
-            
-        <ImageView
-            android:id="@+id/chupa_chat_frag_other_gender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/chupa_chat_other_gender_company_number_margin"
-            android:layout_marginRight="@dimen/chupa_chat_other_gender_company_number_margin"
-            android:contentDescription="@string/gender" />
+            android:gravity="center"
+            android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/chupa_chat_frag_other_company_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_medium" />
-            
+            <ImageView
+                android:id="@+id/chupa_chat_frag_other_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/chupa_chat_other_gender_company_number_margin"
+                android:layout_marginRight="@dimen/chupa_chat_other_gender_company_number_margin"
+                android:contentDescription="@string/gender" />
+
+            <TextView
+                android:id="@+id/chupa_chat_frag_other_company_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_medium" />
         </LinearLayout>
-
     </LinearLayout>
 
     <View
@@ -93,13 +91,15 @@
             android:id="@+id/chupa_chat_frag_message_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/square_chat_input_layout_left_margin"
+            android:layout_marginStart="@dimen/square_chat_input_layout_left_margin"
             android:layout_weight="1"
             android:background="@drawable/bg_inputbar_highlight"
             android:ems="10"
             android:inputType="textMultiLine"
             android:maxLines="3"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/square_chat_input_layout_left_margin"
+            android:paddingEnd="@dimen/square_chat_input_right_margin"
             android:paddingLeft="@dimen/square_chat_input_left_margin"
             android:paddingRight="@dimen/square_chat_input_right_margin"
             android:paddingStart="@dimen/square_chat_input_left_margin"
