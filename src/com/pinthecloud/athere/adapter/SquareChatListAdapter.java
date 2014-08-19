@@ -123,7 +123,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
 				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
-				profileImage.setImageBitmap(profileBitmap);
+				profileImage.setImageBitmap(null);
+				//profileImage.setImageBitmap(profileBitmap);
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {
 

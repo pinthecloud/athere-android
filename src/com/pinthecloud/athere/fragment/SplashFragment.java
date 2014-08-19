@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
 import com.pinthecloud.athere.activity.HongkunTestAcitivity;
@@ -27,7 +28,7 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AppVersion;
 
-public class SplashFragment extends AhFragment {
+public class SplashFragment extends AhFragment implements Runnable{
 
 	private VersionHelper versionHelper;
 
@@ -68,8 +69,8 @@ public class SplashFragment extends AhFragment {
 		//////////////////////////////////////////////////////////////
 		if (!isHongkunTest()) {
 			// Start Chupa Application
-			//			new AhThread(this).start();
-			_run();
+			new AhThread(this).start();
+//			_run();
 		}
 
 		return view;
@@ -87,7 +88,7 @@ public class SplashFragment extends AhFragment {
 			return false;
 
 		boolean val = true;
-		if(val) return false;
+//		if(val) return false;
 
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
@@ -101,7 +102,7 @@ public class SplashFragment extends AhFragment {
 		})
 		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				//				new AhThread(SplashFragment.this).start();
+				new AhThread(SplashFragment.this).start();
 				return;
 			}
 		})
@@ -111,7 +112,7 @@ public class SplashFragment extends AhFragment {
 	}
 
 
-	public void _run() {
+	public void run() {
 		versionHelper.getServerAppVersionAsync(_thisFragment, new AhEntityCallback<AppVersion>() {
 
 			@Override
