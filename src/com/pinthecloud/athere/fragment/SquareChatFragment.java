@@ -195,9 +195,8 @@ public class SquareChatFragment extends AhFragment{
 			messageList.addAll(talks);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
-			
-		// display Message that myself has been entered
-		}else{
+		}
+		if(messageList.size() < 1){
 			String enterMessage = getResources().getString(R.string.enter_square_message);
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 			AhMessage.Builder messageBuilder = new AhMessage.Builder();

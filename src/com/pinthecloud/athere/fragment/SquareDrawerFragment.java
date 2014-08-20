@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -40,15 +41,17 @@ import com.pinthecloud.athere.util.FileUtil;
 public class SquareDrawerFragment extends AhFragment {
 
 	private ProgressBar progressBar;
-	private TextView maleNumText;
-	private TextView femaleNumText;
-	private Button exitButton;
 
+	private ToggleButton chatAlarmButton;
+	private ToggleButton chupaAlarmButton;
 	private ImageView profileImage;
 	private ImageView profileGenderImage;
 	private TextView profileNickNameText;
 	private TextView profileAgeText;
 	private TextView profileCompanyNumText;
+	private TextView maleNumText;
+	private TextView femaleNumText;
+	private Button exitButton;
 
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
@@ -70,6 +73,8 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set Ui Component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
+		chatAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_alarm_button);
+		chupaAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_alarm_button);
 		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
 		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
 		profileImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
@@ -114,8 +119,41 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 		/*
-		 * Set Button
+		 * Set general buttons
 		 */
+		chatAlarmButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				boolean isChecked = chatAlarmButton.isChecked();
+				if(isChecked){
+					pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
+				}else{
+					pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, false);
+				}
+			}
+		});
+		chupaAlarmButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				boolean isChecked = chupaAlarmButton.isChecked();
+				if(isChecked){
+					pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
+				}else{
+					pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, false);
+				}
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
+
+					@Override
+					public void onCompleted(AhUser entity) {
+						progressBar.setVisibility(View.GONE);
+					}
+				});
+			}
+		});
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -172,8 +210,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void onCompleted(Boolean entity) {
-						userDBHelper.deleteAllUsers();
-						messageDBHelper.deleteAllMessages();
 						removeSquarePreference();
 					}
 				});
@@ -288,6 +324,13 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final AhUser user) {
+		/*
+		 * Set alarm toggle button
+		 */
+		chatAlarmButton.setChecked(pref.getBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY));
+		chupaAlarmButton.setChecked(user.isChupaEnable());
+
+
 		/*
 		 * Set profile image
 		 */

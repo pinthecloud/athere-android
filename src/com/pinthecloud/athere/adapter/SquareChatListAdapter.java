@@ -77,15 +77,14 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Find UI component
 			 */
 			TextView messageText = null;
-			TextView timeText = null;
 			if(this.layoutId == R.layout.row_chat_notification_list){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
-				timeText = (TextView)view.findViewById(R.id.row_chat_notification_time);
 			} else if(this.layoutId == R.layout.row_square_chat_list_send){
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
-				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
+				TextView timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
-
+				timeText.setText(message.getTimeStamp());
+				
 				/*
 				 * Set UI component only in send list
 				 */
@@ -103,8 +102,9 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				final AhUser user = userDBHelper.getUser(message.getSenderId(), true);
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_message);
-				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
-
+				TextView timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
+				timeText.setText(message.getTimeStamp());
+				
 				/*
 				 * Find UI component only in receive list
 				 */
@@ -156,7 +156,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Set Shared UI component
 			 */
 			messageText.setText(message.getContent());
-			timeText.setText(message.getTimeStamp());
 		}
 		return view;
 	}
