@@ -19,18 +19,18 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
-public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
+public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
 	private Context context;
 	private int layoutId;
-	private List<User> items;
+	private List<AhUser> items;
 
 
-	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<User> items) {
+	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<AhUser> items) {
 		super(context, layoutId, items);
 		this.context = context;
 		this.layoutId = layoutId;
@@ -47,7 +47,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
 
-		final User user = items.get(position);
+		final AhUser user = items.get(position);
 		if (user != null) {
 			/*
 			 * Find UI Component

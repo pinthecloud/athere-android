@@ -17,13 +17,13 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 
 public class ProfileDialog extends AhDialogFragment{
 
 	private PreferenceHelper pref;	
-	private User user;
+	private AhUser user;
 
 	private ImageView profileImage;
 	private ImageView genderImage;
@@ -33,7 +33,7 @@ public class ProfileDialog extends AhDialogFragment{
 	private Button sendChupaButton;
 
 
-	public ProfileDialog(User user, AhDialogCallback ahDialogCallback) {
+	public ProfileDialog(AhUser user, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
 		this.pref = AhApplication.getInstance().getPref();

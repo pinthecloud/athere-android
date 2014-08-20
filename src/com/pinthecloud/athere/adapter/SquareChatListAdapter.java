@@ -25,7 +25,7 @@ import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
@@ -101,7 +101,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Get other user and find UI component
 				 */
-				final User user = userDBHelper.getUser(message.getSenderId(), true);
+				final AhUser user = userDBHelper.getUser(message.getSenderId(), true);
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_message);
 				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
 

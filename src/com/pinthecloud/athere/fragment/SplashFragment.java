@@ -28,7 +28,7 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AppVersion;
 
-public class SplashFragment extends AhFragment implements Runnable{
+public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
 
@@ -69,8 +69,7 @@ public class SplashFragment extends AhFragment implements Runnable{
 		//////////////////////////////////////////////////////////////
 		if (!isHongkunTest()) {
 			// Start Chupa Application
-			new AhThread(this).start();
-//			_run();
+			_run();
 		}
 
 		return view;
@@ -102,7 +101,8 @@ public class SplashFragment extends AhFragment implements Runnable{
 		})
 		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				new AhThread(SplashFragment.this).start();
+//				new AhThread(SplashFragment.this).start();
+				_run();
 				return;
 			}
 		})
@@ -112,7 +112,7 @@ public class SplashFragment extends AhFragment implements Runnable{
 	}
 
 
-	public void run() {
+	public void _run() {
 		versionHelper.getServerAppVersionAsync(_thisFragment, new AhEntityCallback<AppVersion>() {
 
 			@Override

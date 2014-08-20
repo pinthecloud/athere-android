@@ -32,7 +32,7 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
@@ -145,10 +145,10 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void ENTER_SQUARE() {
-		userHelper.getUserAsync(null, userId, new AhEntityCallback<User>() {
+		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
 
 			@Override
-			public void onCompleted(User user) {
+			public void onCompleted(AhUser user) {
 //				String imagePath = ImageFileUtil.saveFile(app, user.getId(), user.getProfilePic());
 				Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic(), 0, 0);
 				String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
@@ -167,7 +167,7 @@ public class AhIntentService extends IntentService {
 
 	private void EXIT_SQUARE() {
 		userDBHelper.exitUser(userId);
-		User user = userDBHelper.getUser(userId, true);
+		AhUser user = userDBHelper.getUser(userId, true);
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
@@ -176,10 +176,10 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void UPDATE_USER_INFO() {
-		userHelper.getUserAsync(null, userId, new AhEntityCallback<User>() {
+		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
 
 			@Override
-			public void onCompleted(User user) {
+			public void onCompleted(AhUser user) {
 				userDBHelper.updateUser(user);
 				if (isRunning(app)) {
 					userHelper.triggerUserEvent(user);
@@ -248,7 +248,7 @@ public class AhIntentService extends IntentService {
 
 		PendingIntent resultPendingIntent =
 				stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-		User sentUser = userDBHelper.getUser(message.getSenderId());
+		AhUser sentUser = userDBHelper.getUser(message.getSenderId());
 		Bitmap bitmap = null;
 		if (sentUser == null){
 			Log.e("ERROR","no sentUser error");

@@ -8,7 +8,7 @@ import android.os.Parcelable;
 import com.google.gson.JsonObject;
 import com.pinthecloud.athere.AhGlobalVariable;
 
-public class User implements Parcelable{
+public class AhUser implements Parcelable{
 	@com.google.gson.annotations.SerializedName("id")
 	private String id;
 	@com.google.gson.annotations.SerializedName("nickName")
@@ -30,19 +30,19 @@ public class User implements Parcelable{
 	@com.google.gson.annotations.SerializedName("isChupaEnable")
 	private boolean isChupaEnable;
 
-	public static final Parcelable.Creator<User> CREATOR = new Creator<User>(){
-		public User createFromParcel(Parcel in){
-			return new User(in);
+	public static final Parcelable.Creator<AhUser> CREATOR = new Creator<AhUser>(){
+		public AhUser createFromParcel(Parcel in){
+			return new AhUser(in);
 		}
-		public User[] newArray(int size){
-			return new User[size];
+		public AhUser[] newArray(int size){
+			return new AhUser[size];
 		}
 	};
 
-	public User() {
+	public AhUser() {
 
 	}
-	public User(Parcel in){
+	public AhUser(Parcel in){
 		readToParcel(in);
 	}
 	public String getId() {
@@ -135,8 +135,8 @@ public class User implements Parcelable{
 		isChupaEnable = in.readInt() == 1;
 	}
 
-	public static User addUserTest(){
-		User user = new User();
+	public static AhUser addUserTest(){
+		AhUser user = new AhUser();
 		user.id = getRandomString();
 		user.nickName = getRandomString();
 		user.profilePic = getRandomString();

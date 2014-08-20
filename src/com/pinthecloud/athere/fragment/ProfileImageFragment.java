@@ -12,14 +12,14 @@ import android.widget.ImageView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class ProfileImageFragment extends AhFragment{
 
 	private PreferenceHelper pref;
-	private User user;
+	private AhUser user;
 
 	private ImageView profileImage; 
 

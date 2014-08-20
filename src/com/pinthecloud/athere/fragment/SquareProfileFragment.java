@@ -43,7 +43,7 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -409,7 +409,7 @@ public class SquareProfileFragment extends AhFragment{
 
 				// Get a user object from preference settings
 				// Enter a square with the user
-				final User user = userHelper.getMyUserInfo(false);
+				final AhUser user = userHelper.getMyUserInfo(false);
 				userHelper.enterSquareAsync(_thisFragment, user, new AhEntityCallback<String>() {
 
 					@Override
@@ -424,13 +424,13 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
-				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<User>() {
+				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<AhUser>() {
 
 					@Override
-					public void onCompleted(List<User> list, int count) {
+					public void onCompleted(List<AhUser> list, int count) {
 						// TODO Auto-generated method stub
 //						userDBHelper.addAllUsers(list);
-						for(User user : list) {
+						for(AhUser user : list) {
 							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic(), 0, 0);
 							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
 							user.setProfilePic(imagePath);
@@ -451,7 +451,7 @@ public class SquareProfileFragment extends AhFragment{
 				// Send message to server for notifying entering
 				String enterMessage = getResources().getString(R.string.enter_square_message);
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				User user = userHelper.getMyUserInfo(true);
+				AhUser user = userHelper.getMyUserInfo(true);
 				messageBuilder.setContent(user.getNickName() + " : " + enterMessage)
 				.setSender(user.getNickName())
 				.setSenderId(user.getId())

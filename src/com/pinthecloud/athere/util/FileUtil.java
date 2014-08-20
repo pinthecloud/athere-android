@@ -77,6 +77,7 @@ public class FileUtil {
 			// the OutputStream
 			fos = context.openFileOutput(name, Context.MODE_PRIVATE);
 			// Writing the bitmap to the output stream
+			if (image == null) throw new AhException("saveImage");
 			image.compress(Bitmap.CompressFormat.PNG, 100, fos);
 			fos.close();
 		} catch (FileNotFoundException e) {
@@ -144,7 +145,6 @@ public class FileUtil {
 		options.inSampleSize = BitmapUtil.calculateSize(options, reqWidth, reqHeight);
 		options.inJustDecodeBounds = false;
 		bitmap = BitmapFactory.decodeFile(context.getFilesDir()+"/"+filename, options);
-		
 		myCached.put(filename+reqWidth+reqHeight, bitmap);
 		return bitmap;
 	}

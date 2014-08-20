@@ -33,7 +33,7 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
@@ -50,7 +50,7 @@ public class ChupaChatFragment extends AhFragment {
 	private TextView otherAge;
 	private TextView otherCompanyNumber;
 
-	private User otherUser;
+	private AhUser otherUser;
 	private boolean isOtherUserExit = false;
 	private boolean isTypedMessage = false;
 

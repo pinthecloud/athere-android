@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 
 public class UserDBHelper extends SQLiteOpenHelper {
 
@@ -104,7 +104,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	 */
 
 	// Adding new contact
-	public void addUser(User user) {
+	public void addUser(AhUser user) {
 
 		if (user == null) return;
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -127,10 +127,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.close(); // Closing database connection
 	}
 
-	public void addAllUsers(List<User> list){
+	public void addAllUsers(List<AhUser> list){
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		for(User user : list){
+		for(AhUser user : list){
 			ContentValues values = new ContentValues();
 			values.put(ID, user.getId());
 			values.put(NICK_NAME, user.getNickName());
@@ -151,7 +151,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 
 	// Getting single contact
-	public User getUser(String id) {
+	public AhUser getUser(String id) {
 		//		SQLiteDatabase db = this.getReadableDatabase();
 		//
 		//		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
@@ -164,7 +164,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return this.getUser(id, false);
 	}
 
-	public User getUser(String id, boolean includingExits){
+	public AhUser getUser(String id, boolean includingExits){
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String query = ID + "=?";
@@ -213,7 +213,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return isExit;
 	}
 
-	public void addIfNotExistOrUpdate(User user){
+	public void addIfNotExistOrUpdate(AhUser user){
 		if (user == null) return;
 
 		if (this.isUserExist(user.getId()))
@@ -222,8 +222,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 			this.addUser(user);
 	}
 
-	private User convertToUser(Cursor cursor) {
-		User user = new User();
+	private AhUser convertToUser(Cursor cursor) {
+		AhUser user = new AhUser();
 		String _id = cursor.getString(0);
 		String nickName = cursor.getString(1);
 		String profilePic = cursor.getString(2);
@@ -250,7 +250,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	
 	// Getting All Contacts
-	public List<User> getAllUsers() {
+	public List<AhUser> getAllUsers() {
 		//		List<User> users = new ArrayList<User>();
 		//		// Select All Query
 		//		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
@@ -270,8 +270,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return this.getAllUsers(false);
 	}
 
-	public List<User> getAllUsers(boolean includingExits) {
-		List<User> users = new ArrayList<User>();
+	public List<AhUser> getAllUsers(boolean includingExits) {
+		List<AhUser> users = new ArrayList<AhUser>();
 		
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
@@ -296,7 +296,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 
 	// Updating single contact
-	public void updateUser(User user) {
+	public void updateUser(AhUser user) {
 
 		if (user == null) return;
 
@@ -331,7 +331,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		User user = this.getUser(id);
+		AhUser user = this.getUser(id);
 		if (user == null) return;
 
 		ContentValues values = new ContentValues();

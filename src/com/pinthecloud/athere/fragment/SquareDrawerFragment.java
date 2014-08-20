@@ -32,7 +32,7 @@ import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.FileUtil;
@@ -52,7 +52,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
-	private List<User> userList = new ArrayList<User>();
+	private List<AhUser> userList = new ArrayList<AhUser>();
 
 
 
@@ -92,7 +92,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				final User user = userList.get(position);
+				final AhUser user = userList.get(position);
 				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
 
 					@Override
@@ -144,10 +144,10 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set handler for refresh new and old user
 		 */
-		userHelper.setUserHandler(new AhEntityCallback<User>() {
+		userHelper.setUserHandler(new AhEntityCallback<AhUser>() {
 
 			@Override
-			public void onCompleted(final User user) {
+			public void onCompleted(final AhUser user) {
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -167,7 +167,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
-				User user = userHelper.getMyUserInfo(true);
+				AhUser user = userHelper.getMyUserInfo(true);
 				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
 
 					@Override
@@ -301,7 +301,7 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
+	public void setUp(View fragmentView, DrawerLayout drawerLayout, final AhUser user) {
 		/*
 		 * Set profile image
 		 */
@@ -363,18 +363,18 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	private int getMaleNum(List<User> list){
+	private int getMaleNum(List<AhUser> list){
 		int count = 0;
-		for(User user : list){
+		for(AhUser user : list){
 			if (user.isMale()) count++;
 		}
 		return count;
 	}
 
 
-	private int getFemaleNum(List<User> list){
+	private int getFemaleNum(List<AhUser> list){
 		int count = 0;
-		for(User user : list){
+		for(AhUser user : list){
 			if (!user.isMale()) count++;
 		}
 		return count;
