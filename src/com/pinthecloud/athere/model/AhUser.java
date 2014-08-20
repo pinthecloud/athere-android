@@ -183,7 +183,7 @@ public class AhUser implements Parcelable{
 
 	public JsonObject toJson() {
 		JsonObject jo = new JsonObject();
-
+		jo.addProperty("id", this.id);
 		jo.addProperty("nickName", this.nickName);
 		jo.addProperty("profilePic", this.profilePic);
 		jo.addProperty("mobileId", this.mobileId);

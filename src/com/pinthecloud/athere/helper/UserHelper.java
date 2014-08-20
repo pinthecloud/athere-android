@@ -45,6 +45,7 @@ public class UserHelper {
 	private MobileServiceClient mClient;
 
 	private final String ENTER_SQUARE = "enter_square";
+	private final String EXIT_SQUARE = "exit_square";
 	/*
 	 * GCM server key
 	 */
@@ -93,13 +94,14 @@ public class UserHelper {
 		mClient.invokeApi(ENTER_SQUARE, json, new ApiJsonOperationCallback() {
 			
 			@Override
-			public void onCompleted(JsonElement json, Exception exception,
+			public void onCompleted(JsonElement _json, Exception exception,
 					ServiceFilterResponse response) {
 				// TODO Auto-generated method stub
 				if (exception == null) {
-					String userId = JsonConverter.convertToUserId(json);
-					List<AhUser> list = JsonConverter.convertToUserList(json);
+					String userId = JsonConverter.convertToUserId(_json);
+					List<AhUser> list = JsonConverter.convertToUserList(_json);
 					callback.onCompleted(userId, list);
+					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
 				}
@@ -119,6 +121,31 @@ public class UserHelper {
 			@Override
 			public void onCompleted(Exception e, ServiceFilterResponse response) {
 				if (e == null) {
+					callback.onCompleted(true);
+					AsyncChainer.notifyNext(frag);
+				} else {
+					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
+				}
+			}
+		});
+	}
+	
+	public void newExitSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<Boolean> callback) throws AhException {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
+		user.setRegistrationId("");
+		user.setProfilePic("");
+		JsonElement json = user.toJson();
+		mClient.invokeApi(EXIT_SQUARE, json, new ApiJsonOperationCallback() {
+			
+			@Override
+			public void onCompleted(JsonElement _json, Exception exception,
+					ServiceFilterResponse response) {
+				// TODO Auto-generated method stub
+				if (exception == null) {
 					callback.onCompleted(true);
 					AsyncChainer.notifyNext(frag);
 				} else {

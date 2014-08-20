@@ -32,10 +32,7 @@ import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
@@ -192,52 +189,74 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 	private void exitSquare() {
-		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+		
+		AhUser user = userHelper.getMyUserInfo(true);
+		userHelper.newExitSquareAsync(_thisFragment, user, new AhEntityCallback<Boolean>() {
 
 			@Override
-			public void doNext(AhFragment frag) {
+			public void onCompleted(Boolean result) {
 				// TODO Auto-generated method stub
-				AhUser user = userHelper.getMyUserInfo(true);
-				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
+				removeSquarePreference();
+				
+				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+				activity.runOnUiThread(new Runnable() {
 
 					@Override
-					public void onCompleted(Boolean entity) {
-						removeSquarePreference();
-					}
-				});
-			}
-
-		}, new Chainable() {
-
-			@Override
-			public void doNext(AhFragment frag) {
-				String exitMessage = getResources().getString(R.string.exit_square_message);
-				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(nickName + " : " + exitMessage)
-				.setSender(nickName)
-				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-				.setType(AhMessage.TYPE.EXIT_SQUARE);
-				AhMessage message = messageBuilder.build();
-				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-
-					@Override
-					public void onCompleted(AhMessage entity) {
-						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
-						activity.runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								progressBar.setVisibility(View.GONE);
-								startActivity(intent);
-								activity.finish();
-							}
-						});
+					public void run() {
+						progressBar.setVisibility(View.GONE);
+						startActivity(intent);
+						activity.finish();
 					}
 				});
 			}
 		});
+		
+//		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+//
+//			@Override
+//			public void doNext(AhFragment frag) {
+//				// TODO Auto-generated method stub
+//				AhUser user = userHelper.getMyUserInfo(true);
+//				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
+//
+//					@Override
+//					public void onCompleted(Boolean entity) {
+//						removeSquarePreference();
+//					}
+//				});
+//			}
+//
+//		}, new Chainable() {
+//
+//			@Override
+//			public void doNext(AhFragment frag) {
+//				String exitMessage = getResources().getString(R.string.exit_square_message);
+//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+//				messageBuilder.setContent(nickName + " : " + exitMessage)
+//				.setSender(nickName)
+//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+//				.setType(AhMessage.TYPE.EXIT_SQUARE);
+//				AhMessage message = messageBuilder.build();
+//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+//
+//					@Override
+//					public void onCompleted(AhMessage entity) {
+//						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+//						activity.runOnUiThread(new Runnable() {
+//
+//							@Override
+//							public void run() {
+//								progressBar.setVisibility(View.GONE);
+//								startActivity(intent);
+//								activity.finish();
+//							}
+//						});
+//					}
+//				});
+//			}
+//		});
 
 
 		/**

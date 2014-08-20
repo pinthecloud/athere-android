@@ -19,6 +19,7 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -93,34 +94,15 @@ public class HongkunTestFragment extends AhFragment {
 						pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
 						pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
 
-						final AhUser user = userHelper.getMyUserInfo(false);
-						Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
-                                R.drawable.chupa);
-						String profilePic = BitmapUtil.convertToString(bm);
-						user.setProfilePic(profilePic);
-						user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
-						user.setAge(20);
-						user.setMale(true);
-						// Get a user object from preference settings
-						// Enter a square with the user
-						
-						JsonObject jo = user.toJson();
-
-						Gson g = new Gson();
-						JsonElement json = g.fromJson(jo, JsonElement.class);
-						
-						
-						mClient.invokeApi("enter_square", json, new ApiJsonOperationCallback() {
-							
-							@Override
-							public void onCompleted(JsonElement arg0, Exception arg1,
-									ServiceFilterResponse arg2) {
-								// TODO Auto-generated method stub
-								
-								Log(_thisFragment, JsonConverter.convertToUserList(arg0));
-								Log(_thisFragment, JsonConverter.convertToUserId(arg0));
-							}
-						});
+						String userId = "D1D25CEC-32C8-4423-A14F-0F513B1B198E";
+//						userHelper.newExitSquareAsync(_thisFragment, new AhEntityCallback<Boolean>() {
+//							
+//							@Override
+//							public void onCompleted(Boolean entity) {
+//								// TODO Auto-generated method stub
+//								Log(_thisFragment,"OK!!");
+//							}
+//						});
 
 					} else if (b.getId() == btnArr[1].getId()) {
 					} else if (b.getId() == btnArr[2].getId()) {
@@ -139,7 +121,7 @@ public class HongkunTestFragment extends AhFragment {
 
 	@Override
 	public void handleException(AhException ex) {
-		Log(_thisFragment, "in handle Hongkunyoo");
+		Log(_thisFragment, "in handle Hongkunyoo" + ex);
 	}
 
 

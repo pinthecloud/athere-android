@@ -178,9 +178,13 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_NAME, null, query,
 				args, null, null, null, null);
 		if (cursor != null)
-			if(cursor.moveToFirst())
-				return convertToUser(cursor);
-
+			if(cursor.moveToFirst()){
+				AhUser u = convertToUser(cursor);
+				db.close();
+				return u;
+			}
+		
+		db.close();
 		return null;
 	}
 
@@ -191,7 +195,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) return cursor.moveToFirst();
-
+		db.close();
 		return isExist;
 	}
 
@@ -204,12 +208,14 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		if (cursor != null) {
 			cursor.moveToFirst();
 			if (cursor.getInt(0) == 1){
+				db.close();
 				return true;
 			} else {
+				db.close();
 				return false;
 			}
 		}
-
+		db.close();
 		return isExit;
 	}
 
@@ -290,7 +296,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				users.add(convertToUser(cursor));
 			} while (cursor.moveToNext());
 		}
-
+		db.close();
 		// return contact list
 		return users;
 	}
