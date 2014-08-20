@@ -15,11 +15,11 @@
         android:layout_height="@dimen/basic_profile_text_height"
         android:layout_marginBottom="@dimen/square_code_dialog_code_enter_button_margin"
         android:ems="10"
-        android:gravity="center|bottom"
+        android:gravity="center"
         android:hint="@string/code"
         android:inputType="text"
         android:maxLength="10"
-        android:textSize="@dimen/font_x_large" >
+        android:textSize="@dimen/font_large" >
     </EditText>
 
     <ImageButton
