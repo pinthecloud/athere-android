@@ -152,8 +152,10 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
-
-		return convertToMessage(cursor);
+		
+		AhMessage message = convertToMessage(cursor);
+		db.close();
+		return message;
 	}
 
 	private AhMessage convertToMessage(Cursor cursor) {
@@ -199,7 +201,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				messages.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-
+		db.close();
 		// return contact list
 		return messages;
 	}
@@ -221,6 +223,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				messages.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
+		db.close();
 		// return contact list
 		return messages;
 	}
@@ -252,6 +255,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				messages.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
+		db.close();
 		// return contact list
 		return messages;
 	}
@@ -305,8 +309,10 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
-
-		return !cursor.moveToFirst();
+		
+		boolean isEmptyFlag = !cursor.moveToFirst();
+		db.close();
+		return isEmptyFlag;
 	}
 
 	public boolean isEmpty(String type) {
@@ -315,7 +321,9 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
 
-		return !cursor.moveToFirst();
+		boolean isEmptyFlag = !cursor.moveToFirst();
+		db.close();
+		return isEmptyFlag;
 	}
 
 	public boolean isEmpty(String... types){
@@ -352,6 +360,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			} while (cursor.moveToNext());
 		}
 		this.deleteAllMessages();
+		db.close();
 		// return contact list
 		return messages;
 	}
@@ -374,6 +383,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			} while (cursor.moveToNext());
 		}
 		this.deleteAllMessages(type);
+		db.close();
 		// return message list
 		return messages;
 	}
@@ -444,7 +454,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				list.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-
+		db.close();
 		return list;
 	}
 
@@ -466,7 +476,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				list.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-
+		db.close();
 		return list;
 	}
 	
@@ -600,8 +610,11 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 			// looping through all rows and adding to list
 			if (cursor.moveToFirst()) {
-				return cursor.getInt(2);
+				int ret = cursor.getInt(2);
+				db.close();
+				return ret;
 			}
+			db.close();
 			return 0;
 		}
 		
@@ -616,6 +629,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 					total += cursor.getInt(2);
 				} while(cursor.moveToNext());
 			}
+			db.close();
 			return total;
 		}
 		

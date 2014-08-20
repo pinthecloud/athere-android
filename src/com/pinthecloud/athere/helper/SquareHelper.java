@@ -15,7 +15,6 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.interfaces.AhCarrier;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
@@ -161,111 +160,111 @@ public class SquareHelper {
 	*/
 	
 	
-	public List<Square> _getSquareListSync(final AhFragment frag, double latitude, double longitude) throws AhException {
-		
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return null;
-		}
-		
-		final AhCarrier<List<Square>> carrier = new AhCarrier<List<Square>>();
-		
-		JsonObject jo = new JsonObject();
-		jo.addProperty(currentLatitude, latitude);
-		jo.addProperty(currentLongitude, longitude);
-
-		Gson g = new Gson();
-		JsonElement json = g.fromJson(jo, JsonElement.class);
-
-		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
-
-			@Override
-			public void onCompleted(JsonElement json, Exception exception,
-					ServiceFilterResponse response) {
-				if ( exception == null) {
-					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
-					if (list == null) {
-						ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.PARSING_ERROR));
-						return;
-					}
-					carrier.load(list);
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.SERVER_ERROR));
-				}
-			}
-		});
-
-		synchronized (lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		return carrier.getItem();
-	}
-
-	public Square _createSquareSync(AhFragment frag, String name, double latitude, double longitude) throws AhException {
-		
-		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
-
-		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
-			throw new AhException(frag, "createSquareSync", AhException.TYPE.GCM_REGISTRATION_FAIL);
-		}
-		Square square = new Square();
-
-		square.setName(name);
-		square.setLatitude(latitude);
-		square.setLongitude(longitude);
-		square.setWhoMade(whoMade);
-		
-		int maleNum = 0;
-		int femaleNum = 0;
-		
-		if(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY)) maleNum++;
-		else femaleNum++;
-		
-		square.setMaleNum(maleNum);
-		square.setFemaleNum(femaleNum);
-
-		return this._createSquareSync(frag, square);
-	}
-
-
-	public Square _createSquareSync(final AhFragment frag, Square square) throws AhException {
-		
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return null;
-		}
-		final AhCarrier<Square> carrier = new AhCarrier<Square>();
-
-		squareTable.insert(square, new TableOperationCallback<Square>() {
-
-			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
-
-				if (exception == null) {
-					carrier.load(entity);
-					synchronized (lock) {
-						lock.notify();
-					}
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.SERVER_ERROR));
-				}
-			}
-		});
-
-		synchronized (lock) {
-			try {
-				lock.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return carrier.getItem();
-	}
+//	public List<Square> _getSquareListSync(final AhFragment frag, double latitude, double longitude) throws AhException {
+//		
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return null;
+//		}
+//		
+//		final AhCarrier<List<Square>> carrier = new AhCarrier<List<Square>>();
+//		
+//		JsonObject jo = new JsonObject();
+//		jo.addProperty(currentLatitude, latitude);
+//		jo.addProperty(currentLongitude, longitude);
+//
+//		Gson g = new Gson();
+//		JsonElement json = g.fromJson(jo, JsonElement.class);
+//
+//		mClient.invokeApi(GET_NEAR_SQUARE, json, new ApiJsonOperationCallback() {
+//
+//			@Override
+//			public void onCompleted(JsonElement json, Exception exception,
+//					ServiceFilterResponse response) {
+//				if ( exception == null) {
+//					List<Square> list = JsonConverter.convertToSquareList(json.getAsJsonArray());
+//					if (list == null) {
+//						ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.PARSING_ERROR));
+//						return;
+//					}
+//					carrier.load(list);
+//					synchronized (lock) {
+//						lock.notify();
+//					}
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "getSquareListSync", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//
+//		synchronized (lock) {
+//			try {
+//				lock.wait();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		return carrier.getItem();
+//	}
+//
+//	public Square _createSquareSync(AhFragment frag, String name, double latitude, double longitude) throws AhException {
+//		
+//		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
+//
+//		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
+//			throw new AhException(frag, "createSquareSync", AhException.TYPE.GCM_REGISTRATION_FAIL);
+//		}
+//		Square square = new Square();
+//
+//		square.setName(name);
+//		square.setLatitude(latitude);
+//		square.setLongitude(longitude);
+//		square.setWhoMade(whoMade);
+//		
+//		int maleNum = 0;
+//		int femaleNum = 0;
+//		
+//		if(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY)) maleNum++;
+//		else femaleNum++;
+//		
+//		square.setMaleNum(maleNum);
+//		square.setFemaleNum(femaleNum);
+//
+//		return this._createSquareSync(frag, square);
+//	}
+//
+//
+//	public Square _createSquareSync(final AhFragment frag, Square square) throws AhException {
+//		
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return null;
+//		}
+//		final AhCarrier<Square> carrier = new AhCarrier<Square>();
+//
+//		squareTable.insert(square, new TableOperationCallback<Square>() {
+//
+//			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
+//
+//				if (exception == null) {
+//					carrier.load(entity);
+//					synchronized (lock) {
+//						lock.notify();
+//					}
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "createSquareSync", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//
+//		synchronized (lock) {
+//			try {
+//				lock.wait();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		return carrier.getItem();
+//	}
 }
