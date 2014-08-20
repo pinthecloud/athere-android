@@ -283,6 +283,9 @@ public class ChupaChatFragment extends AhFragment {
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 
+		// Clear badge numbers displayed on chupa list
+		messageDBHelper.clearBadgeNum(chupaCommunId);
+		
 		/*
 		 * If other user exit, add exit message
 		 */
@@ -304,9 +307,6 @@ public class ChupaChatFragment extends AhFragment {
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 		}
-
-		// Clear badge numbers displayed on chupa list
-		messageDBHelper.clearBadgeNum(chupaCommunId);
 	}
 
 
