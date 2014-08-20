@@ -108,7 +108,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Find UI component only in receive list
 				 */
-				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nickname);
+				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nick_name);
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
@@ -123,9 +123,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
-//				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+				//				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 				Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
-//				profileImage.setImageBitmap(null);
 				profileImage.setImageBitmap(profileBitmap);
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {

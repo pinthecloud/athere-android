@@ -126,19 +126,14 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, this, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
-		
 		messageListView.setOnScrollListener(new OnScrollListener() {
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				// TODO Auto-generated method stub
 				if (firstVisibleItem == 1) {
 					// TODO : Insert messageListView.add(0, messages);
-					
 				}
 			}
-
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// TODO Auto-generated method stub
 			}
 		});
 
@@ -189,6 +184,20 @@ public class SquareChatFragment extends AhFragment{
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();
 			messageList.addAll(talks);
+			messageListAdapter.notifyDataSetChanged();
+			messageListView.setSelection(messageListView.getCount() - 1);
+		}else{
+			String enterMessage = getResources().getString(R.string.enter_square_message);
+			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+			AhMessage.Builder messageBuilder = new AhMessage.Builder();
+			messageBuilder.setContent(nickName + " " + enterMessage)
+			.setSender(nickName)
+			.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+			.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+			.setType(AhMessage.TYPE.ENTER_SQUARE);
+			AhMessage message = messageBuilder.build();
+
+			messageList.add(message);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 		}

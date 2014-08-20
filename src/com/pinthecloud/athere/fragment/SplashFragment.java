@@ -9,6 +9,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.AhThread;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
 import com.pinthecloud.athere.activity.HongkunTestAcitivity;
@@ -31,6 +31,7 @@ import com.pinthecloud.athere.model.AppVersion;
 public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,12 +65,50 @@ public class SplashFragment extends AhFragment {
 		AhGlobalVariable.APP_NAME = getResources().getString(R.string.app_name);
 
 
-		//////////////////////////////////////////////////////////////
+		/*
+		 * If time is up, remove local preferences.
+		 */
+		if(pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY)){
+			Time time = new Time();
+			time.setToNow();
+			String currentTime = time.format("%Y:%m:%d:%H");
+			String[] currentArray = currentTime.split(":");
+			int currentYear = Integer.parseInt(currentArray[0]);
+			int currentMonth = Integer.parseInt(currentArray[1]);
+			int currentDay = Integer.parseInt(currentArray[2]);
+			int currentHour = Integer.parseInt(currentArray[3]);
+
+			String lastLoggedInSquareTime = pref.getString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+			String[] lastArray = lastLoggedInSquareTime.split(":");
+			int lastYear = Integer.parseInt(lastArray[0]);
+			int lastMonth = Integer.parseInt(lastArray[1]);
+			int lastDay = Integer.parseInt(lastArray[2]);
+			int lastHour = Integer.parseInt(lastArray[3]);
+
+			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
+				userDBHelper.deleteAllUsers();
+				messageDBHelper.deleteAllMessages();
+				removeSquarePreference();
+			} else if(currentDay > lastDay && lastHour < 12){
+				userDBHelper.deleteAllUsers();
+				messageDBHelper.deleteAllMessages();
+				removeSquarePreference();
+			} else if(currentDay > lastDay && currentHour >= 12){
+				userDBHelper.deleteAllUsers();
+				messageDBHelper.deleteAllMessages();
+				removeSquarePreference();
+			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
+				userDBHelper.deleteAllUsers();
+				messageDBHelper.deleteAllMessages();
+				removeSquarePreference();
+			}
+		}
+
+
 		// Erase Later (Exception for hongkun)
-		//////////////////////////////////////////////////////////////
 		if (!isHongkunTest()) {
 			// Start Chupa Application
-			_run();
+			runChupa();
 		}
 
 		return view;
@@ -86,9 +125,6 @@ public class SplashFragment extends AhFragment {
 				|| myGal3.equals(httpAgent)))	// Galaxy 3
 			return false;
 
-		boolean val = true;
-//		if(val) return false;
-
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
 		.setMessage("Want to Go to HongkunTest?")
@@ -101,8 +137,7 @@ public class SplashFragment extends AhFragment {
 		})
 		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-//				new AhThread(SplashFragment.this).start();
-				_run();
+				runChupa();
 				return;
 			}
 		})
@@ -112,12 +147,11 @@ public class SplashFragment extends AhFragment {
 	}
 
 
-	public void _run() {
+	public void runChupa() {
 		versionHelper.getServerAppVersionAsync(_thisFragment, new AhEntityCallback<AppVersion>() {
 
 			@Override
 			public void onCompleted(final AppVersion serverVer) {
-				// TODO Auto-generated method stub
 				double clientVer;
 				try {
 					clientVer = versionHelper.getClientAppVersion();
@@ -173,19 +207,5 @@ public class SplashFragment extends AhFragment {
 			intent.setClass(context, SquareActivity.class);
 		}
 		startActivity(intent);
-	}
-
-
-	@Override
-	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SplashFragment onStop");
-		super.onStop();
-	}
-
-
-	@Override
-	public void onDestroy() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SplashFragment onDestroy");
-		super.onDestroy();
 	}
 }

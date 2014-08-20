@@ -309,14 +309,7 @@ public class UserHelper {
 	}
 
 	public AhUser getMyUserInfo(boolean hasId) {
-		Bitmap pictureBitmap = null;
-		pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-//		try {
-//			pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-//		} catch (FileNotFoundException e) {
-//			pictureBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-//			Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
-//		}
+		Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
 		String profilePic = BitmapUtil.convertToString(pictureBitmap);
 
 		AhUser user = new AhUser();
@@ -343,7 +336,6 @@ public class UserHelper {
 
 			@Override
 			protected String doInBackground(GoogleCloudMessaging... params) {
-				// TODO Auto-generated method stub
 				GoogleCloudMessaging gcm = params[0];
 				try {
 					return gcm.register(GCM_SENDER_ID);
@@ -352,17 +344,15 @@ public class UserHelper {
 					return null;
 				}
 			}
-			
+
 			@Override
 			protected void onPostExecute(String result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
-				
 				callback.onCompleted(result);
 				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
-		
+
 	}
 
 	public boolean _unRegisterGcmSync(final AhFragment frag) {
@@ -388,7 +378,6 @@ public class UserHelper {
 	//	private final String USER_RECEIVED = "USER_RECEIVED";
 		private int countUserHandler = 0;
 	public void setUserHandler(AhEntityCallback<AhUser> callback){
-//				map.put(USER_RECEIVED, callback);
 		if (countUserHandler == 0) {
 			_callback = callback;
 			countUserHandler++;

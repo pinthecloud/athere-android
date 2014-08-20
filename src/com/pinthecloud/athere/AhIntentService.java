@@ -46,13 +46,15 @@ public class AhIntentService extends IntentService {
 	private PreferenceHelper pref;
 	private Context _this;
 
-	AhMessage message = null;
-	String userId = null; 
+	private AhMessage message = null;
+	private String userId = null; 
 
+	
 	public AhIntentService() {
 		this("AhIntentService");
 	}
 
+	
 	public AhIntentService(String name) {
 		super(name);
 		app = AhApplication.getInstance();
@@ -64,9 +66,9 @@ public class AhIntentService extends IntentService {
 		_this = this;
 	}
 
+	
 	@Override
 	protected void onHandleIntent(Intent intent) {
-
 		/*
 		 * Parsing the data from server
 		 */
@@ -74,6 +76,7 @@ public class AhIntentService extends IntentService {
 		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID))
 			return;
 
+		
 		try {
 			message = parseMessageIntent(intent);
 			userId = parseUserIdIntent(intent);
@@ -83,6 +86,7 @@ public class AhIntentService extends IntentService {
 		}
 		Log.e(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
 
+		
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {
 
@@ -150,7 +154,7 @@ public class AhIntentService extends IntentService {
 			@Override
 			public void onCompleted(AhUser user) {
 //				String imagePath = ImageFileUtil.saveFile(app, user.getId(), user.getProfilePic());
-				Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic(), 0, 0);
+				Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
 				String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
 				user.setProfilePic(imagePath);
 				userDBHelper.addUser(user);

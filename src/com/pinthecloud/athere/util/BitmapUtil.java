@@ -207,15 +207,11 @@ public class BitmapUtil {
 	}
 
 
-	public static Bitmap convertToBitmap(String str, int reqWidth, int reqHeight){
+	public static Bitmap convertToBitmap(String str){
 		Bitmap bitmap = null;
 		try{
 			byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
-			if(reqWidth == 0 || reqHeight == 0){
-				bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-			}else{
-				bitmap = decodeInSampleSize(encodeByte, reqWidth, reqHeight);	
-			}
+			bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 		}catch(Exception e){
 			Log.d(AhGlobalVariable.LOG_TAG, "Error of BitmapUtil : " + e.getMessage());
 		}

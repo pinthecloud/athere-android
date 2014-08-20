@@ -73,7 +73,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			}
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 			profileImage.setImageBitmap(profileBitmap);
 

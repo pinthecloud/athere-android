@@ -84,7 +84,7 @@
         android:id="@+id/chupa_chat_frag_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/inputbar_background"
+        android:background="@color/chupa_inputbar_background"
         android:orientation="horizontal" >
 
         <EditText

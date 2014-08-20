@@ -6,7 +6,8 @@
 
 <!-- Hwajung -->
     <color name="dark_gray">#636363</color>
-    <color name="inputbar_background">#80f4f4f4</color>
+    <color name="chupa_inputbar_background">#80f4f4f4</color>
+    <color name="chat_inputbar_background">#80ffffff</color>
 <!-- Seungmin -->
     <color name="gray_background">#eaeaea</color>
     <color name="gray_list_selector">#f4f4f4</color>
