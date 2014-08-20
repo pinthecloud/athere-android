@@ -2,20 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/row_chat_notification_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_chat_inout_msg"
-        android:textSize="@dimen/font_small" />
+    android:gravity="center" >
 
     <TextView
         android:id="@+id/row_chat_notification_text"
+        android:background="@drawable/bg_chat_inout_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/font_small" />
+        android:textSize="@dimen/font_small"
+        android:textColor="@color/gray_tab_text_unselected" />
 
 </LinearLayout>
