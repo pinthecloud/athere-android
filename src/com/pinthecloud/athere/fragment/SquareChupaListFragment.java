@@ -21,7 +21,7 @@ import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 
 public class SquareChupaListFragment extends AhFragment{
 
@@ -121,7 +121,7 @@ public class SquareChupaListFragment extends AhFragment{
 			} else {
 				throw new AhException("No User in Sender or Receive");
 			}
-			User user = userDBHelper.getUser(userId);
+			AhUser user = userDBHelper.getUser(userId);
 
 			// if there is No such User
 			if (user == null) {

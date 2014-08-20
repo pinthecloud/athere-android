@@ -1,13 +1,11 @@
 package com.pinthecloud.athere.fragment;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -22,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -34,7 +33,7 @@ import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.FileUtil;
@@ -42,19 +41,21 @@ import com.pinthecloud.athere.util.FileUtil;
 public class SquareDrawerFragment extends AhFragment {
 
 	private ProgressBar progressBar;
-	private TextView maleNumText;
-	private TextView femaleNumText;
-	private Button exitButton;
 
-	private ImageView profileCircleImage;
+	private ToggleButton chatAlarmButton;
+	private ToggleButton chupaAlarmButton;
+	private ImageView profileImage;
 	private ImageView profileGenderImage;
 	private TextView profileNickNameText;
 	private TextView profileAgeText;
 	private TextView profileCompanyNumText;
+	private TextView maleNumText;
+	private TextView femaleNumText;
+	private Button exitButton;
 
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
-	private List<User> userList = new ArrayList<User>();
+	private List<AhUser> userList = new ArrayList<AhUser>();
 
 
 
@@ -72,9 +73,11 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set Ui Component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
+		chatAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_alarm_button);
+		chupaAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_alarm_button);
 		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
 		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
-		profileCircleImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
+		profileImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
 		profileGenderImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_gender);
 		profileNickNameText= (TextView) view.findViewById(R.id.square_drawer_frag_profile_nick_name);
 		profileAgeText = (TextView) view.findViewById(R.id.square_drawer_frag_profile_age);
@@ -94,7 +97,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				final User user = userList.get(position);
+				final AhUser user = userList.get(position);
 				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
 
 					@Override
@@ -116,8 +119,37 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 		/*
-		 * Set Button
+		 * Set general buttons
 		 */
+		chatAlarmButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				boolean isChecked = chatAlarmButton.isChecked();
+				if(isChecked){
+					pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
+				}else{
+					pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, false);
+				}
+			}
+		});
+		chupaAlarmButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				boolean isChecked = chupaAlarmButton.isChecked();
+				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
+
+					@Override
+					public void onCompleted(AhUser entity) {
+						progressBar.setVisibility(View.GONE);
+					}
+				});
+			}
+		});
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -130,9 +162,9 @@ public class SquareDrawerFragment extends AhFragment {
 					@Override
 					public void doPositiveThing(Bundle bundle) {
 						progressBar.setVisibility(View.VISIBLE);
+						progressBar.bringToFront();
 						exitSquare();
 					}
-
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						// Do nothing
@@ -146,10 +178,10 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set handler for refresh new and old user
 		 */
-		userHelper.setUserHandler(new AhEntityCallback<User>() {
+		userHelper.setUserHandler(new AhEntityCallback<AhUser>() {
 
 			@Override
-			public void onCompleted(final User user) {
+			public void onCompleted(final AhUser user) {
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -169,14 +201,12 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
-				User user = userHelper.getMyUserInfo(true);
+				AhUser user = userHelper.getMyUserInfo(true);
 				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
 
 					@Override
 					public void onCompleted(Boolean entity) {
-						// TODO Auto-generated method stub
-						userDBHelper.deleteAllUsers();
-						messageDBHelper.deleteAllMessages();
+						removeSquarePreference();
 					}
 				});
 			}
@@ -198,14 +228,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						// TODO Auto-generated method stub
-						pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-						pref.removePref(AhGlobalVariable.USER_ID_KEY);
-						pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
 						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 						activity.runOnUiThread(new Runnable() {
 
@@ -280,13 +302,8 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set profile images 
 		 */
 		Bitmap profileBitmap = null;
-		try {
-			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-		} catch (FileNotFoundException e) {
-			profileBitmap = BitmapFactory.decodeResource(app.getResources(), R.drawable.splash);
-			Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareDrawerFragmet : " + e.getMessage());
-		}
-		profileCircleImage.setImageBitmap(profileBitmap);
+		profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+		profileImage.setImageBitmap(profileBitmap);
 	}
 
 
@@ -297,16 +314,23 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Release image resources
 		 */
-		profileCircleImage.setImageBitmap(null);
+		profileImage.setImageBitmap(null);
 		super.onStop();
 	}
 
 
-	public void setUp(View fragmentView, DrawerLayout drawerLayout, final User user) {
+	public void setUp(View fragmentView, DrawerLayout drawerLayout, final AhUser user) {
+		/*
+		 * Set alarm toggle button
+		 */
+		chatAlarmButton.setChecked(pref.getBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY));
+		chupaAlarmButton.setChecked(user.isChupaEnable());
+
+
 		/*
 		 * Set profile image
 		 */
-		profileCircleImage.setOnClickListener(new OnClickListener() {
+		profileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -364,18 +388,18 @@ public class SquareDrawerFragment extends AhFragment {
 	}
 
 
-	private int getMaleNum(List<User> list){
+	private int getMaleNum(List<AhUser> list){
 		int count = 0;
-		for(User user : list){
+		for(AhUser user : list){
 			if (user.isMale()) count++;
 		}
 		return count;
 	}
 
 
-	private int getFemaleNum(List<User> list){
+	private int getFemaleNum(List<AhUser> list){
 		int count = 0;
-		for(User user : list){
+		for(AhUser user : list){
 			if (!user.isMale()) count++;
 		}
 		return count;

@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
-
+import com.pinthecloud.athere.util.FileUtil;
 
 /**
  * 
@@ -46,7 +42,8 @@ public class HongkunTestFragment extends AhFragment {
 		mClient = app.getmClient();
 	}
 
-	public View _onAhCreateView(LayoutInflater inflater, ViewGroup container,
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
 
@@ -78,9 +75,21 @@ public class HongkunTestFragment extends AhFragment {
 				public void onClick(View v) {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
-						throw new AhException("Test Exception");
+						
+						Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+                                R.drawable.chupa);
+						
+						String str = FileUtil.saveImageToInternalStorage(context, bitmap, "hong");
+						Log(_thisFragment, "여기 시발 : "+str);
 					} else if (b.getId() == btnArr[1].getId()) {
+//						Bitmap bit = ImageFileUtil.readFile(context, "plz");
+						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong");
+						img.setImageBitmap(bit);
 					} else if (b.getId() == btnArr[2].getId()) {
+						int w = img.getWidth();
+						int h = img.getHeight();
+						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong", w, h);
+						img.setImageBitmap(bit);
 					} else if (b.getId() == btnArr[3].getId()) {
 					} else if (b.getId() == btnArr[4].getId()) {
 					} else if (b.getId() == btnArr[5].getId()) {
@@ -89,46 +98,6 @@ public class HongkunTestFragment extends AhFragment {
 				}
 			});
 		}
-
-		return view;
-	}
-
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_hongkun_test, container, false);
-
-		myBtn = (Button)view.findViewById(R.id.drawer_user_chupa_btn);
-		myBtn.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				//				final AhMessage message = new AhMessage.Builder()
-				//						.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
-				//						.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-				//						.setReceiverId("A9320D41-D348-4A11-A6ED-41174EF6FB11")
-				//						.setType(AhMessage.TYPE.TALK)
-				//						.build();
-
-				JsonObject jo = new JsonObject();
-				jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
-
-				Gson g = new Gson();
-				JsonElement json = g.fromJson(jo, JsonElement.class);
-				String FORCED_LOGOUT = "forced_logout";
-
-				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
-
-					@Override
-					public void onCompleted(JsonElement arg0, Exception arg1,
-							ServiceFilterResponse arg2) {
-						// TODO Auto-generated method stub
-						Log(_thisFragment,"arg0 : " + arg0, arg1);
-					}
-				});
-			}
-		});
 
 		return view;
 	}

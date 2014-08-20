@@ -224,6 +224,57 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// return contact list
 		return messages;
 	}
+	
+	public List<AhMessage> getAllMessagesByFifties(int offset, String type) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		
+		String countQuery = "SELECT COUNT(*) FROM "+TABLE_NAME+ " WHERE " + TYPE + " = ?";
+		Cursor countCursor = db.rawQuery(countQuery, new String[] { type });
+		int total = 0;
+		if (countCursor!= null){
+			if(countCursor.moveToFirst()){
+				total = countCursor.getInt(0);
+			}
+		}
+		
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + TYPE
+				+ " = ?" + " ORDER BY " + ID + " LIMIT 10 OFFSET "
+				+ (total - ((offset+1) * 10));
+		
+		Cursor cursor = db.rawQuery(selectQuery, new String[] { type });
+
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+			do {
+				messages.add(convertToMessage(cursor));
+			} while (cursor.moveToNext());
+		}
+		// return contact list
+		return messages;
+	}
+	
+	public List<AhMessage> getAllMessagesByFifties(int offset, String... types) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		for(String type : types){
+			messages.addAll(this.getAllMessagesByFifties(offset, type));
+		}
+		sortMessages(messages);
+		return messages;
+	}
+	
+	public List<AhMessage> getAllMessagesByFifties(int offset, AhMessage.TYPE... types) {
+		List<AhMessage> messages = new ArrayList<AhMessage>();
+
+		for(AhMessage.TYPE type : types){
+			messages.addAll(this.getAllMessagesByFifties(offset, type.toString()));
+		}
+		sortMessages(messages);
+		return messages;
+	}
 
 	public List<AhMessage> getAllMessages(String... types) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
@@ -425,7 +476,10 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 			@Override
 			public int compare(AhMessage lhs, AhMessage rhs) {
-				return lhs.getId().compareTo(rhs.getId());
+				int left = Integer.valueOf(lhs.getId());
+				int right = Integer.valueOf(rhs.getId());
+				if (left == right) return 0;
+				return left > right ? 1: -1;
 			}
 		});
 	}

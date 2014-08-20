@@ -7,7 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 
 public class JsonConverter {
 
@@ -48,8 +48,8 @@ public class JsonConverter {
 		return list;
 	}
 
-	public static List<User> convertToUserList(JsonElement json){
-		List<User> list = new ArrayList<User>();
+	public static List<AhUser> convertToUserList(JsonElement json){
+		List<AhUser> list = new ArrayList<AhUser>();
 
 		JsonObject userListJson = json.getAsJsonObject();
 		JsonElement userList = userListJson.get("userList");
@@ -57,7 +57,7 @@ public class JsonConverter {
 		for(int i = 0 ; i < jsonArray.size() ; i++){
 			JsonElement jsonElement = jsonArray.get(i);
 			JsonObject jo = jsonElement.getAsJsonObject();
-			User user = new User();
+			AhUser user = new AhUser();
 			user.setId(jo.get("id").getAsString());
 			user.setNickName(jo.get("nickName").getAsString());
 			user.setProfilePic(jo.get("profilePic").getAsString());

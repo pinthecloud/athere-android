@@ -108,7 +108,6 @@ public class VersionHelper {
 		String versionName = app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName;
 		return Double.parseDouble(versionName);
 	}
-
 }
 
 // get Version from server;

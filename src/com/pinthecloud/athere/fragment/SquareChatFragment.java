@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -31,6 +33,7 @@ public class SquareChatFragment extends AhFragment{
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
 
 	private String squareId;
+	private int offset = 0;
 
 
 	public SquareChatFragment(String squareId) {
@@ -124,6 +127,22 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, this, R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
+		messageListView.setOnScrollListener(new OnScrollListener() {
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				if (firstVisibleItem == 1) {
+					// TODO : Insert messageListView.add(0, messages);
+//					offset++;
+//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+////					messageList.clear();
+//					messageList.addAll(0, talks);
+//					messageListAdapter.notifyDataSetChanged();
+//					messageListView.setSelection(messageListView.getCount() - 1);
+				}
+			}
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+			}
+		});
 
 		/**
 		 * See 
@@ -168,10 +187,27 @@ public class SquareChatFragment extends AhFragment{
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
 	private void refreshView(){
+		// ENTER, EXIT, TALK
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
+			//final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();
 			messageList.addAll(talks);
+			messageListAdapter.notifyDataSetChanged();
+			messageListView.setSelection(messageListView.getCount() - 1);
+		}
+		if(messageList.size() < 1){
+			String enterMessage = getResources().getString(R.string.enter_square_message);
+			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+			AhMessage.Builder messageBuilder = new AhMessage.Builder();
+			messageBuilder.setContent(nickName + " " + enterMessage)
+			.setSender(nickName)
+			.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+			.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+			.setType(AhMessage.TYPE.ENTER_SQUARE);
+			AhMessage message = messageBuilder.build();
+
+			messageList.add(message);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 		}

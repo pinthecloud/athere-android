@@ -641,7 +641,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		};
 	}
 
-	public View getTabBadge(int position){
+	public View getTabBadgeView(int position){
 		RelativeLayout layout = (RelativeLayout)tabsContainer.getChildAt(position);
 		return layout.getChildAt(1);
 	}

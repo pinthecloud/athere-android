@@ -17,13 +17,14 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.model.User;
-import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class ProfileDialog extends AhDialogFragment{
 
-	private PreferenceHelper pref;	
-	private User user;
+	private AhApplication app;
+	private PreferenceHelper pref;
+	private AhUser user;
 
 	private ImageView profileImage;
 	private ImageView genderImage;
@@ -33,10 +34,11 @@ public class ProfileDialog extends AhDialogFragment{
 	private Button sendChupaButton;
 
 
-	public ProfileDialog(User user, AhDialogCallback ahDialogCallback) {
+	public ProfileDialog(AhUser user, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
-		this.pref = AhApplication.getInstance().getPref();
+		this.app = AhApplication.getInstance();
+		this.pref = app.getPref();
 		this.user = user;
 		setStyle(STYLE_NO_TITLE, 0);
 	}
@@ -63,8 +65,10 @@ public class ProfileDialog extends AhDialogFragment{
 		 */
 		Resources resources = getResources();
 		if(user.isMale()){
+			genderImage.setImageResource(R.drawable.profile_gender_m);
 			companyNumberText.setTextColor(resources.getColor(R.color.blue));
 		}else{
+			genderImage.setImageResource(R.drawable.profile_gender_w);
 			companyNumberText.setTextColor(resources.getColor(R.color.dark_red));
 		}
 		nickNameText.setText(user.getNickName());
@@ -80,7 +84,6 @@ public class ProfileDialog extends AhDialogFragment{
 			@Override
 			public void onClick(View v) {
 				ahDialogCallback.doNegativeThing(null);
-				dismiss();
 			}
 		});
 
@@ -108,15 +111,21 @@ public class ProfileDialog extends AhDialogFragment{
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "ProfileDialog onStart");
-		
+
 		/*
 		 * Set image
 		 */
-		int w = profileImage.getWidth();
-		int h = profileImage.getHeight();
-		Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+		Bitmap profileBitmap = null;
+		if(!user.getId().equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
+			// other user
+			int w = profileImage.getWidth();
+			int h = profileImage.getHeight();
+			//			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			profileBitmap = FileUtil.getImageFromInternalStorage(app, user.getProfilePic(), w, h);
+		}else{
+			profileBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+		}
 		profileImage.setImageBitmap(profileBitmap);
-		
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
 		}else{
@@ -129,7 +138,6 @@ public class ProfileDialog extends AhDialogFragment{
 	public void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, "ProfileDialog onStop");
 		profileImage.setImageBitmap(null);
-		genderImage.setImageBitmap(null);
 		super.onStop();
 	}
 }

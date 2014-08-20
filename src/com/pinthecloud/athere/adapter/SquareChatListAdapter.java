@@ -25,8 +25,9 @@ import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
@@ -76,15 +77,14 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Find UI component
 			 */
 			TextView messageText = null;
-			TextView timeText = null;
 			if(this.layoutId == R.layout.row_chat_notification_list){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
-				timeText = (TextView)view.findViewById(R.id.row_chat_notification_time);
 			} else if(this.layoutId == R.layout.row_square_chat_list_send){
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
-				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
+				TextView timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
-
+				timeText.setText(message.getTimeStamp());
+				
 				/*
 				 * Set UI component only in send list
 				 */
@@ -100,14 +100,15 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Get other user and find UI component
 				 */
-				final User user = userDBHelper.getUser(message.getSenderId(), true);
+				final AhUser user = userDBHelper.getUser(message.getSenderId(), true);
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_message);
-				timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
-
+				TextView timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
+				timeText.setText(message.getTimeStamp());
+				
 				/*
 				 * Find UI component only in receive list
 				 */
-				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nickname);
+				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nick_name);
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
@@ -122,7 +123,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
-				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+				//				Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+				Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 				profileImage.setImageBitmap(profileBitmap);
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {
@@ -154,7 +156,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Set Shared UI component
 			 */
 			messageText.setText(message.getContent());
-			timeText.setText(message.getTimeStamp());
 		}
 		return view;
 	}

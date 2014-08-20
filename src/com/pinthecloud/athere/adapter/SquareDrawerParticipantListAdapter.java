@@ -19,17 +19,18 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
-public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
+public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
 	private Context context;
 	private int layoutId;
-	private List<User> items;
+	private List<AhUser> items;
 
 
-	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<User> items) {
+	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<AhUser> items) {
 		super(context, layoutId, items);
 		this.context = context;
 		this.layoutId = layoutId;
@@ -46,7 +47,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
 
-		final User user = items.get(position);
+		final AhUser user = items.get(position);
 		if (user != null) {
 			/*
 			 * Find UI Component
@@ -64,15 +65,16 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<User> {
 			companyNumber.setText("" + user.getCompanyNum());
 			Resources resources = context.getResources();
 			if(user.isMale()){
-				gender.setImageResource(R.drawable.sidebar_member_gender_m);
+				gender.setImageResource(R.drawable.profile_gender_m);
 				companyNumber.setTextColor(resources.getColor(R.color.blue));
 			}else{
-				gender.setImageResource(R.drawable.sidebar_member_gender_w);
+				gender.setImageResource(R.drawable.profile_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
+			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 			profileImage.setImageBitmap(profileBitmap);
 
 

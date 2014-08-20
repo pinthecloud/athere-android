@@ -21,12 +21,12 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.model.User;
+import com.pinthecloud.athere.model.AhUser;
 
 public class SquareActivity extends AhActivity{
 
 	private Square square;
-	private User user;
+	private AhUser user;
 
 	private ActionBar mActionBar;
 

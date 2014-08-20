@@ -2,17 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/row_square_chupa_list_layout"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/square_list_height"
-    android:orientation="vertical"
-    android:paddingEnd="@dimen/square_chupa_list_right_margin"
-    android:paddingLeft="@dimen/square_chupa_list_left_margin"
-    android:paddingRight="@dimen/square_chupa_list_right_margin"
-    android:paddingStart="@dimen/square_chupa_list_left_margin" >
+    android:layout_height="@dimen/square_chupa_list_height"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:paddingEnd="0dp"
+        android:paddingLeft="@dimen/square_chupa_list_profile_left_margin"
+        android:paddingRight="0dp"
+        android:paddingStart="@dimen/square_chupa_list_profile_left_margin" >
 
         <com.pinthecloud.athere.view.AhImageView
             android:id="@+id/square_chupa_list_profile_pic"
@@ -36,15 +36,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/square_chupa_list_content_margin"
-                android:ellipsize="end"
-                android:maxWidth="@dimen/square_chupa_list_sender_max_width"
                 android:singleLine="true"
-                android:textSize="@dimen/font_x_large" />
+                android:textSize="@dimen/font_large" />
 
             <TextView
                 android:id="@+id/square_chupa_list_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/square_chat_list_receive_content_left_margin"
+                android:layout_marginStart="@dimen/square_chat_list_receive_content_left_margin"
                 android:textSize="@dimen/font_small" />
         </LinearLayout>
 
@@ -54,6 +54,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/square_chupa_list_time_right_margin"
+            android:layout_marginRight="@dimen/square_chupa_list_time_right_margin"
             android:orientation="vertical" >
 
             <TextView
@@ -61,7 +63,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/square_chupa_list_content_margin"
-                android:textSize="@dimen/font_medium" />
+                android:textColor="@color/gray_light"
+                android:textSize="@dimen/font_small" />
 
             <TextView
                 android:id="@+id/square_chupa_list_badge_num"
@@ -71,7 +74,7 @@
                 android:gravity="center"
                 android:textColor="@color/dark_red"
                 android:textSize="@dimen/font_medium"
-                android:visibility="gone" />
+                android:visibility="invisible" />
         </LinearLayout>
     </RelativeLayout>
 

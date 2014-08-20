@@ -7,7 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,13 +18,16 @@ import android.net.Uri;
 import android.os.Environment;
 
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.exception.AhException;
 
 public class FileUtil {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
-
+	private static Map<String, Bitmap> myCached = new HashMap<String, Bitmap>();
+	
+	
 	/** Create a file Uri for saving an image or video */
 	public static Uri getOutputMediaFileUri(int type){
 		return Uri.fromFile(getOutputMediaFile(type));
@@ -65,36 +70,84 @@ public class FileUtil {
 	}
 
 
-	public static boolean saveImageToInternalStorage(Context context, Bitmap image, String key) throws IOException {
+	public static String saveImageToInternalStorage(Context context, Bitmap image, String name) {
+		FileOutputStream fos = null;
 		try {
 			// Use the compress method on the Bitmap object to write image to
 			// the OutputStream
-			FileOutputStream fos = context.openFileOutput(key, Context.MODE_PRIVATE);
-
+			fos = context.openFileOutput(name, Context.MODE_PRIVATE);
 			// Writing the bitmap to the output stream
+			if (image == null) throw new AhException("saveImage");
 			image.compress(Bitmap.CompressFormat.PNG, 100, fos);
 			fos.close();
 		} catch (FileNotFoundException e) {
-			throw e;
+			throw new AhException("FileNotFoundException");
 		} catch (IOException e) {
-			throw e;
+			throw new AhException("IOException");
 		}
-		return true;
+		return name;
+
+		
+		//		File file = new File(context.getFilesDir(), name);
+		//		if (file.exists()) {
+		//			file.delete();
+		//		}
+		//		
+		//		FileOutputStream fos = null;
+		//		try {
+		//			boolean isSuccess = file.createNewFile();
+		//			if (!isSuccess) {
+		//				throw new AhException("saveImageToInternalStorage");
+		//			}
+		//			fos = new FileOutputStream(file);
+		//			ByteArrayOutputStream baos = new  ByteArrayOutputStream();
+		////			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+		////			byte [] b = baos.toByteArray();
+		//			baos.writeTo(fos);
+		//			Log.e("ERROR", "saveImageToInternalStorage name : " + name + " / ");
+		////			fos.write(b);
+		//			fos.flush();
+		//			fos.close();
+		//		} catch (FileNotFoundException e) {
+		//			e.printStackTrace();
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//		}
+		//		return file.getAbsolutePath();
 	}
 
 
 	/*
 	 * look in internal storage
 	 */
-	public static Bitmap getImageFromInternalStorage(Context context, String filename) throws FileNotFoundException {
-		Bitmap imageBitmap = null;
+	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
+		Bitmap bitmap = myCached.get(filename);
+		if (bitmap != null) return bitmap;
+		
 		try {
 			File filePath = context.getFileStreamPath(filename);
 			FileInputStream fi = new FileInputStream(filePath);
-			imageBitmap = BitmapFactory.decodeStream(fi);
+			bitmap = BitmapFactory.decodeStream(fi);
 		} catch (FileNotFoundException e) {
-			throw e;
+			throw new AhException("FileNotFoundException");
 		}
-		return imageBitmap;
+		myCached.put(filename, bitmap);
+		return bitmap;
+	}
+
+	
+	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
+		Bitmap bitmap = myCached.get(fileName+reqWidth+reqHeight);
+		if (bitmap != null) return bitmap;
+		
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		
+		// Calculate inSampleSize
+		options.inSampleSize = BitmapUtil.calculateSize(options, reqWidth, reqHeight);
+		options.inJustDecodeBounds = false;
+		bitmap = BitmapFactory.decodeFile(context.getFilesDir()+"/"+fileName, options);
+		myCached.put(fileName+reqWidth+reqHeight, bitmap);
+		return bitmap;
 	}
 }

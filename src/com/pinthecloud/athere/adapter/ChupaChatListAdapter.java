@@ -50,13 +50,12 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Find UI component
 			 */
 			TextView messageText = null;
-			TextView timeText = null;
 			if(this.layoutId == R.layout.row_chat_notification_list){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
-				timeText = (TextView)view.findViewById(R.id.row_chat_notification_time);
 			}else if(this.layoutId == R.layout.row_chupa_chat_list_send){
 				messageText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_message);
-				timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_time);
+				TextView timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_time);
+				timeText.setText(message.getTimeStamp());
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_chupa_chat_list_send_progress_bar);
 
 
@@ -76,7 +75,8 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				 * Get other user and find UI component
 				 */
 				messageText = (TextView)view.findViewById(R.id.row_chupa_chat_list_receive_message);
-				timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_receive_time);
+				TextView timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_receive_time);
+				timeText.setText(message.getTimeStamp());
 			}
 
 
@@ -84,7 +84,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Set Shared UI component
 			 */
 			messageText.setText(message.getContent());
-			timeText.setText(message.getTimeStamp());
 		}
 		return view;
 	}
