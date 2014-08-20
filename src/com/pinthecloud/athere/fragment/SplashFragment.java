@@ -86,20 +86,12 @@ public class SplashFragment extends AhFragment {
 			int lastHour = Integer.parseInt(lastArray[3]);
 
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				userDBHelper.deleteAllUsers();
-				messageDBHelper.deleteAllMessages();
 				removeSquarePreference();
 			} else if(currentDay > lastDay && lastHour < 12){
-				userDBHelper.deleteAllUsers();
-				messageDBHelper.deleteAllMessages();
 				removeSquarePreference();
 			} else if(currentDay > lastDay && currentHour >= 12){
-				userDBHelper.deleteAllUsers();
-				messageDBHelper.deleteAllMessages();
 				removeSquarePreference();
 			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
-				userDBHelper.deleteAllUsers();
-				messageDBHelper.deleteAllMessages();
 				removeSquarePreference();
 			}
 		}

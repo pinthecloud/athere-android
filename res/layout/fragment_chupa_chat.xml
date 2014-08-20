@@ -31,9 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/chupa_chat_other_nick_name_gender_margin"
             android:layout_marginRight="@dimen/chupa_chat_other_nick_name_gender_margin"
-            android:ellipsize="end"
-            android:maxWidth="@dimen/chupa_chat_other_nick_max_width"
-            android:singleLine="true"
             android:textSize="@dimen/font_large" />
 
         <TextView

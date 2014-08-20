@@ -137,6 +137,10 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	 * Check nick name EditText
 	 */
 	protected void removeSquarePreference(){
+		userDBHelper.deleteAllUsers();
+		messageDBHelper.deleteAllMessages();
+		messageDBHelper.cleareAllBadgeNum();
+		
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
