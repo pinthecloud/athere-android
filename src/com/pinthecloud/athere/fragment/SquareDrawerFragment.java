@@ -138,11 +138,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				boolean isChecked = chupaAlarmButton.isChecked();
-				if(isChecked){
-					pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-				}else{
-					pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, false);
-				}
+				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
 				progressBar.setVisibility(View.VISIBLE);
 				progressBar.bringToFront();
 				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
