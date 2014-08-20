@@ -10,10 +10,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
+import com.pinthecloud.athere.util.JsonConverter;
 
 /**
  * 
@@ -76,20 +85,45 @@ public class HongkunTestFragment extends AhFragment {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
 						
-						Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+						String squareIdStr = "29F4F376-D083-4600-8D77-B616B96F29F5";
+						int companyNumber = 2;
+						pref.putString(AhGlobalVariable.NICK_NAME_KEY, "nickName");
+						pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+						pref.putString(AhGlobalVariable.SQUARE_ID_KEY, squareIdStr);
+						pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
+						pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
+
+						final AhUser user = userHelper.getMyUserInfo(false);
+						Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
                                 R.drawable.chupa);
+						String profilePic = BitmapUtil.convertToString(bm);
+						user.setProfilePic(profilePic);
+						user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
+						user.setAge(20);
+						user.setMale(true);
+						// Get a user object from preference settings
+						// Enter a square with the user
 						
-						String str = FileUtil.saveImageToInternalStorage(context, bitmap, "hong");
-						Log(_thisFragment, "여기 시발 : "+str);
+						JsonObject jo = user.toJson();
+
+						Gson g = new Gson();
+						JsonElement json = g.fromJson(jo, JsonElement.class);
+						
+						
+						mClient.invokeApi("enter_square", json, new ApiJsonOperationCallback() {
+							
+							@Override
+							public void onCompleted(JsonElement arg0, Exception arg1,
+									ServiceFilterResponse arg2) {
+								// TODO Auto-generated method stub
+								
+								Log(_thisFragment, JsonConverter.convertToUserList(arg0));
+								Log(_thisFragment, JsonConverter.convertToUserId(arg0));
+							}
+						});
+
 					} else if (b.getId() == btnArr[1].getId()) {
-//						Bitmap bit = ImageFileUtil.readFile(context, "plz");
-						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong");
-						img.setImageBitmap(bit);
 					} else if (b.getId() == btnArr[2].getId()) {
-						int w = img.getWidth();
-						int h = img.getHeight();
-						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong", w, h);
-						img.setImageBitmap(bit);
 					} else if (b.getId() == btnArr[3].getId()) {
 					} else if (b.getId() == btnArr[4].getId()) {
 					} else if (b.getId() == btnArr[5].getId()) {

@@ -126,11 +126,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				boolean isChecked = chatAlarmButton.isChecked();
-				if(isChecked){
-					pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
-				}else{
-					pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, false);
-				}
+				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, isChecked);
 			}
 		});
 		chupaAlarmButton.setOnClickListener(new OnClickListener() {

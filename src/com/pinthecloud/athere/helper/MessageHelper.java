@@ -41,7 +41,107 @@ public class MessageHelper {
 		this.lock = app.getLock();
 	}
 
+	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
+		JsonObject jo = new JsonObject();
+		jo.addProperty("type", message.getType());
+		jo.addProperty("content", message.getContent());
+		jo.addProperty("sender", message.getSender());
+		jo.addProperty("senderId", message.getSenderId());
+		jo.addProperty("receiver", message.getReceiver());
+		jo.addProperty("receiverId", message.getReceiverId());
+		jo.addProperty("timeStamp", message.getTimeStamp());
+		jo.addProperty("chupaCommunId", message.getChupaCommunId());
+
+		Gson g = new Gson();
+		JsonElement json = g.fromJson(jo, JsonElement.class);
+
+		//mClient.setContext(frag.getActivity());
+		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
+
+			@Override
+			public void onCompleted(JsonElement json, Exception e,
+					ServiceFilterResponse response) {
+				if (e == null) {
+					callback.onCompleted(null);
+					AsyncChainer.notifyNext(frag);
+				}
+				else
+					ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.SERVER_ERROR));
+			}
+		});
+
+	}
+
+
+	
+	
+	/**
+	 *  ===[The Message Triggering Propagation Mechanism]===
+	 *  When the message pushed by server comes,
+	 *  
+	 *  The message triggers the Activity currently on Top (whether [SquareActivity] or [ChupaChatActivity])
+	 * 	if [SquareActivity]
+	 * 		it  triggers [SquareTabFragment]
+	 * 		and [SquareTabFragment] triggers both [SquareChatFragment] & [SquareChupaListFragment]
+	 * 
+	 *  if [ChupaChatActivity]
+	 *  	it triggers [ChupaChatFragment]
+	 *  
+	 *  
+	 *  ===[The Way to Program in Each Handler]===
+	 *  The handlers SHOULD NOT MODIFY any Database contents.
+	 *  The Database contents will be modified before handlers. (Precisely, in [AhIntentService])
+	 *  The handlers should only refresh the related Views. (typically, refreshView() method)
+	 * 
+	 */
+	
+	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
+
+	public void setMessageHandler(AhActivity activity, AhEntityCallback<AhMessage> callback){
+		AhEntityCallback<AhMessage> _callback = map.get(activity.getClass().getName());
+		if (_callback == null) {
+			map.put(activity.getClass().getName(), callback);
+		}
+	}
+	public void setMessageHandler(AhFragment frag, AhEntityCallback<AhMessage> callback){
+		AhEntityCallback<AhMessage> _callback = map.get(frag.getClass().getName());
+		if (_callback == null) {
+			map.put(frag.getClass().getName(), callback);
+		}
+	}
+	
+	public void triggerMessageEvent(AhFragment frag, AhMessage message){
+		this.triggerMessageEvent(frag.getClass().getName(), message);
+	}
+
+	public void triggerMessageEvent(String key, AhMessage message){
+		AhEntityCallback<AhMessage> _callback = map.get(key);
+		if(_callback != null) {
+			_callback.onCompleted(message);
+		}
+		else 
+			Log.d(AhGlobalVariable.LOG_TAG,"[MessageHelper.triggerMessage] map.get(MESSAGE_RECEIVED); :" + message.getType());
+	}
+	
+	
+	
+	
+	//////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////
+	
+	/**
+	 * 
+	 * Sync Method
+	 * NOT USING
+	 */
+	
+	
 	public boolean _sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
 
 		if (!app.isOnline()) {
@@ -89,108 +189,5 @@ public class MessageHelper {
 			}
 		}
 		return carrier.getItem();
-	}
-
-	public boolean turnOnPush(){
-		return false;
-	}
-
-	public boolean turnOffPush(){
-		return false;
-	}
-
-	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
-
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-
-		JsonObject jo = new JsonObject();
-		jo.addProperty("type", message.getType());
-		jo.addProperty("content", message.getContent());
-		jo.addProperty("sender", message.getSender());
-		jo.addProperty("senderId", message.getSenderId());
-		jo.addProperty("receiver", message.getReceiver());
-		jo.addProperty("receiverId", message.getReceiverId());
-		jo.addProperty("timeStamp", message.getTimeStamp());
-		jo.addProperty("chupaCommunId", message.getChupaCommunId());
-
-		Gson g = new Gson();
-		JsonElement json = g.fromJson(jo, JsonElement.class);
-
-		//mClient.setContext(frag.getActivity());
-		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
-
-			@Override
-			public void onCompleted(JsonElement json, Exception e,
-					ServiceFilterResponse response) {
-				if (e == null) {
-					callback.onCompleted(null);
-					AsyncChainer.notifyNext(frag);
-				}
-				else
-					ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.SERVER_ERROR));
-			}
-		});
-
-	}
-
-
-	/**
-	 *  ===[The Message Triggering Propagation Mechanism]===
-	 *  When the message pushed by server comes,
-	 *  
-	 *  The message triggers the Activity currently on Top (whether [SquareActivity] or [ChupaChatActivity])
-	 * 	if [SquareActivity]
-	 * 		it  triggers [SquareTabFragment]
-	 * 		and [SquareTabFragment] triggers both [SquareChatFragment] & [SquareChupaListFragment]
-	 * 
-	 *  if [ChupaChatActivity]
-	 *  	it triggers [ChupaChatFragment]
-	 *  
-	 *  
-	 *  ===[The Way to Program in Each Handler]===
-	 *  The handlers SHOULD NOT MODIFY any Database contents.
-	 *  The Database contents will be modified before handlers. (Precisely, in [AhIntentService])
-	 *  The handlers should only refresh the related Views. (typically, refreshView() method)
-	 * 
-	 */
-	
-//	private Map<String, List<AhEntityCallback<AhMessage>>> mapList = new HashMap<String, List<AhEntityCallback<AhMessage>>>();
-	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
-//	private final String MESSAGE_RECEIVED = "MESSAGE_RECEIVED_ON_AIR";
-	//	public static final String MESSAGE_RECEIVED_WHILE_SLEEP = "MESSAGE_RECEIVED_WHILE_SLEEP";
-
-//	public void setMessageHandler(AhMessage.TYPE type, AhEntityCallback<AhMessage> callback){
-//		map.put(type.toString(), callback);
-//		Log.d(AhGlobalVariable.LOG_TAG,"setMessageHandler :" + type.toString() + callback);
-//	}
-
-	public void setMessageHandler(AhActivity activity, AhEntityCallback<AhMessage> callback){
-		AhEntityCallback<AhMessage> _callback = map.get(activity.getClass().getName());
-		if (_callback == null) {
-			map.put(activity.getClass().getName(), callback);
-		}
-	}
-	public void setMessageHandler(AhFragment frag, AhEntityCallback<AhMessage> callback){
-		AhEntityCallback<AhMessage> _callback = map.get(frag.getClass().getName());
-		if (_callback == null) {
-			map.put(frag.getClass().getName(), callback);
-		}
-	}
-	
-	
-	public void triggerMessageEvent(AhFragment frag, AhMessage message){
-		this.triggerMessageEvent(frag.getClass().getName(), message);
-	}
-
-	public void triggerMessageEvent(String key, AhMessage message){
-		AhEntityCallback<AhMessage> _callback = map.get(key);
-		if(_callback != null) {
-			_callback.onCompleted(message);
-		}
-		else 
-			Log.d(AhGlobalVariable.LOG_TAG,"[MessageHelper.triggerMessage] map.get(MESSAGE_RECEIVED); :" + message.getType());
 	}
 }

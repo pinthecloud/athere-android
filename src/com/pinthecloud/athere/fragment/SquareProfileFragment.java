@@ -42,6 +42,7 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
+import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.AhUser;
@@ -408,84 +409,122 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
-				userHelper.enterSquareAsync(_thisFragment, user, new AhEntityCallback<String>() {
-
+				
+				userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
+					
 					@Override
-					public void onCompleted(String id) {
-						pref.putString(AhGlobalVariable.USER_ID_KEY, id);
-					}
-				});
-			}
-		}, new Chainable() {
-
-			@Override
-			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
-				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<AhUser>() {
-
-					@Override
-					public void onCompleted(List<AhUser> list, int count) {
+					public void onCompleted(String userId, List<AhUser> list) {
 						// TODO Auto-generated method stub
-//						userDBHelper.addAllUsers(list);
+						pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
+						
 						for(AhUser user : list) {
 							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
 							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
 							user.setProfilePic(imagePath);
 							userDBHelper.addUser(user);
 						}
+						
+						
+						// Save this setting and go to next activity
+						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						Time time = new Time();
+						time.setToNow();
+						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
+						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
+						
+						
+						// Set and move to next activity after clear previous activity
+						intent.setClass(context, SquareActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-						// Remove Me from User DB Table.
-						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
-					}
-				});
+						activity.runOnUiThread(new Runnable(){
 
-			}
-		}, new Chainable() {
-
-			@Override
-			public void doNext(AhFragment frag) {
-				// Send message to server for notifying entering
-				String enterMessage = getResources().getString(R.string.enter_square_message);
-				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				AhUser user = userHelper.getMyUserInfo(true);
-				messageBuilder.setContent(user.getNickName() + " : " + enterMessage)
-				.setSender(user.getNickName())
-				.setSenderId(user.getId())
-				.setReceiverId(square.getId())
-				.setType(AhMessage.TYPE.ENTER_SQUARE);
-				AhMessage message = messageBuilder.build();
-				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-
-					@Override
-					public void onCompleted(AhMessage entity) {
-						// Do nothing
-					}
-				});
-
-				// Save this setting and go to next activity
-				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-				Time time = new Time();
-				time.setToNow();
-				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
-				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
-				
-				
-				// Set and move to next activity after clear previous activity
-				intent.setClass(context, SquareActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-				activity.runOnUiThread(new Runnable(){
-
-					@Override
-					public void run() {
-						// Dimiss progress bar
-						progressBar.setVisibility(View.GONE);
-						startActivity(intent);
+							@Override
+							public void run() {
+								// Dimiss progress bar
+								progressBar.setVisibility(View.GONE);
+								startActivity(intent);
+							}
+						});
+						
+						
 					}
 				});
 			}
 		});
+		
+		
+//		, new Chainable() {
+//
+//			@Override
+//			public void doNext(AhFragment frag) {
+//				// TODO Auto-generated method stub
+//				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<AhUser>() {
+//
+//					@Override
+//					public void onCompleted(List<AhUser> list, int count) {
+//						// TODO Auto-generated method stub
+////						userDBHelper.addAllUsers(list);
+//						for(AhUser user : list) {
+//							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
+//							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+//							user.setProfilePic(imagePath);
+//							userDBHelper.addUser(user);
+//						}
+//
+//						// Remove Me from User DB Table.
+//						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
+//					}
+//				});
+//
+//			}
+//		}, new Chainable() {
+//
+//			@Override
+//			public void doNext(AhFragment frag) {
+//				// Send message to server for notifying entering
+//				String enterMessage = getResources().getString(R.string.enter_square_message);
+//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+//				AhUser user = userHelper.getMyUserInfo(true);
+//				messageBuilder.setContent(user.getNickName() + " : " + enterMessage)
+//				.setSender(user.getNickName())
+//				.setSenderId(user.getId())
+//				.setReceiverId(square.getId())
+//				.setType(AhMessage.TYPE.ENTER_SQUARE);
+//				AhMessage message = messageBuilder.build();
+//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+//
+//					@Override
+//					public void onCompleted(AhMessage entity) {
+//						// Do nothing
+//					}
+//				});
+//
+//				// Save this setting and go to next activity
+//				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+//				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+//				Time time = new Time();
+//				time.setToNow();
+//				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
+//				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
+//				
+//				
+//				// Set and move to next activity after clear previous activity
+//				intent.setClass(context, SquareActivity.class);
+//				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//				activity.runOnUiThread(new Runnable(){
+//
+//					@Override
+//					public void run() {
+//						// Dimiss progress bar
+//						progressBar.setVisibility(View.GONE);
+//						startActivity(intent);
+//					}
+//				});
+//			}
+//		});
 
 
 

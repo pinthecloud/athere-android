@@ -52,7 +52,7 @@ public class JsonConverter {
 		List<AhUser> list = new ArrayList<AhUser>();
 
 		JsonObject userListJson = json.getAsJsonObject();
-		JsonElement userList = userListJson.get("userList");
+		JsonElement userList = userListJson.get("list");
 		JsonArray jsonArray = userList.getAsJsonArray();
 		for(int i = 0 ; i < jsonArray.size() ; i++){
 			JsonElement jsonElement = jsonArray.get(i);
@@ -72,5 +72,11 @@ public class JsonConverter {
 			list.add(user);
 		}
 		return list;
+	}
+	
+	public static String convertToUserId(JsonElement json) {
+		JsonObject userListJson = json.getAsJsonObject();
+		JsonElement userList = userListJson.get("userId");
+		return userList.getAsString();
 	}
 }
