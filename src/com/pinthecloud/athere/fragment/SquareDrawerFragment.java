@@ -174,6 +174,7 @@ public class SquareDrawerFragment extends AhFragment {
 					public void onCompleted(Boolean entity) {
 						userDBHelper.deleteAllUsers();
 						messageDBHelper.deleteAllMessages();
+						removeSquarePreference();
 					}
 				});
 			}
@@ -195,7 +196,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						removeSquarePreference();
 						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
 						activity.runOnUiThread(new Runnable() {
 

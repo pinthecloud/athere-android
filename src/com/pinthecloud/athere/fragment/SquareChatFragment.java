@@ -186,6 +186,20 @@ public class SquareChatFragment extends AhFragment{
 			messageList.addAll(talks);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
+		}else{
+			String enterMessage = getResources().getString(R.string.enter_square_message);
+			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+			AhMessage.Builder messageBuilder = new AhMessage.Builder();
+			messageBuilder.setContent(nickName + " " + enterMessage)
+			.setSender(nickName)
+			.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+			.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+			.setType(AhMessage.TYPE.ENTER_SQUARE);
+			AhMessage message = messageBuilder.build();
+
+			messageList.add(message);
+			messageListAdapter.notifyDataSetChanged();
+			messageListView.setSelection(messageListView.getCount() - 1);
 		}
 	}
 

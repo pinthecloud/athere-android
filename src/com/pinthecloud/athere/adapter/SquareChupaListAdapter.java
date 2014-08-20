@@ -73,7 +73,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				badgeNum.setText(chupaBadge);
 				badgeNum.setVisibility(View.VISIBLE);
 			}else{
-				badgeNum.setVisibility(View.GONE);
+				badgeNum.setVisibility(View.INVISIBLE);
 			}
 		}
 

@@ -465,7 +465,7 @@ public class SquareProfileFragment extends AhFragment{
 				Time time = new Time();
 				time.setToNow();
 				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
-				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, AhGlobalVariable.SQUARE_CHAT_TAB);
+				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
 				
 				
 				// Set and move to next activity after clear previous activity

@@ -107,7 +107,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Find UI component only in receive list
 				 */
-				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nickname);
+				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nick_name);
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
