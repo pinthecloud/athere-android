@@ -187,8 +187,10 @@ public class SquareChatFragment extends AhFragment{
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
 	private void refreshView(){
+		
 		// ENTER, EXIT, TALK
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
+			Log(_thisFragment, "HERE");
 			//final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();

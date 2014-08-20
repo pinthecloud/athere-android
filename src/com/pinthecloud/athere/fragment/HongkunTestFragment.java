@@ -20,6 +20,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -85,36 +86,31 @@ public class HongkunTestFragment extends AhFragment {
 				public void onClick(View v) {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
+						b.setText("ADD");
+						AhMessage message = AhMessage.buildMessage();
+						Log(_thisFragment, message);
+						messageDBHelper.addMessage(message);
 						
-						String squareIdStr = "29F4F376-D083-4600-8D77-B616B96F29F5";
-						int companyNumber = 2;
-						pref.putString(AhGlobalVariable.NICK_NAME_KEY, "nickName");
-						pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
-						pref.putString(AhGlobalVariable.SQUARE_ID_KEY, squareIdStr);
-						pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-						pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
-
-						String userId = "D1D25CEC-32C8-4423-A14F-0F513B1B198E";
-//						userHelper.newExitSquareAsync(_thisFragment, new AhEntityCallback<Boolean>() {
-//							
-//							@Override
-//							public void onCompleted(Boolean entity) {
-//								// TODO Auto-generated method stub
-//								Log(_thisFragment,"OK!!");
-//							}
-//						});
-
 					} else if (b.getId() == btnArr[1].getId()) {
+						b.setText("isEmpty");
+						Log(_thisFragment, messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.CHUPA));
 					} else if (b.getId() == btnArr[2].getId()) {
+						b.setText("getAllMessages");
+						Log(_thisFragment, messageDBHelper.getAllMessages(AhMessage.TYPE.CHUPA, AhMessage.TYPE.EXIT_SQUARE));
 					} else if (b.getId() == btnArr[3].getId()) {
+						b.setText("deleteAll");
+						messageDBHelper.deleteAllMessages();
 					} else if (b.getId() == btnArr[4].getId()) {
+						
 					} else if (b.getId() == btnArr[5].getId()) {
+						
 					}
 					messageText.setText(b.getText());
 				}
 			});
 		}
-
+		
+		
 		return view;
 	}
 
