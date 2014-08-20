@@ -145,10 +145,10 @@ public class SquareDrawerFragment extends AhFragment {
 				}
 				progressBar.setVisibility(View.VISIBLE);
 				progressBar.bringToFront();
-				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<User>() {
+				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
 
 					@Override
-					public void onCompleted(User entity) {
+					public void onCompleted(AhUser entity) {
 						progressBar.setVisibility(View.GONE);
 					}
 				});
