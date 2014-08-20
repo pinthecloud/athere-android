@@ -33,6 +33,7 @@ public class SquareChatFragment extends AhFragment{
 	private List<AhMessage> messageList = new ArrayList<AhMessage>();
 
 	private String squareId;
+	private int offset = 0;
 
 
 	public SquareChatFragment(String squareId) {
@@ -131,6 +132,12 @@ public class SquareChatFragment extends AhFragment{
 					int visibleItemCount, int totalItemCount) {
 				if (firstVisibleItem == 1) {
 					// TODO : Insert messageListView.add(0, messages);
+//					offset++;
+//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+////					messageList.clear();
+//					messageList.addAll(0, talks);
+//					messageListAdapter.notifyDataSetChanged();
+//					messageListView.setSelection(messageListView.getCount() - 1);
 				}
 			}
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -180,12 +187,16 @@ public class SquareChatFragment extends AhFragment{
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
 	private void refreshView(){
+		// ENTER, EXIT, TALK
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
+			//final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();
 			messageList.addAll(talks);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
+			
+		// display Message that myself has been entered
 		}else{
 			String enterMessage = getResources().getString(R.string.enter_square_message);
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
