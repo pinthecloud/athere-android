@@ -96,7 +96,7 @@ public class AsyncChainer {
 		Queue<Chainable> queue = mapQueue.get(clazz.getName());
 		if (queue == null) {
 			//throw new AhException("No such Chainable");
-			Log.e("ERROR", "No such Chainable : " + frag.getClass().getName());
+			Log.e("ERROR", "No such Chainable : " + clazz.getName());
 			return;
 		}
 		if (!queue.isEmpty()) {
