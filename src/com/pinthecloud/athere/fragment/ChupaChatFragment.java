@@ -34,7 +34,6 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 
@@ -75,9 +74,12 @@ public class ChupaChatFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
 
+		
 		// Remove Notification when the user enters the Chupa chat room.
 		NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
+		
+		
 		/*
 		 * Set UI component
 		 */
@@ -135,14 +137,6 @@ public class ChupaChatFragment extends AhFragment {
 			otherGender.setImageResource(R.drawable.profile_gender_w);
 			otherCompanyNumber.setTextColor(resources.getColor(R.color.dark_red));
 		}
-
-
-		/*
-		 * Set message list view
-		 */
-		messageListAdapter = new ChupaChatListAdapter
-				(context, R.layout.row_square_chat_list_send, messageList);
-		messageListView.setAdapter(messageListAdapter);
 
 
 		/*
@@ -281,12 +275,8 @@ public class ChupaChatFragment extends AhFragment {
 		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		messageList.clear();
 		messageList.addAll(chupas);
-		messageListAdapter.notifyDataSetChanged();
-		messageListView.setSelection(messageListView.getCount() - 1);
 
-		// Clear badge numbers displayed on chupa list
-		messageDBHelper.clearBadgeNum(chupaCommunId);
-		
+
 		/*
 		 * If other user exit, add exit message
 		 */
@@ -303,11 +293,20 @@ public class ChupaChatFragment extends AhFragment {
 			.setReceiverId(otherUser.getSquareId())
 			.setType(AhMessage.TYPE.EXIT_SQUARE);
 			AhMessage message = messageBuilder.build();
-
 			messageList.add(message);
-			messageListAdapter.notifyDataSetChanged();
-			messageListView.setSelection(messageListView.getCount() - 1);
 		}
+
+
+		/*
+		 * Set message listview
+		 */
+		messageListAdapter = new ChupaChatListAdapter
+				(context, R.layout.row_square_chat_list_send, messageList);
+		messageListView.setAdapter(messageListAdapter);
+		messageListView.setSelection(messageListView.getCount() - 1);
+
+		// Clear badge numbers displayed on chupa list
+		messageDBHelper.clearBadgeNum(chupaCommunId);
 	}
 
 
