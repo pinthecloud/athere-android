@@ -48,6 +48,7 @@ public class AhException extends RuntimeException {
 		PARSING_ERROR,
 		MESSAGE_ERROR,
 		NO_USER_ID,
-		GCM_REGISTRATION_FAIL
+		GCM_REGISTRATION_FAIL,
+		SD_CARD_FAIL
 	}
 }

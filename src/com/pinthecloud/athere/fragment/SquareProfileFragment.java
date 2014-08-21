@@ -38,6 +38,8 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -95,10 +97,11 @@ public class SquareProfileFragment extends AhFragment{
 
 					// Get file from taken data
 					File pictureFile = FileUtil.getOutputMediaFile(FileUtil.MEDIA_TYPE_IMAGE);
-					Uri pictureFileUri = Uri.fromFile(pictureFile);
-					if (pictureFile == null){
+					if (pictureFile == null) {
+						ExceptionManager.fireException(new AhException(_thisFragment, "onPictureTaken", AhException.TYPE.SD_CARD_FAIL));
 						return;
 					}
+					Uri pictureFileUri = Uri.fromFile(pictureFile);
 					FileOutputStream fos = new FileOutputStream(pictureFile);
 					fos.write(data);
 					fos.close();
