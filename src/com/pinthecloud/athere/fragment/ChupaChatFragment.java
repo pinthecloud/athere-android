@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,6 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.FileUtil;
 
-
 public class ChupaChatFragment extends AhFragment {
 
 	private ActionBar mActionBar;
@@ -55,7 +53,7 @@ public class ChupaChatFragment extends AhFragment {
 
 	private ListView messageListView;
 	private ChupaChatListAdapter messageListAdapter;
-	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
+	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,14 +70,14 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
+		View view = inflater.inflate(R.layout.fragment_chupa_chat, container,
+				false);
 
-		
 		// Remove Notification when the user enters the Chupa chat room.
-		NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager mNotificationManager = (NotificationManager) activity
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-		
-		
+
 		/*
 		 * Set UI component
 		 */
@@ -93,12 +91,10 @@ public class ChupaChatFragment extends AhFragment {
 		messageEditText = (EditText) view.findViewById(R.id.chupa_chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chupa_chat_frag_send_button);
 
-
 		/*
 		 * Set Action Bar
 		 */
 		mActionBar.setTitle(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
-
 
 		/*
 		 * Set other user bar
@@ -107,37 +103,44 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				ProfileDialog profileDialog = new ProfileDialog(otherUser, new AhDialogCallback() {
+				ProfileDialog profileDialog = new ProfileDialog(otherUser,
+						new AhDialogCallback() {
 
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						Intent intent = new Intent(context, ChupaChatActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, otherUser.getId());
-						context.startActivity(intent);
-						activity.finish();
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						Intent intent = new Intent(context, ProfileImageActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, otherUser.getId());
-						context.startActivity(intent);
-					}
-				});
-				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+							@Override
+							public void doPositiveThing(Bundle bundle) {
+								Intent intent = new Intent(context,
+										ChupaChatActivity.class);
+								intent.putExtra(AhGlobalVariable.USER_KEY,
+										otherUser.getId());
+								context.startActivity(intent);
+								activity.finish();
+							}
+
+							@Override
+							public void doNegativeThing(Bundle bundle) {
+								Intent intent = new Intent(context,
+										ProfileImageActivity.class);
+								intent.putExtra(AhGlobalVariable.USER_KEY,
+										otherUser.getId());
+								context.startActivity(intent);
+							}
+						});
+				profileDialog.show(getFragmentManager(),
+						AhGlobalVariable.DIALOG_KEY);
 			}
 		});
 		otherNickName.setText(otherUser.getNickName());
 		otherAge.setText("" + otherUser.getAge());
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 		Resources resources = getResources();
-		if(otherUser.isMale()){
+		if (otherUser.isMale()) {
 			otherGender.setImageResource(R.drawable.profile_gender_m);
 			otherCompanyNumber.setTextColor(resources.getColor(R.color.blue));
-		}else{
+		} else {
 			otherGender.setImageResource(R.drawable.profile_gender_w);
-			otherCompanyNumber.setTextColor(resources.getColor(R.color.dark_red));
+			otherCompanyNumber.setTextColor(resources
+					.getColor(R.color.dark_red));
 		}
-
 
 		/*
 		 * Set edit text
@@ -145,24 +148,26 @@ public class ChupaChatFragment extends AhFragment {
 		messageEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
 				String message = s.toString().trim();
-				if(message.length() < 1){
+				if (message.length() < 1) {
 					isTypedMessage = false;
-				}else{
+				} else {
 					isTypedMessage = true;
 				}
 				sendButton.setEnabled(isSenderButtonEnable());
 			}
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 			}
+
 			@Override
 			public void afterTextChanged(Editable s) {
 			}
 		});
-
 
 		/*
 		 * Set event on button
@@ -173,13 +178,16 @@ public class ChupaChatFragment extends AhFragment {
 			public void onClick(View v) {
 				// Make message
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(messageEditText.getText().toString())
-				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
-				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-				.setReceiver(otherUser.getNickName())
-				.setReceiverId(otherUser.getId())
-				.setType(AhMessage.TYPE.CHUPA)
-				.setStatus(AhMessage.STATUS.SENDING);
+				messageBuilder
+						.setContent(messageEditText.getText().toString())
+						.setSender(
+								pref.getString(AhGlobalVariable.NICK_NAME_KEY))
+						.setSenderId(
+								pref.getString(AhGlobalVariable.USER_ID_KEY))
+						.setReceiver(otherUser.getNickName())
+						.setReceiverId(otherUser.getId())
+						.setType(AhMessage.TYPE.CHUPA)
+						.setStatus(AhMessage.STATUS.SENDING);
 				final AhMessage message = messageBuilder.build();
 
 				messageList.add(message);
@@ -189,25 +197,26 @@ public class ChupaChatFragment extends AhFragment {
 				final int id = messageDBHelper.addMessage(message);
 
 				// Send message to server
-				messageHelper.sendMessageAsync(_thisFragment,message, new AhEntityCallback<AhMessage>() {
+				messageHelper.sendMessageAsync(_thisFragment, message,
+						new AhEntityCallback<AhMessage>() {
 
-					@Override
-					public void onCompleted(AhMessage entity) {
-						message.setStatus(AhMessage.STATUS.SENT);
-						messageListAdapter.notifyDataSetChanged();
-						messageDBHelper.updateMessages(id, message);
-					}
-				});
+							@Override
+							public void onCompleted(AhMessage entity) {
+								message.setStatus(AhMessage.STATUS.SENT);
+								messageListAdapter.notifyDataSetChanged();
+								messageDBHelper.updateMessages(id, message);
+							}
+						});
 			}
 		});
 		sendButton.setEnabled(false);
 
-
 		/**
-		 * See 
-		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
-		 *   2) com.pinthecloud.athere.AhIntentService class Line #47, which has the event time when to trigger
-		 *  
+		 * See 1) com.pinthecloud.athere.helper.MessageEventHelper class, which
+		 * is the implementation of the needed structure 2)
+		 * com.pinthecloud.athere.AhIntentService class Line #47, which has the
+		 * event time when to trigger
+		 * 
 		 * This method sets the MessageHandler received on app running
 		 */
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
@@ -216,12 +225,19 @@ public class ChupaChatFragment extends AhFragment {
 			public void onCompleted(final AhMessage message) {
 
 				// Only Chupa & Exit Message can go through
-				if (!(message.getType().equals(AhMessage.TYPE.CHUPA.toString())
-						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString()))) return;
+				if (!(message.getType().equals(
+						AhMessage.TYPE.CHUPA.toString()) || message
+						.getType().equals(
+								AhMessage.TYPE.EXIT_SQUARE.toString())))
+					return;
 
-				// If Exit Message, Check if it's related Exit (Don't go through other User Exit message)
-				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-					if (!otherUser.getId().equals(message.getSenderId())) return;
+				// If Exit Message, Check if it's related Exit (Don't go
+				// through other User Exit message)
+				if (message.getType().equals(
+						AhMessage.TYPE.EXIT_SQUARE.toString())) {
+					if (!otherUser.getId()
+							.equals(message.getSenderId()))
+						return;
 				}
 				activity.runOnUiThread(new Runnable() {
 
@@ -236,72 +252,71 @@ public class ChupaChatFragment extends AhFragment {
 		return view;
 	}
 
-
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStart");
 
-		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
+		String chupaCommunId = AhMessage
+				.buildChupaCommunId(
+						pref.getString(AhGlobalVariable.USER_ID_KEY),
+						otherUser.getId());
 		refreshView(chupaCommunId);
 
 		int w = otherProfileImage.getWidth();
 		int h = otherProfileImage.getHeight();
 
-		//		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
-		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, otherUser.getProfilePic(), w, h);
+		// Bitmap profileBitmap =
+		// BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
+		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context,
+				otherUser.getProfilePic(), w, h);
 		otherProfileImage.setImageBitmap(profileBitmap);
 	}
 
-
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStop");
 		otherProfileImage.setImageBitmap(null);
 		super.onStop();
 	}
 
-
 	/*
-	 * Set sent and received chupas to list view 
+	 * Set sent and received chupas to list view
 	 */
-	private void refreshView(String chupaCommunId){
-		if(chupaCommunId == null || chupaCommunId.equals(""))
+	private void refreshView(String chupaCommunId) {
+		if (chupaCommunId == null || chupaCommunId.equals(""))
 			throw new AhException("No chupaCommunId");
 
 		/*
 		 * Get every chupa by chupaCommunId
 		 */
-		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
+		final List<AhMessage> chupas = messageDBHelper
+				.getChupasByCommunId(chupaCommunId);
 		messageList.clear();
 		messageList.addAll(chupas);
-
 
 		/*
 		 * If other user exit, add exit message
 		 */
-		if (userDBHelper.isUserExit(otherUser.getId())){
+		if (userDBHelper.isUserExit(otherUser.getId())) {
 			isOtherUserExit = true;
 			sendButton.setEnabled(false);
 
-			String exitMessage = getResources().getString(R.string.exit_square_message);
+			String exitMessage = getResources().getString(
+					R.string.exit_square_message);
 			String nickName = otherUser.getNickName();
 			AhMessage.Builder messageBuilder = new AhMessage.Builder();
 			messageBuilder.setContent(nickName + " " + exitMessage)
-			.setSender(nickName)
-			.setSenderId(otherUser.getId())
-			.setReceiverId(otherUser.getSquareId())
-			.setType(AhMessage.TYPE.EXIT_SQUARE);
+					.setSender(nickName).setSenderId(otherUser.getId())
+					.setReceiverId(otherUser.getSquareId())
+					.setType(AhMessage.TYPE.EXIT_SQUARE);
 			AhMessage message = messageBuilder.build();
 			messageList.add(message);
 		}
 
-
 		/*
 		 * Set message listview
 		 */
-		messageListAdapter = new ChupaChatListAdapter
-				(context, R.layout.row_square_chat_list_send, messageList);
+		messageListAdapter = new ChupaChatListAdapter(context,
+				R.layout.row_square_chat_list_send, messageList);
 		messageListView.setAdapter(messageListAdapter);
 		messageListView.setSelection(messageListView.getCount() - 1);
 
@@ -309,8 +324,7 @@ public class ChupaChatFragment extends AhFragment {
 		messageDBHelper.clearBadgeNum(chupaCommunId);
 	}
 
-
-	private boolean isSenderButtonEnable(){
+	private boolean isSenderButtonEnable() {
 		return isTypedMessage && !isOtherUserExit;
 	}
 }
