@@ -10,10 +10,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
+import com.pinthecloud.athere.util.JsonConverter;
 
 /**
  * 
@@ -75,37 +86,38 @@ public class HongkunTestFragment extends AhFragment {
 				public void onClick(View v) {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
+						b.setText("ADD");
+						AhMessage message = AhMessage.buildMessage();
+						Log(_thisFragment, message);
+						messageDBHelper.addMessage(message);
 						
-						Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
-                                R.drawable.chupa);
-						
-						String str = FileUtil.saveImageToInternalStorage(context, bitmap, "hong");
-						Log(_thisFragment, "여기 시발 : "+str);
 					} else if (b.getId() == btnArr[1].getId()) {
-//						Bitmap bit = ImageFileUtil.readFile(context, "plz");
-						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong");
-						img.setImageBitmap(bit);
+						b.setText("isEmpty");
+						Log(_thisFragment, messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.CHUPA));
 					} else if (b.getId() == btnArr[2].getId()) {
-						int w = img.getWidth();
-						int h = img.getHeight();
-						Bitmap bit = FileUtil.getImageFromInternalStorage(context, "hong", w, h);
-						img.setImageBitmap(bit);
+						b.setText("getAllMessages");
+						Log(_thisFragment, messageDBHelper.getAllMessages(AhMessage.TYPE.CHUPA, AhMessage.TYPE.EXIT_SQUARE));
 					} else if (b.getId() == btnArr[3].getId()) {
+						b.setText("deleteAll");
+						messageDBHelper.deleteAllMessages();
 					} else if (b.getId() == btnArr[4].getId()) {
+						
 					} else if (b.getId() == btnArr[5].getId()) {
+						
 					}
 					messageText.setText(b.getText());
 				}
 			});
 		}
-
+		
+		
 		return view;
 	}
 
 
 	@Override
 	public void handleException(AhException ex) {
-		Log(_thisFragment, "in handle Hongkunyoo");
+		Log(_thisFragment, "in handle Hongkunyoo" + ex);
 	}
 
 

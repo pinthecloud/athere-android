@@ -1,83 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:paddingTop="@dimen/profile_dialog_top_margin" >
+    android:layout_gravity="center" >
 
     <com.pinthecloud.athere.view.AhImageView
         android:id="@+id/profile_dialog_profile"
-        android:layout_width="@dimen/profile_dialog_profile_width"
-        android:layout_height="@dimen/profile_dialog_profile_height"
+        android:layout_width="@dimen/profile_dialog_width"
+        android:layout_height="@dimen/profile_dialog_height"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/profile_dialog_profile_nick_name_margin"
         android:contentDescription="@string/profile_image" />
-
-    <TextView
-        android:id="@+id/profile_dialog_nick_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_dialog_profile"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/profile_dialog_nick_name_info_margin"
-        android:textSize="@dimen/font_x_large" />
-
+    
     <LinearLayout
-        android:id="@+id/profile_dialog_info_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_dialog_nick_name"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/profile_dialog_info_send_button_margin"
-        android:gravity="center"
+        android:layout_width="@dimen/profile_dialog_width"
+        android:layout_height="@dimen/profile_dialog_height"
         android:orientation="horizontal" >
 
-        <TextView
-            android:id="@+id/profile_dialog_age"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/profile_dialog_age_gender_margin"
-            android:layout_marginRight="@dimen/profile_dialog_age_gender_margin"
-            android:textSize="@dimen/font_medium" />
-
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/square_drawer_profile_company_num_height"
-            android:background="@drawable/bg_sidebar_member"
-            android:gravity="center" >
-
-            <ImageView
-                android:id="@+id/profile_dialog_gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/profile_dialog_gender_company_number_margin"
-                android:layout_marginRight="@dimen/profile_dialog_gender_company_number_margin"
-                android:contentDescription="@string/gender" />
+            android:id="@+id/profile_dialog_info_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_dialog_nick_name_info_height"
+            android:background="@drawable/bg_profile_dialog_nick_name_info"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:paddingTop="@dimen/profile_dialog_nick_name_top_margin"
+            android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/profile_dialog_company_number"
+                android:id="@+id/profile_dialog_nick_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/profile_dialog_nick_name_age_margin"
+                android:layout_marginEnd="@dimen/profile_dialog_nick_name_age_margin"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_large" />
+
+            <TextView
+                android:id="@+id/profile_dialog_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/profile_dialog_age_gender_margin"
+                android:layout_marginRight="@dimen/profile_dialog_age_gender_margin"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/font_medium" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/square_drawer_profile_company_num_height"
+                android:background="@drawable/bg_profile_dialog_info"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/profile_dialog_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/profile_dialog_gender_company_number_margin"
+                    android:layout_marginRight="@dimen/profile_dialog_gender_company_number_margin"
+                    android:contentDescription="@string/gender" />
+
+                <TextView
+                    android:id="@+id/profile_dialog_company_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_medium" />
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
-
-    <View
-        android:id="@+id/profile_dialog_send_button_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
-        android:layout_below="@+id/profile_dialog_info_layout"
-        android:background="@color/gray_line" />
-
+	
     <Button
         android:id="@+id/profile_dialog_send_button"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/profile_dialog_height"
         android:layout_height="@dimen/profile_dialog_send_button_height"
-        android:layout_below="@+id/profile_dialog_send_button_divider"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
+        android:layout_marginTop="@dimen/profile_dialog_height"
+        android:background="@android:color/white"
         android:text="@string/send_chupa"
-        android:textColor="@color/red"
+        android:textColor="@color/dark_red"
         android:textSize="@dimen/font_large" />
-
+   
 </RelativeLayout>

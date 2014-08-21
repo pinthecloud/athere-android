@@ -187,7 +187,7 @@ public class AhMessage implements Parcelable {
 	public static AhMessage buildMessage(String type){
 		AhMessage message = new AhMessage();
 
-		message.id = ("id-"+(count));
+		//message.id = ("id-"+(count));
 		message.type = (type);
 		message.content = ("Content-" + (count));
 		message.sender = ("sender-"+count);

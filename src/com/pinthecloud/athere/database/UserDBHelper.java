@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.pinthecloud.athere.model.AhUser;
 
@@ -94,8 +95,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	public void dropTable() {
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void dropTable(SQLiteDatabase db) {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 	}
 
@@ -152,15 +152,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Getting single contact
 	public AhUser getUser(String id) {
-		//		SQLiteDatabase db = this.getReadableDatabase();
-		//
-		//		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
-		//				new String[] { id }, null, null, null, null);
-		//		if (cursor != null)
-		//			if(cursor.moveToFirst())
-		//				return convertToUser(cursor);
-		//
-		//		return null;
 		return this.getUser(id, false);
 	}
 
@@ -177,10 +168,15 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = db.query(TABLE_NAME, null, query,
 				args, null, null, null, null);
-		if (cursor != null)
-			if(cursor.moveToFirst())
-				return convertToUser(cursor);
-
+		if (cursor != null) {
+			if(cursor.moveToFirst()){
+				AhUser u = convertToUser(cursor);
+				db.close();
+				return u;
+			}
+		}
+		
+		db.close();
 		return null;
 	}
 
@@ -190,8 +186,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
 				new String[] { userId }, null, null, null, null);
-		if (cursor != null) return cursor.moveToFirst();
-
+		if (cursor != null) {
+			boolean val = cursor.moveToFirst();
+			db.close();
+			return val;
+		}
+		db.close();
 		return isExist;
 	}
 
@@ -203,13 +203,16 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
+			Log.e("ERROR","has_been_out : " + cursor.getInt(0));
 			if (cursor.getInt(0) == 1){
+				db.close();
 				return true;
 			} else {
+				db.close();
 				return false;
 			}
 		}
-
+		db.close();
 		return isExit;
 	}
 
@@ -290,7 +293,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				users.add(convertToUser(cursor));
 			} while (cursor.moveToNext());
 		}
-
+		db.close();
 		// return contact list
 		return users;
 	}
@@ -331,25 +334,18 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		AhUser user = this.getUser(id);
-		if (user == null) return;
-
 		ContentValues values = new ContentValues();
-		values.put(ID, user.getId());
-		values.put(NICK_NAME, user.getNickName());
-		values.put(PROFILE_PIC, user.getProfilePic());
-		values.put(MOBILE_ID, user.getMobileId());
-		values.put(REGISTRATION_ID, user.getRegistrationId());
-		values.put(IS_MALE, user.isMale());
-		values.put(COMPANY_NUM, user.getCompanyNum());
-		values.put(AGE, user.getAge());
-		values.put(SQUARE_ID, user.getSquareId());
-		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
 		values.put(HAS_BEEN_OUT, true);
-
-		// Inserting Row
-		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });
+//
+//		// Inserting Row
+		db.update(TABLE_NAME, values, ID + "=?", new String[] { id });
 		db.close(); // Closing database connection
+		
+//		String query = "UPDATE " + TABLE_NAME + " SET " + HAS_BEEN_OUT+"=?"+
+//				" WHERE " + ID + "=?";
+//		String [] selectionArgs = new String[]{ String.valueOf(1), id};
+//		db.rawQuery(query, selectionArgs);
+//		db.close();
 	}
 
 	public void deleteAllUsers() {
