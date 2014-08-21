@@ -50,6 +50,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/row_square_chat_list_receive_profile_into_layout"
         android:layout_marginTop="@dimen/square_chat_list_receive_message_layout_top_margin"
+        android:paddingLeft="@dimen/square_chat_list_receive_message_layout_left_margin"
+        android:paddingRight="@dimen/square_chat_list_receive_message_layout_right_margin"
+        android:paddingStart="@dimen/square_chat_list_receive_message_layout_left_margin"
+        android:paddingEnd="@dimen/square_chat_list_receive_message_layout_right_margin"
         android:layout_toEndOf="@+id/row_square_chat_list_receive_profile"
         android:layout_toRightOf="@+id/row_square_chat_list_receive_profile" >
 
@@ -58,8 +62,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center|start"
             android:background="@drawable/bg_chat_msg_recieved"
-            android:textSize="@dimen/font_large" />
+            android:textSize="@dimen/font_regular" />
 
         <TextView
             android:id="@+id/row_square_chat_list_receive_time"

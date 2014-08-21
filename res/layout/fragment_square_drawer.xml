@@ -26,7 +26,7 @@
             android:id="@+id/square_drawer_frag_setting_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_bar_height"
-            android:background="@android:color/white"
+            android:background="@color/gray_drawer_background"
             android:baselineAligned="false"
             android:orientation="horizontal" >
 
@@ -43,6 +43,7 @@
                     android:layout_marginEnd="@dimen/square_drawer_setting_bar_text_toggle_margin"
                     android:layout_marginRight="@dimen/square_drawer_setting_bar_text_toggle_margin"
                     android:text="@string/chat_alarm"
+                    android:textColor="@color/gray_tab_text_unselected"
                     android:textSize="@dimen/font_medium" />
 
                 <ToggleButton
@@ -58,7 +59,7 @@
             <View
                 android:layout_width="@dimen/divider_height"
                 android:layout_height="match_parent"
-                android:background="@color/gray_line" />
+                android:background="@android:color/white" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -73,6 +74,7 @@
                     android:layout_marginEnd="@dimen/square_drawer_setting_bar_text_toggle_margin"
                     android:layout_marginRight="@dimen/square_drawer_setting_bar_text_toggle_margin"
                     android:text="@string/chupa_alarm"
+                    android:textColor="@color/gray_tab_text_unselected"
                     android:textSize="@dimen/font_medium" />
 
                 <ToggleButton
@@ -85,11 +87,6 @@
                     android:textOn="" />
             </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="@color/gray_line" />
 
         <RelativeLayout
             android:id="@+id/square_drawer_frag_profile_bar_layout"
