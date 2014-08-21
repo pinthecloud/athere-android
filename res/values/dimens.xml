@@ -51,6 +51,8 @@
     <!-- Square chat -->
     <dimen name="square_chat_profile_width">35dp</dimen>
     <dimen name="square_chat_profile_height">35dp</dimen>
+    <dimen name="square_chat_input_top_margin">3dp</dimen>
+    <dimen name="square_chat_input_bottom_margin">3dp</dimen>
     <dimen name="square_chat_input_layout_left_margin">8dp</dimen>
     <dimen name="square_chat_input_left_margin">12dp</dimen>
     <dimen name="square_chat_input_right_margin">4dp</dimen>

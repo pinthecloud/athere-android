@@ -19,8 +19,8 @@
         android:layout_height="wrap_content"
         android:background="@color/chat_inputbar_background"
         android:orientation="horizontal"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp" >
+        android:paddingTop="@dimen/square_chat_input_top_margin"
+        android:paddingBottom="@dimen/square_chat_input_bottom_margin" >
 
         <EditText
             android:id="@+id/square_chat_frag_message_text"
