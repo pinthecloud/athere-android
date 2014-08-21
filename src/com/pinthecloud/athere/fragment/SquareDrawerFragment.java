@@ -86,9 +86,6 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set user list
 		 */
-		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, this, R.layout.row_square_drawer_participant_list, userList);
-		participantListView.setAdapter(participantListAdapter);
 		participantListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -195,7 +192,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(Boolean result) {
-				// TODO Auto-generated method stub
 				removeSquarePreference();
 				
 				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
@@ -215,7 +211,6 @@ public class SquareDrawerFragment extends AhFragment {
 //
 //			@Override
 //			public void doNext(AhFragment frag) {
-//				// TODO Auto-generated method stub
 //				AhUser user = userHelper.getMyUserInfo(true);
 //				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
 //
@@ -392,7 +387,9 @@ public class SquareDrawerFragment extends AhFragment {
 		 */
 		userList.clear();
 		userList.addAll(userDBHelper.getAllUsers());
-		participantListAdapter.notifyDataSetChanged();
+		participantListAdapter = new SquareDrawerParticipantListAdapter
+				(context, this, R.layout.row_square_drawer_participant_list, userList);
+		participantListView.setAdapter(participantListAdapter);
 
 
 		/*

@@ -39,6 +39,7 @@
     <string name="shout">Shout</string>
     <string name="confirm">Confirm</string>
     <string name="hint">Hint</string>
+    <string name="blank">Blank</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>

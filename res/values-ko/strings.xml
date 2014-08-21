@@ -39,6 +39,7 @@
     <string name="shout">소리지르기</string>
     <string name="confirm">확인</string>
     <string name="hint">힌트</string>
+    <string name="blank">없음</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>

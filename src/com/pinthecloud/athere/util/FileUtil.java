@@ -123,7 +123,6 @@ public class FileUtil {
 	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
 		Bitmap bitmap = myCached.get(filename);
 		if (bitmap != null) return bitmap;
-		
 		try {
 			File filePath = context.getFileStreamPath(filename);
 			FileInputStream fi = new FileInputStream(filePath);
