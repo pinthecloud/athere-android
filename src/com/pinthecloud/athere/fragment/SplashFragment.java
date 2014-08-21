@@ -23,10 +23,13 @@ import com.pinthecloud.athere.activity.HongkunTestAcitivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AppVersion;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 
 public class SplashFragment extends AhFragment {
 
@@ -62,7 +65,6 @@ public class SplashFragment extends AhFragment {
 		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
 		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
-		AhGlobalVariable.APP_NAME = getResources().getString(R.string.app_name);
 
 
 		/*
@@ -109,7 +111,7 @@ public class SplashFragment extends AhFragment {
 
 	public boolean isHongkunTest() {
 		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
 		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
 		String httpAgent = System.getProperty("http.agent");
 		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
@@ -142,42 +144,72 @@ public class SplashFragment extends AhFragment {
 
 
 	public void runChupa() {
-		versionHelper.getServerAppVersionAsync(_thisFragment, new AhEntityCallback<AppVersion>() {
+		
+		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
-			public void onCompleted(final AppVersion serverVer) {
-				double clientVer;
-				try {
-					clientVer = versionHelper.getClientAppVersion();
-				} catch (NameNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
-					clientVer = 0.1;
-				}
-				if (serverVer.getVersion() > clientVer) {
-					Resources resources = getResources();
-					String title = resources.getString(R.string.update_app_title);
-					String message = resources.getString(R.string.update_app_message);
-					AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
+				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
+						.equals(PreferenceHelper.DEFAULT_STRING)){
+					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
 
 						@Override
-						public void doPositiveThing(Bundle bundle) {
-							Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pname:" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
-							startActivity(intent);
+						public void onCompleted(String registrationId) {
+							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
-								activity.finish();
-							} else {
-								goToNextActivity();
-							}
-						}
+
 					});
-					updateDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-				}else{
-					goToNextActivity();
+
+				} else {
+					AsyncChainer.notifyNext(frag);
 				}
 			}
+			
+		},new Chainable(){
+
+			@Override
+			public void doNext(AhFragment frag) {
+				// TODO Auto-generated method stub
+				versionHelper.getServerAppVersionAsync(frag, new AhEntityCallback<AppVersion>() {
+
+					@Override
+					public void onCompleted(final AppVersion serverVer) {
+						double clientVer;
+						try {
+							clientVer = versionHelper.getClientAppVersion();
+						} catch (NameNotFoundException e) {
+							Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
+							clientVer = 0.1;
+						}
+						if (serverVer.getVersion() > clientVer) {
+							Resources resources = getResources();
+							String title = resources.getString(R.string.update_app_title);
+							String message = resources.getString(R.string.update_app_message);
+							AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
+
+								@Override
+								public void doPositiveThing(Bundle bundle) {
+									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pname:" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
+									startActivity(intent);
+								}
+								@Override
+								public void doNegativeThing(Bundle bundle) {
+									if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
+										activity.finish();
+									} else {
+										goToNextActivity();
+									}
+								}
+							});
+							updateDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+						}else{
+							goToNextActivity();
+						}
+					}
+				});
+			}
+			
 		});
 	}
 

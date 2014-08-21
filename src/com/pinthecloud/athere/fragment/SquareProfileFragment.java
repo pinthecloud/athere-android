@@ -401,80 +401,56 @@ public class SquareProfileFragment extends AhFragment{
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
-		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+		// Save info for user
+		String nickName = nickNameEditText.getText().toString();
+		int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
+		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
+		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
+		pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
 
+
+		// Get a user object from preference settings
+		// Enter a square with the user
+		final AhUser user = userHelper.getMyUserInfo(false);
+		
+		userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
+			
 			@Override
-			public void doNext(AhFragment frag) {
-				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
-						.equals(PreferenceHelper.DEFAULT_STRING)){
-					userHelper.getRegistrationIdAsync(_thisFragment, new AhEntityCallback<String>(){
-
-						@Override
-						public void onCompleted(String registrationId) {
-							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-						}
-
-					});
-
-				} else {
-					AsyncChainer.notifyNext(frag);
+			public void onCompleted(String userId, List<AhUser> list) {
+				// TODO Auto-generated method stub
+				pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
+				
+				for(AhUser user : list) {
+					Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
+					String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+					user.setProfilePic(imagePath);
+					userDBHelper.addUser(user);
 				}
-			}
+				
+				
+				// Save this setting and go to next activity
+				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+				Time time = new Time();
+				time.setToNow();
+				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
+				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
+				
+				
+				// Set and move to next activity after clear previous activity
+				intent.setClass(context, SquareActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		}, new Chainable() {
-
-			@Override
-			public void doNext(AhFragment frag) {
-				// Save info for user
-				String nickName = nickNameEditText.getText().toString();
-				int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-				pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
-				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
-				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
-
-
-				// Get a user object from preference settings
-				// Enter a square with the user
-				final AhUser user = userHelper.getMyUserInfo(false);
-
-				userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
+				activity.runOnUiThread(new Runnable(){
 
 					@Override
-					public void onCompleted(String userId, List<AhUser> list) {
-						pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
+					public void run() {
+						// Dimiss progress bar
+						progressBar.setVisibility(View.GONE);
+						startActivity(intent);
 
-						for(AhUser user : list) {
-							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
-							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
-							user.setProfilePic(imagePath);
-							userDBHelper.addUser(user);
-						}
-
-
-						// Save this setting and go to next activity
-						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-						Time time = new Time();
-						time.setToNow();
-						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
-						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
-
-
-						// Set and move to next activity after clear previous activity
-						intent.setClass(context, SquareActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-						activity.runOnUiThread(new Runnable(){
-
-							@Override
-							public void run() {
-								// Dimiss progress bar
-								progressBar.setVisibility(View.GONE);
-								startActivity(intent);
-							}
-						});
 					}
 				});
 			}
