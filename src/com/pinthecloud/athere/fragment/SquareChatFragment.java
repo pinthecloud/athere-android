@@ -34,7 +34,7 @@ public class SquareChatFragment extends AhFragment{
 
 	private String squareId;
 	private int offset = 0;
-
+	
 
 	public SquareChatFragment(String squareId) {
 		super();
@@ -124,25 +124,23 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set message list view
 		 */
-		messageListAdapter = new SquareChatListAdapter
-				(context, this, R.layout.row_square_chat_list_send, messageList);
-		messageListView.setAdapter(messageListAdapter);
 		messageListView.setOnScrollListener(new OnScrollListener() {
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
 				if (firstVisibleItem == 1) {
 					// TODO : Insert messageListView.add(0, messages);
-//					offset++;
-//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-////					messageList.clear();
-//					messageList.addAll(0, talks);
-//					messageListAdapter.notifyDataSetChanged();
-//					messageListView.setSelection(messageListView.getCount() - 1);
+					//					offset++;
+					//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+					////					messageList.clear();
+					//					messageList.addAll(0, talks);
+					//					messageListAdapter.notifyDataSetChanged();
+					//					messageListView.setSelection(messageListView.getCount() - 1);
 				}
 			}
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 			}
 		});
+
 
 		/**
 		 * See 
@@ -187,17 +185,21 @@ public class SquareChatFragment extends AhFragment{
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
 	private void refreshView(){
-		
-		// ENTER, EXIT, TALK
+		/*
+		 * Set ENTER, EXIT, TALK messages
+		 */
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
 			Log(_thisFragment, "HERE");
 			//final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();
 			messageList.addAll(talks);
-			messageListAdapter.notifyDataSetChanged();
-			messageListView.setSelection(messageListView.getCount() - 1);
 		}
+
+
+		/*
+		 * Set my message for entering
+		 */
 		if(messageList.size() < 1){
 			String enterMessage = getResources().getString(R.string.enter_square_message);
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
@@ -208,11 +210,17 @@ public class SquareChatFragment extends AhFragment{
 			.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
 			.setType(AhMessage.TYPE.ENTER_SQUARE);
 			AhMessage message = messageBuilder.build();
-
 			messageList.add(message);
-			messageListAdapter.notifyDataSetChanged();
-			messageListView.setSelection(messageListView.getCount() - 1);
 		}
+
+
+		/*
+		 * Set message list view
+		 */
+		messageListAdapter = new SquareChatListAdapter
+				(context, this, R.layout.row_square_chat_list_send, messageList);
+		messageListView.setAdapter(messageListAdapter);
+		messageListView.setSelection(messageListView.getCount() - 1);
 	}
 
 
