@@ -50,8 +50,6 @@ public class SquareChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
-		squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
-		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -63,16 +61,19 @@ public class SquareChupaListFragment extends AhFragment{
 			}
 		});
 		
+		
+		/*
+		 * Set message handler for getting push
+		 */
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 			
 			@Override
 			public void onCompleted(AhMessage entity) {
-				// TODO Auto-generated method stub
+				
 				activity.runOnUiThread(new Runnable() {
 					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						refreshView();
 					}
 				});
@@ -89,13 +90,20 @@ public class SquareChupaListFragment extends AhFragment{
 		refreshView();
 	}
 	
+	
 	private void refreshView() {
+		/*
+		 * Set square chupa list view
+		 */
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		lastChupaCommunList.clear();
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));
-		squareChupaListAdapter.notifyDataSetChanged();
+		squareChupaListAdapter = new SquareChupaListAdapter
+				(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+		squareChupaListView.setAdapter(squareChupaListAdapter);
 	}
 
+	
 	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){
