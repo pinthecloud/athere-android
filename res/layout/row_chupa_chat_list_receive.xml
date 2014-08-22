@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/bg_chupa_recieved"
-        android:textSize="@dimen/font_large" />
+        android:gravity="center|start"
+        android:textSize="@dimen/font_regular" />
 
     <TextView
         android:id="@+id/row_chupa_chat_list_receive_time"
