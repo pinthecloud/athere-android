@@ -11,7 +11,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@drawable/chat_bg"
-        android:divider="@null" />
+        android:divider="@null"
+        android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
         android:id="@+id/square_chat_frag_input_layout"
@@ -19,8 +20,8 @@
         android:layout_height="wrap_content"
         android:background="@color/chat_inputbar_background"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/square_chat_input_top_margin"
-        android:paddingBottom="@dimen/square_chat_input_bottom_margin" >
+        android:paddingBottom="@dimen/square_chat_input_bottom_margin"
+        android:paddingTop="@dimen/square_chat_input_top_margin" >
 
         <EditText
             android:id="@+id/square_chat_frag_message_text"

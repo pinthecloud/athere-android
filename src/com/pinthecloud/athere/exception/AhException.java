@@ -9,6 +9,7 @@ public class AhException extends RuntimeException {
 	private AhException.TYPE type;
 	private AhFragment from;
 	private String methodName;
+	private Object parameter;
 
 	public AhException(String string) {
 		super(string);
@@ -20,6 +21,13 @@ public class AhException extends RuntimeException {
 		this.methodName = methodName;
 	}
 
+	public AhException(AhFragment from, String methodName, TYPE type, Object parameter) {
+		this.from = from;
+		this.type = type;
+		this.methodName = methodName;
+		this.parameter = parameter;
+	}
+	
 	public TYPE getType() {
 		return type;
 	}
@@ -32,6 +40,10 @@ public class AhException extends RuntimeException {
 		return methodName;
 	}
 
+	public Object getParameter() {
+		return parameter;
+	}
+	
 	@Override
 	public String toString() {
 		if (super.getMessage() != null) { 

@@ -57,6 +57,7 @@ public class ChupaChatFragment extends AhFragment {
 	private ChupaChatListAdapter messageListAdapter;
 	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>(); 
 
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,12 +75,12 @@ public class ChupaChatFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
 
-		
+
 		// Remove Notification when the user enters the Chupa chat room.
 		NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-		
-		
+
+
 		/*
 		 * Set UI component
 		 */
@@ -98,6 +99,14 @@ public class ChupaChatFragment extends AhFragment {
 		 * Set Action Bar
 		 */
 		mActionBar.setTitle(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
+
+
+		/*
+		 * Set message listview
+		 */
+		messageListAdapter = new ChupaChatListAdapter
+				(context, this, R.layout.row_square_chat_list_send, messageList);
+		messageListView.setAdapter(messageListAdapter);
 
 
 		/*
@@ -180,24 +189,8 @@ public class ChupaChatFragment extends AhFragment {
 				.setReceiverId(otherUser.getId())
 				.setType(AhMessage.TYPE.CHUPA)
 				.setStatus(AhMessage.STATUS.SENDING);
-				final AhMessage message = messageBuilder.build();
-
-				messageList.add(message);
-				messageListAdapter.notifyDataSetChanged();
-				messageListView.setSelection(messageListView.getCount() - 1);
-				messageEditText.setText("");
-				final int id = messageDBHelper.addMessage(message);
-
-				// Send message to server
-				messageHelper.sendMessageAsync(_thisFragment,message, new AhEntityCallback<AhMessage>() {
-
-					@Override
-					public void onCompleted(AhMessage entity) {
-						message.setStatus(AhMessage.STATUS.SENT);
-						messageListAdapter.notifyDataSetChanged();
-						messageDBHelper.updateMessages(id, message);
-					}
-				});
+				final AhMessage sendChupa = messageBuilder.build();
+				sendChupa(sendChupa);
 			}
 		});
 		sendButton.setEnabled(false);
@@ -223,13 +216,7 @@ public class ChupaChatFragment extends AhFragment {
 				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					if (!otherUser.getId().equals(message.getSenderId())) return;
 				}
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						refreshView(message.getChupaCommunId());
-					}
-				});
+				refreshView(message.getChupaCommunId());
 			}
 		});
 
@@ -247,8 +234,6 @@ public class ChupaChatFragment extends AhFragment {
 
 		int w = otherProfileImage.getWidth();
 		int h = otherProfileImage.getHeight();
-
-		//		Bitmap profileBitmap = BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
 		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, otherUser.getProfilePic(), w, h);
 		otherProfileImage.setImageBitmap(profileBitmap);
 	}
@@ -259,6 +244,29 @@ public class ChupaChatFragment extends AhFragment {
 		Log.d(AhGlobalVariable.LOG_TAG, "ChupaChatFragmenr onStop");
 		otherProfileImage.setImageBitmap(null);
 		super.onStop();
+	}
+
+
+	public void sendChupa(final AhMessage sendChupa){
+		sendChupa.setStatus(AhMessage.STATUS.SENDING);
+		messageList.add(sendChupa);
+		messageListAdapter.notifyDataSetChanged();
+		messageListView.setSelection(messageListView.getCount() - 1);
+		messageEditText.setText("");
+
+		int id = messageDBHelper.addMessage(sendChupa);
+		sendChupa.setId("" + id);
+
+		// Send message to server
+		messageHelper.sendMessageAsync(_thisFragment, sendChupa, new AhEntityCallback<AhMessage>() {
+
+			@Override
+			public void onCompleted(AhMessage entity) {
+				sendChupa.setStatus(AhMessage.STATUS.SENT);
+				messageListAdapter.notifyDataSetChanged();
+				messageDBHelper.updateMessages(Integer.parseInt(sendChupa.getId()), sendChupa);
+			}
+		});	
 	}
 
 
@@ -298,19 +306,40 @@ public class ChupaChatFragment extends AhFragment {
 
 
 		/*
+		 * Clear badge numbers displayed on chupa list
+		 */
+		messageDBHelper.clearBadgeNum(chupaCommunId);
+		
+		
+		/*
 		 * Set message listview
 		 */
-		messageListAdapter = new ChupaChatListAdapter
-				(context, R.layout.row_square_chat_list_send, messageList);
-		messageListView.setAdapter(messageListAdapter);
-		messageListView.setSelection(messageListView.getCount() - 1);
+		activity.runOnUiThread(new Runnable() {
 
-		// Clear badge numbers displayed on chupa list
-		messageDBHelper.clearBadgeNum(chupaCommunId);
+			@Override
+			public void run() {
+				messageListAdapter.notifyDataSetChanged();
+				messageListView.setSelection(messageListView.getCount() - 1);
+			}
+		});
 	}
 
 
 	private boolean isSenderButtonEnable(){
 		return isTypedMessage && !isOtherUserExit;
+	}
+
+
+	@Override
+	public void handleException(AhException ex) {
+		if(ex.getMethodName().equals("sendMessageAsync")){
+			AhMessage exMessage = (AhMessage)ex.getParameter();
+			exMessage.setStatus(AhMessage.STATUS.FAIL);
+			messageListAdapter.notifyDataSetChanged();
+			messageListView.setSelection(messageListView.getCount() - 1);
+			messageDBHelper.updateMessages(Integer.parseInt(exMessage.getId()), exMessage);
+			return;
+		}
+		super.handleException(ex);
 	}
 }

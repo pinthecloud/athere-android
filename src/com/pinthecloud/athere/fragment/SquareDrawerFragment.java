@@ -86,6 +86,9 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set user list
 		 */
+		participantListAdapter = new SquareDrawerParticipantListAdapter
+				(context, R.layout.row_square_drawer_participant_list, userList);
+		participantListView.setAdapter(participantListAdapter);
 		participantListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -151,8 +154,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
-						progressBar.setVisibility(View.VISIBLE);
-						progressBar.bringToFront();
 						exitSquare();
 					}
 					@Override
@@ -172,86 +173,77 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhUser user) {
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						updateUserList();
-					}
-				});
+				updateUserList();
 			}
 		});
 
 		return view;
 	}
 
+
 	private void exitSquare() {
-		
+		progressBar.setVisibility(View.VISIBLE);
+		progressBar.bringToFront();
+
 		AhUser user = userHelper.getMyUserInfo(true);
 		userHelper.newExitSquareAsync(_thisFragment, user, new AhEntityCallback<Boolean>() {
 
 			@Override
 			public void onCompleted(Boolean result) {
-				removeSquarePreference();
-				
-				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
-				activity.runOnUiThread(new Runnable() {
+				progressBar.setVisibility(View.GONE);
 
-					@Override
-					public void run() {
-						progressBar.setVisibility(View.GONE);
-						startActivity(intent);
-						activity.finish();
-					}
-				});
+				removeSquarePreference();
+				final Intent intent = new Intent(activity, SquareListActivity.class);
+				startActivity(intent);
+				activity.finish();
 			}
 		});
-		
-//		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
-//
-//			@Override
-//			public void doNext(AhFragment frag) {
-//				AhUser user = userHelper.getMyUserInfo(true);
-//				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
-//
-//					@Override
-//					public void onCompleted(Boolean entity) {
-//						removeSquarePreference();
-//					}
-//				});
-//			}
-//
-//		}, new Chainable() {
-//
-//			@Override
-//			public void doNext(AhFragment frag) {
-//				String exitMessage = getResources().getString(R.string.exit_square_message);
-//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-//				messageBuilder.setContent(nickName + " : " + exitMessage)
-//				.setSender(nickName)
-//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-//				.setType(AhMessage.TYPE.EXIT_SQUARE);
-//				AhMessage message = messageBuilder.build();
-//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-//
-//					@Override
-//					public void onCompleted(AhMessage entity) {
-//						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
-//						activity.runOnUiThread(new Runnable() {
-//
-//							@Override
-//							public void run() {
-//								progressBar.setVisibility(View.GONE);
-//								startActivity(intent);
-//								activity.finish();
-//							}
-//						});
-//					}
-//				});
-//			}
-//		});
+
+		//		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+		//
+		//			@Override
+		//			public void doNext(AhFragment frag) {
+		//				AhUser user = userHelper.getMyUserInfo(true);
+		//				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
+		//
+		//					@Override
+		//					public void onCompleted(Boolean entity) {
+		//						removeSquarePreference();
+		//					}
+		//				});
+		//			}
+		//
+		//		}, new Chainable() {
+		//
+		//			@Override
+		//			public void doNext(AhFragment frag) {
+		//				String exitMessage = getResources().getString(R.string.exit_square_message);
+		//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+		//				messageBuilder.setContent(nickName + " : " + exitMessage)
+		//				.setSender(nickName)
+		//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+		//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+		//				.setType(AhMessage.TYPE.EXIT_SQUARE);
+		//				AhMessage message = messageBuilder.build();
+		//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+		//
+		//					@Override
+		//					public void onCompleted(AhMessage entity) {
+		//						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+		//						activity.runOnUiThread(new Runnable() {
+		//
+		//							@Override
+		//							public void run() {
+		//								progressBar.setVisibility(View.GONE);
+		//								startActivity(intent);
+		//								activity.finish();
+		//							}
+		//						});
+		//					}
+		//				});
+		//			}
+		//		});
 
 
 		/**
@@ -387,16 +379,20 @@ public class SquareDrawerFragment extends AhFragment {
 		 */
 		userList.clear();
 		userList.addAll(userDBHelper.getAllUsers());
-		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, this, R.layout.row_square_drawer_participant_list, userList);
-		participantListView.setAdapter(participantListAdapter);
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				participantListAdapter.notifyDataSetChanged();
 
 
-		/*
-		 * Set member number text
-		 */
-		maleNumText.setText("" + getMaleNum(userList));
-		femaleNumText.setText("" + getFemaleNum(userList));
+				/*
+				 * Set member number text
+				 */
+				maleNumText.setText("" + getMaleNum(userList));
+				femaleNumText.setText("" + getFemaleNum(userList));
+			}
+		});
 	}
 
 

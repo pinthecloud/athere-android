@@ -370,8 +370,8 @@ public class SquareProfileFragment extends AhFragment{
 		releaseCameraAndRemoveView();
 		super.onStop();
 	}
-	
-	
+
+
 	/*
 	 * Create our Preview view and set it as the content of our activity.
 	 * Create orientation event listener
@@ -469,15 +469,9 @@ public class SquareProfileFragment extends AhFragment{
 						intent.setClass(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-						activity.runOnUiThread(new Runnable(){
-
-							@Override
-							public void run() {
-								// Dimiss progress bar
-								progressBar.setVisibility(View.GONE);
-								startActivity(intent);
-							}
-						});
+						// Dimiss progress bar
+						progressBar.setVisibility(View.GONE);
+						startActivity(intent);
 					}
 				});
 			}

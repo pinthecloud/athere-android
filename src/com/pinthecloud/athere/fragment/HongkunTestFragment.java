@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,21 +8,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
-import com.pinthecloud.athere.util.FileUtil;
-import com.pinthecloud.athere.util.JsonConverter;
 
 /**
  * 
@@ -90,7 +77,7 @@ public class HongkunTestFragment extends AhFragment {
 						AhMessage message = AhMessage.buildMessage();
 						Log(_thisFragment, message);
 						messageDBHelper.addMessage(message);
-						
+
 					} else if (b.getId() == btnArr[1].getId()) {
 						b.setText("isEmpty");
 						Log(_thisFragment, messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.CHUPA));
@@ -101,16 +88,16 @@ public class HongkunTestFragment extends AhFragment {
 						b.setText("deleteAll");
 						messageDBHelper.deleteAllMessages();
 					} else if (b.getId() == btnArr[4].getId()) {
-						
+
 					} else if (b.getId() == btnArr[5].getId()) {
-						
+
 					}
 					messageText.setText(b.getText());
 				}
 			});
 		}
-		
-		
+
+
 		return view;
 	}
 

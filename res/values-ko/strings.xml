@@ -18,6 +18,7 @@
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="delete">지우기</string>
+    <string name="re_send">재전송</string>
     <string name="select">선택하기</string>
     <string name="settings">설정</string>
     <string name="gender">성별</string>
@@ -40,6 +41,7 @@
     <string name="confirm">확인</string>
     <string name="hint">힌트</string>
     <string name="blank">없음</string>
+    <string name="fail">취소</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -60,9 +62,9 @@
     <string name="shout_notification_title">shouts.</string>
     <string name="update_app_title">Update App</string>
     <string name="update_app_message">새로운 버전이 나왔습니다. 업데이트 해주세요</string>
-    <string name="internet_not_connected_title">인터넷에 연결되지 않았습니다</string>
     <string name="internet_not_connected_message">네트워크 연결상태가 좋지 않습니다. 연결상태를 체크해주세요</string>
-    
+    <string name="message_fail_message">재전송하시겠습니까?</string>
+
     <!-- String Array -->
 
     <string-array name="profile_image_select_string_array">

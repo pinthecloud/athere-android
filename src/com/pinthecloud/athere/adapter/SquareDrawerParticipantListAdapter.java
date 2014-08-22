@@ -2,7 +2,6 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -29,7 +28,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 	private List<AhUser> items;
 
 
-	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<AhUser> items) {
+	public SquareDrawerParticipantListAdapter(Context context, int layoutId, List<AhUser> items) {
 		super(context, layoutId, items);
 		this.context = context;
 		this.layoutId = layoutId;

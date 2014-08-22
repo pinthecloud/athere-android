@@ -44,6 +44,7 @@ public class AhGlobalVariable{
 	 */
 	public static final String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";
 	public static final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
+	public static final String IS_POLICY_CONSENT_KEY = "IS_POLICY_CONSENT_KEY";
 	public static final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
 	
 	public static final String NICK_NAME_KEY = "NICK_NAME_KEY";

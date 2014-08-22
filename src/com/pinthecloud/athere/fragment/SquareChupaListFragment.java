@@ -53,6 +53,12 @@ public class SquareChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
+		/*
+		 * Set square chupa list view
+		 */
+		squareChupaListAdapter = new SquareChupaListAdapter
+				(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -72,14 +78,7 @@ public class SquareChupaListFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						refreshView();
-					}
-				});
+				refreshView();
 			}
 		});
 
@@ -101,15 +100,19 @@ public class SquareChupaListFragment extends AhFragment{
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		lastChupaCommunList.clear();
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));
-		squareChupaListAdapter = new SquareChupaListAdapter
-				(context, R.layout.row_square_chupa_list, lastChupaCommunList);
-		squareChupaListView.setAdapter(squareChupaListAdapter);
+		activity.runOnUiThread(new Runnable() {
 
-		if(lastChupaCommunList.size() < 1){
-			blankImage.setVisibility(View.VISIBLE);
-		} else{
-			blankImage.setVisibility(View.GONE);
-		}
+			@Override
+			public void run() {
+				squareChupaListAdapter.notifyDataSetChanged();
+
+				if(lastChupaCommunList.size() < 1){
+					blankImage.setVisibility(View.VISIBLE);
+				} else{
+					blankImage.setVisibility(View.GONE);
+				}
+			}
+		});
 	}
 
 
@@ -127,7 +130,7 @@ public class SquareChupaListFragment extends AhFragment{
 			String isExit = "false";
 			String chupaBadge = "";
 
-			if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getSenderId())) {
+			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
 				userNickName = message.getReceiver();
@@ -139,7 +142,7 @@ public class SquareChupaListFragment extends AhFragment{
 				throw new AhException("No User in Sender or Receive");
 			}
 			AhUser user = userDBHelper.getUser(userId);
-
+			
 			// if there is No such User
 			if (user == null) {
 				// check whether it is exited.
@@ -155,7 +158,7 @@ public class SquareChupaListFragment extends AhFragment{
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
 			chupaCommunId = message.getChupaCommunId();
-			chupaBadge = ""+messageDBHelper.getBadgeNum(message.getChupaCommunId());
+			chupaBadge = "" + messageDBHelper.getBadgeNum(message.getChupaCommunId());
 			map.put("profilePic", profilePic);
 			map.put("userNickName", userNickName);
 			map.put("userId", userId);

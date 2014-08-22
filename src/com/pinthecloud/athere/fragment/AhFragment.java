@@ -75,7 +75,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		String title = ex.getType().toString();
 		String message = ex.toString();
 		if(ex.getType().equals(AhException.TYPE.INTERNET_NOT_CONNECTED)){
-			title = resources.getString(R.string.internet_not_connected_title);
+			title = null;
 			message = resources.getString(R.string.internet_not_connected_message);
 		}
 		exceptionDialog = new AhAlertDialog(title, message, false, new AhDialogCallback() {

@@ -3,7 +3,6 @@ package com.pinthecloud.athere.dialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -12,6 +11,8 @@ public class AhAlertDialog extends AhDialogFragment{
 
 	private String title;
 	private String message;
+	private String okMessage;
+	private String cancelMessage;
 	private boolean cancel;
 
 	public AhAlertDialog(String title, String message, boolean cancel, AhDialogCallback ahDialogCallback) {
@@ -22,25 +23,41 @@ public class AhAlertDialog extends AhDialogFragment{
 		this.cancel = cancel;
 	}
 
+	public AhAlertDialog(String title, String message, String okMessage, String cancelMessage, boolean cancel, AhDialogCallback ahDialogCallback) {
+		super();
+		this.ahDialogCallback = ahDialogCallback;
+		this.title = title;
+		this.message = message;
+		this.okMessage = okMessage;
+		this.cancelMessage = cancelMessage;
+		this.cancel = cancel;
+	}
+
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		// Get String from resources
-		Resources resources = getResources();
-		String ok = resources.getString(android.R.string.ok);
-		String no = resources.getString(android.R.string.no);
+		if(okMessage == null){
+			okMessage =  getResources().getString(android.R.string.ok);
+		}
+		if(cancelMessage == null){
+			cancelMessage =  getResources().getString(android.R.string.no);	
+		}
 
 		// Make Dialog
 		AlertDialog.Builder altBuilder = new AlertDialog.Builder(getActivity());
-		altBuilder.setTitle(title);
+		if(title == null){
+			setStyle(STYLE_NO_TITLE, 0);
+		}else{
+			altBuilder.setTitle(title);
+		}
 		altBuilder.setMessage(message);
-		altBuilder.setPositiveButton(ok, new DialogInterface.OnClickListener() {
+		altBuilder.setPositiveButton(okMessage, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int which) {
 				ahDialogCallback.doPositiveThing(null);
 				dismiss();
 			}
 		});
 		if(cancel){
-			altBuilder.setNegativeButton(no, new DialogInterface.OnClickListener() {
+			altBuilder.setNegativeButton(cancelMessage, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					ahDialogCallback.doNegativeThing(null);
 					dismiss();

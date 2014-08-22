@@ -42,7 +42,7 @@ public class MessageHelper {
 	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 
 		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED, message));
 			return;
 		}
 
