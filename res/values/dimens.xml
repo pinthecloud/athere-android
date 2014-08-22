@@ -60,6 +60,7 @@
     <dimen name="square_chat_notification_text_height">40dp</dimen>
     <dimen name="square_chat_notification_text_top_margin">3dp</dimen>
     <dimen name="square_chat_list_receive_left_margin">10dp</dimen>
+    <dimen name="square_chat_list_receive_right_margin">50dp</dimen>
     <dimen name="square_chat_list_receive_top_margin">5dp</dimen>
     <dimen name="square_chat_list_receive_bottom_margin">5dp</dimen>
     <dimen name="square_chat_list_receive_profile_nick_name_margin">6.5dp</dimen>
@@ -90,9 +91,11 @@
     <dimen name="chupa_chat_other_profile_height">33.5dp</dimen>
     <dimen name="chupa_chat_left_margin">10.5dp</dimen>
     <dimen name="chupa_chat_list_receive_left_margin">12dp</dimen>
+    <dimen name="chupa_chat_list_receive_right_margin">50dp</dimen>
     <dimen name="chupa_chat_list_receive_top_margin">3dp</dimen>
     <dimen name="chupa_chat_list_receive_bottom_margin">3dp</dimen>
     <dimen name="chupa_chat_list_send_right_margin">12dp</dimen>
+    <dimen name="chupa_chat_list_send_left_margin">50dp</dimen>
     <dimen name="chupa_chat_list_send_top_margin">3dp</dimen>
     <dimen name="chupa_chat_list_send_bottom_margin">3dp</dimen>
     <dimen name="chupa_chat_list_send_time_right_margin">3dp</dimen>
@@ -129,7 +132,7 @@
     <dimen name="profile_dialog_width">280dp</dimen>
     <dimen name="profile_dialog_height">280dp</dimen>
     <dimen name="profile_dialog_top_margin">48dp</dimen>
-    <dimen name="profile_dialog_send_button_height">48dp</dimen>
+    <dimen name="profile_dialog_send_button_height">52dp</dimen>
     <dimen name="profile_dialog_nick_name_info_height">56dp</dimen>
     <dimen name="profile_dialog_nick_name_top_margin">12dp</dimen>
     <dimen name="profile_dialog_nick_name_age_margin">10dp</dimen>

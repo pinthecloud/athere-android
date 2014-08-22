@@ -5,9 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/chupa_chat_list_receive_bottom_margin"
-    android:paddingEnd="0dp"
+    android:paddingEnd="@dimen/chupa_chat_list_receive_right_margin"
     android:paddingLeft="@dimen/chupa_chat_list_receive_left_margin"
-    android:paddingRight="0dp"
+    android:paddingRight="@dimen/chupa_chat_list_receive_right_margin"
     android:paddingStart="@dimen/chupa_chat_list_receive_left_margin"
     android:paddingTop="@dimen/chupa_chat_list_receive_top_margin" >
 

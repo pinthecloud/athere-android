@@ -256,6 +256,6 @@
         android:background="@android:color/white"
         android:text="@string/exit_square"
         android:textColor="@color/dark_red"
-        android:textSize="@dimen/font_large" />
+        android:textSize="@dimen/font_medium" />
 
 </RelativeLayout>
