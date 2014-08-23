@@ -25,7 +25,6 @@ public class MessageHelper {
 
 	private AhApplication app;
 	private MobileServiceClient mClient;
-	private Object lock;
 
 	/*
 	 * Methods name
@@ -37,13 +36,13 @@ public class MessageHelper {
 		super();
 		this.app = AhApplication.getInstance();
 		this.mClient = app.getmClient();
-		this.lock = app.getLock();
 	}
 
+	
 	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 
 		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED, message));
 			return;
 		}
 
@@ -78,8 +77,6 @@ public class MessageHelper {
 	}
 
 
-	
-	
 	/**
 	 *  ===[The Message Triggering Propagation Mechanism]===
 	 *  When the message pushed by server comes,
@@ -99,6 +96,7 @@ public class MessageHelper {
 	 *  The handlers should only refresh the related Views. (typically, refreshView() method)
 	 * 
 	 */
+
 	
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
 
@@ -114,7 +112,7 @@ public class MessageHelper {
 			map.put(frag.getClass().getName(), callback);
 		}
 	}
-	
+
 	public void triggerMessageEvent(AhFragment frag, AhMessage message){
 		this.triggerMessageEvent(frag.getClass().getName(), message);
 	}
@@ -127,66 +125,60 @@ public class MessageHelper {
 		else 
 			Log.d(AhGlobalVariable.LOG_TAG,"[MessageHelper.triggerMessage] map.get(MESSAGE_RECEIVED); :" + message.getType());
 	}
-	
-	
-	
-	
-	//////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////
-	
+
+
 	/**
 	 * 
 	 * Sync Method
 	 * NOT USING
 	 */
-	
-	
-//	public boolean _sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
-//
-//		if (!app.isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return false;
-//		}
-//
-//		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
-//
-//		JsonObject jo = new JsonObject();
-//		jo.addProperty("type", message.getType());
-//		jo.addProperty("content", message.getContent());
-//		jo.addProperty("sender", message.getSender());
-//		jo.addProperty("senderId", message.getSenderId());
-//		jo.addProperty("receiver", message.getReceiver());
-//		jo.addProperty("receiverId", message.getReceiverId());
-//		jo.addProperty("timeStamp", message.getTimeStamp());
-//		jo.addProperty("chupaCommunId", message.getChupaCommunId());
-//
-//		Gson g = new Gson();
-//		JsonElement json = g.fromJson(jo, JsonElement.class);
-//
-//		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
-//
-//			@Override
-//			public void onCompleted(JsonElement json, Exception exception,
-//					ServiceFilterResponse response) {
-//				if(exception == null){
-//					carrier.load(true);
-//					synchronized (lock) {
-//						lock.notify();
-//					}
-//				} else {
-//					carrier.load(false);
-//					ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.SERVER_ERROR));
-//				}
-//			}
-//		});
-//
-//		synchronized (lock) {
-//			try {
-//				lock.wait();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return carrier.getItem();
-//	}
+
+	//	public boolean _sendMessageSync(final AhFragment frag, AhMessage message) throws AhException {
+	//
+	//		if (!app.isOnline()) {
+	//			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+	//			return false;
+	//		}
+	//
+	//		final AhCarrier<Boolean> carrier = new AhCarrier<Boolean>();
+	//
+	//		JsonObject jo = new JsonObject();
+	//		jo.addProperty("type", message.getType());
+	//		jo.addProperty("content", message.getContent());
+	//		jo.addProperty("sender", message.getSender());
+	//		jo.addProperty("senderId", message.getSenderId());
+	//		jo.addProperty("receiver", message.getReceiver());
+	//		jo.addProperty("receiverId", message.getReceiverId());
+	//		jo.addProperty("timeStamp", message.getTimeStamp());
+	//		jo.addProperty("chupaCommunId", message.getChupaCommunId());
+	//
+	//		Gson g = new Gson();
+	//		JsonElement json = g.fromJson(jo, JsonElement.class);
+	//
+	//		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
+	//
+	//			@Override
+	//			public void onCompleted(JsonElement json, Exception exception,
+	//					ServiceFilterResponse response) {
+	//				if(exception == null){
+	//					carrier.load(true);
+	//					synchronized (lock) {
+	//						lock.notify();
+	//					}
+	//				} else {
+	//					carrier.load(false);
+	//					ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.SERVER_ERROR));
+	//				}
+	//			}
+	//		});
+	//
+	//		synchronized (lock) {
+	//			try {
+	//				lock.wait();
+	//			} catch (InterruptedException e) {
+	//				e.printStackTrace();
+	//			}
+	//		}
+	//		return carrier.getItem();
+	//	}
 }

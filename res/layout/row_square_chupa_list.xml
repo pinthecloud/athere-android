@@ -45,6 +45,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/square_chat_list_receive_content_left_margin"
                 android:layout_marginStart="@dimen/square_chat_list_receive_content_left_margin"
+                android:ellipsize="end"
+            	android:maxWidth="@dimen/square_chat_list_receive_content_max_width"
+            	android:singleLine="true"
                 android:textSize="@dimen/font_small" />
         </LinearLayout>
 

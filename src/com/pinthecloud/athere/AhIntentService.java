@@ -33,7 +33,6 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class AhIntentService extends IntentService {
@@ -75,7 +74,6 @@ public class AhIntentService extends IntentService {
 		String unRegisterd = intent.getStringExtra("unregistered");
 		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID))
 			return;
-
 		
 		try {
 			message = parseMessageIntent(intent);
@@ -85,7 +83,6 @@ public class AhIntentService extends IntentService {
 			return;
 		}
 		Log.e(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
-
 		
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {
@@ -153,10 +150,7 @@ public class AhIntentService extends IntentService {
 
 			@Override
 			public void onCompleted(AhUser user) {
-//				String imagePath = ImageFileUtil.saveFile(app, user.getId(), user.getProfilePic());
-//				Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
-//				String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
-//				user.setProfilePic(imagePath);
+
 				userDBHelper.addUser(user);
 				if (isRunning(app)) {
 					String currentActivityName = getCurrentRunningActivityName(app);
@@ -359,6 +353,7 @@ public class AhIntentService extends IntentService {
 			.setReceiver(receiver)
 			.setReceiverId(receiverId)
 			.setTimeStamp(timeStamp)
+			.setStatus(AhMessage.STATUS.SENT)
 			.setChupaCommunId(chupaCommunId);
 
 		} catch (JSONException e) {

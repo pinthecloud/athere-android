@@ -2,8 +2,6 @@ package com.pinthecloud.athere.fragment;
 
 import java.io.File;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,22 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
-import com.pinthecloud.athere.util.FileUtil;
-import com.pinthecloud.athere.util.JsonConverter;
 
 /**
  * 
@@ -90,18 +76,6 @@ public class HongkunTestFragment extends AhFragment {
 				public void onClick(View v) {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
-						new Thread(new Runnable() {
-							
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-								Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
-                                        R.drawable.splash);
-								Log(_thisFragment, "before upload");
-								Log(_thisFragment, "after upload");
-							}
-						}).start();
-						
 					} else if (b.getId() == btnArr[1].getId()) {
 						new Thread(new Runnable() {
 							
@@ -120,16 +94,16 @@ public class HongkunTestFragment extends AhFragment {
 						b.setText("deleteAll");
 						messageDBHelper.deleteAllMessages();
 					} else if (b.getId() == btnArr[4].getId()) {
-						
+
 					} else if (b.getId() == btnArr[5].getId()) {
-						
+
 					}
 					messageText.setText(b.getText());
 				}
 			});
 		}
-		
-		
+
+
 		return view;
 	}
 

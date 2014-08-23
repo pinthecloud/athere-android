@@ -24,7 +24,6 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
@@ -81,7 +80,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			final int h = profileImage.getHeight();
 //			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 //			profileImage.setImageBitmap(profileBitmap);
-			blobStorageHelper.getBitmapAsync(frag, user.getId(), new AhEntityCallback<Bitmap>() {
+			blobStorageHelper.getBitmapAsync(frag, user.getId(), w,h, new AhEntityCallback<Bitmap>() {
 
 				@Override
 				public void onCompleted(final Bitmap entity) {

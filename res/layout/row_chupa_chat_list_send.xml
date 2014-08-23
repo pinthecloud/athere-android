@@ -7,10 +7,20 @@
     android:orientation="horizontal"
     android:paddingBottom="@dimen/chupa_chat_list_send_bottom_margin"
     android:paddingEnd="@dimen/chupa_chat_list_send_right_margin"
-    android:paddingLeft="0dp"
+    android:paddingLeft="@dimen/chupa_chat_list_send_left_margin"
     android:paddingRight="@dimen/chupa_chat_list_send_right_margin"
-    android:paddingStart="0dp"
+    android:paddingStart="@dimen/chupa_chat_list_send_left_margin"
     android:paddingTop="@dimen/chupa_chat_list_send_top_margin" >
+
+    <ImageButton
+        android:id="@+id/row_chupa_chat_list_send_fail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/fail"
+        android:src="@drawable/msg_send_cancel"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/row_chupa_chat_list_send_progress_bar"
@@ -35,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_chupa_sent"
-        android:gravity="center"
+        android:gravity="center|start"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/font_large" />
+        android:textSize="@dimen/font_regular" />
 
 </LinearLayout>

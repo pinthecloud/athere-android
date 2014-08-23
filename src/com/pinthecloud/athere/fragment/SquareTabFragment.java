@@ -103,13 +103,7 @@ public class SquareTabFragment extends AhFragment{
 			public void onCompleted(final AhMessage message) {
 				// Chupa & Exit Message can go through here
 				// Chupa & Exit Message need to be update visually in ChupaChatList Fragment
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						refreshView();
-					}
-				});
+				refreshView();
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);
 			}
@@ -118,7 +112,7 @@ public class SquareTabFragment extends AhFragment{
 		return view;
 	}
 
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -126,14 +120,20 @@ public class SquareTabFragment extends AhFragment{
 		refreshView();
 	}
 
-	
+
 	private void refreshView(){
-		int totalNum = messageDBHelper.getAllBadgeNum();
-		if(totalNum != 0){
-			badge.setText("" + totalNum);
-			badge.show();	
-		}else{
-			badge.hide();
-		}
+		final int totalNum = messageDBHelper.getAllBadgeNum();
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				if(totalNum != 0){
+					badge.setText("" + totalNum);
+					badge.show();	
+				}else{
+					badge.hide();
+				}
+			}
+		});
 	}
 }

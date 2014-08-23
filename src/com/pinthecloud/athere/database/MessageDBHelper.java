@@ -1,8 +1,6 @@
 package com.pinthecloud.athere.database;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -584,19 +582,18 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	}
 
 
-	private void sortMessages(List<AhMessage> list){
-		Collections.sort(list, new Comparator<AhMessage>() {
-
-			@Override
-			public int compare(AhMessage lhs, AhMessage rhs) {
-				int left = Integer.valueOf(lhs.getId());
-				int right = Integer.valueOf(rhs.getId());
-				if (left == right) return 0;
-				return left > right ? 1: -1;
-			}
-		});
-	}
-
+	//	private void sortMessages(List<AhMessage> list){
+	//		Collections.sort(list, new Comparator<AhMessage>() {
+	//
+	//			@Override
+	//			public int compare(AhMessage lhs, AhMessage rhs) {
+	//				int left = Integer.valueOf(lhs.getId());
+	//				int right = Integer.valueOf(rhs.getId());
+	//				if (left == right) return 0;
+	//				return left > right ? 1: -1;
+	//			}
+	//		});
+	//	}
 
 
 	public int getBadgeNum(String chupaCommunId) {

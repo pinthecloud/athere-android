@@ -83,7 +83,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				}
 			});
 			
-			
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 			if (!chupaBadge.equals("0")) {

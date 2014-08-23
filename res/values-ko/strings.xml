@@ -18,11 +18,12 @@
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="delete">지우기</string>
+    <string name="re_send">재전송</string>
     <string name="select">선택하기</string>
     <string name="settings">설정</string>
     <string name="gender">성별</string>
-    <string name="birth_of_year">출생년도</string>
-    <string name="number_of_member">몇 명이 오셨나요?</string>
+    <string name="birth_of_year">출생연도</string>
+    <string name="number_of_member">몇 명이서 오셨나요?</string>
     <string name="nick_name">닉네임</string>
     <string name="drawer">사이드바</string>
     <string name="rotate">카메라 돌리기</string>
@@ -33,12 +34,14 @@
     <string name="send_chupa">추파 보내기</string>
     <string name="chupa">추파</string>
     <string name="chat_alarm">채팅알람</string>
-    <string name="get_chupa">추파받기</string>
+    <string name="chupa_alarm">추파알람</string>
     <string name="player">참가팀</string>
-    <string name="code">가게 코드</string>
+    <string name="code">매장 코드</string>
     <string name="shout">소리지르기</string>
     <string name="confirm">확인</string>
     <string name="hint">힌트</string>
+    <string name="blank">없음</string>
+    <string name="fail">취소</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -52,16 +55,16 @@
     <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
     <string name="no_profile_picture_message">힌트 사진을 까먹으셨네요</string>
     <string name="offline_message">인터넷에 연결할 수 없어요. 연결상태를 체크해주세요</string>
-    <string name="exit_square_message">안녕! 그라운드를 나왔습니다</string>
-    <string name="enter_square_message">안녕! 그라운드에 들어왔습니다</string>
-    <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 사라져요. 정말 나가시나요?</string>
+    <string name="exit_square_message">님이 그라운드를 나갔습니다</string>
+    <string name="enter_square_message">님이 그라운드에 들어왔습니다</string>
+    <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워집니다. 나가시겠습니까?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈습니다</string>
     <string name="shout_notification_title">shouts.</string>
     <string name="update_app_title">Update App</string>
     <string name="update_app_message">새로운 버전이 나왔습니다. 업데이트 해주세요</string>
-    <string name="internet_not_connected_title">인터넷에 연결되지 않았습니다</string>
-    <string name="internet_not_connected_message">네트워크 연결상태가 구려요. 연결상태를 체크해주세요</string>
-    
+    <string name="internet_not_connected_message">네트워크 연결상태가 좋지 않습니다. 연결상태를 체크해주세요</string>
+    <string name="message_fail_message">재전송하시겠습니까?</string>
+
     <!-- String Array -->
 
     <string-array name="profile_image_select_string_array">

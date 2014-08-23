@@ -66,7 +66,7 @@ public class SplashFragment extends AhFragment {
 		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 
-
+		
 		/*
 		 * If time is up, remove local preferences.
 		 */

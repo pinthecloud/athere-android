@@ -38,6 +38,8 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
@@ -94,10 +96,11 @@ public class SquareProfileFragment extends AhFragment{
 
 					// Get file from taken data
 					File pictureFile = FileUtil.getOutputMediaFile(FileUtil.MEDIA_TYPE_IMAGE);
-					Uri pictureFileUri = Uri.fromFile(pictureFile);
-					if (pictureFile == null){
+					if (pictureFile == null) {
+						ExceptionManager.fireException(new AhException(_thisFragment, "onPictureTaken", AhException.TYPE.SD_CARD_FAIL));
 						return;
 					}
+					Uri pictureFileUri = Uri.fromFile(pictureFile);
 					FileOutputStream fos = new FileOutputStream(pictureFile);
 					fos.write(data);
 					fos.close();
@@ -368,8 +371,8 @@ public class SquareProfileFragment extends AhFragment{
 		releaseCameraAndRemoveView();
 		super.onStop();
 	}
-	
-	
+
+
 	/*
 	 * Create our Preview view and set it as the content of our activity.
 	 * Create orientation event listener
@@ -477,16 +480,9 @@ public class SquareProfileFragment extends AhFragment{
 						intent.setClass(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-						activity.runOnUiThread(new Runnable(){
-
-							@Override
-							public void run() {
-								// Dimiss progress bar
-								progressBar.setVisibility(View.GONE);
-								startActivity(intent);
-
-							}
-						});
+						// Dimiss progress bar
+						progressBar.setVisibility(View.GONE);
+						startActivity(intent);
 					}
 				});
 			}

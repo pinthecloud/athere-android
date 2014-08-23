@@ -18,7 +18,6 @@ import com.pinthecloud.athere.util.AsyncChainer;
 public class VersionHelper {
 
 	private AhApplication app;
-	private Object lock;
 
 	/**
 	 * Model tables
@@ -31,12 +30,13 @@ public class VersionHelper {
 		OPTIONAL
 	}
 
+	
 	public VersionHelper() {
 		app = AhApplication.getInstance();
-		lock = app.getLock();
 		appVersionTable = app.getAppVersionTable();
 	}
 
+	
 	public void getServerAppVersionAsync(final AhFragment frag, final AhEntityCallback<AppVersion> callback) {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -62,52 +62,53 @@ public class VersionHelper {
 		});
 	}
 
+	
 	public double getClientAppVersion() throws NameNotFoundException {
 		String versionName = app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName;
 		return Double.parseDouble(versionName);
 	}
-	
-	
-//	public AppVersion _getServerAppVersionSync(final AhFragment frag) {
-//		if (!app.isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return null;
-//		}
-//
-//		final AhCarrier<AppVersion> carrier = new AhCarrier<AppVersion>();
-//		appVersionTable.select("").execute(new TableQueryCallback<AppVersion>() {
-//
-//			@Override
-//			public void onCompleted(List<AppVersion> list, int count, Exception exception,
-//					ServiceFilterResponse response) {
-//				if(exception == null){
-//					if (list.size() == 1) {
-//						AppVersion appVersion = list.get(0);
-//						carrier.load(appVersion);
-//					} else {
-//						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
-//					}
-//
-//					synchronized (lock) {
-//						lock.notify();
-//					}
-//				} else {
-//					carrier.load(null);
-//					ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
-//				}
-//			}
-//		});
-//
-//		synchronized (lock) {
-//			try {
-//				lock.wait();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//
-//		return carrier.getItem();
-//	}
+
+
+	//	public AppVersion _getServerAppVersionSync(final AhFragment frag) {
+	//		if (!app.isOnline()) {
+	//			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+	//			return null;
+	//		}
+	//
+	//		final AhCarrier<AppVersion> carrier = new AhCarrier<AppVersion>();
+	//		appVersionTable.select("").execute(new TableQueryCallback<AppVersion>() {
+	//
+	//			@Override
+	//			public void onCompleted(List<AppVersion> list, int count, Exception exception,
+	//					ServiceFilterResponse response) {
+	//				if(exception == null){
+	//					if (list.size() == 1) {
+	//						AppVersion appVersion = list.get(0);
+	//						carrier.load(appVersion);
+	//					} else {
+	//						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
+	//					}
+	//
+	//					synchronized (lock) {
+	//						lock.notify();
+	//					}
+	//				} else {
+	//					carrier.load(null);
+	//					ExceptionManager.fireException(new AhException(frag, "getServerAppVersionSync", AhException.TYPE.SERVER_ERROR));
+	//				}
+	//			}
+	//		});
+	//
+	//		synchronized (lock) {
+	//			try {
+	//				lock.wait();
+	//			} catch (InterruptedException e) {
+	//				e.printStackTrace();
+	//			}
+	//		}
+	//
+	//		return carrier.getItem();
+	//	}
 }
 
 // get Version from server;
