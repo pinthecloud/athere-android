@@ -17,7 +17,10 @@ import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.util.AsyncChainer;
 
 public class BlobStorageHelper {
 
@@ -33,18 +36,20 @@ public class BlobStorageHelper {
 		} catch (InvalidKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
+//			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
+			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
+//			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
+			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 
 		// Create a blob service client
 		blobClient = account.createCloudBlobClient();
 	}
 	
-	public String uploadBitmapSync(String id, Bitmap bitmap) {
+	public String uploadBitmapSync(final AhFragment frag, String id, Bitmap bitmap) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		try {
@@ -57,18 +62,21 @@ public class BlobStorageHelper {
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		
 		return id;
 	}
 	
-	public Bitmap downloadBitmapSync(String id) {
+	public Bitmap downloadBitmapSync(final AhFragment frag, String id) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		
@@ -81,14 +89,16 @@ public class BlobStorageHelper {
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		return null;
 	}
 	
-	public String downloadToFileSync(String id, Context context, String path) {
+	public String downloadToFileSync(final AhFragment frag, String id, Context context, String path) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		
@@ -100,17 +110,20 @@ public class BlobStorageHelper {
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		return null;
 	}
 	
-	public void uploadBitmapAsync(String id, final Bitmap bitmap, final AhEntityCallback<String> callback) {
+	public void uploadBitmapAsync(final AhFragment frag, String id, final Bitmap bitmap, final AhEntityCallback<String> callback) {
 		
 		(new AsyncTask<String, Void, String>() {
 
@@ -118,47 +131,49 @@ public class BlobStorageHelper {
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				String id = params[0];
-				return uploadBitmapSync(id, bitmap);
+				return uploadBitmapSync(frag, id, bitmap);
 			}
 			
 			@Override
 			protected void onPostExecute(String result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
-				
-				callback.onCompleted(result);
+				if (callback != null)
+					callback.onCompleted(result);
+				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);
 	}
 	
-	public void downloadBitmapAsync(String id, final AhEntityCallback<Bitmap> callback) {
+	public void downloadBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {
 		(new AsyncTask<String, Void, Bitmap>() {
 
 			@Override
 			protected Bitmap doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				String id = params[0];
-				return downloadBitmapSync(id);
+				return downloadBitmapSync(frag, id);
 			}
 			
 			@Override
 			protected void onPostExecute(Bitmap result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
-				
-				callback.onCompleted(result);
+				if (callback != null)
+					callback.onCompleted(result);
+				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);
 	}
 	
-	public void downloadToFileAsync(String id, final Context context, final String path, final AhEntityCallback<String> callback) {
+	public void downloadToFileAsync(final AhFragment frag, String id, final Context context, final String path, final AhEntityCallback<String> callback) {
 		(new AsyncTask<String, Void, String>() {
 
 			@Override
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				String id = params[0];
-				return downloadToFileSync(id, context, path);
+				return downloadToFileSync(frag, id, context, path);
 			}
 			
 			@Override
@@ -166,7 +181,9 @@ public class BlobStorageHelper {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				
-				callback.onCompleted(result);
+				if (callback != null)
+					callback.onCompleted(result);
+				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);
 	}

@@ -39,7 +39,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
@@ -419,14 +418,7 @@ public class SquareProfileFragment extends AhFragment{
 			public void onCompleted(String userId, List<AhUser> list) {
 				// TODO Auto-generated method stub
 				pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
-				blobStorageHelper.uploadBitmapAsync(userId, pictureBitmap, new AhEntityCallback<String>() {
-					
-					@Override
-					public void onCompleted(String entity) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
+				blobStorageHelper.uploadBitmapAsync(_thisFragment, userId, pictureBitmap, null);
 				
 				userDBHelper.addAllUsers(list);
 //				for(AhUser user : list) {

@@ -2,7 +2,6 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,24 +15,32 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
+import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
 	private Context context;
+	private AhFragment frag;
 	private int layoutId;
 	private List<AhUser> items;
+	private BlobStorageHelper blobStorageHelper;
 
-
-	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<AhUser> items) {
+	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId, List<AhUser> items) {
 		super(context, layoutId, items);
 		this.context = context;
+		this.frag = fragment;
 		this.layoutId = layoutId;
 		this.items = items;
+		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
 	}
 
 
@@ -51,7 +58,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			/*
 			 * Find UI Component
 			 */
-			ImageView profileImage = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
+			final ImageView profileImage = (ImageView)view.findViewById(R.id.drawer_user_pro_pic);
 			TextView nickName = (TextView)view.findViewById(R.id.drawer_user_nick_name);
 			ImageView gender = (ImageView)view.findViewById(R.id.drawer_user_gender);
 			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
@@ -70,10 +77,28 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 				gender.setImageResource(R.drawable.profile_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
-			int w = profileImage.getWidth();
-			int h = profileImage.getHeight();
-			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
-			profileImage.setImageBitmap(profileBitmap);
+			final int w = profileImage.getWidth();
+			final int h = profileImage.getHeight();
+//			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
+//			profileImage.setImageBitmap(profileBitmap);
+			blobStorageHelper.downloadToFileAsync(frag, user.getId(), this.context, user.getId(), new AhEntityCallback<String>() {
+
+				@Override
+				public void onCompleted(String entity) {
+					// TODO Auto-generated method stub
+					final Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
+					AhActivity activity = (AhActivity)context;
+					activity.runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							profileImage.setImageBitmap(profileBitmap);
+						}
+					});
+					
+				}
+			});
 
 
 			/*
