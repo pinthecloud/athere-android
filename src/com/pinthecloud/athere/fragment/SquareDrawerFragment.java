@@ -196,6 +196,8 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onCompleted(Boolean result) {
 				// TODO Auto-generated method stub
+				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
 				removeSquarePreference();
 				
 				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);

@@ -99,7 +99,7 @@ public class SquareChupaListFragment extends AhFragment{
 		lastChupaCommunList.clear();
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));
 		squareChupaListAdapter = new SquareChupaListAdapter
-				(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+				(context, _thisFragment, R.layout.row_square_chupa_list, lastChupaCommunList);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 	}
 

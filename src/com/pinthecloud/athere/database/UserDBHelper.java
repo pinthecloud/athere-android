@@ -128,6 +128,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 
 	public void addAllUsers(List<AhUser> list){
+		
+		if (list == null || list.size() == 0) return;
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		for(AhUser user : list){

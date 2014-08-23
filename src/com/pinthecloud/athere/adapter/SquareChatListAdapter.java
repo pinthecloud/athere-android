@@ -2,7 +2,6 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,24 +22,26 @@ import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.ProfileDialog;
+import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	private Context context;
-	private Fragment fragment;
+	private AhFragment fragment;
 	private LayoutInflater inflater;
 	private int layoutId;
 	private List<AhMessage> items;
 
 	private AhApplication app;
 	private UserDBHelper userDBHelper;
+	private CachedBlobStorageHelper blobStorageHelper;
 
-
-	public SquareChatListAdapter(Context context, Fragment fragment, int layoutId, List<AhMessage> items) {
+	public SquareChatListAdapter(Context context, AhFragment fragment, int layoutId, List<AhMessage> items) {
 		super(context, layoutId, items);
 		this.context = context;
 		this.fragment = fragment;
@@ -50,6 +51,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		this.app = AhApplication.getInstance(); 
 		this.userDBHelper = app.getUserDBHelper();
+		this.blobStorageHelper = app.getBlobStorageHelper();
 	}
 
 
@@ -109,7 +111,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 * Find UI component only in receive list
 				 */
 				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nick_name);
-				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
+				final ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
 				/*
@@ -123,8 +125,18 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
-				Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
-				profileImage.setImageBitmap(profileBitmap);
+//				Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
+					
+				blobStorageHelper.getBitmapAsync(fragment, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
+					
+					@Override
+					public void onCompleted(Bitmap entity) {
+						// TODO Auto-generated method stub
+						profileImage.setImageBitmap(entity);
+					}
+				});
+				
+				
 				profileImage.bringToFront();
 				profileImage.setOnClickListener(new OnClickListener() {
 

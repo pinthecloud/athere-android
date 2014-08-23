@@ -33,7 +33,6 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.FileUtil;
 
 public class ChupaChatFragment extends AhFragment {
 
@@ -267,9 +266,20 @@ public class ChupaChatFragment extends AhFragment {
 
 		// Bitmap profileBitmap =
 		// BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
-		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context,
-				otherUser.getProfilePic(), w, h);
-		otherProfileImage.setImageBitmap(profileBitmap);
+//		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context,
+//				otherUser.getProfilePic(), w, h);
+//		Bitmap profileBitmap = BitmapFactory.decodeResource(getResources(), R.id.splash_logo);
+//		otherProfileImage.setImageBitmap(profileBitmap);
+		blobStorageHelper.getBitmapAsync(_thisFragment, 
+				pref.getString(AhGlobalVariable.USER_ID_KEY), w, h, 
+				new AhEntityCallback<Bitmap>() {
+
+			@Override
+			public void onCompleted(Bitmap entity) {
+				// TODO Auto-generated method stub
+				otherProfileImage.setImageBitmap(entity);
+			}
+		});
 	}
 
 	@Override

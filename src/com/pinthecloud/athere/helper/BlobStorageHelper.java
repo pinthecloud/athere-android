@@ -27,19 +27,18 @@ public class BlobStorageHelper {
 	
 	private static final String storageConnectionString = 
 			"DefaultEndpointsProtocol=http;AccountName=athere;AccountKey=ldhgydlWndSIl7XfiaAQ+sibsNtVZ1Psebba1RpBKxMbyFVYUCMvvuQir0Ty7f0+8TnNLfFKc9yFlYpP6ZSuQQ==";
-	private CloudBlobClient blobClient;
+	private static final String CONTAINER_NAME = "chupaprofile";
+	protected CloudBlobClient blobClient;
 	
 	public BlobStorageHelper() {
 		CloudStorageAccount account = null;
 		try {
 			account = CloudStorageAccount.parse(storageConnectionString);
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 //			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
 			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 //			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
 			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
@@ -53,7 +52,7 @@ public class BlobStorageHelper {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		try {
-			container = blobClient.getContainerReference("chupaprofile");
+			container = blobClient.getContainerReference(CONTAINER_NAME);
 			 blob = container.getBlockBlobReference(id);
 			 ByteArrayOutputStream baos = new ByteArrayOutputStream();
              bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -81,7 +80,7 @@ public class BlobStorageHelper {
 		CloudBlockBlob blob = null;
 		
 		try {
-			container = blobClient.getContainerReference("chupaprofile");
+			container = blobClient.getContainerReference(CONTAINER_NAME);
 			blob = container.getBlockBlobReference(id);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			blob.download(baos);
@@ -98,15 +97,15 @@ public class BlobStorageHelper {
 		return null;
 	}
 	
-	public String downloadToFileSync(final AhFragment frag, String id, Context context, String path) {
+	public String downloadToFileSync(final AhFragment frag, String id, String path) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		
 		try {
-			container = blobClient.getContainerReference("chupaprofile");
+			container = blobClient.getContainerReference(CONTAINER_NAME);
 			blob = container.getBlockBlobReference(id);
-			blob.downloadToFile(context.getFilesDir() + "/" + path);
-			return context.getFilesDir() + "/" + path;
+			blob.downloadToFile(frag.getActivity().getFilesDir() + "/" + path);
+			return frag.getActivity().getFilesDir() + "/" + path;
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,6 +120,27 @@ public class BlobStorageHelper {
 			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		return null;
+	}
+	
+	public boolean deleteBitmapSync(final AhFragment frag, String id) {
+		CloudBlobContainer container = null;
+		CloudBlockBlob blob = null;
+		
+		try {
+			container = blobClient.getContainerReference(CONTAINER_NAME);
+			blob = container.getBlockBlobReference(id);
+			blob.delete();
+			return true;
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+		} catch (StorageException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+		}
+		return false;
 	}
 	
 	public void uploadBitmapAsync(final AhFragment frag, String id, final Bitmap bitmap, final AhEntityCallback<String> callback) {
@@ -173,11 +193,33 @@ public class BlobStorageHelper {
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				String id = params[0];
-				return downloadToFileSync(frag, id, context, path);
+				return downloadToFileSync(frag, id, path);
 			}
 			
 			@Override
 			protected void onPostExecute(String result) {
+				// TODO Auto-generated method stub
+				super.onPostExecute(result);
+				
+				if (callback != null)
+					callback.onCompleted(result);
+				AsyncChainer.notifyNext(frag);
+			}
+		}).execute(id);
+	}
+	
+	public void deleteBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Boolean> callback) {
+		(new AsyncTask<String, Void, Boolean>() {
+
+			@Override
+			protected Boolean doInBackground(String... params) {
+				// TODO Auto-generated method stub
+				String id = params[0];
+				return deleteBitmapSync(frag, id);
+			}
+			
+			@Override
+			protected void onPostExecute(Boolean result) {
 				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				

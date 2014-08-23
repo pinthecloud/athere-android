@@ -21,7 +21,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.FileUtil;
@@ -32,7 +32,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 	private AhFragment frag;
 	private int layoutId;
 	private List<AhUser> items;
-	private BlobStorageHelper blobStorageHelper;
+	private CachedBlobStorageHelper blobStorageHelper;
 
 	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId, List<AhUser> items) {
 		super(context, layoutId, items);
@@ -81,24 +81,40 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			final int h = profileImage.getHeight();
 //			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 //			profileImage.setImageBitmap(profileBitmap);
-			blobStorageHelper.downloadToFileAsync(frag, user.getId(), this.context, user.getId(), new AhEntityCallback<String>() {
+			blobStorageHelper.getBitmapAsync(frag, user.getId(), new AhEntityCallback<Bitmap>() {
 
 				@Override
-				public void onCompleted(String entity) {
+				public void onCompleted(final Bitmap entity) {
 					// TODO Auto-generated method stub
-					final Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 					AhActivity activity = (AhActivity)context;
 					activity.runOnUiThread(new Runnable() {
 						
 						@Override
 						public void run() {
 							// TODO Auto-generated method stub
-							profileImage.setImageBitmap(profileBitmap);
+							profileImage.setImageBitmap(entity);
 						}
 					});
 					
 				}
 			});
+//			blobStorageHelper.downloadBitmapAsync(frag, user.getId(), new AhEntityCallback<Bitmap>() {
+//
+//				@Override
+//				public void onCompleted(final Bitmap entity) {
+//					// TODO Auto-generated method stub
+//					Log.e("ERROR", "bitmap : " + entity);
+//					AhActivity activity = (AhActivity)context;
+//					activity.runOnUiThread(new Runnable() {
+//						
+//						@Override
+//						public void run() {
+//							// TODO Auto-generated method stub
+//							profileImage.setImageBitmap(entity);
+//						}
+//					});
+//				}
+//			});
 
 
 			/*

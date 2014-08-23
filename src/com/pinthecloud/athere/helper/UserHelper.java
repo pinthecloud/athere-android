@@ -83,7 +83,6 @@ public class UserHelper {
 			return;
 		}
 		JsonObject jo = user.toJson();
-
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 		

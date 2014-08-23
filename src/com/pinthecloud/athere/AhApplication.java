@@ -21,6 +21,7 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -28,9 +29,9 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 
@@ -65,7 +66,7 @@ public class AhApplication extends Application{
 	private static SquareHelper squareHelper;
 	private static MessageHelper messageHelper;
 	private static VersionHelper versionHelper;
-	private static BlobStorageHelper blobStorageHelper;
+	private static CachedBlobStorageHelper blobStorageHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -99,7 +100,7 @@ public class AhApplication extends Application{
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
-		blobStorageHelper = new BlobStorageHelper();
+		blobStorageHelper = new CachedBlobStorageHelper();
 
 	}
 
@@ -142,7 +143,7 @@ public class AhApplication extends Application{
 	public VersionHelper getVersionHelper() {
 		return versionHelper;
 	}
-	public BlobStorageHelper getBlobStorageHelper() {
+	public CachedBlobStorageHelper getBlobStorageHelper() {
 		return blobStorageHelper;
 	}
 

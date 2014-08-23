@@ -154,9 +154,9 @@ public class AhIntentService extends IntentService {
 			@Override
 			public void onCompleted(AhUser user) {
 //				String imagePath = ImageFileUtil.saveFile(app, user.getId(), user.getProfilePic());
-				Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
-				String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
-				user.setProfilePic(imagePath);
+//				Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
+//				String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+//				user.setProfilePic(imagePath);
 				userDBHelper.addUser(user);
 				if (isRunning(app)) {
 					String currentActivityName = getCurrentRunningActivityName(app);
