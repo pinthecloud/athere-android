@@ -13,6 +13,11 @@ public class AhException extends RuntimeException {
 	public AhException(String string) {
 		super(string);
 	}
+	
+	public AhException(TYPE type) {
+		this.type = type;
+		this.from = null;
+	}
 
 	public AhException(AhFragment from, String methodName, TYPE type) {
 		this.from = from;
@@ -48,6 +53,7 @@ public class AhException extends RuntimeException {
 		PARSING_ERROR,
 		MESSAGE_ERROR,
 		NO_USER_ID,
-		GCM_REGISTRATION_FAIL
+		GCM_REGISTRATION_FAIL,
+		BLOB_STORAGE_ERROR
 	}
 }

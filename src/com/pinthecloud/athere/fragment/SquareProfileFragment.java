@@ -38,14 +38,11 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
@@ -74,6 +71,7 @@ public class SquareProfileFragment extends AhFragment{
 	private NumberPickerDialog companyNumberPickerDialog;
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
+	private Bitmap pictureBitmap;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -100,7 +98,7 @@ public class SquareProfileFragment extends AhFragment{
 					FileOutputStream fos = new FileOutputStream(pictureFile);
 					fos.write(data);
 					fos.close();
-					Bitmap pictureBitmap = BitmapFactory.decodeStream
+					pictureBitmap = BitmapFactory.decodeStream
 							(app.getContentResolver().openInputStream(pictureFileUri));
 					pictureFile.delete();
 
@@ -421,14 +419,22 @@ public class SquareProfileFragment extends AhFragment{
 			public void onCompleted(String userId, List<AhUser> list) {
 				// TODO Auto-generated method stub
 				pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
+				blobStorageHelper.uploadBitmapAsync(userId, pictureBitmap, new AhEntityCallback<String>() {
+					
+					@Override
+					public void onCompleted(String entity) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 				
-				for(AhUser user : list) {
-					Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
-					String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
-					user.setProfilePic(imagePath);
-					userDBHelper.addUser(user);
-				}
-				
+				userDBHelper.addAllUsers(list);
+//				for(AhUser user : list) {
+//					Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
+//					String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+//					user.setProfilePic(imagePath);
+//					userDBHelper.addUser(user);
+//				}
 				
 				// Save this setting and go to next activity
 				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());

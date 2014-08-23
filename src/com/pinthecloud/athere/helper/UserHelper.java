@@ -3,7 +3,6 @@ package com.pinthecloud.athere.helper;
 import java.io.IOException;
 import java.util.List;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,8 +27,6 @@ import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.BitmapUtil;
-import com.pinthecloud.athere.util.FileUtil;
 import com.pinthecloud.athere.util.JsonConverter;
 
 public class UserHelper {
@@ -226,8 +223,9 @@ public class UserHelper {
 	}
 
 	public AhUser getMyUserInfo(boolean hasId) {
-		Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-		String profilePic = BitmapUtil.convertToString(pictureBitmap);
+//		Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+//		String profilePic = BitmapUtil.convertToString(pictureBitmap);
+		String profilePic = "";
 
 		AhUser user = new AhUser();
 		if(hasId)

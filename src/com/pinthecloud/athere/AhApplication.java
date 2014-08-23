@@ -20,6 +20,7 @@ import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -64,6 +65,7 @@ public class AhApplication extends Application{
 	private static SquareHelper squareHelper;
 	private static MessageHelper messageHelper;
 	private static VersionHelper versionHelper;
+	private static BlobStorageHelper blobStorageHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -97,6 +99,7 @@ public class AhApplication extends Application{
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
+		blobStorageHelper = new BlobStorageHelper();
 
 	}
 
@@ -138,6 +141,9 @@ public class AhApplication extends Application{
 	}
 	public VersionHelper getVersionHelper() {
 		return versionHelper;
+	}
+	public BlobStorageHelper getBlobStorageHelper() {
+		return blobStorageHelper;
 	}
 
 

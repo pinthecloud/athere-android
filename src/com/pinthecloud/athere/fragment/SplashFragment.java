@@ -118,8 +118,8 @@ public class SplashFragment extends AhFragment {
 				|| myGal3.equals(httpAgent))))	// Galaxy 3
 			return false;
 
-		boolean val = true;
-		if (val) return false;
+//		boolean val = true;
+//		if (val) return false;
 		
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")

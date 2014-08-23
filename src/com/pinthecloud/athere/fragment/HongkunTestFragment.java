@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
+import java.io.File;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
@@ -44,6 +47,7 @@ public class HongkunTestFragment extends AhFragment {
 	private Button myBtn;
 	private MobileServiceClient mClient;
 
+	private BlobStorageHelper blobStorageHelper;
 	public static final String SENDER_ID = "838051405989";
 
 
@@ -78,7 +82,7 @@ public class HongkunTestFragment extends AhFragment {
 		btnArr[5] = (Button)view.findViewById(R.id.button6);
 		messageText = (TextView)view.findViewById(R.id.message_text);
 		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
-
+		blobStorageHelper = new BlobStorageHelper();
 		for(int i = 0 ; i < 6 ; i++){
 			btnArr[i].setOnClickListener(new View.OnClickListener() {
 
@@ -86,17 +90,32 @@ public class HongkunTestFragment extends AhFragment {
 				public void onClick(View v) {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
-						b.setText("ADD");
-						AhMessage message = AhMessage.buildMessage();
-						Log(_thisFragment, message);
-						messageDBHelper.addMessage(message);
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
+                                        R.drawable.splash);
+								Log(_thisFragment, "before upload");
+								Log(_thisFragment, "after upload");
+							}
+						}).start();
 						
 					} else if (b.getId() == btnArr[1].getId()) {
-						b.setText("isEmpty");
-						Log(_thisFragment, messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.CHUPA));
+						new Thread(new Runnable() {
+							
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+							}
+						}).start();
+						
 					} else if (b.getId() == btnArr[2].getId()) {
-						b.setText("getAllMessages");
-						Log(_thisFragment, messageDBHelper.getAllMessages(AhMessage.TYPE.CHUPA, AhMessage.TYPE.EXIT_SQUARE));
+						String filename = "gogo.png";
+						File filePath = context.getFileStreamPath(filename);
+						Log(_thisFragment, context.getFilesDir()+"/"+filename, filePath, context.getFilesDir()+"/"+filename.equals(filePath));
+						
 					} else if (b.getId() == btnArr[3].getId()) {
 						b.setText("deleteAll");
 						messageDBHelper.deleteAllMessages();
