@@ -19,6 +19,10 @@ public class AhGlobalVariable{
 	public static int DEVICE_DPI;
 	public static float DEVICE_DENSITY;
 
+	/*
+	 * GCM server key
+	 */
+	public static final String GCM_SENDER_ID = "838051405989";
 
 	/*
 	 * String

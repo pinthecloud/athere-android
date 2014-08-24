@@ -174,7 +174,7 @@ public class SplashFragment extends AhFragment {
 		          
 		        if (!GCMRegistrar.isRegistered(context)) {
 		        	// Registration ID 발급 요청
-			        GCMRegistrar.register(context, UserHelper.GCM_SENDER_ID);
+			        GCMRegistrar.register(context, AhGlobalVariable.GCM_SENDER_ID);
 		        }
 		        
 		        AsyncChainer.notifyNext(frag);

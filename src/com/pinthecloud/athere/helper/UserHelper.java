@@ -1,12 +1,9 @@
 package com.pinthecloud.athere.helper;
 
-import java.io.IOException;
 import java.util.List;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,11 +40,6 @@ public class UserHelper {
 
 	private final String ENTER_SQUARE = "enter_square";
 	private final String EXIT_SQUARE = "exit_square";
-	/*
-	 * GCM server key
-	 */
-	public static final String GCM_SENDER_ID = "838051405989";
-
 
 	public UserHelper() {
 		super();
@@ -58,24 +50,24 @@ public class UserHelper {
 		this.mClient = app.getmClient();
 	}
 
-	public void enterSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-		userTable.insert(user, new TableOperationCallback<AhUser>() {
-
-			@Override
-			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
-				if (exception == null) {
-					callback.onCompleted(entity.getId());
-					AsyncChainer.notifyNext(frag);
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
-				}
-			}
-		});
-	}
+//	public void enterSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//		userTable.insert(user, new TableOperationCallback<AhUser>() {
+//
+//			@Override
+//			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
+//				if (exception == null) {
+//					callback.onCompleted(entity.getId());
+//					AsyncChainer.notifyNext(frag);
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//	}
 	
 	public void newEnterSquareAsync(final AhFragment frag, AhUser user, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
 		if (!app.isOnline()) {
@@ -106,25 +98,25 @@ public class UserHelper {
 
 	}
 
-	public void exitSquareAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-
-		userTable.delete(userId, new TableDeleteCallback() {
-
-			@Override
-			public void onCompleted(Exception e, ServiceFilterResponse response) {
-				if (e == null) {
-					callback.onCompleted(true);
-					AsyncChainer.notifyNext(frag);
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
-				}
-			}
-		});
-	}
+//	public void exitSquareAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//
+//		userTable.delete(userId, new TableDeleteCallback() {
+//
+//			@Override
+//			public void onCompleted(Exception e, ServiceFilterResponse response) {
+//				if (e == null) {
+//					callback.onCompleted(true);
+//					AsyncChainer.notifyNext(frag);
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//	}
 	
 	public void newExitSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<Boolean> callback) throws AhException {
 		if (!app.isOnline()) {
@@ -241,33 +233,33 @@ public class UserHelper {
 	}
 
 
-	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
-
-			@Override
-			protected String doInBackground(GoogleCloudMessaging... params) {
-				GoogleCloudMessaging gcm = params[0];
-				try {
-					return gcm.register(GCM_SENDER_ID);
-				} catch (IOException e) {
-					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL));
-					return null;
-				}
-			}
-
-			@Override
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				callback.onCompleted(result);
-				AsyncChainer.notifyNext(frag);
-			}
-		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
-
-	}
+//	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
+//
+//			@Override
+//			protected String doInBackground(GoogleCloudMessaging... params) {
+//				GoogleCloudMessaging gcm = params[0];
+//				try {
+//					return gcm.register(GCM_SENDER_ID);
+//				} catch (IOException e) {
+//					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+//					return null;
+//				}
+//			}
+//
+//			@Override
+//			protected void onPostExecute(String result) {
+//				super.onPostExecute(result);
+//				callback.onCompleted(result);
+//				AsyncChainer.notifyNext(frag);
+//			}
+//		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
+//
+//	}
 
 	//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
 	AhEntityCallback<AhUser> _callback;

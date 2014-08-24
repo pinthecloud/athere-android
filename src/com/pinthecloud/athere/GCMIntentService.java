@@ -31,6 +31,7 @@ import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhIdUser;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.FileUtil;
@@ -66,7 +67,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 //	}
 	
 	public GCMIntentService(){
-		this(UserHelper.GCM_SENDER_ID);
+		this(AhGlobalVariable.GCM_SENDER_ID);
 	}
 
 	public GCMIntentService(String senderId){
@@ -100,6 +101,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onRegistered(Context arg0, String registrationId) {
 		// TODO Auto-generated method stub
 		pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+		AhIdUser idUser = new AhIdUser();
 	}
 
 
@@ -248,7 +250,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				// TODO Auto-generated method stub
 				
 			}
 		});

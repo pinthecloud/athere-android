@@ -29,6 +29,8 @@ public class AhUser implements Parcelable{
 	private String squareId;
 	@com.google.gson.annotations.SerializedName("isChupaEnable")
 	private boolean isChupaEnable;
+	@com.google.gson.annotations.SerializedName("ahIdUser")
+	private String ahIdUser;
 
 	public static final Parcelable.Creator<AhUser> CREATOR = new Creator<AhUser>(){
 		public AhUser createFromParcel(Parcel in){

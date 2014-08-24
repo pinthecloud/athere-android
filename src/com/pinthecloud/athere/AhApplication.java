@@ -159,10 +159,10 @@ public class AhApplication extends Application{
 	}
 
 
-	//TODO : Don't Use NOW
+
 	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<AhMessage> callback) {
 		if (!isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "sendMessageSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "forcedLogoutAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 
