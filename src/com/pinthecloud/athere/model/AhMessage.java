@@ -110,6 +110,11 @@ public class AhMessage implements Parcelable {
 	public String getTimeStamp() {
 		return timeStamp;
 	}
+	public void setTimeStamp() {
+		Time time = new Time();
+		time.setToNow();
+		this.timeStamp = time.format("%Y%m%d%H%M%S");
+	}
 	public String getChupaCommunId() {
 		return chupaCommunId;
 	}
@@ -188,6 +193,10 @@ public class AhMessage implements Parcelable {
 		}
 	}
 
+
+	/*
+	 * Make random message for test
+	 */
 	private static int count = 0;
 	public static AhMessage buildMessage(String type){
 		AhMessage message = new AhMessage();
@@ -229,9 +238,10 @@ public class AhMessage implements Parcelable {
 	}
 
 
+	/*
+	 * Message Builder Class
+	 */
 	public static class Builder {
-
-		private static final String DEFAULT_STRING = "DEFAULT_STRING";
 
 		private String id;
 		private String type;
@@ -240,8 +250,8 @@ public class AhMessage implements Parcelable {
 		private String senderId;
 		private String receiver;
 		private String receiverId;
-		private String timeStamp = DEFAULT_STRING;
-		private String chupaCommunId = DEFAULT_STRING;
+		private String timeStamp = null;
+		private String chupaCommunId = null;
 		private int status = STATUS.SENDING.getValue();
 
 		public Builder setId(String id) {
@@ -276,6 +286,12 @@ public class AhMessage implements Parcelable {
 			this.receiverId = receiverId;
 			return this;
 		}
+		public Builder setTimeStamp() {
+			Time time = new Time();
+			time.setToNow();
+			this.timeStamp = time.format("%Y%m%d%H%M%S");
+			return this;
+		}
 		public Builder setTimeStamp(String timeStamp) {
 			this.timeStamp = timeStamp;
 			return this;
@@ -295,7 +311,6 @@ public class AhMessage implements Parcelable {
 
 		public AhMessage build(){
 			AhMessage message = new AhMessage();
-
 			message.id = id;
 			message.type = type;
 			message.content = content;
@@ -305,20 +320,14 @@ public class AhMessage implements Parcelable {
 			message.receiverId = receiverId;
 			message.status = status;
 
-			if (this.timeStamp.equals(DEFAULT_STRING)){
-				Time time = new Time();
-				time.setToNow();
-				message.timeStamp = time.format("%H:%M");
+			if (this.timeStamp == null){
+				message.timeStamp = "99999999999999";
 			} else {
 				message.timeStamp = timeStamp;
 			}
-
-			if (this.chupaCommunId.equals(DEFAULT_STRING)){
-				if (this.senderId.compareTo(this.receiverId) > 0) {
-					message.chupaCommunId = message.senderId + message.receiverId;
-				} else {
-					message.chupaCommunId = message.receiverId + message.senderId;
-				}
+			
+			if (this.chupaCommunId == null){
+				message.chupaCommunId = buildChupaCommunId(this.senderId, this.receiverId);
 			} else {
 				message.chupaCommunId = chupaCommunId;
 			}

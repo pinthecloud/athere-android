@@ -143,7 +143,7 @@ public class SquareChatFragment extends AhFragment{
 				
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
-						||message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
+						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
 				refreshView();
 			}
 		});
@@ -166,24 +166,24 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
-
+		
 		int id = messageDBHelper.addMessage(message);
 		message.setId("" + id);
-
+		
 		// Send message to server
 		messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
 				message.setStatus(AhMessage.STATUS.SENT);
-				messageListAdapter.notifyDataSetChanged();
-				messageDBHelper.updateMessages(Integer.parseInt(message.getId()), message);
+				message.setTimeStamp();
+				messageDBHelper.updateMessages(message);
+				refreshView();
 			}
 		});
 	}
-
-
-
+	
+	
 	/**
 	 * @author hongkunyoo
 	 * notify this Method When this Fragment is on Resume
@@ -212,7 +212,8 @@ public class SquareChatFragment extends AhFragment{
 			.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 			.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
 			.setType(AhMessage.TYPE.ENTER_SQUARE)
-			.setStatus(AhMessage.STATUS.SENT);
+			.setStatus(AhMessage.STATUS.SENT)
+			.setTimeStamp();
 			AhMessage enterTalk = messageBuilder.build();
 			messageList.add(enterTalk);
 		}
@@ -243,7 +244,7 @@ public class SquareChatFragment extends AhFragment{
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
-			messageDBHelper.updateMessages(Integer.parseInt(exMessage.getId()), exMessage);
+			messageDBHelper.updateMessages(exMessage);
 			return;
 		}
 		super.handleException(ex);

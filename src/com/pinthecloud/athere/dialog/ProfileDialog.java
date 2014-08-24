@@ -3,7 +3,6 @@ package com.pinthecloud.athere.dialog;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -129,7 +128,7 @@ public class ProfileDialog extends AhDialogFragment{
 			//			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 			//profileBitmap = FileUtil.getImageFromInternalStorage(app, user.getProfilePic(), w, h);
 			blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
-				
+
 				@Override
 				public void onCompleted(Bitmap entity) {
 					// TODO Auto-generated method stub
@@ -140,7 +139,7 @@ public class ProfileDialog extends AhDialogFragment{
 			profileBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
 			profileImage.setImageBitmap(profileBitmap);
 		}
-		
+
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
 		}else{

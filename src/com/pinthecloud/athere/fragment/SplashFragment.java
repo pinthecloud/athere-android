@@ -67,7 +67,7 @@ public class SplashFragment extends AhFragment {
 		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 
-		
+
 		/*
 		 * If time is up, remove local preferences.
 		 */
@@ -112,16 +112,13 @@ public class SplashFragment extends AhFragment {
 
 	public boolean isHongkunTest() {
 		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
 		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
 		String httpAgent = System.getProperty("http.agent");
 		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
 				|| myGal3.equals(httpAgent))))	// Galaxy 3
 			return false;
 
-//		boolean val = true;
-//		if (val) return false;
-		
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
 		.setMessage("Want to Go to HongkunTest?")
@@ -145,7 +142,6 @@ public class SplashFragment extends AhFragment {
 
 
 	public void runChupa() {
-		
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
@@ -166,7 +162,7 @@ public class SplashFragment extends AhFragment {
 					AsyncChainer.notifyNext(frag);
 				}
 			}
-			
+
 		},new Chainable(){
 
 			@Override
@@ -210,7 +206,7 @@ public class SplashFragment extends AhFragment {
 					}
 				});
 			}
-			
+
 		});
 	}
 

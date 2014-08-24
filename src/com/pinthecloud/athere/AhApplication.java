@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -16,13 +15,11 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
@@ -199,9 +196,9 @@ public class AhApplication extends Application{
 					}
 				});
 			}
-			
+
 		}, new Chainable() {
-			
+
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
@@ -219,7 +216,7 @@ public class AhApplication extends Application{
 				});
 			}
 		});
-		
+
 	}
 	
 	public void removeSquarePreference(){

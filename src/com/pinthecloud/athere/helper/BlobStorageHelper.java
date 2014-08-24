@@ -36,11 +36,9 @@ public class BlobStorageHelper {
 			account = CloudStorageAccount.parse(storageConnectionString);
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
-//			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
 			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-//			throw new AhException(AhException.TYPE.BLOB_STORAGE_ERROR);
 			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 
@@ -59,16 +57,10 @@ public class BlobStorageHelper {
 			 blob.upload(new ByteArrayInputStream(baos.toByteArray()), baos.size());
 			 baos.close();
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		
@@ -86,12 +78,8 @@ public class BlobStorageHelper {
 			blob.download(baos);
 			return BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.size());
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		return null;
@@ -107,16 +95,10 @@ public class BlobStorageHelper {
 			blob.downloadToFile(frag.getActivity().getFilesDir() + "/" + path);
 			return frag.getActivity().getFilesDir() + "/" + path;
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		return null;
@@ -132,12 +114,8 @@ public class BlobStorageHelper {
 			blob.delete();
 			return true;
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		return false;
@@ -149,14 +127,12 @@ public class BlobStorageHelper {
 
 			@Override
 			protected String doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				String id = params[0];
 				return uploadBitmapSync(frag, id, bitmap);
 			}
 			
 			@Override
 			protected void onPostExecute(String result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				if (callback != null)
 					callback.onCompleted(result);
@@ -170,14 +146,12 @@ public class BlobStorageHelper {
 
 			@Override
 			protected Bitmap doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				String id = params[0];
 				return downloadBitmapSync(frag, id);
 			}
 			
 			@Override
 			protected void onPostExecute(Bitmap result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				if (callback != null)
 					callback.onCompleted(result);
@@ -191,14 +165,12 @@ public class BlobStorageHelper {
 
 			@Override
 			protected String doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				String id = params[0];
 				return downloadToFileSync(frag, id, path);
 			}
 			
 			@Override
 			protected void onPostExecute(String result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				
 				if (callback != null)
@@ -213,14 +185,12 @@ public class BlobStorageHelper {
 
 			@Override
 			protected Boolean doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				String id = params[0];
 				return deleteBitmapSync(frag, id);
 			}
 			
 			@Override
 			protected void onPostExecute(Boolean result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				
 				if (callback != null)

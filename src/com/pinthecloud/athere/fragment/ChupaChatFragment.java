@@ -114,25 +114,25 @@ public class ChupaChatFragment extends AhFragment {
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, otherUser,
 						new AhDialogCallback() {
 
-							@Override
-							public void doPositiveThing(Bundle bundle) {
-								Intent intent = new Intent(context,
-										ChupaChatActivity.class);
-								intent.putExtra(AhGlobalVariable.USER_KEY,
-										otherUser.getId());
-								context.startActivity(intent);
-								activity.finish();
-							}
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						Intent intent = new Intent(context,
+								ChupaChatActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY,
+								otherUser.getId());
+						context.startActivity(intent);
+						activity.finish();
+					}
 
-							@Override
-							public void doNegativeThing(Bundle bundle) {
-								Intent intent = new Intent(context,
-										ProfileImageActivity.class);
-								intent.putExtra(AhGlobalVariable.USER_KEY,
-										otherUser.getId());
-								context.startActivity(intent);
-							}
-						});
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						Intent intent = new Intent(context,
+								ProfileImageActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY,
+								otherUser.getId());
+						context.startActivity(intent);
+					}
+				});
 				profileDialog.show(getFragmentManager(),
 						AhGlobalVariable.DIALOG_KEY);
 			}
@@ -228,6 +228,7 @@ public class ChupaChatFragment extends AhFragment {
 							.equals(message.getSenderId()))
 						return;
 				}
+
 				refreshView(message.getChupaCommunId());
 			}
 		});
@@ -250,8 +251,8 @@ public class ChupaChatFragment extends AhFragment {
 
 		// Bitmap profileBitmap =
 		// BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
-//		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context,
-//				otherUser.getProfilePic(), w, h);
+		//		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context,
+		//				otherUser.getProfilePic(), w, h);
 		blobStorageHelper.getBitmapAsync(_thisFragment, 
 				otherUser.getId(), w, h, 
 				new AhEntityCallback<Bitmap>() {
@@ -271,26 +272,27 @@ public class ChupaChatFragment extends AhFragment {
 	}
 
 
-	public void sendChupa(final AhMessage sendChupa){
-		sendChupa.setStatus(AhMessage.STATUS.SENDING);
-		messageList.add(sendChupa);
+	public void sendChupa(final AhMessage message){
+		message.setStatus(AhMessage.STATUS.SENDING);
+		messageList.add(message);
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
 
-		int id = messageDBHelper.addMessage(sendChupa);
-		sendChupa.setId("" + id);
+		int id = messageDBHelper.addMessage(message);
+		message.setId("" + id);
 
 		// Send message to server
-		messageHelper.sendMessageAsync(_thisFragment, sendChupa, new AhEntityCallback<AhMessage>() {
+		messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				sendChupa.setStatus(AhMessage.STATUS.SENT);
-				messageListAdapter.notifyDataSetChanged();
-				messageDBHelper.updateMessages(Integer.parseInt(sendChupa.getId()), sendChupa);
+				message.setStatus(AhMessage.STATUS.SENT);
+				message.setTimeStamp();
+				messageDBHelper.updateMessages(message);
+				refreshView(message.getChupaCommunId());
 			}
-		});	
+		});
 	}
 
 
@@ -321,9 +323,12 @@ public class ChupaChatFragment extends AhFragment {
 			String nickName = otherUser.getNickName();
 			AhMessage.Builder messageBuilder = new AhMessage.Builder();
 			messageBuilder.setContent(nickName + " " + exitMessage)
-					.setSender(nickName).setSenderId(otherUser.getId())
-					.setReceiverId(otherUser.getSquareId())
-					.setType(AhMessage.TYPE.EXIT_SQUARE);
+			.setSender(nickName)
+			.setSenderId(otherUser.getId())
+			.setReceiverId(otherUser.getSquareId())
+			.setType(AhMessage.TYPE.EXIT_SQUARE)
+			.setStatus(AhMessage.STATUS.SENT)
+			.setTimeStamp();
 			AhMessage message = messageBuilder.build();
 			messageList.add(message);
 		}
@@ -332,7 +337,7 @@ public class ChupaChatFragment extends AhFragment {
 		 * Clear badge numbers displayed on chupa list
 		 */
 		messageDBHelper.clearBadgeNum(chupaCommunId);
-		
+
 		/*
 		 * Set message listview
 		 */
@@ -358,7 +363,7 @@ public class ChupaChatFragment extends AhFragment {
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
-			messageDBHelper.updateMessages(Integer.parseInt(exMessage.getId()), exMessage);
+			messageDBHelper.updateMessages(exMessage);
 			return;
 		}
 		super.handleException(ex);

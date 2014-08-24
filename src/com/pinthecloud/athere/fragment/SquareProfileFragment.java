@@ -418,7 +418,6 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
@@ -427,7 +426,6 @@ public class SquareProfileFragment extends AhFragment{
 					
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
-						// TODO Auto-generated method stub
 						pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
 						userDBHelper.addAllUsers(list);
 					}
@@ -437,13 +435,11 @@ public class SquareProfileFragment extends AhFragment{
 			
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.uploadBitmapAsync(_thisFragment, userId, pictureBitmap, new AhEntityCallback<String>() {
 					
 					@Override
 					public void onCompleted(String entity) {
-						// TODO Auto-generated method stub
 						
 					}
 				});
@@ -466,7 +462,6 @@ public class SquareProfileFragment extends AhFragment{
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						// TODO Auto-generated method stub
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
@@ -487,7 +482,6 @@ public class SquareProfileFragment extends AhFragment{
 				});
 			}
 		});
-		// 
 				
 
 		//		, new Chainable() {
@@ -498,7 +492,6 @@ public class SquareProfileFragment extends AhFragment{
 		//
 		//					@Override
 		//					public void onCompleted(List<AhUser> list, int count) {
-		//						// TODO Auto-generated method stub
 		////						userDBHelper.addAllUsers(list);
 		//						for(AhUser user : list) {
 		//							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());

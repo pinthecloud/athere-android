@@ -62,7 +62,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			String isExit = lastChupaMap.get("isExit");
 			String userNickName = lastChupaMap.get("userNickName");
 			String userId = lastChupaMap.get("userId");
-			String picStr = lastChupaMap.get("profilePic");
+			//			String picStr = lastChupaMap.get("profilePic");
 			String chupaBadge = lastChupaMap.get("chupaBadge");
 
 			if (isExit.equals("true")) {
@@ -71,18 +71,14 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			sender.setText(userNickName);
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-//			//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(picStr, w, h);
-//			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, picStr, w, h);
-			
 			blobStorageHelper.getBitmapAsync(frag, userId, w, h, new AhEntityCallback<Bitmap>() {
 
 				@Override
 				public void onCompleted(Bitmap entity) {
-					// TODO Auto-generated method stub
 					profileImage.setImageBitmap(entity);
 				}
 			});
-			
+
 			content.setText(lastChupaMap.get("content"));
 			timeStamp.setText(lastChupaMap.get("timeStamp"));
 			if (!chupaBadge.equals("0")) {
