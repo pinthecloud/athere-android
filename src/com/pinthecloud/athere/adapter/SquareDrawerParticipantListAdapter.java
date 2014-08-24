@@ -97,18 +97,18 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 					
 				}
 			});
+			
+			
 //			blobStorageHelper.downloadBitmapAsync(frag, user.getId(), new AhEntityCallback<Bitmap>() {
 //
 //				@Override
 //				public void onCompleted(final Bitmap entity) {
-//					// TODO Auto-generated method stub
 //					Log.e("ERROR", "bitmap : " + entity);
 //					AhActivity activity = (AhActivity)context;
 //					activity.runOnUiThread(new Runnable() {
 //						
 //						@Override
 //						public void run() {
-//							// TODO Auto-generated method stub
 //							profileImage.setImageBitmap(entity);
 //						}
 //					});

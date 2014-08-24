@@ -448,7 +448,6 @@ public class SquareProfileFragment extends AhFragment{
 			
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				String enterMessage = getResources().getString(R.string.enter_square_message);
 				
 				AhUser user = userHelper.getMyUserInfo(true);

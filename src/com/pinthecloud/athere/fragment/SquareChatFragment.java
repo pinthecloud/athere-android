@@ -140,7 +140,7 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment Message onComplete : " + message.getContent());
-				
+
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
@@ -166,10 +166,10 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
-		
+
 		int id = messageDBHelper.addMessage(message);
 		message.setId("" + id);
-		
+
 		// Send message to server
 		messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
 
@@ -182,8 +182,8 @@ public class SquareChatFragment extends AhFragment{
 			}
 		});
 	}
-	
-	
+
+
 	/**
 	 * @author hongkunyoo
 	 * notify this Method When this Fragment is on Resume
@@ -193,19 +193,9 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
-		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
-			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-			messageList.clear();
-			messageList.addAll(talks);
-		}
-
-
-		/*
-		 * Set my message for entering
-		 */
-		if(messageList.size() < 1){
-			String enterMessage = getResources().getString(R.string.enter_square_message);
+		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+			String enterMessage = getResources().getString(R.string.enter_square_message);
 			AhMessage.Builder messageBuilder = new AhMessage.Builder();
 			messageBuilder.setContent(nickName + " " + enterMessage)
 			.setSender(nickName)
@@ -215,22 +205,21 @@ public class SquareChatFragment extends AhFragment{
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp();
 			AhMessage enterTalk = messageBuilder.build();
-			messageList.add(enterTalk);
+			messageDBHelper.addMessage(enterTalk);
 		}
+		List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+		messageList.clear();
+		messageList.addAll(talks);
 
 
 		/*
 		 * Set message list view
 		 */
 		activity.runOnUiThread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-//				messageListAdapter.notifyDataSetChanged();
-				messageListAdapter = new SquareChatListAdapter
-						(context, _thisFragment, R.layout.row_square_chat_list_send, messageList);
-				messageListView.setAdapter(messageListAdapter);
-				
+				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});

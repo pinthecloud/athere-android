@@ -49,23 +49,23 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private AhMessage message = null;
 	private String userId = null; 
 
-	
-//	public AhIntentService() {
-//		this("AhIntentService");
-//	}
-//
-//	
-//	public AhIntentService(String name) {
-//		super(name);
-//		app = AhApplication.getInstance();
-//		messageHelper = app.getMessageHelper();
-//		messageDBHelper = app.getMessageDBHelper();
-//		userDBHelper = app.getUserDBHelper();
-//		userHelper = app.getUserHelper();
-//		pref = app.getPref();
-//		_this = this;
-//	}
-	
+
+	//	public AhIntentService() {
+	//		this("AhIntentService");
+	//	}
+	//
+	//	
+	//	public AhIntentService(String name) {
+	//		super(name);
+	//		app = AhApplication.getInstance();
+	//		messageHelper = app.getMessageHelper();
+	//		messageDBHelper = app.getMessageDBHelper();
+	//		userDBHelper = app.getUserDBHelper();
+	//		userHelper = app.getUserHelper();
+	//		pref = app.getPref();
+	//		_this = this;
+	//	}
+
 	public GCMIntentService(){
 		this(AhGlobalVariable.GCM_SENDER_ID);
 	}
@@ -80,7 +80,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		pref = app.getPref();
 		_this = this;
 	}
-	
+
 
 	@Override
 	protected void onError(Context arg0, String arg1) {
@@ -97,7 +97,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onRegistered(Context arg0, String registrationId) {
-		// TODO Auto-generated method stub
 		pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 		AhIdUser idUser = new AhIdUser();
 	}
@@ -105,13 +104,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onUnregistered(Context arg0, String arg1) {
-		// TODO Auto-generated method stub
 		Log.e("ERROR", "onUnregistered");
 		pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
 	}
-	
 
-	
+
+
 	public void _onHandleIntent(Intent intent) {
 		/*
 		 * Parsing the data from server
@@ -119,7 +117,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		String unRegisterd = intent.getStringExtra("unregistered");
 		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID))
 			return;
-		
+
 		try {
 			message = parseMessageIntent(intent);
 			userId = parseUserIdIntent(intent);
@@ -128,7 +126,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			return;
 		}
 		Log.e(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
-		
+
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {
 
@@ -242,19 +240,19 @@ public class GCMIntentService extends GCMBaseIntentService {
 		//			messageHelper.triggerMessageEvent(message);
 		//		}
 	}
-	
+
 	private void FORCED_LOGOUT() {
 		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				
+
 			}
 		});
 	}
-	
+
 	private void ADMIN_MESSAGE() {
-		
+
 	}
 
 
@@ -315,7 +313,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			Log.e("ERROR","no sentUser error");
 			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
 		} else {
-//			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
+			//			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
 			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getProfilePic(), 0, 0);
 		}
 
@@ -359,7 +357,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		}
 		return false;
 	}
-	
+
 	private boolean isChupaChatRunning(Context context) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
@@ -371,11 +369,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 		}
 		return false;
 	}
-	
+
 	private String getCurrentRunningActivityName(Context context) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
-		
+
 		for (RunningTaskInfo task : tasks) {
 			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) {
 				return task.topActivity.getClassName();

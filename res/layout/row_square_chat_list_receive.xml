@@ -11,7 +11,7 @@
     android:paddingStart="@dimen/square_chat_list_receive_left_margin"
     android:paddingTop="@dimen/square_chat_list_receive_top_margin" >
 
-    <com.pinthecloud.athere.view.AhImageView
+    <ImageView
         android:id="@+id/row_square_chat_list_receive_profile"
         android:layout_width="@dimen/square_chat_profile_width"
         android:layout_height="@dimen/square_chat_profile_height"

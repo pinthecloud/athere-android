@@ -26,9 +26,9 @@ public class FileUtil {
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
-	private static Map<String, Bitmap> myCached = new HashMap<String, Bitmap>();
-	
-	
+	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
+
+
 	/** Create a file Uri for saving an image or video */
 	public static Uri getOutputMediaFileUri(int type){
 		return Uri.fromFile(getOutputMediaFile(type));
@@ -86,34 +86,6 @@ public class FileUtil {
 			throw new AhException("IOException");
 		}
 		return name;
-
-		
-		//		File file = new File(context.getFilesDir(), name);
-		//		if (file.exists()) {
-		//			file.delete();
-		//		}
-		//		
-		//		FileOutputStream fos = null;
-		//		try {
-		//			boolean isSuccess = file.createNewFile();
-		//			if (!isSuccess) {
-		//				throw new AhException("saveImageToInternalStorage");
-		//			}
-		//			fos = new FileOutputStream(file);
-		//			ByteArrayOutputStream baos = new  ByteArrayOutputStream();
-		////			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-		////			byte [] b = baos.toByteArray();
-		//			baos.writeTo(fos);
-		//			Log.e("ERROR", "saveImageToInternalStorage name : " + name + " / ");
-		////			fos.write(b);
-		//			fos.flush();
-		//			fos.close();
-		//		} catch (FileNotFoundException e) {
-		//			e.printStackTrace();
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
-		//		return file.getAbsolutePath();
 	}
 
 
@@ -121,7 +93,7 @@ public class FileUtil {
 	 * look in internal storage
 	 */
 	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
-		Bitmap bitmap = myCached.get(filename);
+		Bitmap bitmap = bitmapCache.get(filename);
 		if (bitmap != null) return bitmap;
 		try {
 			File filePath = context.getFileStreamPath(filename);
@@ -130,23 +102,23 @@ public class FileUtil {
 		} catch (FileNotFoundException e) {
 			throw new AhException("FileNotFoundException");
 		}
-		myCached.put(filename, bitmap);
+		bitmapCache.put(filename, bitmap);
 		return bitmap;
 	}
 
-	
+
 	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
-		Bitmap bitmap = myCached.get(fileName+reqWidth+reqHeight);
+		Bitmap bitmap = bitmapCache.get(fileName+reqWidth+reqHeight);
 		if (bitmap != null) return bitmap;
-		
+
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
-		
+
 		// Calculate inSampleSize
 		options.inSampleSize = BitmapUtil.calculateSize(options, reqWidth, reqHeight);
 		options.inJustDecodeBounds = false;
 		bitmap = BitmapFactory.decodeFile(context.getFilesDir()+"/"+fileName, options);
-		myCached.put(fileName+reqWidth+reqHeight, bitmap);
+		bitmapCache.put(fileName+reqWidth+reqHeight, bitmap);
 		return bitmap;
 	}
 }
