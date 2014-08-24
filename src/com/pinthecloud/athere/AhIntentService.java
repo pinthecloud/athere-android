@@ -346,7 +346,6 @@ public class AhIntentService extends IntentService {
 			String senderId = jo.getString("senderId");
 			String receiver = jo.getString("receiver");
 			String receiverId = jo.getString("receiverId");
-			String timeStamp = jo.getString("timeStamp");
 			String chupaCommunId = jo.getString("chupaCommunId");
 
 			messageBuilder.setType(type)
@@ -355,7 +354,7 @@ public class AhIntentService extends IntentService {
 			.setSenderId(senderId)
 			.setReceiver(receiver)
 			.setReceiverId(receiverId)
-			.setTimeStamp(timeStamp)
+			.setTimeStamp()
 			.setStatus(AhMessage.STATUS.SENT)
 			.setChupaCommunId(chupaCommunId);
 

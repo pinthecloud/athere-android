@@ -40,7 +40,8 @@
         android:paddingRight="@dimen/square_chat_list_send_time_right_margin"
         android:paddingStart="0dp"
         android:textColor="@color/gray_light"
-        android:textSize="@dimen/font_small" />
+        android:textSize="@dimen/font_small"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/row_square_chat_list_send_message"

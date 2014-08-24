@@ -216,6 +216,7 @@ public class ChupaChatFragment extends AhFragment {
 				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					if (!otherUser.getId().equals(message.getSenderId())) return;
 				}
+				
 				refreshView(message.getChupaCommunId());
 			}
 		});
@@ -247,26 +248,27 @@ public class ChupaChatFragment extends AhFragment {
 	}
 
 
-	public void sendChupa(final AhMessage sendChupa){
-		sendChupa.setStatus(AhMessage.STATUS.SENDING);
-		messageList.add(sendChupa);
+	public void sendChupa(final AhMessage message){
+		message.setStatus(AhMessage.STATUS.SENDING);
+		messageList.add(message);
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
-
-		int id = messageDBHelper.addMessage(sendChupa);
-		sendChupa.setId("" + id);
-
+		
+		int id = messageDBHelper.addMessage(message);
+		message.setId("" + id);
+		
 		// Send message to server
-		messageHelper.sendMessageAsync(_thisFragment, sendChupa, new AhEntityCallback<AhMessage>() {
+		messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				sendChupa.setStatus(AhMessage.STATUS.SENT);
-				messageListAdapter.notifyDataSetChanged();
-				messageDBHelper.updateMessages(Integer.parseInt(sendChupa.getId()), sendChupa);
+				message.setStatus(AhMessage.STATUS.SENT);
+				message.setTimeStamp();
+				messageDBHelper.updateMessages(message);
+				refreshView(message.getChupaCommunId());
 			}
-		});	
+		});
 	}
 
 
@@ -299,7 +301,9 @@ public class ChupaChatFragment extends AhFragment {
 			.setSender(nickName)
 			.setSenderId(otherUser.getId())
 			.setReceiverId(otherUser.getSquareId())
-			.setType(AhMessage.TYPE.EXIT_SQUARE);
+			.setType(AhMessage.TYPE.EXIT_SQUARE)
+			.setStatus(AhMessage.STATUS.SENT)
+			.setTimeStamp();
 			AhMessage message = messageBuilder.build();
 			messageList.add(message);
 		}
@@ -337,7 +341,7 @@ public class ChupaChatFragment extends AhFragment {
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
-			messageDBHelper.updateMessages(Integer.parseInt(exMessage.getId()), exMessage);
+			messageDBHelper.updateMessages(exMessage);
 			return;
 		}
 		super.handleException(ex);

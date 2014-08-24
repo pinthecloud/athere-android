@@ -86,7 +86,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Set UI component only in send list
 				 */
-				timeText.setText(message.getTimeStamp());
 				failButton.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -115,12 +114,19 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				});
 				int status = message.getStatus();
 				if(status ==  AhMessage.STATUS.SENDING.getValue()){
+					timeText.setVisibility(View.GONE);
 					failButton.setVisibility(View.GONE);
 					progressBar.setVisibility(View.VISIBLE);
 				}else if(status ==  AhMessage.STATUS.SENT.getValue()){
+					String time = message.getTimeStamp();
+					String hour = time.substring(8, 10);
+					String minute = time.substring(10, 12);
+					timeText.setText(hour + ":" + minute);
+					timeText.setVisibility(View.VISIBLE);
 					failButton.setVisibility(View.GONE);
 					progressBar.setVisibility(View.GONE);
 				}else if(status ==  AhMessage.STATUS.FAIL.getValue()){
+					timeText.setVisibility(View.GONE);
 					failButton.setVisibility(View.VISIBLE);
 					progressBar.setVisibility(View.GONE);
 				}
@@ -130,7 +136,10 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				messageText = (TextView)view.findViewById(R.id.row_chupa_chat_list_receive_message);
 				TextView timeText = (TextView)view.findViewById(R.id.row_chupa_chat_list_receive_time);
-				timeText.setText(message.getTimeStamp());
+				String time = message.getTimeStamp();
+				String hour = time.substring(8, 10);
+				String minute = time.substring(10, 12);
+				timeText.setText(hour + ":" + minute);
 			}
 
 
