@@ -46,7 +46,7 @@ public class UserHelper {
 	/*
 	 * GCM server key
 	 */
-	private final String GCM_SENDER_ID = "838051405989";
+	public static final String GCM_SENDER_ID = "838051405989";
 
 
 	public UserHelper() {
