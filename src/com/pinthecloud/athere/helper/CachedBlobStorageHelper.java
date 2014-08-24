@@ -40,14 +40,12 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 
 			@Override
 			protected Bitmap doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				String id = params[0];
 				return getBitmapSync(frag, id);
 			}
 			
 			@Override
 			protected void onPostExecute(Bitmap result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				if (callback != null)
 					callback.onCompleted(result);
@@ -61,14 +59,12 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 
 			@Override
 			protected Bitmap doInBackground(String... params) {
-				// TODO Auto-generated method stub
 				String id = params[0];
 				return getBitmapSync(frag, id, w, h);
 			}
 			
 			@Override
 			protected void onPostExecute(Bitmap result) {
-				// TODO Auto-generated method stub
 				super.onPostExecute(result);
 				if (callback != null)
 					callback.onCompleted(result);

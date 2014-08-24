@@ -24,7 +24,6 @@ import com.pinthecloud.athere.activity.HongkunTestAcitivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -67,7 +66,7 @@ public class SplashFragment extends AhFragment {
 		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
 		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 
-		
+
 		/*
 		 * If time is up, remove local preferences.
 		 */
@@ -112,16 +111,13 @@ public class SplashFragment extends AhFragment {
 
 	public boolean isHongkunTest() {
 		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
 		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
 		String httpAgent = System.getProperty("http.agent");
 		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
 				|| myGal3.equals(httpAgent))))	// Galaxy 3
 			return false;
 
-//		boolean val = true;
-//		if (val) return false;
-		
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
 		.setMessage("Want to Go to HongkunTest?")
@@ -145,41 +141,39 @@ public class SplashFragment extends AhFragment {
 
 
 	public void runChupa() {
-		
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
-//				if(false && pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
-//						.equals(PreferenceHelper.DEFAULT_STRING)){
-//					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
-//
-//						@Override
-//						public void onCompleted(String registrationId) {
-//							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-//						}
-//
-//					});
-//
-//				} else {
-//					AsyncChainer.notifyNext(frag);
-//				}
-				
-		        // 디바이스 체크
-		        GCMRegistrar.checkDevice(context);
-		          
-		        // AndroidManifest.xml 체크
-		        GCMRegistrar.checkManifest(context);
-		          
-		        if (!GCMRegistrar.isRegistered(context)) {
-		        	// Registration ID 발급 요청
-			        GCMRegistrar.register(context, AhGlobalVariable.GCM_SENDER_ID);
-		        }
-		        
-		        AsyncChainer.notifyNext(frag);
+				//				if(false && pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
+				//						.equals(PreferenceHelper.DEFAULT_STRING)){
+				//					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
+				//
+				//						@Override
+				//						public void onCompleted(String registrationId) {
+				//							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+				//						}
+				//
+				//					});
+				//
+				//				} else {
+				//					AsyncChainer.notifyNext(frag);
+				//				}
+
+				// Check device
+				GCMRegistrar.checkDevice(context);
+
+				// Check AndroidManifest.xml
+				GCMRegistrar.checkManifest(context);
+
+				if (!GCMRegistrar.isRegistered(context)) {
+					// Registration ID 발급 요청
+					GCMRegistrar.register(context, AhGlobalVariable.GCM_SENDER_ID);
+				}
+
+				AsyncChainer.notifyNext(frag);
 			}
-			
+
 		},new Chainable(){
 
 			@Override
@@ -223,7 +217,7 @@ public class SplashFragment extends AhFragment {
 					}
 				});
 			}
-			
+
 		});
 	}
 

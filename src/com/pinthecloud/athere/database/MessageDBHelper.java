@@ -122,7 +122,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 
 	// Getting All Messages
-	public void updateMessages(int id, AhMessage message) {
+	public void updateMessages(AhMessage message) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -137,7 +137,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		values.put(STATUS, message.getStatus());
 
 		// Inserting Row
-		db.update(TABLE_NAME, values, ID + " = ?", new String[]{ String.valueOf(id) });
+		db.update(TABLE_NAME, values, ID + " = ?", new String[]{ message.getId() });
 		db.close(); // Closing database connection
 	}
 
@@ -188,7 +188,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
 		// Select All Query
-		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + ID;
+		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + TIME_STAMP;
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
@@ -210,7 +210,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + TYPE + " = ?" +
-				" ORDER BY " + ID;
+				" ORDER BY " + TIME_STAMP;
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
@@ -298,7 +298,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + whereStr.toString() + 
-				" ORDER BY " + ID;
+				" ORDER BY " + TIME_STAMP;
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
@@ -329,7 +329,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + whereStr.toString() + 
-				" ORDER BY " + ID;
+				" ORDER BY " + TIME_STAMP;
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
@@ -545,7 +545,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" JOIN (SELECT MAX(id) id FROM " + TABLE_NAME +
 				" GROUP BY " + CHUPA_COMMUN_ID + ") t2 on t1.id = t2.id" +
 				" WHERE " + TYPE + " = ?" +
-				" ORDER BY id DESC";
+				" ORDER BY " + TIME_STAMP + " DESC";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString()});
 
@@ -565,7 +565,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + TYPE + "=? AND " + CHUPA_COMMUN_ID + " = ?" +
-				" ORDER BY id";
+				" ORDER BY " + TIME_STAMP;
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString() 

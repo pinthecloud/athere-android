@@ -78,18 +78,18 @@ public class HongkunTestFragment extends AhFragment {
 					if (b.getId() == btnArr[0].getId()) {
 					} else if (b.getId() == btnArr[1].getId()) {
 						new Thread(new Runnable() {
-							
+
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
 							}
 						}).start();
-						
+
 					} else if (b.getId() == btnArr[2].getId()) {
 						String filename = "gogo.png";
 						File filePath = context.getFileStreamPath(filename);
 						Log(_thisFragment, context.getFilesDir()+"/"+filename, filePath, context.getFilesDir()+"/"+filename.equals(filePath));
-						
+
 					} else if (b.getId() == btnArr[3].getId()) {
 						b.setText("deleteAll");
 						messageDBHelper.deleteAllMessages();

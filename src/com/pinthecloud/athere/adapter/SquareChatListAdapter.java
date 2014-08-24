@@ -101,7 +101,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Set UI component only in send list
 				 */
-				timeText.setText(message.getTimeStamp());
 				failButton.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -121,6 +120,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 							}
 							@Override
 							public void doNegativeThing(Bundle bundle) {
+								messageDBHelper.deleteMessage(message.getId());
 								items.remove(position);
 								notifyDataSetChanged();
 							}
@@ -130,12 +130,19 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				});
 				int status = message.getStatus();
 				if(status ==  AhMessage.STATUS.SENDING.getValue()){
+					timeText.setVisibility(View.GONE);
 					failButton.setVisibility(View.GONE);
 					progressBar.setVisibility(View.VISIBLE);
 				}else if(status ==  AhMessage.STATUS.SENT.getValue()){
+					String time = message.getTimeStamp();
+					String hour = time.substring(8, 10);
+					String minute = time.substring(10, 12);
+					timeText.setText(hour + ":" + minute);
+					timeText.setVisibility(View.VISIBLE);
 					failButton.setVisibility(View.GONE);
 					progressBar.setVisibility(View.GONE);
 				}else if(status ==  AhMessage.STATUS.FAIL.getValue()){
+					timeText.setVisibility(View.GONE);
 					failButton.setVisibility(View.VISIBLE);
 					progressBar.setVisibility(View.GONE);
 				}
@@ -158,7 +165,10 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Set UI component only in receive list
 				 */
-				timeText.setText(message.getTimeStamp());
+				String time = message.getTimeStamp();
+				String hour = time.substring(8, 10);
+				String minute = time.substring(10, 12);
+				timeText.setText(hour + ":" + minute);
 				nickNameText.setText(message.getSender());
 				if(user.isMale()){
 					profileGenderImage.setImageResource(R.drawable.chat_gender_m);
@@ -167,8 +177,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
-//				Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
-					
 				blobStorageHelper.getBitmapAsync(fragment, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
 					
 					@Override

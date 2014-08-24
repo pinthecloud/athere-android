@@ -84,14 +84,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	@Override
 	protected void onError(Context arg0, String arg1) {
-		// TODO Auto-generated method stub
 		Log.e("ERROR", "onError");
 	}
 
 
 	@Override
 	protected void onMessage(Context arg0, Intent intent) {
-		// TODO Auto-generated method stub
 		Log.e("ERROR", "onMessage");
 		_onHandleIntent(intent);
 	}
@@ -408,7 +406,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String senderId = jo.getString("senderId");
 			String receiver = jo.getString("receiver");
 			String receiverId = jo.getString("receiverId");
-			String timeStamp = jo.getString("timeStamp");
 			String chupaCommunId = jo.getString("chupaCommunId");
 
 			messageBuilder.setType(type)
@@ -417,7 +414,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			.setSenderId(senderId)
 			.setReceiver(receiver)
 			.setReceiverId(receiverId)
-			.setTimeStamp(timeStamp)
+			.setTimeStamp()
 			.setStatus(AhMessage.STATUS.SENT)
 			.setChupaCommunId(chupaCommunId);
 

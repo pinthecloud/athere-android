@@ -17,6 +17,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
+        android:layout_marginEnd="@dimen/chupa_chat_list_send_time_right_margin"
+        android:layout_marginRight="@dimen/chupa_chat_list_send_time_right_margin"
         android:background="@android:color/transparent"
         android:contentDescription="@string/fail"
         android:src="@drawable/msg_send_cancel"
@@ -27,6 +30,9 @@
         android:layout_width="@dimen/chupa_chat_list_send_progress_width"
         android:layout_height="@dimen/chupa_chat_list_send_progress_height"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
+        android:layout_marginEnd="@dimen/chupa_chat_list_send_time_right_margin"
+        android:layout_marginRight="@dimen/chupa_chat_list_send_time_right_margin"
         android:visibility="gone" />
 
     <TextView
@@ -34,11 +40,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
         android:layout_marginEnd="@dimen/chupa_chat_list_send_time_right_margin"
         android:layout_marginRight="@dimen/chupa_chat_list_send_time_right_margin"
-        android:paddingBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
         android:textColor="@color/gray_light"
-        android:textSize="@dimen/font_small" />
+        android:textSize="@dimen/font_small"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/row_chupa_chat_list_send_message"

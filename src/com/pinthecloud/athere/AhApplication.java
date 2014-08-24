@@ -20,7 +20,6 @@ import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
@@ -204,14 +203,14 @@ public class AhApplication extends Application{
 					}
 				});
 			}
-			
+
 		}, new Chainable() {
-			
+
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
 				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-					
+
 					@Override
 					public void onCompleted(AhMessage entity) {
 						// TODO Auto-generated method stub
@@ -220,6 +219,6 @@ public class AhApplication extends Application{
 				});
 			}
 		});
-		
+
 	}
 }
