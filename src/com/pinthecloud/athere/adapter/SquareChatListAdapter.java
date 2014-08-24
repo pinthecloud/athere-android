@@ -47,7 +47,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	private CachedBlobStorageHelper blobStorageHelper;
 
 	public SquareChatListAdapter(Context context, AhFragment fragment, int layoutId, List<AhMessage> items) {
-	
+
 
 		super(context, layoutId, items);
 		this.context = context;
@@ -178,16 +178,13 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
 				blobStorageHelper.getBitmapAsync(fragment, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
-					
+
 					@Override
 					public void onCompleted(Bitmap entity) {
-						// TODO Auto-generated method stub
 						profileImage.setImageBitmap(entity);
 					}
 				});
-				
-				
-				profileImage.bringToFront();
+				//				blobStorageHelper.setImageViewAsync(fragment, user.getId(), profileImage);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override

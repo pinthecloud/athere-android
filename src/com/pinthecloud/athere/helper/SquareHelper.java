@@ -95,7 +95,7 @@ public class SquareHelper {
 
 
 	public void createSquareAsync(AhFragment frag, String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
-		String whoMade = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
+		String whoMade = pref.getString(AhGlobalVariable.USER_ID_KEY);
 
 		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));

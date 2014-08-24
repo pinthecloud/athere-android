@@ -58,7 +58,7 @@ public class AhApplication extends Application{
 	private static MobileServiceClient mClient;
 	private static MobileServiceTable<AhUser> userTable;
 	private static MobileServiceTable<Square> squareTable;
-	private MobileServiceTable<AppVersion> appVersionTable;
+	private static MobileServiceTable<AppVersion> appVersionTable;
 
 	// Helper
 	private static UserHelper userHelper;

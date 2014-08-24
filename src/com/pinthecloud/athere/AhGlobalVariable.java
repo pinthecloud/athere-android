@@ -27,7 +27,7 @@ public class AhGlobalVariable{
 	/*
 	 * String
 	 */
-	public static String APP_NAME = "Chupa";
+	public static String APP_NAME = "chupa";
 	public static final String LOG_TAG = "AtHere";
 	public static final String PROFILE_PICTURE_NAME = "profile_picture_name.png";
 	public static final String ANDROID = "Android";

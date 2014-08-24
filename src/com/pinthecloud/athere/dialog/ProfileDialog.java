@@ -125,17 +125,14 @@ public class ProfileDialog extends AhDialogFragment{
 			// other user
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-			//			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
-			//profileBitmap = FileUtil.getImageFromInternalStorage(app, user.getProfilePic(), w, h);
 			blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
 
 				@Override
 				public void onCompleted(Bitmap entity) {
-					// TODO Auto-generated method stub
 					profileImage.setImageBitmap(entity);
 				}
 			});
-		}else{
+		} else{
 			profileBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
 			profileImage.setImageBitmap(profileBitmap);
 		}

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@android:color/white" >
 
-    <com.pinthecloud.athere.view.AhImageView
+    <ImageView
         android:id="@+id/profile_dialog_profile"
         android:layout_width="@dimen/profile_dialog_width"
         android:layout_height="@dimen/profile_dialog_height"

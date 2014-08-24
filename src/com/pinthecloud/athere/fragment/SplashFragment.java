@@ -146,9 +146,7 @@ public class SplashFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
-				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
-						.equals(PreferenceHelper.DEFAULT_STRING)){
+				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
 					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
 
 						@Override
@@ -167,7 +165,6 @@ public class SplashFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				versionHelper.getServerAppVersionAsync(frag, new AhEntityCallback<AppVersion>() {
 
 					@Override

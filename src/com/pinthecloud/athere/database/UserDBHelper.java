@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.pinthecloud.athere.model.AhUser;
 
@@ -128,7 +127,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 
 	public void addAllUsers(List<AhUser> list){
-		
+
 		if (list == null || list.size() == 0) return;
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -177,7 +176,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				return u;
 			}
 		}
-		
+
 		db.close();
 		return null;
 	}
@@ -205,7 +204,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) {
 			cursor.moveToFirst();
-			Log.e("ERROR","has_been_out : " + cursor.getInt(0));
 			if (cursor.getInt(0) == 1){
 				db.close();
 				return true;
@@ -253,7 +251,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return user;
 	}
 
-	
+
 	// Getting All Contacts
 	public List<AhUser> getAllUsers() {
 		//		List<User> users = new ArrayList<User>();
@@ -277,7 +275,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	public List<AhUser> getAllUsers(boolean includingExits) {
 		List<AhUser> users = new ArrayList<AhUser>();
-		
+
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
 		String[] args = null;
@@ -338,16 +336,16 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		ContentValues values = new ContentValues();
 		values.put(HAS_BEEN_OUT, true);
-//
-//		// Inserting Row
+		//
+		//		// Inserting Row
 		db.update(TABLE_NAME, values, ID + "=?", new String[] { id });
 		db.close(); // Closing database connection
-		
-//		String query = "UPDATE " + TABLE_NAME + " SET " + HAS_BEEN_OUT+"=?"+
-//				" WHERE " + ID + "=?";
-//		String [] selectionArgs = new String[]{ String.valueOf(1), id};
-//		db.rawQuery(query, selectionArgs);
-//		db.close();
+
+		//		String query = "UPDATE " + TABLE_NAME + " SET " + HAS_BEEN_OUT+"=?"+
+		//				" WHERE " + ID + "=?";
+		//		String [] selectionArgs = new String[]{ String.valueOf(1), id};
+		//		db.rawQuery(query, selectionArgs);
+		//		db.close();
 	}
 
 	public void deleteAllUsers() {

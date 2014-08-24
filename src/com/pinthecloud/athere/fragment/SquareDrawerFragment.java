@@ -385,11 +385,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void run() {
-//				participantListAdapter.notifyDataSetChanged();
-
-				participantListAdapter = new SquareDrawerParticipantListAdapter
-						(context, _thisFragment, R.layout.row_square_drawer_participant_list, userList);
-				participantListView.setAdapter(participantListAdapter); 
+				participantListAdapter.notifyDataSetChanged();
 
 				/*
 				 * Set member number text

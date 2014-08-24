@@ -49,12 +49,12 @@ public class AhIntentService extends IntentService {
 	private AhMessage message = null;
 	private String userId = null; 
 
-	
+
 	public AhIntentService() {
 		this("AhIntentService");
 	}
 
-	
+
 	public AhIntentService(String name) {
 		super(name);
 		app = AhApplication.getInstance();
@@ -66,6 +66,7 @@ public class AhIntentService extends IntentService {
 		_this = this;
 	}
 
+
 	public void onHandleIntent(Intent intent) {
 		/*
 		 * Parsing the data from server
@@ -73,7 +74,7 @@ public class AhIntentService extends IntentService {
 		String unRegisterd = intent.getStringExtra("unregistered");
 		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID))
 			return;
-		
+
 		try {
 			message = parseMessageIntent(intent);
 			userId = parseUserIdIntent(intent);
@@ -82,7 +83,7 @@ public class AhIntentService extends IntentService {
 			return;
 		}
 		Log.e(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
-		
+
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {
 
@@ -196,26 +197,25 @@ public class AhIntentService extends IntentService {
 		//			messageHelper.triggerMessageEvent(message);
 		//		}
 	}
-	
+
 	private void FORCED_LOGOUT() {
 		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
 
 			@Override
 			public void onCompleted(Boolean entity) {
-				
+
 				if (isRunning(app)){
 					String currentActivityName = getCurrentRunningActivityName(app);
 					messageHelper.triggerMessageEvent(currentActivityName, message);
 				} else {
 					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
 				}
-				
 			}
 		});
 	}
-	
+
 	private void ADMIN_MESSAGE() {
-		
+
 	}
 
 
@@ -280,7 +280,7 @@ public class AhIntentService extends IntentService {
 			Log.e("ERROR","no sentUser error");
 			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
 		} else {
-//			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
+			//			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
 			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getProfilePic(), 0, 0);
 		}
 
@@ -324,7 +324,8 @@ public class AhIntentService extends IntentService {
 		}
 		return false;
 	}
-	
+
+
 	private boolean isActivityRunning(Context context, Class<?> clazz) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
@@ -336,11 +337,12 @@ public class AhIntentService extends IntentService {
 		}
 		return false;
 	}
-	
+
+
 	private String getCurrentRunningActivityName(Context context) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
-		
+
 		for (RunningTaskInfo task : tasks) {
 			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) {
 				return task.topActivity.getClassName();

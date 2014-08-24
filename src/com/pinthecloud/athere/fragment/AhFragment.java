@@ -21,7 +21,6 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.model.AhUser;
 
 /**
  *  Basic Fragment class for At here application
@@ -145,9 +144,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	 */
 	//	@ExceptionHandler(target = AhFragment.class)
 	//	public void myhandleException(final AhException ex) {
-	//		// TODO Auto-generated method stub
-	//		
-	//		
 	//		
 	//		Method[] ms = pair.getClazz().getMethods();
 	//		for(Method method : ms) {
@@ -169,7 +165,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	//		
 	//			@Override
 	//			public void run() {
-	//				// TODO Auto-generated method stub
 	//				new AlertDialog.Builder(_thisFragment.getActivity())
 	//				.setTitle(ex.getType().toString())
 	//				.setMessage(ex.toString())
@@ -183,5 +178,4 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	//			}
 	//		});
 	//	}
-
 }

@@ -8,7 +8,6 @@ import android.provider.Settings.Secure;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -170,15 +169,14 @@ public class BasicProfileFragment extends AhFragment{
 						user.setAhId(registrationId);
 						user.setPassword("");
 						user.setRegistrationId(registrationId);
-						
+
 						final String androidId = Secure.getString(activity.getContentResolver(), Secure.ANDROID_ID);
 						user.setAndroidId(androidId);
-						
+
 						userHelper.addAhIdUser(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
-							
+
 							@Override
 							public void onCompleted(AhIdUser entity) {
-								// TODO Auto-generated method stub
 								int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
 								Calendar c = Calendar.getInstance();
 								int age = c.get(Calendar.YEAR) - (birthYear - 1);
@@ -194,12 +192,10 @@ public class BasicProfileFragment extends AhFragment{
 								activity.finish();
 							}
 						});
-						
+
 					} else {
 						ExceptionManager.fireException(new AhException(AhException.TYPE.GCM_REGISTRATION_FAIL));
 					}
-					
-					
 				}
 			}
 		});
@@ -211,19 +207,5 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
-	}
-	
-	
-	@Override
-	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "BasicProfileFragment onStop");
-		super.onStop();
-	}
-
-
-	@Override
-	public void onDestroy() {
-		Log.d(AhGlobalVariable.LOG_TAG, "BasicProfileFragment onDestroy");
-		super.onDestroy();
 	}
 }
