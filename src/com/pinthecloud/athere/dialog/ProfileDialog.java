@@ -15,16 +15,21 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class ProfileDialog extends AhDialogFragment{
 
 	private AhApplication app;
+	private AhFragment frag;
 	private PreferenceHelper pref;
 	private AhUser user;
+	private CachedBlobStorageHelper blobStorageHelper;
 
 	private ImageView profileImage;
 	private ImageView genderImage;
@@ -34,12 +39,14 @@ public class ProfileDialog extends AhDialogFragment{
 	private Button sendChupaButton;
 
 
-	public ProfileDialog(AhUser user, AhDialogCallback ahDialogCallback) {
+	public ProfileDialog(AhFragment frag, AhUser user, AhDialogCallback ahDialogCallback) {
 		super();
+		this.frag = frag;
 		this.ahDialogCallback = ahDialogCallback;
 		this.app = AhApplication.getInstance();
 		this.pref = app.getPref();
 		this.user = user;
+		this.blobStorageHelper = app.getBlobStorageHelper();
 		setStyle(STYLE_NO_TITLE, 0);
 	}
 
@@ -110,7 +117,6 @@ public class ProfileDialog extends AhDialogFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "ProfileDialog onStart");
 
 		/*
 		 * Set image
@@ -121,11 +127,20 @@ public class ProfileDialog extends AhDialogFragment{
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
 			//			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
-			profileBitmap = FileUtil.getImageFromInternalStorage(app, user.getProfilePic(), w, h);
+			//profileBitmap = FileUtil.getImageFromInternalStorage(app, user.getProfilePic(), w, h);
+			blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
+				
+				@Override
+				public void onCompleted(Bitmap entity) {
+					// TODO Auto-generated method stub
+					profileImage.setImageBitmap(entity);
+				}
+			});
 		}else{
 			profileBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+			profileImage.setImageBitmap(profileBitmap);
 		}
-		profileImage.setImageBitmap(profileBitmap);
+		
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
 		}else{
@@ -136,7 +151,6 @@ public class ProfileDialog extends AhDialogFragment{
 
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "ProfileDialog onStop");
 		profileImage.setImageBitmap(null);
 		super.onStop();
 	}

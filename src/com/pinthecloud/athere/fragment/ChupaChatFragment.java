@@ -111,7 +111,7 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				ProfileDialog profileDialog = new ProfileDialog(otherUser,
+				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, otherUser,
 						new AhDialogCallback() {
 
 							@Override

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.FileUtil;
 
@@ -63,11 +64,20 @@ public class ProfileImageFragment extends AhFragment{
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
 			//			profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
-			profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
+//			profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
+			blobStorageHelper.getBitmapAsync(_thisFragment, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
+				
+				@Override
+				public void onCompleted(Bitmap entity) {
+					// TODO Auto-generated method stub
+					profileImage.setImageBitmap(entity);
+				}
+			});
 		}else{
 			profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
+			profileImage.setImageBitmap(profileBitmap);
 		}
-		profileImage.setImageBitmap(profileBitmap);
+		
 	}
 
 

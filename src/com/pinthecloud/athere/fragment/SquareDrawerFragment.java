@@ -95,7 +95,7 @@ public class SquareDrawerFragment extends AhFragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				final AhUser user = userList.get(position);
-				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
@@ -338,7 +338,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {

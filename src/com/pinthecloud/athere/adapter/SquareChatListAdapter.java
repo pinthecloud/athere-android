@@ -184,7 +184,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 					@Override
 					public void onClick(View v) {
-						ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+						ProfileDialog profileDialog = new ProfileDialog(fragment, user, new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {
