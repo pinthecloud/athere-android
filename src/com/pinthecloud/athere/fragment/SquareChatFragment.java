@@ -194,7 +194,6 @@ public class SquareChatFragment extends AhFragment{
 		 * Set ENTER, EXIT, TALK messages
 		 */
 		if (!messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
-			Log(_thisFragment, "HERE");
 			final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			messageList.clear();
 			messageList.addAll(talks);
@@ -226,7 +225,11 @@ public class SquareChatFragment extends AhFragment{
 			
 			@Override
 			public void run() {
-				messageListAdapter.notifyDataSetChanged();
+//				messageListAdapter.notifyDataSetChanged();
+				messageListAdapter = new SquareChatListAdapter
+						(context, _thisFragment, R.layout.row_square_chat_list_send, messageList);
+				messageListView.setAdapter(messageListAdapter);
+				
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});

@@ -253,7 +253,7 @@ public class ChupaChatFragment extends AhFragment {
 //		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context,
 //				otherUser.getProfilePic(), w, h);
 		blobStorageHelper.getBitmapAsync(_thisFragment, 
-				pref.getString(AhGlobalVariable.USER_ID_KEY), w, h, 
+				otherUser.getId(), w, h, 
 				new AhEntityCallback<Bitmap>() {
 
 			@Override

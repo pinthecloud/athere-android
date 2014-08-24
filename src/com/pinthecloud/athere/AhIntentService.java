@@ -103,6 +103,10 @@ public class AhIntentService extends IntentService {
 					UPDATE_USER_INFO();
 				} else if (AhMessage.TYPE.MESSAGE_READ.equals(type)) {
 					MESSAGE_READ();
+				} else if (AhMessage.TYPE.FORCED_LOGOUT.equals(type)) {
+					FORCED_LOGOUT();
+				} else if (AhMessage.TYPE.ADMIN_MESSAGE.equals(type)) {
+					ADMIN_MESSAGE();
 				}
 			}
 		}).start();
@@ -192,6 +196,21 @@ public class AhIntentService extends IntentService {
 		//		if (isRunning(app)) {
 		//			messageHelper.triggerMessageEvent(message);
 		//		}
+	}
+	
+	private void FORCED_LOGOUT() {
+		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<AhMessage>() {
+
+			@Override
+			public void onCompleted(AhMessage entity) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+	
+	private void ADMIN_MESSAGE() {
+		
 	}
 
 

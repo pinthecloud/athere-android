@@ -37,7 +37,9 @@ public class AhMessage implements Parcelable {
 		ENTER_SQUARE("ENTER_SQUARE"),	// To Square Users
 		EXIT_SQUARE("EXIT_SQUARE"),		// To Square Users
 		UPDATE_USER_INFO("UPDATE_USER_INFO"), // To Square Users
-		MESSAGE_READ("MESSAGE_READ");
+		MESSAGE_READ("MESSAGE_READ"),
+		FORCED_LOGOUT("FORCED_LOGOUT"),
+		ADMIN_MESSAGE("ADMIN_MESSAGE");
 
 		private final String value;
 
