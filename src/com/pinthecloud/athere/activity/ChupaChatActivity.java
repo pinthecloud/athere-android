@@ -2,7 +2,9 @@ package com.pinthecloud.athere.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
@@ -35,6 +37,15 @@ public class ChupaChatActivity extends AhActivity {
 			@Override
 			public void onCompleted(AhMessage message) {
 				// TODO Auto-generated method stub
+				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
+					String text = _this.getResources().getString(R.string.forced_logout_title);
+					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
+					toast.show();
+					Intent intent = new Intent(ChupaChatActivity.this, SquareListActivity.class);
+					startActivity(intent);
+					finish();
+					return;
+				}
 				messageHelper.triggerMessageEvent(chupaChatFragment, message);
 			}
 		});

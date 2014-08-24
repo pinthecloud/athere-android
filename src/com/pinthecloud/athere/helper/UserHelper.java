@@ -11,7 +11,6 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
@@ -22,6 +21,7 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
+import com.pinthecloud.athere.model.AhIdUser;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.JsonConverter;
@@ -36,6 +36,7 @@ public class UserHelper {
 	 * Model tables
 	 */
 	private MobileServiceTable<AhUser> userTable;
+	private MobileServiceTable<AhIdUser> userIdTable;
 	private MobileServiceClient mClient;
 
 	private final String ENTER_SQUARE = "enter_square";
@@ -48,6 +49,7 @@ public class UserHelper {
 //		this.lock = app.getLock();
 		this.userTable = app.getUserTable();
 		this.mClient = app.getmClient();
+		this.userIdTable = mClient.getTable(AhIdUser.class);
 	}
 
 //	public void enterSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
@@ -68,6 +70,29 @@ public class UserHelper {
 //			}
 //		});
 //	}
+	
+	public void addAhIdUser(final AhFragment frag, AhIdUser user, final AhEntityCallback<AhIdUser> callback) {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+		userIdTable.insert(user, new TableOperationCallback<AhIdUser>() {
+
+			@Override
+			public void onCompleted(AhIdUser _user, Exception exception,
+					ServiceFilterResponse response) {
+				// TODO Auto-generated method stub
+				if (exception == null) {
+					callback.onCompleted(_user);
+					AsyncChainer.notifyNext(frag);
+				} else {
+					ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.SERVER_ERROR));
+				}
+			}
+		});
+		
+	}
+	
 	
 	public void newEnterSquareAsync(final AhFragment frag, AhUser user, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
 		if (!app.isOnline()) {
@@ -229,6 +254,7 @@ public class UserHelper {
 		user.setMale(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
 		user.setSquareId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
 		user.setChupaEnable(pref.getBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY));
+		user.setAhIdUserKey(pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
 		return user;
 	}
 

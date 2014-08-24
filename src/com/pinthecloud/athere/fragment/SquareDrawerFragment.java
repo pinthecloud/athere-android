@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -193,7 +194,7 @@ public class SquareDrawerFragment extends AhFragment {
 				// TODO Auto-generated method stub
 				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
-				removeSquarePreference();
+				AhApplication.getInstance().removeSquarePreference();
 				progressBar.setVisibility(View.GONE);
 				final Intent intent = new Intent(activity, SquareListActivity.class);
 				startActivity(intent);

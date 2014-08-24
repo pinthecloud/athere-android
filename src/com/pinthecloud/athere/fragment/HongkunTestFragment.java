@@ -11,9 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
+import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.model.AhUser;
 
 /**
  * 
@@ -76,6 +80,22 @@ public class HongkunTestFragment extends AhFragment {
 				public void onClick(View v) {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
+						
+						MobileServiceTable<AhUser> table =  app.getUserTable();
+						AhUser myUser = AhUser.addUserTest();
+						
+						table.insert(myUser, new TableOperationCallback<AhUser>() {
+							
+							@Override
+							public void onCompleted(AhUser arg0, Exception arg1,
+									ServiceFilterResponse arg2) {
+								// TODO Auto-generated method stub
+								Log(_thisFragment, "OK");
+							}
+						});
+						
+						
+						
 					} else if (b.getId() == btnArr[1].getId()) {
 						new Thread(new Runnable() {
 							

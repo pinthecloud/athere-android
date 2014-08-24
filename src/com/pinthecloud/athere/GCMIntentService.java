@@ -15,6 +15,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
@@ -24,16 +25,20 @@ import android.util.Log;
 import com.google.android.gcm.GCMBaseIntentService;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
+import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhIdUser;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class GCMIntentService extends GCMBaseIntentService {
@@ -188,7 +193,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
-			if (!isChupaChatRunning(app)){
+			if (!isActivityRunning(app, ChupaChatActivity.class)){
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
 		} else {
@@ -246,10 +251,17 @@ public class GCMIntentService extends GCMBaseIntentService {
 	}
 	
 	private void FORCED_LOGOUT() {
-		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<AhMessage>() {
+		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
 
 			@Override
-			public void onCompleted(AhMessage entity) {
+			public void onCompleted(Boolean entity) {
+				
+				if (isRunning(app)){
+					String currentActivityName = getCurrentRunningActivityName(app);
+					messageHelper.triggerMessageEvent(currentActivityName, message);
+				} else {
+					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
+				}
 				
 			}
 		});
@@ -281,7 +293,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 			if(!pref.getBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY)){
 				return;
 			}
-		} 
+		} else if (AhMessage.TYPE.FORCED_LOGOUT.equals(type)){
+			title = resources.getString(R.string.forced_logout_title);
+			content = message.getContent();
+			clazz = SquareListActivity.class;
+		}
 
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(_this, clazz);
@@ -301,9 +317,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(_this);
 
 		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(ChupaChatActivity.class);
+		if (AhMessage.TYPE.CHUPA.equals(type))
+			stackBuilder.addParentStack(ChupaChatActivity.class);
 
-		//				stackBuilder.addNextIntent(new Intent(_this, SquareActivity.class));
 
 		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
@@ -362,12 +378,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return false;
 	}
 	
-	private boolean isChupaChatRunning(Context context) {
+	private boolean isActivityRunning(Context context, Class<?> clazz) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
 
 		for (RunningTaskInfo task : tasks) {
-			if (task.topActivity.getClassName().equals(ChupaChatActivity.class.getName())) {
+			if (task.topActivity.getClassName().equals(clazz.getName())) {
 				return true;
 			}
 		}

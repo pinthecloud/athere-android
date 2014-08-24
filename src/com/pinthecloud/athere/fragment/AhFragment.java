@@ -137,30 +137,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 
-	/*
-	 * Check nick name EditText
-	 */
-	protected void removeSquarePreference(){
-		for(AhUser user : userDBHelper.getAllUsers()){
-			context.deleteFile(user.getProfilePic());
-		}
-		context.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
-		userDBHelper.deleteAllUsers();
-		messageDBHelper.deleteAllMessages();
-		messageDBHelper.cleareAllBadgeNum();
-
-		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
-		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-		pref.removePref(AhGlobalVariable.USER_ID_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-	}
-
-
 	/**
 	 * 
 	 * NOT USING METHOD

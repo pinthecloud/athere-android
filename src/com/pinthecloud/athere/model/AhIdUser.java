@@ -9,6 +9,8 @@ public class AhIdUser {
 	private String password;
 	@com.google.gson.annotations.SerializedName("registrationId")
 	private String registrationId;
+	@com.google.gson.annotations.SerializedName("androidId")
+	private String androidId;
 	
 	public String getId() {
 		return id;
@@ -33,5 +35,11 @@ public class AhIdUser {
 	}
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
+	}
+	public String getAndroidId() {
+		return androidId;
+	}
+	public void setAndroidId(String androidId) {
+		this.androidId = androidId;
 	}
 }

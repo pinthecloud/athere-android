@@ -29,8 +29,8 @@ public class AhUser implements Parcelable{
 	private String squareId;
 	@com.google.gson.annotations.SerializedName("isChupaEnable")
 	private boolean isChupaEnable;
-	@com.google.gson.annotations.SerializedName("ahIdUser")
-	private String ahIdUser;
+	@com.google.gson.annotations.SerializedName("ahIdUserKey")
+	private String ahIdUserKey;
 
 	public static final Parcelable.Creator<AhUser> CREATOR = new Creator<AhUser>(){
 		public AhUser createFromParcel(Parcel in){
@@ -107,6 +107,12 @@ public class AhUser implements Parcelable{
 	public void setChupaEnable(boolean isChupaEnable) {
 		this.isChupaEnable = isChupaEnable;
 	}
+	public String getAhIdUserKey() {
+		return ahIdUserKey;
+	}
+	public void setAhIdUserKey(String ahIdUserKey) {
+		this.ahIdUserKey = ahIdUserKey;
+	}
 	@Override
 	public int describeContents() {
 		return 0;
@@ -123,6 +129,7 @@ public class AhUser implements Parcelable{
 		dest.writeInt(age);	
 		dest.writeString(squareId);
 		dest.writeInt(isChupaEnable? 1 : 0);
+		dest.writeString(ahIdUserKey);
 	}
 	public void readToParcel(Parcel in){
 		id = in.readString();
@@ -135,6 +142,7 @@ public class AhUser implements Parcelable{
 		age = in.readInt();
 		squareId = in.readString();
 		isChupaEnable = in.readInt() == 1;
+		ahIdUserKey = in.readString();
 	}
 
 	public static AhUser addUserTest(){
@@ -149,6 +157,7 @@ public class AhUser implements Parcelable{
 		user.age = getRandomInt();
 		user.squareId = getRandomString();
 		user.isChupaEnable = getRandomInt() < 20;
+		user.ahIdUserKey = getRandomString();
 		return user;
 	}
 
@@ -180,7 +189,8 @@ public class AhUser implements Parcelable{
 						" companyNum : "+this.companyNum + " \n "+
 						" age : "+this.age + " \n "+
 						" isChupaEnable : "+this.isChupaEnable + " \n "+
-						" squareId : "+this.squareId + " }";
+						" squareId : "+this.squareId + 
+						" ahIdUserKey : " + ahIdUserKey + " }";
 	}
 
 	public JsonObject toJson() {
@@ -195,6 +205,7 @@ public class AhUser implements Parcelable{
 		jo.addProperty("age", this.age);
 		jo.addProperty("squareId", this.squareId);
 		jo.addProperty("isChupaEnable", this.isChupaEnable);
+		jo.addProperty("ahIdUserKey", this.ahIdUserKey);
 
 		return jo;
 	}

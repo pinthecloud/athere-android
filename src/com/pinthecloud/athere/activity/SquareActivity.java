@@ -3,6 +3,7 @@ package com.pinthecloud.athere.activity;
 import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
@@ -20,8 +22,8 @@ import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.Square;
 
 public class SquareActivity extends AhActivity{
 
@@ -130,6 +132,15 @@ public class SquareActivity extends AhActivity{
 			@Override
 			public void onCompleted(AhMessage message) {
 				// TODO Auto-generated method stub
+				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
+					String text = _this.getResources().getString(R.string.forced_logout_title);
+					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
+					toast.show();
+					Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
+					startActivity(intent);
+					finish();
+					return;
+				}
 				messageHelper.triggerMessageEvent(mSquareTabFragment, message);
 			}
 		});

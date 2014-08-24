@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -18,11 +19,14 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhIdUser;
 
 public class BasicProfileFragment extends AhFragment{
 
@@ -158,19 +162,42 @@ public class BasicProfileFragment extends AhFragment{
 					completeButton.setEnabled(false);
 
 					// Save this setting and go to next activity
-					int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
-					Calendar c = Calendar.getInstance();
-					int age = c.get(Calendar.YEAR) - (birthYear - 1);
-					pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
-					pref.putInt(AhGlobalVariable.AGE_KEY, age);
+					if (GCMRegistrar.isRegistered(context)) {
+						String registrationId = GCMRegistrar.getRegistrationId(context);
+						AhIdUser user = new AhIdUser();
+						user.setAhId(registrationId);
+						user.setPassword("");
+						user.setRegistrationId(registrationId);
+						
+						final String androidId = Secure.getString(activity.getContentResolver(), Secure.ANDROID_ID);
+						user.setAndroidId(androidId);
+						
+						userHelper.addAhIdUser(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
+							
+							@Override
+							public void onCompleted(AhIdUser entity) {
+								// TODO Auto-generated method stub
+								int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
+								Calendar c = Calendar.getInstance();
+								int age = c.get(Calendar.YEAR) - (birthYear - 1);
+								pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
+								pref.putInt(AhGlobalVariable.AGE_KEY, age);
 
-					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
-					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-
-					Intent intent = new Intent(context, SquareListActivity.class);
-					startActivity(intent);
-					activity.finish();
+								pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
+								pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
+								pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
+								pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAndroidId());
+								Intent intent = new Intent(context, SquareListActivity.class);
+								startActivity(intent);
+								activity.finish();
+							}
+						});
+						
+					} else {
+						completeButton.setEnabled(true);
+					}
+					
+					
 				}
 			}
 		});

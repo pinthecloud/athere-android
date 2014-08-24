@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
@@ -24,7 +25,6 @@ import com.pinthecloud.athere.activity.HongkunTestAcitivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -89,13 +89,13 @@ public class SplashFragment extends AhFragment {
 			int lastHour = Integer.parseInt(lastArray[3]);
 
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				removeSquarePreference();
+				AhApplication.getInstance().removeSquarePreference();
 			} else if(currentDay > lastDay && lastHour < 12){
-				removeSquarePreference();
+				AhApplication.getInstance().removeSquarePreference();
 			} else if(currentDay > lastDay && currentHour >= 12){
-				removeSquarePreference();
+				AhApplication.getInstance().removeSquarePreference();
 			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
-				removeSquarePreference();
+				AhApplication.getInstance().removeSquarePreference();
 			}
 		}
 

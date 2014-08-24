@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
@@ -160,7 +162,7 @@ public class AhApplication extends Application{
 
 
 
-	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<AhMessage> callback) {
+	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<Boolean> callback) {
 		if (!isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "forcedLogoutAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -168,7 +170,7 @@ public class AhApplication extends Application{
 
 		JsonObject jo = new JsonObject();
 		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
-		jo.addProperty("registrationId", pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
+		jo.addProperty("ahIdUserKey", pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
 
 		Gson g = new Gson();
 		final JsonElement json = g.fromJson(jo, JsonElement.class);
@@ -188,19 +190,12 @@ public class AhApplication extends Application{
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
-				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
-
+				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+					
 					@Override
-					public void onCompleted(JsonElement json, Exception exception,
-							ServiceFilterResponse response) {
-						pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-						pref.removePref(AhGlobalVariable.USER_ID_KEY);
-						pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
-						pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-						pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-						pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+					public void onCompleted(AhMessage entity) {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 			}
@@ -210,16 +205,40 @@ public class AhApplication extends Application{
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
-				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-					
+				
+				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
+
 					@Override
-					public void onCompleted(AhMessage entity) {
-						// TODO Auto-generated method stub
-						callback.onCompleted(entity);
+					public void onCompleted(JsonElement json, Exception exception,
+							ServiceFilterResponse response) {
+						
+						removeSquarePreference();
+						
+						callback.onCompleted(true);
 					}
 				});
 			}
 		});
 		
+	}
+	
+	public void removeSquarePreference(){
+		for(AhUser user : userDBHelper.getAllUsers()){
+			app.deleteFile(user.getProfilePic());
+		}
+		app.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
+		userDBHelper.deleteAllUsers();
+		messageDBHelper.deleteAllMessages();
+		messageDBHelper.cleareAllBadgeNum();
+
+		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+		pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
+		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+		pref.removePref(AhGlobalVariable.USER_ID_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
 	}
 }
