@@ -1,9 +1,13 @@
 package com.pinthecloud.athere.helper;
 
+import java.io.IOException;
 import java.util.List;
 
+import android.os.AsyncTask;
+import android.provider.Settings.Global;
 import android.util.Log;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -259,33 +263,33 @@ public class UserHelper {
 	}
 
 
-//	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
-//		if (!app.isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return;
-//		}
-//		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
-//
-//			@Override
-//			protected String doInBackground(GoogleCloudMessaging... params) {
-//				GoogleCloudMessaging gcm = params[0];
-//				try {
-//					return gcm.register(GCM_SENDER_ID);
-//				} catch (IOException e) {
-//					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdSync", AhException.TYPE.GCM_REGISTRATION_FAIL));
-//					return null;
-//				}
-//			}
-//
-//			@Override
-//			protected void onPostExecute(String result) {
-//				super.onPostExecute(result);
-//				callback.onCompleted(result);
-//				AsyncChainer.notifyNext(frag);
-//			}
-//		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
-//
-//	}
+	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
+
+			@Override
+			protected String doInBackground(GoogleCloudMessaging... params) {
+				GoogleCloudMessaging gcm = params[0];
+				try {
+					return gcm.register(AhGlobalVariable.GCM_SENDER_ID);
+				} catch (IOException e) {
+					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+					return null;
+				}
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				callback.onCompleted(result);
+				AsyncChainer.notifyNext(frag);
+			}
+		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
+
+	}
 
 	//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
 	AhEntityCallback<AhUser> _callback;

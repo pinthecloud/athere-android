@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningTaskInfo;
+import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,33 +16,27 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
-import com.google.android.gcm.GCMBaseIntentService;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
-import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhIdUser;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.util.FileUtil;
 
-public class GCMIntentService extends GCMBaseIntentService {
+public class AhIntentService extends IntentService {
 
 	private AhApplication app;
 	private MessageHelper messageHelper;
@@ -55,28 +50,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private String userId = null; 
 
 	
-//	public AhIntentService() {
-//		this("AhIntentService");
-//	}
-//
-//	
-//	public AhIntentService(String name) {
-//		super(name);
-//		app = AhApplication.getInstance();
-//		messageHelper = app.getMessageHelper();
-//		messageDBHelper = app.getMessageDBHelper();
-//		userDBHelper = app.getUserDBHelper();
-//		userHelper = app.getUserHelper();
-//		pref = app.getPref();
-//		_this = this;
-//	}
-	
-	public GCMIntentService(){
-		this(AhGlobalVariable.GCM_SENDER_ID);
+	public AhIntentService() {
+		this("AhIntentService");
 	}
 
-	public GCMIntentService(String senderId){
-		super(senderId);
+	
+	public AhIntentService(String name) {
+		super(name);
 		app = AhApplication.getInstance();
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
@@ -85,41 +65,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 		pref = app.getPref();
 		_this = this;
 	}
-	
 
-	@Override
-	protected void onError(Context arg0, String arg1) {
-		// TODO Auto-generated method stub
-		Log.e("ERROR", "onError");
-	}
-
-
-	@Override
-	protected void onMessage(Context arg0, Intent intent) {
-		// TODO Auto-generated method stub
-		Log.e("ERROR", "onMessage");
-		_onHandleIntent(intent);
-	}
-
-
-	@Override
-	protected void onRegistered(Context arg0, String registrationId) {
-		// TODO Auto-generated method stub
-		pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-		AhIdUser idUser = new AhIdUser();
-	}
-
-
-	@Override
-	protected void onUnregistered(Context arg0, String arg1) {
-		// TODO Auto-generated method stub
-		Log.e("ERROR", "onUnregistered");
-		pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
-	}
-	
-
-	
-	public void _onHandleIntent(Intent intent) {
+	public void onHandleIntent(Intent intent) {
 		/*
 		 * Parsing the data from server
 		 */
@@ -399,7 +346,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 				return task.topActivity.getClassName();
 			}
 		}
-		return GCMIntentService.class.getName();
+		return AhIntentService.class.getName();
 	}
 
 

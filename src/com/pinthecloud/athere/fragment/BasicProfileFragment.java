@@ -19,11 +19,13 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.google.android.gcm.GCMRegistrar;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhIdUser;
@@ -162,8 +164,8 @@ public class BasicProfileFragment extends AhFragment{
 					completeButton.setEnabled(false);
 
 					// Save this setting and go to next activity
-					if (GCMRegistrar.isRegistered(context)) {
-						String registrationId = GCMRegistrar.getRegistrationId(context);
+					String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
+					if (!registrationId.equals(PreferenceHelper.DEFAULT_STRING)) {
 						AhIdUser user = new AhIdUser();
 						user.setAhId(registrationId);
 						user.setPassword("");
@@ -194,7 +196,7 @@ public class BasicProfileFragment extends AhFragment{
 						});
 						
 					} else {
-						completeButton.setEnabled(true);
+						ExceptionManager.fireException(new AhException(AhException.TYPE.GCM_REGISTRATION_FAIL));
 					}
 					
 					

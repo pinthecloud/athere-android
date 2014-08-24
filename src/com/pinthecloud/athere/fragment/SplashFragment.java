@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gcm.GCMRegistrar;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -25,6 +24,7 @@ import com.pinthecloud.athere.activity.HongkunTestAcitivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -151,33 +151,20 @@ public class SplashFragment extends AhFragment {
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
-//				if(false && pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
-//						.equals(PreferenceHelper.DEFAULT_STRING)){
-//					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
-//
-//						@Override
-//						public void onCompleted(String registrationId) {
-//							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-//						}
-//
-//					});
-//
-//				} else {
-//					AsyncChainer.notifyNext(frag);
-//				}
-				
-		        // 디바이스 체크
-		        GCMRegistrar.checkDevice(context);
-		          
-		        // AndroidManifest.xml 체크
-		        GCMRegistrar.checkManifest(context);
-		          
-		        if (!GCMRegistrar.isRegistered(context)) {
-		        	// Registration ID 발급 요청
-			        GCMRegistrar.register(context, AhGlobalVariable.GCM_SENDER_ID);
-		        }
-		        
-		        AsyncChainer.notifyNext(frag);
+				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
+						.equals(PreferenceHelper.DEFAULT_STRING)){
+					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
+
+						@Override
+						public void onCompleted(String registrationId) {
+							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+						}
+
+					});
+
+				} else {
+					AsyncChainer.notifyNext(frag);
+				}
 			}
 			
 		},new Chainable(){
