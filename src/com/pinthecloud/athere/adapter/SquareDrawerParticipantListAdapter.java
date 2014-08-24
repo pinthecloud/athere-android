@@ -2,7 +2,6 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -20,7 +19,6 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
@@ -30,7 +28,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 	private List<AhUser> items;
 
 
-	public SquareDrawerParticipantListAdapter(Context context, Fragment fragment, int layoutId, List<AhUser> items) {
+	public SquareDrawerParticipantListAdapter(Context context, int layoutId, List<AhUser> items) {
 		super(context, layoutId, items);
 		this.context = context;
 		this.layoutId = layoutId;
@@ -73,7 +71,6 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			}
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-			//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(user.getProfilePic(), w, h);
 			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
 			profileImage.setImageBitmap(profileBitmap);
 

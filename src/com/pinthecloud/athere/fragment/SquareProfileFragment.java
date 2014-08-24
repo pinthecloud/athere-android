@@ -38,14 +38,14 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
-import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -95,10 +95,11 @@ public class SquareProfileFragment extends AhFragment{
 
 					// Get file from taken data
 					File pictureFile = FileUtil.getOutputMediaFile(FileUtil.MEDIA_TYPE_IMAGE);
-					Uri pictureFileUri = Uri.fromFile(pictureFile);
-					if (pictureFile == null){
+					if (pictureFile == null) {
+						ExceptionManager.fireException(new AhException(_thisFragment, "onPictureTaken", AhException.TYPE.SD_CARD_FAIL));
 						return;
 					}
+					Uri pictureFileUri = Uri.fromFile(pictureFile);
 					FileOutputStream fos = new FileOutputStream(pictureFile);
 					fos.write(data);
 					fos.close();
@@ -340,6 +341,37 @@ public class SquareProfileFragment extends AhFragment{
 	}
 
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStart");
+
+		/*
+		 * Set camera for taking picture OR
+		 * Set taken picture to image view
+		 */
+		if(!isTookPicture){
+			openCameraAndSetView();
+		}else{
+			Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
+			profilePictureView.setImageBitmap(pictureBitmap);
+		}
+	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStop");
+
+		/*
+		 * Release resources
+		 */
+		profilePictureView.setImageBitmap(null);
+		releaseCameraAndRemoveView();
+		super.onStop();
+	}
+
+
 	/*
 	 * Create our Preview view and set it as the content of our activity.
 	 * Create orientation event listener
@@ -409,22 +441,21 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
-				
+
 				userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
-					
+
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
-						// TODO Auto-generated method stub
 						pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
-						
+
 						for(AhUser user : list) {
 							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
 							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
 							user.setProfilePic(imagePath);
 							userDBHelper.addUser(user);
 						}
-						
-						
+
+
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
@@ -432,99 +463,90 @@ public class SquareProfileFragment extends AhFragment{
 						time.setToNow();
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
 						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
-						
-						
+
+
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-						activity.runOnUiThread(new Runnable(){
-
-							@Override
-							public void run() {
-								// Dimiss progress bar
-								progressBar.setVisibility(View.GONE);
-								startActivity(intent);
-							}
-						});
-						
-						
+						// Dimiss progress bar
+						progressBar.setVisibility(View.GONE);
+						startActivity(intent);
 					}
 				});
 			}
 		});
-		
-		
-//		, new Chainable() {
-//
-//			@Override
-//			public void doNext(AhFragment frag) {
-//				// TODO Auto-generated method stub
-//				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<AhUser>() {
-//
-//					@Override
-//					public void onCompleted(List<AhUser> list, int count) {
-//						// TODO Auto-generated method stub
-////						userDBHelper.addAllUsers(list);
-//						for(AhUser user : list) {
-//							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
-//							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
-//							user.setProfilePic(imagePath);
-//							userDBHelper.addUser(user);
-//						}
-//
-//						// Remove Me from User DB Table.
-//						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
-//					}
-//				});
-//
-//			}
-//		}, new Chainable() {
-//
-//			@Override
-//			public void doNext(AhFragment frag) {
-//				// Send message to server for notifying entering
-//				String enterMessage = getResources().getString(R.string.enter_square_message);
-//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-//				AhUser user = userHelper.getMyUserInfo(true);
-//				messageBuilder.setContent(user.getNickName() + " : " + enterMessage)
-//				.setSender(user.getNickName())
-//				.setSenderId(user.getId())
-//				.setReceiverId(square.getId())
-//				.setType(AhMessage.TYPE.ENTER_SQUARE);
-//				AhMessage message = messageBuilder.build();
-//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-//
-//					@Override
-//					public void onCompleted(AhMessage entity) {
-//						// Do nothing
-//					}
-//				});
-//
-//				// Save this setting and go to next activity
-//				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-//				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-//				Time time = new Time();
-//				time.setToNow();
-//				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
-//				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
-//				
-//				
-//				// Set and move to next activity after clear previous activity
-//				intent.setClass(context, SquareActivity.class);
-//				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//				activity.runOnUiThread(new Runnable(){
-//
-//					@Override
-//					public void run() {
-//						// Dimiss progress bar
-//						progressBar.setVisibility(View.GONE);
-//						startActivity(intent);
-//					}
-//				});
-//			}
-//		});
+
+
+		//		, new Chainable() {
+		//
+		//			@Override
+		//			public void doNext(AhFragment frag) {
+		//				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<AhUser>() {
+		//
+		//					@Override
+		//					public void onCompleted(List<AhUser> list, int count) {
+		//						// TODO Auto-generated method stub
+		////						userDBHelper.addAllUsers(list);
+		//						for(AhUser user : list) {
+		//							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
+		//							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
+		//							user.setProfilePic(imagePath);
+		//							userDBHelper.addUser(user);
+		//						}
+		//
+		//						// Remove Me from User DB Table.
+		//						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
+		//					}
+		//				});
+		//
+		//			}
+		//		}, new Chainable() {
+		//
+		//			@Override
+		//			public void doNext(AhFragment frag) {
+		//				// Send message to server for notifying entering
+		//				String enterMessage = getResources().getString(R.string.enter_square_message);
+		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+		//				AhUser user = userHelper.getMyUserInfo(true);
+		//				messageBuilder.setContent(user.getNickName() + " : " + enterMessage)
+		//				.setSender(user.getNickName())
+		//				.setSenderId(user.getId())
+		//				.setReceiverId(square.getId())
+		//				.setType(AhMessage.TYPE.ENTER_SQUARE);
+		//				AhMessage message = messageBuilder.build();
+		//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+		//
+		//					@Override
+		//					public void onCompleted(AhMessage entity) {
+		//						// Do nothing
+		//					}
+		//				});
+		//
+		//				// Save this setting and go to next activity
+		//				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+		//				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+		//				Time time = new Time();
+		//				time.setToNow();
+		//				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
+		//				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
+		//				
+		//				
+		//				// Set and move to next activity after clear previous activity
+		//				intent.setClass(context, SquareActivity.class);
+		//				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+		//
+		//				activity.runOnUiThread(new Runnable(){
+		//
+		//					@Override
+		//					public void run() {
+		//						// Dimiss progress bar
+		//						progressBar.setVisibility(View.GONE);
+		//						startActivity(intent);
+		//					}
+		//				});
+		//			}
+		//		});
 
 
 
@@ -614,43 +636,6 @@ public class SquareProfileFragment extends AhFragment{
 
 	private boolean isCompleteButtonEnable(){
 		return isTookPicture && isTypedMember && isTypedNickName;
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStart");
-
-		/*
-		 * Set camera for taking picture OR
-		 * Set taken picture to image view
-		 */
-		if(!isTookPicture){
-			openCameraAndSetView();
-		}else{
-			Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-			profilePictureView.setImageBitmap(pictureBitmap);
-//			try {
-//				// Set taken picture to view
-//				Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-//				profilePictureView.setImageBitmap(pictureBitmap);
-//			} catch (FileNotFoundException e) {
-//				Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment onStart : " + e.getMessage());
-//			}
-		}
-	}
-
-
-	@Override
-	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStop");
-
-		/*
-		 * Release resources
-		 */
-		profilePictureView.setImageBitmap(null);
-		releaseCameraAndRemoveView();
-		super.onStop();
 	}
 
 

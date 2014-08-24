@@ -64,7 +64,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			sender.setText(userNickName);
 			int w = profileImage.getWidth();
 			int h = profileImage.getHeight();
-			//			Bitmap profileBitmap = BitmapUtil.convertToBitmap(picStr, w, h);
 			Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, picStr, w, h);
 			profileImage.setImageBitmap(profileBitmap);
 			content.setText(lastChupaMap.get("content"));

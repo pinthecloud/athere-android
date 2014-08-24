@@ -23,7 +23,7 @@ public class AhGlobalVariable{
 	/*
 	 * String
 	 */
-	public static String APP_NAME;
+	public static String APP_NAME = "Chupa";
 	public static final String LOG_TAG = "AtHere";
 	public static final String PROFILE_PICTURE_NAME = "profile_picture_name.png";
 	public static final String ANDROID = "Android";
@@ -44,6 +44,7 @@ public class AhGlobalVariable{
 	 */
 	public static final String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";
 	public static final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
+	public static final String IS_POLICY_CONSENT_KEY = "IS_POLICY_CONSENT_KEY";
 	public static final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
 	
 	public static final String NICK_NAME_KEY = "NICK_NAME_KEY";

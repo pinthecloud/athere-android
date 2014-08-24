@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_chupa_list_frag_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <ListView
-        android:id="@+id/square_chupa_list_frag_list"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/square_chupa_list_frag_blank_image"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:divider="@null"
-        android:listSelector="@drawable/list_selector_bg" >
-    </ListView>
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/blank"
+        android:src="@drawable/chupa_list_empty"
+        android:visibility="gone" />
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.4"
-        android:background="@color/gray_background" />
+        android:orientation="vertical" >
 
-</LinearLayout>
+        <ListView
+            android:id="@+id/square_chupa_list_frag_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            android:listSelector="@drawable/list_selector_bg" >
+        </ListView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.4"
+            android:background="@color/gray_background" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -28,8 +29,9 @@ public class SquareChupaListFragment extends AhFragment{
 	private SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
 	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
+	private ImageView blankImage;
 
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,12 +47,17 @@ public class SquareChupaListFragment extends AhFragment{
 		 * Set UI component
 		 */
 		squareChupaListView = (ListView)view.findViewById(R.id.square_chupa_list_frag_list);
+		blankImage = (ImageView)view.findViewById(R.id.square_chupa_list_frag_blank_image);
 
 
 		/*
 		 * Set square chupa list view
 		 */
-		squareChupaListAdapter = new SquareChupaListAdapter(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+		/*
+		 * Set square chupa list view
+		 */
+		squareChupaListAdapter = new SquareChupaListAdapter
+				(context, R.layout.row_square_chupa_list, lastChupaCommunList);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -62,20 +69,16 @@ public class SquareChupaListFragment extends AhFragment{
 				startActivity(intent);
 			}
 		});
-		
+
+
+		/*
+		 * Set message handler for getting push
+		 */
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
-			
+
 			@Override
 			public void onCompleted(AhMessage entity) {
-				// TODO Auto-generated method stub
-				activity.runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						refreshView();
-					}
-				});
+				refreshView();
 			}
 		});
 
@@ -88,13 +91,30 @@ public class SquareChupaListFragment extends AhFragment{
 		super.onStart();
 		refreshView();
 	}
-	
+
+
 	private void refreshView() {
+		/*
+		 * Set square chupa list view
+		 */
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		lastChupaCommunList.clear();
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));
-		squareChupaListAdapter.notifyDataSetChanged();
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				squareChupaListAdapter.notifyDataSetChanged();
+
+				if(lastChupaCommunList.size() < 1){
+					blankImage.setVisibility(View.VISIBLE);
+				} else{
+					blankImage.setVisibility(View.GONE);
+				}
+			}
+		});
 	}
+
 
 	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
@@ -109,8 +129,8 @@ public class SquareChupaListFragment extends AhFragment{
 			String chupaCommunId = "";
 			String isExit = "false";
 			String chupaBadge = "";
-			
-			if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getSenderId())) {
+
+			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
 				userNickName = message.getReceiver();
@@ -122,7 +142,7 @@ public class SquareChupaListFragment extends AhFragment{
 				throw new AhException("No User in Sender or Receive");
 			}
 			AhUser user = userDBHelper.getUser(userId);
-
+			
 			// if there is No such User
 			if (user == null) {
 				// check whether it is exited.
@@ -138,7 +158,7 @@ public class SquareChupaListFragment extends AhFragment{
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
 			chupaCommunId = message.getChupaCommunId();
-			chupaBadge = ""+messageDBHelper.getBadgeNum(message.getChupaCommunId());
+			chupaBadge = "" + messageDBHelper.getBadgeNum(message.getChupaCommunId());
 			map.put("profilePic", profilePic);
 			map.put("userNickName", userNickName);
 			map.put("userId", userId);

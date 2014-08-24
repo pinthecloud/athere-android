@@ -70,7 +70,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/squre_profile_hint_sentence_nick_name_margin"
                 android:contentDescription="@string/hint"
                 android:src="@drawable/ground_profile_label" />
 

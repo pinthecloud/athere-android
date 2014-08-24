@@ -1,8 +1,6 @@
 package com.pinthecloud.athere.database;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -42,7 +40,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	private final String STATUS = "status";
 
 	private BadgeDBHelper badgeDBHelper;
-	
+
 	public MessageDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		badgeDBHelper = new BadgeDBHelper(context);
@@ -142,8 +140,8 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		db.update(TABLE_NAME, values, ID + " = ?", new String[]{ String.valueOf(id) });
 		db.close(); // Closing database connection
 	}
-	
-	
+
+
 	// Getting single contact
 	public AhMessage getMessage(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -152,7 +150,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
 			cursor.moveToFirst();
-		
+
 		AhMessage message = convertToMessage(cursor);
 		db.close();
 		return message;
@@ -227,67 +225,67 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// return contact list
 		return messages;
 	}
-	
-//	public List<AhMessage> getAllMessagesByFifties(int offset, String type) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		SQLiteDatabase db = this.getReadableDatabase();
-//		
-//		String countQuery = "SELECT COUNT(*) FROM "+TABLE_NAME+ " WHERE " + TYPE + " = ?";
-//		Cursor countCursor = db.rawQuery(countQuery, new String[] { type });
-//		int total = 0;
-//		if (countCursor!= null){
-//			if(countCursor.moveToFirst()){
-//				total = countCursor.getInt(0);
-//			}
-//		}
-//		
-//		// Select All Query
-//		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + TYPE
-//				+ " = ?" + " ORDER BY " + ID + " LIMIT 10 OFFSET "
-//				+ (total - ((offset+1) * 10));
-//		
-//		Cursor cursor = db.rawQuery(selectQuery, new String[] { type });
-//
-//		// looping through all rows and adding to list
-//		if (cursor.moveToFirst()) {
-//			do {
-//				messages.add(convertToMessage(cursor));
-//			} while (cursor.moveToNext());
-//		}
-//		db.close();
-//		// return contact list
-//		return messages;
-//	}
-//	
-//	public List<AhMessage> getAllMessagesByFifties(int offset, String... types) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		for(String type : types){
-//			messages.addAll(this.getAllMessagesByFifties(offset, type));
-//		}
-//		sortMessages(messages);
-//		return messages;
-//	}
-//	
-//	public List<AhMessage> getAllMessagesByFifties(int offset, AhMessage.TYPE... types) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		for(AhMessage.TYPE type : types){
-//			messages.addAll(this.getAllMessagesByFifties(offset, type.toString()));
-//		}
-//		sortMessages(messages);
-//		return messages;
-//	}
+
+	//	public List<AhMessage> getAllMessagesByFifties(int offset, String type) {
+	//		List<AhMessage> messages = new ArrayList<AhMessage>();
+	//
+	//		SQLiteDatabase db = this.getReadableDatabase();
+	//		
+	//		String countQuery = "SELECT COUNT(*) FROM "+TABLE_NAME+ " WHERE " + TYPE + " = ?";
+	//		Cursor countCursor = db.rawQuery(countQuery, new String[] { type });
+	//		int total = 0;
+	//		if (countCursor!= null){
+	//			if(countCursor.moveToFirst()){
+	//				total = countCursor.getInt(0);
+	//			}
+	//		}
+	//		
+	//		// Select All Query
+	//		String selectQuery = "SELECT * FROM " + TABLE_NAME + " WHERE " + TYPE
+	//				+ " = ?" + " ORDER BY " + ID + " LIMIT 10 OFFSET "
+	//				+ (total - ((offset+1) * 10));
+	//		
+	//		Cursor cursor = db.rawQuery(selectQuery, new String[] { type });
+	//
+	//		// looping through all rows and adding to list
+	//		if (cursor.moveToFirst()) {
+	//			do {
+	//				messages.add(convertToMessage(cursor));
+	//			} while (cursor.moveToNext());
+	//		}
+	//		db.close();
+	//		// return contact list
+	//		return messages;
+	//	}
+	//	
+	//	public List<AhMessage> getAllMessagesByFifties(int offset, String... types) {
+	//		List<AhMessage> messages = new ArrayList<AhMessage>();
+	//
+	//		for(String type : types){
+	//			messages.addAll(this.getAllMessagesByFifties(offset, type));
+	//		}
+	//		sortMessages(messages);
+	//		return messages;
+	//	}
+	//	
+	//	public List<AhMessage> getAllMessagesByFifties(int offset, AhMessage.TYPE... types) {
+	//		List<AhMessage> messages = new ArrayList<AhMessage>();
+	//
+	//		for(AhMessage.TYPE type : types){
+	//			messages.addAll(this.getAllMessagesByFifties(offset, type.toString()));
+	//		}
+	//		sortMessages(messages);
+	//		return messages;
+	//	}
 
 	public List<AhMessage> getAllMessages(String... types) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		for(String type : types){
-//			messages.addAll(this.getAllMessages(type));
-//		}
-//		sortMessages(messages);
-//		return messages;
+		//		List<AhMessage> messages = new ArrayList<AhMessage>();
+		//
+		//		for(String type : types){
+		//			messages.addAll(this.getAllMessages(type));
+		//		}
+		//		sortMessages(messages);
+		//		return messages;
 		List<String> typeArr = new ArrayList<String>();
 		StringBuilder whereStr = new StringBuilder();
 		for (String type : types) {
@@ -318,7 +316,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	}
 
 	public List<AhMessage> getAllMessages(AhMessage.TYPE... types) {
-		
+
 		List<String> typeArr = new ArrayList<String>();
 		StringBuilder whereStr = new StringBuilder();
 		for (AhMessage.TYPE type : types) {
@@ -357,7 +355,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
-		
+
 		cursor.moveToFirst();
 		int count = cursor.getInt(0);
 		db.close();
@@ -377,7 +375,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	}
 
 	public boolean isEmpty(String... types){
-		
+
 		List<String> typeArr = new ArrayList<String>();
 		StringBuilder whereStr = new StringBuilder();
 		for (String type : types) {
@@ -385,11 +383,11 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			whereStr.append(TYPE + "=? OR ");
 		}
 		whereStr.delete(whereStr.length()- 3, whereStr.length());
-		
-		
+
+
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + whereStr.toString();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
-		
+
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
@@ -407,11 +405,11 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			whereStr.append(TYPE + "=? OR ");
 		}
 		whereStr.delete(whereStr.length()- 3, whereStr.length());
-		
-		
+
+
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + whereStr.toString();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
-		
+
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
@@ -425,95 +423,95 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		return this.isEmpty(type.toString());
 	}
 
-//	public List<AhMessage> popAllMessages() {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		// Select All Query
-//		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + ID;
-//
-//		SQLiteDatabase db = this.getReadableDatabase();
-//		Cursor cursor = db.rawQuery(selectQuery, null);
-//
-//		// looping through all rows and adding to list
-//		if (cursor.moveToFirst()) {
-//			do {
-//				messages.add(convertToMessage(cursor));
-//			} while (cursor.moveToNext());
-//		}
-//		db.delete(TABLE_NAME, null ,null);
-//		db.close();
-//		// return contact list
-//		return messages;
-//	}
-//
-//	public List<AhMessage> popAllMessages(String type) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		// Select All Query
-//		String selectQuery = "SELECT * FROM " + TABLE_NAME +
-//				" WHERE " + TYPE + " = ?" +
-//				" ORDER BY " + ID;
-//
-//		SQLiteDatabase db = this.getReadableDatabase();
-//		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
-//
-//		// looping through all rows and adding to list
-//		if (cursor.moveToFirst()) {
-//			do {
-//				messages.add(convertToMessage(cursor));
-//			} while (cursor.moveToNext());
-//		}
-//		this.deleteAllMessages(type);
-//		db.close();
-//		// return message list
-//		return messages;
-//	}
-//
-//	public List<AhMessage> popAllMessages(String... types) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//		List<String> typeArr = new ArrayList<String>();
-//		StringBuilder whereStr = new StringBuilder();
-//		for (String type : types) {
-//			typeArr.add(type);
-//			whereStr.append(TYPE + "=? OR ");
-//		}
-//		whereStr.delete(whereStr.length()- 3, whereStr.length());
-//		
-//		
-//		String selectQuery = "SELECT * FROM " + TABLE_NAME +
-//				" WHERE " + whereStr.toString() +
-//				" ORDER BY " + ID;
-//
-//		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
-//		SQLiteDatabase db = this.getReadableDatabase();
-//		
-//		Cursor cursor = db.rawQuery(selectQuery, argArray);
-//
-//		// looping through all rows and adding to list
-//		if (cursor.moveToFirst()) {
-//			do {
-//				messages.add(convertToMessage(cursor));
-//			} while (cursor.moveToNext());
-//		}
-//		this.deleteAllMessages(type);
-//		db.close();
-//		// return message list
-//		return messages;
-//	}
-//
-//	public List<AhMessage> popAllMessages(AhMessage.TYPE... types) {
-//		List<AhMessage> messages = new ArrayList<AhMessage>();
-//
-//		for(AhMessage.TYPE type : types){
-//			messages.addAll(this.popAllMessages(type));
-//		}
-//		sortMessages(messages);
-//		return messages;
-//	}
-//
-//	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
-//		return this.popAllMessages(type.toString());
-//	}
+	//	public List<AhMessage> popAllMessages() {
+	//		List<AhMessage> messages = new ArrayList<AhMessage>();
+	//
+	//		// Select All Query
+	//		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + ID;
+	//
+	//		SQLiteDatabase db = this.getReadableDatabase();
+	//		Cursor cursor = db.rawQuery(selectQuery, null);
+	//
+	//		// looping through all rows and adding to list
+	//		if (cursor.moveToFirst()) {
+	//			do {
+	//				messages.add(convertToMessage(cursor));
+	//			} while (cursor.moveToNext());
+	//		}
+	//		db.delete(TABLE_NAME, null ,null);
+	//		db.close();
+	//		// return contact list
+	//		return messages;
+	//	}
+	//
+	//	public List<AhMessage> popAllMessages(String type) {
+	//		List<AhMessage> messages = new ArrayList<AhMessage>();
+	//
+	//		// Select All Query
+	//		String selectQuery = "SELECT * FROM " + TABLE_NAME +
+	//				" WHERE " + TYPE + " = ?" +
+	//				" ORDER BY " + ID;
+	//
+	//		SQLiteDatabase db = this.getReadableDatabase();
+	//		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
+	//
+	//		// looping through all rows and adding to list
+	//		if (cursor.moveToFirst()) {
+	//			do {
+	//				messages.add(convertToMessage(cursor));
+	//			} while (cursor.moveToNext());
+	//		}
+	//		this.deleteAllMessages(type);
+	//		db.close();
+	//		// return message list
+	//		return messages;
+	//	}
+	//
+	//	public List<AhMessage> popAllMessages(String... types) {
+	//		List<AhMessage> messages = new ArrayList<AhMessage>();
+	//		List<String> typeArr = new ArrayList<String>();
+	//		StringBuilder whereStr = new StringBuilder();
+	//		for (String type : types) {
+	//			typeArr.add(type);
+	//			whereStr.append(TYPE + "=? OR ");
+	//		}
+	//		whereStr.delete(whereStr.length()- 3, whereStr.length());
+	//		
+	//		
+	//		String selectQuery = "SELECT * FROM " + TABLE_NAME +
+	//				" WHERE " + whereStr.toString() +
+	//				" ORDER BY " + ID;
+	//
+	//		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
+	//		SQLiteDatabase db = this.getReadableDatabase();
+	//		
+	//		Cursor cursor = db.rawQuery(selectQuery, argArray);
+	//
+	//		// looping through all rows and adding to list
+	//		if (cursor.moveToFirst()) {
+	//			do {
+	//				messages.add(convertToMessage(cursor));
+	//			} while (cursor.moveToNext());
+	//		}
+	//		this.deleteAllMessages(type);
+	//		db.close();
+	//		// return message list
+	//		return messages;
+	//	}
+	//
+	//	public List<AhMessage> popAllMessages(AhMessage.TYPE... types) {
+	//		List<AhMessage> messages = new ArrayList<AhMessage>();
+	//
+	//		for(AhMessage.TYPE type : types){
+	//			messages.addAll(this.popAllMessages(type));
+	//		}
+	//		sortMessages(messages);
+	//		return messages;
+	//	}
+	//
+	//	public List<AhMessage> popAllMessages(AhMessage.TYPE type) {
+	//		return this.popAllMessages(type.toString());
+	//	}
 
 	// Deleting single contact
 	public void deleteMessage(String messageId) {
@@ -582,31 +580,30 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		db.close();
 		return list;
 	}
-	
-	
-	private void sortMessages(List<AhMessage> list){
-		Collections.sort(list, new Comparator<AhMessage>() {
 
-			@Override
-			public int compare(AhMessage lhs, AhMessage rhs) {
-				int left = Integer.valueOf(lhs.getId());
-				int right = Integer.valueOf(rhs.getId());
-				if (left == right) return 0;
-				return left > right ? 1: -1;
-			}
-		});
-	}
-	
-	
+
+	//	private void sortMessages(List<AhMessage> list){
+	//		Collections.sort(list, new Comparator<AhMessage>() {
+	//
+	//			@Override
+	//			public int compare(AhMessage lhs, AhMessage rhs) {
+	//				int left = Integer.valueOf(lhs.getId());
+	//				int right = Integer.valueOf(rhs.getId());
+	//				if (left == right) return 0;
+	//				return left > right ? 1: -1;
+	//			}
+	//		});
+	//	}
+
 
 	public int getBadgeNum(String chupaCommunId) {
 		return badgeDBHelper.getBadgeNum(chupaCommunId);
 	}
-	
+
 	public int getAllBadgeNum() {
 		return badgeDBHelper.getAllBadgeNum();
 	}
-	
+
 	public void increaseBadgeNum(String chupaCommunId) {
 		badgeDBHelper.increaseBadgeNum(chupaCommunId);
 	}
@@ -615,12 +612,12 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public void clearBadgeNum(String chupaCommunId) {
 		badgeDBHelper.deleteBadge(chupaCommunId);
 	}
-	
+
 	public void cleareAllBadgeNum() {
 		badgeDBHelper.cleareAllBadgeNum();
 	}
 
-	
+
 	private class BadgeDBHelper extends SQLiteOpenHelper {
 		// Database Version
 		private static final int BADGE_DATABASE_VERSION = 2;
@@ -657,7 +654,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// Drop older table if existed
 			dropTable(db);
-			
+
 			// Create tables again
 			onCreate(db);
 		}
@@ -674,10 +671,10 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		public void dropTable(SQLiteDatabase db) {
 			db.execSQL("DROP TABLE IF EXISTS " + BADGE_TABLE_NAME);
 		}
-		
+
 		private int createBadge(String chupaCommunId){
 			SQLiteDatabase db = this.getWritableDatabase();
-			
+
 			ContentValues values = new ContentValues();
 			putValueWithoutNull(values, BADGE_CHUPA_COMMUN_ID, chupaCommunId);
 			values.put(COUNT, 0);
@@ -689,7 +686,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 		private void updateBadge(String chupaCommunId, int count) {
 			SQLiteDatabase db = this.getWritableDatabase();
-			
+
 			ContentValues values = new ContentValues();
 			values.put(COUNT, count);
 
@@ -716,7 +713,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			db.close();
 			return 0;
 		}
-		
+
 		private int getAllBadgeNum() {
 			String selectQuery = "SELECT * FROM " + BADGE_TABLE_NAME;
 			SQLiteDatabase db = this.getReadableDatabase();
@@ -731,7 +728,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			db.close();
 			return total;
 		}
-		
+
 		private void increaseBadgeNum(String chupaCommunId) {
 			int badgeNum = this.getBadgeNum(chupaCommunId);
 			if (badgeNum == 0) {
@@ -741,10 +738,10 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 
 
-//		private void clearBadgeNum(String chupaCommunId) {
-//			this.deleteBadge(chupaCommunId);
-//		}
-		
+		//		private void clearBadgeNum(String chupaCommunId) {
+		//			this.deleteBadge(chupaCommunId);
+		//		}
+
 		private void cleareAllBadgeNum() {
 			SQLiteDatabase db = this.getWritableDatabase();
 			db.delete(BADGE_TABLE_NAME, null, null);

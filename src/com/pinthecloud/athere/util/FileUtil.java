@@ -16,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
@@ -44,11 +45,9 @@ public class FileUtil {
 
 		// This location works best if you want the created images to be shared
 		// between applications and persist after your app has been uninstalled.
-
 		// Create the storage directory if it does not exist
 		if (!mediaStorageDir.exists()){
 			if (!mediaStorageDir.mkdirs()){
-				// failed to create directory
 				return null;
 			}
 		}
@@ -63,9 +62,10 @@ public class FileUtil {
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
 					"VID_"+ timeStamp + ".mp4");
 		} else {
+			Log.e("ERROR", "type : "+type);
 			return null;
 		}
-
+		Log.e("ERROR", "mediaFile : "+mediaFile);
 		return mediaFile;
 	}
 
@@ -123,7 +123,6 @@ public class FileUtil {
 	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
 		Bitmap bitmap = myCached.get(filename);
 		if (bitmap != null) return bitmap;
-		
 		try {
 			File filePath = context.getFileStreamPath(filename);
 			FileInputStream fi = new FileInputStream(filePath);

@@ -18,6 +18,7 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="delete">Delete</string>
+    <string name="re_send">Re Send</string>
     <string name="select">Select</string>
     <string name="settings">Settings</string>
     <string name="gender">Gender</string>
@@ -39,6 +40,8 @@
     <string name="shout">Shout</string>
     <string name="confirm">Confirm</string>
     <string name="hint">Hint</string>
+    <string name="blank">Blank</string>
+    <string name="fail">Fail</string>
 
     <!-- Sentence -->
     <string name="delete_profile_image_message">Do you want to make your profile as default?</string>
@@ -59,8 +62,8 @@
     <string name="shout_notification_title">shouts.</string>
     <string name="update_app_title">Update App</string>
     <string name="update_app_message">There is update. Please update App.</string>
-    <string name="internet_not_connected_title">Internet unavailable</string>
     <string name="internet_not_connected_message">Internet is bad. Please check your network environment.</string>
+    <string name="message_fail_message">Would you re send?</string>
     
     <!-- String Array -->
 

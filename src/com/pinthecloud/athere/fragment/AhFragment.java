@@ -20,6 +20,7 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.model.AhUser;
 
 /**
  *  Basic Fragment class for At here application
@@ -74,7 +75,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		String title = ex.getType().toString();
 		String message = ex.toString();
 		if(ex.getType().equals(AhException.TYPE.INTERNET_NOT_CONNECTED)){
-			title = resources.getString(R.string.internet_not_connected_title);
+			title = null;
 			message = resources.getString(R.string.internet_not_connected_message);
 		}
 		exceptionDialog = new AhAlertDialog(title, message, false, new AhDialogCallback() {
@@ -137,10 +138,14 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	 * Check nick name EditText
 	 */
 	protected void removeSquarePreference(){
+		for(AhUser user : userDBHelper.getAllUsers()){
+			context.deleteFile(user.getProfilePic());
+		}
+		context.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
-		
+
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);

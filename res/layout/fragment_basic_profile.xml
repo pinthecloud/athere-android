@@ -67,7 +67,7 @@
         android:id="@+id/basic_profile_frag_complete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/basic_profile_complete_button_top_margin"
+        android:layout_marginTop="@dimen/basic_profile_complete_button_top_margin"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
         android:src="@drawable/ok_image_button_bg" />
