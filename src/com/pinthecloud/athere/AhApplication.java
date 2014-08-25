@@ -52,7 +52,6 @@ public class AhApplication extends Application{
 	// Application
 	private static AhApplication app;
 	private static PreferenceHelper pref;
-	private static Object lock;
 
 	// Mobile Service instances
 	private static MobileServiceClient mClient;
@@ -86,7 +85,6 @@ public class AhApplication extends Application{
 			Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
 		}
 		pref = new PreferenceHelper(this);
-		lock = new Object();
 
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
@@ -100,17 +98,13 @@ public class AhApplication extends Application{
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
-
 	}
-
+	
 	public static AhApplication getInstance(){
 		return app;
 	}
 	public PreferenceHelper getPref() {
 		return pref;
-	}
-	public Object getLock() {
-		return lock;
 	}
 	public MobileServiceClient getmClient() {
 		return mClient;
@@ -156,7 +150,6 @@ public class AhApplication extends Application{
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
-
 
 
 	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<Boolean> callback) {

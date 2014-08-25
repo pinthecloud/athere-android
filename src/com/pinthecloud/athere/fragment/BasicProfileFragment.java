@@ -166,11 +166,9 @@ public class BasicProfileFragment extends AhFragment{
 					String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
 					if (!registrationId.equals(PreferenceHelper.DEFAULT_STRING)) {
 						AhIdUser user = new AhIdUser();
-						user.setAhId(registrationId);
-						user.setPassword("");
-						user.setRegistrationId(registrationId);
-
 						final String androidId = Secure.getString(activity.getContentResolver(), Secure.ANDROID_ID);
+						user.setAhId(androidId);
+						user.setPassword("");
 						user.setAndroidId(androidId);
 
 						userHelper.addAhIdUser(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
@@ -186,7 +184,7 @@ public class BasicProfileFragment extends AhFragment{
 								pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
 								pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
 								pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-								pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAndroidId());
+								pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAhId());
 								Intent intent = new Intent(context, SquareListActivity.class);
 								startActivity(intent);
 								activity.finish();

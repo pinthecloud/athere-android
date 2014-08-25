@@ -44,7 +44,8 @@ public class UserHelper {
 
 	private final String ENTER_SQUARE = "enter_square";
 	private final String EXIT_SQUARE = "exit_square";
-
+	
+	private int count = 0;
 	public UserHelper() {
 		super();
 		this.app = AhApplication.getInstance();
@@ -53,6 +54,7 @@ public class UserHelper {
 		this.userTable = app.getUserTable();
 		this.mClient = app.getmClient();
 		this.userIdTable = mClient.getTable(AhIdUser.class);
+		Log.e("HONGKUN","UserHelper" + count++);
 	}
 
 //	public void enterSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
@@ -241,7 +243,7 @@ public class UserHelper {
 	}
 
 	public AhUser getMyUserInfo(boolean hasId) {
-		String profilePic = "";
+		String profilePic = "NOT_IN_USED";
 
 		AhUser user = new AhUser();
 		if(hasId)
@@ -290,18 +292,12 @@ public class UserHelper {
 	//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
 	AhEntityCallback<AhUser> _callback;
 	//	private final String USER_RECEIVED = "USER_RECEIVED";
-	private int countUserHandler = 0;
 	public void setUserHandler(AhEntityCallback<AhUser> callback){
-		if (countUserHandler == 0) {
-			_callback = callback;
-			countUserHandler++;
-		} else {
-			Log.e("ERROR","userHandler : " + countUserHandler);
-		}
+		_callback = callback;
 	}
 
 	public void triggerUserEvent(AhUser user){
-		//		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
+//		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
 		if(_callback != null)
 			_callback.onCompleted(user);
 		else 

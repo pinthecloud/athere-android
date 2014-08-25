@@ -14,7 +14,7 @@
         android:paddingRight="0dp"
         android:paddingStart="@dimen/square_chupa_list_profile_left_margin" >
 
-        <com.pinthecloud.athere.view.AhImageView
+        <ImageView
             android:id="@+id/square_chupa_list_profile_pic"
             android:layout_width="@dimen/square_chupa_list_profile_width"
             android:layout_height="@dimen/square_chupa_list_profile_height"
