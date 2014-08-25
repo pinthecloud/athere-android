@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,11 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 
 public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
 	private Context context;
-	private AhFragment frag;
+	private AhFragment fragment;
 	private int layoutId;
 	private List<Map<String,String>> items;
 	private CachedBlobStorageHelper blobStorageHelper;
@@ -29,7 +27,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 	public SquareChupaListAdapter(Context context, AhFragment frag, int layoutId, List<Map<String,String>> items) {
 		super(context, layoutId, items);
 		this.context = context;
-		this.frag = frag;
+		this.fragment = frag;
 		this.layoutId = layoutId;
 		this.items = items;
 		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
@@ -69,18 +67,13 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
 			}
 			sender.setText(userNickName);
-			int w = profileImage.getWidth();
-			int h = profileImage.getHeight();
-			blobStorageHelper.getBitmapAsync(frag, userId, w, h, new AhEntityCallback<Bitmap>() {
-
-				@Override
-				public void onCompleted(Bitmap entity) {
-					profileImage.setImageBitmap(entity);
-				}
-			});
+			blobStorageHelper.setImageViewAsync(fragment, userId, profileImage);
 
 			content.setText(lastChupaMap.get("content"));
-			timeStamp.setText(lastChupaMap.get("timeStamp"));
+			String time = lastChupaMap.get("timeStamp");
+			String hour = time.substring(8, 10);
+			String minute = time.substring(10, 12);
+			timeStamp.setText(hour + ":" + minute);
 			if (!chupaBadge.equals("0")) {
 				badgeNum.setText(chupaBadge);
 				badgeNum.setVisibility(View.VISIBLE);
