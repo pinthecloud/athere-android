@@ -186,12 +186,10 @@ public class AhApplication extends Application{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
 				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
 					
 					@Override
 					public void onCompleted(AhMessage entity) {
-						// TODO Auto-generated method stub
 						
 					}
 				});

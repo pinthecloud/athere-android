@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,14 +29,13 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	private Context context;
-	private AhFragment fragment;
+	private AhFragment frag;
 	private LayoutInflater inflater;
 	private int layoutId;
 	private List<AhMessage> items;
@@ -51,7 +49,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		super(context, layoutId, items);
 		this.context = context;
-		this.fragment = fragment;
+		this.frag = fragment;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.layoutId = layoutId;
 		this.items = items;
@@ -115,7 +113,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 							public void doPositiveThing(Bundle bundle) {
 								messageDBHelper.deleteMessage(message.getId());
 								items.remove(position);
-								SquareChatFragment squareChatFragment = (SquareChatFragment)fragment;
+								SquareChatFragment squareChatFragment = (SquareChatFragment)frag;
 								squareChatFragment.sendTalk(message);
 							}
 							@Override
@@ -125,7 +123,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 								notifyDataSetChanged();
 							}
 						});
-						reSendOrCancelDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+						reSendOrCancelDialog.show(frag.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 					}
 				});
 				int status = message.getStatus();
@@ -175,21 +173,21 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				} else{
 					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
-				int w = profileImage.getWidth();
-				int h = profileImage.getHeight();
-				blobStorageHelper.getBitmapAsync(fragment, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
-
-					@Override
-					public void onCompleted(Bitmap entity) {
-						profileImage.setImageBitmap(entity);
-					}
-				});
-				//				blobStorageHelper.setImageViewAsync(fragment, user.getId(), profileImage);
+				//				int w = profileImage.getWidth();
+				//				int h = profileImage.getHeight();
+				//				blobStorageHelper.getBitmapAsync(fragment, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
+				//
+				//					@Override
+				//					public void onCompleted(Bitmap entity) {
+				//						profileImage.setImageBitmap(entity);
+				//					}
+				//				});
+				blobStorageHelper.setImageViewAsync(frag, user.getId(), profileImage);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						ProfileDialog profileDialog = new ProfileDialog(fragment, user, new AhDialogCallback() {
+						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {
@@ -204,7 +202,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 								context.startActivity(intent);
 							}
 						});
-						profileDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+						profileDialog.show(frag.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 					}
 				});
 			}

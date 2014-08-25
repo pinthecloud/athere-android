@@ -11,7 +11,6 @@ import android.util.LruCache;
 import android.widget.ImageView;
 
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.FileUtil;
 
@@ -32,6 +31,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		final int cacheSize = maxMemory / 8;
 
 		mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+
 			@Override
 			protected int sizeOf(String key, Bitmap bitmap) {
 				// The cache size will be measured in kilobytes rather than
@@ -41,19 +41,20 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		};
 	}
 
-	
-	public Bitmap getBitmapSync(final AhFragment frag, String id) {
-		synchronized(frag) {
-			Bitmap bm = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
-			if (bm != null) return bm;
 
-			bm = this.downloadBitmapSync(frag, id);
-			if (bm == null) return null;
+	//	public Bitmap getBitmapSync(final AhFragment frag, String id) {
+	//		synchronized(frag) {
+	//			Bitmap bm = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+	//			if (bm != null) return bm;
+	//
+	//			bm = this.downloadBitmapSync(frag, id);
+	//			if (bm == null) return null;
+	//
+	//			FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
+	//			return bm;
+	//		}
+	//	}
 
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
-			return bm;
-		}
-	}
 
 	public Bitmap getBitmapSync(final AhFragment frag, String id, int w, int h) {
 		synchronized(frag) {
@@ -69,43 +70,44 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	}
 
 
-	public void getBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {
-		(new AsyncTask<String, Void, Bitmap>() {
+	//	public void getBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {
+	//		(new AsyncTask<String, Void, Bitmap>() {
+	//
+	//			@Override
+	//			protected Bitmap doInBackground(String... params) {
+	//				String id = params[0];
+	//				return getBitmapSync(frag, id);
+	//			}
+	//
+	//			@Override
+	//			protected void onPostExecute(Bitmap result) {
+	//				super.onPostExecute(result);
+	//				if (callback != null)
+	//					callback.onCompleted(result);
+	//				AsyncChainer.notifyNext(frag);
+	//			}
+	//		}).execute(id);
+	//	}
 
-			@Override
-			protected Bitmap doInBackground(String... params) {
-				String id = params[0];
-				return getBitmapSync(frag, id);
-			}
 
-			@Override
-			protected void onPostExecute(Bitmap result) {
-				super.onPostExecute(result);
-				if (callback != null)
-					callback.onCompleted(result);
-				AsyncChainer.notifyNext(frag);
-			}
-		}).execute(id);
-	}
-
-	public void getBitmapAsync(final AhFragment frag, String id, final int w, final int h, final AhEntityCallback<Bitmap> callback) {
-		(new AsyncTask<String, Void, Bitmap>() {
-
-			@Override
-			protected Bitmap doInBackground(String... params) {
-				String id = params[0];
-				return getBitmapSync(frag, id, w, h);
-			}
-
-			@Override
-			protected void onPostExecute(Bitmap result) {
-				super.onPostExecute(result);
-				if (callback != null)
-					callback.onCompleted(result);
-				AsyncChainer.notifyNext(frag);
-			}
-		}).execute(id);
-	}
+	//	public void getBitmapAsync(final AhFragment frag, String id, final int w, final int h, final AhEntityCallback<Bitmap> callback) {
+	//		(new AsyncTask<String, Void, Bitmap>() {
+	//
+	//			@Override
+	//			protected Bitmap doInBackground(String... params) {
+	//				String id = params[0];
+	//				return getBitmapSync(frag, id, w, h);
+	//			}
+	//
+	//			@Override
+	//			protected void onPostExecute(Bitmap result) {
+	//				super.onPostExecute(result);
+	//				if (callback != null)
+	//					callback.onCompleted(result);
+	//				AsyncChainer.notifyNext(frag);
+	//			}
+	//		}).execute(id);
+	//	}
 
 
 	public void setImageViewAsync(AhFragment frag, int id, ImageView imageView) {
@@ -122,9 +124,14 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 			} else {
-				final BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
-				Bitmap mPlaceHolderBitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-				final AsyncDrawable asyncDrawable =
+				Drawable drawable = imageView.getDrawable();
+				Bitmap mPlaceHolderBitmap = null;
+				if(drawable != null){
+					mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();	
+				}
+
+				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
+				AsyncDrawable asyncDrawable =
 						new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
 				imageView.setImageDrawable(asyncDrawable);
 				task.execute(id);
@@ -161,7 +168,6 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (isCancelled()) {
 				bitmap = null;
 			}
-
 			if (imageViewReference != null && bitmap != null) {
 				final ImageView imageView = imageViewReference.get();
 				final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
@@ -169,6 +175,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 					imageView.setImageBitmap(bitmap);
 				}
 			}
+			AsyncChainer.notifyNext(frag);
 		}
 	}
 
