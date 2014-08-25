@@ -150,11 +150,11 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void ENTER_SQUARE() {
+		messageDBHelper.addMessage(message);
 		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
 
 			@Override
 			public void onCompleted(AhUser user) {
-
 				userDBHelper.addUser(user);
 				if (isRunning(app)) {
 					String currentActivityName = getCurrentRunningActivityName(app);
@@ -168,6 +168,7 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void EXIT_SQUARE() {
+		messageDBHelper.addMessage(message);
 		userDBHelper.exitUser(userId);
 		AhUser user = userDBHelper.getUser(userId, true);
 		if (isRunning(app)) {
@@ -235,11 +236,11 @@ public class AhIntentService extends IntentService {
 			title = message.getSender() + " " + resources.getString(R.string.shout_notification_title);
 			content = message.getContent();
 		} else if (AhMessage.TYPE.ENTER_SQUARE.equals(type)){
-			title = message.getSender() + " " + resources.getString(R.string.enter_square_message);
-			content = message.getContent();
 			if(!pref.getBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY)){
 				return;
 			}
+			title = message.getSender() + " " + resources.getString(R.string.enter_square_message);
+			content = message.getContent();
 		} else if (AhMessage.TYPE.FORCED_LOGOUT.equals(type)){
 			title = resources.getString(R.string.forced_logout_title);
 			content = message.getContent();
@@ -373,7 +374,6 @@ public class AhIntentService extends IntentService {
 			String senderId = jo.getString("senderId");
 			String receiver = jo.getString("receiver");
 			String receiverId = jo.getString("receiverId");
-			String timeStamp = jo.getString("timeStamp");
 			String chupaCommunId = jo.getString("chupaCommunId");
 
 			messageBuilder.setType(type)
@@ -382,7 +382,7 @@ public class AhIntentService extends IntentService {
 			.setSenderId(senderId)
 			.setReceiver(receiver)
 			.setReceiverId(receiverId)
-			.setTimeStamp(timeStamp)
+			.setTimeStamp()
 			.setStatus(AhMessage.STATUS.SENT)
 			.setChupaCommunId(chupaCommunId);
 

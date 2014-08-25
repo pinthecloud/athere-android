@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -22,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -34,7 +32,6 @@ import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareDrawerFragment extends AhFragment {
 
@@ -131,15 +128,18 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				boolean isChecked = chupaAlarmButton.isChecked();
-				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
 				progressBar.setVisibility(View.VISIBLE);
 				progressBar.bringToFront();
+				chupaAlarmButton.setEnabled(false);
+
+				boolean isChecked = chupaAlarmButton.isChecked();
+				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
 				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
 
 					@Override
 					public void onCompleted(AhUser entity) {
 						progressBar.setVisibility(View.GONE);
+						chupaAlarmButton.setEnabled(true);
 					}
 				});
 			}
@@ -191,11 +191,14 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(Boolean result) {
+				progressBar.setVisibility(View.GONE);
+
 				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
-				AhApplication.getInstance().removeSquarePreference();
-				progressBar.setVisibility(View.GONE);
-				final Intent intent = new Intent(activity, SquareListActivity.class);
+
+				app.removeSquarePreference();
+
+				Intent intent = new Intent(activity, SquareListActivity.class);
 				startActivity(intent);
 				activity.finish();
 			}
@@ -305,9 +308,7 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set profile images 
 		 */
-		Bitmap profileBitmap = null;
-		profileBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME);
-		profileImage.setImageBitmap(profileBitmap);
+		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profileImage);
 	}
 
 

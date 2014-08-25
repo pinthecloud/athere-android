@@ -1,15 +1,12 @@
 package com.pinthecloud.athere.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,7 +23,7 @@ public class FileUtil {
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
-	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
+	//	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
 
 
 	/** Create a file Uri for saving an image or video */
@@ -92,33 +89,24 @@ public class FileUtil {
 	/*
 	 * look in internal storage
 	 */
-	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
-		Bitmap bitmap = bitmapCache.get(filename);
-		if (bitmap != null) return bitmap;
-		try {
-			File filePath = context.getFileStreamPath(filename);
-			FileInputStream fi = new FileInputStream(filePath);
-			bitmap = BitmapFactory.decodeStream(fi);
-		} catch (FileNotFoundException e) {
-			throw new AhException("FileNotFoundException");
-		}
-		bitmapCache.put(filename, bitmap);
-		return bitmap;
-	}
+	//	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
+	//		try {
+	//			File filePath = context.getFileStreamPath(filename);
+	//			FileInputStream fi = new FileInputStream(filePath);
+	//			return BitmapFactory.decodeStream(fi);
+	//		} catch (FileNotFoundException e) {
+	//			throw new AhException("FileNotFoundException");
+	//		}
+	//	}
 
 
 	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
-		Bitmap bitmap = bitmapCache.get(fileName+reqWidth+reqHeight);
-		if (bitmap != null) return bitmap;
-
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 
 		// Calculate inSampleSize
 		options.inSampleSize = BitmapUtil.calculateSize(options, reqWidth, reqHeight);
 		options.inJustDecodeBounds = false;
-		bitmap = BitmapFactory.decodeFile(context.getFilesDir()+"/"+fileName, options);
-		bitmapCache.put(fileName+reqWidth+reqHeight, bitmap);
-		return bitmap;
+		return BitmapFactory.decodeFile(context.getFilesDir()+"/"+fileName, options);
 	}
 }
