@@ -17,6 +17,7 @@ public class AhActivity extends Activity{
 
 	protected AhApplication app;
 	protected PreferenceHelper pref;
+	protected AhActivity _this;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class AhActivity extends Activity{
 		 */
 		app = AhApplication.getInstance();
 		pref = app.getPref();
+		_this = this;
 	}
 
 	// Logging Method

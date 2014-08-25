@@ -2,7 +2,6 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -27,24 +26,29 @@ import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.ProfileDialog;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
+import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.FileUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	private Context context;
-	private Fragment fragment;
+	private AhFragment fragment;
 	private LayoutInflater inflater;
 	private int layoutId;
 	private List<AhMessage> items;
 
 	private UserDBHelper userDBHelper;
 	private MessageDBHelper messageDBHelper;
+	private CachedBlobStorageHelper blobStorageHelper;
 
-	public SquareChatListAdapter(Context context, Fragment fragment, int layoutId, List<AhMessage> items) {
+	public SquareChatListAdapter(Context context, AhFragment fragment, int layoutId, List<AhMessage> items) {
+
+
 		super(context, layoutId, items);
 		this.context = context;
 		this.fragment = fragment;
@@ -54,6 +58,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		AhApplication app = AhApplication.getInstance(); 
 		this.userDBHelper = app.getUserDBHelper();
+		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
 	}
 
@@ -96,7 +101,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Set UI component only in send list
 				 */
-				timeText.setText(message.getTimeStamp());
 				failButton.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -116,6 +120,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 							}
 							@Override
 							public void doNegativeThing(Bundle bundle) {
+								messageDBHelper.deleteMessage(message.getId());
 								items.remove(position);
 								notifyDataSetChanged();
 							}
@@ -125,12 +130,19 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				});
 				int status = message.getStatus();
 				if(status ==  AhMessage.STATUS.SENDING.getValue()){
+					timeText.setVisibility(View.GONE);
 					failButton.setVisibility(View.GONE);
 					progressBar.setVisibility(View.VISIBLE);
 				}else if(status ==  AhMessage.STATUS.SENT.getValue()){
+					String time = message.getTimeStamp();
+					String hour = time.substring(8, 10);
+					String minute = time.substring(10, 12);
+					timeText.setText(hour + ":" + minute);
+					timeText.setVisibility(View.VISIBLE);
 					failButton.setVisibility(View.GONE);
 					progressBar.setVisibility(View.GONE);
 				}else if(status ==  AhMessage.STATUS.FAIL.getValue()){
+					timeText.setVisibility(View.GONE);
 					failButton.setVisibility(View.VISIBLE);
 					progressBar.setVisibility(View.GONE);
 				}
@@ -147,13 +159,16 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				TextView timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
 				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nick_name);
-				ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
+				final ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
 				/*
 				 * Set UI component only in receive list
 				 */
-				timeText.setText(message.getTimeStamp());
+				String time = message.getTimeStamp();
+				String hour = time.substring(8, 10);
+				String minute = time.substring(10, 12);
+				timeText.setText(hour + ":" + minute);
 				nickNameText.setText(message.getSender());
 				if(user.isMale()){
 					profileGenderImage.setImageResource(R.drawable.chat_gender_m);
@@ -162,13 +177,19 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				}
 				int w = profileImage.getWidth();
 				int h = profileImage.getHeight();
-				Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context, user.getProfilePic(), w, h);
-				profileImage.setImageBitmap(profileBitmap);
+				blobStorageHelper.getBitmapAsync(fragment, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
+
+					@Override
+					public void onCompleted(Bitmap entity) {
+						profileImage.setImageBitmap(entity);
+					}
+				});
+				//				blobStorageHelper.setImageViewAsync(fragment, user.getId(), profileImage);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+						ProfileDialog profileDialog = new ProfileDialog(fragment, user, new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {

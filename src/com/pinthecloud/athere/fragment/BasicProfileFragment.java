@@ -4,10 +4,10 @@ import java.util.Calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +22,12 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhIdUser;
 
 public class BasicProfileFragment extends AhFragment{
 
@@ -158,19 +163,39 @@ public class BasicProfileFragment extends AhFragment{
 					completeButton.setEnabled(false);
 
 					// Save this setting and go to next activity
-					int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
-					Calendar c = Calendar.getInstance();
-					int age = c.get(Calendar.YEAR) - (birthYear - 1);
-					pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
-					pref.putInt(AhGlobalVariable.AGE_KEY, age);
+					String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
+					if (!registrationId.equals(PreferenceHelper.DEFAULT_STRING)) {
+						AhIdUser user = new AhIdUser();
+						user.setAhId(registrationId);
+						user.setPassword("");
+						user.setRegistrationId(registrationId);
 
-					pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-					pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
-					pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
+						final String androidId = Secure.getString(activity.getContentResolver(), Secure.ANDROID_ID);
+						user.setAndroidId(androidId);
 
-					Intent intent = new Intent(context, SquareListActivity.class);
-					startActivity(intent);
-					activity.finish();
+						userHelper.addAhIdUser(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
+
+							@Override
+							public void onCompleted(AhIdUser entity) {
+								int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
+								Calendar c = Calendar.getInstance();
+								int age = c.get(Calendar.YEAR) - (birthYear - 1);
+								pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
+								pref.putInt(AhGlobalVariable.AGE_KEY, age);
+
+								pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
+								pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
+								pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
+								pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAndroidId());
+								Intent intent = new Intent(context, SquareListActivity.class);
+								startActivity(intent);
+								activity.finish();
+							}
+						});
+
+					} else {
+						ExceptionManager.fireException(new AhException(AhException.TYPE.GCM_REGISTRATION_FAIL));
+					}
 				}
 			}
 		});
@@ -182,19 +207,5 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
-	}
-	
-	
-	@Override
-	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "BasicProfileFragment onStop");
-		super.onStop();
-	}
-
-
-	@Override
-	public void onDestroy() {
-		Log.d(AhGlobalVariable.LOG_TAG, "BasicProfileFragment onDestroy");
-		super.onDestroy();
 	}
 }

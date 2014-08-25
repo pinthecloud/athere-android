@@ -15,12 +15,12 @@ import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.model.AhUser;
 
 /**
  *  Basic Fragment class for At here application
@@ -40,6 +40,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected UserHelper userHelper;
 	protected UserDBHelper userDBHelper;
 	protected SquareHelper squareHelper;
+	protected CachedBlobStorageHelper blobStorageHelper;
 
 
 	public AhFragment(){
@@ -50,6 +51,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
 		squareHelper = app.getSquareHelper();
+		blobStorageHelper = app.getBlobStorageHelper();
 		pref = app.getPref();
 	}
 
@@ -134,30 +136,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 
-	/*
-	 * Check nick name EditText
-	 */
-	protected void removeSquarePreference(){
-		for(AhUser user : userDBHelper.getAllUsers()){
-			context.deleteFile(user.getProfilePic());
-		}
-		context.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
-		userDBHelper.deleteAllUsers();
-		messageDBHelper.deleteAllMessages();
-		messageDBHelper.cleareAllBadgeNum();
-
-		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
-		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-		pref.removePref(AhGlobalVariable.USER_ID_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-	}
-
-
 	/**
 	 * 
 	 * NOT USING METHOD
@@ -166,9 +144,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	 */
 	//	@ExceptionHandler(target = AhFragment.class)
 	//	public void myhandleException(final AhException ex) {
-	//		// TODO Auto-generated method stub
-	//		
-	//		
 	//		
 	//		Method[] ms = pair.getClazz().getMethods();
 	//		for(Method method : ms) {
@@ -190,7 +165,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	//		
 	//			@Override
 	//			public void run() {
-	//				// TODO Auto-generated method stub
 	//				new AlertDialog.Builder(_thisFragment.getActivity())
 	//				.setTitle(ex.getType().toString())
 	//				.setMessage(ex.toString())
@@ -204,5 +178,4 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	//			}
 	//		});
 	//	}
-
 }

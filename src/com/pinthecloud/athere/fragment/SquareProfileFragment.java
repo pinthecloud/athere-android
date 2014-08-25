@@ -40,10 +40,10 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.AsyncChainer;
@@ -76,6 +76,7 @@ public class SquareProfileFragment extends AhFragment{
 	private NumberPickerDialog companyNumberPickerDialog;
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
+	private Bitmap pictureBitmap;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -103,7 +104,7 @@ public class SquareProfileFragment extends AhFragment{
 					FileOutputStream fos = new FileOutputStream(pictureFile);
 					fos.write(data);
 					fos.close();
-					Bitmap pictureBitmap = BitmapFactory.decodeStream
+					pictureBitmap = BitmapFactory.decodeStream
 							(app.getContentResolver().openInputStream(pictureFileUri));
 					pictureFile.delete();
 
@@ -404,58 +405,62 @@ public class SquareProfileFragment extends AhFragment{
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
+		// Save info for user
+		String nickName = nickNameEditText.getText().toString();
+		int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
+		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
+		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
+		pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
+
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
 			public void doNext(AhFragment frag) {
-				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
-						.equals(PreferenceHelper.DEFAULT_STRING)){
-					userHelper.getRegistrationIdAsync(_thisFragment, new AhEntityCallback<String>(){
-
-						@Override
-						public void onCompleted(String registrationId) {
-							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-						}
-
-					});
-
-				} else {
-					AsyncChainer.notifyNext(frag);
-				}
-			}
-
-		}, new Chainable() {
-
-			@Override
-			public void doNext(AhFragment frag) {
-				// Save info for user
-				String nickName = nickNameEditText.getText().toString();
-				int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-				pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
-				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
-				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
-
-
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
-
+				
 				userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
-
+					
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
 						pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
+						userDBHelper.addAllUsers(list);
+					}
+				});
+			}
+		}, new Chainable() {
+			
+			@Override
+			public void doNext(AhFragment frag) {
+				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				blobStorageHelper.uploadBitmapAsync(_thisFragment, userId, pictureBitmap, new AhEntityCallback<String>() {
+					
+					@Override
+					public void onCompleted(String entity) {
+						
+					}
+				});
+			}
+		}, new Chainable() {
+			
+			@Override
+			public void doNext(AhFragment frag) {
+				String enterMessage = getResources().getString(R.string.enter_square_message);
+				
+				AhUser user = userHelper.getMyUserInfo(true);
+				AhMessage message = new AhMessage.Builder()
+				.setContent(user.getNickName() + " : " + enterMessage)
+				.setSender(user.getNickName())
+				.setSenderId(user.getId())
+				.setReceiverId(square.getId())
+				.setType(AhMessage.TYPE.ENTER_SQUARE).build();
+				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
 
-						for(AhUser user : list) {
-							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
-							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
-							user.setProfilePic(imagePath);
-							userDBHelper.addUser(user);
-						}
-
-
+					@Override
+					public void onCompleted(AhMessage entity) {
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
@@ -463,8 +468,8 @@ public class SquareProfileFragment extends AhFragment{
 						time.setToNow();
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
 						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
-
-
+						
+						
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -476,7 +481,7 @@ public class SquareProfileFragment extends AhFragment{
 				});
 			}
 		});
-
+				
 
 		//		, new Chainable() {
 		//
@@ -486,7 +491,6 @@ public class SquareProfileFragment extends AhFragment{
 		//
 		//					@Override
 		//					public void onCompleted(List<AhUser> list, int count) {
-		//						// TODO Auto-generated method stub
 		////						userDBHelper.addAllUsers(list);
 		//						for(AhUser user : list) {
 		//							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());

@@ -57,7 +57,7 @@ public class SquareChupaListFragment extends AhFragment{
 		 * Set square chupa list view
 		 */
 		squareChupaListAdapter = new SquareChupaListAdapter
-				(context, R.layout.row_square_chupa_list, lastChupaCommunList);
+				(context, _thisFragment, R.layout.row_square_chupa_list, lastChupaCommunList);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -100,6 +100,7 @@ public class SquareChupaListFragment extends AhFragment{
 		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		lastChupaCommunList.clear();
 		lastChupaCommunList.addAll(convertToMap(lastChupaList));
+		
 		activity.runOnUiThread(new Runnable() {
 
 			@Override

@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -87,7 +88,7 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set user list
 		 */
 		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, R.layout.row_square_drawer_participant_list, userList);
+				(context, _thisFragment, R.layout.row_square_drawer_participant_list, userList);
 		participantListView.setAdapter(participantListAdapter);
 		participantListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -95,7 +96,7 @@ public class SquareDrawerFragment extends AhFragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				final AhUser user = userList.get(position);
-				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
@@ -190,9 +191,10 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(Boolean result) {
+				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
+				AhApplication.getInstance().removeSquarePreference();
 				progressBar.setVisibility(View.GONE);
-
-				removeSquarePreference();
 				final Intent intent = new Intent(activity, SquareListActivity.class);
 				startActivity(intent);
 				activity.finish();
@@ -336,7 +338,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				ProfileDialog profileDialog = new ProfileDialog(user, new AhDialogCallback() {
+				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
@@ -384,7 +386,6 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void run() {
 				participantListAdapter.notifyDataSetChanged();
-
 
 				/*
 				 * Set member number text
