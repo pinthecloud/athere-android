@@ -15,10 +15,10 @@
     <string name="blur_image">Blur Image</string>
     <string name="on">On</string>
     <string name="off">Off</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
+    <string name="male">Man</string>
+    <string name="female">Woman</string>
     <string name="delete">Delete</string>
-    <string name="re_send">Re Send</string>
+    <string name="re_send">Re-send</string>
     <string name="select">Select</string>
     <string name="settings">Settings</string>
     <string name="gender">Gender</string>
@@ -52,19 +52,21 @@
     <string name="bad_gallery_message">Loading image from gallery met error. Please try it again.</string>
     <string name="bad_enter_square_message">Entering the square met error. Please try it again.</string>
     <string name="bad_square_code_message">Square code is wrong. Please enter again.</string>
-    <string name="basic_profile_complete_message">Is it right your profile? You can\'t change it forward.</string>
+    <string name="basic_profile_complete_message">Did you enter your profile correctly? You can\'t change it afterward.</string>
     <string name="no_profile_picture_message">Please take a profile picture.</string>
-    <string name="offline_message">Network access is unavailable. Please check network status.</string>
+    <string name="offline_message">Network access is unavailable. Please check the network status.</string>
     <string name="exit_square_message">leaves ground.</string>
     <string name="enter_square_message">enters ground.</string>
-    <string name="exit_square_consent_message">Every chats and chupas you have will be deleted. Do you leave ground?</string>
+    <string name="exit_square_consent_message">Every chat and chupa you have will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
     <string name="shout_notification_title">shouts.</string>
     <string name="forced_logout_title">You have been logout.</string>
+    <string name="googe_play_services_title">Google Play Services</string>
+    <string name="googe_play_services_message">You need to install Google Play Services to use Chupa</string>
     <string name="update_app_title">Update App</string>
-    <string name="update_app_message">There is update. Please update App.</string>
-    <string name="internet_not_connected_message">Internet is bad. Please check your network environment.</string>
-    <string name="message_fail_message">Would you re send?</string>
+    <string name="update_app_message">New version found. Please update your App.</string>
+    <string name="internet_not_connected_message">Internet is bad. Please check your network environments.</string>
+    <string name="message_fail_message">Would you try again?</string>
     
     <!-- String Array -->
 

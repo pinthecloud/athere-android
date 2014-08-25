@@ -24,6 +24,8 @@ import com.pinthecloud.athere.activity.HongkunTestAcitivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
+import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -191,6 +193,7 @@ public class SplashFragment extends AhFragment {
 								public void doNegativeThing(Bundle bundle) {
 									if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
 										activity.finish();
+										android.os.Process.killProcess(android.os.Process.myPid());
 									} else {
 										goToNextActivity();
 									}
@@ -227,5 +230,32 @@ public class SplashFragment extends AhFragment {
 			intent.setClass(context, SquareActivity.class);
 		}
 		startActivity(intent);
+	}
+	
+	@Override
+	public void handleException(AhException ex) {
+		// TODO Auto-generated method stub
+//		super.handleException(ex);
+		
+		if (ex.getType().equals(AhException.TYPE.GCM_REGISTRATION_FAIL)) {
+			Resources res = getResources();
+			String title = res.getString(R.string.googe_play_services_title);
+			String message = res.getString(R.string.googe_play_services_message);
+			new AhAlertDialog(title, message, true, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.gms"));
+					startActivity(intent);
+					activity.finish();
+					android.os.Process.killProcess(android.os.Process.myPid());
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					activity.finish();
+					android.os.Process.killProcess(android.os.Process.myPid());
+				}
+			}).show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+		}
 	}
 }

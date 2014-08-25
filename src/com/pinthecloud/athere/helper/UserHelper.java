@@ -266,6 +266,8 @@ public class UserHelper {
 			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
+		
+		
 		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
 
 			@Override
@@ -274,7 +276,6 @@ public class UserHelper {
 				try {
 					return gcm.register(AhGlobalVariable.GCM_SENDER_ID);
 				} catch (IOException e) {
-					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
 					return null;
 				}
 			}
@@ -282,8 +283,12 @@ public class UserHelper {
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
-				callback.onCompleted(result);
-				AsyncChainer.notifyNext(frag);
+				if (result != null) {
+					callback.onCompleted(result);
+					AsyncChainer.notifyNext(frag);
+				} else {
+					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+				}
 			}
 		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
 
