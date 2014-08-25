@@ -8,7 +8,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -239,30 +238,9 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		String chupaCommunId = AhMessage
-				.buildChupaCommunId(
-						pref.getString(AhGlobalVariable.USER_ID_KEY),
-						otherUser.getId());
+		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		refreshView(chupaCommunId);
-
-		int w = otherProfileImage.getWidth();
-		int h = otherProfileImage.getHeight();
-
-		// Bitmap profileBitmap =
-		// BitmapUtil.convertToBitmap(otherUser.getProfilePic(), w, h);
-		//		Bitmap profileBitmap = FileUtil.getImageFromInternalStorage(context,
-		//				otherUser.getProfilePic(), w, h);
-		blobStorageHelper.getBitmapAsync(_thisFragment, 
-				otherUser.getId(), w, h, 
-				new AhEntityCallback<Bitmap>() {
-
-			@Override
-			public void onCompleted(Bitmap entity) {
-				// TODO Auto-generated method stub
-				otherProfileImage.setImageBitmap(entity);
-			}
-		});
+		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
 	}
 
 	@Override

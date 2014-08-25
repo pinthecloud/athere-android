@@ -1,7 +1,6 @@
 package com.pinthecloud.athere.dialog;
 
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,7 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.FileUtil;
 
 public class ProfileDialog extends AhDialogFragment{
 
@@ -120,22 +117,11 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set image
 		 */
-		Bitmap profileBitmap = null;
-		if(!user.getId().equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
-			// other user
-			int w = profileImage.getWidth();
-			int h = profileImage.getHeight();
-			blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
-
-				@Override
-				public void onCompleted(Bitmap entity) {
-					profileImage.setImageBitmap(entity);
-				}
-			});
-		} else{
-			profileBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-			profileImage.setImageBitmap(profileBitmap);
+		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
+		if(!user.getId().equals(id)){
+			id = user.getId();
 		}
+		blobStorageHelper.setImageViewAsync(frag, id, profileImage);
 
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);

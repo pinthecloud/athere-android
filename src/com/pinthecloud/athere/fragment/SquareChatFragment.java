@@ -139,11 +139,13 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment Message onComplete : " + message.getContent());
-
+				Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment Message onComplete : " + message.getType() + " " + message.getContent());
+				
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
-						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())) return;
+						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
+					return;
+				}
 				refreshView();
 			}
 		});
@@ -190,6 +192,8 @@ public class SquareChatFragment extends AhFragment{
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
 	private void refreshView(){
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment refreshView");
+		
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */

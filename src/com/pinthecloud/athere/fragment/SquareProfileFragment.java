@@ -354,8 +354,7 @@ public class SquareProfileFragment extends AhFragment{
 		if(!isTookPicture){
 			openCameraAndSetView();
 		}else{
-			Bitmap pictureBitmap = FileUtil.getImageFromInternalStorage(app, AhGlobalVariable.PROFILE_PICTURE_NAME);
-			profilePictureView.setImageBitmap(pictureBitmap);
+			blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profilePictureView);
 		}
 	}
 
@@ -449,10 +448,9 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				String enterMessage = getResources().getString(R.string.enter_square_message);
-				
 				AhUser user = userHelper.getMyUserInfo(true);
 				AhMessage message = new AhMessage.Builder()
-				.setContent(user.getNickName() + " : " + enterMessage)
+				.setContent(user.getNickName() + " " + enterMessage)
 				.setSender(user.getNickName())
 				.setSenderId(user.getId())
 				.setReceiverId(square.getId())
