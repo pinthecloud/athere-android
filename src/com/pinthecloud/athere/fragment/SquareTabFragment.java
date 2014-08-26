@@ -31,7 +31,11 @@ public class SquareTabFragment extends AhFragment{
 	private BadgeView badge;
 
 	private Square square;
-
+	
+	
+	public SquareTabFragment() {
+		super();
+	}
 
 	public SquareTabFragment(Square square) {
 		super();

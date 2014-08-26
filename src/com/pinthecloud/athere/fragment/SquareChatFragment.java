@@ -28,9 +28,12 @@ public class SquareChatFragment extends AhFragment{
 
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
-//	private List<AhMessage> messageList = new ArrayList<AhMessage>();
-
 	private String squareId;
+
+	
+	public SquareChatFragment() {
+		super();
+	}
 
 
 	public SquareChatFragment(String squareId) {
@@ -38,15 +41,18 @@ public class SquareChatFragment extends AhFragment{
 		this.squareId = squareId;
 	}
 
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
 
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
+
 
 		/*
 		 * Set UI component
@@ -107,24 +113,24 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, _thisFragment);
 		messageListView.setAdapter(messageListAdapter);
-		
-		
-//		messageListView.setOnScrollListener(new OnScrollListener() {
-//			public void onScroll(AbsListView view, int firstVisibleItem,
-//					int visibleItemCount, int totalItemCount) {
-//				if (firstVisibleItem == 1) {
-//					// TODO : Insert messageListView.add(0, messages);
-//					offset++;
-//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-//					messageList.clear();
-//					messageList.addAll(0, talks);
-//					messageListAdapter.notifyDataSetChanged();
-//					messageListView.setSelection(messageListView.getCount() - 1);
-//				}
-//			}
-//			public void onScrollStateChanged(AbsListView view, int scrollState) {
-//			}
-//		});
+
+
+		//		messageListView.setOnScrollListener(new OnScrollListener() {
+		//			public void onScroll(AbsListView view, int firstVisibleItem,
+		//					int visibleItemCount, int totalItemCount) {
+		//				if (firstVisibleItem == 1) {
+		//					// TODO : Insert messageListView.add(0, messages);
+		//					offset++;
+		//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+		//					messageList.clear();
+		//					messageList.addAll(0, talks);
+		//					messageListAdapter.notifyDataSetChanged();
+		//					messageListView.setSelection(messageListView.getCount() - 1);
+		//				}
+		//			}
+		//			public void onScrollStateChanged(AbsListView view, int scrollState) {
+		//			}
+		//		});
 
 
 		/**
@@ -139,7 +145,7 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment Message onComplete : " + message.getType() + " " + message.getContent());
-				
+
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
@@ -163,19 +169,24 @@ public class SquareChatFragment extends AhFragment{
 
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
-//		messageList.add(message);
-		
-		activity.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				messageListAdapter.add(message);
-				messageListAdapter.notifyDataSetChanged();
-				messageListView.setSelection(messageListView.getCount() - 1);
-				messageEditText.setText("");
-			}
-		});
+
+		messageListAdapter.add(message);
+		messageListAdapter.notifyDataSetChanged();
+		messageListView.setSelection(messageListView.getCount() - 1);
+		messageEditText.setText("");
+
+
+		//		activity.runOnUiThread(new Runnable() {
+		//			
+		//			@Override
+		//			public void run() {
+		//				messageListAdapter.add(message);
+		//				messageListAdapter.notifyDataSetChanged();
+		//				messageListView.setSelection(messageListView.getCount() - 1);
+		//				messageEditText.setText("");
+		//			}
+		//		});
+
 
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
@@ -201,7 +212,7 @@ public class SquareChatFragment extends AhFragment{
 	 */
 	private void refreshView(){
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment refreshView");
-		
+
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
@@ -216,13 +227,10 @@ public class SquareChatFragment extends AhFragment{
 			.setType(AhMessage.TYPE.ENTER_SQUARE)
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp().build();
-			Log(_thisFragment, enterTalk);
 			messageDBHelper.addMessage(enterTalk);
 		}
 		final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-//		messageList.clear();
-//		messageList.addAll(talks);
-		
+
 
 		/*
 		 * Set message list view
@@ -233,7 +241,6 @@ public class SquareChatFragment extends AhFragment{
 			public void run() {
 				messageListAdapter.clear();
 				messageListAdapter.addAll(talks);
-				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});
@@ -245,19 +252,12 @@ public class SquareChatFragment extends AhFragment{
 		if(ex.getMethodName().equals("sendMessageAsync")){
 			AhMessage exMessage = (AhMessage)ex.getParameter();
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
-			activity.runOnUiThread(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					messageListAdapter.notifyDataSetChanged();
-					messageListView.setSelection(messageListView.getCount() - 1);
-				}
-			});
 			messageDBHelper.updateMessages(exMessage);
+			messageListAdapter.notifyDataSetChanged();
+			messageListView.setSelection(messageListView.getCount() - 1);
 			return;
 		}
 		super.handleException(ex);
 	}
-	
+
 }

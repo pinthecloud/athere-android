@@ -62,7 +62,7 @@
     <string name="shout_notification_title">shouts.</string>
     <string name="forced_logout_title">You have been logout.</string>
     <string name="googe_play_services_title">Google Play Services</string>
-    <string name="googe_play_services_message">You need to install Google Play Services to use Chupa</string>
+    <string name="googe_play_services_message">You need to install Google Play Services to use Chupa.</string>
     <string name="update_app_title">Update App</string>
     <string name="update_app_message">New version found. Please update your App.</string>
     <string name="internet_not_connected_message">Internet is bad. Please check your network environments.</string>

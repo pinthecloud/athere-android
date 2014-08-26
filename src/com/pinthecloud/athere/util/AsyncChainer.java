@@ -58,13 +58,13 @@ import com.pinthecloud.athere.fragment.AhFragment;
 
 
 public class AsyncChainer {
-
 	private static final int NUM_OF_QUEUE = 10;
 	private static Map<String, Queue<Chainable>> mapQueue;
 	static {
 		mapQueue = new HashMap<String, Queue<Chainable>>();
 	}
 
+	
 	public static void asyncChain(AhFragment frag, Chainable...chains) {
 		Class<?> clazz = null;
 		if (frag == null) {
@@ -84,6 +84,7 @@ public class AsyncChainer {
 		AsyncChainer.notifyNext(frag);
 	}
 
+	
 	public static void notifyNext(AhFragment frag) {
 		Class<?> clazz = null;
 		if (frag == null) {
@@ -93,7 +94,7 @@ public class AsyncChainer {
 		}
 		Queue<Chainable> queue = mapQueue.get(clazz.getName());
 		if (queue == null) {
-//			Log.e("ERROR", "No such Chainable : " + clazz.getName());
+			//			Log.e("ERROR", "No such Chainable : " + clazz.getName());
 			return;
 		}
 		if (!queue.isEmpty()) {
@@ -103,6 +104,7 @@ public class AsyncChainer {
 		}
 	}
 
+	
 	public static interface Chainable {
 		public void doNext(AhFragment frag);
 	}

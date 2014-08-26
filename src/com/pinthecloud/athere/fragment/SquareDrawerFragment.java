@@ -287,8 +287,6 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set participant list view
 		 */
-//		userList.clear();
-		
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
