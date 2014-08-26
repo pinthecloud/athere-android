@@ -7,7 +7,8 @@ import android.util.Log;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
-import io.fiverocks.android.FiveRocks;	
+import io.fiverocks.android.FiveRocks;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  *  Base class for every activity.
@@ -59,15 +60,18 @@ public class AhActivity extends Activity{
 	
 	@Override
 	protected void onStart() {
-	  super.onStart();
-	  FiveRocks.onActivityStart(this);
+		super.onStart();
+		
+		FiveRocks.onActivityStart(this);
+		EasyTracker.getInstance(this).activityStart(this);	// google analytics  
 	}
 
 	@Override
 	protected void onStop() {
-	  FiveRocks.onActivityStop(this);
-	  super.onStop();
+		super.onStop();
+		
+		FiveRocks.onActivityStop(this);
+		EasyTracker.getInstance(this).activityStop(this);  // google analytics
+	 
 	}
-	
-	
 }
