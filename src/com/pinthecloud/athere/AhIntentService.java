@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,8 +50,7 @@ public class AhIntentService extends IntentService {
 
 	private AhMessage message = null;
 	private String userId = null; 
-
-
+	
 	public AhIntentService() {
 		this("AhIntentService");
 	}
@@ -124,7 +124,7 @@ public class AhIntentService extends IntentService {
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
-		}
+		} 
 	}
 
 	private void SHOUTING() {
@@ -177,7 +177,7 @@ public class AhIntentService extends IntentService {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
-		} 
+		}
 	}
 
 	private void UPDATE_USER_INFO() {
@@ -188,7 +188,7 @@ public class AhIntentService extends IntentService {
 				userDBHelper.updateUser(user);
 				if (isRunning(app)) {
 					userHelper.triggerUserEvent(user);
-				}
+				} 
 			}
 		});
 	}
@@ -218,7 +218,7 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void ADMIN_MESSAGE() {
-
+		throw new AhException("NOT IMPLEMENTED YET");
 	}
 
 

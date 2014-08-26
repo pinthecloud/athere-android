@@ -316,6 +316,53 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// return contact list
 		return messages;
 	}
+	
+	public AhMessage getLastMessage(AhMessage.TYPE type) {
+		String selectQuery = "SELECT * FROM " + TABLE_NAME +
+				" WHERE " + TYPE + " = ?" + 
+				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type.toString() });
+
+		// looping through all rows and adding to list
+		AhMessage message = null;
+		if (cursor.moveToFirst()) {
+			message = convertToMessage(cursor);
+		}
+		db.close();
+		// return contact list
+		return message;
+	}
+	
+	public AhMessage getLastMessage(AhMessage.TYPE... types) {
+		
+		List<String> typeArr = new ArrayList<String>();
+		StringBuilder whereStr = new StringBuilder();
+		for (AhMessage.TYPE type : types) {
+			typeArr.add(type.toString());
+			whereStr.append(TYPE + "=? OR ");
+		}
+		whereStr.delete(whereStr.length()- 3, whereStr.length());
+
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + TABLE_NAME +
+				" WHERE " + whereStr.toString() + 
+				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
+		Cursor cursor = db.rawQuery(selectQuery, argArray);
+		
+		// looping through all rows and adding to list
+		AhMessage message = null;
+		if (cursor.moveToFirst()) {
+			message = convertToMessage(cursor);
+		}
+		db.close();
+		// return contact list
+		return message;
+	}
 
 	public List<AhMessage> getAllMessages(AhMessage.TYPE... types) {
 
@@ -581,6 +628,26 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 		db.close();
 		return list;
+	}
+	
+	public AhMessage getLastChupaByCommunId(String chupaCommunId){
+
+		// Select All Query
+		String selectQuery = "SELECT * FROM " + TABLE_NAME +
+				" WHERE " + TYPE + "=? AND " + CHUPA_COMMUN_ID + " = ?" +
+				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString() 
+				,chupaCommunId});
+
+		AhMessage message = null;
+		// looping through all rows and adding to list
+		if (cursor.moveToFirst()) {
+				message = (convertToMessage(cursor));
+		}
+		db.close();
+		return message;
 	}
 
 

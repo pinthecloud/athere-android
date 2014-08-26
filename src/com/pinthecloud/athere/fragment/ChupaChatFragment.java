@@ -50,6 +50,9 @@ public class ChupaChatFragment extends AhFragment {
 
 	private ListView messageListView;
 	private ChupaChatListAdapter messageListAdapter;
+	
+	private List<AhMessage> chupas;
+	private AhMessage chupa;
 //	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
 
 
@@ -226,7 +229,7 @@ public class ChupaChatFragment extends AhFragment {
 						return;
 				}
 
-				refreshView(message.getChupaCommunId());
+				refreshView(message.getChupaCommunId(), false);
 			}
 		});
 
@@ -237,7 +240,7 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-		refreshView(chupaCommunId);
+		refreshView(chupaCommunId, true);
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
 	}
 
@@ -267,7 +270,7 @@ public class ChupaChatFragment extends AhFragment {
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
-				refreshView(message.getChupaCommunId());
+				refreshView(message.getChupaCommunId(), false);
 			}
 		});
 	}
@@ -276,22 +279,32 @@ public class ChupaChatFragment extends AhFragment {
 	/*
 	 * Set sent and received chupas to list view
 	 */
-	private void refreshView(String chupaCommunId) {
+	private void refreshView(String chupaCommunId, final boolean refreshAll) {
 		if (chupaCommunId == null || chupaCommunId.equals(""))
 			throw new AhException("No chupaCommunId");
 
 		/*
 		 * Get every chupa by chupaCommunId
 		 */
-		final List<AhMessage> chupas = messageDBHelper
-				.getChupasByCommunId(chupaCommunId);
+		if (refreshAll) {
+			chupas = messageDBHelper
+					.getChupasByCommunId(chupaCommunId);
+		} else {
+			chupa = messageDBHelper.getLastChupaByCommunId(chupaCommunId);
+		}
+		
 		activity.runOnUiThread(new Runnable() {
 			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				messageListAdapter.clear();
-				messageListAdapter.addAll(chupas);
+				if (refreshAll) {
+					messageListAdapter.clear();
+					messageListAdapter.addAll(chupas);
+				} else {
+					messageListAdapter.add(chupa);
+				}
+				
 			}
 		});
 		

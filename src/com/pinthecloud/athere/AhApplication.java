@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Application;
 import android.content.Context;
@@ -71,7 +72,6 @@ public class AhApplication extends Application{
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
 
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -99,6 +99,7 @@ public class AhApplication extends Application{
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
+		
 	}
 	
 	public static AhApplication getInstance(){
