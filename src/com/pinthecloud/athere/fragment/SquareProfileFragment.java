@@ -420,9 +420,9 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
-				
+
 				userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
-					
+
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
 						pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
@@ -431,20 +431,20 @@ public class SquareProfileFragment extends AhFragment{
 				});
 			}
 		}, new Chainable() {
-			
+
 			@Override
 			public void doNext(AhFragment frag) {
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.uploadBitmapAsync(_thisFragment, userId, pictureBitmap, new AhEntityCallback<String>() {
-					
+
 					@Override
 					public void onCompleted(String entity) {
-						
+
 					}
 				});
 			}
 		}, new Chainable() {
-			
+
 			@Override
 			public void doNext(AhFragment frag) {
 				String enterMessage = getResources().getString(R.string.enter_square_message);
@@ -466,8 +466,8 @@ public class SquareProfileFragment extends AhFragment{
 						time.setToNow();
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
 						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
-						
-						
+
+
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -479,7 +479,7 @@ public class SquareProfileFragment extends AhFragment{
 				});
 			}
 		});
-				
+
 
 		//		, new Chainable() {
 		//

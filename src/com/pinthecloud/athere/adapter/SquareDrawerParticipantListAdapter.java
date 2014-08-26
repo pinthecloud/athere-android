@@ -3,7 +3,6 @@ package com.pinthecloud.athere.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,15 +27,15 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 	private int layoutId;
 	private CachedBlobStorageHelper blobStorageHelper;
 
-//	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId, List<AhUser> items) {
-//		super(context, layoutId, items);
-//		this.context = context;
-//		this.frag = fragment;
-//		this.layoutId = layoutId;
-//		this.items = items;
-//		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
-//	}
-	
+	//	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId, List<AhUser> items) {
+	//		super(context, layoutId, items);
+	//		this.context = context;
+	//		this.frag = fragment;
+	//		this.layoutId = layoutId;
+	//		this.items = items;
+	//		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
+	//	}
+
 	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId) {
 		super(context, layoutId);
 		this.context = context;
@@ -54,8 +53,8 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
-		
-//		final AhUser user = items.get(position);
+
+		//		final AhUser user = items.get(position);
 		final AhUser user = this.getItem(position);
 		if (user != null) {
 			/*

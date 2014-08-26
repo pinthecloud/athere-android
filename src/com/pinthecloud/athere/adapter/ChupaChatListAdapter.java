@@ -24,22 +24,22 @@ import com.pinthecloud.athere.model.AhMessage;
 
 public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 
+	private final int NOTIFICATION = 0;
+	private final int SEND = 1;
+	private final int RECEIVE = 2;
+
 	private Context context;
 	private Fragment fragment;
 	private LayoutInflater inflater;
-	private int layoutId;
-//	private List<AhMessage> items;
 	private ChupaChatListAdapter _this;
 	private MessageDBHelper messageDBHelper;
 
 
-	public ChupaChatListAdapter(Context context, Fragment fragment, int layoutId) {
-		super(context, layoutId);
+	public ChupaChatListAdapter(Context context, Fragment fragment) {
+		super(context, 0);
 		this.context = context;
 		this.fragment = fragment;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.layoutId = layoutId;
-//		this.items = items;
 
 		this._this = this;
 		AhApplication app = AhApplication.getInstance();
@@ -50,29 +50,26 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View view = convertView;
+		int type = getItemViewType(position);
+		if (view == null) {
+			if(type == NOTIFICATION){
+				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
+			} else if(type == SEND){
+				view = inflater.inflate(R.layout.row_chupa_chat_list_send, parent, false);
+			} else if(type == RECEIVE){
+				view = inflater.inflate(R.layout.row_chupa_chat_list_receive, parent, false);
+			}
+		}
 
 		final AhMessage message = this.getItem(position);
 		if (message != null) {
-			// Inflate different layout by user
-			if(message.isNotification()){
-				this.layoutId = R.layout.row_chat_notification_list;
-			} else{
-				if(message.isMine()){
-					this.layoutId = R.layout.row_chupa_chat_list_send;
-				} else{
-					this.layoutId = R.layout.row_chupa_chat_list_receive;
-				}
-			}
-			view = inflater.inflate(this.layoutId, parent, false);
-
-
 			/*
 			 * Find UI component
 			 */
 			TextView messageText = null;
-			if(this.layoutId == R.layout.row_chat_notification_list){
+			if(type == NOTIFICATION){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
-			}else if(this.layoutId == R.layout.row_chupa_chat_list_send){
+			}else if(type == SEND){
 				messageText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_message);
 
 				/*
@@ -131,7 +128,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 					failButton.setVisibility(View.VISIBLE);
 					progressBar.setVisibility(View.GONE);
 				}
-			} else if(this.layoutId == R.layout.row_chupa_chat_list_receive){
+			} else if(type == RECEIVE){
 				/*
 				 * Get other user and find UI component
 				 */
@@ -156,5 +153,27 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	@Override
 	public boolean isEnabled(int position) {
 		return false;
+	}
+
+
+	@Override
+	public int getViewTypeCount() {
+		return 3;
+	}
+
+
+	@Override
+	public int getItemViewType(int position) {
+		// Inflate different layout by user
+		AhMessage message = getItem(position);
+		if(message.isNotification()){
+			return NOTIFICATION;
+		}else{
+			if(message.isMine()){
+				return SEND;
+			} else{
+				return RECEIVE;
+			}
+		}
 	}
 }

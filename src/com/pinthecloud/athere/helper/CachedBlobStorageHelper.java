@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
-import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.FileUtil;
@@ -72,22 +71,29 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 
 
 	//	public void getBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {
-	//		(new AsyncTask<String, Void, Bitmap>() {
+	//		Bitmap bitmap = getBitmapFromMemCache(id);
+	//		if (bitmap != null) {
+	//			callback.onCompleted(bitmap);
+	//		} else {
+	//			(new AsyncTask<String, Void, Bitmap>() {
 	//
-	//			@Override
-	//			protected Bitmap doInBackground(String... params) {
-	//				String id = params[0];
-	//				return getBitmapSync(frag, id);
-	//			}
+	//				@Override
+	//				protected Bitmap doInBackground(String... params) {
+	//					String id = params[0];
+	//					Bitmap bitmap = getBitmapSync(frag, id);
+	//					addBitmapToMemoryCache(id, bitmap);
+	//					return bitmap;
+	//				}
 	//
-	//			@Override
-	//			protected void onPostExecute(Bitmap result) {
-	//				super.onPostExecute(result);
-	//				if (callback != null)
-	//					callback.onCompleted(result);
-	//				AsyncChainer.notifyNext(frag);
-	//			}
-	//		}).execute(id);
+	//				@Override
+	//				protected void onPostExecute(Bitmap result) {
+	//					super.onPostExecute(result);
+	//					if (callback != null)
+	//						callback.onCompleted(result);
+	//					AsyncChainer.notifyNext(frag);
+	//				}
+	//			}).execute(id);
+	//		}
 	//	}
 
 
@@ -111,31 +117,24 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	//	}
 
 
-	public void setImageViewAsync(AhFragment frag, int id, ImageView imageView) {
-		this.setImageViewAsync(frag, ""+id, imageView);
-	}
-
-
 	public void setImageViewAsync(AhFragment frag, String id, ImageView imageView) {
 		if (cancelPotentialWork(id, imageView)) {
 			int w = imageView.getWidth();
 			int h = imageView.getHeight();
-			String imageKey = id + w + h;
-			Bitmap bitmap = getBitmapFromMemCache(imageKey);
+			Bitmap bitmap = getBitmapFromMemCache(id + w + h);
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 			} else {
-				// com.pinthecloud.athere.R.drawable.launcher
-				Drawable drawable = frag.getResources().getDrawable(com.pinthecloud.athere.R.drawable.launcher);
-				Bitmap mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();
-				
-				// TODO : Need to fix caching method
-				imageView.setImageBitmap(mPlaceHolderBitmap);
-//				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
-//				AsyncDrawable asyncDrawable =
-//						new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
-//				imageView.setImageDrawable(asyncDrawable);
-//				task.execute(id);
+				Bitmap mPlaceHolderBitmap = null;
+				Drawable drawable = imageView.getDrawable();
+				if(drawable != null){
+					mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();
+				}
+
+				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
+				AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
+				imageView.setImageDrawable(asyncDrawable);
+				task.execute(id);
 			}
 		}
 	}
@@ -184,11 +183,9 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	private class AsyncDrawable extends BitmapDrawable {
 		private final WeakReference<BitmapWorkerTask> bitmapWorkerTaskReference;
 
-		public AsyncDrawable(Resources res, Bitmap bitmap,
-				BitmapWorkerTask bitmapWorkerTask) {
+		public AsyncDrawable(Resources res, Bitmap bitmap, BitmapWorkerTask bitmapWorkerTask) {
 			super(res, bitmap);
-			bitmapWorkerTaskReference =
-					new WeakReference<BitmapWorkerTask>(bitmapWorkerTask);
+			bitmapWorkerTaskReference = new WeakReference<BitmapWorkerTask>(bitmapWorkerTask);
 		}
 
 		public BitmapWorkerTask getBitmapWorkerTask() {
@@ -201,7 +198,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		final BitmapWorkerTask bitmapWorkerTask = getBitmapWorkerTask(imageView);
 
 		if (bitmapWorkerTask != null) {
-			final String bitmapData = bitmapWorkerTask.id;
+			String bitmapData = bitmapWorkerTask.id;
 			// If bitmapData is not yet set or it differs from the new data
 			if (bitmapData == null || !bitmapData.equals(id)) {
 				// Cancel previous task
