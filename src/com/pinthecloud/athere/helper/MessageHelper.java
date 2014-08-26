@@ -39,7 +39,7 @@ public class MessageHelper {
 	}
 
 	
-	public void sendMessageAsync(final AhFragment frag, AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
+	public void sendMessageAsync(final AhFragment frag, final AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED, message));
@@ -70,7 +70,7 @@ public class MessageHelper {
 					AsyncChainer.notifyNext(frag);
 				}
 				else
-					ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.SERVER_ERROR, message));
 			}
 		});
 

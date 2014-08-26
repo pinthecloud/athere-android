@@ -140,12 +140,26 @@ public class AhIntentService extends IntentService {
 	private void CHUPA() {
 		messageDBHelper.addMessage(message);
 		messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
+		
+		// Is the Chupa App Running
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
-			messageHelper.triggerMessageEvent(currentActivityName, message);
-			if (!isActivityRunning(app, ChupaChatActivity.class)){
+			AhUser currentChupaUser = app.getCurrentChupaUser();
+			// Is the User in ChupaActivity
+			if (isActivityRunning(app, ChupaChatActivity.class)){
+				// Is the currentUser talking is the same user from the server.
+				if (currentChupaUser != null && currentChupaUser.getId().equals(message.getSenderId())) {
+					messageHelper.triggerMessageEvent(currentActivityName, message);
+				// Or the server from the user is different from the current User talking
+				} else {
+					alertNotification(AhMessage.TYPE.CHUPA);
+				}
+			// Is the User is Not in ChupaActivity
+			} else {
+				messageHelper.triggerMessageEvent(currentActivityName, message);
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
+		// if App Not Running
 		} else {
 			alertNotification(AhMessage.TYPE.CHUPA);
 		}

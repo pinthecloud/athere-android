@@ -66,6 +66,7 @@ public class ChupaChatFragment extends AhFragment {
 		if (otherUser == null) {
 			throw new AhException("No User Error");
 		}
+		app.setCurrentChupaUser(otherUser);
 	}
 
 	@Override
@@ -254,7 +255,7 @@ public class ChupaChatFragment extends AhFragment {
 	public void sendChupa(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 //		messageList.add(message);
-		messageListAdapter.add(message);
+		//messageListAdapter.add(message);
 //		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
