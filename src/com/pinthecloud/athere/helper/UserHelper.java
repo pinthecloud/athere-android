@@ -45,7 +45,6 @@ public class UserHelper {
 	private final String ENTER_SQUARE = "enter_square";
 	private final String EXIT_SQUARE = "exit_square";
 	
-	private int count = 0;
 	public UserHelper() {
 		super();
 		this.app = AhApplication.getInstance();
@@ -54,7 +53,6 @@ public class UserHelper {
 		this.userTable = app.getUserTable();
 		this.mClient = app.getmClient();
 		this.userIdTable = mClient.getTable(AhIdUser.class);
-		Log.e("HONGKUN","UserHelper" + count++);
 	}
 
 //	public void enterSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {

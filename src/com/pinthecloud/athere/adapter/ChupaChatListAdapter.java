@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.List;
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
@@ -30,19 +28,20 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	private Fragment fragment;
 	private LayoutInflater inflater;
 	private int layoutId;
-	private List<AhMessage> items;
-
+//	private List<AhMessage> items;
+	private ChupaChatListAdapter _this;
 	private MessageDBHelper messageDBHelper;
 
 
-	public ChupaChatListAdapter(Context context, Fragment fragment, int layoutId, List<AhMessage> items) {
-		super(context, layoutId, items);
+	public ChupaChatListAdapter(Context context, Fragment fragment, int layoutId) {
+		super(context, layoutId);
 		this.context = context;
 		this.fragment = fragment;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.layoutId = layoutId;
-		this.items = items;
+//		this.items = items;
 
+		this._this = this;
 		AhApplication app = AhApplication.getInstance();
 		this.messageDBHelper = app.getMessageDBHelper();
 	}
@@ -52,7 +51,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View view = convertView;
 
-		final AhMessage message = items.get(position);
+		final AhMessage message = this.getItem(position);
 		if (message != null) {
 			// Inflate different layout by user
 			if(message.isNotification()){
@@ -99,13 +98,15 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 							@Override
 							public void doPositiveThing(Bundle bundle) {
 								messageDBHelper.deleteMessage(message.getId());
-								items.remove(position);
+								_this.remove(_this.getItem(position));
+//								items.remove(position);
 								ChupaChatFragment chupaChatFragment = (ChupaChatFragment)fragment;
 								chupaChatFragment.sendChupa(message);
 							}
 							@Override
 							public void doNegativeThing(Bundle bundle) {
-								items.remove(position);
+								_this.remove(_this.getItem(position));
+//								items.remove(position);
 								notifyDataSetChanged();
 							}
 						});

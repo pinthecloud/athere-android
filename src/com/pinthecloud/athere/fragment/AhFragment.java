@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
@@ -41,8 +43,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected UserDBHelper userDBHelper;
 	protected SquareHelper squareHelper;
 	protected CachedBlobStorageHelper blobStorageHelper;
-
-
+	
 	public AhFragment(){
 		_thisFragment = this;
 		app = AhApplication.getInstance();
@@ -58,13 +59,14 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		/*
 		 * Set static value
 		 */
 		context = getActivity();
 		activity = (AhActivity) context;
 		ExceptionManager.setHandler(_thisFragment);
+		
+		
 	}
 
 

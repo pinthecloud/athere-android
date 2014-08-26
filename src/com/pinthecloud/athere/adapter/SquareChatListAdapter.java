@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -38,34 +36,33 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	private AhFragment frag;
 	private LayoutInflater inflater;
 	private int layoutId;
-	private List<AhMessage> items;
-
+//	private List<AhMessage> items;
+	private SquareChatListAdapter _this;
+	
 	private UserDBHelper userDBHelper;
 	private MessageDBHelper messageDBHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
 
-	public SquareChatListAdapter(Context context, AhFragment fragment, int layoutId, List<AhMessage> items) {
+	public SquareChatListAdapter(Context context, AhFragment fragment, int layoutId) {
 
 
-		super(context, layoutId, items);
+		super(context, layoutId);
 		this.context = context;
 		this.frag = fragment;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.layoutId = layoutId;
-		this.items = items;
-
+//		this.items = items;
+		this._this = this;
 		AhApplication app = AhApplication.getInstance(); 
 		this.userDBHelper = app.getUserDBHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
 	}
 
-
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View view = convertView;
-
-		final AhMessage message = items.get(position);
+		final AhMessage message = this.getItem(position);
 		if (message != null) {
 			// Inflate different layout by user
 			if(message.isNotification()){
@@ -77,8 +74,9 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 					this.layoutId = R.layout.row_square_chat_list_receive;
 				}
 			}
+			
 			view = inflater.inflate(this.layoutId, parent, false);
-
+			
 
 			/*
 			 * Find UI component
@@ -112,14 +110,14 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 							@Override
 							public void doPositiveThing(Bundle bundle) {
 								messageDBHelper.deleteMessage(message.getId());
-								items.remove(position);
+								_this.remove(_this.getItem(position));
 								SquareChatFragment squareChatFragment = (SquareChatFragment)frag;
 								squareChatFragment.sendTalk(message);
 							}
 							@Override
 							public void doNegativeThing(Bundle bundle) {
 								messageDBHelper.deleteMessage(message.getId());
-								items.remove(position);
+								_this.remove(_this.getItem(position));
 								notifyDataSetChanged();
 							}
 						});

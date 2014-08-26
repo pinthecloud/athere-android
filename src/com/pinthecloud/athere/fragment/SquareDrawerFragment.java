@@ -1,8 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -50,7 +47,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
-	private List<AhUser> userList = new ArrayList<AhUser>();
+//	private List<AhUser> userList = new ArrayList<AhUser>();
 
 
 
@@ -85,14 +82,15 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set user list
 		 */
 		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, _thisFragment, R.layout.row_square_drawer_participant_list, userList);
+				(context, _thisFragment, R.layout.row_square_drawer_participant_list);
 		participantListView.setAdapter(participantListAdapter);
 		participantListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				final AhUser user = userList.get(position);
+//				final AhUser user = userList.get(position);
+				final AhUser user = participantListAdapter.getItem(position);
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
@@ -204,97 +202,7 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 
-		//		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
-		//
-		//			@Override
-		//			public void doNext(AhFragment frag) {
-		//				AhUser user = userHelper.getMyUserInfo(true);
-		//				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
-		//
-		//					@Override
-		//					public void onCompleted(Boolean entity) {
-		//						removeSquarePreference();
-		//					}
-		//				});
-		//			}
-		//
-		//		}, new Chainable() {
-		//
-		//			@Override
-		//			public void doNext(AhFragment frag) {
-		//				String exitMessage = getResources().getString(R.string.exit_square_message);
-		//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		//				messageBuilder.setContent(nickName + " : " + exitMessage)
-		//				.setSender(nickName)
-		//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-		//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-		//				.setType(AhMessage.TYPE.EXIT_SQUARE);
-		//				AhMessage message = messageBuilder.build();
-		//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
-		//
-		//					@Override
-		//					public void onCompleted(AhMessage entity) {
-		//						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
-		//						activity.runOnUiThread(new Runnable() {
-		//
-		//							@Override
-		//							public void run() {
-		//								progressBar.setVisibility(View.GONE);
-		//								startActivity(intent);
-		//								activity.finish();
-		//							}
-		//						});
-		//					}
-		//				});
-		//			}
-		//		});
-
-
-		/**
-		 *  DO NOT REMOVE
-		 *  NEED FOR REFERENCE
-		 */
-		//		new AhThread(new Runnable() {
-		//
-		//			@Override
-		//			public void run() {
-		//				User user = userHelper.getMyUserInfo(true);
-		//				userHelper.exitSquareSync(_thisFragment, user.getId());
-		////				userHelper.unRegisterGcmSync(_thisFragment);
-		//				userDBHelper.deleteAllUsers();
-		//				messageDBHelper.deleteAllMessages();
-		//
-		//				String exitMessage = getResources().getString(R.string.exit_square_message);
-		//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		//				messageBuilder.setContent(nickName + " : " + exitMessage)
-		//				.setSender(nickName)
-		//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-		//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-		//				.setType(AhMessage.TYPE.EXIT_SQUARE);
-		//				AhMessage message = messageBuilder.build();
-		//				messageHelper.sendMessageSync(_thisFragment, message);
-		//
-		//				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-		//				pref.removePref(AhGlobalVariable.USER_ID_KEY);
-		//				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-		//				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-		//				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-		//				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-		//				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-		//				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
-		//				activity.runOnUiThread(new Runnable() {
-		//
-		//					@Override
-		//					public void run() {
-		//						progressBar.setVisibility(View.GONE);
-		//						startActivity(intent);
-		//						activity.finish();
-		//					}
-		//				});
-		//			}
-		//		}).start();
+		
 	}	
 
 
@@ -358,7 +266,6 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 
-
 		/*
 		 * Set profile information text and gender image
 		 */
@@ -380,38 +287,145 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set participant list view
 		 */
-		userList.clear();
-		userList.addAll(userDBHelper.getAllUsers());
+//		userList.clear();
+		
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
+				participantListAdapter.clear();
+				participantListAdapter.addAll(userDBHelper.getAllUsers());
 				participantListAdapter.notifyDataSetChanged();
 
 				/*
 				 * Set member number text
 				 */
-				maleNumText.setText("" + getMaleNum(userList));
-				femaleNumText.setText("" + getFemaleNum(userList));
+				maleNumText.setText("" + getMaleNum(participantListAdapter));
+				femaleNumText.setText("" + getFemaleNum(participantListAdapter));
 			}
 		});
 	}
 
 
-	private int getMaleNum(List<AhUser> list){
+	private int getMaleNum(SquareDrawerParticipantListAdapter list){
 		int count = 0;
-		for(AhUser user : list){
-			if (user.isMale()) count++;
+		for(int i = 0 ; i < list.getCount() ; i++) {
+			if (list.getItem(i).isMale()) count++;
 		}
+//		for(AhUser user : list){
+//			if (user.isMale()) count++;
+//		}
 		return count;
 	}
 
 
-	private int getFemaleNum(List<AhUser> list){
+	private int getFemaleNum(SquareDrawerParticipantListAdapter list){
 		int count = 0;
-		for(AhUser user : list){
-			if (!user.isMale()) count++;
+		for(int i = 0 ; i < list.getCount() ; i++) {
+			if (!list.getItem(i).isMale()) count++;
 		}
+//		for(AhUser user : list){
+//			if (!user.isMale()) count++;
+//		}
 		return count;
 	}
 }
+
+
+
+
+/**
+ * This was placed inside exitSqure
+ */
+
+//AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+//
+//			@Override
+//			public void doNext(AhFragment frag) {
+//				AhUser user = userHelper.getMyUserInfo(true);
+//				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
+//
+//					@Override
+//					public void onCompleted(Boolean entity) {
+//						removeSquarePreference();
+//					}
+//				});
+//			}
+//
+//		}, new Chainable() {
+//
+//			@Override
+//			public void doNext(AhFragment frag) {
+//				String exitMessage = getResources().getString(R.string.exit_square_message);
+//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+//				messageBuilder.setContent(nickName + " : " + exitMessage)
+//				.setSender(nickName)
+//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+//				.setType(AhMessage.TYPE.EXIT_SQUARE);
+//				AhMessage message = messageBuilder.build();
+//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+//
+//					@Override
+//					public void onCompleted(AhMessage entity) {
+//						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+//						activity.runOnUiThread(new Runnable() {
+//
+//							@Override
+//							public void run() {
+//								progressBar.setVisibility(View.GONE);
+//								startActivity(intent);
+//								activity.finish();
+//							}
+//						});
+//					}
+//				});
+//			}
+//		});
+
+
+/**
+ *  DO NOT REMOVE
+ *  NEED FOR REFERENCE
+ */
+//		new AhThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				User user = userHelper.getMyUserInfo(true);
+//				userHelper.exitSquareSync(_thisFragment, user.getId());
+////				userHelper.unRegisterGcmSync(_thisFragment);
+//				userDBHelper.deleteAllUsers();
+//				messageDBHelper.deleteAllMessages();
+//
+//				String exitMessage = getResources().getString(R.string.exit_square_message);
+//				String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+//				messageBuilder.setContent(nickName + " : " + exitMessage)
+//				.setSender(nickName)
+//				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+//				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+//				.setType(AhMessage.TYPE.EXIT_SQUARE);
+//				AhMessage message = messageBuilder.build();
+//				messageHelper.sendMessageSync(_thisFragment, message);
+//
+//				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+//				pref.removePref(AhGlobalVariable.USER_ID_KEY);
+//				pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
+//				pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
+//				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+//				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+//				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+//				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+//				activity.runOnUiThread(new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						progressBar.setVisibility(View.GONE);
+//						startActivity(intent);
+//						activity.finish();
+//					}
+//				});
+//			}
+//		}).start();

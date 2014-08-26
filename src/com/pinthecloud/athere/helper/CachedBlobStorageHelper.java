@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
+import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.FileUtil;
@@ -124,17 +125,17 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 			} else {
-				Drawable drawable = imageView.getDrawable();
-				Bitmap mPlaceHolderBitmap = null;
-				if(drawable != null){
-					mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();	
-				}
-
-				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
-				AsyncDrawable asyncDrawable =
-						new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
-				imageView.setImageDrawable(asyncDrawable);
-				task.execute(id);
+				// com.pinthecloud.athere.R.drawable.launcher
+				Drawable drawable = frag.getResources().getDrawable(com.pinthecloud.athere.R.drawable.launcher);
+				Bitmap mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();
+				
+				// TODO : Need to fix caching method
+				imageView.setImageBitmap(mPlaceHolderBitmap);
+//				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
+//				AsyncDrawable asyncDrawable =
+//						new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
+//				imageView.setImageDrawable(asyncDrawable);
+//				task.execute(id);
 			}
 		}
 	}

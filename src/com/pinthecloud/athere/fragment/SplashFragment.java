@@ -25,7 +25,6 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -121,6 +120,7 @@ public class SplashFragment extends AhFragment {
 				|| myGal3.equals(httpAgent))))	// Galaxy 3
 			return false;
 
+		
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
 		.setMessage("Want to Go to HongkunTest?")
@@ -186,7 +186,7 @@ public class SplashFragment extends AhFragment {
 
 								@Override
 								public void doPositiveThing(Bundle bundle) {
-									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pname:" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
+									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
 									startActivity(intent);
 								}
 								@Override

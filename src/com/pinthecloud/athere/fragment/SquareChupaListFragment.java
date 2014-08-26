@@ -28,7 +28,7 @@ public class SquareChupaListFragment extends AhFragment{
 
 	private SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
-	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
+//	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 	private ImageView blankImage;
 
 
@@ -57,7 +57,7 @@ public class SquareChupaListFragment extends AhFragment{
 		 * Set square chupa list view
 		 */
 		squareChupaListAdapter = new SquareChupaListAdapter
-				(context, _thisFragment, R.layout.row_square_chupa_list, lastChupaCommunList);
+				(context, _thisFragment, R.layout.row_square_chupa_list);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -65,7 +65,7 @@ public class SquareChupaListFragment extends AhFragment{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, lastChupaCommunList.get(position).get("userId"));
+				intent.putExtra(AhGlobalVariable.USER_KEY, squareChupaListAdapter.getItem(position).get("userId"));
 				startActivity(intent);
 			}
 		});
@@ -97,17 +97,21 @@ public class SquareChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
-		List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-		lastChupaCommunList.clear();
-		lastChupaCommunList.addAll(convertToMap(lastChupaList));
+		final List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
+//		lastChupaCommunList.clear();
+//		lastChupaCommunList.addAll(convertToMap(lastChupaList));
+		
+		
 		
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
+				squareChupaListAdapter.clear();
+				squareChupaListAdapter.addAll(convertToMap(lastChupaList));
 				squareChupaListAdapter.notifyDataSetChanged();
 
-				if(lastChupaCommunList.size() < 1){
+				if(squareChupaListAdapter.getCount() < 1){
 					blankImage.setVisibility(View.VISIBLE);
 				} else{
 					blankImage.setVisibility(View.GONE);

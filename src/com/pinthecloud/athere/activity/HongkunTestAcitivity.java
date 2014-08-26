@@ -7,10 +7,13 @@ import android.widget.Button;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.HongkunTestFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn01;
@@ -31,7 +34,7 @@ public class HongkunTestAcitivity extends AhActivity {
 	private String content;
 
 	public static final String SENDER_ID = "838051405989";
-
+	AhFragment hongFrag;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +55,28 @@ public class HongkunTestAcitivity extends AhActivity {
 		/*
 		 * Set Fragment to container
 		 */
+		
+		
 		try{
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 			//SquareListFragment squareListFragment = new SquareListFragment();
-			HongkunTestFragment hongFrag = new HongkunTestFragment();
+			hongFrag = new HongkunTestFragment();
 			fragmentTransaction.add(R.id.hongkun_test_container, hongFrag);
 			fragmentTransaction.commit();
 		} catch(AhException ex){
 			Log(this,"HERE : ",ex);
 		}
+		
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+			
+			@Override
+			public void onCompleted(AhMessage message) {
+				// TODO Auto-generated method stub
+				messageHelper.triggerMessageEvent(hongFrag, message);
+			}
+		});
 	}
 	/*
 	public void addItem(View view) {

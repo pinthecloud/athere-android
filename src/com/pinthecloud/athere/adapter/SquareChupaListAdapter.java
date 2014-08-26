@@ -1,9 +1,9 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +21,14 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 	private Context context;
 	private AhFragment fragment;
 	private int layoutId;
-	private List<Map<String,String>> items;
+//	private List<Map<String,String>> items;
 	private CachedBlobStorageHelper blobStorageHelper;
 
-	public SquareChupaListAdapter(Context context, AhFragment frag, int layoutId, List<Map<String,String>> items) {
-		super(context, layoutId, items);
+	public SquareChupaListAdapter(Context context, AhFragment frag, int layoutId) {
+		super(context, layoutId);
 		this.context = context;
 		this.fragment = frag;
 		this.layoutId = layoutId;
-		this.items = items;
 		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
 	}
 
@@ -41,8 +40,8 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
-
-		Map<String,String> lastChupaMap = items.get(position);
+		
+		Map<String,String> lastChupaMap = this.getItem(position);
 		if (lastChupaMap != null) {
 			/*
 			 * Find UI component

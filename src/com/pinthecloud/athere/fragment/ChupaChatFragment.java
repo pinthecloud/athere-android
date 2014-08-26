@@ -1,6 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -51,7 +50,7 @@ public class ChupaChatFragment extends AhFragment {
 
 	private ListView messageListView;
 	private ChupaChatListAdapter messageListAdapter;
-	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
+//	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
 
 
 	@Override
@@ -99,7 +98,7 @@ public class ChupaChatFragment extends AhFragment {
 		 * Set message listview
 		 */
 		messageListAdapter = new ChupaChatListAdapter
-				(context, this, R.layout.row_square_chat_list_send, messageList);
+				(context, this, R.layout.row_square_chat_list_send);
 		messageListView.setAdapter(messageListAdapter);
 
 
@@ -252,7 +251,8 @@ public class ChupaChatFragment extends AhFragment {
 
 	public void sendChupa(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
-		messageList.add(message);
+//		messageList.add(message);
+		messageListAdapter.add(message);
 		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
@@ -286,8 +286,16 @@ public class ChupaChatFragment extends AhFragment {
 		 */
 		final List<AhMessage> chupas = messageDBHelper
 				.getChupasByCommunId(chupaCommunId);
-		messageList.clear();
-		messageList.addAll(chupas);
+		activity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				messageListAdapter.clear();
+				messageListAdapter.addAll(chupas);
+			}
+		});
+		
 
 		/*
 		 * If other user exit, add exit message
@@ -308,7 +316,7 @@ public class ChupaChatFragment extends AhFragment {
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp();
 			AhMessage message = messageBuilder.build();
-			messageList.add(message);
+			messageListAdapter.add(message);
 		}
 
 		/*

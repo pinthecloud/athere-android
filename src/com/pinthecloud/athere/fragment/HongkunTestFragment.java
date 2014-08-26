@@ -2,21 +2,26 @@ package com.pinthecloud.athere.fragment;
 
 import java.io.File;
 
+import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 
 /**
@@ -36,11 +41,11 @@ public class HongkunTestFragment extends AhFragment {
 	private ImageView img;
 	private Button myBtn;
 	private MobileServiceClient mClient;
-
+	ListView listView; 
 	private BlobStorageHelper blobStorageHelper;
 	public static final String SENDER_ID = "838051405989";
 
-
+	ArrayAdapter<String> adapter;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,8 +76,22 @@ public class HongkunTestFragment extends AhFragment {
 		btnArr[4] = (Button)view.findViewById(R.id.button5);
 		btnArr[5] = (Button)view.findViewById(R.id.button6);
 		messageText = (TextView)view.findViewById(R.id.message_text);
+		listView = (ListView)view.findViewById(R.id.hongkun_list_view);
 		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
 		blobStorageHelper = new BlobStorageHelper();
+		
+		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		for(int i = 0 ; i < 6 ; i++){
 			btnArr[i].setOnClickListener(new View.OnClickListener() {
 
@@ -81,18 +100,9 @@ public class HongkunTestFragment extends AhFragment {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
 						
-						MobileServiceTable<AhUser> table =  app.getUserTable();
-						AhUser myUser = AhUser.addUserTest();
+						Handler h = new Handler();
 						
-						table.insert(myUser, new TableOperationCallback<AhUser>() {
-							
-							@Override
-							public void onCompleted(AhUser arg0, Exception arg1,
-									ServiceFilterResponse arg2) {
-								// TODO Auto-generated method stub
-								Log(_thisFragment, "OK");
-							}
-						});
+						
 						
 						
 						
@@ -122,7 +132,41 @@ public class HongkunTestFragment extends AhFragment {
 				}
 			});
 		}
+		
+		
+		messageHelper.setMessageHandler(_thisFragment, new AhEntityCallback<AhMessage>() {
 
+			@Override
+			public void onCompleted(final AhMessage entity) {
+				// TODO Auto-generated method stub
+				activity.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						adapter.add(entity.getContent());
+					}
+				});
+			}
+		});
+		
+//		messageHelper.setHandler(new DataSetObserver() {
+//			
+//			@Override
+//			public void onChanged() {
+//				// TODO Auto-generated method stub
+//				super.onChanged();
+//				activity.runOnUiThread(new Runnable() {
+//					
+//					@Override
+//					public void run() {
+//						// TODO Auto-generated method stub
+//						adapter.add("onchange");
+//					}
+//				});
+//				
+//			}
+//		});
 
 		return view;
 	}

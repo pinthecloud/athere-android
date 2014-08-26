@@ -101,22 +101,14 @@ public class MessageHelper {
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
 
 	public void setMessageHandler(AhActivity activity, AhEntityCallback<AhMessage> callback){
-		AhEntityCallback<AhMessage> _callback = map.get(activity.getClass().getName());
-		if (_callback == null) {
-			map.put(activity.getClass().getName(), callback);
-		}
+		map.put(activity.getClass().getName(), callback);
 	}
 	public void setMessageHandler(AhFragment frag, AhEntityCallback<AhMessage> callback){
-		AhEntityCallback<AhMessage> _callback = map.get(frag.getClass().getName());
-		if (_callback == null) {
-			map.put(frag.getClass().getName(), callback);
-		}
+		map.put(frag.getClass().getName(), callback);
 	}
-
 	public void triggerMessageEvent(AhFragment frag, AhMessage message){
 		this.triggerMessageEvent(frag.getClass().getName(), message);
 	}
-
 	public void triggerMessageEvent(String key, AhMessage message){
 		AhEntityCallback<AhMessage> _callback = map.get(key);
 		if(_callback != null) {
@@ -125,7 +117,7 @@ public class MessageHelper {
 		else 
 			Log.d(AhGlobalVariable.LOG_TAG,"[MessageHelper.triggerMessage] map.get(MESSAGE_RECEIVED); :" + message.getType());
 	}
-
+	
 
 	/**
 	 * 
