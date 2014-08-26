@@ -116,10 +116,11 @@ public class SplashFragment extends AhFragment {
 		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
 		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
 		String httpAgent = System.getProperty("http.agent");
-		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-				|| myGal3.equals(httpAgent))))	// Galaxy 3
-			return false;
-
+//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
+//				|| myGal3.equals(httpAgent))))	// Galaxy 3
+//			return false;
+		if (true)
+		return false;
 		
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")

@@ -124,6 +124,10 @@ public class FileUtil {
 
 
 	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
+		
+		if (context == null) {
+			throw new AhException("context==null Exception");
+		}
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 

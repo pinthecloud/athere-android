@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class MessageDBHelper extends SQLiteOpenHelper {
@@ -109,6 +110,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		values.put(STATUS, message.getStatus());
 
 		// Inserting Row
+		if (db == null) throw new AhException("db null in addMessage");
 		long id = db.insert(TABLE_NAME, null, values);
 		db.close(); // Closing database connection
 		return (int)id;

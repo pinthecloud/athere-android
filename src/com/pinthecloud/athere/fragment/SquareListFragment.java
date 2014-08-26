@@ -110,16 +110,14 @@ public class SquareListFragment extends AhFragment{
 	 */
 	private void getNearSquares(){
 		mProgressBar.setVisibility(View.VISIBLE);
-
 		squareHelper.getSquareListAsync(_thisFragment, 0, 0, new AhListCallback<Square>() {
 
 			@Override
 			public void onCompleted(List<Square> list, int count) {
 				mProgressBar.setVisibility(View.GONE);
-
 				squareList.clear();
 				squareList.addAll(list);
-//				squareListAdapter.notifyDataSetChanged();
+				squareListAdapter.notifyDataSetChanged();
 			}
 		});
 	}
