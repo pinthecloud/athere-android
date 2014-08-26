@@ -163,19 +163,22 @@ public class SquareChatFragment extends AhFragment{
 
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
-//		messageList.add(message);
 		
-		activity.runOnUiThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				messageListAdapter.add(message);
-				messageListAdapter.notifyDataSetChanged();
-				messageListView.setSelection(messageListView.getCount() - 1);
-				messageEditText.setText("");
-			}
-		});
+		messageListAdapter.add(message);
+		messageListAdapter.notifyDataSetChanged();
+		messageListView.setSelection(messageListView.getCount() - 1);
+		messageEditText.setText("");
+		
+//		activity.runOnUiThread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				messageListAdapter.add(message);
+//				messageListAdapter.notifyDataSetChanged();
+//				messageListView.setSelection(messageListView.getCount() - 1);
+//				messageEditText.setText("");
+//			}
+//		});
 
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));

@@ -20,7 +20,6 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 	private Context context;
 	private AhFragment fragment;
 	private int layoutId;
-	//	private List<Map<String,String>> items;
 	private CachedBlobStorageHelper blobStorageHelper;
 
 	public SquareChupaListAdapter(Context context, AhFragment frag, int layoutId) {
@@ -28,7 +27,9 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 		this.context = context;
 		this.fragment = frag;
 		this.layoutId = layoutId;
-		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
+		
+		AhApplication app = AhApplication.getInstance();
+		this.blobStorageHelper = app.getBlobStorageHelper();
 	}
 
 	@Override
@@ -40,7 +41,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
 
-		Map<String,String> lastChupaMap = this.getItem(position);
+		Map<String,String> lastChupaMap = getItem(position);
 		if (lastChupaMap != null) {
 			/*
 			 * Find UI component
@@ -79,7 +80,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				badgeNum.setVisibility(View.INVISIBLE);
 			}
 		}
-
+		
 		return view;
 	}
 }

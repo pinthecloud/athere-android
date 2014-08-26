@@ -89,11 +89,13 @@ public class ChupaChatFragment extends AhFragment {
 		messageEditText = (EditText) view.findViewById(R.id.chupa_chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chupa_chat_frag_send_button);
 
+		
 		/*
 		 * Set Action Bar
 		 */
 		mActionBar.setTitle(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
-
+		
+		
 		/*
 		 * Set message listview
 		 */

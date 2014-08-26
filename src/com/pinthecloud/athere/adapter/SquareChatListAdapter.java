@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -39,26 +40,25 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	private Context context;
 	private AhFragment frag;
 	private LayoutInflater inflater;
-	private SquareChatListAdapter _this;
 
 	private UserDBHelper userDBHelper;
 	private MessageDBHelper messageDBHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
 
-	
-	public SquareChatListAdapter(Context context, AhFragment fragment) {
+
+	public SquareChatListAdapter(Context context, AhFragment frag) {
 		super(context, 0);
 		this.context = context;
-		this.frag = fragment;
+		this.frag = frag;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this._this = this;
+
 		AhApplication app = AhApplication.getInstance(); 
 		this.userDBHelper = app.getUserDBHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
 	}
 
-	
+
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View view = convertView;
@@ -98,27 +98,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 					@Override
 					public void onClick(View v) {
-						Resources resources = context.getResources();
-						String dialogMessage = resources.getString(R.string.message_fail_message);
-						String resend = resources.getString(R.string.re_send);
-						String delete = resources.getString(R.string.delete);
-						AhAlertDialog reSendOrCancelDialog = new AhAlertDialog(null, dialogMessage, resend, delete, true, new AhDialogCallback() {
-
-							@Override
-							public void doPositiveThing(Bundle bundle) {
-								messageDBHelper.deleteMessage(message.getId());
-								_this.remove(_this.getItem(position));
-								SquareChatFragment squareChatFragment = (SquareChatFragment)frag;
-								squareChatFragment.sendTalk(message);
-							}
-							@Override
-							public void doNegativeThing(Bundle bundle) {
-								messageDBHelper.deleteMessage(message.getId());
-								_this.remove(_this.getItem(position));
-								notifyDataSetChanged();
-							}
-						});
-						reSendOrCancelDialog.show(frag.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+						showReSendOrCancelDialog(message, position);
 					}
 				});
 				int status = message.getStatus();
@@ -168,6 +148,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				} else{
 					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
+				
+				
 				//				int w = profileImage.getWidth();
 				//				int h = profileImage.getHeight();
 				//				blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
@@ -177,6 +159,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				//						profileImage.setImageBitmap(entity);
 				//					}
 				//				});
+				
+				
 				blobStorageHelper.setImageViewAsync(frag, user.getId(), profileImage);
 				profileImage.setOnClickListener(new OnClickListener() {
 
@@ -207,6 +191,14 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Set Shared UI component
 			 */
 			messageText.setText(message.getContent());
+			messageText.setOnLongClickListener(new OnLongClickListener() {
+				
+				@Override
+				public boolean onLongClick(View v) {
+					showReSendOrCancelDialog(message, position);
+					return false;
+				}
+			});
 		}
 		return view;
 	}
@@ -237,5 +229,30 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				return RECEIVE;
 			}
 		}
+	}
+	
+	
+	private void showReSendOrCancelDialog(final AhMessage message, final int position){
+		Resources resources = context.getResources();
+		String dialogMessage = resources.getString(R.string.message_fail_message);
+		String resend = resources.getString(R.string.re_send);
+		String delete = resources.getString(R.string.delete);
+		AhAlertDialog reSendOrCancelDialog = new AhAlertDialog(null, dialogMessage, resend, delete, true, new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				messageDBHelper.deleteMessage(message.getId());
+				remove(getItem(position));
+				SquareChatFragment squareChatFragment = (SquareChatFragment)frag;
+				squareChatFragment.sendTalk(message);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				messageDBHelper.deleteMessage(message.getId());
+				remove(getItem(position));
+				notifyDataSetChanged();
+			}
+		});
+		reSendOrCancelDialog.show(frag.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 }

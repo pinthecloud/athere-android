@@ -151,7 +151,7 @@ public class BasicProfileFragment extends AhFragment{
 				nickNameEditText.setSelection(nickName.length());
 
 				// Save gender and birth year infomation to preference
-				String message = checkNickName(nickName);
+				String message = app.checkNickName(nickName);
 				if(!message.equals("")){
 					// Unproper nick name
 					// Show warning toast for each situation

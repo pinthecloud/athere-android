@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +14,12 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 
 	private Context context;
 	private int layoutId;
-	private List<Square> items;
 
 
-	public SquareListAdapter(Context context, int layoutId, List<Square> items) {
-		super(context, layoutId, items);
+	public SquareListAdapter(Context context, int layoutId) {
+		super(context, layoutId);
 		this.context = context;
 		this.layoutId = layoutId;
-		this.items = items;
 	}
 
 
@@ -36,7 +32,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
 
-		Square square = items.get(position);
+		Square square = getItem(position);
 		if (square != null) {
 			/*
 			 * Find UI component
@@ -45,7 +41,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			TextView maleNumText = (TextView)view.findViewById(R.id.row_square_list_male_number);
 			TextView femaleNumText = (TextView)view.findViewById(R.id.row_square_list_female_number);
 
-			
+
 			/*
 			 * Set UI component
 			 */

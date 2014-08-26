@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -29,19 +30,17 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	private final int RECEIVE = 2;
 
 	private Context context;
-	private Fragment fragment;
+	private Fragment frag;
 	private LayoutInflater inflater;
-	private ChupaChatListAdapter _this;
 	private MessageDBHelper messageDBHelper;
 
 
-	public ChupaChatListAdapter(Context context, Fragment fragment) {
+	public ChupaChatListAdapter(Context context, Fragment frag) {
 		super(context, 0);
 		this.context = context;
-		this.fragment = fragment;
+		this.frag = frag;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		this._this = this;
 		AhApplication app = AhApplication.getInstance();
 		this.messageDBHelper = app.getMessageDBHelper();
 	}
@@ -86,28 +85,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 
 					@Override
 					public void onClick(View v) {
-						Resources resources = context.getResources();
-						String dialogMessage = resources.getString(R.string.message_fail_message);
-						String resend = resources.getString(R.string.re_send);
-						String delete = resources.getString(R.string.delete);
-						AhAlertDialog reSendOrCancelDialog = new AhAlertDialog(null, dialogMessage, resend, delete, true, new AhDialogCallback() {
-
-							@Override
-							public void doPositiveThing(Bundle bundle) {
-								messageDBHelper.deleteMessage(message.getId());
-								_this.remove(_this.getItem(position));
-//								items.remove(position);
-								ChupaChatFragment chupaChatFragment = (ChupaChatFragment)fragment;
-								chupaChatFragment.sendChupa(message);
-							}
-							@Override
-							public void doNegativeThing(Bundle bundle) {
-								_this.remove(_this.getItem(position));
-//								items.remove(position);
-								notifyDataSetChanged();
-							}
-						});
-						reSendOrCancelDialog.show(fragment.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+						showReSendOrCancelDialog(message, position);
 					}
 				});
 				int status = message.getStatus();
@@ -145,6 +123,14 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Set Shared UI component
 			 */
 			messageText.setText(message.getContent());
+			messageText.setOnLongClickListener(new OnLongClickListener() {
+
+				@Override
+				public boolean onLongClick(View v) {
+					showReSendOrCancelDialog(message, position);
+					return false;
+				}
+			});
 		}
 		return view;
 	}
@@ -175,5 +161,30 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				return RECEIVE;
 			}
 		}
+	}
+
+
+	private void showReSendOrCancelDialog(final AhMessage message, final int position){
+		Resources resources = context.getResources();
+		String dialogMessage = resources.getString(R.string.message_fail_message);
+		String resend = resources.getString(R.string.re_send);
+		String delete = resources.getString(R.string.delete);
+		AhAlertDialog reSendOrCancelDialog = new AhAlertDialog(null, dialogMessage, resend, delete, true, new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				messageDBHelper.deleteMessage(message.getId());
+				remove(getItem(position));
+				ChupaChatFragment squareChatFragment = (ChupaChatFragment)frag;
+				squareChatFragment.sendChupa(message);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				messageDBHelper.deleteMessage(message.getId());
+				remove(getItem(position));
+				notifyDataSetChanged();
+			}
+		});
+		reSendOrCancelDialog.show(frag.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 }

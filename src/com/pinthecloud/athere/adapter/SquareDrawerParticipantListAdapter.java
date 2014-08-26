@@ -27,21 +27,14 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 	private int layoutId;
 	private CachedBlobStorageHelper blobStorageHelper;
 
-	//	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId, List<AhUser> items) {
-	//		super(context, layoutId, items);
-	//		this.context = context;
-	//		this.frag = fragment;
-	//		this.layoutId = layoutId;
-	//		this.items = items;
-	//		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
-	//	}
-
 	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId) {
 		super(context, layoutId);
 		this.context = context;
 		this.frag = fragment;
 		this.layoutId = layoutId;
-		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
+		
+		AhApplication app = AhApplication.getInstance();
+		this.blobStorageHelper = app.getBlobStorageHelper();
 	}
 
 
@@ -54,8 +47,8 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
 
-		//		final AhUser user = items.get(position);
-		final AhUser user = this.getItem(position);
+		
+		final AhUser user = getItem(position);
 		if (user != null) {
 			/*
 			 * Find UI Component
@@ -112,6 +105,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 				}
 			});
 		}
+		
 		return view;
 	}
 }

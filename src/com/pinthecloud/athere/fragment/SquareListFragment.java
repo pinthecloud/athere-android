@@ -61,7 +61,7 @@ public class SquareListFragment extends AhFragment{
 		/*
 		 * Set square list view
 		 */
-		squareListAdapter = new SquareListAdapter(context, R.layout.row_square_list, squareList);
+		squareListAdapter = new SquareListAdapter(context, R.layout.row_square_list);
 		squareListView.setAdapter(squareListAdapter);
 		squareListView.setOnItemClickListener(new OnItemClickListener() {
 

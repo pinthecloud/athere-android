@@ -109,33 +109,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 
-	/*
-	 * Check nick name EditText
-	 */
-	protected String checkNickName(String nickName){
-		Log.d(AhGlobalVariable.LOG_TAG, "CheckNickNameEditText");
-
-		// Set regular expression for checking nick name
-		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
-		String message = "";
-
-		/*
-		 * Check logic whether this nick name is valid or not
-		 * If user doesn't type in proper nick name,
-		 * can't go to next activity
-		 */
-		// Check length of nick name
-		if(nickName.length() < 2){
-			message = getResources().getString(R.string.min_nick_name_message);
-		} else if(!nickName.matches(nickNameRegx)){
-			message = getResources().getString(R.string.bad_nick_name_message);
-		} else if(nickName.length() > 10){
-			message = getResources().getString(R.string.max_nick_name_message);
-		}
-		return message;
-	}
-
-
 	/**
 	 * 
 	 * NOT USING METHOD
