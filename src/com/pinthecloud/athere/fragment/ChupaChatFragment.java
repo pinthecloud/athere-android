@@ -252,7 +252,7 @@ public class ChupaChatFragment extends AhFragment {
 		message.setStatus(AhMessage.STATUS.SENDING);
 //		messageList.add(message);
 		messageListAdapter.add(message);
-		messageListAdapter.notifyDataSetChanged();
+//		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
 
@@ -330,7 +330,7 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void run() {
-				messageListAdapter.notifyDataSetChanged();
+//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});
@@ -346,7 +346,7 @@ public class ChupaChatFragment extends AhFragment {
 		if(ex.getMethodName().equals("sendMessageAsync")){
 			AhMessage exMessage = (AhMessage)ex.getParameter();
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
-			messageListAdapter.notifyDataSetChanged();
+//			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 			messageDBHelper.updateMessages(exMessage);
 			return;

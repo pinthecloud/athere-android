@@ -171,7 +171,7 @@ public class SquareChatFragment extends AhFragment{
 			public void run() {
 				// TODO Auto-generated method stub
 				messageListAdapter.add(message);
-				messageListAdapter.notifyDataSetChanged();
+//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 				messageEditText.setText("");
 			}
@@ -232,7 +232,7 @@ public class SquareChatFragment extends AhFragment{
 			public void run() {
 				messageListAdapter.clear();
 				messageListAdapter.addAll(talks);
-				messageListAdapter.notifyDataSetChanged();
+//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});
@@ -249,7 +249,7 @@ public class SquareChatFragment extends AhFragment{
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					messageListAdapter.notifyDataSetChanged();
+//					messageListAdapter.notifyDataSetChanged();
 					messageListView.setSelection(messageListView.getCount() - 1);
 				}
 			});

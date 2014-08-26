@@ -295,7 +295,7 @@ public class SquareDrawerFragment extends AhFragment {
 			public void run() {
 				participantListAdapter.clear();
 				participantListAdapter.addAll(userDBHelper.getAllUsers());
-				participantListAdapter.notifyDataSetChanged();
+//				participantListAdapter.notifyDataSetChanged();
 
 				/*
 				 * Set member number text

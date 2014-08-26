@@ -119,7 +119,7 @@ public class SquareListFragment extends AhFragment{
 
 				squareList.clear();
 				squareList.addAll(list);
-				squareListAdapter.notifyDataSetChanged();
+//				squareListAdapter.notifyDataSetChanged();
 			}
 		});
 	}

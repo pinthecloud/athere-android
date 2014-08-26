@@ -109,7 +109,7 @@ public class SquareChupaListFragment extends AhFragment{
 			public void run() {
 				squareChupaListAdapter.clear();
 				squareChupaListAdapter.addAll(convertToMap(lastChupaList));
-				squareChupaListAdapter.notifyDataSetChanged();
+//				squareChupaListAdapter.notifyDataSetChanged();
 
 				if(squareChupaListAdapter.getCount() < 1){
 					blankImage.setVisibility(View.VISIBLE);
