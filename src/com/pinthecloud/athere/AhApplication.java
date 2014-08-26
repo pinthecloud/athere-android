@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
