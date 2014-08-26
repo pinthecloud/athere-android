@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
@@ -24,6 +25,9 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 public class SquareActivity extends AhActivity{
 
@@ -46,6 +50,14 @@ public class SquareActivity extends AhActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
+		
+		/*
+		 * for Google Analytics
+		 */
+		Tracker t = ((AhApplication) getApplication()).getTracker(AhApplication.TrackerName.APP_TRACKER);
+		
+		t.setScreenName("SquareActivity");
+		t.send(new HitBuilders.AppViewBuilder().build());
 
 		/*
 		 * Set Helper and get square
@@ -181,5 +193,21 @@ public class SquareActivity extends AhActivity{
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+	}
+	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		
+		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 }
