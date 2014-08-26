@@ -216,7 +216,6 @@ public class SquareChatFragment extends AhFragment{
 			.setType(AhMessage.TYPE.ENTER_SQUARE)
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp().build();
-			Log(_thisFragment, enterTalk);
 			messageDBHelper.addMessage(enterTalk);
 		}
 		final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);

@@ -33,6 +33,7 @@ import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
+import com.pinthecloud.athere.util.FileUtil;
 
 /*
  * 
@@ -218,6 +219,8 @@ public class AhApplication extends Application{
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
+		FileUtil.clearAllFiles(app);
+		blobStorageHelper.clearCache();
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);

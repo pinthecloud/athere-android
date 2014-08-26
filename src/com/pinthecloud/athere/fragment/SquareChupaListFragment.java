@@ -120,12 +120,11 @@ public class SquareChupaListFragment extends AhFragment{
 		});
 	}
 
-
 	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){
 			Map<String, String> map = new HashMap<String, String>();
-
+			
 			String profilePic = "";
 			String userNickName = "";
 			String userId = "";
@@ -134,7 +133,7 @@ public class SquareChupaListFragment extends AhFragment{
 			String chupaCommunId = "";
 			String isExit = "false";
 			String chupaBadge = "";
-
+			
 			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -147,7 +146,6 @@ public class SquareChupaListFragment extends AhFragment{
 				throw new AhException("No User in Sender or Receive");
 			}
 			AhUser user = userDBHelper.getUser(userId);
-			
 			// if there is No such User
 			if (user == null) {
 				// check whether it is exited.
@@ -172,7 +170,7 @@ public class SquareChupaListFragment extends AhFragment{
 			map.put("chupaCommunId", chupaCommunId);
 			map.put("isExit", isExit);
 			map.put("chupaBadge", chupaBadge);
-
+			
 			list.add(map);
 		}
 		return list;

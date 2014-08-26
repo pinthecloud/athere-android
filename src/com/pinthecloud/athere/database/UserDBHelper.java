@@ -159,15 +159,15 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public AhUser getUser(String id, boolean includingExits){
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String query = ID + "=?";
+		String _query = ID + "=?";
 		String[] args = new String[] { id };
 
 		if (!includingExits) {
-			query = ID + "=? and " + HAS_BEEN_OUT + "=?";
+			_query = ID + "=? and " + HAS_BEEN_OUT + "=?";
 			args = new String[] { id, "0" };
 		}
 
-		Cursor cursor = db.query(TABLE_NAME, null, query,
+		Cursor cursor = db.query(TABLE_NAME, null, _query,
 				args, null, null, null, null);
 		if (cursor != null) {
 			if(cursor.moveToFirst()){

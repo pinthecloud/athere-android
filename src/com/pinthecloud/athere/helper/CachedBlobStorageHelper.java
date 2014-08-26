@@ -125,16 +125,19 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 			} else {
-				Bitmap mPlaceHolderBitmap = null;
-				Drawable drawable = imageView.getDrawable();
-				if(drawable != null){
-					mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();
+				synchronized (frag) {
+					Bitmap mPlaceHolderBitmap = null;
+	//				Drawable drawable = imageView.getDrawable();
+	//				Drawable drawable = frag.getResources().getDrawable(com.pinthecloud.athere.R.drawable.launcher);
+	//				if(drawable != null){
+	//					mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();
+	//				}
+	
+					BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
+					AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
+					imageView.setImageDrawable(asyncDrawable);
+					task.execute(id);
 				}
-
-				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
-				AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
-				imageView.setImageDrawable(asyncDrawable);
-				task.execute(id);
 			}
 		}
 	}
@@ -233,5 +236,9 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 
 	private Bitmap getBitmapFromMemCache(String key) {
 		return mMemoryCache.get(key);
+	}
+	
+	public void clearCache() {
+		mMemoryCache.evictAll();
 	}
 }
