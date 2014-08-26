@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -89,15 +90,15 @@ public class FileUtil {
 	/*
 	 * look in internal storage
 	 */
-	//	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
-	//		try {
-	//			File filePath = context.getFileStreamPath(filename);
-	//			FileInputStream fi = new FileInputStream(filePath);
-	//			return BitmapFactory.decodeStream(fi);
-	//		} catch (FileNotFoundException e) {
-	//			throw new AhException("FileNotFoundException");
-	//		}
-	//	}
+	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
+		try {
+			File filePath = context.getFileStreamPath(filename);
+			FileInputStream fi = new FileInputStream(filePath);
+			return BitmapFactory.decodeStream(fi);
+		} catch (FileNotFoundException e) {
+			throw new AhException("FileNotFoundException");
+		}
+	}
 
 
 	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {

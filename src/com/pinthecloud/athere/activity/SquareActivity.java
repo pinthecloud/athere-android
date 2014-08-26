@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -126,9 +125,9 @@ public class SquareActivity extends AhActivity{
 
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		
+
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
-			
+
 			@Override
 			public void onCompleted(AhMessage message) {
 				// TODO Auto-generated method stub
@@ -144,7 +143,7 @@ public class SquareActivity extends AhActivity{
 				messageHelper.triggerMessageEvent(mSquareTabFragment, message);
 			}
 		});
-		
+
 	}
 
 

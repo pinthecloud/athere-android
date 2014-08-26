@@ -107,8 +107,7 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set message list view
 		 */
-		messageListAdapter = new SquareChatListAdapter
-				(context, this, R.layout.row_square_chat_list_send, messageList);
+		messageListAdapter = new SquareChatListAdapter(context, this, messageList);
 		messageListView.setAdapter(messageListAdapter);
 		messageListView.setOnScrollListener(new OnScrollListener() {
 			public void onScroll(AbsListView view, int firstVisibleItem,

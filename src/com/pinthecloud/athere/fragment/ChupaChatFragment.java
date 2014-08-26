@@ -98,8 +98,7 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set message listview
 		 */
-		messageListAdapter = new ChupaChatListAdapter
-				(context, this, R.layout.row_square_chat_list_send, messageList);
+		messageListAdapter = new ChupaChatListAdapter(context, this, messageList);
 		messageListView.setAdapter(messageListAdapter);
 
 

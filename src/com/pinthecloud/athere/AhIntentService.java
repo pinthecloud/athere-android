@@ -38,13 +38,14 @@ import com.pinthecloud.athere.util.FileUtil;
 
 public class AhIntentService extends IntentService {
 
+	private Context _this;
 	private AhApplication app;
+	private PreferenceHelper pref;
+
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
-	private PreferenceHelper pref;
-	private Context _this;
 
 	private AhMessage message = null;
 	private String userId = null; 
@@ -57,13 +58,14 @@ public class AhIntentService extends IntentService {
 
 	public AhIntentService(String name) {
 		super(name);
+		_this = this;
 		app = AhApplication.getInstance();
+		pref = app.getPref();
+
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 		userHelper = app.getUserHelper();
-		pref = app.getPref();
-		_this = this;
 	}
 
 
@@ -281,8 +283,7 @@ public class AhIntentService extends IntentService {
 			Log.e("ERROR","no sentUser error");
 			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
 		} else {
-			//			bitmap = BitmapUtil.convertToBitmap(sentUser.getProfilePic(), 0, 0);
-			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getProfilePic(), 0, 0);
+			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getId());
 		}
 
 
