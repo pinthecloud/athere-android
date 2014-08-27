@@ -48,7 +48,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public MessageDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		badgeDBHelper = new BadgeDBHelper(context);
-		Log.e("ERROR", "MessageDBHelper()");
 	}
 
 	// Creating Tables
@@ -98,6 +97,8 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		db = this.getWritableDatabase();
 	}
 	public void close() {
+		Log.e("ERROR","db close()");
+		if (true) throw new AhException("db close");
 		db.close();
 	}
 
