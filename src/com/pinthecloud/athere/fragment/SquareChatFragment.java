@@ -14,12 +14,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -32,6 +37,8 @@ public class SquareChatFragment extends AhFragment{
 
 	private List<AhMessage> talks;
 	private AhMessage talk;
+	
+	Tracker t;
 	
 	public SquareChatFragment() {
 		super();
@@ -46,6 +53,19 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/* 
+		 * for google analytics
+		 */
+		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+
+        if (t==null){
+            t = ((AhApplication) getActivity().getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
+
+            t.setScreenName("SquareChatFragment");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
 	}
 
 
@@ -165,8 +185,17 @@ public class SquareChatFragment extends AhFragment{
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
 		refreshView(true);
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
 	}
 	
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
+	}
 
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
@@ -193,8 +222,17 @@ public class SquareChatFragment extends AhFragment{
 			public void onCompleted(AhMessage entity) {
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
+				
+//				Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
+//				t.send(new HitBuilders.EventBuilder()
+//				.setCategory("SquareChatFragment")
+//				.setAction("SendChat")
+//				.setLabel("SendChat")
+//				.build());
+				
 				messageDBHelper.updateMessages(message);
 				refreshView(false);
+				
 			}
 		});
 	}

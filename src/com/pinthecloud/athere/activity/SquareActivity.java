@@ -14,9 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+//import com.google.android.gms.analytics.GoogleAnalytics;
+//import com.google.android.gms.analytics.HitBuilders;
+//import com.google.android.gms.analytics.Tracker;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
@@ -47,7 +47,7 @@ public class SquareActivity extends AhActivity{
 	private MessageHelper messageHelper;
 	private UserHelper userHelper;
 
-	Tracker t;
+//	Tracker t;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +57,15 @@ public class SquareActivity extends AhActivity{
 		/* 
 		 * for google analytics
 		 */
-        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
-
-        if (t==null){
-            t = ((AhApplication) getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
-            t.setScreenName("SquareActivity");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
+//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
+//
+//        if (t==null){
+//            t = ((AhApplication) getApplication()).getTracker(
+//                    AhApplication.TrackerName.APP_TRACKER);
+//
+//            t.setScreenName("SquareActivity");
+//            t.send(new HitBuilders.AppViewBuilder().build());
+//        }
         
 		/*
 		 * Set Helper and get square
@@ -208,12 +208,12 @@ public class SquareActivity extends AhActivity{
 	@Override
 	protected void onStart() {
 		super.onStart();
-		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 }

@@ -34,6 +34,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -52,6 +53,9 @@ import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
 import com.pinthecloud.athere.view.CameraPreview;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
 
 public class SquareProfileFragment extends AhFragment{
 
@@ -78,6 +82,8 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
 
+	Tracker t;
+	
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
 		@Override
@@ -146,6 +152,19 @@ public class SquareProfileFragment extends AhFragment{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		/* 
+		 * for google analytics
+		 */
+		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+
+        if (t==null){
+            t = ((AhApplication) getActivity().getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
+
+            t.setScreenName("SquareProfileFragment");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
+		
 		// Get parameter from previous activity intent
 		intent = activity.getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
@@ -350,6 +369,8 @@ public class SquareProfileFragment extends AhFragment{
 		}else{
 			blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profilePictureView);
 		}
+		
+		GoogleAnalytics.getInstance(getActivity().getApplicationContext()).reportActivityStart(getActivity());
 	}
 
 
@@ -359,6 +380,8 @@ public class SquareProfileFragment extends AhFragment{
 		profilePictureView.setImageBitmap(null);
 		releaseCameraAndRemoveView();
 		super.onStop();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplicationContext()).reportActivityStop(getActivity());
 	}
 
 

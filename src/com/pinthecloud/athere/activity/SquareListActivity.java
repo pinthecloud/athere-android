@@ -4,18 +4,17 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareListFragment;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+//import com.google.android.gms.analytics.GoogleAnalytics;
+//import com.google.android.gms.analytics.HitBuilders;
+//import com.google.android.gms.analytics.Tracker;
 
 
 public class SquareListActivity extends AhActivity {
 
-	Tracker t;
+//	Tracker t;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +24,15 @@ public class SquareListActivity extends AhActivity {
 		/* 
 		 * for google analytics
 		 */
-        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
-
-        if (t==null){
-            t = ((AhApplication) getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
-            t.setScreenName("SquareListActivity");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
+//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
+//
+//        if (t==null){
+//            t = ((AhApplication) getApplication()).getTracker(
+//                    AhApplication.TrackerName.APP_TRACKER);
+//
+//            t.setScreenName("SquareListActivity");
+//            t.send(new HitBuilders.AppViewBuilder().build());
+//        }
 
 		/*
 		 * Set Fragment to container
@@ -51,7 +50,7 @@ public class SquareListActivity extends AhActivity {
 		// TODO Auto-generated method stub
 		super.onStart();
 		
-		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 	}
 	
 	@Override
@@ -59,7 +58,7 @@ public class SquareListActivity extends AhActivity {
 		// TODO Auto-generated method stub
 		super.onStop();
 		
-		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 
 	//	@Override

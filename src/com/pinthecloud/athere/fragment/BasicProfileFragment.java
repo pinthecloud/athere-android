@@ -18,13 +18,19 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhIdUser;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
 
 public class BasicProfileFragment extends AhFragment{
 
@@ -38,12 +44,26 @@ public class BasicProfileFragment extends AhFragment{
 	private boolean isTypedNickName = false;
 	private boolean isPickedBirthYear = false;
 
+	Tracker t;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);
 
+		/* 
+		 * for google analytics
+		 */
+		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+
+        if (t==null){
+            t = ((AhApplication) getActivity().getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
+
+            t.setScreenName("BasicProfileFragment");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
+		
 		/*
 		 * Find UI component
 		 */
@@ -188,6 +208,26 @@ public class BasicProfileFragment extends AhFragment{
 							Intent intent = new Intent(context, SquareListActivity.class);
 							startActivity(intent);
 							activity.finish();
+						
+							/*
+							 * check the sex 
+							 */
+							if(maleButton.isChecked() == true){
+								Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
+								t.send(new HitBuilders.EventBuilder()
+								.setCategory("BasicProfileFragment")
+								.setAction("CheckSex")
+								.setLabel("Male")
+								.build());
+							}
+							else{
+								Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
+								t.send(new HitBuilders.EventBuilder()
+								.setCategory("BasicProfileFragment")
+								.setAction("CheckSex")
+								.setLabel("Female")
+								.build());
+							}
 						}
 					});
 				}
@@ -196,7 +236,6 @@ public class BasicProfileFragment extends AhFragment{
 		completeButton.setEnabled(false);
 		return view;
 	}
-
 
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
