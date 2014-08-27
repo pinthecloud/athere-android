@@ -1,9 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -16,11 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
-import com.pinthecloud.athere.activity.HongkunTestAcitivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
@@ -32,10 +32,6 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.analytics.HitBuilders;
 
 
 public class SplashFragment extends AhFragment {
@@ -145,35 +141,35 @@ public class SplashFragment extends AhFragment {
 	}
 
 
-	private boolean isHongkunTest() {
-		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
-		String httpAgent = System.getProperty("http.agent");
-		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-				|| myGal3.equals(httpAgent))))	// Galaxy 3
-			return false;
-		
-		new AlertDialog.Builder(context)
-		.setTitle("Routing Dialog")
-		.setMessage("Want to Go to HongkunTest?")
-		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) { 
-				startActivity(new Intent(activity, HongkunTestAcitivity.class)); 
-				activity.finish();
-				return;
-			}
-		})
-		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				runChupa();
-				return;
-			}
-		})
-		.setIcon(android.R.drawable.ic_dialog_alert)
-		.show();
-		return true;
-	}
+//	private boolean isHongkunTest() {
+//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
+//		String httpAgent = System.getProperty("http.agent");
+//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
+//				|| myGal3.equals(httpAgent))))	// Galaxy 3
+//			return false;
+//		
+//		new AlertDialog.Builder(context)
+//		.setTitle("Routing Dialog")
+//		.setMessage("Want to Go to HongkunTest?")
+//		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int which) { 
+//				startActivity(new Intent(activity, HongkunTestAcitivity.class)); 
+//				activity.finish();
+//				return;
+//			}
+//		})
+//		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+//			public void onClick(DialogInterface dialog, int which) {
+//				runChupa();
+//				return;
+//			}
+//		})
+//		.setIcon(android.R.drawable.ic_dialog_alert)
+//		.show();
+//		return true;
+//	}
 
 
 	private void runChupa() {
