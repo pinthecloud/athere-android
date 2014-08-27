@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.model.AhMessage;
@@ -27,6 +28,8 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 	// Messages table name
 	private static final String TABLE_NAME = "messages";
+	
+	private SQLiteDatabase db;
 
 	// Messages Table Columns names
 	private final String ID = "id";
@@ -45,6 +48,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public MessageDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		badgeDBHelper = new BadgeDBHelper(context);
+		Log.e("ERROR", "MessageDBHelper()");
 	}
 
 	// Creating Tables
@@ -89,6 +93,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 	}
+	
+	public void open() {
+		db = this.getWritableDatabase();
+	}
+	public void close() {
+		db.close();
+	}
 
 	/**
 	 * All CRUD(Create, Read, Update, Delete) Operations
@@ -96,7 +107,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 	// Adding new contact
 	public int addMessage(AhMessage message) {
-		SQLiteDatabase db = this.getWritableDatabase();
+//		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		putValueWithoutNull(values, TYPE, message.getType());
@@ -112,7 +123,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Inserting Row
 		if (db == null) throw new AhException("db null in addMessage");
 		long id = db.insert(TABLE_NAME, null, values);
-		db.close(); // Closing database connection
+//		db.close(); // Closing database connection
 		return (int)id;
 	}
 
@@ -125,7 +136,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 	// Getting All Messages
 	public void updateMessages(AhMessage message) {
-		SQLiteDatabase db = this.getWritableDatabase();
+//		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		putValueWithoutNull(values, TYPE, message.getType());
@@ -140,13 +151,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 		// Inserting Row
 		db.update(TABLE_NAME, values, ID + " = ?", new String[]{ message.getId() });
-		db.close(); // Closing database connection
+//		db.close(); // Closing database connection
 	}
 
 
 	// Getting single contact
 	public AhMessage getMessage(int id) {
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor cursor = db.query(TABLE_NAME, null, ID + " = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
@@ -154,7 +165,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			cursor.moveToFirst();
 
 		AhMessage message = convertToMessage(cursor);
-		db.close();
+//		db.close();
 		return message;
 	}
 
@@ -192,7 +203,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + TIME_STAMP;
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
 		// looping through all rows and adding to list
@@ -201,7 +212,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				messages.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		db.close();
+//		db.close();
 		// return contact list
 		return messages;
 	}
@@ -214,7 +225,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + TYPE + " = ?" +
 				" ORDER BY " + TIME_STAMP;
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
 
 		// looping through all rows and adding to list
@@ -223,7 +234,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				messages.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		db.close();
+//		db.close();
 		// return contact list
 		return messages;
 	}
@@ -302,7 +313,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + whereStr.toString() + 
 				" ORDER BY " + TIME_STAMP;
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
@@ -312,7 +323,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				messages.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		db.close();
+//		db.close();
 		// return contact list
 		return messages;
 	}
@@ -322,7 +333,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + TYPE + " = ?" + 
 				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type.toString() });
 
 		// looping through all rows and adding to list
@@ -330,7 +341,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			message = convertToMessage(cursor);
 		}
-		db.close();
+//		db.close();
 		// return contact list
 		return message;
 	}
@@ -350,7 +361,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + whereStr.toString() + 
 				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 		
@@ -359,7 +370,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 			message = convertToMessage(cursor);
 		}
-		db.close();
+//		db.close();
 		// return contact list
 		return message;
 	}
@@ -380,7 +391,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + whereStr.toString() + 
 				" ORDER BY " + TIME_STAMP;
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
@@ -390,7 +401,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				messages.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		db.close();
+//		db.close();
 		// return contact list
 		return messages;
 	}
@@ -402,24 +413,24 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public boolean isEmpty() {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME;
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
 		cursor.moveToFirst();
 		int count = cursor.getInt(0);
-		db.close();
+//		db.close();
 		return count == 0;
 	}
 
 	public boolean isEmpty(String type) {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + TYPE + " = ?";
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
 
 		cursor.moveToFirst();
 		int count = cursor.getInt(0);
-		db.close();
+//		db.close();
 		return count == 0;
 	}
 
@@ -437,12 +448,12 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + whereStr.toString();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
 		cursor.moveToFirst();
 		int count = cursor.getInt(0);
-		db.close();
+//		db.close();
 		return count == 0;
 	}
 
@@ -459,12 +470,12 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + whereStr.toString();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
 		cursor.moveToFirst();
 		int count = cursor.getInt(0);
-		db.close();
+//		db.close();
 		return count == 0;
 	}
 
@@ -564,22 +575,22 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 	// Deleting single contact
 	public void deleteMessage(String messageId) {
-		SQLiteDatabase db = this.getWritableDatabase();
+//		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_NAME, ID + " = ?",
 				new String[] { String.valueOf(messageId) });
-		db.close();
+//		db.close();
 	}
 
 	public void deleteAllMessages() {
-		SQLiteDatabase db = this.getWritableDatabase();
+//		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_NAME, null ,null);
-		db.close();
+//		db.close();
 	}
 
 	public void deleteAllMessages(String strType) {
-		SQLiteDatabase db = this.getWritableDatabase();
+//		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_NAME, TYPE + " = ?", new String[]{ strType });
-		db.close();
+//		db.close();
 	}
 
 	public void deleteAllMessages(AhMessage.TYPE type) {
@@ -595,7 +606,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" GROUP BY " + CHUPA_COMMUN_ID + ") t2 on t1.id = t2.id" +
 				" WHERE " + TYPE + " = ?" +
 				" ORDER BY " + TIME_STAMP + " DESC";
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString()});
 
 		// looping through all rows and adding to list
@@ -604,7 +615,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				list.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		db.close();
+//		db.close();
 		return list;
 	}
 
@@ -616,7 +627,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + TYPE + "=? AND " + CHUPA_COMMUN_ID + " = ?" +
 				" ORDER BY " + TIME_STAMP;
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString() 
 				,chupaCommunId});
 
@@ -626,7 +637,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				list.add(convertToMessage(cursor));
 			} while (cursor.moveToNext());
 		}
-		db.close();
+//		db.close();
 		return list;
 	}
 	
@@ -637,7 +648,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + TYPE + "=? AND " + CHUPA_COMMUN_ID + " = ?" +
 				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
 
-		SQLiteDatabase db = this.getReadableDatabase();
+//		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString() 
 				,chupaCommunId});
 
@@ -646,7 +657,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		if (cursor.moveToFirst()) {
 				message = (convertToMessage(cursor));
 		}
-		db.close();
+//		db.close();
 		return message;
 	}
 

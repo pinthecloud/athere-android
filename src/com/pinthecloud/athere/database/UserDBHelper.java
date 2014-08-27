@@ -207,14 +207,16 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_NAME, new String[]{ HAS_BEEN_OUT }, ID + "=?",
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) {
-			cursor.moveToFirst();
-			if (cursor.getInt(0) == 1){
-				db.close();
-				return true;
-			} else {
-				db.close();
-				return false;
+			if (cursor.moveToFirst()) {
+				if (cursor.getInt(0) == 1){
+					db.close();
+					return true;
+				} else {
+					db.close();
+					return false;
+				}
 			}
+			return isExit;
 		}
 		db.close();
 		return isExit;

@@ -1,7 +1,6 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Application;
 import android.content.Context;
@@ -147,7 +146,7 @@ public class AhApplication extends Application{
 		return currentChupaUser;
 	}
 	public void setCurrentChupaUser(AhUser user) {
-		this.currentChupaUser = user;
+		currentChupaUser = user;
 	}
 
 
@@ -226,8 +225,10 @@ public class AhApplication extends Application{
 		}
 		app.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
 		userDBHelper.deleteAllUsers();
+		messageDBHelper.open();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
+		messageDBHelper.close();
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearCache();
 

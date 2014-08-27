@@ -70,6 +70,7 @@ public class AhIntentService extends IntentService {
 
 
 	public void onHandleIntent(Intent intent) {
+		messageDBHelper.open();
 		/*
 		 * Parsing the data from server
 		 */
@@ -110,6 +111,7 @@ public class AhIntentService extends IntentService {
 				} else if (AhMessage.TYPE.ADMIN_MESSAGE.equals(type)) {
 					ADMIN_MESSAGE();
 				}
+				messageDBHelper.close();
 			}
 		}).start();
 	}

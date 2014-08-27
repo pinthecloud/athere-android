@@ -161,7 +161,7 @@ public class SquareChatFragment extends AhFragment{
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
 		refreshView(true);
 	}
-
+	
 
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
@@ -203,7 +203,6 @@ public class SquareChatFragment extends AhFragment{
 	 */
 	private void refreshView(final boolean refreshAll){
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment refreshView");
-		Log(_thisFragment, "refreshAll : "+refreshAll);
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
@@ -219,7 +218,6 @@ public class SquareChatFragment extends AhFragment{
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp().build();
 			messageDBHelper.addMessage(enterTalk);
-			throw new AhException("in Set Enter Exit Talk if");
 		}
 		
 		if (refreshAll){
