@@ -14,6 +14,7 @@ import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -27,10 +28,10 @@ import com.pinthecloud.athere.model.AhIdUser;
 
 public class BasicProfileFragment extends AhFragment{
 
+	private ProgressBar progressBar;
 	private EditText nickNameEditText;
 	private EditText birthYearEditText;
 	private NumberPickerDialog yearPickerDialog;
-
 	private RadioButton maleButton;
 	private ImageButton completeButton;
 
@@ -46,6 +47,7 @@ public class BasicProfileFragment extends AhFragment{
 		/*
 		 * Find UI component
 		 */
+		progressBar = (ProgressBar) view.findViewById(R.id.basic_profile_frag_progress_bar);
 		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_edit_text);
 		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_year_text);
 		maleButton = (RadioButton) view.findViewById(R.id.basic_profile_frag_male_button);
@@ -156,7 +158,9 @@ public class BasicProfileFragment extends AhFragment{
 					toast.show();
 				} else{
 					// Proper nick name
+					// Show progress bar
 					// Disable complete button for preventing double click
+					progressBar.setVisibility(View.VISIBLE);
 					completeButton.setEnabled(false);
 
 
@@ -170,6 +174,8 @@ public class BasicProfileFragment extends AhFragment{
 
 						@Override
 						public void onCompleted(AhIdUser entity) {
+							progressBar.setVisibility(View.GONE);
+
 							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
 							Calendar c = Calendar.getInstance();
 							int age = c.get(Calendar.YEAR) - (birthYear - 1);
