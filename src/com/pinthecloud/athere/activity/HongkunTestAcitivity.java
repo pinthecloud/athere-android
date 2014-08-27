@@ -69,14 +69,6 @@ public class HongkunTestAcitivity extends AhActivity {
 			Log(this,"HERE : ",ex);
 		}
 		
-		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
-			
-			@Override
-			public void onCompleted(AhMessage message) {
-				// TODO Auto-generated method stub
-				messageHelper.triggerMessageEvent(hongFrag, message);
-			}
-		});
 	}
 	/*
 	public void addItem(View view) {

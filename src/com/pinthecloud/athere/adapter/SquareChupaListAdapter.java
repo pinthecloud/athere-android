@@ -3,6 +3,7 @@ package com.pinthecloud.athere.adapter;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,9 +62,10 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			String userId = lastChupaMap.get("userId");
 			//			String picStr = lastChupaMap.get("profilePic");
 			String chupaBadge = lastChupaMap.get("chupaBadge");
-
 			if (isExit.equals("true")) {
 				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
+			} else {
+				sender.setTextColor(context.getResources().getColor(R.color.black));
 			}
 			sender.setText(userNickName);
 			blobStorageHelper.setImageViewAsync(fragment, userId, profileImage);

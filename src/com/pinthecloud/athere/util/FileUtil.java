@@ -66,6 +66,28 @@ public class FileUtil {
 		Log.e("ERROR", "mediaFile : "+mediaFile);
 		return mediaFile;
 	}
+	
+	public static void clearAllFiles(Context context) {
+		
+		File dir = context.getFilesDir();
+		boolean result = false;
+		if (dir.isDirectory()) {
+			File[] files = dir.listFiles();
+			for (File file : files) {
+				if (file.isFile()) {
+					result = file.delete();
+					if (!result) {
+						throw new AhException("File remove Error");
+					}
+				} else {
+					throw new AhException("File remove Error");
+				}
+			}
+		} else {
+			throw new AhException("File remove Error");
+		}
+		
+	}
 
 
 	public static String saveImageToInternalStorage(Context context, Bitmap image, String name) {
@@ -102,6 +124,10 @@ public class FileUtil {
 
 
 	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
+		
+		if (context == null) {
+			throw new AhException("context==null Exception");
+		}
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 

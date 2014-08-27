@@ -49,6 +49,10 @@ public class ChupaChatFragment extends AhFragment {
 
 	private ListView messageListView;
 	private ChupaChatListAdapter messageListAdapter;
+	
+	private List<AhMessage> chupas;
+	private AhMessage chupa;
+//	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
 
 
 	@Override
@@ -61,6 +65,7 @@ public class ChupaChatFragment extends AhFragment {
 		if (otherUser == null) {
 			throw new AhException("No User Error");
 		}
+		app.setCurrentChupaUser(otherUser);
 	}
 
 
@@ -223,7 +228,7 @@ public class ChupaChatFragment extends AhFragment {
 					return;
 				}
 
-				refreshView(message.getChupaCommunId());
+				refreshView(message.getChupaCommunId(), false);
 			}
 		});
 
@@ -234,9 +239,10 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-		refreshView(chupaCommunId);
+		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
+		refreshView(chupaCommunId, true);
+		
 	}
 
 
@@ -249,13 +255,11 @@ public class ChupaChatFragment extends AhFragment {
 
 	public void sendChupa(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
-		messageListAdapter.add(message);
-		messageListAdapter.notifyDataSetChanged();
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
 
 		int id = messageDBHelper.addMessage(message);
-		message.setId("" + id);
+		message.setId(String.valueOf(id));
 
 		// Send message to server
 		messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
@@ -265,7 +269,7 @@ public class ChupaChatFragment extends AhFragment {
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
-				refreshView(message.getChupaCommunId());
+				refreshView(message.getChupaCommunId(), false);
 			}
 		});
 	}
@@ -274,24 +278,36 @@ public class ChupaChatFragment extends AhFragment {
 	/*
 	 * Set sent and received chupas to list view
 	 */
-	private void refreshView(String chupaCommunId) {
+	private void refreshView(String chupaCommunId, final boolean refreshAll) {
+		if (chupaCommunId == null || chupaCommunId.equals(""))
+			throw new AhException("No chupaCommunId");
 		/*
 		 * Clear badge numbers displayed on chupa list
 		 */
 		messageDBHelper.clearBadgeNum(chupaCommunId);
 
-
+		if (chupaCommunId == null || chupaCommunId.equals("")) throw new AhException("No chupaCommunId");
 		/*
 		 * Get every chupa by chupaCommunId
 		 */
-		if (chupaCommunId == null || chupaCommunId.equals("")) throw new AhException("No chupaCommunId");
-		final List<AhMessage> chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
+		if (refreshAll) {
+			chupas = messageDBHelper
+					.getChupasByCommunId(chupaCommunId);
+		} else {
+			chupa = messageDBHelper.getLastChupaByCommunId(chupaCommunId);
+		}
+		
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
-				messageListAdapter.clear();
-				messageListAdapter.addAll(chupas);
+				// TODO Auto-generated method stub
+				if (refreshAll) {
+					messageListAdapter.clear();
+					messageListAdapter.addAll(chupas);
+				} else {
+					messageListAdapter.add(chupa);
+				}
 			}
 		});
 
@@ -322,7 +338,6 @@ public class ChupaChatFragment extends AhFragment {
 			});
 		}
 
-
 		/*
 		 * Set message listview
 		 */
@@ -347,7 +362,7 @@ public class ChupaChatFragment extends AhFragment {
 			AhMessage exMessage = (AhMessage)ex.getParameter();
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageDBHelper.updateMessages(exMessage);
-			messageListAdapter.notifyDataSetChanged();
+//			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 			return;
 		}

@@ -100,21 +100,15 @@ public class HongkunTestFragment extends AhFragment {
 					Button b = (Button)v;
 					if (b.getId() == btnArr[0].getId()) {
 						
-						Handler h = new Handler();
-						
-						
-						
-						
-						
+						AhMessage message = AhMessage.buildMessage(AhMessage.TYPE.TALK);
+						Log(_thisFragment, message);
+						messageDBHelper.addMessage(message);
+						message = AhMessage.buildMessage(AhMessage.TYPE.TALK);
+						Log(_thisFragment, message);
+						messageDBHelper.addMessage(message);
 					} else if (b.getId() == btnArr[1].getId()) {
-						new Thread(new Runnable() {
-
-							@Override
-							public void run() {
-								// TODO Auto-generated method stub
-							}
-						}).start();
-
+						AhMessage message = messageDBHelper.getLastMessage(AhMessage.TYPE.TALK);
+						Log(_thisFragment, message);
 					} else if (b.getId() == btnArr[2].getId()) {
 						String filename = "gogo.png";
 						File filePath = context.getFileStreamPath(filename);
@@ -134,21 +128,6 @@ public class HongkunTestFragment extends AhFragment {
 		}
 		
 		
-		messageHelper.setMessageHandler(_thisFragment, new AhEntityCallback<AhMessage>() {
-
-			@Override
-			public void onCompleted(final AhMessage entity) {
-				// TODO Auto-generated method stub
-				activity.runOnUiThread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						adapter.add(entity.getContent());
-					}
-				});
-			}
-		});
 		
 //		messageHelper.setHandler(new DataSetObserver() {
 //			

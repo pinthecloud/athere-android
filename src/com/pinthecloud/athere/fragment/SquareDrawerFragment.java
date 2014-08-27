@@ -33,7 +33,6 @@ import com.pinthecloud.athere.model.AhUser;
 public class SquareDrawerFragment extends AhFragment {
 
 	private ProgressBar progressBar;
-
 	private ToggleButton chatAlarmButton;
 	private ToggleButton chupaAlarmButton;
 	private ImageView profileImage;
@@ -47,8 +46,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
-//	private List<AhUser> userList = new ArrayList<AhUser>();
-
 
 
 	@Override
@@ -293,7 +290,7 @@ public class SquareDrawerFragment extends AhFragment {
 			public void run() {
 				participantListAdapter.clear();
 				participantListAdapter.addAll(userDBHelper.getAllUsers());
-				participantListAdapter.notifyDataSetChanged();
+//				participantListAdapter.notifyDataSetChanged();
 
 				/*
 				 * Set member number text

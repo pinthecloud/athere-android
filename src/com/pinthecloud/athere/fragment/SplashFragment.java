@@ -130,8 +130,10 @@ public class SplashFragment extends AhFragment {
 		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
 				|| myGal3.equals(httpAgent))))	// Galaxy 3
 			return false;
-
-
+		
+//		if (true)
+//		return false;
+		
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
 		.setMessage("Want to Go to HongkunTest?")

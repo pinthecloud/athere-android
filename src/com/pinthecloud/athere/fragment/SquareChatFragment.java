@@ -30,11 +30,12 @@ public class SquareChatFragment extends AhFragment{
 	private SquareChatListAdapter messageListAdapter;
 	private String squareId;
 
+	private List<AhMessage> talks;
+	private AhMessage talk;
 	
 	public SquareChatFragment() {
 		super();
 	}
-
 
 	public SquareChatFragment(String squareId) {
 		super();
@@ -151,10 +152,10 @@ public class SquareChatFragment extends AhFragment{
 						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
 					return;
 				}
-				refreshView();
+				refreshView(false);
 			}
 		});
-
+//		refreshView(true);
 		return view;
 	}
 
@@ -163,30 +164,24 @@ public class SquareChatFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
-		refreshView();
+		refreshView(true);
 	}
-
+	
 
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
-
-		messageListAdapter.add(message);
-		messageListAdapter.notifyDataSetChanged();
-		messageListView.setSelection(messageListView.getCount() - 1);
-		messageEditText.setText("");
-
-
-		//		activity.runOnUiThread(new Runnable() {
-		//			
-		//			@Override
-		//			public void run() {
-		//				messageListAdapter.add(message);
-		//				messageListAdapter.notifyDataSetChanged();
-		//				messageListView.setSelection(messageListView.getCount() - 1);
-		//				messageEditText.setText("");
-		//			}
-		//		});
-
+		
+		activity.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+//				messageListAdapter.add(message);
+//				messageListAdapter.notifyDataSetChanged();
+				messageListView.setSelection(messageListView.getCount() - 1);
+				messageEditText.setText("");
+			}
+		});
 
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
@@ -199,7 +194,7 @@ public class SquareChatFragment extends AhFragment{
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
-				refreshView();
+				refreshView(false);
 			}
 		});
 	}
@@ -210,9 +205,8 @@ public class SquareChatFragment extends AhFragment{
 	 * notify this Method When this Fragment is on Resume
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
-	private void refreshView(){
+	private void refreshView(final boolean refreshAll){
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment refreshView");
-
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
@@ -229,9 +223,13 @@ public class SquareChatFragment extends AhFragment{
 			.setTimeStamp().build();
 			messageDBHelper.addMessage(enterTalk);
 		}
-		final List<AhMessage> talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-
-
+		
+		if (refreshAll){
+			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+		} else {
+			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+		}
+		
 		/*
 		 * Set message list view
 		 */
@@ -239,8 +237,14 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void run() {
-				messageListAdapter.clear();
-				messageListAdapter.addAll(talks);
+				if (refreshAll) {
+					messageListAdapter.clear();
+					messageListAdapter.addAll(talks);
+				} else {
+					messageListAdapter.add(talk);
+				}
+				
+//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});
@@ -253,8 +257,16 @@ public class SquareChatFragment extends AhFragment{
 			AhMessage exMessage = (AhMessage)ex.getParameter();
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageDBHelper.updateMessages(exMessage);
-			messageListAdapter.notifyDataSetChanged();
-			messageListView.setSelection(messageListView.getCount() - 1);
+			activity.runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					messageListAdapter.notifyDataSetChanged();
+					messageListView.setSelection(messageListView.getCount() - 1);
+				}
+			});
+			
 			return;
 		}
 		super.handleException(ex);

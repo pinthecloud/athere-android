@@ -39,6 +39,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	private final String AGE = "age";
 	private final String SQUARE_ID = "square_id";
 	private final String IS_CHUPA_ENABLE = "is_chupa_enable";
+	private final String AH_ID_USER_KEY = "ah_id_user_key";
 
 	private final String HAS_BEEN_OUT = "has_been_out";
 
@@ -65,7 +66,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				+ AGE + " INTEGER,"
 				+ SQUARE_ID + " TEXT,"
 				+ IS_CHUPA_ENABLE + " INTEGER,"
-				+ HAS_BEEN_OUT + " INTEGER"
+				+ HAS_BEEN_OUT + " INTEGER, "
+				+ AH_ID_USER_KEY + " TEXT"
 				+")";
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
@@ -120,6 +122,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		values.put(SQUARE_ID, user.getSquareId());
 		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
 		values.put(HAS_BEEN_OUT, false);
+		values.put(AH_ID_USER_KEY, user.getAhIdUserKey());
 
 		// Inserting Row
 		db.insert(TABLE_NAME, null, values);
@@ -144,7 +147,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 			values.put(SQUARE_ID, user.getSquareId());
 			values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
 			values.put(HAS_BEEN_OUT, false);
-
+			values.put(AH_ID_USER_KEY, user.getAhIdUserKey());
+			
 			// Inserting Row
 			db.insert(TABLE_NAME, null, values);
 		}
@@ -159,15 +163,15 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public AhUser getUser(String id, boolean includingExits){
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String query = ID + "=?";
+		String _query = ID + "=?";
 		String[] args = new String[] { id };
 
 		if (!includingExits) {
-			query = ID + "=? and " + HAS_BEEN_OUT + "=?";
+			_query = ID + "=? and " + HAS_BEEN_OUT + "=?";
 			args = new String[] { id, "0" };
 		}
 
-		Cursor cursor = db.query(TABLE_NAME, null, query,
+		Cursor cursor = db.query(TABLE_NAME, null, _query,
 				args, null, null, null, null);
 		if (cursor != null) {
 			if(cursor.moveToFirst()){
@@ -203,14 +207,16 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_NAME, new String[]{ HAS_BEEN_OUT }, ID + "=?",
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) {
-			cursor.moveToFirst();
-			if (cursor.getInt(0) == 1){
-				db.close();
-				return true;
-			} else {
-				db.close();
-				return false;
+			if (cursor.moveToFirst()) {
+				if (cursor.getInt(0) == 1){
+					db.close();
+					return true;
+				} else {
+					db.close();
+					return false;
+				}
 			}
+			return isExit;
 		}
 		db.close();
 		return isExit;
@@ -237,6 +243,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		int age = cursor.getInt(7);
 		String squareId = cursor.getString(8);
 		boolean chupaEnable = cursor.getInt(9) == 1;
+		String ahIdUserKey = cursor.getString(10);
 
 		user.setId(_id);
 		user.setNickName(nickName);
@@ -248,6 +255,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		user.setAge(age);
 		user.setSquareId(squareId);
 		user.setChupaEnable(chupaEnable);
+		user.setAhIdUserKey(ahIdUserKey);
 		return user;
 	}
 
@@ -316,6 +324,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		values.put(AGE, user.getAge());
 		values.put(SQUARE_ID, user.getSquareId());
 		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
+		values.put(AH_ID_USER_KEY, user.getAhIdUserKey());
 
 		// Inserting Row
 		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });

@@ -37,6 +37,7 @@ import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
+import com.pinthecloud.athere.util.FileUtil;
 
 
 /*
@@ -74,10 +75,11 @@ public class AhApplication extends Application{
 	// DB
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
+	
+	private static AhUser currentChupaUser;
 
 	// The following line should be changed to include the correct property id.
 	private static final String GA_PROPERTY_ID = "UA-53944359-1";
-
 
 	@Override
 	public void onCreate() {
@@ -106,6 +108,7 @@ public class AhApplication extends Application{
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
+		
 	}
 
 	public static AhApplication getInstance(){
@@ -146,6 +149,12 @@ public class AhApplication extends Application{
 	}
 	public CachedBlobStorageHelper getBlobStorageHelper() {
 		return blobStorageHelper;
+	}
+	public AhUser getCurrentChupaUser() {
+		return currentChupaUser;
+	}
+	public void setCurrentChupaUser(AhUser user) {
+		currentChupaUser = user;
 	}
 
 
@@ -224,8 +233,12 @@ public class AhApplication extends Application{
 		}
 		app.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
 		userDBHelper.deleteAllUsers();
+		messageDBHelper.open();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
+		messageDBHelper.close();
+		FileUtil.clearAllFiles(app);
+		blobStorageHelper.clearCache();
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);

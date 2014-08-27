@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,8 +50,7 @@ public class AhIntentService extends IntentService {
 
 	private AhMessage message = null;
 	private String userId = null; 
-
-
+	
 	public AhIntentService() {
 		this("AhIntentService");
 	}
@@ -70,6 +70,7 @@ public class AhIntentService extends IntentService {
 
 
 	public void onHandleIntent(Intent intent) {
+		messageDBHelper.open();
 		/*
 		 * Parsing the data from server
 		 */
@@ -110,6 +111,7 @@ public class AhIntentService extends IntentService {
 				} else if (AhMessage.TYPE.ADMIN_MESSAGE.equals(type)) {
 					ADMIN_MESSAGE();
 				}
+				messageDBHelper.close();
 			}
 		}).start();
 	}
@@ -124,7 +126,7 @@ public class AhIntentService extends IntentService {
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
-		}
+		} 
 	}
 
 	private void SHOUTING() {
@@ -140,12 +142,26 @@ public class AhIntentService extends IntentService {
 	private void CHUPA() {
 		messageDBHelper.addMessage(message);
 		messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
+		
+		// Is the Chupa App Running
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
-			messageHelper.triggerMessageEvent(currentActivityName, message);
-			if (!isActivityRunning(app, ChupaChatActivity.class)){
+			AhUser currentChupaUser = app.getCurrentChupaUser();
+			// Is the User in ChupaActivity
+			if (isActivityRunning(app, ChupaChatActivity.class)){
+				// Is the currentUser talking is the same user from the server.
+				if (currentChupaUser != null && currentChupaUser.getId().equals(message.getSenderId())) {
+					messageHelper.triggerMessageEvent(currentActivityName, message);
+				// Or the server from the user is different from the current User talking
+				} else {
+					alertNotification(AhMessage.TYPE.CHUPA);
+				}
+			// Is the User is Not in ChupaActivity
+			} else {
+				messageHelper.triggerMessageEvent(currentActivityName, message);
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
+		// if App Not Running
 		} else {
 			alertNotification(AhMessage.TYPE.CHUPA);
 		}
@@ -177,7 +193,7 @@ public class AhIntentService extends IntentService {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
-		} 
+		}
 	}
 
 	private void UPDATE_USER_INFO() {
@@ -188,7 +204,7 @@ public class AhIntentService extends IntentService {
 				userDBHelper.updateUser(user);
 				if (isRunning(app)) {
 					userHelper.triggerUserEvent(user);
-				}
+				} 
 			}
 		});
 	}
@@ -218,7 +234,7 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void ADMIN_MESSAGE() {
-
+		throw new AhException("NOT IMPLEMENTED YET");
 	}
 
 
