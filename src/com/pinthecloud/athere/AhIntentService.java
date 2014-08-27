@@ -1,7 +1,6 @@
 package com.pinthecloud.athere;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -121,7 +120,8 @@ public class AhIntentService extends IntentService {
 	 * 
 	 */
 	private void TALK() {
-		messageDBHelper.addMessage(message);
+		int id = messageDBHelper.addMessage(message);
+		message.setId(String.valueOf(id));
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
@@ -129,7 +129,8 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void SHOUTING() {
-		messageDBHelper.addMessage(message);
+		int id = messageDBHelper.addMessage(message);
+		message.setId(String.valueOf(id));
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
@@ -139,7 +140,8 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void CHUPA() {
-		messageDBHelper.addMessage(message);
+		int id = messageDBHelper.addMessage(message);
+		message.setId(String.valueOf(id));
 		messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
 		
 		// Is the Chupa App Running
@@ -167,7 +169,8 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void ENTER_SQUARE() {
-		messageDBHelper.addMessage(message);
+		int id = messageDBHelper.addMessage(message);
+		message.setId(String.valueOf(id));
 		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
 
 			@Override
@@ -185,7 +188,8 @@ public class AhIntentService extends IntentService {
 	}
 
 	private void EXIT_SQUARE() {
-		messageDBHelper.addMessage(message);
+		int id = messageDBHelper.addMessage(message);
+		message.setId(String.valueOf(id));
 		userDBHelper.exitUser(userId);
 		AhUser user = userDBHelper.getUser(userId, true);
 		if (isRunning(app)) {
@@ -210,10 +214,6 @@ public class AhIntentService extends IntentService {
 
 	private void MESSAGE_READ() {
 		throw new AhException("NOT IMPLEMENTED YET");
-		//		messageDBHelper.updateMessage(message);
-		//		if (isRunning(app)) {
-		//			messageHelper.triggerMessageEvent(message);
-		//		}
 	}
 
 	private void FORCED_LOGOUT() {

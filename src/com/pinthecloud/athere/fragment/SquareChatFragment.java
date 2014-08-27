@@ -152,7 +152,7 @@ public class SquareChatFragment extends AhFragment{
 						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
 					return;
 				}
-				refreshView(false);
+				refreshView(message.getId());
 			}
 		});
 //		refreshView(true);
@@ -164,7 +164,7 @@ public class SquareChatFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
-		refreshView(true);
+		refreshView(null);
 	}
 	
 
@@ -176,7 +176,7 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-//				messageListAdapter.add(message);
+				messageListAdapter.add(message);
 //				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 				messageEditText.setText("");
@@ -194,7 +194,10 @@ public class SquareChatFragment extends AhFragment{
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
-				refreshView(false);
+//				messageListAdapter.notifyDataSetChanged();
+//				messageListView.setSelection(messageListView.getCount() - 1);
+				messageListAdapter.remove(message);
+				refreshView(message.getId());
 			}
 		});
 	}
@@ -205,7 +208,7 @@ public class SquareChatFragment extends AhFragment{
 	 * notify this Method When this Fragment is on Resume
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
-	private void refreshView(final boolean refreshAll){
+	private void refreshView(final String id){
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment refreshView");
 		/*
 		 * Set ENTER, EXIT, TALK messages
@@ -213,8 +216,9 @@ public class SquareChatFragment extends AhFragment{
 		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 			String enterMessage = getResources().getString(R.string.enter_square_message);
+			String warningMessage = getResources().getString(R.string.behave_well_warning);
 			AhMessage enterTalk = new AhMessage.Builder()
-			.setContent(nickName + " " + enterMessage)
+			.setContent(nickName + " " + enterMessage + "\n" + warningMessage)
 			.setSender(nickName)
 			.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
 			.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
@@ -224,10 +228,12 @@ public class SquareChatFragment extends AhFragment{
 			messageDBHelper.addMessage(enterTalk);
 		}
 		
-		if (refreshAll){
+		if (id == null){
 			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 		} else {
-			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+			int _id = Integer.valueOf(id);
+//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+			talk = messageDBHelper.getMessage(_id);
 		}
 		
 		/*
@@ -237,14 +243,14 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void run() {
-				if (refreshAll) {
+				if (id == null) {
 					messageListAdapter.clear();
 					messageListAdapter.addAll(talks);
 				} else {
 					messageListAdapter.add(talk);
 				}
 				
-//				messageListAdapter.notifyDataSetChanged();
+				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});

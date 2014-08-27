@@ -228,7 +228,7 @@ public class ChupaChatFragment extends AhFragment {
 					return;
 				}
 
-				refreshView(message.getChupaCommunId(), false);
+				refreshView(message.getChupaCommunId(), message.getId());
 			}
 		});
 
@@ -241,7 +241,7 @@ public class ChupaChatFragment extends AhFragment {
 		super.onStart();
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
-		refreshView(chupaCommunId, true);
+		refreshView(chupaCommunId, null);
 		
 	}
 
@@ -255,6 +255,7 @@ public class ChupaChatFragment extends AhFragment {
 
 	public void sendChupa(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
+		messageListAdapter.add(message);
 		messageListView.setSelection(messageListView.getCount() - 1);
 		messageEditText.setText("");
 
@@ -269,7 +270,19 @@ public class ChupaChatFragment extends AhFragment {
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
-				refreshView(message.getChupaCommunId(), false);
+				activity.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+//						messageListAdapter.notifyDataSetChanged();
+//						messageListView.setSelection(messageListView.getCount() - 1);
+						
+						messageListAdapter.remove(message);
+						
+					}
+				});
+				refreshView(message.getChupaCommunId(), message.getId());
 			}
 		});
 	}
@@ -278,7 +291,7 @@ public class ChupaChatFragment extends AhFragment {
 	/*
 	 * Set sent and received chupas to list view
 	 */
-	private void refreshView(String chupaCommunId, final boolean refreshAll) {
+	private void refreshView(String chupaCommunId, final String id) {
 		if (chupaCommunId == null || chupaCommunId.equals(""))
 			throw new AhException("No chupaCommunId");
 		/*
@@ -290,11 +303,12 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Get every chupa by chupaCommunId
 		 */
-		if (refreshAll) {
+		if (id == null) {
 			chupas = messageDBHelper
 					.getChupasByCommunId(chupaCommunId);
 		} else {
-			chupa = messageDBHelper.getLastChupaByCommunId(chupaCommunId);
+			int _id = Integer.valueOf(id);
+			chupa = messageDBHelper.getMessage(_id);
 		}
 		
 		activity.runOnUiThread(new Runnable() {
@@ -302,7 +316,7 @@ public class ChupaChatFragment extends AhFragment {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				if (refreshAll) {
+				if (id == null) {
 					messageListAdapter.clear();
 					messageListAdapter.addAll(chupas);
 				} else {

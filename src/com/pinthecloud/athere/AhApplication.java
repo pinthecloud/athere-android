@@ -236,6 +236,7 @@ public class AhApplication extends Application{
 		messageDBHelper.cleareAllBadgeNum();
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearCache();
+		blobStorageHelper.deleteBitmapAsync(null, pref.getString(AhGlobalVariable.USER_ID_KEY), null);
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
