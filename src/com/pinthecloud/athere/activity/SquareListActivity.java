@@ -11,6 +11,7 @@ import com.pinthecloud.athere.fragment.SquareListFragment;
 //import com.google.android.gms.analytics.HitBuilders;
 //import com.google.android.gms.analytics.Tracker;
 
+import io.fiverocks.android.FiveRocks;
 
 public class SquareListActivity extends AhActivity {
 
@@ -21,6 +22,7 @@ public class SquareListActivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_list);
 
+	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		/* 
 		 * for google analytics
 		 */
@@ -51,6 +53,7 @@ public class SquareListActivity extends AhActivity {
 		super.onStart();
 		
 //		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+		FiveRocks.onActivityStart(this);
 	}
 	
 	@Override
@@ -59,6 +62,8 @@ public class SquareListActivity extends AhActivity {
 		super.onStop();
 		
 //		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+		
+		FiveRocks.onActivityStop(this);
 	}
 
 	//	@Override

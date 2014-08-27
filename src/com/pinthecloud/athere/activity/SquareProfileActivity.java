@@ -11,6 +11,8 @@ import com.pinthecloud.athere.fragment.SquareProfileFragment;
 //import com.google.android.gms.analytics.HitBuilders;
 //import com.google.android.gms.analytics.Tracker;
 
+import io.fiverocks.android.FiveRocks;
+
 public class SquareProfileActivity extends AhActivity {
 
 //	Tracker t;
@@ -20,6 +22,7 @@ public class SquareProfileActivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_profile);
 	
+	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		/* 
 		 * for google analytics
 		 */
@@ -50,6 +53,7 @@ public class SquareProfileActivity extends AhActivity {
 		super.onStart();
 		
 //		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+		FiveRocks.onActivityStart(this);
 	}
 	
 	@Override
@@ -58,5 +62,6 @@ public class SquareProfileActivity extends AhActivity {
 		super.onStop();
 		
 //		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+		FiveRocks.onActivityStop(this);
 	}
 }

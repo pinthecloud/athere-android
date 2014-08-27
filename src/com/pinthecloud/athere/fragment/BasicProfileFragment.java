@@ -27,10 +27,10 @@ import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhIdUser;
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.analytics.HitBuilders;
+
 
 public class BasicProfileFragment extends AhFragment{
 
@@ -47,10 +47,10 @@ public class BasicProfileFragment extends AhFragment{
 	Tracker t;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);
-
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
 		/* 
 		 * for google analytics
 		 */
@@ -63,7 +63,13 @@ public class BasicProfileFragment extends AhFragment{
             t.setScreenName("BasicProfileFragment");
             t.send(new HitBuilders.AppViewBuilder().build());
         }
-		
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);		
+        
 		/*
 		 * Find UI component
 		 */
@@ -239,5 +245,20 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
+	}
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+	}
+	
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
 	}
 }

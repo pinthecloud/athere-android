@@ -8,40 +8,24 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
+import io.fiverocks.android.FiveRocks;
 
 public class ChupaChatActivity extends AhActivity {
 
 	private MessageHelper messageHelper;
-	Tracker t;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chupa_chat);
 
-		/* 
-		 * for google analytics
-		 */
-        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
-
-        if (t==null){
-            t = ((AhApplication) getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
-            t.setScreenName("ChupaChatActivity");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
+	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		
 		/*
 		 * Set helper
@@ -81,14 +65,16 @@ public class ChupaChatActivity extends AhActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+		
+		FiveRocks.onActivityStart(this);
 	}
 
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+		
+		FiveRocks.onActivityStop(this);
 	}
 
 	

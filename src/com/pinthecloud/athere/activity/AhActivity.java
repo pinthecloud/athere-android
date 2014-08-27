@@ -25,7 +25,6 @@ public class AhActivity extends Activity{
 	public static final String FiveRocks_AppKey = "Mx8kZ2BxcZKXZPBz5UV8";
 	
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -34,7 +33,7 @@ public class AhActivity extends Activity{
 	    
 		// Set FiveRocks AppId, AppKey
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
-		FiveRocks.setUserCohortVariable(1, "DemoUser");
+		// FiveRocks.setUserCohortVariable(1, "DemoUser");
 		
 		
 		/*

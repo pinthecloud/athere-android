@@ -37,12 +37,13 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.analytics.HitBuilders;
 
+
 public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
 
 	Tracker t;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,6 +61,7 @@ public class SplashFragment extends AhFragment {
             t.setScreenName("SplashFragment");
             t.send(new HitBuilders.AppViewBuilder().build());
         }
+       
 	}
 
 

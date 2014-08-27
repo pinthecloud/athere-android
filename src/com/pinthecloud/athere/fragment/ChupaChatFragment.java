@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -30,6 +31,10 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
 
 public class ChupaChatFragment extends AhFragment {
 
@@ -53,12 +58,27 @@ public class ChupaChatFragment extends AhFragment {
 	private List<AhMessage> chupas;
 	private AhMessage chupa;
 //	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
+	
+	Tracker t;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		/* 
+		 * for google analytics
+		 */
+		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+
+        if (t==null){
+            t = ((AhApplication) getActivity().getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
+
+            t.setScreenName("ChupaChatFragment");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
+		
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		otherUser = userDBHelper.getUser(userId, true);
@@ -239,6 +259,9 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
 		refreshView(chupaCommunId, null);
@@ -250,6 +273,8 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStop() {
 		otherProfileImage.setImageBitmap(null);
 		super.onStop();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
 	}
 
 

@@ -11,6 +11,9 @@ import com.pinthecloud.athere.fragment.SplashFragment;
 //import com.google.android.gms.analytics.HitBuilders;
 //import com.google.android.gms.analytics.Tracker;
 
+import io.fiverocks.android.FiveRocks;
+
+
 /**
  * 
  *  First Page
@@ -27,6 +30,8 @@ public class SplashActivity extends AhActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+		
+	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 
 		/* 
 		 * for google analytics
@@ -57,6 +62,7 @@ public class SplashActivity extends AhActivity{
 		// TODO Auto-generated method stub
 		super.onStart();
 		
+		FiveRocks.onActivityStart(this);
 //		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 	}
 	
@@ -64,6 +70,8 @@ public class SplashActivity extends AhActivity{
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+		
+		FiveRocks.onActivityStart(this);
 //		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 }

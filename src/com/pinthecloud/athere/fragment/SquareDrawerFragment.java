@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -29,6 +30,9 @@ import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 public class SquareDrawerFragment extends AhFragment {
 
@@ -47,10 +51,24 @@ public class SquareDrawerFragment extends AhFragment {
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 
-
-	@Override
+    Tracker t;
+	
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/* 
+		 * for google analytics
+		 */
+		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+
+        if (t==null){
+            t = ((AhApplication) getActivity().getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
+
+            t.setScreenName("SquareDrawerFragment");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
 	}
 
 	@Override
@@ -209,7 +227,7 @@ public class SquareDrawerFragment extends AhFragment {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
 		updateUserList();
 
-
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
 		/*
 		 * Set profile images 
 		 */
@@ -226,6 +244,8 @@ public class SquareDrawerFragment extends AhFragment {
 		 */
 		profileImage.setImageBitmap(null);
 		super.onStop();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
 	}
 
 

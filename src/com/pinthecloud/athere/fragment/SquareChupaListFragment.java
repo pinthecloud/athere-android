@@ -15,6 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -23,6 +24,9 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 public class SquareChupaListFragment extends AhFragment{
 
@@ -30,10 +34,24 @@ public class SquareChupaListFragment extends AhFragment{
 	private ListView squareChupaListView;
 	private ImageView blankImage;
 
+	Tracker t;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		/* 
+		 * for google analytics
+		 */
+		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+
+        if (t==null){
+            t = ((AhApplication) getActivity().getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
+
+            t.setScreenName("SquareChupaListFragment");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
 	}
 
 
@@ -84,6 +102,16 @@ public class SquareChupaListFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		refreshView();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+	}
+	
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		
+		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
 	}
 
 

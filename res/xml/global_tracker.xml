@@ -8,8 +8,7 @@
 
     <!-- The screen names that will appear in reports -->
    <!--  <screenName name="com.pinthecloud.athere.activity.BasicProfileActivity">BasicProfileActivity</screenName> -->
-    <screenName name="com.pinthecloud.athere.activity.ChupaChatActivity">ChupaChatActivity</screenName>
-    <screenName name="com.pinthecloud.athere.activity.ProfileImageActivity">ProfileImageActivity</screenName>
+   <!-- <screenName name="com.pinthecloud.athere.activity.ChupaChatActivity">ChupaChatActivity</screenName> -->
    <!--  <screenName name="com.pinthecloud.athere.activity.SplashActivity">SplashActivity</screenName> -->
    <!--  <screenName name="com.pinthecloud.athere.activity.SquareActivity">SquareActivity</screenName> -->
    <!--  <screenName name="com.pinthecloud.athere.activity.SquareListActivity">SquareListActivity</screenName> -->
@@ -20,7 +19,9 @@
     <screenName name="com.pinthecloud.athere.fragment.SquareListFragment">SquareListFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.SquareProfileFragment">SquareProfileFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.SquareChatFragment">SquareChatFragment</screenName>
-    
+    <screenName name="com.pinthecloud.athere.fragment.ChupaChatFragment">ChupaChatFragment</screenName>
+        <screenName name="com.pinthecloud.athere.fragment.SquareChupaListFragment">SquareChupaListFragment</screenName>
+    <screenName name="com.pinthecloud.athere.fragment.SquareDrawerFragment">SquareDrawerFragment</screenName>
     <!--  The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-53944359-1</string>
 </resources>
