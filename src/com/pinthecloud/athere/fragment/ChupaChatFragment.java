@@ -144,10 +144,8 @@ public class ChupaChatFragment extends AhFragment {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
-						Intent intent = new Intent(context,
-								ChupaChatActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY,
-								otherUser.getId());
+						Intent intent = new Intent(context, ChupaChatActivity.class);
+						intent.putExtra(AhGlobalVariable.USER_KEY, otherUser.getId());
 						context.startActivity(intent);
 						activity.finish();
 					}
@@ -262,9 +260,7 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		
 		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
-		
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
 		refreshView(chupaCommunId, null);
@@ -276,7 +272,6 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStop() {
 		otherProfileImage.setImageBitmap(null);
 		super.onStop();
-		
 		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
 	}
 
@@ -302,12 +297,7 @@ public class ChupaChatFragment extends AhFragment {
 					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
-//						messageListAdapter.notifyDataSetChanged();
-//						messageListView.setSelection(messageListView.getCount() - 1);
-						
 						messageListAdapter.remove(message);
-						
 					}
 				});
 				refreshView(message.getChupaCommunId(), message.getId());
@@ -343,7 +333,6 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				if (id == null) {
 					messageListAdapter.clear();
 					messageListAdapter.addAll(chupas);

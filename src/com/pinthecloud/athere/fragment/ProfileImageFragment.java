@@ -45,7 +45,6 @@ public class ProfileImageFragment extends AhFragment{
 		 * Set UI component
 		 */
 		profileImage = (ImageView) view.findViewById(R.id.profile_image_frag_view);
-
 		return view;
 	}
 

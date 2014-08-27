@@ -23,8 +23,7 @@
             android:layout_height="@dimen/square_drawer_participant_list_profile_height"
             android:layout_marginEnd="@dimen/square_drawer_participant_list_profile_nick_margin"
             android:layout_marginRight="@dimen/square_drawer_participant_list_profile_nick_margin"
-            android:contentDescription="@string/profile_image"
-            android:src="@drawable/launcher" />
+            android:contentDescription="@string/profile_image" />
 
         <TextView
             android:id="@+id/drawer_user_nick_name"

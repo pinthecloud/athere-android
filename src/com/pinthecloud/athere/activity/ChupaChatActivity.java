@@ -24,14 +24,15 @@ public class ChupaChatActivity extends AhActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chupa_chat);
-
 	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		
+	    
 		/*
 		 * Set helper
 		 */
 		messageHelper = app.getMessageHelper();
 
+		
 		/*
 		 * Set Fragment to container
 		 */
@@ -41,7 +42,6 @@ public class ChupaChatActivity extends AhActivity {
 		final ChupaChatFragment chupaChatFragment = new ChupaChatFragment();
 		fragmentTransaction.add(R.id.chupa_chat_container, chupaChatFragment);
 		fragmentTransaction.commit();
-
 
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
@@ -65,7 +65,6 @@ public class ChupaChatActivity extends AhActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
 		FiveRocks.onActivityStart(this);
 	}
 
@@ -73,7 +72,6 @@ public class ChupaChatActivity extends AhActivity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
 		FiveRocks.onActivityStop(this);
 	}
 

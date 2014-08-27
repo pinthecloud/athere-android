@@ -24,28 +24,30 @@ import io.fiverocks.android.FiveRocks;
  */
 public class SplashActivity extends AhActivity{
 
-//	Tracker t;
-	
+	//	private Tracker t;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		
-	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+
 
 		/* 
 		 * for google analytics
 		 */
-//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
-//
-//        if (t==null){
-//            t = ((AhApplication) getApplication()).getTracker(
-//                    AhApplication.TrackerName.APP_TRACKER);
-//
-//            t.setScreenName("SplashActivity");
-//            t.send(new HitBuilders.AppViewBuilder().build());
-//        }
-        
+		//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
+		//
+		//        if (t==null){
+		//            t = ((AhApplication) getApplication()).getTracker(
+		//                    AhApplication.TrackerName.APP_TRACKER);
+		//
+		//            t.setScreenName("SplashActivity");
+		//            t.send(new HitBuilders.AppViewBuilder().build());
+		//        }
+
+
 		/*
 		 * Set Fragment to container
 		 */
@@ -56,22 +58,18 @@ public class SplashActivity extends AhActivity{
 		fragmentTransaction.add(R.id.splash_container, splashFragment);
 		fragmentTransaction.commit();
 	}
-	
+
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
-		
 		FiveRocks.onActivityStart(this);
-//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+		//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 	}
-	
+
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		
 		FiveRocks.onActivityStart(this);
-//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+		//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 }

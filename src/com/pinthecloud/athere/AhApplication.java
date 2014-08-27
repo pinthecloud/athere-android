@@ -11,7 +11,6 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -75,7 +74,7 @@ public class AhApplication extends Application{
 	// DB
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
-	
+
 	private static AhUser currentChupaUser;
 
 	// The following line should be changed to include the correct property id.
@@ -227,10 +226,6 @@ public class AhApplication extends Application{
 	}
 
 	public void removeSquarePreference(){
-		for(AhUser user : userDBHelper.getAllUsers()){
-			app.deleteFile(user.getId());
-		}
-		app.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
@@ -275,8 +270,8 @@ public class AhApplication extends Application{
 		}
 		return message;
 	}
-	
-	
+
+
 	/**
 	 * Enum used to identify the tracker that needs to be used for tracking.
 	 *
@@ -290,7 +285,7 @@ public class AhApplication extends Application{
 		ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
 	}
 	private HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
-	
+
 	public synchronized Tracker getTracker(TrackerName trackerId) {
 		if (!mTrackers.containsKey(trackerId)) {
 			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);

@@ -11,8 +11,10 @@ import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
+import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class CachedBlobStorageHelper extends BlobStorageHelper {
@@ -42,19 +44,21 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		};
 	}
 
+
 	public Bitmap getBitmapSync(final AhFragment frag, String id, int w, int h) {
-//		synchronized(frag) {
-			Bitmap bm = FileUtil.getImageFromInternalStorage(frag.getActivity(), id, w, h);
-			if (bm != null) return bm;
+		//		synchronized(frag) {
+		Bitmap bm = FileUtil.getImageFromInternalStorage(frag.getActivity(), id, w, h);
+		if (bm != null) return bm;
 
-			bm = this.downloadBitmapSync(frag, id);
-			if (bm == null) return null;
+		bm = this.downloadBitmapSync(frag, id);
+		if (bm == null) return null;
 
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
-			return bm;
-//		}
+		FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
+		return bm;
+		//		}
 	}
-	
+
+
 	public Bitmap getBitmapSync(final Context context, String id) {
 		Bitmap bm = FileUtil.getImageFromInternalStorage(context, id);
 		if (bm != null) return bm;
@@ -67,8 +71,6 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	}
 
 
-
-
 	public void setImageViewAsync(AhFragment frag, String id, ImageView imageView) {
 		if (cancelPotentialWork(id, imageView)) {
 			int w = imageView.getWidth();
@@ -77,8 +79,9 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 			} else {
-				Drawable drawable = frag.getResources().getDrawable(com.pinthecloud.athere.R.drawable.launcher);
-				Bitmap mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();
+				Bitmap mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), R.drawable.launcher, w, h);
+				//				Drawable drawable = frag.getResources().getDrawable(com.pinthecloud.athere.R.drawable.launcher);
+				//				Bitmap mPlaceHolderBitmap = ((BitmapDrawable)drawable).getBitmap();
 
 				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
 				AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
@@ -103,7 +106,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		// Decode image in background.
 		@Override
 		protected Bitmap doInBackground(String... params) {
-			
+
 			id = params[0];
 			int w = imageViewReference.get().getWidth();
 			int h = imageViewReference.get().getHeight();
@@ -182,14 +185,17 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		}
 	}
 
+
 	private Bitmap getBitmapFromMemCache(String key) {
 		return mMemoryCache.get(key);
 	}
-	
+
+
 	public void clearCache() {
 		mMemoryCache.evictAll();
 	}
-	
+
+
 	//	public void getBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {
 	//		Bitmap bitmap = getBitmapFromMemCache(id);
 	//		if (bitmap != null) {
@@ -235,5 +241,4 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	//			}
 	//		}).execute(id);
 	//	}
-
 }

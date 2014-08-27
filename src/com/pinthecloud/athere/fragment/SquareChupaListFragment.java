@@ -34,17 +34,17 @@ public class SquareChupaListFragment extends AhFragment{
 	private ListView squareChupaListView;
 	private ImageView blankImage;
 
-	Tracker t;
+	private Tracker t;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		
 		/* 
 		 * for google analytics
 		 */
 		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
-
         if (t==null){
             t = ((AhApplication) getActivity().getApplication()).getTracker(
                     AhApplication.TrackerName.APP_TRACKER);
@@ -102,15 +102,12 @@ public class SquareChupaListFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		refreshView();
-		
 		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
 	}
 	
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		
 		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
 	}
 
@@ -126,8 +123,6 @@ public class SquareChupaListFragment extends AhFragment{
 			public void run() {
 				squareChupaListAdapter.clear();
 				squareChupaListAdapter.addAll(convertToMap(lastChupaList));
-//				squareChupaListAdapter.notifyDataSetChanged();
-
 				if(squareChupaListAdapter.getCount() < 1){
 					blankImage.setVisibility(View.VISIBLE);
 				} else{

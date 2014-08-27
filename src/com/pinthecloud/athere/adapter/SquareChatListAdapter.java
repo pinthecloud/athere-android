@@ -161,6 +161,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				final ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
+				
 				/*
 				 * Set UI component only in receive list
 				 */

@@ -24,8 +24,6 @@ public class FileUtil {
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
-	//	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
-
 
 	/** Create a file Uri for saving an image or video */
 	public static Uri getOutputMediaFileUri(int type){
@@ -67,8 +65,8 @@ public class FileUtil {
 		return mediaFile;
 	}
 	
+	
 	public static void clearAllFiles(Context context) {
-		
 		File dir = context.getFilesDir();
 		boolean result = false;
 		if (dir.isDirectory()) {
@@ -86,7 +84,6 @@ public class FileUtil {
 		} else {
 			throw new AhException("File remove Error");
 		}
-		
 	}
 
 

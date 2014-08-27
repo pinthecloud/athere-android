@@ -380,7 +380,6 @@ public class SquareProfileFragment extends AhFragment{
 		profilePictureView.setImageBitmap(null);
 		releaseCameraAndRemoveView();
 		super.onStop();
-		
 		GoogleAnalytics.getInstance(getActivity().getApplicationContext()).reportActivityStop(getActivity());
 	}
 

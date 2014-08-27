@@ -6,7 +6,6 @@ package com.pinthecloud.athere.fragment;
  * @author hongkunyoo
  * Test Fragment for hongkunyoo's own experiments
  */
-
 public class HongkunTestFragment extends AhFragment {
 
 //	private Button[] btnArr;
@@ -22,6 +21,7 @@ public class HongkunTestFragment extends AhFragment {
 //	private BlobStorageHelper blobStorageHelper;
 //	public static final String SENDER_ID = "838051405989";
 //
+//	
 //	ArrayAdapter<String> adapter;
 //	@Override
 //	public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +29,7 @@ public class HongkunTestFragment extends AhFragment {
 //		mClient = app.getmClient();
 //	}
 //
+//	
 //	@Override
 //	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 //			Bundle savedInstanceState) {
@@ -64,10 +65,8 @@ public class HongkunTestFragment extends AhFragment {
 //			@Override
 //			public void onItemClick(AdapterView<?> parent, View view,
 //					int position, long id) {
-//				// TODO Auto-generated method stub
 //				
 //			}
-//			
 //		});
 //		for(int i = 0 ; i < 6 ; i++){
 //			btnArr[i].setOnClickListener(new View.OnClickListener() {

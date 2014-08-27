@@ -51,11 +51,12 @@ public class SquareDrawerFragment extends AhFragment {
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 
-    Tracker t;
+    private Tracker t;
 	
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		
 		/* 
 		 * for google analytics
@@ -71,6 +72,7 @@ public class SquareDrawerFragment extends AhFragment {
         }
 	}
 
+    
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -216,8 +218,6 @@ public class SquareDrawerFragment extends AhFragment {
 				activity.finish();
 			}
 		});
-
-		
 	}	
 
 
@@ -226,11 +226,7 @@ public class SquareDrawerFragment extends AhFragment {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
 		updateUserList();
-
 		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
-		/*
-		 * Set profile images 
-		 */
 		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profileImage);
 	}
 
@@ -238,13 +234,8 @@ public class SquareDrawerFragment extends AhFragment {
 	@Override
 	public void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
-
-		/*
-		 * Release image resources
-		 */
 		profileImage.setImageBitmap(null);
 		super.onStop();
-		
 		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
 	}
 
@@ -283,6 +274,7 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 
+		
 		/*
 		 * Set profile information text and gender image
 		 */
@@ -310,8 +302,8 @@ public class SquareDrawerFragment extends AhFragment {
 			public void run() {
 				participantListAdapter.clear();
 				participantListAdapter.addAll(userDBHelper.getAllUsers());
-//				participantListAdapter.notifyDataSetChanged();
 
+				
 				/*
 				 * Set member number text
 				 */
@@ -345,8 +337,6 @@ public class SquareDrawerFragment extends AhFragment {
 		return count;
 	}
 }
-
-
 
 
 /**
