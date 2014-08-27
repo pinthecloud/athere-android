@@ -1,5 +1,6 @@
 package com.pinthecloud.athere;
 
+import java.io.File;
 import java.util.List;
 
 import org.json.JSONException;
@@ -28,6 +29,7 @@ import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
@@ -46,6 +48,7 @@ public class AhIntentService extends IntentService {
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
+	private CachedBlobStorageHelper blobStorageHelper;
 
 	private AhMessage message = null;
 	private String userId = null; 
@@ -65,6 +68,7 @@ public class AhIntentService extends IntentService {
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 		userHelper = app.getUserHelper();
+		blobStorageHelper = app.getBlobStorageHelper();
 	}
 
 
@@ -88,7 +92,6 @@ public class AhIntentService extends IntentService {
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {
 
-			@Override
 			public void run() {
 				if (AhMessage.TYPE.TALK.equals(type)) {
 					TALK();
@@ -109,7 +112,6 @@ public class AhIntentService extends IntentService {
 				} else if (AhMessage.TYPE.ADMIN_MESSAGE.equals(type)) {
 					ADMIN_MESSAGE();
 				}
-				messageDBHelper.close();
 			}
 		}).start();
 	}
@@ -174,14 +176,23 @@ public class AhIntentService extends IntentService {
 		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
 
 			@Override
-			public void onCompleted(AhUser user) {
+			public void onCompleted(final AhUser user) {
 				userDBHelper.addUser(user);
 				if (isRunning(app)) {
 					String currentActivityName = getCurrentRunningActivityName(app);
 					messageHelper.triggerMessageEvent(currentActivityName, message);
 					userHelper.triggerUserEvent(user);
 				} else {
-					alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+					blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
+
+						@Override
+						public void onCompleted(Bitmap entity) {
+							// TODO Auto-generated method stub
+							FileUtil.saveImageToInternalStorage(app, entity, user.getId());
+							alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+						}
+					});
+					
 				}
 			}
 		});
@@ -297,6 +308,7 @@ public class AhIntentService extends IntentService {
 			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
 		} else {
 			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getId());
+
 		}
 
 

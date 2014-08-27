@@ -2,6 +2,7 @@ package com.pinthecloud.athere.helper;
 
 import java.lang.ref.WeakReference;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -52,6 +53,17 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
 			return bm;
 //		}
+	}
+	
+	public Bitmap getBitmapSync(final Context context, String id) {
+		Bitmap bm = FileUtil.getImageFromInternalStorage(context, id);
+		if (bm != null) return bm;
+
+		bm = this.downloadBitmapSync(null, id);
+		if (bm == null) return null;
+
+		FileUtil.saveImageToInternalStorage(context, bm, id);
+		return bm;
 	}
 
 
