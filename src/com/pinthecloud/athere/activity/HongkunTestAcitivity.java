@@ -12,8 +12,6 @@ import com.pinthecloud.athere.fragment.HongkunTestFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
 
 public class HongkunTestAcitivity extends AhActivity {
 	Button btn01;
@@ -30,8 +28,6 @@ public class HongkunTestAcitivity extends AhActivity {
 	MessageHelper messageHelper;
 	SquareHelper squareHelper;
 
-	private String who;
-	private String content;
 
 	public static final String SENDER_ID = "838051405989";
 	AhFragment hongFrag;
@@ -50,7 +46,6 @@ public class HongkunTestAcitivity extends AhActivity {
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
 
-		who = "test user";
 
 		/*
 		 * Set Fragment to container
