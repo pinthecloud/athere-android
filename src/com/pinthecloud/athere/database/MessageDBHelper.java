@@ -172,7 +172,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		db.update(TABLE_NAME, values, ID + " = ?", new String[]{ message.getId() });
 //		db.close(); // Closing database connection
 		this.closeDatabase();
-		this.closeDatabase();
 	}
 
 

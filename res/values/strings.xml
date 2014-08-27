@@ -57,6 +57,7 @@
     <string name="offline_message">Network access is unavailable. Please check the network status.</string>
     <string name="exit_square_message">leaves ground.</string>
     <string name="enter_square_message">enters ground.</string>
+    <string name="behave_well_warning">Report to the counter, if any insult, abuse words come out.</string>
     <string name="exit_square_consent_message">Every chat and chupa you have will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
     <string name="shout_notification_title">shouts.</string>
@@ -66,7 +67,7 @@
     <string name="update_app_title">Update App</string>
     <string name="update_app_message">New version found. Please update your App.</string>
     <string name="internet_not_connected_message">Internet is bad. Please check your network environments.</string>
-    <string name="message_fail_message">Would you try again?</string>
+    <string name="message_fail_message">Select action.</string>
     
     <!-- String Array -->
 
