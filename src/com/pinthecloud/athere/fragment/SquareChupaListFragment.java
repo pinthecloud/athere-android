@@ -28,7 +28,6 @@ public class SquareChupaListFragment extends AhFragment{
 
 	private SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
-//	private List<Map<String,String>> lastChupaCommunList = new ArrayList<Map<String,String>>();
 	private ImageView blankImage;
 
 
@@ -53,17 +52,12 @@ public class SquareChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
-		/*
-		 * Set square chupa list view
-		 */
-		squareChupaListAdapter = new SquareChupaListAdapter
-				(context, _thisFragment, R.layout.row_square_chupa_list);
+		squareChupaListAdapter = new SquareChupaListAdapter(context, _thisFragment, R.layout.row_square_chupa_list);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
 				intent.putExtra(AhGlobalVariable.USER_KEY, squareChupaListAdapter.getItem(position).get("userId"));
 				startActivity(intent);
@@ -98,11 +92,6 @@ public class SquareChupaListFragment extends AhFragment{
 		 * Set square chupa list view
 		 */
 		final List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
-//		lastChupaCommunList.clear();
-//		lastChupaCommunList.addAll(convertToMap(lastChupaList));
-		
-		
-		
 		activity.runOnUiThread(new Runnable() {
 
 			@Override

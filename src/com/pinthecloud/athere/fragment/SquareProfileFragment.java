@@ -104,8 +104,7 @@ public class SquareProfileFragment extends AhFragment{
 					FileOutputStream fos = new FileOutputStream(pictureFile);
 					fos.write(data);
 					fos.close();
-					pictureBitmap = BitmapFactory.decodeStream
-							(app.getContentResolver().openInputStream(pictureFileUri));
+					pictureBitmap = BitmapFactory.decodeStream(app.getContentResolver().openInputStream(pictureFileUri));
 					pictureFile.delete();
 
 					// Crop picture
@@ -317,7 +316,7 @@ public class SquareProfileFragment extends AhFragment{
 				nickNameEditText.setSelection(nickName.length());
 
 				// Save gender and birth year infomation to preference
-				String message = checkNickName(nickName);
+				String message = app.checkNickName(nickName);
 				if(!message.equals("")){
 					// Unproper nick name
 					// Show warning toast for each situation
@@ -346,11 +345,6 @@ public class SquareProfileFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStart");
-
-		/*
-		 * Set camera for taking picture OR
-		 * Set taken picture to image view
-		 */
 		if(!isTookPicture){
 			openCameraAndSetView();
 		}else{
@@ -362,10 +356,6 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStop");
-
-		/*
-		 * Release resources
-		 */
 		profilePictureView.setImageBitmap(null);
 		releaseCameraAndRemoveView();
 		super.onStop();

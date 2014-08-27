@@ -14,6 +14,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
@@ -47,6 +51,15 @@ public class SquareActivity extends AhActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
 
+
+		/*
+		 * for Google Analytics
+		 */
+		Tracker tracker = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
+		tracker.setScreenName("SquareActivity");
+		tracker.send(new HitBuilders.AppViewBuilder().build());
+
+
 		/*
 		 * Set Helper and get square
 		 */
@@ -66,11 +79,13 @@ public class SquareActivity extends AhActivity{
 		fragmentManager = getFragmentManager();
 		mSquareDrawerFragment = (SquareDrawerFragment) fragmentManager.findFragmentById(R.id.square_drawer_fragment);
 
+
 		/*
 		 * Set Action Bar
 		 */
 		mActionBar.setDisplayShowHomeEnabled(false);
 		mActionBar.setTitle(square.getName());
+
 
 		/*
 		 * Set tab
@@ -126,13 +141,13 @@ public class SquareActivity extends AhActivity{
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
+
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage message) {
-				// TODO Auto-generated method stub
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
-					String text = _this.getResources().getString(R.string.forced_logout_title);
+					String text = getResources().getString(R.string.forced_logout_title);
 					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
 					toast.show();
 					Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
@@ -181,5 +196,17 @@ public class SquareActivity extends AhActivity{
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 }

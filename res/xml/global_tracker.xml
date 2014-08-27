@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="ga_logLevel">verbose</string>
+
+    <!-- Enable automatic Activity measurement -->
+    <bool name="ga_autoActivityTracking">true</bool>
+
+    <!-- The screen names that will appear in reports -->
+    <screenName name="com.pinthecloud.athere.activity.SquareActivity">SquareActivity</screenName>
+    <screenName name="com.pinthecloud.athere.activity.ChupaChatActivity">ChupaChatActivity</screenName>
+    
+    <!--  The following value should be replaced with correct property id. -->
+    <string name="ga_trackingId">UA-53944359-1</string>
+</resources>

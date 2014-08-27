@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
@@ -33,9 +32,13 @@ public class AhActivity extends Activity{
 		super.onCreate(savedInstanceState);
 	    FiveRocks.setDebugEnabled(true);
 	    
-		// Set FiveRocks AppId, AppKey
+	    
+		/*
+		 * Set FiveRocks AppId, AppKey
+		 */
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		FiveRocks.setUserCohortVariable(1, "DemoUser");
+
 		
 		/*
 		 * Set static value
@@ -60,19 +63,17 @@ public class AhActivity extends Activity{
 		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
 	
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
 		FiveRocks.onActivityStart(this);
-		EasyTracker.getInstance(this).activityStart(this);	// google analytics
 	}
 
+	
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
 		FiveRocks.onActivityStop(this);
-		EasyTracker.getInstance(this).activityStop(this);  // google analytics
 	}
 }

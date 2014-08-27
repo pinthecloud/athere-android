@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,6 +37,7 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.FileUtil;
+
 
 /*
  * 
@@ -73,6 +77,9 @@ public class AhApplication extends Application{
 	
 	private static AhUser currentChupaUser;
 
+	// The following line should be changed to include the correct property id.
+	private static final String GA_PROPERTY_ID = "UA-53944359-1";
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -102,7 +109,7 @@ public class AhApplication extends Application{
 		blobStorageHelper = new CachedBlobStorageHelper();
 		
 	}
-	
+
 	public static AhApplication getInstance(){
 		return app;
 	}
@@ -189,10 +196,10 @@ public class AhApplication extends Application{
 			@Override
 			public void doNext(AhFragment frag) {
 				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-					
+
 					@Override
 					public void onCompleted(AhMessage entity) {
-						
+
 					}
 				});
 			}
@@ -202,15 +209,15 @@ public class AhApplication extends Application{
 			@Override
 			public void doNext(AhFragment frag) {
 				// TODO Auto-generated method stub
-				
+
 				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 
 					@Override
 					public void onCompleted(JsonElement json, Exception exception,
 							ServiceFilterResponse response) {
-						
+
 						removeSquarePreference();
-						
+
 						callback.onCompleted(true);
 					}
 				});
@@ -218,10 +225,10 @@ public class AhApplication extends Application{
 		});
 
 	}
-	
+
 	public void removeSquarePreference(){
 		for(AhUser user : userDBHelper.getAllUsers()){
-			app.deleteFile(user.getProfilePic());
+			app.deleteFile(user.getId());
 		}
 		app.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
 		userDBHelper.deleteAllUsers();
@@ -241,5 +248,57 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+	}
+
+
+	/*
+	 * Check nick name EditText
+	 */
+	public String checkNickName(String nickName){
+		Log.d(AhGlobalVariable.LOG_TAG, "CheckNickNameEditText");
+
+		// Set regular expression for checking nick name
+		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
+		String message = "";
+
+		/*
+		 * Check logic whether this nick name is valid or not
+		 * If user doesn't type in proper nick name,
+		 * can't go to next activity
+		 */
+		// Check length of nick name
+		if(nickName.length() < 2){
+			message = getResources().getString(R.string.min_nick_name_message);
+		} else if(!nickName.matches(nickNameRegx)){
+			message = getResources().getString(R.string.bad_nick_name_message);
+		} else if(nickName.length() > 10){
+			message = getResources().getString(R.string.max_nick_name_message);
+		}
+		return message;
+	}
+	
+	
+	/**
+	 * Enum used to identify the tracker that needs to be used for tracking.
+	 *
+	 * A single tracker is usually enough for most purposes. In case you do need multiple trackers,
+	 * storing them all in Application object helps ensure that they are created only once per
+	 * application instance.
+	 */
+	public enum TrackerName {
+		APP_TRACKER, // Tracker used only in this app.
+		GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
+		ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
+	}
+	private HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+	public synchronized Tracker getTracker(TrackerName trackerId) {
+		if (!mTrackers.containsKey(trackerId)) {
+			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+			Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(GA_PROPERTY_ID)
+					: (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(R.xml.global_tracker)
+							: analytics.newTracker(R.xml.ecommerce_tracker);
+					mTrackers.put(trackerId, t);
+		}
+		return mTrackers.get(trackerId);
 	}
 }

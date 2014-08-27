@@ -286,13 +286,11 @@ public class AhIntentService extends IntentService {
 		if (AhMessage.TYPE.CHUPA.equals(type))
 			stackBuilder.addParentStack(ChupaChatActivity.class);
 
-
 		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
 		//				stackBuilder.addNextIntentWithParentStack(resultIntent);
 
-		PendingIntent resultPendingIntent =
-				stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		AhUser sentUser = userDBHelper.getUser(message.getSenderId());
 		Bitmap bitmap = null;
 		if (sentUser == null){

@@ -2,7 +2,6 @@ package com.pinthecloud.athere.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -67,8 +66,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		 */
 		
 		ExceptionManager.setHandler(_thisFragment);
-
-
 	}
 	
 	@Override
@@ -84,12 +81,11 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		Log(_thisFragment, "AhFragment handleException : " + ex.toString());
 
 		AhAlertDialog exceptionDialog = null;
-		Resources resources = getResources();
 		String title = ex.getType().toString();
 		String message = ex.toString();
 		if(ex.getType().equals(AhException.TYPE.INTERNET_NOT_CONNECTED)){
 			title = null;
-			message = resources.getString(R.string.internet_not_connected_message);
+			message = getResources().getString(R.string.internet_not_connected_message);
 		}
 		exceptionDialog = new AhAlertDialog(title, message, false, new AhDialogCallback() {
 			@Override
@@ -117,33 +113,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 			Log.e("ERROR", str.toString());
 		}
 		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-	}
-
-
-	/*
-	 * Check nick name EditText
-	 */
-	protected String checkNickName(String nickName){
-		Log.d(AhGlobalVariable.LOG_TAG, "CheckNickNameEditText");
-
-		// Set regular expression for checking nick name
-		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
-		String message = "";
-
-		/*
-		 * Check logic whether this nick name is valid or not
-		 * If user doesn't type in proper nick name,
-		 * can't go to next activity
-		 */
-		// Check length of nick name
-		if(nickName.length() < 2){
-			message = getResources().getString(R.string.min_nick_name_message);
-		} else if(!nickName.matches(nickNameRegx)){
-			message = getResources().getString(R.string.bad_nick_name_message);
-		} else if(nickName.length() > 10){
-			message = getResources().getString(R.string.max_nick_name_message);
-		}
-		return message;
 	}
 
 

@@ -48,9 +48,8 @@ public class AhGlobalVariable{
 	 */
 	public static final String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";
 	public static final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
-	public static final String IS_POLICY_CONSENT_KEY = "IS_POLICY_CONSENT_KEY";
 	public static final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
-	
+
 	public static final String NICK_NAME_KEY = "NICK_NAME_KEY";
 	public static final String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";
 	public static final String AGE_KEY = "AGE_KEY";
@@ -60,6 +59,7 @@ public class AhGlobalVariable{
 	public static final String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
+	public static final String ANDROID_ID_KEY = "ANDROID_ID_KEY";
 	public static final String USER_ID_KEY = "USER_ID_KEY";
 	public static final String AH_ID_USER_KEY = "AH_ID_USER_KEY";
 

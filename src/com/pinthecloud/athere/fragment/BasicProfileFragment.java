@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -22,9 +21,6 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
-import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.exception.ExceptionManager;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhIdUser;
@@ -150,8 +146,9 @@ public class BasicProfileFragment extends AhFragment{
 				nickNameEditText.setText(nickName);
 				nickNameEditText.setSelection(nickName.length());
 
+
 				// Save gender and birth year infomation to preference
-				String message = checkNickName(nickName);
+				String message = app.checkNickName(nickName);
 				if(!message.equals("")){
 					// Unproper nick name
 					// Show warning toast for each situation
@@ -162,43 +159,35 @@ public class BasicProfileFragment extends AhFragment{
 					// Disable complete button for preventing double click
 					completeButton.setEnabled(false);
 
+
 					// Save this setting and go to next activity
-					String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
-					if (!registrationId.equals(PreferenceHelper.DEFAULT_STRING)) {
-						AhIdUser user = new AhIdUser();
-						final String androidId = Secure.getString(activity.getContentResolver(), Secure.ANDROID_ID);
-						user.setAhId(androidId);
-						user.setPassword("");
-						user.setAndroidId(androidId);
+					String androidId = pref.getString(AhGlobalVariable.ANDROID_ID_KEY);
+					AhIdUser user = new AhIdUser();
+					user.setAhId(androidId);
+					user.setPassword("");
+					user.setAndroidId(androidId);
+					userHelper.addAhIdUser(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
 
-						userHelper.addAhIdUser(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
-
-							@Override
-							public void onCompleted(AhIdUser entity) {
-								int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
-								Calendar c = Calendar.getInstance();
-								int age = c.get(Calendar.YEAR) - (birthYear - 1);
-								pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
-								pref.putInt(AhGlobalVariable.AGE_KEY, age);
-
-								pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-								pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
-								pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-								pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAhId());
-								Intent intent = new Intent(context, SquareListActivity.class);
-								startActivity(intent);
-								activity.finish();
-							}
-						});
-
-					} else {
-						ExceptionManager.fireException(new AhException(AhException.TYPE.GCM_REGISTRATION_FAIL));
-					}
+						@Override
+						public void onCompleted(AhIdUser entity) {
+							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
+							Calendar c = Calendar.getInstance();
+							int age = c.get(Calendar.YEAR) - (birthYear - 1);
+							pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
+							pref.putInt(AhGlobalVariable.AGE_KEY, age);
+							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
+							pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
+							pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
+							pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAhId());
+							Intent intent = new Intent(context, SquareListActivity.class);
+							startActivity(intent);
+							activity.finish();
+						}
+					});
 				}
 			}
 		});
 		completeButton.setEnabled(false);
-
 		return view;
 	}
 

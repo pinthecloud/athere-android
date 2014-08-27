@@ -28,27 +28,32 @@ public class SquareChatFragment extends AhFragment{
 
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
-//	private List<AhMessage> messageList = new ArrayList<AhMessage>();
-
 	private String squareId;
 
 	private List<AhMessage> talks;
 	private AhMessage talk;
 	
+	public SquareChatFragment() {
+		super();
+	}
+
 	public SquareChatFragment(String squareId) {
 		super();
 		this.squareId = squareId;
 	}
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
 
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
+
 
 		/*
 		 * Set UI component
@@ -109,24 +114,24 @@ public class SquareChatFragment extends AhFragment{
 		messageListAdapter = new SquareChatListAdapter
 				(context, _thisFragment);
 		messageListView.setAdapter(messageListAdapter);
-		
-		
-//		messageListView.setOnScrollListener(new OnScrollListener() {
-//			public void onScroll(AbsListView view, int firstVisibleItem,
-//					int visibleItemCount, int totalItemCount) {
-//				if (firstVisibleItem == 1) {
-//					// TODO : Insert messageListView.add(0, messages);
-//					offset++;
-//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-//					messageList.clear();
-//					messageList.addAll(0, talks);
-//					messageListAdapter.notifyDataSetChanged();
-//					messageListView.setSelection(messageListView.getCount() - 1);
-//				}
-//			}
-//			public void onScrollStateChanged(AbsListView view, int scrollState) {
-//			}
-//		});
+
+
+		//		messageListView.setOnScrollListener(new OnScrollListener() {
+		//			public void onScroll(AbsListView view, int firstVisibleItem,
+		//					int visibleItemCount, int totalItemCount) {
+		//				if (firstVisibleItem == 1) {
+		//					// TODO : Insert messageListView.add(0, messages);
+		//					offset++;
+		//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+		//					messageList.clear();
+		//					messageList.addAll(0, talks);
+		//					messageListAdapter.notifyDataSetChanged();
+		//					messageListView.setSelection(messageListView.getCount() - 1);
+		//				}
+		//			}
+		//			public void onScrollStateChanged(AbsListView view, int scrollState) {
+		//			}
+		//		});
 
 
 		/**
@@ -141,7 +146,7 @@ public class SquareChatFragment extends AhFragment{
 			@Override
 			public void onCompleted(final AhMessage message) {
 				Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment Message onComplete : " + message.getType() + " " + message.getContent());
-				
+
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
@@ -165,7 +170,6 @@ public class SquareChatFragment extends AhFragment{
 
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
-//		messageList.add(message);
 		
 		activity.runOnUiThread(new Runnable() {
 			
@@ -226,8 +230,6 @@ public class SquareChatFragment extends AhFragment{
 			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 		}
 		
-		
-
 		/*
 		 * Set message list view
 		 */
@@ -254,19 +256,20 @@ public class SquareChatFragment extends AhFragment{
 		if(ex.getMethodName().equals("sendMessageAsync")){
 			AhMessage exMessage = (AhMessage)ex.getParameter();
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
+			messageDBHelper.updateMessages(exMessage);
 			activity.runOnUiThread(new Runnable() {
 				
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-//					messageListAdapter.notifyDataSetChanged();
+					messageListAdapter.notifyDataSetChanged();
 					messageListView.setSelection(messageListView.getCount() - 1);
 				}
 			});
-			messageDBHelper.updateMessages(exMessage);
+			
 			return;
 		}
 		super.handleException(ex);
 	}
-	
+
 }

@@ -4,8 +4,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -13,12 +19,28 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 
 public class ChupaChatActivity extends AhActivity {
-	
-	MessageHelper messageHelper;
+
+	private MessageHelper messageHelper;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chupa_chat);
+
+		/*
+		 * Set helper
+		 */
+		messageHelper = app.getMessageHelper();
+
+
+		/*
+		 * for google analytics
+		 */
+		Tracker tracker = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
+		tracker.setScreenName("ChupaChatActivity");
+		tracker.send(new HitBuilders.AppViewBuilder().build());
+
 
 		/*
 		 * Set Fragment to container
@@ -29,14 +51,12 @@ public class ChupaChatActivity extends AhActivity {
 		final ChupaChatFragment chupaChatFragment = new ChupaChatFragment();
 		fragmentTransaction.add(R.id.chupa_chat_container, chupaChatFragment);
 		fragmentTransaction.commit();
-		
-		messageHelper = app.getMessageHelper();
-		
+
+
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
-			
+
 			@Override
 			public void onCompleted(AhMessage message) {
-				// TODO Auto-generated method stub
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
 					String text = _this.getResources().getString(R.string.forced_logout_title);
 					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
@@ -49,5 +69,31 @@ public class ChupaChatActivity extends AhActivity {
 				messageHelper.triggerMessageEvent(chupaChatFragment, message);
 			}
 		});
+	}
+
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+	}
+
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+	}
+
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		// Respond to the action bar's Up/Home button
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

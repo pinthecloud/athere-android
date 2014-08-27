@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
@@ -50,23 +49,13 @@ public class SplashFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_splash, container, false);
 
+
 		/*
 		 * Set notification removed when launched app 
 		 */
 		NotificationManager mNotificationManager =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-
-
-		/*
-		 * Get device resolution and set it
-		 */
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
-		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
-		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
-		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
 
 
 		/*
@@ -90,20 +79,42 @@ public class SplashFragment extends AhFragment {
 			int lastHour = Integer.parseInt(lastArray[3]);
 
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				AhApplication.getInstance().removeSquarePreference();
+				app.removeSquarePreference();
 			} else if(currentDay > lastDay && lastHour < 12){
-				AhApplication.getInstance().removeSquarePreference();
+				app.removeSquarePreference();
 			} else if(currentDay > lastDay && currentHour >= 12){
-				AhApplication.getInstance().removeSquarePreference();
+				app.removeSquarePreference();
 			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
-				AhApplication.getInstance().removeSquarePreference();
+				app.removeSquarePreference();
 			}
 		}
 
 
+		/*
+		 * Get device resolution and set it
+		 */
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
+		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
+		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
+		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
+
+
+		/*
+		 * Get unique android id
+		 */
+		if(pref.getString(AhGlobalVariable.ANDROID_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
+			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
+			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
+		}
+
+
+		/*
+		 * Start Chupa Application
+		 */
 		// Erase Later (Exception for hongkun)
 		if (!isHongkunTest()) {
-			// Start Chupa Application
 			runChupa();
 		}
 
@@ -111,7 +122,7 @@ public class SplashFragment extends AhFragment {
 	}
 
 
-	public boolean isHongkunTest() {
+	private boolean isHongkunTest() {
 		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
 		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
@@ -119,6 +130,7 @@ public class SplashFragment extends AhFragment {
 		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
 				|| myGal3.equals(httpAgent))))	// Galaxy 3
 			return false;
+		
 //		if (true)
 //		return false;
 		
@@ -144,7 +156,7 @@ public class SplashFragment extends AhFragment {
 	}
 
 
-	public void runChupa() {
+	private void runChupa() {
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
@@ -156,9 +168,7 @@ public class SplashFragment extends AhFragment {
 						public void onCompleted(String registrationId) {
 							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 						}
-
 					});
-
 				} else {
 					AsyncChainer.notifyNext(frag);
 				}
@@ -180,9 +190,8 @@ public class SplashFragment extends AhFragment {
 							clientVer = 0.1;
 						}
 						if (serverVer.getVersion() > clientVer) {
-							Resources resources = getResources();
-							String title = resources.getString(R.string.update_app_title);
-							String message = resources.getString(R.string.update_app_message);
+							String title = getResources().getString(R.string.update_app_title);
+							String message = getResources().getString(R.string.update_app_message);
 							AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
 
 								@Override
@@ -194,7 +203,6 @@ public class SplashFragment extends AhFragment {
 								public void doNegativeThing(Bundle bundle) {
 									if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
 										activity.finish();
-										android.os.Process.killProcess(android.os.Process.myPid());
 									} else {
 										goToNextActivity();
 									}
@@ -207,7 +215,6 @@ public class SplashFragment extends AhFragment {
 					}
 				});
 			}
-
 		});
 	}
 
@@ -232,16 +239,13 @@ public class SplashFragment extends AhFragment {
 		}
 		startActivity(intent);
 	}
-	
+
+
 	@Override
 	public void handleException(AhException ex) {
-		// TODO Auto-generated method stub
-//		super.handleException(ex);
-		
 		if (ex.getType().equals(AhException.TYPE.GCM_REGISTRATION_FAIL)) {
-			Resources res = getResources();
-			String title = res.getString(R.string.googe_play_services_title);
-			String message = res.getString(R.string.googe_play_services_message);
+			String title = getResources().getString(R.string.googe_play_services_title);
+			String message = getResources().getString(R.string.googe_play_services_message);
 			new AhAlertDialog(title, message, true, new AhDialogCallback() {
 
 				@Override
@@ -249,14 +253,14 @@ public class SplashFragment extends AhFragment {
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.gms"));
 					startActivity(intent);
 					activity.finish();
-					android.os.Process.killProcess(android.os.Process.myPid());
 				}
 				@Override
 				public void doNegativeThing(Bundle bundle) {
 					activity.finish();
-					android.os.Process.killProcess(android.os.Process.myPid());
 				}
 			}).show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			return;
 		}
+		super.handleException(ex);
 	}
 }

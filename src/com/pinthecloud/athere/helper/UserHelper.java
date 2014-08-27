@@ -159,7 +159,6 @@ public class UserHelper {
 			@Override
 			public void onCompleted(JsonElement _json, Exception exception,
 					ServiceFilterResponse response) {
-				// TODO Auto-generated method stub
 				if (exception == null) {
 					callback.onCompleted(true);
 					AsyncChainer.notifyNext(frag);
