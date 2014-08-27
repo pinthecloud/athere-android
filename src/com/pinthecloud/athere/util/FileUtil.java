@@ -118,7 +118,8 @@ public class FileUtil {
 			FileInputStream fi = new FileInputStream(filePath);
 			return BitmapFactory.decodeStream(fi);
 		} catch (FileNotFoundException e) {
-			throw new AhException("FileNotFoundException");
+			Log.e("ERROR", "FileNotFoundException");
+			return null;
 		}
 	}
 
@@ -126,7 +127,13 @@ public class FileUtil {
 	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
 		
 		if (context == null) {
-			throw new AhException("context==null Exception");
+			Log.e("ERROR", "context==null, return null");
+			try{
+				context.getApplicationContext();
+			} catch(NullPointerException ex) {
+				ex.printStackTrace();
+			}
+			return null;
 		}
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
