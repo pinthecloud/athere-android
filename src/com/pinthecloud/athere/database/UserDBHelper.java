@@ -9,7 +9,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.pinthecloud.athere.model.AhUser;
 
@@ -57,7 +56,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
 	 */
 	private SQLiteDatabase openDatabase(String name) {
-		Log.e("ERROR", "open : " + name);
+//		Log.e("ERROR", "open : " + name);
 		if (mCount.incrementAndGet() == 1) {
 			mDb = this.getWritableDatabase();
 		}
@@ -65,7 +64,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 	
 	private void closeDatabase(String name) {
-		Log.e("ERROR", "close : " + name);
+//		Log.e("ERROR", "close : " + name);
 		if (mCount.decrementAndGet() == 0) {
 			mDb.close();
 		}
@@ -194,10 +193,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		if (!includingExits) {
 			_query = ID + "=? and " + HAS_BEEN_OUT + "=?";
 			args = new String[] { id, "0" };
-		}
-		Log.e("ERROR", "query : " + _query + " / args null : " +(args== null));
-		for (int k = 0 ; k < args.length ; k++) {
-			Log.e("ERROR", args[k]);
 		}
 		Cursor cursor = db.query(TABLE_NAME, null, _query,
 				args, null, null, null, null);

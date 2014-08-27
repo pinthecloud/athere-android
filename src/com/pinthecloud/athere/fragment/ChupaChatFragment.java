@@ -81,6 +81,9 @@ public class ChupaChatFragment extends AhFragment {
 		
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
+		if (userId == null) {
+			userId = pref.getString(AhGlobalVariable.USER_KEY);
+		}
 		otherUser = userDBHelper.getUser(userId, true);
 		if (otherUser == null) {
 			throw new AhException("No User Error");

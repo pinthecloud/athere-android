@@ -1,6 +1,5 @@
 package com.pinthecloud.athere;
 
-import java.io.File;
 import java.util.List;
 
 import org.json.JSONException;
@@ -283,6 +282,7 @@ public class AhIntentService extends IntentService {
 		 */
 		if (AhMessage.TYPE.CHUPA.equals(type)){
 			resultIntent.putExtra(AhGlobalVariable.USER_KEY, message.getSenderId());
+			pref.putString(AhGlobalVariable.USER_KEY, message.getSenderId());
 			resultIntent.putExtra("gotoChupa", true);
 		}
 
