@@ -70,7 +70,6 @@ public class AhIntentService extends IntentService {
 
 
 	public void onHandleIntent(Intent intent) {
-		messageDBHelper.open();
 		/*
 		 * Parsing the data from server
 		 */

@@ -57,8 +57,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	public void onCreate(Bundle savedInstanceState) {
 		context = getActivity();
 		activity = (AhActivity) context;
-//		messageDBHelper = new MessageDBHelper(this.activity);
-//		messageDBHelper.open();
 		super.onCreate(savedInstanceState);
 		/*
 		 * Set static value
@@ -66,14 +64,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		
 		ExceptionManager.setHandler(_thisFragment);
 	}
-	
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-//		messageDBHelper.close();
-	}
-	
 
 	@Override
 	public void handleException(final AhException ex) {

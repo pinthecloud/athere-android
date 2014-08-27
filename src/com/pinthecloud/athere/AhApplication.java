@@ -107,9 +107,6 @@ public class AhApplication extends Application{
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
-		
-		messageDBHelper.open();
-		
 	}
 
 	public static AhApplication getInstance(){
@@ -234,10 +231,8 @@ public class AhApplication extends Application{
 		}
 		app.deleteFile(AhGlobalVariable.PROFILE_PICTURE_NAME);
 		userDBHelper.deleteAllUsers();
-//		messageDBHelper.open();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
-//		messageDBHelper.close();
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearCache();
 
