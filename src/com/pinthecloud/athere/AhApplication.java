@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -288,6 +289,7 @@ public class AhApplication extends Application{
 		ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
 	}
 	private HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+	
 	public synchronized Tracker getTracker(TrackerName trackerId) {
 		if (!mTrackers.containsKey(trackerId)) {
 			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);

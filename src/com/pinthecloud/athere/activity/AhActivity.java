@@ -32,13 +32,10 @@ public class AhActivity extends Activity{
 		super.onCreate(savedInstanceState);
 	    FiveRocks.setDebugEnabled(true);
 	    
-	    
-		/*
-		 * Set FiveRocks AppId, AppKey
-		 */
+		// Set FiveRocks AppId, AppKey
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		FiveRocks.setUserCohortVariable(1, "DemoUser");
-
+		
 		
 		/*
 		 * Set static value
@@ -48,7 +45,7 @@ public class AhActivity extends Activity{
 		_this = this;
 		
 	}
-	
+
 	// Logging Method
 	protected void Log(AhActivity activity, Object... params){
 		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
@@ -63,17 +60,17 @@ public class AhActivity extends Activity{
 		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
 	
-	
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FiveRocks.onActivityStart(this);
+		
+		FiveRocks.onActivityStart(this);		
 	}
 
-	
 	@Override
 	protected void onStop() {
 		super.onStop();
+		
 		FiveRocks.onActivityStop(this);
 	}
 }

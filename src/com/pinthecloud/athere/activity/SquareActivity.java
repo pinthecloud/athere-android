@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
@@ -46,20 +47,26 @@ public class SquareActivity extends AhActivity{
 	private MessageHelper messageHelper;
 	private UserHelper userHelper;
 
+	Tracker t;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
 
-
-		/*
-		 * for Google Analytics
+		/* 
+		 * for google analytics
 		 */
-		Tracker tracker = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-		tracker.setScreenName("SquareActivity");
-		tracker.send(new HitBuilders.AppViewBuilder().build());
+        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
 
+        if (t==null){
+            t = ((AhApplication) getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
 
+            t.setScreenName("SquareActivity");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
+        
 		/*
 		 * Set Helper and get square
 		 */

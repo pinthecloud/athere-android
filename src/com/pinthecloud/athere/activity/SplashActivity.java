@@ -4,8 +4,13 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SplashFragment;
+
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 /**
  * 
@@ -17,11 +22,26 @@ import com.pinthecloud.athere.fragment.SplashFragment;
  */
 public class SplashActivity extends AhActivity{
 
+	Tracker t;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 
+		/* 
+		 * for google analytics
+		 */
+        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
+
+        if (t==null){
+            t = ((AhApplication) getApplication()).getTracker(
+                    AhApplication.TrackerName.APP_TRACKER);
+
+            t.setScreenName("SplashActivity");
+            t.send(new HitBuilders.AppViewBuilder().build());
+        }
+        
 		/*
 		 * Set Fragment to container
 		 */
@@ -31,5 +51,20 @@ public class SplashActivity extends AhActivity{
 		SplashFragment splashFragment = new SplashFragment ();
 		fragmentTransaction.add(R.id.splash_container, splashFragment);
 		fragmentTransaction.commit();
+	}
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+	}
+	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		   GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 }
