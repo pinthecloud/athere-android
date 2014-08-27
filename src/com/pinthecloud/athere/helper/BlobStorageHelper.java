@@ -70,7 +70,6 @@ public class BlobStorageHelper {
 	public Bitmap downloadBitmapSync(final AhFragment frag, String id) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
-		
 		try {
 			container = blobClient.getContainerReference(CONTAINER_NAME);
 			blob = container.getBlockBlobReference(id);
@@ -78,11 +77,17 @@ public class BlobStorageHelper {
 			blob.download(baos);
 			return BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.size());
 		} catch (URISyntaxException e) {
-			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+			e.printStackTrace();
+//			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+			e.printStackTrace();
+//			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
-		return null;
+		Bitmap bm = null;
+		if (frag != null) {
+			bm = BitmapFactory.decodeResource(frag.getActivity().getResources(), com.pinthecloud.athere.R.drawable.launcher);
+		}
+		return bm;
 	}
 	
 	public String downloadToFileSync(final AhFragment frag, String id, String path) {

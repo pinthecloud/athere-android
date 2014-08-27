@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.pinthecloud.athere.model.AhUser;
 
@@ -56,7 +57,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
 	 */
 	private SQLiteDatabase openDatabase(String name) {
-//		Log.e("ERROR", "open : " + name);
+		Log.e("ERROR", "open : " + name);
 		if (mCount.incrementAndGet() == 1) {
 			mDb = this.getWritableDatabase();
 		}
@@ -64,7 +65,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 	
 	private void closeDatabase(String name) {
-//		Log.e("ERROR", "close : " + name);
+		Log.e("ERROR", "close : " + name);
 		if (mCount.decrementAndGet() == 0) {
 			mDb.close();
 		}
@@ -183,10 +184,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return this.getUser(id, false);
 	}
 
-	public AhUser getUser(String id, boolean includingExits){
+	public synchronized AhUser getUser(String id, boolean includingExits){
 //		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("getUser(String id, boolean includingExits)");
-
+		AhUser user = null;
 		String _query = ID + "=?";
 		String[] args = new String[] { id };
 
@@ -194,21 +195,20 @@ public class UserDBHelper extends SQLiteOpenHelper {
 			_query = ID + "=? and " + HAS_BEEN_OUT + "=?";
 			args = new String[] { id, "0" };
 		}
-
+		Log.e("ERROR", "query : " + _query + " / args null : " +(args== null));
+		for (int k = 0 ; k < args.length ; k++) {
+			Log.e("ERROR", args[k]);
+		}
 		Cursor cursor = db.query(TABLE_NAME, null, _query,
 				args, null, null, null, null);
 		if (cursor != null) {
 			if(cursor.moveToFirst()){
-				AhUser u = convertToUser(cursor);
-//				db.close();
-				this.closeDatabase("getUser(String id, boolean includingExits)");
-				return u;
+				user = convertToUser(cursor);
 			}
 		}
-
 //		db.close();
 		this.closeDatabase("getUser(String id, boolean includingExits)");
-		return null;
+		return user;
 	}
 
 	public boolean isUserExist(String userId){
@@ -219,17 +219,14 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) {
-			boolean val = cursor.moveToFirst();
-//			db.close();
-			this.closeDatabase("isUserExist");
-			return val;
+			isExist = cursor.moveToFirst();
 		}
 //		db.close();
 		this.closeDatabase("isUserExist");
 		return isExist;
 	}
 
-	public boolean isUserExit(String userId) {
+	public synchronized boolean isUserExit(String userId) {
 		boolean isExit = false;
 //		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("isUserExit(String userId)");
@@ -239,16 +236,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
 				if (cursor.getInt(0) == 1){
-//					db.close();
-					this.closeDatabase("isUserExit(String userId)");
-					return true;
+					isExit = true;
 				} else {
-//					db.close();
-					this.closeDatabase("isUserExit(String userId)");
-					return false;
+					isExit = false;
 				}
 			}
-			return isExit;
 		}
 //		db.close();
 		this.closeDatabase("isUserExit(String userId)");
@@ -295,22 +287,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	// Getting All Contacts
 	public List<AhUser> getAllUsers() {
-		//		List<User> users = new ArrayList<User>();
-		//		// Select All Query
-		//		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
-		//
-		//		SQLiteDatabase db = this.getWritableDatabase();
-		//		Cursor cursor = db.rawQuery(selectQuery, null);
-		//
-		//		// looping through all rows and adding to list
-		//		if (cursor.moveToFirst()) {
-		//			do {
-		//				users.add(convertToUser(cursor));
-		//			} while (cursor.moveToNext());
-		//		}
-		//
-		//		// return contact list
-		//		return users;
 		return this.getAllUsers(false);
 	}
 
@@ -337,7 +313,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		}
 //		db.close();
 		this.closeDatabase("getAllUsers(boolean includingExits)");
-		// return contact list
 		return users;
 	}
 

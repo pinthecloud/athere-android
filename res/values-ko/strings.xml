@@ -67,7 +67,7 @@
     <string name="update_app_title">Update App</string>
     <string name="update_app_message">새로운 버전이 나왔습니다. 업데이트 해주세요</string>
     <string name="internet_not_connected_message">네트워크 연결상태가 좋지 않습니다. 연결상태를 체크해주세요</string>
-    <string name="message_fail_message">작업선택?</string>
+    <string name="message_fail_message">작업을 선택하세요.</string>
 
     <!-- String Array -->
 
