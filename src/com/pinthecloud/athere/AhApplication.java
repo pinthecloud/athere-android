@@ -176,6 +176,8 @@ public class AhApplication extends Application{
 		JsonObject jo = new JsonObject();
 		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
 		jo.addProperty("ahIdUserKey", pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
+		jo.addProperty("isMale", pref.getString(AhGlobalVariable.IS_MALE_KEY));
+		jo.addProperty("squareId", pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
 
 		Gson g = new Gson();
 		final JsonElement json = g.fromJson(jo, JsonElement.class);

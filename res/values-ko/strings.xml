@@ -57,7 +57,7 @@
     <string name="offline_message">인터넷에 연결할 수 없어요. 연결상태를 체크해주세요</string>
     <string name="exit_square_message">님이 그라운드를 나갔습니다.</string>
     <string name="enter_square_message">님이 그라운드에 들어왔습니다.</string>
-    <string name="behave_well_warning">욕설, 비방, 불쾌한 메세지를 받은 경우, 카운터에 신고하기 바랍니다.</string>
+    <string name="behave_well_warning">욕설, 비방, 불쾌한 메세지를 보낼 시, 법적인 책임을 물으실 수 있습니다.</string>
     <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워집니다. 나가시겠습니까?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈습니다.</string>
     <string name="shout_notification_title">shouts.</string>
