@@ -4,12 +4,14 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SplashFragment;
 
 //import com.google.android.gms.analytics.GoogleAnalytics;
 //import com.google.android.gms.analytics.HitBuilders;
 //import com.google.android.gms.analytics.Tracker;
+
 
 import io.fiverocks.android.FiveRocks;
 
@@ -31,7 +33,7 @@ public class SplashActivity extends AhActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
 
 
 		/* 

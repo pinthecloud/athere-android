@@ -19,10 +19,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.adapter.ChupaChatListAdapter;
@@ -32,9 +35,6 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.analytics.HitBuilders;
 
 public class ChupaChatFragment extends AhFragment {
 
@@ -54,12 +54,11 @@ public class ChupaChatFragment extends AhFragment {
 
 	private ListView messageListView;
 	private ChupaChatListAdapter messageListAdapter;
-	
+
 	private List<AhMessage> chupas;
 	private AhMessage chupa;
-//	private ArrayList<AhMessage> messageList = new ArrayList<AhMessage>();
-	
-	Tracker t;
+
+	private Tracker t;
 
 
 	@Override
@@ -69,16 +68,15 @@ public class ChupaChatFragment extends AhFragment {
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
+		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
+		if (t==null){
+			t = app.getTracker(
+					AhApplication.TrackerName.APP_TRACKER);
+			t.setScreenName("ChupaChatFragment");
+			t.send(new HitBuilders.AppViewBuilder().build());
+		}
 
-        if (t==null){
-            t = app.getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-            t.setScreenName("ChupaChatFragment");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
-		
-        
+
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		if (userId == null) {
@@ -263,7 +261,7 @@ public class ChupaChatFragment extends AhFragment {
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
 		refreshView(chupaCommunId, null);
-		
+
 	}
 
 
@@ -299,7 +297,7 @@ public class ChupaChatFragment extends AhFragment {
 				.setLabel("Chupa")
 				.build());
 				activity.runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						messageListAdapter.remove(message);
@@ -333,7 +331,7 @@ public class ChupaChatFragment extends AhFragment {
 			int _id = Integer.valueOf(id);
 			chupa = messageDBHelper.getMessage(_id);
 		}
-		
+
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
@@ -398,7 +396,7 @@ public class ChupaChatFragment extends AhFragment {
 			AhMessage exMessage = (AhMessage)ex.getParameter();
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageDBHelper.updateMessages(exMessage);
-//			messageListAdapter.notifyDataSetChanged();
+			//			messageListAdapter.notifyDataSetChanged();
 			messageListView.setSelection(messageListView.getCount() - 1);
 			return;
 		}
