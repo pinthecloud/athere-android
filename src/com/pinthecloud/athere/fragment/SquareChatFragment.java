@@ -215,21 +215,23 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				message.setStatus(AhMessage.STATUS.SENT);
-				message.setTimeStamp();
-				
-				
-				/*
-				 * Check Chat
-				 */
 				Tracker t = app.getTracker(TrackerName.APP_TRACKER);
 				t.send(new HitBuilders.EventBuilder()
 				.setCategory("SquareChatFragment")
 				.setAction("SendChat")
 				.setLabel("Chat")
 				.build());
+				
+				message.setStatus(AhMessage.STATUS.SENT);
+				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
-				messageListAdapter.remove(message);
+				activity.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						messageListAdapter.remove(message);
+					}
+				});
 				refreshView(message.getId());
 			}
 		});
@@ -243,6 +245,8 @@ public class SquareChatFragment extends AhFragment{
 	 */
 	private void refreshView(final String id){
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment refreshView");
+
+
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
@@ -282,7 +286,7 @@ public class SquareChatFragment extends AhFragment{
 				} else {
 					messageListAdapter.add(talk);
 				}
-				messageListAdapter.notifyDataSetChanged();
+				//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});
@@ -302,9 +306,9 @@ public class SquareChatFragment extends AhFragment{
 					messageListAdapter.notifyDataSetChanged();
 				}
 			});
-			return;
+		}else{
+			super.handleException(ex);	
 		}
-		super.handleException(ex);
 	}
 
 }

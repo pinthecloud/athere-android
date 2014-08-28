@@ -287,15 +287,16 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				message.setStatus(AhMessage.STATUS.SENT);
-				message.setTimeStamp();
-				messageDBHelper.updateMessages(message);
 				Tracker t = app.getTracker(TrackerName.APP_TRACKER);
 				t.send(new HitBuilders.EventBuilder()
 				.setCategory("ChupaChatFragment")
 				.setAction("SendChupa")
 				.setLabel("Chupa")
 				.build());
+				
+				message.setStatus(AhMessage.STATUS.SENT);
+				message.setTimeStamp();
+				messageDBHelper.updateMessages(message);
 				activity.runOnUiThread(new Runnable() {
 
 					@Override
@@ -313,25 +314,24 @@ public class ChupaChatFragment extends AhFragment {
 	 * Set sent and received chupas to list view
 	 */
 	private void refreshView(String chupaCommunId, final String id) {
-		if (chupaCommunId == null || chupaCommunId.equals(""))
-			throw new AhException("No chupaCommunId");
+		if (chupaCommunId == null || chupaCommunId.equals("")) throw new AhException("No chupaCommunId");
+		
+		
 		/*
 		 * Clear badge numbers displayed on chupa list
 		 */
 		messageDBHelper.clearBadgeNum(chupaCommunId);
 
-		if (chupaCommunId == null || chupaCommunId.equals("")) throw new AhException("No chupaCommunId");
+		
 		/*
 		 * Get every chupa by chupaCommunId
 		 */
 		if (id == null) {
-			chupas = messageDBHelper
-					.getChupasByCommunId(chupaCommunId);
+			chupas = messageDBHelper.getChupasByCommunId(chupaCommunId);
 		} else {
 			int _id = Integer.valueOf(id);
 			chupa = messageDBHelper.getMessage(_id);
 		}
-
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
@@ -372,6 +372,7 @@ public class ChupaChatFragment extends AhFragment {
 			});
 		}
 
+		
 		/*
 		 * Set message listview
 		 */
@@ -396,10 +397,15 @@ public class ChupaChatFragment extends AhFragment {
 			AhMessage exMessage = (AhMessage)ex.getParameter();
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageDBHelper.updateMessages(exMessage);
-			//			messageListAdapter.notifyDataSetChanged();
-			messageListView.setSelection(messageListView.getCount() - 1);
-			return;
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					messageListAdapter.notifyDataSetChanged();
+				}
+			});
+		}else{
+			super.handleException(ex);	
 		}
-		super.handleException(ex);
 	}
 }
