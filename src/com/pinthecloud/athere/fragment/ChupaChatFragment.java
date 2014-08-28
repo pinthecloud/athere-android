@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.adapter.ChupaChatListAdapter;
@@ -31,7 +32,6 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.analytics.HitBuilders;
@@ -69,10 +69,10 @@ public class ChupaChatFragment extends AhFragment {
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
 
         if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
+            t = app.getTracker(
                     AhApplication.TrackerName.APP_TRACKER);
 
             t.setScreenName("ChupaChatFragment");
@@ -243,7 +243,6 @@ public class ChupaChatFragment extends AhFragment {
 					return;
 				}
 
-
 				// If Exit Message, Check if it's related Exit
 				// (Don't go through other User Exit message)
 				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())
@@ -298,6 +297,12 @@ public class ChupaChatFragment extends AhFragment {
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
+				Tracker t = app.getTracker(TrackerName.APP_TRACKER);
+				t.send(new HitBuilders.EventBuilder()
+				.setCategory("ChupaChatFragment")
+				.setAction("SendChupa")
+				.setLabel("Chupa")
+				.build());
 				activity.runOnUiThread(new Runnable() {
 					
 					@Override

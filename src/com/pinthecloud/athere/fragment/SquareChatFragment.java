@@ -227,7 +227,7 @@ public class SquareChatFragment extends AhFragment{
 				/*
 				 * Check Chat
 				 */
-				Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
+				Tracker t = app.getTracker(TrackerName.APP_TRACKER);
 				t.send(new HitBuilders.EventBuilder()
 				.setCategory("SquareChatFragment")
 				.setAction("SendChat")
