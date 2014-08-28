@@ -46,7 +46,7 @@ public class SquareListFragment extends AhFragment{
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
+		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
         if (t==null){
             t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
             t.setScreenName("SquareListFragment");

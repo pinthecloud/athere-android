@@ -4,6 +4,8 @@ package com.pinthecloud.athere;
 public class AhGlobalVariable{
 
 	public static final String GOOGLE_STORE_APP_ID = "com.pinthecloud.athere";
+	
+	
 	/*
 	 * Int
 	 */
@@ -20,9 +22,13 @@ public class AhGlobalVariable{
 	public static float DEVICE_DENSITY;
 
 	/*
-	 * GCM server key
+	 * Key for external service
 	 */
 	public static final String GCM_SENDER_ID = "838051405989";
+	public static final String Five_ROCKS_APP_ID = "53f9e732333a3895de000001";
+	public static final String Five_ROCKS_APP_KEY = "Mx8kZ2BxcZKXZPBz5UV8";
+	public static final String GA_TRACKER_KEY = "UA-53944359-1";
+	
 
 	/*
 	 * String
