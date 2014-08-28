@@ -82,15 +82,14 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
 
-	Tracker t;
-
+	private Tracker t;
+	
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
 		@Override
 		public void onShutter() {
 		}
 	};
-
 
 	// JPEG 이미지를 생성 후 호출
 	private PictureCallback mPicutureListener = new PictureCallback(){
@@ -155,7 +154,7 @@ public class SquareProfileFragment extends AhFragment{
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
+		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
 
 		if (t==null){
 			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);

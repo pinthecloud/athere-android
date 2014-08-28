@@ -8,6 +8,7 @@ import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -25,7 +26,7 @@ public class ChupaChatActivity extends AhActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chupa_chat);
-	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+	    FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
 		
 	    
 		/*

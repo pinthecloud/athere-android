@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
@@ -20,22 +21,20 @@ public class AhActivity extends Activity{
 	protected PreferenceHelper pref;
 	protected AhActivity _this;
 
-	// for FiveRocks analytics
-	public static final String FiveRocks_AppId = "53f9e732333a3895de000001";
-	public static final String FiveRocks_AppKey = "Mx8kZ2BxcZKXZPBz5UV8";
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		/*
+		 * Set FiveRocks
+		 */
 		FiveRocks.setDebugEnabled(true);
-
-
-		// Set FiveRocks AppId, AppKey
-		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
 		// FiveRocks.setUserCohortVariable(1, "DemoUser");
-
-
+		
+		
 		/*
 		 * Set static value
 		 */
@@ -63,7 +62,7 @@ public class AhActivity extends Activity{
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FiveRocks.onActivityStart(this);		
+		FiveRocks.onActivityStart(this);	
 	}
 
 
