@@ -69,16 +69,14 @@ public class ChupaChatFragment extends AhFragment {
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
-
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
         if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
+            t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
             t.setScreenName("ChupaChatFragment");
             t.send(new HitBuilders.AppViewBuilder().build());
         }
 		
+        
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		if (userId == null) {
@@ -260,7 +258,7 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
 		refreshView(chupaCommunId, null);
@@ -272,7 +270,7 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStop() {
 		otherProfileImage.setImageBitmap(null);
 		super.onStop();
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
 

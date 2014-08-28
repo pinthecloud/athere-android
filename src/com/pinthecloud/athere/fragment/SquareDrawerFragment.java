@@ -18,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -30,9 +33,6 @@ import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 public class SquareDrawerFragment extends AhFragment {
 
@@ -51,28 +51,25 @@ public class SquareDrawerFragment extends AhFragment {
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 
-    private Tracker t;
-	
-    @Override
+	private Tracker t;
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
+
+
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
-
-        if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
-            t.setScreenName("SquareDrawerFragment");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
+		if (t==null){
+			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
+			t.setScreenName("SquareDrawerFragment");
+			t.send(new HitBuilders.AppViewBuilder().build());
+		}
 	}
 
-    
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -106,7 +103,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-//				final AhUser user = userList.get(position);
+				//				final AhUser user = userList.get(position);
 				final AhUser user = participantListAdapter.getItem(position);
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
@@ -226,7 +223,7 @@ public class SquareDrawerFragment extends AhFragment {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
 		updateUserList();
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profileImage);
 	}
 
@@ -236,7 +233,7 @@ public class SquareDrawerFragment extends AhFragment {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
 		profileImage.setImageBitmap(null);
 		super.onStop();
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 
 
@@ -274,7 +271,7 @@ public class SquareDrawerFragment extends AhFragment {
 			}
 		});
 
-		
+
 		/*
 		 * Set profile information text and gender image
 		 */
@@ -303,7 +300,7 @@ public class SquareDrawerFragment extends AhFragment {
 				participantListAdapter.clear();
 				participantListAdapter.addAll(userDBHelper.getAllUsers());
 
-				
+
 				/*
 				 * Set member number text
 				 */
@@ -319,9 +316,9 @@ public class SquareDrawerFragment extends AhFragment {
 		for(int i = 0 ; i < list.getCount() ; i++) {
 			if (list.getItem(i).isMale()) count++;
 		}
-//		for(AhUser user : list){
-//			if (user.isMale()) count++;
-//		}
+		//		for(AhUser user : list){
+		//			if (user.isMale()) count++;
+		//		}
 		return count;
 	}
 
@@ -331,9 +328,9 @@ public class SquareDrawerFragment extends AhFragment {
 		for(int i = 0 ; i < list.getCount() ; i++) {
 			if (!list.getItem(i).isMale()) count++;
 		}
-//		for(AhUser user : list){
-//			if (!user.isMale()) count++;
-//		}
+		//		for(AhUser user : list){
+		//			if (!user.isMale()) count++;
+		//		}
 		return count;
 	}
 }

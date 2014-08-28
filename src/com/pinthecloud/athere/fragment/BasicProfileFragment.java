@@ -46,6 +46,7 @@ public class BasicProfileFragment extends AhFragment{
 
 	private Tracker t;
 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,11 +55,9 @@ public class BasicProfileFragment extends AhFragment{
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
         if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
+            t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
             t.setScreenName("BasicProfileFragment");
             t.send(new HitBuilders.AppViewBuilder().build());
         }
@@ -251,13 +250,13 @@ public class BasicProfileFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 	
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 }

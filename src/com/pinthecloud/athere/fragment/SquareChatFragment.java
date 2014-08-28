@@ -59,9 +59,9 @@ public class SquareChatFragment extends AhFragment{
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
 		if (t == null){
-			t = ((AhApplication) getActivity().getApplication()).getTracker(AhApplication.TrackerName.APP_TRACKER);
+			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
 			t.setScreenName("SquareChatFragment");
 			t.send(new HitBuilders.AppViewBuilder().build());
 		}
@@ -183,14 +183,14 @@ public class SquareChatFragment extends AhFragment{
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
 		refreshView(null);
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 
 
@@ -222,7 +222,7 @@ public class SquareChatFragment extends AhFragment{
 				/*
 				 * Check Chat
 				 */
-				Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
+				Tracker t = app.getTracker(TrackerName.APP_TRACKER);
 				t.send(new HitBuilders.EventBuilder()
 				.setCategory("SquareChatFragment")
 				.setAction("SendChat")

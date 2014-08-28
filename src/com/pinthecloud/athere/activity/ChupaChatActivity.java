@@ -20,6 +20,7 @@ public class ChupaChatActivity extends AhActivity {
 
 	private MessageHelper messageHelper;
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

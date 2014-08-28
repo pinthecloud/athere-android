@@ -50,6 +50,7 @@ public class SquareActivity extends AhActivity{
 
 	//	private Tracker t;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -208,6 +209,7 @@ public class SquareActivity extends AhActivity{
 		}
 	}
 
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -215,6 +217,7 @@ public class SquareActivity extends AhActivity{
 		FiveRocks.onActivityStart(this);
 	}
 
+	
 	@Override
 	protected void onStop() {
 		super.onStop();
