@@ -36,21 +36,19 @@ public class SquareListFragment extends AhFragment{
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
 
-	Tracker t;
+	private Tracker t;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
-
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
         if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
+            t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
             t.setScreenName("SquareListFragment");
             t.send(new HitBuilders.AppViewBuilder().build());
         }
@@ -135,24 +133,21 @@ public class SquareListFragment extends AhFragment{
 				mProgressBar.setVisibility(View.GONE);
 				squareListAdapter.clear();
 				squareListAdapter.addAll(list);
-//				squareListAdapter.notifyDataSetChanged();
 			}
 		});
 	}
 	
+	
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
-		
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
+	
 	
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 }

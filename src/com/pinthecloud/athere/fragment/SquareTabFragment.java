@@ -37,15 +37,18 @@ public class SquareTabFragment extends AhFragment{
 		super();
 	}
 
+	
 	public SquareTabFragment(Square square) {
 		super();
 		this.square = square;
 	}
 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,6 +101,7 @@ public class SquareTabFragment extends AhFragment{
 		badge.setTextSize(BADGE_SIZE);
 		badge.setBadgePosition(BadgeView.POSITION_CENTER_VERTICAL_RIGHT);
 
+		
 		/*
 		 * Set message handle
 		 */

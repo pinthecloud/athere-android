@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.activity;
 
+import io.fiverocks.android.FiveRocks;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -7,23 +8,22 @@ import android.os.Bundle;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.BasicProfileFragment;
 
-import io.fiverocks.android.FiveRocks;
-
 //import com.google.android.gms.analytics.GoogleAnalytics;
 //import com.google.android.gms.analytics.HitBuilders;
 //import com.google.android.gms.analytics.Tracker;
 
 public class BasicProfileActivity extends AhActivity{
 
-//	Tracker t;
+//	private Tracker t;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_basic_profile);
-
 	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		
+	    
 		/* 
 		 * for google analytics
 		 */
@@ -37,6 +37,7 @@ public class BasicProfileActivity extends AhActivity{
 //            t.send(new HitBuilders.AppViewBuilder().build());
 //        }
 		
+	    
 		/*
 		 * Set Fragment to container
 		 */
@@ -50,17 +51,13 @@ public class BasicProfileActivity extends AhActivity{
 	
 	@Override
 		protected void onStart() {
-			// TODO Auto-generated method stub
 			super.onStart();
-			
 			FiveRocks.onActivityStart(this);
 		}
 	
 	@Override
 		protected void onStop() {
-			// TODO Auto-generated method stub
 			super.onStop();
-			
 			FiveRocks.onActivityStop(this);
 		}
 }

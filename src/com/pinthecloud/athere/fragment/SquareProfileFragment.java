@@ -83,7 +83,7 @@ public class SquareProfileFragment extends AhFragment{
 	private Bitmap pictureBitmap;
 
 	Tracker t;
-	
+
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
 		@Override
@@ -155,16 +155,14 @@ public class SquareProfileFragment extends AhFragment{
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
 
-        if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
+		if (t==null){
+			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
+			t.setScreenName("SquareProfileFragment");
+			t.send(new HitBuilders.AppViewBuilder().build());
+		}
 
-            t.setScreenName("SquareProfileFragment");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
-		
 		// Get parameter from previous activity intent
 		intent = activity.getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
@@ -369,8 +367,7 @@ public class SquareProfileFragment extends AhFragment{
 		}else{
 			blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profilePictureView);
 		}
-		
-		GoogleAnalytics.getInstance(getActivity().getApplicationContext()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
 
@@ -380,8 +377,7 @@ public class SquareProfileFragment extends AhFragment{
 		profilePictureView.setImageBitmap(null);
 		releaseCameraAndRemoveView();
 		super.onStop();
-		
-		GoogleAnalytics.getInstance(getActivity().getApplicationContext()).reportActivityStop(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 
 

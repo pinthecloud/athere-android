@@ -14,18 +14,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
-
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -38,12 +37,14 @@ public class SquareChatFragment extends AhFragment{
 
 	private List<AhMessage> talks;
 	private AhMessage talk;
-	
-	Tracker t;
-	
+
+	private Tracker t;
+
+
 	public SquareChatFragment() {
 		super();
 	}
+
 
 	public SquareChatFragment(String squareId) {
 		super();
@@ -54,19 +55,16 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
-
-        if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
-            t.setScreenName("SquareChatFragment");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
+		if (t == null){
+			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
+			t.setScreenName("SquareChatFragment");
+			t.send(new HitBuilders.AppViewBuilder().build());
+		}
 	}
 
 
@@ -176,7 +174,6 @@ public class SquareChatFragment extends AhFragment{
 				refreshView(message.getId());
 			}
 		});
-//		refreshView(true);
 		return view;
 	}
 
@@ -186,29 +183,25 @@ public class SquareChatFragment extends AhFragment{
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
 		refreshView(null);
-		
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
-	
+
+
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
-	
+
 
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
-		
+
 		activity.runOnUiThread(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				messageListAdapter.add(message);
-//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 				messageEditText.setText("");
 			}
@@ -224,6 +217,8 @@ public class SquareChatFragment extends AhFragment{
 			public void onCompleted(AhMessage entity) {
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
+				
+				
 				/*
 				 * Check Chat
 				 */
@@ -234,8 +229,6 @@ public class SquareChatFragment extends AhFragment{
 				.setLabel("Chat")
 				.build());
 				messageDBHelper.updateMessages(message);
-//				messageListAdapter.notifyDataSetChanged();
-//				messageListView.setSelection(messageListView.getCount() - 1);
 				messageListAdapter.remove(message);
 				refreshView(message.getId());
 			}
@@ -267,15 +260,15 @@ public class SquareChatFragment extends AhFragment{
 			.setTimeStamp().build();
 			messageDBHelper.addMessage(enterTalk);
 		}
-		
 		if (id == null){
 			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 		} else {
 			int _id = Integer.valueOf(id);
-//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			talk = messageDBHelper.getMessage(_id);
 		}
-		
+
+
 		/*
 		 * Set message list view
 		 */
@@ -289,7 +282,6 @@ public class SquareChatFragment extends AhFragment{
 				} else {
 					messageListAdapter.add(talk);
 				}
-				
 				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
@@ -304,15 +296,12 @@ public class SquareChatFragment extends AhFragment{
 			exMessage.setStatus(AhMessage.STATUS.FAIL);
 			messageDBHelper.updateMessages(exMessage);
 			activity.runOnUiThread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					messageListAdapter.notifyDataSetChanged();
-					messageListView.setSelection(messageListView.getCount() - 1);
 				}
 			});
-			
 			return;
 		}
 		super.handleException(ex);

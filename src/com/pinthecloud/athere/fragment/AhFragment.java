@@ -41,6 +41,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected SquareHelper squareHelper;
 	protected CachedBlobStorageHelper blobStorageHelper;
 
+	
 	public AhFragment(){
 		_thisFragment = this;
 		app = AhApplication.getInstance();
@@ -53,18 +54,21 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		pref = app.getPref();
 	}
 
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		context = getActivity();
 		activity = (AhActivity) context;
 		super.onCreate(savedInstanceState);
+		
+		
 		/*
 		 * Set static value
 		 */
-		
 		ExceptionManager.setHandler(_thisFragment);
 	}
 
+	
 	@Override
 	public void handleException(final AhException ex) {
 		Log(_thisFragment, "AhFragment handleException : " + ex.toString());

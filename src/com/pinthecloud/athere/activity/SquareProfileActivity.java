@@ -15,26 +15,29 @@ import io.fiverocks.android.FiveRocks;
 
 public class SquareProfileActivity extends AhActivity {
 
-//	Tracker t;
+	//	private Tracker t;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_profile);
-	
-	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+
+
 		/* 
 		 * for google analytics
 		 */
-//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
-//
-//        if (t==null){
-//            t = ((AhApplication) getApplication()).getTracker(
-//                    AhApplication.TrackerName.APP_TRACKER);
-//
-//            t.setScreenName("SquareProfileActivity");
-//            t.send(new HitBuilders.AppViewBuilder().build());
-//        }
+		//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
+		//
+		//        if (t==null){
+		//            t = ((AhApplication) getApplication()).getTracker(
+		//                    AhApplication.TrackerName.APP_TRACKER);
+		//
+		//            t.setScreenName("SquareProfileActivity");
+		//            t.send(new HitBuilders.AppViewBuilder().build());
+		//        }
+
 
 		/*
 		 * Set Fragment to container
@@ -46,22 +49,20 @@ public class SquareProfileActivity extends AhActivity {
 		fragmentTransaction.add(R.id.square_profile_container, squareProfileFragment);
 		fragmentTransaction.commit();
 	}
+
 	
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
-		
-//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+		//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 		FiveRocks.onActivityStart(this);
 	}
+
 	
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		
-//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+		//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 		FiveRocks.onActivityStop(this);
 	}
 }

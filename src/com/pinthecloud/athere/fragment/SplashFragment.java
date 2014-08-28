@@ -37,27 +37,24 @@ import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
-
-	Tracker t;
+	private Tracker t;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		versionHelper = app.getVersionHelper();
 		
+		
 		/* 
 		 * for google analytics
 		 */
-		GoogleAnalytics.getInstance(getActivity().getApplication()).newTracker("UA-53944359-1");
-
+		GoogleAnalytics.getInstance(app).newTracker("UA-53944359-1");
         if (t==null){
-            t = ((AhApplication) getActivity().getApplication()).getTracker(
-                    AhApplication.TrackerName.APP_TRACKER);
-
+            t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
             t.setScreenName("SplashFragment");
             t.send(new HitBuilders.AppViewBuilder().build());
         }
-       
 	}
 
 
@@ -280,19 +277,17 @@ public class SplashFragment extends AhFragment {
 		super.handleException(ex);
 	}
 	
+	
 	@Override
 	public void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
-		
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStart(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
+	
 	
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		
-		GoogleAnalytics.getInstance(getActivity().getApplication()).reportActivityStop(getActivity());
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 }

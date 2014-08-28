@@ -28,10 +28,10 @@ public class HongkunTestAcitivity extends AhActivity {
 	MessageHelper messageHelper;
 	SquareHelper squareHelper;
 
-
 	public static final String SENDER_ID = "838051405989";
 	AhFragment hongFrag;
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,8 +50,6 @@ public class HongkunTestAcitivity extends AhActivity {
 		/*
 		 * Set Fragment to container
 		 */
-		
-		
 		try{
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -65,6 +63,8 @@ public class HongkunTestAcitivity extends AhActivity {
 		}
 		
 	}
+	
+	
 	/*
 	public void addItem(View view) {
 
@@ -80,11 +80,11 @@ public class HongkunTestAcitivity extends AhActivity {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				// TODO Auto-generated method stub
 				btn01.setText(btn01.getText().toString() + (b1Count++));
 			}
 		});
 	}
+
 
 	public void addItem02(View view) {
 
@@ -100,11 +100,11 @@ public class HongkunTestAcitivity extends AhActivity {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				// TODO Auto-generated method stub
 				btn02.setText(btn02.getText().toString() + (b2Count++));
 			}
 		});
 	}
+
 
 	public void addItem03(View view) {
 
@@ -120,11 +120,11 @@ public class HongkunTestAcitivity extends AhActivity {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				// TODO Auto-generated method stub
 				btn03.setText(btn03.getText().toString() + (b3Count++));
 			}
 		});
 	}
+
 
 	public void addItem04(View view) {
 

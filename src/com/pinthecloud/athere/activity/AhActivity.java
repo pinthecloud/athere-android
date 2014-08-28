@@ -23,27 +23,27 @@ public class AhActivity extends Activity{
 	// for FiveRocks analytics
 	public static final String FiveRocks_AppId = "53f9e732333a3895de000001";
 	public static final String FiveRocks_AppKey = "Mx8kZ2BxcZKXZPBz5UV8";
-	
-	
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
-	    FiveRocks.setDebugEnabled(true);
-	    
+		FiveRocks.setDebugEnabled(true);
+
+
 		// Set FiveRocks AppId, AppKey
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		// FiveRocks.setUserCohortVariable(1, "DemoUser");
-		
-		
+
+
 		/*
 		 * Set static value
 		 */
 		app = AhApplication.getInstance();
 		pref = app.getPref();
 		_this = this;
-		
 	}
+
 
 	// Logging Method
 	protected void Log(AhActivity activity, Object... params){
@@ -58,18 +58,18 @@ public class AhActivity extends Activity{
 		}
 		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 	}
-	
+
+
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
 		FiveRocks.onActivityStart(this);		
 	}
+
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
 		FiveRocks.onActivityStop(this);
 	}
 }

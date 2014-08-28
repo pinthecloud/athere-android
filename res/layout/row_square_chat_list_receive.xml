@@ -17,8 +17,7 @@
         android:layout_height="@dimen/square_chat_profile_height"
         android:layout_marginEnd="@dimen/square_chat_list_receive_profile_nick_name_margin"
         android:layout_marginRight="@dimen/square_chat_list_receive_profile_nick_name_margin"
-        android:contentDescription="@string/profile_image"
-        android:src="@drawable/launcher" />
+        android:contentDescription="@string/profile_image" />
 
     <RelativeLayout
         android:id="@+id/row_square_chat_list_receive_profile_into_layout"

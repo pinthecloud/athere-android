@@ -169,6 +169,7 @@ public class AhIntentService extends IntentService {
 		}
 	}
 
+	
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
@@ -191,12 +192,12 @@ public class AhIntentService extends IntentService {
 							alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 						}
 					});
-					
 				}
 			}
 		});
 	}
 
+	
 	private void EXIT_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
@@ -209,6 +210,7 @@ public class AhIntentService extends IntentService {
 		}
 	}
 
+	
 	private void UPDATE_USER_INFO() {
 		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
 
@@ -222,10 +224,12 @@ public class AhIntentService extends IntentService {
 		});
 	}
 
+	
 	private void MESSAGE_READ() {
 		throw new AhException("NOT IMPLEMENTED YET");
 	}
 
+	
 	private void FORCED_LOGOUT() {
 		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
 
@@ -242,6 +246,7 @@ public class AhIntentService extends IntentService {
 		});
 	}
 
+	
 	private void ADMIN_MESSAGE() {
 		throw new AhException("NOT IMPLEMENTED YET");
 	}

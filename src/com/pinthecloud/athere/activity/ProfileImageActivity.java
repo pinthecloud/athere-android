@@ -14,11 +14,10 @@ public class ProfileImageActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	    
 		setContentView(R.layout.activity_profile_image);
+		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 
-	    FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
-		
+
 		/*
 		 * Set Fragment to container
 		 */
@@ -29,20 +28,18 @@ public class ProfileImageActivity extends AhActivity{
 		fragmentTransaction.add(R.id.profile_image_container, profileImageFragment);
 		fragmentTransaction.commit();
 	}
-	
+
+
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
-		
 		FiveRocks.onActivityStart(this);
 	}
 
+
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
-		
 		FiveRocks.onActivityStop(this);
 	}
 }
