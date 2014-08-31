@@ -49,10 +49,13 @@ import com.pinthecloud.athere.util.FileUtil;
 public class AhApplication extends Application{
 
 	// Windows Azure Mobile Service Keys
-	private final String APP_URL = "https://athere.azure-mobile.net/";
-	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	//	private final String APP_URL = "https://athere.azure-mobile.net/";
+	//	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	private final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
+	private final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
 
-	private static final String FORCED_LOGOUT = "forced_logout";
+	// Method Name
+	private final String FORCED_LOGOUT = "forced_logout";
 
 	// Application
 	private static AhApplication app;
@@ -87,8 +90,8 @@ public class AhApplication extends Application{
 
 		try {
 			mClient = new MobileServiceClient(
-					APP_URL,
-					APP_KEY,
+					APP_TEST_URL,
+					APP_TEST_KEY,
 					this);
 		} catch (MalformedURLException e) {
 			Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());

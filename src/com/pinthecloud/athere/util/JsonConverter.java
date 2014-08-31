@@ -22,8 +22,8 @@ public class JsonConverter {
 			double latitude = jo.get("latitude").getAsDouble();
 			double longitude = jo.get("longitude").getAsDouble();
 			String whoMade = jo.get("whoMade").getAsString();
-			int maleNum = jo.get("malenum").getAsInt();
-			int femaleNum = jo.get("femalenum").getAsInt();
+			int maleNum = jo.get("maleNum").getAsInt();
+			int femaleNum = jo.get("femaleNum").getAsInt();
 			int distance = jo.get("distance").getAsInt();
 			boolean isAdmin = jo.get("isAdmin").getAsBoolean();
 			String code = "";
