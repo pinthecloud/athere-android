@@ -21,6 +21,7 @@ import com.pinthecloud.athere.model.AhUser;
 
 public class ProfileDialog extends AhDialogFragment{
 
+	private AhDialogCallback ahDialogCallback;
 	private AhApplication app;
 	private AhFragment frag;
 	private PreferenceHelper pref;

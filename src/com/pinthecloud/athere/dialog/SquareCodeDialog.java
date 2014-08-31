@@ -17,6 +17,7 @@ import com.pinthecloud.athere.model.Square;
 
 public class SquareCodeDialog extends AhDialogFragment{
 
+	private AhDialogCallback ahDialogCallback;
 	private Square square;
 	private EditText codeText;
 	private ImageButton enterButton;

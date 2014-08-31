@@ -176,7 +176,7 @@ public class AhApplication extends Application{
 		JsonObject jo = new JsonObject();
 		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
 		jo.addProperty("ahIdUserKey", pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
-		jo.addProperty("isMale", pref.getString(AhGlobalVariable.IS_MALE_KEY));
+		jo.addProperty("isMale", pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
 		jo.addProperty("squareId", pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
 
 		Gson g = new Gson();
@@ -209,16 +209,12 @@ public class AhApplication extends Application{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
-
 				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 
 					@Override
 					public void onCompleted(JsonElement json, Exception exception,
 							ServiceFilterResponse response) {
-
 						removeSquarePreference();
-
 						callback.onCompleted(true);
 					}
 				});

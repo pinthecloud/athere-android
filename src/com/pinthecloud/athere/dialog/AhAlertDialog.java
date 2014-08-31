@@ -9,12 +9,14 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 public class AhAlertDialog extends AhDialogFragment{
 
+	private AhDialogCallback ahDialogCallback;
 	private String title;
 	private String message;
 	private String okMessage;
 	private String cancelMessage;
 	private boolean cancel;
 
+	
 	public AhAlertDialog(String title, String message, boolean cancel, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
@@ -23,6 +25,7 @@ public class AhAlertDialog extends AhDialogFragment{
 		this.cancel = cancel;
 	}
 
+	
 	public AhAlertDialog(String title, String message, String okMessage, String cancelMessage, boolean cancel, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
@@ -33,6 +36,7 @@ public class AhAlertDialog extends AhDialogFragment{
 		this.cancel = cancel;
 	}
 
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		if(okMessage == null){
@@ -43,7 +47,7 @@ public class AhAlertDialog extends AhDialogFragment{
 		}
 
 		// Make Dialog
-		AlertDialog.Builder altBuilder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder altBuilder = new AlertDialog.Builder(activity);
 		if(title == null){
 			setStyle(STYLE_NO_TITLE, 0);
 		}else{

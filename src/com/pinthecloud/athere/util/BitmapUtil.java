@@ -38,8 +38,7 @@ public class BitmapUtil {
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeStream(context.getContentResolver()
-				.openInputStream(imageUri), null, options);
+		BitmapFactory.decodeStream(context.getContentResolver().openInputStream(imageUri), null, options);
 
 		// Calculate inSampleSize
 		options.inSampleSize = calculateSize(options, reqWidth, reqHeight);
@@ -127,6 +126,30 @@ public class BitmapUtil {
 	}
 
 
+	public static int getImageOrientation(String imagePath) throws IOException{
+		Log.d(AhGlobalVariable.LOG_TAG, "BitmapHelper getImageOrientation");
+
+		try {
+			ExifInterface exif = new ExifInterface(imagePath);
+			int orientation = exif.getAttributeInt(
+					ExifInterface.TAG_ORIENTATION,
+					ExifInterface.ORIENTATION_NORMAL);
+			switch (orientation) {
+			case ExifInterface.ORIENTATION_ROTATE_90:
+				return 90;
+			case ExifInterface.ORIENTATION_ROTATE_180:
+				return 180;
+			case ExifInterface.ORIENTATION_ROTATE_270:
+				return 270;
+			default:
+				return 0;
+			}
+		} catch (IOException e) {
+			throw e;
+		}
+	}
+	
+	
 	public static Bitmap rotate(Bitmap bitmap, int degree) {
 		int w = bitmap.getWidth();
 		int h = bitmap.getHeight();

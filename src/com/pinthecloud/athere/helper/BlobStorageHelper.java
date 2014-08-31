@@ -16,6 +16,7 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -28,8 +29,8 @@ public class BlobStorageHelper {
 			"DefaultEndpointsProtocol=http;AccountName=athere;AccountKey=ldhgydlWndSIl7XfiaAQ+sibsNtVZ1Psebba1RpBKxMbyFVYUCMvvuQir0Ty7f0+8TnNLfFKc9yFlYpP6ZSuQQ==";
 	private static final String CONTAINER_NAME = "chupaprofile";
 	protected CloudBlobClient blobClient;
-	
-	
+
+
 	public BlobStorageHelper() {
 		CloudStorageAccount account = null;
 		try {
@@ -45,18 +46,18 @@ public class BlobStorageHelper {
 		// Create a blob service client
 		blobClient = account.createCloudBlobClient();
 	}
-	
-	
+
+
 	public String uploadBitmapSync(final AhFragment frag, String id, Bitmap bitmap) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		try {
 			container = blobClient.getContainerReference(CONTAINER_NAME);
-			 blob = container.getBlockBlobReference(id);
-			 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-			 blob.upload(new ByteArrayInputStream(baos.toByteArray()), baos.size());
-			 baos.close();
+			blob = container.getBlockBlobReference(id);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+			blob.upload(new ByteArrayInputStream(baos.toByteArray()), baos.size());
+			baos.close();
 		} catch (URISyntaxException e) {
 			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
@@ -64,11 +65,10 @@ public class BlobStorageHelper {
 		} catch (IOException e) {
 			ExceptionManager.fireException(new AhException(frag, "uploadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
-		
 		return id;
 	}
-	
-	
+
+
 	public Bitmap downloadBitmapSync(final AhFragment frag, String id) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
@@ -79,22 +79,22 @@ public class BlobStorageHelper {
 			blob.download(baos);
 			return BitmapFactory.decodeByteArray(baos.toByteArray(), 0, baos.size());
 		} catch (URISyntaxException e) {
-//			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+			//			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-//			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+			//			ExceptionManager.fireException(new AhException(frag, "downloadBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		Bitmap bm = null;
 		if (frag != null) {
-			bm = BitmapFactory.decodeResource(frag.getActivity().getResources(), com.pinthecloud.athere.R.drawable.launcher);
+			bm = BitmapFactory.decodeResource(frag.getActivity().getResources(), R.drawable.launcher);
 		}
 		return bm;
 	}
-	
-	
+
+
 	public String downloadToFileSync(final AhFragment frag, String id, String path) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
-		
+
 		try {
 			container = blobClient.getContainerReference(CONTAINER_NAME);
 			blob = container.getBlockBlobReference(id);
@@ -109,12 +109,12 @@ public class BlobStorageHelper {
 		}
 		return null;
 	}
-	
-	
+
+
 	public boolean deleteBitmapSync(final AhFragment frag, String id) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
-		
+
 		try {
 			container = blobClient.getContainerReference(CONTAINER_NAME);
 			blob = container.getBlockBlobReference(id);
@@ -127,10 +127,9 @@ public class BlobStorageHelper {
 		}
 		return false;
 	}
-	
-	
+
+
 	public void uploadBitmapAsync(final AhFragment frag, String id, final Bitmap bitmap, final AhEntityCallback<String> callback) {
-		
 		(new AsyncTask<String, Void, String>() {
 
 			@Override
@@ -138,7 +137,7 @@ public class BlobStorageHelper {
 				String id = params[0];
 				return uploadBitmapSync(frag, id, bitmap);
 			}
-			
+
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
@@ -148,8 +147,8 @@ public class BlobStorageHelper {
 			}
 		}).execute(id);
 	}
-	
-	
+
+
 	public void downloadBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {
 		(new AsyncTask<String, Void, Bitmap>() {
 
@@ -158,7 +157,7 @@ public class BlobStorageHelper {
 				String id = params[0];
 				return downloadBitmapSync(frag, id);
 			}
-			
+
 			@Override
 			protected void onPostExecute(Bitmap result) {
 				super.onPostExecute(result);
@@ -168,8 +167,8 @@ public class BlobStorageHelper {
 			}
 		}).execute(id);
 	}
-	
-	
+
+
 	public void downloadToFileAsync(final AhFragment frag, String id, final Context context, final String path, final AhEntityCallback<String> callback) {
 		(new AsyncTask<String, Void, String>() {
 
@@ -178,19 +177,19 @@ public class BlobStorageHelper {
 				String id = params[0];
 				return downloadToFileSync(frag, id, path);
 			}
-			
+
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
-				
+
 				if (callback != null)
 					callback.onCompleted(result);
 				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);
 	}
-	
-	
+
+
 	public void deleteBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Boolean> callback) {
 		(new AsyncTask<String, Void, Boolean>() {
 
@@ -199,7 +198,7 @@ public class BlobStorageHelper {
 				String id = params[0];
 				return deleteBitmapSync(frag, id);
 			}
-			
+
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);

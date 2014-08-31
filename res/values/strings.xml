@@ -49,7 +49,6 @@
     <string name="max_nick_name_message">Please type in less then 16 letters.</string>
     <string name="bad_camera_message">Camera met error. Please try it again.</string>
     <string name="bad_nick_name_message">This is invalid nick name.</string>
-    <string name="bad_gallery_message">Loading image from gallery met error. Please try it again.</string>
     <string name="bad_enter_square_message">Entering the square met error. Please try it again.</string>
     <string name="bad_square_code_message">Square code is wrong. Please enter again.</string>
     <string name="basic_profile_complete_message">Did you enter your profile correctly? You can\'t change it afterward.</string>
@@ -68,13 +67,17 @@
     <string name="update_app_message">New version found. Please update your App.</string>
     <string name="internet_not_connected_message">Internet is bad. Please check your network environments.</string>
     <string name="message_fail_message">Select action.</string>
-    
+
     <!-- String Array -->
 
-    <string-array name="profile_image_select_string_array">
+    <string-array name="profile_image_select_delete_string_array">
         <item>Album</item>
         <item>Camera</item>
         <item>Delete</item>
+    </string-array>
+    <string-array name="profile_image_select_string_array">
+        <item>Album</item>
+        <item>Camera</item>
     </string-array>
     <string-array name="square_tab_string_array">
         <item>chat</item>

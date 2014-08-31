@@ -26,7 +26,8 @@
                 android:id="@+id/square_profile_frag_profile_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/profile_image" />
+                android:contentDescription="@string/profile_image"
+                android:src="@drawable/launcher" />
 
             <ImageButton
                 android:id="@+id/square_profile_frag_self_camera_button"
@@ -37,7 +38,8 @@
                 android:layout_alignTop="@+id/square_profile_frag_profile_picture"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/rotate"
-                android:src="@drawable/camera_rotate" />
+                android:src="@drawable/camera_rotate"
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/square_profile_frag_camera_button"
@@ -48,7 +50,8 @@
                 android:layout_marginBottom="@dimen/square_profile_camera_button_bottom_margin"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/take"
-                android:src="@drawable/camera_take" />
+                android:src="@drawable/camera_take"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/square_profile_frag_progress_bar"
