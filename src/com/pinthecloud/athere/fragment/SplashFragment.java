@@ -76,7 +76,7 @@ public class SplashFragment extends AhFragment {
 		 * Do this method when only update app
 		 */
 		//		insertAppVersion();
-
+		
 
 		/*
 		 * If time is up, remove local preferences.

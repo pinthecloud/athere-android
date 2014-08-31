@@ -194,25 +194,13 @@ public class BasicProfileFragment extends AhFragment{
 					user.setAhId(androidId);
 					user.setPassword("");
 					user.setAndroidId(androidId);
-					userHelper.addAhIdUser(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
+					userHelper.addIdUserAsync(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
 
 						@Override
 						public void onCompleted(AhIdUser entity) {
 							progressBar.setVisibility(View.GONE);
 
-							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
-							Calendar c = Calendar.getInstance();
-							int age = c.get(Calendar.YEAR) - (birthYear - 1);
-							pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
-							pref.putInt(AhGlobalVariable.AGE_KEY, age);
-							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-							pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
-							pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-							pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAhId());
-							Intent intent = new Intent(context, SquareListActivity.class);
-							startActivity(intent);
-							activity.finish();
-						
+							
 							/*
 							 * check the sex 
 							 */
@@ -232,6 +220,24 @@ public class BasicProfileFragment extends AhFragment{
 								.setLabel("Female")
 								.build());
 							}
+							
+							
+							/*
+							 * Save setting and move to next activity
+							 */
+							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
+							Calendar c = Calendar.getInstance();
+							int age = c.get(Calendar.YEAR) - (birthYear - 1);
+							pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
+							pref.putInt(AhGlobalVariable.AGE_KEY, age);
+							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
+							pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
+							pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
+							pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAhId());
+							
+							Intent intent = new Intent(context, SquareListActivity.class);
+							startActivity(intent);
+							activity.finish();
 						}
 					});
 				}

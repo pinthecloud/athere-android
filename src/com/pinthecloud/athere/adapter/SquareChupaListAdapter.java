@@ -67,7 +67,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				sender.setTextColor(context.getResources().getColor(R.color.black));
 			}
 			sender.setText(userNickName);
-			blobStorageHelper.setImageViewAsync(fragment, userId, profileImage);
+			blobStorageHelper.setImageViewAsync(fragment, userId, R.drawable.launcher, profileImage);
 
 			content.setText(lastChupaMap.get("content"));
 			String time = lastChupaMap.get("timeStamp");

@@ -58,7 +58,7 @@ public class ProfileImageFragment extends AhFragment{
 		if(user != null){
 			id = user.getId();
 		}
-		blobStorageHelper.setImageViewAsync(_thisFragment, id, profileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, id, -1, profileImage);
 	}
 
 

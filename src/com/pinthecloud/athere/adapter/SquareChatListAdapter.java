@@ -176,7 +176,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
 				
-				
 				//				int w = profileImage.getWidth();
 				//				int h = profileImage.getHeight();
 				//				blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
@@ -187,8 +186,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				//					}
 				//				});
 				
-				
-				blobStorageHelper.setImageViewAsync(frag, user.getId(), profileImage);
+				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.launcher, profileImage);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override

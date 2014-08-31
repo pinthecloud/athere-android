@@ -200,7 +200,7 @@ public class SquareDrawerFragment extends AhFragment {
 		progressBar.bringToFront();
 
 		AhUser user = userHelper.getMyUserInfo(true);
-		userHelper.newExitSquareAsync(_thisFragment, user, new AhEntityCallback<Boolean>() {
+		userHelper.exitSquareAsync(_thisFragment, user, new AhEntityCallback<Boolean>() {
 
 			@Override
 			public void onCompleted(Boolean result) {
@@ -225,7 +225,7 @@ public class SquareDrawerFragment extends AhFragment {
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
 		updateUserList();
 		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
-		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, R.drawable.launcher, profileImage);
 	}
 
 

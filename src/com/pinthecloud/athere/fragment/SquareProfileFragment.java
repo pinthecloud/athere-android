@@ -558,7 +558,7 @@ public class SquareProfileFragment extends AhFragment{
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
 
-				userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
+				userHelper.enterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {

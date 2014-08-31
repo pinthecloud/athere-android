@@ -122,7 +122,7 @@ public class ProfileDialog extends AhDialogFragment{
 		if(!user.getId().equals(id)){
 			id = user.getId();
 		}
-		blobStorageHelper.setImageViewAsync(frag, id, profileImage);
+		blobStorageHelper.setImageViewAsync(frag, id, -1, profileImage);
 
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
