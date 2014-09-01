@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.model.AhUser;
 
 public class UserDBHelper extends SQLiteOpenHelper {
@@ -186,7 +187,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public synchronized AhUser getUser(String id, boolean includingExits){
 //		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("getUser(String id, boolean includingExits)");
-		AhUser user = null;
+		AhUser user = this.getAdminUser();
 		String _query = ID + "=?";
 		String[] args = new String[] { id };
 
@@ -373,5 +374,25 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.delete(TABLE_NAME, null, null);
 //		db.close();
 		this.closeDatabase("deleteAllUsers");
+	}
+	
+	private AhUser getAdminUser() {
+		AhUser user = new AhUser();
+		user.setId("PintheCloud");
+		user.setNickName("관리자");
+		user.setProfilePic("");
+		user.setMale(true);
+		user.setCompanyNum(0);
+		user.setAge(40);
+		user.setSquareId("NO_SQUARE_ID");
+		user.setChupaEnable(true);
+		user.setAhIdUserKey("NO_AH_ID_USER_KEY");
+		
+		
+		return user;
+	}
+	
+	private boolean isAdminUser(AhUser user) {
+		return "PintheCloud".equals(user.getId());
 	}
 }

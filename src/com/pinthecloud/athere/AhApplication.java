@@ -7,6 +7,7 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings.Global;
 import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -49,7 +50,7 @@ import com.pinthecloud.athere.util.FileUtil;
  */
 public class AhApplication extends Application{
 
-	public final boolean DEBUG_MODE = true;
+	
 	
 	// Windows Azure Mobile Service Keys
 	private final String APP_URL = "https://athere.azure-mobile.net/";
@@ -93,7 +94,7 @@ public class AhApplication extends Application{
 		String AZURE_URL;
 		String AZZURE_KEY;
 		
-		if (DEBUG_MODE) {
+		if (AhGlobalVariable.DEBUG_MODE) {
 			AZURE_URL = APP_TEST_URL;
 			AZZURE_KEY = APP_TEST_KEY;
 		} else {

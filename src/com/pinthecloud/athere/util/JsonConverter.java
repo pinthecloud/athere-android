@@ -10,7 +10,11 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.AhUser;
 
 public class JsonConverter {
-
+	private static JsonElement getJsonElement(JsonObject jo, String key) {
+		JsonElement je = jo.get(key);
+		if (je == null) je = jo.get(key.toLowerCase());
+		return je;
+	}
 	public static List<Square> convertToSquareList(JsonArray jsonArray) {
 		List<Square> list = new ArrayList<Square>();
 
@@ -22,8 +26,10 @@ public class JsonConverter {
 			double latitude = jo.get("latitude").getAsDouble();
 			double longitude = jo.get("longitude").getAsDouble();
 			String whoMade = jo.get("whoMade").getAsString();
-			int maleNum = jo.get("maleNum").getAsInt();
-			int femaleNum = jo.get("femaleNum").getAsInt();
+//			int maleNum = jo.get("maleNum").getAsInt();
+//			int femaleNum = jo.get("femaleNum").getAsInt();
+			int maleNum = getJsonElement(jo, "maleNum").getAsInt();
+			int femaleNum = getJsonElement(jo, "femaleNum").getAsInt();
 			int distance = jo.get("distance").getAsInt();
 			boolean isAdmin = jo.get("isAdmin").getAsBoolean();
 			String code = "";
