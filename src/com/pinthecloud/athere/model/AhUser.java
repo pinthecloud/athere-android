@@ -27,6 +27,8 @@ public class AhUser implements Parcelable{
 	private int age;
 	@com.google.gson.annotations.SerializedName("squareId")
 	private String squareId;
+	@com.google.gson.annotations.SerializedName("isChatEnable")
+	private boolean isChatEnable;
 	@com.google.gson.annotations.SerializedName("isChupaEnable")
 	private boolean isChupaEnable;
 	@com.google.gson.annotations.SerializedName("ahIdUserKey")
@@ -101,6 +103,12 @@ public class AhUser implements Parcelable{
 	public void setSquareId(String squareId) {
 		this.squareId = squareId;
 	}
+	public boolean isChatEnable() {
+		return isChatEnable;
+	}
+	public void setChatEnable(boolean isChatEnable) {
+		this.isChatEnable = isChatEnable;
+	}
 	public boolean isChupaEnable() {
 		return isChupaEnable;
 	}
@@ -128,6 +136,7 @@ public class AhUser implements Parcelable{
 		dest.writeInt(companyNum);	
 		dest.writeInt(age);	
 		dest.writeString(squareId);
+		dest.writeInt(isChatEnable? 1 : 0);
 		dest.writeInt(isChupaEnable? 1 : 0);
 		dest.writeString(ahIdUserKey);
 	}
@@ -141,6 +150,7 @@ public class AhUser implements Parcelable{
 		companyNum = in.readInt();
 		age = in.readInt();
 		squareId = in.readString();
+		isChatEnable = in.readInt() == 1;
 		isChupaEnable = in.readInt() == 1;
 		ahIdUserKey = in.readString();
 	}
@@ -156,6 +166,7 @@ public class AhUser implements Parcelable{
 		user.companyNum = getRandomInt();
 		user.age = getRandomInt();
 		user.squareId = getRandomString();
+		user.isChatEnable = getRandomInt() < 20;
 		user.isChupaEnable = getRandomInt() < 20;
 		user.ahIdUserKey = getRandomString();
 		return user;
@@ -188,6 +199,7 @@ public class AhUser implements Parcelable{
 						" isMale : "+this.isMale + " \n "+
 						" companyNum : "+this.companyNum + " \n "+
 						" age : "+this.age + " \n "+
+						" isChatEnable : "+this.isChatEnable + " \n "+
 						" isChupaEnable : "+this.isChupaEnable + " \n "+
 						" squareId : "+this.squareId + 
 						" ahIdUserKey : " + ahIdUserKey + " }";
@@ -204,6 +216,7 @@ public class AhUser implements Parcelable{
 		jo.addProperty("companyNum", this.companyNum);
 		jo.addProperty("age", this.age);
 		jo.addProperty("squareId", this.squareId);
+		jo.addProperty("isChatEnable", this.isChatEnable);
 		jo.addProperty("isChupaEnable", this.isChupaEnable);
 		jo.addProperty("ahIdUserKey", this.ahIdUserKey);
 

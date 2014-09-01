@@ -548,7 +548,7 @@ public class SquareProfileFragment extends AhFragment{
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-		pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
+		pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, true);
 
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 

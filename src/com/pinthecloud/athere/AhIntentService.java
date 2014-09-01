@@ -51,7 +51,7 @@ public class AhIntentService extends IntentService {
 
 	private AhMessage message = null;
 	private String userId = null; 
-	
+
 	public AhIntentService() {
 		this("AhIntentService");
 	}
@@ -94,8 +94,6 @@ public class AhIntentService extends IntentService {
 			public void run() {
 				if (AhMessage.TYPE.TALK.equals(type)) {
 					TALK();
-				} else if (AhMessage.TYPE.SHOUTING.equals(type)) {
-					SHOUTING();
 				} else if (AhMessage.TYPE.CHUPA.equals(type)) {
 					CHUPA();
 				} else if (AhMessage.TYPE.ENTER_SQUARE.equals(type)) {
@@ -127,25 +125,17 @@ public class AhIntentService extends IntentService {
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
-		} 
-	}
-
-	private void SHOUTING() {
-		int id = messageDBHelper.addMessage(message);
-		message.setId(String.valueOf(id));
-		if (isRunning(app)) {
-			String currentActivityName = getCurrentRunningActivityName(app);
-			messageHelper.triggerMessageEvent(currentActivityName, message);
 		} else {
-			alertNotification(AhMessage.TYPE.SHOUTING);
+			alertNotification(AhMessage.TYPE.TALK);
 		}
 	}
+
 
 	private void CHUPA() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
 		messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
-		
+
 		// Is the Chupa App Running
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -155,22 +145,22 @@ public class AhIntentService extends IntentService {
 				// Is the currentUser talking is the same user from the server.
 				if (currentChupaUser != null && currentChupaUser.getId().equals(message.getSenderId())) {
 					messageHelper.triggerMessageEvent(currentActivityName, message);
-				// Or the server from the user is different from the current User talking
+					// Or the server from the user is different from the current User talking
 				} else {
 					alertNotification(AhMessage.TYPE.CHUPA);
 				}
-			// Is the User is Not in ChupaActivity
+				// Is the User is Not in ChupaActivity
 			} else {
 				messageHelper.triggerMessageEvent(currentActivityName, message);
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
-		// if App Not Running
+			// if App Not Running
 		} else {
 			alertNotification(AhMessage.TYPE.CHUPA);
 		}
 	}
 
-	
+
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
@@ -198,7 +188,7 @@ public class AhIntentService extends IntentService {
 		});
 	}
 
-	
+
 	private void EXIT_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
@@ -211,7 +201,7 @@ public class AhIntentService extends IntentService {
 		}
 	}
 
-	
+
 	private void UPDATE_USER_INFO() {
 		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
 
@@ -225,12 +215,12 @@ public class AhIntentService extends IntentService {
 		});
 	}
 
-	
+
 	private void MESSAGE_READ() {
 		throw new AhException("NOT IMPLEMENTED YET");
 	}
 
-	
+
 	private void FORCED_LOGOUT() {
 		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
 
@@ -247,7 +237,7 @@ public class AhIntentService extends IntentService {
 		});
 	}
 
-	
+
 	private void ADMIN_MESSAGE() {
 		throw new AhException("NOT IMPLEMENTED YET");
 	}
@@ -257,41 +247,36 @@ public class AhIntentService extends IntentService {
 	 *  Method For alerting notification
 	 */
 	private void alertNotification(AhMessage.TYPE type){
+		/*
+		 * Creates an explicit intent for an Activity in your app
+		 */
+		Intent resultIntent = new Intent();
 		String title = "";
 		String content = "";
-		Class<?> clazz = SquareActivity.class;
 		Resources resources = _this.getResources();
-		if (AhMessage.TYPE.CHUPA.equals(type)){
-			title = message.getSender() +" " + resources.getString(R.string.send_chupa_notification_title);
+		if (AhMessage.TYPE.TALK.equals(type)){
+			title = message.getSender();
 			content = message.getContent();
-			clazz = ChupaChatActivity.class;
-		} else if (AhMessage.TYPE.SHOUTING.equals(type)){
-			title = message.getSender() + " " + resources.getString(R.string.shout_notification_title);
-			content = message.getContent();
+			resultIntent.setClass(_this, SquareActivity.class);
 		} else if (AhMessage.TYPE.ENTER_SQUARE.equals(type)){
-			if(!pref.getBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY)){
+			if(!pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
 				return;
 			}
 			title = message.getSender() + " " + resources.getString(R.string.enter_square_message);
 			content = message.getContent();
+			resultIntent.setClass(_this, SquareActivity.class);
+		} else if (AhMessage.TYPE.CHUPA.equals(type)){
+			title = message.getSender() +" " + resources.getString(R.string.send_chupa_notification_title);
+			content = message.getContent();
+			resultIntent.setClass(_this, ChupaChatActivity.class);
+			resultIntent.putExtra(AhGlobalVariable.USER_KEY, message.getSenderId());
 		} else if (AhMessage.TYPE.FORCED_LOGOUT.equals(type)){
 			title = resources.getString(R.string.forced_logout_title);
 			content = message.getContent();
-			clazz = SquareListActivity.class;
+			resultIntent.setClass(_this, SquareListActivity.class);
 		}
 
-		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(_this, clazz);
-
-		/**
-		 *  NEED TO BE FIXED!!
-		 */
-		if (AhMessage.TYPE.CHUPA.equals(type)){
-			resultIntent.putExtra(AhGlobalVariable.USER_KEY, message.getSenderId());
-			pref.putString(AhGlobalVariable.USER_KEY, message.getSenderId());
-			resultIntent.putExtra("gotoChupa", true);
-		}
-
+		
 		// The stack builder object will contain an artificial back stack for the
 		// started Activity.
 		// This ensures that navigating backward from the Activity leads out of
@@ -310,14 +295,12 @@ public class AhIntentService extends IntentService {
 		AhUser sentUser = userDBHelper.getUser(message.getSenderId());
 		Bitmap bitmap = null;
 		if (sentUser == null){
-			Log.e("ERROR","no sentUser error");
 			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
 		} else {
 			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getId());
-
 		}
 
-
+		
 		/*
 		 * Set Notification
 		 */

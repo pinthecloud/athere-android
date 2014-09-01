@@ -257,7 +257,7 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
+		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
 		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);

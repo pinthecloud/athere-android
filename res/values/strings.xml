@@ -59,7 +59,6 @@
     <string name="behave_well_warning">You have a legal responsibility for any kinds of insult, abuse words.</string>
     <string name="exit_square_consent_message">Every chat and chupa you have will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
-    <string name="shout_notification_title">shouts.</string>
     <string name="forced_logout_title">You have been logout.</string>
     <string name="googe_play_services_title">Google Play Services</string>
     <string name="googe_play_services_message">You need to install Google Play Services to use Chupa.</string>
