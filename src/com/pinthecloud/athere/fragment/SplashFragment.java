@@ -38,23 +38,23 @@ public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
 	private Tracker t;
-	
-	
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		versionHelper = app.getVersionHelper();
-		
-		
+
+
 		/* 
 		 * for google analytics
 		 */
 		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-        if (t==null){
-            t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-            t.setScreenName("SplashFragment");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
+		if (t==null){
+			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
+			t.setScreenName("SplashFragment");
+			t.send(new HitBuilders.AppViewBuilder().build());
+		}
 	}
 
 
@@ -71,6 +71,12 @@ public class SplashFragment extends AhFragment {
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
 
+
+		/*
+		 * Do this method when only update app
+		 */
+		//		insertAppVersion();
+		
 
 		/*
 		 * If time is up, remove local preferences.
@@ -124,49 +130,49 @@ public class SplashFragment extends AhFragment {
 		}
 
 
-//		/*
-//		 * Start Chupa Application
-//		 */
-//		// Erase Later (Exception for hongkun)
-//		if (!isHongkunTest()) {
-//			runChupa();
-//		}
-		
+		//		/*
+		//		 * Start Chupa Application
+		//		 */
+		//		// Erase Later (Exception for hongkun)
+		//		if (!isHongkunTest()) {
+		//			runChupa();
+		//		}
+
 		runChupa();
 
 		return view;
 	}
 
 
-//	private boolean isHongkunTest() {
-//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
-//		String httpAgent = System.getProperty("http.agent");
-//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-//				|| myGal3.equals(httpAgent))))	// Galaxy 3
-//			return false;
-//		
-//		new AlertDialog.Builder(context)
-//		.setTitle("Routing Dialog")
-//		.setMessage("Want to Go to HongkunTest?")
-//		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int which) { 
-//				startActivity(new Intent(activity, HongkunTestAcitivity.class)); 
-//				activity.finish();
-//				return;
-//			}
-//		})
-//		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//			public void onClick(DialogInterface dialog, int which) {
-//				runChupa();
-//				return;
-//			}
-//		})
-//		.setIcon(android.R.drawable.ic_dialog_alert)
-//		.show();
-//		return true;
-//	}
+	//	private boolean isHongkunTest() {
+	//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+	//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+	//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
+	//		String httpAgent = System.getProperty("http.agent");
+	//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
+	//				|| myGal3.equals(httpAgent))))	// Galaxy 3
+	//			return false;
+	//		
+	//		new AlertDialog.Builder(context)
+	//		.setTitle("Routing Dialog")
+	//		.setMessage("Want to Go to HongkunTest?")
+	//		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) { 
+	//				startActivity(new Intent(activity, HongkunTestAcitivity.class)); 
+	//				activity.finish();
+	//				return;
+	//			}
+	//		})
+	//		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) {
+	//				runChupa();
+	//				return;
+	//			}
+	//		})
+	//		.setIcon(android.R.drawable.ic_dialog_alert)
+	//		.show();
+	//		return true;
+	//	}
 
 
 	private void runChupa() {
@@ -276,18 +282,37 @@ public class SplashFragment extends AhFragment {
 		}
 		super.handleException(ex);
 	}
-	
-	
+
+
 	@Override
 	public void onStart() {
 		super.onStart();
 		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
-	
-	
+
+
 	@Override
 	public void onStop() {
 		super.onStop();
 		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
+
+
+	//	private void insertAppVersion(){
+	//		AppVersion appVersion = new AppVersion();
+	//		try {
+	//			appVersion.setVersion(versionHelper.getClientAppVersion());
+	//		} catch (NameNotFoundException e) {
+	//			Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
+	//			appVersion.setVersion(0.1);
+	//		}
+	//		appVersion.setType(AppVersion.TYPE.MANDATORY.toString());
+	//		versionHelper.insertAppVersion(_thisFragment, appVersion, new AhEntityCallback<AppVersion>() {
+	//
+	//			@Override
+	//			public void onCompleted(AppVersion entity) {
+	//				// Do nothing
+	//			}
+	//		});
+	//	}
 }

@@ -109,7 +109,6 @@ public class SquareHelper {
 
 		int maleNum = 0;
 		int femaleNum = 0;
-
 		if(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY)) maleNum++;
 		else femaleNum++;
 
@@ -121,7 +120,6 @@ public class SquareHelper {
 
 
 	public void createSquareAsync(final AhFragment frag, Square square, final AhEntityCallback<Square> callback) throws AhException {
-
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -130,7 +128,6 @@ public class SquareHelper {
 		squareTable.insert(square, new TableOperationCallback<Square>() {
 
 			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
-
 				if (exception == null) {
 					callback.onCompleted(entity);
 					AsyncChainer.notifyNext(frag);

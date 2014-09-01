@@ -6,6 +6,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.exception.AhException;
@@ -30,13 +31,34 @@ public class VersionHelper {
 		OPTIONAL
 	}
 
-	
+
 	public VersionHelper() {
 		app = AhApplication.getInstance();
 		appVersionTable = app.getAppVersionTable();
 	}
 
-	
+
+	public void insertAppVersionAsync(final AhFragment frag, AppVersion appVersion, final AhEntityCallback<AppVersion> callback) throws AhException {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
+		appVersionTable.insert(appVersion, new TableOperationCallback<AppVersion>() {
+
+			@Override
+			public void onCompleted(AppVersion entity, Exception exception, ServiceFilterResponse response) {
+				if (exception == null) {
+					callback.onCompleted(entity);
+					AsyncChainer.notifyNext(frag);
+				} else {
+					ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.SERVER_ERROR));
+				}
+			}
+		});
+	}
+
+
 	public void getServerAppVersionAsync(final AhFragment frag, final AhEntityCallback<AppVersion> callback) {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getServerAppVersionAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -62,7 +84,7 @@ public class VersionHelper {
 		});
 	}
 
-	
+
 	public double getClientAppVersion() throws NameNotFoundException {
 		String versionName = app.getPackageManager().getPackageInfo(app.getPackageName(), 0).versionName;
 		return Double.parseDouble(versionName);

@@ -259,7 +259,7 @@ public class ChupaChatFragment extends AhFragment {
 		super.onStart();
 		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
-		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), otherProfileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
 		refreshView(chupaCommunId, null);
 
 	}

@@ -30,6 +30,7 @@ import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhIdUser;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppVersion;
@@ -49,10 +50,13 @@ import com.pinthecloud.athere.util.FileUtil;
 public class AhApplication extends Application{
 
 	// Windows Azure Mobile Service Keys
-	private final String APP_URL = "https://athere.azure-mobile.net/";
-	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	//	private final String APP_URL = "https://athere.azure-mobile.net/";
+	//	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	private final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
+	private final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
 
-	private static final String FORCED_LOGOUT = "forced_logout";
+	// Method Name
+	private final String FORCED_LOGOUT = "forced_logout";
 
 	// Application
 	private static AhApplication app;
@@ -61,6 +65,7 @@ public class AhApplication extends Application{
 	// Mobile Service instances
 	private static MobileServiceClient mClient;
 	private static MobileServiceTable<AhUser> userTable;
+	private static MobileServiceTable<AhIdUser> idUserTable;
 	private static MobileServiceTable<Square> squareTable;
 	private static MobileServiceTable<AppVersion> appVersionTable;
 
@@ -87,8 +92,8 @@ public class AhApplication extends Application{
 
 		try {
 			mClient = new MobileServiceClient(
-					APP_URL,
-					APP_KEY,
+					APP_TEST_URL,
+					APP_TEST_KEY,
 					this);
 		} catch (MalformedURLException e) {
 			Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
@@ -99,6 +104,7 @@ public class AhApplication extends Application{
 		messageDBHelper = new MessageDBHelper(this);
 
 		userTable = mClient.getTable(AhUser.class);
+		idUserTable = mClient.getTable(AhIdUser.class);
 		squareTable = mClient.getTable(Square.class);
 		appVersionTable = mClient.getTable(AppVersion.class);
 
@@ -120,6 +126,9 @@ public class AhApplication extends Application{
 	}
 	public MobileServiceTable<AhUser> getUserTable() {
 		return userTable;
+	}
+	public MobileServiceTable<AhIdUser> getIdUserTable() {
+		return idUserTable;
 	}
 	public MobileServiceTable<Square> getSquareTable() {
 		return squareTable;
@@ -209,16 +218,12 @@ public class AhApplication extends Application{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				// TODO Auto-generated method stub
-
 				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 
 					@Override
 					public void onCompleted(JsonElement json, Exception exception,
 							ServiceFilterResponse response) {
-
 						removeSquarePreference();
-
 						callback.onCompleted(true);
 					}
 				});

@@ -14,6 +14,7 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 public class NumberPickerDialog extends AhDialogFragment {
 
+	private AhDialogCallback ahDialogCallback;
 	private NumberPicker yearPicker;
 	private String title;
 	private int min;

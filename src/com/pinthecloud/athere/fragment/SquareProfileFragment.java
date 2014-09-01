@@ -1,12 +1,12 @@
 package com.pinthecloud.athere.fragment;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -16,6 +16,8 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -34,13 +36,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
-import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
@@ -53,11 +57,10 @@ import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
 import com.pinthecloud.athere.view.CameraPreview;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.analytics.HitBuilders;
 
 public class SquareProfileFragment extends AhFragment{
+
+	private final int GET_IMAGE_GALLERY_CODE = 1;
 
 	private Intent intent;
 	private Square square;
@@ -71,19 +74,19 @@ public class SquareProfileFragment extends AhFragment{
 	private ImageButton cameraRotateButton;
 
 	private int cameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
+	private boolean isCamera = false;
 	private boolean isTookPicture = false;
 	private boolean isTypedNickName = false;
 	private boolean isTypedMember = false;
 
 	private LinearLayout profileInfoLayout;
 	private ImageButton completeButton;
-	private NumberPickerDialog companyNumberPickerDialog;
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
 
 	private Tracker t;
-	
+
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
 		@Override
@@ -92,56 +95,48 @@ public class SquareProfileFragment extends AhFragment{
 	};
 
 	// JPEG 이미지를 생성 후 호출
-	private PictureCallback mPicutureListener = new PictureCallback(){
+	private PictureCallback mPictureListener = new PictureCallback(){
 		public void onPictureTaken(byte[] data, Camera camera){
 			if (data != null){
-				try {
-					// Stop preview before processing image
-					mCamera.stopPreview();
+				// Stop preview before processing image
+				mCamera.stopPreview();
 
-					// Get file from taken data
-					File pictureFile = FileUtil.getOutputMediaFile(FileUtil.MEDIA_TYPE_IMAGE);
-					if (pictureFile == null) {
-						ExceptionManager.fireException(new AhException(_thisFragment, "onPictureTaken", AhException.TYPE.SD_CARD_FAIL));
-						return;
-					}
-					Uri pictureFileUri = Uri.fromFile(pictureFile);
-					FileOutputStream fos = new FileOutputStream(pictureFile);
-					fos.write(data);
-					fos.close();
-					pictureBitmap = BitmapFactory.decodeStream(app.getContentResolver().openInputStream(pictureFileUri));
-					pictureFile.delete();
+				// Get file from taken data
+				//					File pictureFile = FileUtil.getOutputMediaFile(FileUtil.MEDIA_TYPE_IMAGE);
+				//					if (pictureFile == null) {
+				//						ExceptionManager.fireException(new AhException(_thisFragment, "onPictureTaken", AhException.TYPE.SD_CARD_FAIL));
+				//					}
+				//					Uri pictureFileUri = Uri.fromFile(pictureFile);
+				//					FileOutputStream fos = new FileOutputStream(pictureFile);
+				//					fos.write(data);
+				//					fos.close();
+				//					pictureBitmap = BitmapFactory.decodeStream(app.getContentResolver().openInputStream(pictureFileUri));
+				//					pictureFile.delete();
+				pictureBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 
-					// Crop picture
-					// Rotate picture
-					int height = pictureBitmap.getHeight();
-					if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
-						pictureBitmap = BitmapUtil.crop(pictureBitmap, 0, 0, height, height);
-						pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_90);
-					}else{
-						pictureBitmap = BitmapUtil.crop(pictureBitmap, AhGlobalVariable.DEVICE_HEIGHT - height, 0, height, height);
-						pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
-						pictureBitmap = BitmapUtil.flip(pictureBitmap);
-					}
-
-					// Set taken picture to view
-					profilePictureView.setImageBitmap(pictureBitmap);
-
-					// Save pictures to internal storage
-					FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
-
-					// Release camera and set button to re take
-					releaseCameraAndRemoveView();
-					isTookPicture = true;
-					cameraButton.setEnabled(true);
-					cameraButton.setImageResource(R.drawable.camera_take_re);
-					cameraRotateButton.setEnabled(true);
-					completeButton.setEnabled(isCompleteButtonEnable());
-				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment mPicutureListener : " + e.getMessage());
-				} catch (IOException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfileFragment mPicutureListener : " + e.getMessage());
+				// Crop picture
+				// Rotate picture
+				int height = pictureBitmap.getHeight();
+				if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
+					pictureBitmap = BitmapUtil.crop(pictureBitmap, 0, 0, height, height);
+					pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_90);
+				}else{
+					pictureBitmap = BitmapUtil.crop(pictureBitmap, AhGlobalVariable.DEVICE_HEIGHT - height, 0, height, height);
+					pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
+					pictureBitmap = BitmapUtil.flip(pictureBitmap);
 				}
+
+				// Set taken picture to view
+				profilePictureView.setImageBitmap(pictureBitmap);
+
+				// Release camera and set button to re take
+				releaseCameraAndRemoveView();
+				isCamera = false;
+				isTookPicture = true;
+				cameraButton.setEnabled(true);
+				cameraButton.setImageResource(R.drawable.camera_take_re);
+				cameraRotateButton.setEnabled(true);
+				completeButton.setEnabled(isCompleteButtonEnable());
 			}
 		}
 	};
@@ -189,6 +184,76 @@ public class SquareProfileFragment extends AhFragment{
 
 
 		/*
+		 * Set Event on picture image view
+		 */
+		profilePictureView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String title = getResources().getString(R.string.select);
+				String[] list = null;
+				if(isTookPicture){
+					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
+				}else{
+					list = getResources().getStringArray(R.array.profile_image_select_string_array);
+				}
+				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
+				callbacks[0] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from gallery
+						intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+						intent.setType("image/*");
+						startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				callbacks[1] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from camera
+						// Set new camera by facing direction
+						releaseCameraAndRemoveView();
+						openCameraAndSetView();
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				if(list.length == 3){
+					callbacks[2] = new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							// Set profile image default
+							profilePictureView.setImageResource(R.drawable.launcher);
+
+							// Release camera and set button to re take
+							isCamera = false;
+							isTookPicture = false;
+							cameraButton.setVisibility(View.GONE);
+							cameraRotateButton.setVisibility(View.GONE);
+							completeButton.setEnabled(isCompleteButtonEnable());
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							// Do nothing
+						}
+					};
+				}
+				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
+				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
+
+
+		/*
 		 * Set event on nick name text
 		 */
 		nickNameEditText.addTextChangedListener(new TextWatcher() {
@@ -218,7 +283,7 @@ public class SquareProfileFragment extends AhFragment{
 		 * Set event on Company EditText
 		 */
 		String title = getResources().getString(R.string.number_of_member);
-		companyNumberPickerDialog = new NumberPickerDialog(title, 1, 10, 2, new AhDialogCallback() {
+		final NumberPickerDialog companyNumberPickerDialog = new NumberPickerDialog(title, 1, 10, 2, new AhDialogCallback() {
 
 			@Override
 			public void doPositiveThing(Bundle bundle) {
@@ -288,14 +353,11 @@ public class SquareProfileFragment extends AhFragment{
 							mCamera.takePicture(
 									mShutterCallback, // 셔터
 									null, // Raw 이미지 생성
-									mPicutureListener); // JPE 이미지 생성
+									mPictureListener); // JPE 이미지 생성
 						}
 					});
 				}else{
 					openCameraAndSetView();
-					isTookPicture = false;
-					cameraButton.setImageResource(R.drawable.camera_take);
-					completeButton.setEnabled(false);
 				}
 			}
 		});
@@ -312,8 +374,6 @@ public class SquareProfileFragment extends AhFragment{
 				// Set new camera by facing direction
 				releaseCameraAndRemoveView();
 				openCameraAndSetView();
-				isTookPicture = false;
-				cameraButton.setImageResource(R.drawable.camera_take);
 			}
 		});
 		completeButton.setOnClickListener(new OnClickListener() {
@@ -362,9 +422,13 @@ public class SquareProfileFragment extends AhFragment{
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStart");
 		if(!isTookPicture){
-			openCameraAndSetView();
+			if(isCamera){
+				openCameraAndSetView();
+			}else{
+				profilePictureView.setImageResource(R.drawable.launcher);
+			}
 		}else{
-			blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, profilePictureView);
+			profilePictureView.setImageBitmap(pictureBitmap);
 		}
 		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
@@ -380,6 +444,61 @@ public class SquareProfileFragment extends AhFragment{
 	}
 
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onActivityResult");
+		switch(requestCode){
+		case GET_IMAGE_GALLERY_CODE:
+			if (resultCode == Activity.RESULT_OK) {
+				/*
+				 * Get image from gallery
+				 */
+				Uri imageUri = data.getData();
+				String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+				Cursor cursor = context.getContentResolver().query(imageUri, filePathColumn, null, null, null);
+				cursor.moveToFirst();
+
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				String imagePath = cursor.getString(columnIndex);
+				cursor.close();
+
+
+				/*
+				 * Set the image
+				 */
+				int w = profilePictureView.getWidth();
+				int h = profilePictureView.getHeight();
+				try {
+					pictureBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, w, h);
+					int degree = BitmapUtil.getImageOrientation(imagePath);
+					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
+				} catch (FileNotFoundException e) {
+					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfilFragment : " + e.getMessage());
+				} catch (IOException e) {
+					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfilFragment : " + e.getMessage());
+				}
+
+
+				/*
+				 * Release camera and set button to re take
+				 */
+				releaseCameraAndRemoveView();
+				isCamera = false;
+				isTookPicture = true;
+				cameraButton.setVisibility(View.GONE);
+				cameraRotateButton.setVisibility(View.GONE);
+				completeButton.setEnabled(isCompleteButtonEnable());
+			} else if (resultCode == Activity.RESULT_CANCELED) {
+				// User cancelled the get image
+			} else {
+				// Get image failed
+			}
+			break;
+		}
+	}
+
+
 	/*
 	 * Create our Preview view and set it as the content of our activity.
 	 * Create orientation event listener
@@ -388,8 +507,18 @@ public class SquareProfileFragment extends AhFragment{
 		mCamera = CameraUtil.getCameraInstance(cameraFacing);
 		mCameraPreview = new CameraPreview(context, mCamera);
 		cameraView.addView(mCameraPreview);
+
 		profilePictureView.setImageBitmap(null);
 		profileInfoLayout.bringToFront();
+
+		isCamera = true;
+		isTookPicture = false;
+		cameraButton.setEnabled(true);
+		cameraButton.setVisibility(View.VISIBLE);
+		cameraButton.setImageResource(R.drawable.camera_take);
+		cameraRotateButton.setEnabled(true);
+		cameraRotateButton.setVisibility(View.VISIBLE);
+		completeButton.setEnabled(false);
 	}
 
 
@@ -429,7 +558,7 @@ public class SquareProfileFragment extends AhFragment{
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
 
-				userHelper.newEnterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
+				userHelper.enterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
@@ -447,7 +576,7 @@ public class SquareProfileFragment extends AhFragment{
 
 					@Override
 					public void onCompleted(String entity) {
-
+						// Do nothing
 					}
 				});
 			}
@@ -475,6 +604,8 @@ public class SquareProfileFragment extends AhFragment{
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
 						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
 
+						// Save pictures to internal storage
+						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
 
 						// Set and move to next activity after clear previous activity
 						intent.setClass(context, SquareActivity.class);
@@ -649,10 +780,6 @@ public class SquareProfileFragment extends AhFragment{
 	}
 
 
-	//	@Override
-	//	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	//		profileImageOnActivityResult(requestCode, resultCode, data);
-	//	}
 	//	
 	//	
 	//	private void profileImageOnClick(){
