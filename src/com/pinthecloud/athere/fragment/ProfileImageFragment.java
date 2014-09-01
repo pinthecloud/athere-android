@@ -17,6 +17,8 @@ public class ProfileImageFragment extends AhFragment{
 
 	private PreferenceHelper pref;
 	private AhUser user;
+	
+	private boolean isMe;
 
 	private ImageView profileImage; 
 
@@ -26,11 +28,19 @@ public class ProfileImageFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 		pref = app.getPref();
 
+		
+		// Get user id from previous activity
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
-
+		if(userId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
+			isMe = true;
+		}else{
+			isMe = false;
+		}
+		
+		
 		// If it is other user, get the user in DB
-		if(!userId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
+		if(!isMe){
 			user = userDBHelper.getUser(userId);
 		}
 	}
@@ -41,6 +51,7 @@ public class ProfileImageFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile_image, container, false);
 
+		
 		/*
 		 * Set UI component
 		 */
@@ -53,12 +64,11 @@ public class ProfileImageFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onStart");
-
 		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
-		if(user != null){
+		if(!isMe){
 			id = user.getId();
 		}
-		blobStorageHelper.setImageViewAsync(_thisFragment, id, -1, profileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, id, 0, profileImage);
 	}
 
 

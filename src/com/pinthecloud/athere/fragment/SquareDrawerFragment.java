@@ -104,7 +104,6 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				//				final AhUser user = userList.get(position);
 				final AhUser user = participantListAdapter.getItem(position);
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
@@ -133,8 +132,20 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+				chatAlarmButton.setEnabled(false);
+
 				boolean isChecked = chatAlarmButton.isChecked();
-				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, isChecked);
+				pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, isChecked);
+				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
+
+					@Override
+					public void onCompleted(AhUser entity) {
+						progressBar.setVisibility(View.GONE);
+						chatAlarmButton.setEnabled(true);
+					}
+				});
 			}
 		});
 		chupaAlarmButton.setOnClickListener(new OnClickListener() {
@@ -242,7 +253,7 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set alarm toggle button
 		 */
-		chatAlarmButton.setChecked(pref.getBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY));
+		chatAlarmButton.setChecked(user.isChatEnable());
 		chupaAlarmButton.setChecked(user.isChupaEnable());
 
 

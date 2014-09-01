@@ -30,7 +30,6 @@ public class AhMessage implements Parcelable {
 	public enum TYPE {
 		// No user Update
 		TALK("TALK"),			// To Square Users
-		SHOUTING("SHOUTING"),	// To Square Users
 		CHUPA("CHUPA"),			// To Individual
 
 		// User Update
@@ -223,14 +222,13 @@ public class AhMessage implements Parcelable {
 		AhMessage.TYPE type;
 		Random r = new Random();
 
-		int _count = r.nextInt(6);
+		int _count = r.nextInt(5);
 		switch(_count){
 		case 0: type = AhMessage.TYPE.TALK; break;
 		case 1: type = AhMessage.TYPE.CHUPA; break;
-		case 2: type = AhMessage.TYPE.SHOUTING; break;
-		case 3: type = AhMessage.TYPE.ENTER_SQUARE; break;
-		case 4: type = AhMessage.TYPE.EXIT_SQUARE; break;
-		case 5: type = AhMessage.TYPE.UPDATE_USER_INFO; break;
+		case 2: type = AhMessage.TYPE.ENTER_SQUARE; break;
+		case 3: type = AhMessage.TYPE.EXIT_SQUARE; break;
+		case 4: type = AhMessage.TYPE.UPDATE_USER_INFO; break;
 		default: type = AhMessage.TYPE.CHUPA; break;
 		}
 
@@ -325,7 +323,7 @@ public class AhMessage implements Parcelable {
 			} else {
 				message.timeStamp = timeStamp;
 			}
-			
+
 			if (this.chupaCommunId == null){
 				message.chupaCommunId = buildChupaCommunId(this.senderId, this.receiverId);
 			} else {

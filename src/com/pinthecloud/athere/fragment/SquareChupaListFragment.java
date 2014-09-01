@@ -132,6 +132,7 @@ public class SquareChupaListFragment extends AhFragment{
 		});
 	}
 
+	
 	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){

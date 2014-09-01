@@ -59,7 +59,6 @@
     <string name="behave_well_warning">욕설, 비방, 불쾌한 메세지를 보낼 시, 법적인 책임을 물으실 수 있습니다.</string>
     <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워집니다. 나가시겠습니까?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈습니다.</string>
-    <string name="shout_notification_title">shouts.</string>
     <string name="forced_logout_title">로그아웃 되셨습니다.</string>
     <string name="googe_play_services_title">Google Play 서비스</string>
     <string name="googe_play_services_message">Chupa를 이용하기 위해서는 해당 서비스를 설치하셔야 됩니다.</string>
