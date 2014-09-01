@@ -61,7 +61,7 @@ public class AhGlobalVariable{
 	public static final String AGE_KEY = "AGE_KEY";
 	public static final String IS_MALE_KEY = "IS_MALE_KEY";
 	public static final String IS_CHUPA_ENABLE_KEY = "IS_CHUPA_ENABLE_KEY";
-	public static final String IS_CHAT_ALARM_ENABLE_KEY = "IS_CHAT_ALARM_ENABLE_KEY";
+	public static final String IS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
 	public static final String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";

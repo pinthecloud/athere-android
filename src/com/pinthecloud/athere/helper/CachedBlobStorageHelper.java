@@ -79,7 +79,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 				imageView.setImageBitmap(bitmap);
 			} else {
 				Bitmap mPlaceHolderBitmap = null;
-				if(placeHolderId != -1){
+				if(placeHolderId <= 0){
 					mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), placeHolderId, w, h);	
 				}
 
