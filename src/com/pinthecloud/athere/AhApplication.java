@@ -7,7 +7,6 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.provider.Settings.Global;
 import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;

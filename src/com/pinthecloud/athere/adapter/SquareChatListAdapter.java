@@ -251,7 +251,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	
 	private void showReSendOrCancelDialog(final AhMessage message, final int position, boolean cancel){
 		Resources resources = context.getResources();
-		String dialogMessage = resources.getString(R.string.message_fail_message);
+		String dialogMessage = resources.getString(R.string.send_message_fail_message);
 		String resend = resources.getString(R.string.re_send);
 		String delete = resources.getString(R.string.delete);
 		AhAlertDialog reSendOrCancelDialog = new AhAlertDialog(null, dialogMessage, delete, resend, cancel, new AhDialogCallback() {

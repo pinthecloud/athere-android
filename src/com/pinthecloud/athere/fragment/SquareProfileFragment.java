@@ -282,8 +282,7 @@ public class SquareProfileFragment extends AhFragment{
 		/*
 		 * Set event on Company EditText
 		 */
-		String title = getResources().getString(R.string.number_of_member);
-		final NumberPickerDialog companyNumberPickerDialog = new NumberPickerDialog(title, 1, 10, 2, new AhDialogCallback() {
+		final NumberPickerDialog companyNumberPickerDialog = new NumberPickerDialog(1, 10, 2, new AhDialogCallback() {
 
 			@Override
 			public void doPositiveThing(Bundle bundle) {

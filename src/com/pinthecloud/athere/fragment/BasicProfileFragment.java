@@ -106,8 +106,7 @@ public class BasicProfileFragment extends AhFragment{
 		/*
 		 * Set birth year edit text and year picker dialog
 		 */
-		String title = getResources().getString(R.string.birth_of_year);
-		yearPickerDialog = new NumberPickerDialog(title, 1950, 2000, 1990, new AhDialogCallback() {
+		yearPickerDialog = new NumberPickerDialog(1950, 2000, 1990, new AhDialogCallback() {
 
 			@Override
 			public void doPositiveThing(Bundle bundle) {

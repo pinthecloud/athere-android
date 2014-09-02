@@ -95,7 +95,7 @@
                 android:layout_marginBottom="@dimen/squre_profile_company_number_start_button_margin"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="@string/number_of_member"
+                android:hint="@string/number_of_member_question"
                 android:textSize="@dimen/font_large" />
 
             <ImageButton

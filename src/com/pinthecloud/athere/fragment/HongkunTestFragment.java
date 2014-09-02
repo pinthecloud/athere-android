@@ -39,11 +39,11 @@ public class HongkunTestFragment extends AhFragment {
 	private ImageView img;
 	private Button myBtn;
 	private MobileServiceClient mClient;
-	ListView listView; 
+	private ListView listView; 
 	private BlobStorageHelper blobStorageHelper;
 	public static final String SENDER_ID = "838051405989";
 
-	
+
 	ArrayAdapter<String> adapter;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class HongkunTestFragment extends AhFragment {
 		mClient = app.getmClient();
 	}
 
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class HongkunTestFragment extends AhFragment {
 		listView = (ListView)view.findViewById(R.id.hongkun_list_view);
 		img = (ImageView)view.findViewById(R.id.hongkun_id_image_view);
 		blobStorageHelper = new BlobStorageHelper();
-		
+
 		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -87,7 +87,7 @@ public class HongkunTestFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				
+
 			}
 		});
 		for(int i = 0 ; i < 6 ; i++){
@@ -114,9 +114,9 @@ public class HongkunTestFragment extends AhFragment {
 								// TODO Auto-generated method stub
 								Log(_thisFragment, "OK");
 							}
-							
+
 						});
-						
+
 					} else if (b.getId() == btnArr[1].getId()) {
 						AhMessage message = messageDBHelper.getLastMessage(AhMessage.TYPE.TALK);
 						Log(_thisFragment, message);
@@ -137,7 +137,7 @@ public class HongkunTestFragment extends AhFragment {
 				}
 			});
 		}
-		
+
 		return view;
 	}
 

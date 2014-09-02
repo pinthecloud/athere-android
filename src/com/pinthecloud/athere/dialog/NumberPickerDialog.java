@@ -16,26 +16,24 @@ public class NumberPickerDialog extends AhDialogFragment {
 
 	private AhDialogCallback ahDialogCallback;
 	private NumberPicker yearPicker;
-	private String title;
 	private int min;
 	private int max;
 	private int defaultValue;
 
 
-	public NumberPickerDialog(String title, int min, int max, int defaultValue, AhDialogCallback ahDialogCallback) {
+	public NumberPickerDialog(int min, int max, int defaultValue, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
-		this.title = title;
 		this.min = min;
 		this.max = max;
 		this.defaultValue = defaultValue;
+		setStyle(STYLE_NO_TITLE, 0);
 	}
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getDialog().setTitle(title);
 		View view = inflater.inflate(R.layout.dialog_number_picker, container, false);
 
 		// Find UI Component

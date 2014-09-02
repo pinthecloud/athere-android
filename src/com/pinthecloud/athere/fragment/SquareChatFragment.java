@@ -168,7 +168,7 @@ public class SquareChatFragment extends AhFragment{
 
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
-						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					return;
 				}
 				refreshView(message.getId());
@@ -250,7 +250,7 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
-		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
+		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK)) {
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 			String enterMessage = getResources().getString(R.string.enter_square_message);
 			String warningMessage = getResources().getString(R.string.behave_well_warning);
@@ -265,11 +265,10 @@ public class SquareChatFragment extends AhFragment{
 			messageDBHelper.addMessage(enterTalk);
 		}
 		if (id == null){
-			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK);
 		} else {
-			int _id = Integer.valueOf(id);
 			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-			talk = messageDBHelper.getMessage(_id);
+			talk = messageDBHelper.getMessage(Integer.parseInt(id));
 		}
 
 
@@ -286,7 +285,6 @@ public class SquareChatFragment extends AhFragment{
 				} else {
 					messageListAdapter.add(talk);
 				}
-				//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});
