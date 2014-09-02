@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -26,6 +27,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
+import com.pinthecloud.athere.activity.ProfileSettingsActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
@@ -39,6 +41,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private ProgressBar progressBar;
 	private ToggleButton chatAlarmButton;
 	private ToggleButton chupaAlarmButton;
+	private ImageButton profileSettingsButton;
 	private ImageView profileImage;
 	private ImageView profileGenderImage;
 	private TextView profileNickNameText;
@@ -51,9 +54,10 @@ public class SquareDrawerFragment extends AhFragment {
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 
+	private AhUser user;
 	private Tracker t;
 
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -82,6 +86,7 @@ public class SquareDrawerFragment extends AhFragment {
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
 		chatAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_alarm_button);
 		chupaAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_alarm_button);
+		profileSettingsButton = (ImageButton) view.findViewById(R.id.square_drawer_frag_profile_bar_settings);
 		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
 		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
 		profileImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
@@ -168,6 +173,15 @@ public class SquareDrawerFragment extends AhFragment {
 				});
 			}
 		});
+		profileSettingsButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, ProfileSettingsActivity.class);
+				intent.putExtra(AhGlobalVariable.USER_KEY, user);
+				context.startActivity(intent);
+			}
+		});
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -250,6 +264,9 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final AhUser user) {
+		this.user = user;
+
+
 		/*
 		 * Set alarm toggle button
 		 */

@@ -156,6 +156,9 @@ public class SquareActivity extends AhActivity{
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
 
+		/*
+		 * Set Handler for forced logout
+		 */
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -164,6 +167,7 @@ public class SquareActivity extends AhActivity{
 					String text = getResources().getString(R.string.forced_logout_title);
 					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
 					toast.show();
+					
 					Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
 					startActivity(intent);
 					finish();
@@ -172,7 +176,6 @@ public class SquareActivity extends AhActivity{
 				messageHelper.triggerMessageEvent(mSquareTabFragment, message);
 			}
 		});
-
 	}
 
 

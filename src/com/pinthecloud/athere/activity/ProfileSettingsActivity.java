@@ -5,17 +5,18 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.ProfileImageFragment;
+import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 
-
-public class ProfileImageActivity extends AhActivity{
+public class ProfileSettingsActivity extends AhActivity{
 
 	private MessageHelper messageHelper;
 
@@ -23,7 +24,7 @@ public class ProfileImageActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profile_image);
+		setContentView(R.layout.activity_profile_settings);
 		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
 
 
@@ -39,8 +40,8 @@ public class ProfileImageActivity extends AhActivity{
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-		ProfileImageFragment profileImageFragment = new ProfileImageFragment();
-		fragmentTransaction.add(R.id.profile_image_container, profileImageFragment);
+		final ChupaChatFragment chupaChatFragment = new ChupaChatFragment();
+		fragmentTransaction.add(R.id.chupa_chat_container, chupaChatFragment);
 		fragmentTransaction.commit();
 
 
@@ -56,7 +57,7 @@ public class ProfileImageActivity extends AhActivity{
 					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
 					toast.show();
 
-					Intent intent = new Intent(ProfileImageActivity.this, SquareListActivity.class);
+					Intent intent = new Intent(ProfileSettingsActivity.this, SquareListActivity.class);
 					startActivity(intent);
 					finish();
 				}
@@ -78,4 +79,3 @@ public class ProfileImageActivity extends AhActivity{
 		FiveRocks.onActivityStop(this);
 	}
 }
-

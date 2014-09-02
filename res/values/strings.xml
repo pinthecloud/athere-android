@@ -8,9 +8,7 @@
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
     <string name="logo">Logo</string>
-    <string name="profile">Profile</string>
     <string name="profile_image">Profile Image</string>
-    <string name="profile_settings">Profile Settings</string>
     <string name="my_profile">My Profile</string>
     <string name="blur_image">Blur Image</string>
     <string name="on">On</string>
@@ -62,7 +60,7 @@
     <string name="update_app_message">New version found. Please update App.</string>
     <string name="internet_not_connected_message">Internet is unavailable. Please check network status.</string>
     <string name="send_message_fail_message">Select action.</string>
-    <string name="number_of_member_question">How many are people with you?</string>
+    <string name="number_of_member_question">How many with you?</string>
 
     <!-- String Array -->
 

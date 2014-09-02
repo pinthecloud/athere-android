@@ -91,6 +91,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
+            android:name=".activity.ProfileSettingsActivity"
+            android:icon="@drawable/actionbar_logo"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ChupaChatActivity"
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"

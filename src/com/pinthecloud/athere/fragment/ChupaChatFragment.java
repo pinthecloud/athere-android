@@ -255,7 +255,6 @@ public class ChupaChatFragment extends AhFragment {
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
 		refreshView(chupaCommunId, null);
-
 	}
 
 

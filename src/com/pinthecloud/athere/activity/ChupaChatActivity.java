@@ -45,6 +45,10 @@ public class ChupaChatActivity extends AhActivity {
 		fragmentTransaction.add(R.id.chupa_chat_container, chupaChatFragment);
 		fragmentTransaction.commit();
 
+		
+		/*
+		 * Set Handler for forced logout
+		 */
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -53,6 +57,7 @@ public class ChupaChatActivity extends AhActivity {
 					String text = _this.getResources().getString(R.string.forced_logout_title);
 					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
 					toast.show();
+					
 					Intent intent = new Intent(ChupaChatActivity.this, SquareListActivity.class);
 					startActivity(intent);
 					finish();
