@@ -18,18 +18,15 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.pinthecloud.athere.AhApplication;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhIdUser;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.analytics.HitBuilders;
 
 
 public class BasicProfileFragment extends AhFragment{
@@ -44,30 +41,12 @@ public class BasicProfileFragment extends AhFragment{
 	private boolean isTypedNickName = false;
 	private boolean isPickedBirthYear = false;
 
-	private Tracker t;
 
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		
-		/* 
-		 * for google analytics
-		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-        if (t==null){
-            t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-            t.setScreenName("BasicProfileFragment");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
-	}
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);		
-        
+
 		/*
 		 * Find UI component
 		 */
@@ -106,8 +85,7 @@ public class BasicProfileFragment extends AhFragment{
 		/*
 		 * Set birth year edit text and year picker dialog
 		 */
-		String title = getResources().getString(R.string.birth_of_year);
-		yearPickerDialog = new NumberPickerDialog(title, 1950, 2000, 1990, new AhDialogCallback() {
+		yearPickerDialog = new NumberPickerDialog(1950, 2000, 1990, new AhDialogCallback() {
 
 			@Override
 			public void doPositiveThing(Bundle bundle) {
@@ -200,27 +178,20 @@ public class BasicProfileFragment extends AhFragment{
 						public void onCompleted(AhIdUser entity) {
 							progressBar.setVisibility(View.GONE);
 
-							
+
 							/*
-							 * check the sex 
+							 * Check the gender
 							 */
-							if(maleButton.isChecked() == true){
-								Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
-								t.send(new HitBuilders.EventBuilder()
-								.setCategory("BasicProfileFragment")
-								.setAction("CheckSex")
-								.setLabel("Male")
-								.build());
+							String gender = "Male";
+							if(!maleButton.isChecked()){
+								gender = "Female";
 							}
-							else{
-								Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
-								t.send(new HitBuilders.EventBuilder()
-								.setCategory("BasicProfileFragment")
-								.setAction("CheckSex")
-								.setLabel("Female")
-								.build());
-							}
-							
+							appTracker.send(new HitBuilders.EventBuilder()
+							.setCategory(_thisFragment.getClass().getSimpleName())
+							.setAction("CheckGender")
+							.setLabel(gender)
+							.build());
+
 							
 							/*
 							 * Save setting and move to next activity
@@ -234,7 +205,7 @@ public class BasicProfileFragment extends AhFragment{
 							pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
 							pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
 							pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAhId());
-							
+
 							Intent intent = new Intent(context, SquareListActivity.class);
 							startActivity(intent);
 							activity.finish();
@@ -247,19 +218,19 @@ public class BasicProfileFragment extends AhFragment{
 		return view;
 	}
 
-	
+
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
 	}
-	
-	
+
+
 	@Override
 	public void onStart() {
 		super.onStart();
 		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
-	
-	
+
+
 	@Override
 	public void onStop() {
 		super.onStop();

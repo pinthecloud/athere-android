@@ -17,9 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
@@ -40,24 +37,12 @@ import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
-	private Tracker t;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		versionHelper = app.getVersionHelper();
-
-
-		/* 
-		 * for google analytics
-		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-		if (t==null){
-			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-			t.setScreenName("SplashFragment");
-			t.send(new HitBuilders.AppViewBuilder().build());
-		}
 	}
 
 

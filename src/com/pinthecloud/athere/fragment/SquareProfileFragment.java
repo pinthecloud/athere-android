@@ -37,9 +37,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -84,8 +81,6 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
-
-	private Tracker t;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -145,17 +140,6 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		/* 
-		 * for google analytics
-		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-
-		if (t==null){
-			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-			t.setScreenName("SquareProfileFragment");
-			t.send(new HitBuilders.AppViewBuilder().build());
-		}
 
 		// Get parameter from previous activity intent
 		intent = activity.getIntent();
@@ -282,8 +266,7 @@ public class SquareProfileFragment extends AhFragment{
 		/*
 		 * Set event on Company EditText
 		 */
-		String title = getResources().getString(R.string.number_of_member);
-		final NumberPickerDialog companyNumberPickerDialog = new NumberPickerDialog(title, 1, 10, 2, new AhDialogCallback() {
+		final NumberPickerDialog companyNumberPickerDialog = new NumberPickerDialog(1, 10, 2, new AhDialogCallback() {
 
 			@Override
 			public void doPositiveThing(Bundle bundle) {

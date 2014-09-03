@@ -8,28 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.model.AhUser;
 
 public class ProfileImageFragment extends AhFragment{
 
-	private PreferenceHelper pref;
 	private AhUser user;
-	
-	private boolean isMe;
-
 	private ImageView profileImage; 
+	private boolean isMe;
 
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		pref = app.getPref();
 
-		
-		// Get user id from previous activity
+
+		/*
+		 * Get user id from previous activity
+		 */
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		if(userId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
@@ -37,8 +35,7 @@ public class ProfileImageFragment extends AhFragment{
 		}else{
 			isMe = false;
 		}
-		
-		
+
 		// If it is other user, get the user in DB
 		if(!isMe){
 			user = userDBHelper.getUser(userId);
@@ -51,7 +48,7 @@ public class ProfileImageFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile_image, container, false);
 
-		
+
 		/*
 		 * Set UI component
 		 */
@@ -64,6 +61,7 @@ public class ProfileImageFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onStart");
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
 		if(!isMe){
 			id = user.getId();
@@ -77,5 +75,6 @@ public class ProfileImageFragment extends AhFragment{
 		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onResume");
 		profileImage.setImageBitmap(null);
 		super.onStop();
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 }

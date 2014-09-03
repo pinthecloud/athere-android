@@ -86,7 +86,7 @@ public class AhIntentService extends IntentService {
 			Log.d(AhGlobalVariable.LOG_TAG, "Error while parsing Message Intent : " + e.getMessage());
 			return;
 		}
-		Log.e(AhGlobalVariable.LOG_TAG,"Received Message Type : " + message.getType());
+		Log.d(AhGlobalVariable.LOG_TAG, "Received Message Type : " + message.getType());
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {
@@ -175,35 +175,11 @@ public class AhIntentService extends IntentService {
 
 				@Override
 				public void onCompleted(Bitmap entity) {
-					// TODO Auto-generated method stub
 					FileUtil.saveImageToInternalStorage(app, entity, user.getId());
 					alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 				}
 			});
 		}
-		
-//		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
-//
-//			@Override
-//			public void onCompleted(final AhUser user) {
-//				userDBHelper.addUser(user);
-//				if (isRunning(app)) {
-//					String currentActivityName = getCurrentRunningActivityName(app);
-//					messageHelper.triggerMessageEvent(currentActivityName, message);
-//					userHelper.triggerUserEvent(user);
-//				} else {
-//					blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
-//
-//						@Override
-//						public void onCompleted(Bitmap entity) {
-//							// TODO Auto-generated method stub
-//							FileUtil.saveImageToInternalStorage(app, entity, user.getId());
-//							alertNotification(AhMessage.TYPE.ENTER_SQUARE);
-//						}
-//					});
-//				}
-//			}
-//		});
 	}
 
 
@@ -276,6 +252,7 @@ public class AhIntentService extends IntentService {
 		String title = "";
 		String content = "";
 		Resources resources = _this.getResources();
+		AhUser sentUser = userDBHelper.getUser(message.getSenderId());
 		if (AhMessage.TYPE.TALK.equals(type)){
 			title = message.getSender();
 			content = message.getContent();
@@ -285,7 +262,13 @@ public class AhIntentService extends IntentService {
 				return;
 			}
 			title = message.getSender() + " " + resources.getString(R.string.enter_square_message);
-			content = message.getContent();
+			String age = resources.getString(R.string.age);
+			String person = resources.getString(R.string.person);
+			String gender = resources.getString(R.string.male);
+			if(!sentUser.isMale()){
+				gender = resources.getString(R.string.female);
+			}
+			content = gender + " " + sentUser.getAge() + age + " " + sentUser.getCompanyNum() + person;
 			resultIntent.setClass(_this, SquareActivity.class);
 		} else if (AhMessage.TYPE.CHUPA.equals(type)){
 			title = message.getSender() +" " + resources.getString(R.string.send_chupa_notification_title);
@@ -298,7 +281,7 @@ public class AhIntentService extends IntentService {
 			resultIntent.setClass(_this, SquareListActivity.class);
 		}
 
-		
+
 		// The stack builder object will contain an artificial back stack for the
 		// started Activity.
 		// This ensures that navigating backward from the Activity leads out of
@@ -314,7 +297,6 @@ public class AhIntentService extends IntentService {
 		//				stackBuilder.addNextIntentWithParentStack(resultIntent);
 
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-		AhUser sentUser = userDBHelper.getUser(message.getSenderId());
 		Bitmap bitmap = null;
 		if (sentUser == null){
 			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
@@ -322,7 +304,7 @@ public class AhIntentService extends IntentService {
 			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getId());
 		}
 
-		
+
 		/*
 		 * Set Notification
 		 */
@@ -422,12 +404,9 @@ public class AhIntentService extends IntentService {
 			.setTimeStamp()
 			.setStatus(AhMessage.STATUS.SENT)
 			.setChupaCommunId(chupaCommunId);
-
 		} catch (JSONException e) {
-			e.printStackTrace();
 			throw e;
 		}
-
 		return messageBuilder.build();
 	}
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -20,12 +21,11 @@ import android.widget.ToggleButton;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
+import com.pinthecloud.athere.activity.ProfileSettingsActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
@@ -39,6 +39,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private ProgressBar progressBar;
 	private ToggleButton chatAlarmButton;
 	private ToggleButton chupaAlarmButton;
+	private ImageButton profileSettingsButton;
 	private ImageView profileImage;
 	private ImageView profileGenderImage;
 	private TextView profileNickNameText;
@@ -51,24 +52,7 @@ public class SquareDrawerFragment extends AhFragment {
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 
-	private Tracker t;
-
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-
-		/* 
-		 * for google analytics
-		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-		if (t==null){
-			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-			t.setScreenName("SquareDrawerFragment");
-			t.send(new HitBuilders.AppViewBuilder().build());
-		}
-	}
+	private AhUser user;
 
 
 	@Override
@@ -76,12 +60,19 @@ public class SquareDrawerFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_drawer, container, false);
 
+		appTracker.send(new HitBuilders.TimingBuilder()
+		.setCategory(_thisFragment.getClass().getSimpleName())
+		.setVariable("DrawerTime")
+		.setLabel("getDrawerTime")
+		.build());
+
 		/*
 		 * Set Ui Component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
 		chatAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_alarm_button);
 		chupaAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_alarm_button);
+		profileSettingsButton = (ImageButton) view.findViewById(R.id.square_drawer_frag_profile_bar_settings);
 		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
 		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
 		profileImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
@@ -104,11 +95,23 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				appTracker.send(new HitBuilders.EventBuilder()
+				.setCategory(_thisFragment.getClass().getSimpleName())
+				.setAction("ViewOthersProfile")
+				.setLabel("ViewOthersProfile")
+				.build());
+
 				final AhUser user = participantListAdapter.getItem(position);
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
+						appTracker.send(new HitBuilders.EventBuilder()
+						.setCategory(_thisFragment.getClass().getSimpleName())
+						.setAction("ProfileSendChupa")
+						.setLabel("ProfileSendChupa")
+						.build());
+
 						Intent intent = new Intent(context, ChupaChatActivity.class);
 						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 						context.startActivity(intent);
@@ -166,6 +169,15 @@ public class SquareDrawerFragment extends AhFragment {
 						chupaAlarmButton.setEnabled(true);
 					}
 				});
+			}
+		});
+		profileSettingsButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(context, ProfileSettingsActivity.class);
+				intent.putExtra(AhGlobalVariable.USER_KEY, user);
+				context.startActivity(intent);
 			}
 		});
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -250,6 +262,9 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final AhUser user) {
+		this.user = user;
+
+
 		/*
 		 * Set alarm toggle button
 		 */

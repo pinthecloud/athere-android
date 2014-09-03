@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
@@ -25,13 +24,6 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
-
-//import com.google.android.gms.analytics.GoogleAnalytics;
-//import com.google.android.gms.analytics.HitBuilders;
-//import com.google.android.gms.analytics.Tracker;
-
-
-import io.fiverocks.android.FiveRocks;
 
 public class SquareActivity extends AhActivity{
 
@@ -50,28 +42,11 @@ public class SquareActivity extends AhActivity{
 	private MessageHelper messageHelper;
 	private UserHelper userHelper;
 
-	//	private Tracker t;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
-		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
-
-
-		/* 
-		 * for google analytics
-		 */
-		//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
-		//
-		//        if (t==null){
-		//            t = ((AhApplication) getApplication()).getTracker(
-		//                    AhApplication.TrackerName.APP_TRACKER);
-		//
-		//            t.setScreenName("SquareActivity");
-		//            t.send(new HitBuilders.AppViewBuilder().build());
-		//        }
 
 
 		/*
@@ -156,14 +131,18 @@ public class SquareActivity extends AhActivity{
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
 
+		/*
+		 * Set Handler for forced logout
+		 */
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
 					String text = getResources().getString(R.string.forced_logout_title);
-					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
+					Toast toast = Toast.makeText(_thisActivity, text, Toast.LENGTH_LONG);
 					toast.show();
+
 					Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
 					startActivity(intent);
 					finish();
@@ -172,7 +151,6 @@ public class SquareActivity extends AhActivity{
 				messageHelper.triggerMessageEvent(mSquareTabFragment, message);
 			}
 		});
-
 	}
 
 
@@ -209,21 +187,5 @@ public class SquareActivity extends AhActivity{
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
-		FiveRocks.onActivityStart(this);
-	}
-
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
-		FiveRocks.onActivityStop(this);
 	}
 }

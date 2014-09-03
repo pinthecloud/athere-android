@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.model.AhUser;
 
 public class UserDBHelper extends SQLiteOpenHelper {

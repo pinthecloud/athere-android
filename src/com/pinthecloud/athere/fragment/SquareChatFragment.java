@@ -16,9 +16,6 @@ import android.widget.ListView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
@@ -38,8 +35,6 @@ public class SquareChatFragment extends AhFragment{
 	private List<AhMessage> talks;
 	private AhMessage talk;
 
-	private Tracker t;
-
 
 	public SquareChatFragment() {
 		super();
@@ -49,22 +44,6 @@ public class SquareChatFragment extends AhFragment{
 	public SquareChatFragment(String squareId) {
 		super();
 		this.squareId = squareId;
-	}
-
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		/* 
-		 * for google analytics
-		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-		if (t == null){
-			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-			t.setScreenName("SquareChatFragment");
-			t.send(new HitBuilders.AppViewBuilder().build());
-		}
 	}
 
 
@@ -168,7 +147,7 @@ public class SquareChatFragment extends AhFragment{
 
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
-						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					return;
 				}
 				refreshView(message.getId());
@@ -215,18 +194,17 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				Tracker t = app.getTracker(TrackerName.APP_TRACKER);
-				t.send(new HitBuilders.EventBuilder()
-				.setCategory("SquareChatFragment")
+				appTracker.send(new HitBuilders.EventBuilder()
+				.setCategory(_thisFragment.getClass().getSimpleName())
 				.setAction("SendChat")
 				.setLabel("Chat")
 				.build());
-				
+
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
 				activity.runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						messageListAdapter.remove(message);
@@ -250,7 +228,7 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
-		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK)) {
+		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK)) {
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 			String enterMessage = getResources().getString(R.string.enter_square_message);
 			String warningMessage = getResources().getString(R.string.behave_well_warning);
@@ -265,11 +243,10 @@ public class SquareChatFragment extends AhFragment{
 			messageDBHelper.addMessage(enterTalk);
 		}
 		if (id == null){
-			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK);
 		} else {
-			int _id = Integer.valueOf(id);
 			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-			talk = messageDBHelper.getMessage(_id);
+			talk = messageDBHelper.getMessage(Integer.parseInt(id));
 		}
 
 
@@ -286,7 +263,6 @@ public class SquareChatFragment extends AhFragment{
 				} else {
 					messageListAdapter.add(talk);
 				}
-				//				messageListAdapter.notifyDataSetChanged();
 				messageListView.setSelection(messageListView.getCount() - 1);
 			}
 		});

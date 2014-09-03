@@ -65,7 +65,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/chupa"
+        android:contentDescription="@string/send_chupa"
         android:src="@drawable/sidebar_chupa" />
 
 </RelativeLayout>
