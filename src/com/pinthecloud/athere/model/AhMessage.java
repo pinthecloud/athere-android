@@ -174,16 +174,24 @@ public class AhMessage implements Parcelable {
 		status = in.readInt();
 	}
 
+	
 	public boolean isMine(){
 		PreferenceHelper pref = AhApplication.getInstance().getPref();
-		return this.senderId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY));
+		return senderId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY));
 	}
 
+	
 	public boolean isNotification(){
 		return (type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString()) 
 				|| type.equals(TYPE.UPDATE_USER_INFO.toString()));
 	}
 
+	
+	public boolean isAdmin(){
+		return type.equals(TYPE.ADMIN_MESSAGE.toString());
+	}
+	
+	
 	public static String buildChupaCommunId(String id0, String id1) {
 		if (id0.compareTo(id1) > 0) {
 			return  id0 + id1;

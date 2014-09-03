@@ -144,7 +144,7 @@ public class SquareChatFragment extends AhFragment{
 			public void onCompleted(final AhMessage message) {
 				Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " Message onComplete : " + message.getType() + " " + message.getContent());
 
-				// Chupa & User Update Message can't go through here
+				// Chupa & Exit Square Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					return;

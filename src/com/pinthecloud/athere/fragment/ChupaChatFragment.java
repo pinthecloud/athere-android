@@ -217,26 +217,29 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-
 				// Only Chupa & Exit Message can go through
+				// Only other user who is going chupa with me can go through
 				if (!(message.getType().equals(AhMessage.TYPE.CHUPA.toString()) 
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())
-								|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString()))){
+						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString()))
+						|| !otherUser.getId().equals(message.getSenderId())){
 					return;
 				}
 
-				// If Exit Message, Check if it's related Exit
-				// (Don't go through other User Exit message)
-				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())
-						&& !otherUser.getId().equals(message.getSenderId())) {
-					return;
-				}
 
 				// If update message, check if it's related update
 				// (Don't go through other User Exit message)
-				if(message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())
-						&& otherUser.getId().equals(message.getSenderId())){
-					refreshView(message.getChupaCommunId(), null);
+				if(message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
+					otherUser = userDBHelper.getUser(otherUser.getId(), true);
+					activity.runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
+							otherNickName.setText(otherUser.getNickName());
+							otherCompanyNumber.setText("" + otherUser.getCompanyNum());
+						}
+					});
 					return;
 				}
 

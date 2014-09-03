@@ -48,8 +48,6 @@ import com.pinthecloud.athere.util.FileUtil;
  *
  */
 public class AhApplication extends Application{
-
-	
 	
 	// Windows Azure Mobile Service Keys
 	private final String APP_URL = "https://athere.azure-mobile.net/";

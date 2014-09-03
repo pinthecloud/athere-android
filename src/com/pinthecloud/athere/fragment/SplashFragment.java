@@ -60,12 +60,6 @@ public class SplashFragment extends AhFragment {
 
 
 		/*
-		 * Do this method when only update app
-		 */
-		//		insertAppVersion();
-
-
-		/*
 		 * If time is up, remove local preferences.
 		 */
 		if(pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY)){
@@ -264,23 +258,4 @@ public class SplashFragment extends AhFragment {
 		}
 		super.handleException(ex);
 	}
-
-
-	//	private void insertAppVersion(){
-	//		AppVersion appVersion = new AppVersion();
-	//		try {
-	//			appVersion.setVersion(versionHelper.getClientAppVersion());
-	//		} catch (NameNotFoundException e) {
-	//			Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
-	//			appVersion.setVersion(0.1);
-	//		}
-	//		appVersion.setType(AppVersion.TYPE.MANDATORY.toString());
-	//		versionHelper.insertAppVersion(_thisFragment, appVersion, new AhEntityCallback<AppVersion>() {
-	//
-	//			@Override
-	//			public void onCompleted(AppVersion entity) {
-	//				// Do nothing
-	//			}
-	//		});
-	//	}
 }
