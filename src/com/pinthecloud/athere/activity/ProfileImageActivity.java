@@ -1,13 +1,11 @@
 package com.pinthecloud.athere.activity;
 
-import io.fiverocks.android.FiveRocks;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ProfileImageFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -24,7 +22,6 @@ public class ProfileImageActivity extends AhActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile_image);
-		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
 
 
 		/*
@@ -52,8 +49,8 @@ public class ProfileImageActivity extends AhActivity{
 			@Override
 			public void onCompleted(AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
-					String text = _this.getResources().getString(R.string.forced_logout_title);
-					Toast toast = Toast.makeText(_this, text, Toast.LENGTH_LONG);
+					String text = getResources().getString(R.string.forced_logout_title);
+					Toast toast = Toast.makeText(_thisActivity, text, Toast.LENGTH_LONG);
 					toast.show();
 
 					Intent intent = new Intent(ProfileImageActivity.this, SquareListActivity.class);
@@ -62,20 +59,6 @@ public class ProfileImageActivity extends AhActivity{
 				}
 			}
 		});
-	}
-
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		FiveRocks.onActivityStart(this);
-	}
-
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		FiveRocks.onActivityStop(this);
 	}
 }
 

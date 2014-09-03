@@ -12,7 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -22,6 +25,7 @@ import com.pinthecloud.athere.model.AhUser;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
+	private AhApplication app;
 	private Context context;
 	private AhFragment frag;
 	private int layoutId;
@@ -32,8 +36,8 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 		this.context = context;
 		this.frag = fragment;
 		this.layoutId = layoutId;
-		
-		AhApplication app = AhApplication.getInstance();
+
+		this.app = AhApplication.getInstance();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 	}
 
@@ -47,7 +51,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			view = inflater.inflate(this.layoutId, parent, false);
 		}
 
-		
+
 		final AhUser user = getItem(position);
 		if (user != null) {
 			/*
@@ -74,7 +78,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			}
 			blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.launcher, profileImage);
 
-			
+
 			//			blobStorageHelper.downloadBitmapAsync(frag, user.getId(), new AhEntityCallback<Bitmap>() {
 			//
 			//				@Override
@@ -91,7 +95,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			//				}
 			//			});
 
-			
+
 			/*
 			 * Set event on button
 			 */
@@ -99,13 +103,20 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
 				@Override
 				public void onClick(View v) {
+					Tracker appTracker = app.getTracker(TrackerName.APP_TRACKER);
+					appTracker.send(new HitBuilders.EventBuilder()
+					.setCategory(frag.getClass().getSimpleName())
+					.setAction("SendChupa")
+					.setLabel("SendChupa")
+					.build());
+
 					Intent intent = new Intent(context, ChupaChatActivity.class);
 					intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 					context.startActivity(intent);
 				}
 			});
 		}
-		
+
 		return view;
 	}
 }

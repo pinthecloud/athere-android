@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.model.AhUser;
@@ -19,7 +16,6 @@ import com.pinthecloud.athere.model.AhUser;
 public class ProfileImageFragment extends AhFragment{
 
 	private AhUser user;
-	private Tracker t;
 	private ImageView profileImage; 
 	private boolean isMe;
 
@@ -29,18 +25,9 @@ public class ProfileImageFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 
 
-		/* 
-		 * for google analytics
+		/*
+		 * Get user id from previous activity
 		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-		if (t==null){
-			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-			t.setScreenName("ProfileImageFragment");
-			t.send(new HitBuilders.AppViewBuilder().build());
-		}
-
-
-		// Get user id from previous activity
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		if(userId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
@@ -48,7 +35,6 @@ public class ProfileImageFragment extends AhFragment{
 		}else{
 			isMe = false;
 		}
-
 
 		// If it is other user, get the user in DB
 		if(!isMe){

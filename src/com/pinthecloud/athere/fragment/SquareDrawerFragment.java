@@ -21,8 +21,6 @@ import android.widget.ToggleButton;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -55,24 +53,6 @@ public class SquareDrawerFragment extends AhFragment {
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 
 	private AhUser user;
-	private Tracker t;
-
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-
-		/* 
-		 * for google analytics
-		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-		if (t==null){
-			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-			t.setScreenName("SquareDrawerFragment");
-			t.send(new HitBuilders.AppViewBuilder().build());
-		}
-	}
 
 
 	@Override
@@ -80,12 +60,12 @@ public class SquareDrawerFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_drawer, container, false);
 
-		t.send(new HitBuilders.TimingBuilder()
-			.setCategory("SquareDrawerFragment")
-			.setVariable("DrawerTime")
-			.setLabel("getDrawerTime")
-			.build());
-		
+		appTracker.send(new HitBuilders.TimingBuilder()
+		.setCategory(_thisFragment.getClass().getSimpleName())
+		.setVariable("DrawerTime")
+		.setLabel("getDrawerTime")
+		.build());
+
 		/*
 		 * Set Ui Component
 		 */
@@ -115,11 +95,23 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				appTracker.send(new HitBuilders.EventBuilder()
+				.setCategory(_thisFragment.getClass().getSimpleName())
+				.setAction("ViewOthersProfile")
+				.setLabel("ViewOthersProfile")
+				.build());
+
 				final AhUser user = participantListAdapter.getItem(position);
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
+						appTracker.send(new HitBuilders.EventBuilder()
+						.setCategory(_thisFragment.getClass().getSimpleName())
+						.setAction("ProfileSendChupa")
+						.setLabel("ProfileSendChupa")
+						.build());
+
 						Intent intent = new Intent(context, ChupaChatActivity.class);
 						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 						context.startActivity(intent);

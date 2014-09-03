@@ -15,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -37,6 +40,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	private final int SEND = 1;
 	private final int RECEIVE = 2;
 
+	private AhApplication app;
 	private Context context;
 	private AhFragment frag;
 	private LayoutInflater inflater;
@@ -52,7 +56,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		this.frag = frag;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		AhApplication app = AhApplication.getInstance(); 
+		this.app = AhApplication.getInstance(); 
 		this.userDBHelper = app.getUserDBHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
@@ -89,7 +93,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				ImageButton failButton = (ImageButton)view.findViewById(R.id.row_square_chat_list_send_fail);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
 
-				
+
 				/*
 				 * Set UI component only in send list
 				 */
@@ -118,14 +122,14 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 					failButton.setVisibility(View.VISIBLE);
 					progressBar.setVisibility(View.GONE);
 				}
-				
-				
+
+
 				/*
 				 * Common UI component
 				 */
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
-					
+
 					@Override
 					public boolean onLongClick(View v) {
 						boolean cancel = true;
@@ -144,7 +148,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				if (user == null) return view;
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
-					
+
 					@Override
 					public boolean onLongClick(View v) {
 						showReSendOrCancelDialog(message, position, false);
@@ -152,7 +156,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 					}
 				});
 
-				
+
 				/*
 				 * Find UI component only in receive list
 				 */
@@ -161,7 +165,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				final ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
 				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
 
-				
+
 				/*
 				 * Set UI component only in receive list
 				 */
@@ -175,7 +179,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				} else{
 					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
-				
+
 				//				int w = profileImage.getWidth();
 				//				int h = profileImage.getHeight();
 				//				blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
@@ -185,16 +189,29 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				//						profileImage.setImageBitmap(entity);
 				//					}
 				//				});
-				
+
 				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.launcher, profileImage);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
+						final Tracker appTracker = app.getTracker(TrackerName.APP_TRACKER);
+						appTracker.send(new HitBuilders.EventBuilder()
+						.setCategory(frag.getClass().getSimpleName())
+						.setAction("ViewOthersProfile")
+						.setLabel("ViewOthersProfile")
+						.build());
+
 						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {
+								appTracker.send(new HitBuilders.EventBuilder()
+								.setCategory(frag.getClass().getSimpleName())
+								.setAction("ProfileSendChupa")
+								.setLabel("ProfileSendChupa")
+								.build());
+
 								Intent intent = new Intent(context, ChupaChatActivity.class);
 								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
 								context.startActivity(intent);
@@ -247,8 +264,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			}
 		}
 	}
-	
-	
+
+
 	private void showReSendOrCancelDialog(final AhMessage message, final int position, boolean cancel){
 		Resources resources = context.getResources();
 		String dialogMessage = resources.getString(R.string.send_message_fail_message);

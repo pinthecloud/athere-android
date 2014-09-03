@@ -84,29 +84,26 @@ public class AhApplication extends Application{
 
 	private static AhUser currentChupaUser;
 
-	// The following line should be changed to include the correct property id.
-	private static final String GA_PROPERTY_ID = "UA-53944359-1";
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		String AZURE_URL;
-		String AZZURE_KEY;
 		
+		String AZURE_URL;
+		String AZURE_KEY;
 		if (AhGlobalVariable.DEBUG_MODE) {
 			AZURE_URL = APP_TEST_URL;
-			AZZURE_KEY = APP_TEST_KEY;
+			AZURE_KEY = APP_TEST_KEY;
 		} else {
 			AZURE_URL = APP_URL;
-			AZZURE_KEY = APP_KEY;
+			AZURE_KEY = APP_KEY;
 		}
 		
 		app = this;
-
 		try {
 			mClient = new MobileServiceClient(
 					AZURE_URL,
-					AZZURE_KEY,
+					AZURE_KEY,
 					this);
 		} catch (MalformedURLException e) {
 			Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
@@ -305,11 +302,10 @@ public class AhApplication extends Application{
 		ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
 	}
 	private HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
-
 	public synchronized Tracker getTracker(TrackerName trackerId) {
 		if (!mTrackers.containsKey(trackerId)) {
 			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-			Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(GA_PROPERTY_ID)
+			Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(AhGlobalVariable.GA_PROPERTY_ID)
 					: (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(R.xml.global_tracker)
 							: analytics.newTracker(R.xml.ecommerce_tracker);
 					mTrackers.put(trackerId, t);

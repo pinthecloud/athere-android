@@ -15,7 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.pinthecloud.athere.AhApplication;
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -24,34 +24,12 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 public class SquareChupaListFragment extends AhFragment{
 
 	private SquareChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
 	private ImageView blankImage;
-
-	private Tracker t;
-
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		
-		/* 
-		 * for google analytics
-		 */
-		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
-        if (t==null){
-            t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
-            t.setScreenName("SquareChupaListFragment");
-            t.send(new HitBuilders.AppViewBuilder().build());
-        }
-	}
 
 
 	@Override

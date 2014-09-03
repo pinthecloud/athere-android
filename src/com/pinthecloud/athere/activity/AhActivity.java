@@ -19,9 +19,16 @@ public class AhActivity extends Activity{
 
 	protected AhApplication app;
 	protected PreferenceHelper pref;
-	protected AhActivity _this;
+	protected AhActivity _thisActivity;
 
 
+	public AhActivity(){
+		_thisActivity = this;
+		app = AhApplication.getInstance();
+		pref = app.getPref();
+	}
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,16 +38,8 @@ public class AhActivity extends Activity{
 		 * Set FiveRocks
 		 */
 		FiveRocks.setDebugEnabled(true);
-		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
+		FiveRocks.init(_thisActivity, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
 		// FiveRocks.setUserCohortVariable(1, "DemoUser");
-		
-		
-		/*
-		 * Set static value
-		 */
-		app = AhApplication.getInstance();
-		pref = app.getPref();
-		_this = this;
 	}
 
 
@@ -62,13 +61,13 @@ public class AhActivity extends Activity{
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FiveRocks.onActivityStart(this);	
+		FiveRocks.onActivityStart(_thisActivity);	
 	}
 
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		FiveRocks.onActivityStop(this);
+		FiveRocks.onActivityStop(_thisActivity);
 	}
 }

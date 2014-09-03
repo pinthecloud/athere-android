@@ -5,7 +5,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
@@ -28,11 +31,11 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
  */
 public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
+	protected AhFragment _thisFragment;
 	protected AhApplication app;
 	protected Context context;
 	protected AhActivity activity;
 	protected PreferenceHelper pref;
-	protected AhFragment _thisFragment;
 
 	protected MessageHelper messageHelper;
 	protected MessageDBHelper messageDBHelper;
@@ -40,35 +43,44 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected UserDBHelper userDBHelper;
 	protected SquareHelper squareHelper;
 	protected CachedBlobStorageHelper blobStorageHelper;
+	protected Tracker appTracker;
 
-	
+
 	public AhFragment(){
 		_thisFragment = this;
 		app = AhApplication.getInstance();
+		pref = app.getPref();
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
 		userDBHelper = app.getUserDBHelper();
 		squareHelper = app.getSquareHelper();
 		blobStorageHelper = app.getBlobStorageHelper();
-		pref = app.getPref();
+		appTracker = app.getTracker(TrackerName.APP_TRACKER);
 	}
 
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		context = getActivity();
 		activity = (AhActivity) context;
 		super.onCreate(savedInstanceState);
-		
-		
+
+
+		/* 
+		 * Set google analytics
+		 */
+		appTracker.setScreenName(_thisFragment.getClass().getSimpleName());
+		appTracker.send(new HitBuilders.AppViewBuilder().build());
+
+
 		/*
 		 * Set static value
 		 */
 		ExceptionManager.setHandler(_thisFragment);
 	}
 
-	
+
 	@Override
 	public void handleException(final AhException ex) {
 		Log(_thisFragment, "AhFragment handleException : " + ex.toString());

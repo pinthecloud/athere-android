@@ -16,7 +16,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -380,8 +379,7 @@ public class AhIntentService extends IntentService {
 	 */
 	private AhMessage parseMessageIntent(Intent intent) throws JSONException {
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		Bundle b = intent.getExtras();
-		String jsonStr = b.getString("message");
+		String jsonStr = intent.getExtras().getString("message");
 
 		JSONObject jo = null;
 
@@ -405,12 +403,9 @@ public class AhIntentService extends IntentService {
 			.setTimeStamp()
 			.setStatus(AhMessage.STATUS.SENT)
 			.setChupaCommunId(chupaCommunId);
-
 		} catch (JSONException e) {
-			e.printStackTrace();
 			throw e;
 		}
-
 		return messageBuilder.build();
 	}
 
@@ -421,6 +416,7 @@ public class AhIntentService extends IntentService {
 	 * @return userId String related to the sent message
 	 */
 	private String parseUserIdIntent(Intent intent){
+		Log.d(AhGlobalVariable.LOG_TAG, "user id : " + intent.getExtras().getString("userId"));
 		return intent.getExtras().getString("userId");
 	}
 }
