@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
@@ -64,7 +63,7 @@ public class SplashFragment extends AhFragment {
 		 * Do this method when only update app
 		 */
 		//		insertAppVersion();
-		
+
 
 		/*
 		 * If time is up, remove local preferences.
@@ -87,13 +86,13 @@ public class SplashFragment extends AhFragment {
 			int lastHour = Integer.parseInt(lastArray[3]);
 
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			} else if(currentDay > lastDay && lastHour < 12){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			} else if(currentDay > lastDay && currentHour >= 12){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			}
 		}
 
@@ -123,10 +122,7 @@ public class SplashFragment extends AhFragment {
 		 */
 		// Erase Later (Exception for hongkun)
 		if (isHongkunTest()) return view;
-		
-		
 		runChupa();
-
 		return view;
 	}
 
@@ -134,13 +130,13 @@ public class SplashFragment extends AhFragment {
 	private boolean isHongkunTest() {
 		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
 		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
+		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
 		String myGal3 = "";
 		String httpAgent = System.getProperty("http.agent");
 		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
 				|| myGal3.equals(httpAgent))))	// Galaxy 3
 			return false;
-		
+
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
 		.setMessage("Want to Go to HongkunTest?")
@@ -191,7 +187,7 @@ public class SplashFragment extends AhFragment {
 						try {
 							clientVer = versionHelper.getClientAppVersion();
 						} catch (NameNotFoundException e) {
-							Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
+							Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
 							clientVer = 0.1;
 						}
 						if (serverVer.getVersion() > clientVer) {
@@ -270,26 +266,12 @@ public class SplashFragment extends AhFragment {
 	}
 
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
-	}
-
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
-	}
-
-
 	//	private void insertAppVersion(){
 	//		AppVersion appVersion = new AppVersion();
 	//		try {
 	//			appVersion.setVersion(versionHelper.getClientAppVersion());
 	//		} catch (NameNotFoundException e) {
-	//			Log.d(AhGlobalVariable.LOG_TAG, "Error of SplashActivity : " + e.getMessage());
+	//			Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
 	//			appVersion.setVersion(0.1);
 	//		}
 	//		appVersion.setType(AppVersion.TYPE.MANDATORY.toString());

@@ -2,13 +2,11 @@ package com.pinthecloud.athere.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.model.AhUser;
@@ -60,8 +58,6 @@ public class ProfileImageFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onStart");
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
 		if(!isMe){
 			id = user.getId();
@@ -72,9 +68,7 @@ public class ProfileImageFragment extends AhFragment{
 
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "ProfileImageFragmenr onResume");
 		profileImage.setImageBitmap(null);
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 }

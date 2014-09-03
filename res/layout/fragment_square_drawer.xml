@@ -113,7 +113,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:background="@android:color/transparent"
-                android:contentDescription="@string/settings"
+                android:contentDescription="@string/profile_settings"
                 android:src="@drawable/actionbar_setting" />
         </RelativeLayout>
 

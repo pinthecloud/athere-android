@@ -196,8 +196,8 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	private Bitmap getBitmapFromMemCache(String key) {
 		return mMemoryCache.get(key);
 	}
-
-
+	
+	
 	public void clearCache() {
 		mMemoryCache.evictAll();
 	}

@@ -126,7 +126,9 @@ public class AhIntentService extends IntentService {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 		} else {
-			alertNotification(AhMessage.TYPE.TALK);
+			if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+				alertNotification(AhMessage.TYPE.TALK);
+			}
 		}
 	}
 
@@ -164,7 +166,7 @@ public class AhIntentService extends IntentService {
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-		
+
 		userDBHelper.addUser(user);
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -176,7 +178,9 @@ public class AhIntentService extends IntentService {
 				@Override
 				public void onCompleted(Bitmap entity) {
 					FileUtil.saveImageToInternalStorage(app, entity, user.getId());
-					alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+					if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+						alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+					}
 				}
 			});
 		}
@@ -199,18 +203,10 @@ public class AhIntentService extends IntentService {
 	private void UPDATE_USER_INFO() {
 		userDBHelper.updateUser(user);
 		if (isRunning(app)) {
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
 		}
-//		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
-//
-//			@Override
-//			public void onCompleted(AhUser user) {
-//				userDBHelper.updateUser(user);
-//				if (isRunning(app)) {
-//					userHelper.triggerUserEvent(user);
-//				} 
-//			}
-//		});
 	}
 
 
@@ -258,10 +254,7 @@ public class AhIntentService extends IntentService {
 			content = message.getContent();
 			resultIntent.setClass(_this, SquareActivity.class);
 		} else if (AhMessage.TYPE.ENTER_SQUARE.equals(type)){
-			if(!pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
-				return;
-			}
-			title = message.getSender() + " " + resources.getString(R.string.enter_square_message);
+			title = message.getContent();
 			String age = resources.getString(R.string.age);
 			String person = resources.getString(R.string.person);
 			String gender = resources.getString(R.string.male);
@@ -379,7 +372,7 @@ public class AhIntentService extends IntentService {
 	 */
 	private AhMessage parseMessageString(String message) throws JSONException {
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-//		Bundle b = intent.getExtras();
+		//		Bundle b = intent.getExtras();
 		JSONObject messageObj = new JSONObject(message);
 		String jsonStr = messageObj.getString("message");
 		JSONObject jo = null;
@@ -417,7 +410,7 @@ public class AhIntentService extends IntentService {
 	 * @return userId String related to the sent message
 	 */
 	private AhUser parseUserString(String message) throws JSONException {
-//		String jsonStr = intent.getExtras().getString("user");
+		//		String jsonStr = intent.getExtras().getString("user");
 		//return intent.getExtras().getString("userId");
 		JSONObject messageObj = new JSONObject(message);
 		String jsonStr = messageObj.getString("user");
@@ -454,7 +447,7 @@ public class AhIntentService extends IntentService {
 			_user.setChatEnable(isChatEnable);
 			_user.setChupaEnable(isChupaEnable);
 			_user.setAhIdUserKey(ahIdUserKey);
-			
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 			throw e;

@@ -26,16 +26,19 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 		squareChupaListFragment = new SquareChupaListFragment();
 	}
 
+	
 	@Override
 	public CharSequence getPageTitle(int position) {
 		return this.titles[position];
 	}
 
+	
 	@Override
 	public int getPageIconResId(int position) {
 		return this.titleIcons[position];
 	}
 
+	
 	@Override
 	public Fragment getItem(int position) {
 		Fragment fragment = null;
@@ -48,6 +51,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 		return fragment;
 	}
 
+	
 	@Override
 	public int getCount() {
 		return this.titles.length;

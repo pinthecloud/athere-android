@@ -15,7 +15,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -79,14 +78,6 @@ public class SquareChupaListFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		refreshView();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
-	}
-	
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 
 

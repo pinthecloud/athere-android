@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -51,8 +49,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
-
-	private AhUser user;
 
 
 	@Override
@@ -176,8 +172,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, ProfileSettingsActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, user);
-				context.startActivity(intent);
+				startActivity(intent);
 			}
 		});
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -232,7 +227,7 @@ public class SquareDrawerFragment extends AhFragment {
 				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
 
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 
 				Intent intent = new Intent(activity, SquareListActivity.class);
 				startActivity(intent);
@@ -245,26 +240,19 @@ public class SquareDrawerFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStart");
 		updateUserList();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, R.drawable.launcher, profileImage);
 	}
 
 
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareDrawerFragment onStop");
 		profileImage.setImageBitmap(null);
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 
 
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final AhUser user) {
-		this.user = user;
-
-
 		/*
 		 * Set alarm toggle button
 		 */

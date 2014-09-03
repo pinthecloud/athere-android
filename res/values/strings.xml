@@ -9,6 +9,7 @@
     <string name="drawer_close">Close drawer</string>
     <string name="logo">Logo</string>
     <string name="profile_image">Profile Image</string>
+    <string name="profile_settings">Profile Settings</string>
     <string name="my_profile">My Profile</string>
     <string name="blur_image">Blur Image</string>
     <string name="on">On</string>

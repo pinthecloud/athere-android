@@ -4,7 +4,11 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
@@ -44,6 +48,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected SquareHelper squareHelper;
 	protected CachedBlobStorageHelper blobStorageHelper;
 	protected Tracker appTracker;
+	protected String simpleClassName;
 
 
 	public AhFragment(){
@@ -57,6 +62,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		squareHelper = app.getSquareHelper();
 		blobStorageHelper = app.getBlobStorageHelper();
 		appTracker = app.getTracker(TrackerName.APP_TRACKER);
+		simpleClassName = _thisFragment.getClass().getSimpleName();
 	}
 
 
@@ -65,12 +71,13 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		context = getActivity();
 		activity = (AhActivity) context;
 		super.onCreate(savedInstanceState);
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreate");
 
 
 		/* 
 		 * Set google analytics
 		 */
-		appTracker.setScreenName(_thisFragment.getClass().getSimpleName());
+		appTracker.setScreenName(simpleClassName);
 		appTracker.send(new HitBuilders.AppViewBuilder().build());
 
 
@@ -81,6 +88,30 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreateView");
+		return super.onCreateView(inflater, container, savedInstanceState);
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStart");
+		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
+	}
+
+
+	@Override
+	public void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStop");
+		super.onStop();
+		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
+	}
+	
+	
 	@Override
 	public void handleException(final AhException ex) {
 		Log(_thisFragment, "AhFragment handleException : " + ex.toString());
