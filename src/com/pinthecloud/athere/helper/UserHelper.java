@@ -246,7 +246,7 @@ public class UserHelper {
 	}
 
 	public AhUser getMyUserInfo(boolean hasId) {
-		String profilePic = "NOT_IN_USED";
+		String profilePic = "NOT_IN_USE";
 
 		AhUser user = new AhUser();
 		if(hasId)

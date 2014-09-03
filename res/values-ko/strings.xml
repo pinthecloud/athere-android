@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Default -->
-    <string name="app_name">추파</string>
+    <string name="app_name">chupa</string>
 
     <!-- Word -->
     <string name="drawer_open">사이드바 열기</string>

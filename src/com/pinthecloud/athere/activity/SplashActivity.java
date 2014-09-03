@@ -4,16 +4,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SplashFragment;
-
 //import com.google.android.gms.analytics.GoogleAnalytics;
 //import com.google.android.gms.analytics.HitBuilders;
 //import com.google.android.gms.analytics.Tracker;
-
-
-import io.fiverocks.android.FiveRocks;
 
 
 /**
@@ -26,14 +21,11 @@ import io.fiverocks.android.FiveRocks;
  */
 public class SplashActivity extends AhActivity{
 
-	//	private Tracker t;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
 
 
 		/* 
@@ -59,19 +51,5 @@ public class SplashActivity extends AhActivity{
 		SplashFragment splashFragment = new SplashFragment ();
 		fragmentTransaction.add(R.id.splash_container, splashFragment);
 		fragmentTransaction.commit();
-	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		FiveRocks.onActivityStart(this);
-		//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-		FiveRocks.onActivityStart(this);
-		//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 }

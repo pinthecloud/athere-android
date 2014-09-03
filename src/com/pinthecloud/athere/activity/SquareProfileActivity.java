@@ -4,41 +4,19 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.SquareProfileFragment;
-
 //import com.google.android.gms.analytics.GoogleAnalytics;
 //import com.google.android.gms.analytics.HitBuilders;
 //import com.google.android.gms.analytics.Tracker;
 
-
-import io.fiverocks.android.FiveRocks;
-
 public class SquareProfileActivity extends AhActivity {
 
-	//	private Tracker t;
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_profile);
-		FiveRocks.init(this, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
-
-
-		/* 
-		 * for google analytics
-		 */
-		//        GoogleAnalytics.getInstance(this).newTracker("UA-53944359-1");
-		//
-		//        if (t==null){
-		//            t = ((AhApplication) getApplication()).getTracker(
-		//                    AhApplication.TrackerName.APP_TRACKER);
-		//
-		//            t.setScreenName("SquareProfileActivity");
-		//            t.send(new HitBuilders.AppViewBuilder().build());
-		//        }
 
 
 		/*
@@ -50,21 +28,5 @@ public class SquareProfileActivity extends AhActivity {
 		SquareProfileFragment squareProfileFragment = new SquareProfileFragment();
 		fragmentTransaction.add(R.id.square_profile_container, squareProfileFragment);
 		fragmentTransaction.commit();
-	}
-
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		//		GoogleAnalytics.getInstance(this).reportActivityStart(this);
-		FiveRocks.onActivityStart(this);
-	}
-
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		//		GoogleAnalytics.getInstance(this).reportActivityStop(this);
-		FiveRocks.onActivityStop(this);
 	}
 }
