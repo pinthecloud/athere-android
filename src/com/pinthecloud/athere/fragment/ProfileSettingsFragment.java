@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -560,7 +561,9 @@ public class ProfileSettingsFragment extends AhFragment{
 						blobStorageHelper.clearCache();
 
 						// Set and move to next activity after clear previous activity
-						activity.finish();
+						Intent intent = new Intent(context, SquareActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
 					}
 				});
 			}

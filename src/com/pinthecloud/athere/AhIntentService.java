@@ -202,11 +202,19 @@ public class AhIntentService extends IntentService {
 
 	private void UPDATE_USER_INFO() {
 		userDBHelper.updateUser(user);
-		if (isRunning(app)) {
-			String currentActivityName = getCurrentRunningActivityName(app);
-			messageHelper.triggerMessageEvent(currentActivityName, message);
-			userHelper.triggerUserEvent(user);
-		}
+		blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
+
+			@Override
+			public void onCompleted(Bitmap entity) {
+				FileUtil.saveImageToInternalStorage(app, entity, user.getId());
+				if (isRunning(app)) {
+					blobStorageHelper.clearCache();
+					String currentActivityName = getCurrentRunningActivityName(app);
+					messageHelper.triggerMessageEvent(currentActivityName, message);
+					userHelper.triggerUserEvent(user);
+				}
+			}
+		});
 	}
 
 
