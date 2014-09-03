@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -241,7 +240,6 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
 		refreshView(chupaCommunId, null);
@@ -252,7 +250,6 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStop() {
 		otherProfileImage.setImageBitmap(null);
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
 

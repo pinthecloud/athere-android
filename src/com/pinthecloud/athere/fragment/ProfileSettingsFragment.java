@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.model.AhUser;
@@ -31,19 +30,5 @@ public class ProfileSettingsFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_profile_settings, container, false);
 		return view;
-	}
-
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
-	}
-
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 }

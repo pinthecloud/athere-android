@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -143,7 +142,7 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment Message onComplete : " + message.getType() + " " + message.getContent());
+				Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " Message onComplete : " + message.getType() + " " + message.getContent());
 
 				// Chupa & User Update Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
@@ -160,19 +159,10 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment onStart");
 		refreshView(null);
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
-	}
-
-
+	
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 
@@ -222,7 +212,7 @@ public class SquareChatFragment extends AhFragment{
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
 	private void refreshView(final String id){
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment refreshView");
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " refreshView");
 
 
 		/*

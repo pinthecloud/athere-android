@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,24 +30,24 @@ public class SquareTabFragment extends AhFragment{
 	private BadgeView badge;
 
 	private Square square;
-	
-	
+
+
 	public SquareTabFragment() {
 		super();
 	}
 
-	
+
 	public SquareTabFragment(Square square) {
 		super();
 		this.square = square;
 	}
 
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
-	
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,7 +100,7 @@ public class SquareTabFragment extends AhFragment{
 		badge.setTextSize(BADGE_SIZE);
 		badge.setBadgePosition(BadgeView.POSITION_CENTER_VERTICAL_RIGHT);
 
-		
+
 		/*
 		 * Set message handle
 		 */
@@ -124,7 +123,6 @@ public class SquareTabFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareTabFragment onStart");
 		refreshView();
 	}
 

@@ -36,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -150,7 +149,6 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment onCreateView");
 		View view = inflater.inflate(R.layout.fragment_square_profile, container, false);
 
 		/*
@@ -403,7 +401,6 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStart");
 		if(!isTookPicture){
 			if(isCamera){
 				openCameraAndSetView();
@@ -413,23 +410,20 @@ public class SquareProfileFragment extends AhFragment{
 		}else{
 			profilePictureView.setImageBitmap(pictureBitmap);
 		}
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
 
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStop");
 		profilePictureView.setImageBitmap(null);
 		releaseCameraAndRemoveView();
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onActivityResult");
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onActivityResult");
 		switch(requestCode){
 		case GET_IMAGE_GALLERY_CODE:
 			if (resultCode == Activity.RESULT_OK) {
@@ -457,9 +451,9 @@ public class SquareProfileFragment extends AhFragment{
 					int degree = BitmapUtil.getImageOrientation(imagePath);
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
 				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfilFragment : " + e.getMessage());
+					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
 				} catch (IOException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfilFragment : " + e.getMessage());
+					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
 				}
 
 
