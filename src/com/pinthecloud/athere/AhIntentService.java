@@ -27,6 +27,7 @@ import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
@@ -141,7 +142,7 @@ public class AhIntentService extends IntentService {
 		// Is the Chupa App Running
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
-			AhUser currentChupaUser = app.getCurrentChupaUser();
+			AhUser currentChupaUser = ChupaChatFragment.otherUser;
 			// Is the User in ChupaActivity
 			if (isActivityRunning(app, ChupaChatActivity.class)){
 				// Is the currentUser talking is the same user from the server.

@@ -43,7 +43,7 @@ public class ChupaChatFragment extends AhFragment {
 	private TextView otherAge;
 	private TextView otherCompanyNumber;
 
-	private AhUser otherUser;
+	public static AhUser otherUser;
 	private boolean isOtherUserExit = false;
 	private boolean isTypedMessage = false;
 
@@ -62,7 +62,6 @@ public class ChupaChatFragment extends AhFragment {
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		otherUser = userDBHelper.getUser(userId, true);
-		app.setCurrentChupaUser(otherUser);
 	}
 
 
@@ -267,6 +266,25 @@ public class ChupaChatFragment extends AhFragment {
 	}
 
 
+	@Override
+	public void handleException(AhException ex) {
+		if(ex.getMethodName().equals("sendMessageAsync")){
+			AhMessage exMessage = (AhMessage)ex.getParameter();
+			exMessage.setStatus(AhMessage.STATUS.FAIL);
+			messageDBHelper.updateMessages(exMessage);
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					messageListAdapter.notifyDataSetChanged();
+				}
+			});
+		}else{
+			super.handleException(ex);	
+		}
+	}
+	
+	
 	public void sendChupa(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 		messageListAdapter.add(message);
@@ -381,24 +399,5 @@ public class ChupaChatFragment extends AhFragment {
 
 	private boolean isSenderButtonEnable() {
 		return isTypedMessage && !isOtherUserExit;
-	}
-
-
-	@Override
-	public void handleException(AhException ex) {
-		if(ex.getMethodName().equals("sendMessageAsync")){
-			AhMessage exMessage = (AhMessage)ex.getParameter();
-			exMessage.setStatus(AhMessage.STATUS.FAIL);
-			messageDBHelper.updateMessages(exMessage);
-			activity.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					messageListAdapter.notifyDataSetChanged();
-				}
-			});
-		}else{
-			super.handleException(ex);	
-		}
 	}
 }

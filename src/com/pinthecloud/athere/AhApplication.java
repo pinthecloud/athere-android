@@ -80,8 +80,6 @@ public class AhApplication extends Application{
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
 
-	private static AhUser currentChupaUser;
-
 
 	@Override
 	public void onCreate() {
@@ -164,12 +162,6 @@ public class AhApplication extends Application{
 	}
 	public CachedBlobStorageHelper getBlobStorageHelper() {
 		return blobStorageHelper;
-	}
-	public AhUser getCurrentChupaUser() {
-		return currentChupaUser;
-	}
-	public void setCurrentChupaUser(AhUser user) {
-		currentChupaUser = user;
 	}
 
 
