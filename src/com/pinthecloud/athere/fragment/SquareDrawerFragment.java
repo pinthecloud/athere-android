@@ -80,6 +80,12 @@ public class SquareDrawerFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_drawer, container, false);
 
+		t.send(new HitBuilders.TimingBuilder()
+			.setCategory("SquareDrawerFragment")
+			.setVariable("DrawerTime")
+			.setLabel("getDrawerTime")
+			.build());
+		
 		/*
 		 * Set Ui Component
 		 */

@@ -201,13 +201,13 @@ public class BasicProfileFragment extends AhFragment{
 
 							
 							/*
-							 * check the sex 
+							 * check the gender
 							 */
 							if(maleButton.isChecked() == true){
 								Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
 								t.send(new HitBuilders.EventBuilder()
 								.setCategory("BasicProfileFragment")
-								.setAction("CheckSex")
+								.setAction("CheckGender")
 								.setLabel("Male")
 								.build());
 							}
@@ -215,7 +215,7 @@ public class BasicProfileFragment extends AhFragment{
 								Tracker t = ((AhApplication) getActivity().getApplication()).getTracker(TrackerName.APP_TRACKER);
 								t.send(new HitBuilders.EventBuilder()
 								.setCategory("BasicProfileFragment")
-								.setAction("CheckSex")
+								.setAction("CheckGender")
 								.setLabel("Female")
 								.build());
 							}

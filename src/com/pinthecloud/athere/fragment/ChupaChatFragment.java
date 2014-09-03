@@ -70,8 +70,7 @@ public class ChupaChatFragment extends AhFragment {
 		 */
 		GoogleAnalytics.getInstance(app).newTracker(AhGlobalVariable.GA_TRACKER_KEY);
 		if (t==null){
-			t = app.getTracker(
-					AhApplication.TrackerName.APP_TRACKER);
+			t = app.getTracker(AhApplication.TrackerName.APP_TRACKER);
 			t.setScreenName("ChupaChatFragment");
 			t.send(new HitBuilders.AppViewBuilder().build());
 		}
@@ -284,7 +283,7 @@ public class ChupaChatFragment extends AhFragment {
 				t.send(new HitBuilders.EventBuilder()
 				.setCategory("ChupaChatFragment")
 				.setAction("SendChupa")
-				.setLabel("Chupa")
+				.setLabel("ChupaChat")
 				.build());
 				
 				message.setStatus(AhMessage.STATUS.SENT);
