@@ -69,10 +69,12 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_chupa_chat, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
 
-		// Remove Notification when the user enters the Chupa chat room.
+
+		/*
+		 * Remove Notification when the user enters the Chupa chat room.
+		 */
 		NotificationManager mNotificationManager = (NotificationManager) activity
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
@@ -218,7 +220,8 @@ public class ChupaChatFragment extends AhFragment {
 
 				// Only Chupa & Exit Message can go through
 				if (!(message.getType().equals(AhMessage.TYPE.CHUPA.toString()) 
-						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString()))){
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())
+								|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString()))){
 					return;
 				}
 
@@ -226,6 +229,14 @@ public class ChupaChatFragment extends AhFragment {
 				// (Don't go through other User Exit message)
 				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())
 						&& !otherUser.getId().equals(message.getSenderId())) {
+					return;
+				}
+
+				// If update message, check if it's related update
+				// (Don't go through other User Exit message)
+				if(message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())
+						&& otherUser.getId().equals(message.getSenderId())){
+					refreshView(message.getChupaCommunId(), null);
 					return;
 				}
 
@@ -240,8 +251,8 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
+		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}
 

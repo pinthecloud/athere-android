@@ -278,7 +278,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				// Delete
 				messageDBHelper.deleteMessage(message.getId());
 				remove(getItem(position));
-				notifyDataSetChanged();
 			}
 			@Override
 			public void doNegativeThing(Bundle bundle) {

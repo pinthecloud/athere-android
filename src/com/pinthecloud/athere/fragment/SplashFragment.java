@@ -86,13 +86,13 @@ public class SplashFragment extends AhFragment {
 			int lastHour = Integer.parseInt(lastArray[3]);
 
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			} else if(currentDay > lastDay && lastHour < 12){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			} else if(currentDay > lastDay && currentHour >= 12){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 			}
 		}
 

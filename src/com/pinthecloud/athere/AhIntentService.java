@@ -125,7 +125,9 @@ public class AhIntentService extends IntentService {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 		} else {
-			alertNotification(AhMessage.TYPE.TALK);
+			if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+				alertNotification(AhMessage.TYPE.TALK);
+			}
 		}
 	}
 
@@ -178,7 +180,9 @@ public class AhIntentService extends IntentService {
 						@Override
 						public void onCompleted(Bitmap entity) {
 							FileUtil.saveImageToInternalStorage(app, entity, user.getId());
-							alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+							if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+								alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+							}
 						}
 					});
 				}
@@ -207,6 +211,8 @@ public class AhIntentService extends IntentService {
 			public void onCompleted(AhUser user) {
 				userDBHelper.updateUser(user);
 				if (isRunning(app)) {
+					String currentActivityName = getCurrentRunningActivityName(app);
+					messageHelper.triggerMessageEvent(currentActivityName, message);
 					userHelper.triggerUserEvent(user);
 				}
 			}
@@ -258,10 +264,7 @@ public class AhIntentService extends IntentService {
 			content = message.getContent();
 			resultIntent.setClass(_this, SquareActivity.class);
 		} else if (AhMessage.TYPE.ENTER_SQUARE.equals(type)){
-			if(!pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
-				return;
-			}
-			title = message.getSender() + " " + resources.getString(R.string.enter_square_message);
+			title = message.getContent();
 			String age = resources.getString(R.string.age);
 			String person = resources.getString(R.string.person);
 			String gender = resources.getString(R.string.male);

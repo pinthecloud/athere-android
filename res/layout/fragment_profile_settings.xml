@@ -26,8 +26,7 @@
                 android:id="@+id/profile_settings_frag_profile_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/profile_image"
-                android:src="@drawable/launcher" />
+                android:contentDescription="@string/profile_image" />
 
             <ImageButton
                 android:id="@+id/profile_settings_frag_self_camera_button"

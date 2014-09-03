@@ -50,8 +50,6 @@ public class SquareDrawerFragment extends AhFragment {
 	private ListView participantListView;
 	private SquareDrawerParticipantListAdapter participantListAdapter;
 
-	private AhUser user;
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -174,8 +172,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, ProfileSettingsActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, user);
-				context.startActivity(intent);
+				startActivity(intent);
 			}
 		});
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -230,7 +227,7 @@ public class SquareDrawerFragment extends AhFragment {
 				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
 
-				app.removeSquarePreference();
+				app.removeSquarePreference(_thisFragment);
 
 				Intent intent = new Intent(activity, SquareListActivity.class);
 				startActivity(intent);
@@ -256,9 +253,6 @@ public class SquareDrawerFragment extends AhFragment {
 
 
 	public void setUp(View fragmentView, DrawerLayout drawerLayout, final AhUser user) {
-		this.user = user;
-
-
 		/*
 		 * Set alarm toggle button
 		 */

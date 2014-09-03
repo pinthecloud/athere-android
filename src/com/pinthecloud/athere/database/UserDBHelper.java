@@ -150,6 +150,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		this.closeDatabase("addUser");
 	}
 
+	
 	public void addAllUsers(List<AhUser> list){
 
 		if (list == null || list.size() == 0) return;
@@ -178,6 +179,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		this.closeDatabase("addAllUsers");
 	}
 
+	
 	// Getting single contact
 	public AhUser getUser(String id) {
 		return this.getUser(id, false);

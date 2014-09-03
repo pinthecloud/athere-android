@@ -149,6 +149,12 @@ public class SquareChatFragment extends AhFragment{
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					return;
 				}
+
+				if(message.getType().equals((AhMessage.TYPE.UPDATE_USER_INFO.toString()))){
+					refreshView(null);
+					return;
+				}
+
 				refreshView(message.getId());
 			}
 		});
@@ -162,7 +168,7 @@ public class SquareChatFragment extends AhFragment{
 		refreshView(null);
 	}
 
-	
+
 	public void sendTalk(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 

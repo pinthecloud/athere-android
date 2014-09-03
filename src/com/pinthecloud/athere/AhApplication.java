@@ -227,13 +227,13 @@ public class AhApplication extends Application{
 		}, new Chainable() {
 
 			@Override
-			public void doNext(AhFragment frag) {
+			public void doNext(final AhFragment frag) {
 				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 
 					@Override
 					public void onCompleted(JsonElement json, Exception exception,
 							ServiceFilterResponse response) {
-						removeSquarePreference();
+						removeSquarePreference(frag);
 						callback.onCompleted(true);
 					}
 				});
@@ -242,13 +242,13 @@ public class AhApplication extends Application{
 
 	}
 
-	public void removeSquarePreference(){
+	public void removeSquarePreference(AhFragment frag){
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearCache();
-		blobStorageHelper.deleteBitmapAsync(null, pref.getString(AhGlobalVariable.USER_ID_KEY), null);
+		blobStorageHelper.deleteBitmapAsync(frag, pref.getString(AhGlobalVariable.USER_ID_KEY), null);
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
