@@ -3,7 +3,6 @@ package com.pinthecloud.athere.fragment;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -55,12 +54,12 @@ public class ProfileSettingsFragment extends AhFragment{
 
 	private final int GET_IMAGE_GALLERY_CODE = 1;
 
-	private ActionBar mActionBar;
 	private ProgressBar progressBar;
 	private Camera mCamera;
 	private CameraPreview mCameraPreview;
 	private FrameLayout cameraView;
 	private ImageView profilePictureView;
+	private ImageButton profilePictureSelect;
 	private ImageButton cameraButton;
 	private ImageButton cameraRotateButton;
 
@@ -130,23 +129,16 @@ public class ProfileSettingsFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
-		mActionBar = activity.getActionBar();
 		progressBar = (ProgressBar) view.findViewById(R.id.profile_settings_frag_progress_bar);
 		cameraView = (FrameLayout) view.findViewById(R.id.profile_settings_frag_camera_view);
 		cameraButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_camera_button);
 		cameraRotateButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.profile_settings_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.profile_settings_frag_profile_picture);
+		profilePictureSelect = (ImageButton) view.findViewById(R.id.profile_settings_frag_profile_picture_select_button);
 		nickNameEditText = (EditText) view.findViewById(R.id.profile_settings_frag_nick_name_text);
 		companyNumberEditText = (EditText) view.findViewById(R.id.profile_settings_frag_company_text);
 		completeButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_start_button);
-
-
-		/*
-		 * Set Action Bar
-		 */
-		mActionBar.setTitle(getResources().getString(R.string.profile_settings));
-		mActionBar.setDisplayHomeAsUpEnabled(true);
 
 
 		/*
@@ -159,65 +151,14 @@ public class ProfileSettingsFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
-				String title = getResources().getString(R.string.select);
-				String[] list = null;
-				if(isTookPicture){
-					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
-				}else{
-					list = getResources().getStringArray(R.array.profile_image_select_string_array);
-				}
-				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
-				callbacks[0] = new AhDialogCallback() {
+				profilePictureOnClick();
+			}
+		});
+		profilePictureSelect.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// Get image from gallery
-						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image/*");
-						startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				callbacks[1] = new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// Get image from camera
-						// Set new camera by facing direction
-						releaseCameraAndRemoveView();
-						openCameraAndSetView();
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				if(list.length == 3){
-					callbacks[2] = new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							// Set profile image default
-							profilePictureView.setImageResource(R.drawable.launcher);
-
-							// Release camera and set button to re take
-							isCamera = false;
-							isTookPicture = false;
-							cameraButton.setVisibility(View.GONE);
-							cameraRotateButton.setVisibility(View.GONE);
-							completeButton.setEnabled(isCompleteButtonEnable());
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							// Do nothing
-						}
-					};
-				}
-				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
-				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			@Override
+			public void onClick(View v) {
+				profilePictureOnClick();
 			}
 		});
 
@@ -393,7 +334,7 @@ public class ProfileSettingsFragment extends AhFragment{
 			if(isCamera){
 				openCameraAndSetView();
 			}else{
-				profilePictureView.setImageResource(R.drawable.launcher);
+				profilePictureView.setImageResource(R.drawable.profile_default);
 			}
 		}else{
 			profilePictureView.setImageBitmap(pictureBitmap);
@@ -451,6 +392,7 @@ public class ProfileSettingsFragment extends AhFragment{
 				releaseCameraAndRemoveView();
 				isCamera = false;
 				isTookPicture = true;
+				profilePictureSelect.setVisibility(View.GONE);
 				cameraButton.setVisibility(View.GONE);
 				cameraRotateButton.setVisibility(View.GONE);
 				completeButton.setEnabled(isCompleteButtonEnable());
@@ -474,6 +416,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		cameraView.addView(mCameraPreview);
 
 		profilePictureView.setImageBitmap(null);
+		profilePictureSelect.setVisibility(View.GONE);
 		profileInfoLayout.bringToFront();
 
 		isCamera = true;
@@ -496,6 +439,73 @@ public class ProfileSettingsFragment extends AhFragment{
 			mCamera.release();
 			mCamera = null;	
 		}
+	}
+
+
+	/*
+	 * Profile Image Click Listener
+	 */
+	private void profilePictureOnClick(){
+		String title = getResources().getString(R.string.select);
+		String[] list = null;
+		if(isTookPicture){
+			list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
+		}else{
+			list = getResources().getStringArray(R.array.profile_image_select_string_array);
+		}
+		AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
+		callbacks[0] = new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				// Get image from gallery
+				Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+				intent.setType("image/*");
+				startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				// Do nothing
+			}
+		};
+		callbacks[1] = new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				// Get image from camera
+				// Set new camera by facing direction
+				releaseCameraAndRemoveView();
+				openCameraAndSetView();
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				// Do nothing
+			}
+		};
+		if(list.length == 3){
+			callbacks[2] = new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					// Set profile image default
+					profilePictureView.setImageResource(R.drawable.profile_default);
+					profilePictureSelect.setVisibility(View.VISIBLE);
+
+					// Release camera and set button to re take
+					isCamera = false;
+					isTookPicture = false;
+					cameraButton.setVisibility(View.GONE);
+					cameraRotateButton.setVisibility(View.GONE);
+					completeButton.setEnabled(isCompleteButtonEnable());
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					// Do nothing
+				}
+			};
+		}
+		AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
+		listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 
 

@@ -29,6 +29,18 @@
                 android:contentDescription="@string/profile_image" />
 
             <ImageButton
+                android:id="@+id/profile_settings_frag_profile_picture_select_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/profile_settings_frag_profile_picture"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/square_profile_camera_button_bottom_margin"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/profile_image"
+                android:src="@drawable/profile_default_select"
+                android:visibility="gone" />
+
+            <ImageButton
                 android:id="@+id/profile_settings_frag_self_camera_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -68,6 +80,12 @@
             android:background="#ffffff"
             android:gravity="center"
             android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/hint"
+                android:src="@drawable/ground_profile_label" />
 
             <EditText
                 android:id="@+id/profile_settings_frag_nick_name_text"

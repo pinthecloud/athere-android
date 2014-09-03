@@ -124,12 +124,6 @@ public class FileUtil {
 	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
 		
 		if (context == null) {
-//			Log.e("ERROR", "context==null, return null");
-//			try{
-//				context.getApplicationContext();
-//			} catch(NullPointerException ex) {
-//				ex.printStackTrace();
-//			}
 			return null;
 		}
 		final BitmapFactory.Options options = new BitmapFactory.Options();

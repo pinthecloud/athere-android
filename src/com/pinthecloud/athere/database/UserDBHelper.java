@@ -393,8 +393,4 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		return user;
 	}
-
-	private boolean isAdminUser(AhUser user) {
-		return "PintheCloud".equals(user.getId());
-	}
 }
