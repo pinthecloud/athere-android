@@ -16,7 +16,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -50,7 +49,7 @@ public class AhIntentService extends IntentService {
 	private CachedBlobStorageHelper blobStorageHelper;
 
 	private AhMessage message = null;
-	private String userId = null; 
+	private AhUser user = null; 
 
 	public AhIntentService() {
 		this("AhIntentService");
@@ -80,8 +79,9 @@ public class AhIntentService extends IntentService {
 			return;
 
 		try {
-			message = parseMessageIntent(intent);
-			userId = parseUserIdIntent(intent);
+			String messageStr = intent.getExtras().getString("message");
+			message = parseMessageString(messageStr);
+			user = parseUserString(messageStr);
 		} catch (JSONException e) {
 			Log.d(AhGlobalVariable.LOG_TAG, "Error while parsing Message Intent : " + e.getMessage());
 			return;
@@ -164,55 +164,77 @@ public class AhIntentService extends IntentService {
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
+		
+		userDBHelper.addUser(user);
+		if (isRunning(app)) {
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
+			userHelper.triggerUserEvent(user);
+		} else {
+			blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
 
-			@Override
-			public void onCompleted(final AhUser user) {
-				userDBHelper.addUser(user);
-				if (isRunning(app)) {
-					String currentActivityName = getCurrentRunningActivityName(app);
-					messageHelper.triggerMessageEvent(currentActivityName, message);
-					userHelper.triggerUserEvent(user);
-				} else {
-					blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
-
-						@Override
-						public void onCompleted(Bitmap entity) {
-							// TODO Auto-generated method stub
-							FileUtil.saveImageToInternalStorage(app, entity, user.getId());
-							alertNotification(AhMessage.TYPE.ENTER_SQUARE);
-						}
-					});
+				@Override
+				public void onCompleted(Bitmap entity) {
+					// TODO Auto-generated method stub
+					FileUtil.saveImageToInternalStorage(app, entity, user.getId());
+					alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 				}
-			}
-		});
+			});
+		}
+		
+//		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
+//
+//			@Override
+//			public void onCompleted(final AhUser user) {
+//				userDBHelper.addUser(user);
+//				if (isRunning(app)) {
+//					String currentActivityName = getCurrentRunningActivityName(app);
+//					messageHelper.triggerMessageEvent(currentActivityName, message);
+//					userHelper.triggerUserEvent(user);
+//				} else {
+//					blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
+//
+//						@Override
+//						public void onCompleted(Bitmap entity) {
+//							// TODO Auto-generated method stub
+//							FileUtil.saveImageToInternalStorage(app, entity, user.getId());
+//							alertNotification(AhMessage.TYPE.ENTER_SQUARE);
+//						}
+//					});
+//				}
+//			}
+//		});
 	}
 
 
 	private void EXIT_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-		userDBHelper.exitUser(userId);
-		AhUser user = userDBHelper.getUser(userId, true);
+		userDBHelper.exitUser(user.getId());
+		AhUser _user = userDBHelper.getUser(user.getId(), true);
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
-			userHelper.triggerUserEvent(user);
+			userHelper.triggerUserEvent(_user);
 		}
 	}
 
 
 	private void UPDATE_USER_INFO() {
-		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
-
-			@Override
-			public void onCompleted(AhUser user) {
-				userDBHelper.updateUser(user);
-				if (isRunning(app)) {
-					userHelper.triggerUserEvent(user);
-				} 
-			}
-		});
+		userDBHelper.updateUser(user);
+		if (isRunning(app)) {
+			userHelper.triggerUserEvent(user);
+		}
+//		userHelper.getUserAsync(null, userId, new AhEntityCallback<AhUser>() {
+//
+//			@Override
+//			public void onCompleted(AhUser user) {
+//				userDBHelper.updateUser(user);
+//				if (isRunning(app)) {
+//					userHelper.triggerUserEvent(user);
+//				} 
+//			}
+//		});
 	}
 
 
@@ -373,11 +395,11 @@ public class AhIntentService extends IntentService {
 	 * @param intent given from the server
 	 * @return AhMessage sent from the server
 	 */
-	private AhMessage parseMessageIntent(Intent intent) throws JSONException {
+	private AhMessage parseMessageString(String message) throws JSONException {
 		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		Bundle b = intent.getExtras();
-		String jsonStr = b.getString("message");
-
+//		Bundle b = intent.getExtras();
+		JSONObject messageObj = new JSONObject(message);
+		String jsonStr = messageObj.getString("message");
 		JSONObject jo = null;
 
 		try {
@@ -415,7 +437,49 @@ public class AhIntentService extends IntentService {
 	 * @param intent given for the server
 	 * @return userId String related to the sent message
 	 */
-	private String parseUserIdIntent(Intent intent){
-		return intent.getExtras().getString("userId");
+	private AhUser parseUserString(String message) throws JSONException {
+//		String jsonStr = intent.getExtras().getString("user");
+		//return intent.getExtras().getString("userId");
+		JSONObject messageObj = new JSONObject(message);
+		String jsonStr = messageObj.getString("user");
+		AhUser _user = new AhUser();
+		JSONObject jo = null;
+		if (jsonStr == null || "null".equals(jsonStr)) {
+			return null;
+		}
+		try {
+			jo = new JSONObject(jsonStr);
+
+			String id = jo.getString("id");
+			String nickName = jo.getString("nickName");
+			String profilePic = jo.getString("profilePic");
+			String mobileId = jo.getString("mobileId");
+			String registrationId = jo.getString("registrationId");
+			boolean isMale = jo.getBoolean("isMale");
+			int companyNum = jo.getInt("companyNum");
+			int age = jo.getInt("age");
+			String squareId = jo.getString("squareId");
+			boolean isChatEnable = jo.getBoolean("isChatEnable");
+			boolean isChupaEnable = jo.getBoolean("isChupaEnable");
+			String ahIdUserKey = jo.getString("ahIdUserKey");
+
+			_user.setId(id);
+			_user.setNickName(nickName);
+			_user.setProfilePic(profilePic);
+			_user.setMobileId(mobileId);
+			_user.setRegistrationId(registrationId);
+			_user.setMale(isMale);
+			_user.setCompanyNum(companyNum);
+			_user.setAge(age);
+			_user.setSquareId(squareId);
+			_user.setChatEnable(isChatEnable);
+			_user.setChupaEnable(isChupaEnable);
+			_user.setAhIdUserKey(ahIdUserKey);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return _user;
 	}
 }

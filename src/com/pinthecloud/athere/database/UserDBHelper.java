@@ -376,9 +376,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		this.closeDatabase("deleteAllUsers");
 	}
 	
+	public static final String ADMIN_ID = "PintheCloud";
 	private AhUser getAdminUser() {
 		AhUser user = new AhUser();
-		user.setId("PintheCloud");
+		user.setId(UserDBHelper.ADMIN_ID);
 		user.setNickName("관리자");
 		user.setProfilePic("");
 		user.setMale(true);

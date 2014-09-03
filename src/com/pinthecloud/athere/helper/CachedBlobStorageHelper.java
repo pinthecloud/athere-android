@@ -5,12 +5,15 @@ import java.lang.ref.WeakReference;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
+import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -69,8 +72,12 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		return bm;
 	}
 
-
 	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView) {
+		if (UserDBHelper.ADMIN_ID.equals(id)) {
+			Bitmap bm = BitmapFactory.decodeResource(frag.getResources(),R.drawable.launcher);
+			imageView.setImageBitmap(bm);
+			return;
+		}
 		if (cancelPotentialWork(id, imageView)) {
 			int w = imageView.getWidth();
 			int h = imageView.getHeight();

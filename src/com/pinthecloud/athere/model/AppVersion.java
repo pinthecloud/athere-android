@@ -9,7 +9,6 @@ public class AppVersion {
 	@com.google.gson.annotations.SerializedName("type")
 	private String type;
 	
-	
 	public enum TYPE {
 		MANDATORY,
 		OPTIONAL
