@@ -69,12 +69,6 @@
             android:gravity="center"
             android:orientation="vertical" >
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/hint"
-                android:src="@drawable/ground_profile_label" />
-
             <EditText
                 android:id="@+id/profile_settings_frag_nick_name_text"
                 android:layout_width="@dimen/profile_settings_text_width"
