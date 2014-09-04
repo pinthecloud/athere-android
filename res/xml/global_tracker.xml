@@ -20,7 +20,7 @@
     <screenName name="com.pinthecloud.athere.fragment.SquareProfileFragment">SquareProfileFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.SquareChatFragment">SquareChatFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.ChupaChatFragment">ChupaChatFragment</screenName>
-        <screenName name="com.pinthecloud.athere.fragment.SquareChupaListFragment">SquareChupaListFragment</screenName>
+    <screenName name="com.pinthecloud.athere.fragment.SquareChupaListFragment">SquareChupaListFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.SquareDrawerFragment">SquareDrawerFragment</screenName>
     <!--  The following value should be replaced with correct property id. -->
     <string name="ga_trackingId">UA-53944359-1</string>

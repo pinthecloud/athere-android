@@ -94,7 +94,7 @@ public class SquareDrawerFragment extends AhFragment {
 				appTracker.send(new HitBuilders.EventBuilder()
 				.setCategory(_thisFragment.getClass().getSimpleName())
 				.setAction("ViewOthersProfile")
-				.setLabel("ViewOthersProfile")
+				.setLabel("DrawerProfile")
 				.build());
 
 				final AhUser user = participantListAdapter.getItem(position);
@@ -104,8 +104,8 @@ public class SquareDrawerFragment extends AhFragment {
 					public void doPositiveThing(Bundle bundle) {
 						appTracker.send(new HitBuilders.EventBuilder()
 						.setCategory(_thisFragment.getClass().getSimpleName())
-						.setAction("ProfileSendChupa")
-						.setLabel("ProfileSendChupa")
+						.setAction("SendChupa")
+						.setLabel("DrawerSendChupa")
 						.build());
 
 						Intent intent = new Intent(context, ChupaChatActivity.class);

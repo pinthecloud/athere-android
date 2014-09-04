@@ -29,7 +29,7 @@ import com.pinthecloud.athere.model.AhIdUser;
 
 
 public class BasicProfileFragment extends AhFragment{
-
+ 
 	private ProgressBar progressBar;
 	private EditText nickNameEditText;
 	private EditText birthYearEditText;
@@ -198,6 +198,13 @@ public class BasicProfileFragment extends AhFragment{
 							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
 							Calendar c = Calendar.getInstance();
 							int age = c.get(Calendar.YEAR) - (birthYear - 1);
+							
+							appTracker.send(new HitBuilders.EventBuilder()
+							.setCategory(_thisFragment.getClass().getSimpleName())
+							.setAction("CheckAge")
+							.setLabel("" + age)
+							.build());
+							
 							pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
 							pref.putInt(AhGlobalVariable.AGE_KEY, age);
 							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);

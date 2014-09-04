@@ -107,7 +107,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 					appTracker.send(new HitBuilders.EventBuilder()
 					.setCategory(frag.getClass().getSimpleName())
 					.setAction("SendChupa")
-					.setLabel("SendChupa")
+					.setLabel("DrawerSendChupa")
 					.build());
 
 					Intent intent = new Intent(context, ChupaChatActivity.class);

@@ -206,7 +206,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 						appTracker.send(new HitBuilders.EventBuilder()
 						.setCategory(frag.getClass().getSimpleName())
 						.setAction("ViewOthersProfile")
-						.setLabel("ViewOthersProfile")
+						.setLabel("ChatsProfile")
 						.build());
 
 						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
@@ -215,8 +215,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 							public void doPositiveThing(Bundle bundle) {
 								appTracker.send(new HitBuilders.EventBuilder()
 								.setCategory(frag.getClass().getSimpleName())
-								.setAction("ProfileSendChupa")
-								.setLabel("ProfileSendChupa")
+								.setAction("SendChupa")
+								.setLabel("ChatsSendChupa")
 								.build());
 
 								Intent intent = new Intent(context, ChupaChatActivity.class);
