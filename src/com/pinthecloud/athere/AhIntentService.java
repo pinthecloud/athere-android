@@ -193,8 +193,8 @@ public class AhIntentService extends IntentService {
 		userDBHelper.exitUser(user.getId());
 		AhUser _user = userDBHelper.getUser(user.getId(), true);
 		if (isRunning(app)) {
-			//			String currentActivityName = getCurrentRunningActivityName(app);
-			//			messageHelper.triggerMessageEvent(currentActivityName, message);
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(_user);
 		}
 	}

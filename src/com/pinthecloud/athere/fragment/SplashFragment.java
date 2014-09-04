@@ -106,8 +106,17 @@ public class SplashFragment extends AhFragment {
 			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
 			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
 		}
-
-
+		
+		
+		/*
+		 * Check whether it is first time launching app after update
+		 */
+		if (pref.getString(AhGlobalVariable.FIRST_UPDATE).equals(PreferenceHelper.DEFAULT_STRING)) {
+			pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
+			pref.putString(AhGlobalVariable.FIRST_UPDATE, AhGlobalVariable.FIRST_UPDATE);
+		}
+		
+		
 		/*
 		 * Start Chupa Application
 		 */
@@ -165,7 +174,7 @@ public class SplashFragment extends AhFragment {
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
-			public void doNext(AhFragment frag) {
+			public void doNext(final AhFragment frag) {
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
 					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
 
@@ -183,6 +192,7 @@ public class SplashFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
+				
 				versionHelper.getServerAppVersionAsync(frag, new AhEntityCallback<AppVersion>() {
 
 					@Override
@@ -192,7 +202,7 @@ public class SplashFragment extends AhFragment {
 							clientVer = versionHelper.getClientAppVersion();
 						} catch (NameNotFoundException e) {
 							Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
-							clientVer = 0.1;
+							clientVer = 0.11;
 						}
 						if (serverVer.getVersion() > clientVer) {
 							String title = getResources().getString(R.string.update_app_title);
