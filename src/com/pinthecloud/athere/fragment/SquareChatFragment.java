@@ -239,7 +239,7 @@ public class SquareChatFragment extends AhFragment{
 			messageDBHelper.addMessage(enterTalk);
 		}
 		if (id == null){
-			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK);
+			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE);
 		} else {
 			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			talk = messageDBHelper.getMessage(Integer.parseInt(id));

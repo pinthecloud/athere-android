@@ -50,7 +50,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected Tracker appTracker;
 	protected String simpleClassName;
 
-
+ 
 	public AhFragment(){
 		_thisFragment = this;
 		app = AhApplication.getInstance();

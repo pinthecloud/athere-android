@@ -65,7 +65,7 @@ public class ProfileSettingsFragment extends AhFragment{
 
 	private int cameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
 	private boolean isCamera = false;
-	private boolean isTookPicture = true;
+	private boolean isTookPicture = true; 
 	private boolean isTypedNickName = true;
 	private boolean isTypedMember = true;
 

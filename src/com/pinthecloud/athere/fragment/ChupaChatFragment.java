@@ -320,7 +320,7 @@ public class ChupaChatFragment extends AhFragment {
 		});
 	}
 
-
+ 
 	/*
 	 * Set sent and received chupas to list view
 	 */
