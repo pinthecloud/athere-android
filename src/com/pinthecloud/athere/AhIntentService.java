@@ -188,13 +188,13 @@ public class AhIntentService extends IntentService {
 
 
 	private void EXIT_SQUARE() {
-		int id = messageDBHelper.addMessage(message);
-		message.setId(String.valueOf(id));
+		//		int id = messageDBHelper.addMessage(message);
+		//		message.setId(String.valueOf(id));
 		userDBHelper.exitUser(user.getId());
 		AhUser _user = userDBHelper.getUser(user.getId(), true);
 		if (isRunning(app)) {
-			String currentActivityName = getCurrentRunningActivityName(app);
-			messageHelper.triggerMessageEvent(currentActivityName, message);
+			//			String currentActivityName = getCurrentRunningActivityName(app);
+			//			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(_user);
 		}
 	}

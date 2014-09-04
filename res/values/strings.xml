@@ -41,6 +41,7 @@
     <string name="fail">Fail</string>
     <string name="age">age</string>
     <string name="person">person</string>
+    <string name="admin">Admin</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
@@ -67,13 +68,13 @@
     <!-- String Array -->
 
     <string-array name="profile_image_select_delete_string_array">
-        <item>Album</item>
-        <item>Camera</item>
+        <item>Select picture from Album</item>
+        <item>Take picture</item>
         <item>Delete</item>
     </string-array>
     <string-array name="profile_image_select_string_array">
-        <item>Album</item>
-        <item>Camera</item>
+        <item>Select picture from Album</item>
+        <item>Take picture</item>
     </string-array>
     <string-array name="square_tab_string_array">
         <item>chat</item>

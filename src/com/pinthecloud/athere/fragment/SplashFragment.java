@@ -1,11 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
-import java.net.MalformedURLException;
-
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -18,8 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
@@ -118,53 +112,53 @@ public class SplashFragment extends AhFragment {
 		 * Start Chupa Application
 		 */
 		// Erase Later (Exception for hongkun)
-//		if (AhGlobalVariable.DEBUG_MODE) {
-//			isHongkunTest();
-//			return view;
-//		}
+		//		if (AhGlobalVariable.DEBUG_MODE) {
+		//			isHongkunTest();
+		//			return view;
+		//		}
 		runChupa();
 		return view;
 	}
 
 
-	private boolean isHongkunTest() {
-//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-//		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
-//		String myGal3 = "";
-//		String httpAgent = System.getProperty("http.agent");
-//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-//				|| myGal3.equals(httpAgent))))	// Galaxy 3
-//			return false;
-
-		new AlertDialog.Builder(context)
-		.setTitle("Routing Dialog")
-		.setMessage("Real or Test Server")
-		.setPositiveButton("Real", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) { 
-				try {
-					MobileServiceClient mClient = AhApplication.getInstance().getmClient();
-					mClient = new MobileServiceClient(
-							AhApplication.getInstance().APP_URL,
-							AhApplication.getInstance().APP_KEY,
-							app);
-					app.setmClient(mClient);
-				} catch (MalformedURLException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
-				}
-				runChupa();
-				
-			}
-		})
-		.setNegativeButton("Test", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				runChupa();
-			}
-		})
-		.setIcon(android.R.drawable.ic_dialog_alert)
-		.show();
-		return true;
-	}
+	//	private boolean isHongkunTest() {
+	//		
+	//		//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+	//		//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+	//		//		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
+	//		//		String myGal3 = "";
+	//		//		String httpAgent = System.getProperty("http.agent");
+	//		//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
+	//		//				|| myGal3.equals(httpAgent))))	// Galaxy 3
+	//		//			return false;
+	//
+	//		new AlertDialog.Builder(context)
+	//		.setTitle("Routing Dialog")
+	//		.setMessage("Real or Test Server")
+	//		.setPositiveButton("Real", new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) { 
+	//				try {
+	//					MobileServiceClient mClient = AhApplication.getInstance().getmClient();
+	//					mClient = new MobileServiceClient(
+	//							AhApplication.getInstance().APP_URL,
+	//							AhApplication.getInstance().APP_KEY,
+	//							app);
+	//					app.setmClient(mClient);
+	//				} catch (MalformedURLException e) {
+	//					Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
+	//				}
+	//				runChupa();
+	//			}
+	//		})
+	//		.setNegativeButton("Test", new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) {
+	//				runChupa();
+	//			}
+	//		})
+	//		.setIcon(android.R.drawable.ic_dialog_alert)
+	//		.show();
+	//		return true;
+	//	}
 
 
 	private void runChupa() {

@@ -30,18 +30,18 @@ import com.pinthecloud.athere.model.Square;
  */
 public class HongkunTestFragment extends AhFragment {
 
-	private Button[] btnArr;
-	private TextView messageText;
-	private int count = 0;
-	private int[] countArr;
-	private StringBuilder squareId = new StringBuilder();
-	private String __id = "";
-	private ImageView img;
-	private Button myBtn;
-	private MobileServiceClient mClient;
-	private ListView listView; 
-	private BlobStorageHelper blobStorageHelper;
-	public static final String SENDER_ID = "838051405989";
+	Button[] btnArr;
+	TextView messageText;
+	int count = 0;
+	int[] countArr;
+	StringBuilder squareId = new StringBuilder();
+	String __id = "";
+	ImageView img;
+	Button myBtn;
+	MobileServiceClient mClient;
+	ListView listView; 
+	BlobStorageHelper blobStorageHelper;
+	static final String SENDER_ID = "838051405989";
 
 
 	ArrayAdapter<String> adapter;

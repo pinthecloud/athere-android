@@ -72,7 +72,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		int type = getItemViewType(position);
 		if (view == null) {
 			if(type == TYPE.ADMIN.ordinal()){
-
+				view = inflater.inflate(R.layout.row_chat_admin_list, parent, false);
 			} else if(type == TYPE.NOTIFICATION.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
 			} else if(type == TYPE.SEND.ordinal()){
@@ -84,12 +84,22 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		final AhMessage message = this.getItem(position);
 		if (message != null) {
-			/*
-			 * Find UI component
-			 */
 			TextView messageText = null;
 			if(type == TYPE.ADMIN.ordinal()){
-				messageText = (TextView)view.findViewById(R.id.row_chat_admin_text);
+				/*
+				 * Find Common UI component
+				 */
+				messageText = (TextView)view.findViewById(R.id.row_chat_admin_message);
+
+
+				/*
+				 * Find and Set UI component only in receive list
+				 */
+				String time = message.getTimeStamp();
+				String hour = time.substring(8, 10);
+				String minute = time.substring(10, 12);
+				TextView timeText = (TextView)view.findViewById(R.id.row_chat_admin_time);
+				timeText.setText(hour + ":" + minute);
 			} else if(type == TYPE.NOTIFICATION.ordinal()){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
 			} else if(type == TYPE.SEND.ordinal()){
@@ -132,7 +142,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 
 				/*
-				 * Common UI component
+				 * Find and Set Common UI component
 				 */
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
@@ -197,7 +207,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				//					}
 				//				});
 
-				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.launcher, profileImage);
+				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override

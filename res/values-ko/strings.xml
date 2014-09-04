@@ -41,6 +41,7 @@
     <string name="fail">취소</string>
     <string name="age">살</string>
     <string name="person">명</string>
+    <string name="admin">관리자</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>

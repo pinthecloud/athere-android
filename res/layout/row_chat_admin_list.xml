@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row_chat_admin_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center" >
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/square_chat_list_receive_bottom_margin"
+    android:paddingEnd="@dimen/square_chat_list_receive_right_margin"
+    android:paddingLeft="@dimen/square_chat_list_receive_left_margin"
+    android:paddingRight="@dimen/square_chat_list_receive_right_margin"
+    android:paddingStart="@dimen/square_chat_list_receive_left_margin"
+    android:paddingTop="@dimen/square_chat_list_receive_top_margin" >
+
+    <ImageView
+        android:id="@+id/row_chat_admin_profile"
+        android:layout_width="@dimen/square_chat_profile_width"
+        android:layout_height="@dimen/square_chat_profile_height"
+        android:layout_marginEnd="@dimen/square_chat_list_receive_profile_nick_name_margin"
+        android:layout_marginRight="@dimen/square_chat_list_receive_profile_nick_name_margin"
+        android:contentDescription="@string/profile_image"
+        android:src="@drawable/chat_admin_profile" />
 
     <TextView
-        android:id="@+id/row_chat_admin_text"
-        android:background="@drawable/bg_chat_notification_text"
+        android:id="@+id/row_chat_admin_nick_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/square_chat_notification_text_top_margin"
-        android:gravity="center"
-        android:textSize="@dimen/font_medium"
-        android:textColor="@android:color/white" />
+        android:layout_toEndOf="@+id/row_chat_admin_profile"
+        android:layout_toRightOf="@+id/row_chat_admin_profile"
+        android:text="@string/admin"
+        android:textSize="@dimen/font_medium" />
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/row_chat_admin_nick_name"
+        android:layout_marginTop="@dimen/square_chat_list_receive_message_layout_top_margin"
+        android:layout_toEndOf="@+id/row_chat_admin_profile"
+        android:layout_toRightOf="@+id/row_chat_admin_profile" >
+
+        <TextView
+            android:id="@+id/row_chat_admin_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_chat_msg_admin"
+            android:gravity="center|start"
+            android:textSize="@dimen/font_regular" />
+
+        <TextView
+            android:id="@+id/row_chat_admin_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="@dimen/square_chat_list_send_time_left_margin"
+            android:layout_marginStart="@dimen/square_chat_list_send_time_left_margin"
+            android:paddingBottom="@dimen/square_chat_list_send_time_bottom_margin"
+            android:textColor="@color/gray_light"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
+
+</RelativeLayout>
