@@ -34,7 +34,7 @@ public class ProfileDialog extends AhDialogFragment{
 	private TextView ageText;
 	private TextView companyNumberText;
 	private Button sendChupaButton;
-
+	
 
 	public ProfileDialog(AhFragment frag, AhUser user, AhDialogCallback ahDialogCallback) {
 		super();
@@ -105,6 +105,8 @@ public class ProfileDialog extends AhDialogFragment{
 		});
 		if(user.getId().equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
 			sendChupaButton.setVisibility(View.GONE);
+			
+			
 		}
 
 		return view;

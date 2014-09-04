@@ -30,6 +30,7 @@
     <string name="exit_square">이 그라운드 나가기</string>
     <string name="send">보내기</string>
     <string name="send_chupa">추파 보내기</string>
+    <string name="profile_setting">프로필 수정</string>
     <string name="chat_alarm">채팅알람</string>
     <string name="chupa_alarm">추파알람</string>
     <string name="player">참가팀</string>
@@ -66,13 +67,13 @@
     <!-- String Array -->
 
     <string-array name="profile_image_select_delete_string_array">
-        <item>앨범</item>
-        <item>카메라</item>
+        <item>앨범에서 사진 선택</item>
+        <item>사진촬영</item>
         <item>삭제</item>
     </string-array>
     <string-array name="profile_image_select_string_array">
-        <item>앨범</item>
-        <item>카메라</item>
+        <item>앨범에서 사진 선택</item>
+        <item>사진촬영</item>
     </string-array>
     <string-array name="square_tab_string_array">
         <item>chat</item>

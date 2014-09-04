@@ -359,7 +359,7 @@ public class SquareProfileFragment extends AhFragment{
 			if(isCamera){
 				openCameraAndSetView();
 			}else{
-				profilePictureView.setImageResource(R.drawable.profile_default);
+				profilePictureView.setImageResource(R.drawable.bg_ground_profile_default);
 			}
 		}else{
 			profilePictureView.setImageBitmap(pictureBitmap);

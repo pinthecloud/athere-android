@@ -44,7 +44,7 @@
     <dimen name="square_drawer_profile_gender_company_num_margin">4dp</dimen>
     <dimen name="square_drawer_bar_height">35dp</dimen>
     <dimen name="square_drawer_bar_left_margin">20dp</dimen>
-    <dimen name="square_drawer_bar_right_margin">20dp</dimen>
+    <dimen name="square_drawer_bar_right_margin">0dp</dimen>
     <dimen name="square_drawer_member_bar_title_right_margin">8dp</dimen>
     <dimen name="square_drawer_member_bar_gender_margin">3.5dp</dimen>
     <dimen name="square_drawer_setting_bar_text_toggle_margin">6.5dp</dimen>

@@ -30,6 +30,7 @@
     <string name="exit_square">Leave Ground</string>
     <string name="send">send</string>
     <string name="send_chupa">Send chupa</string>
+    <string name="profile_setting">Edit profile</string>
     <string name="chat_alarm">Chat Alarm</string>
     <string name="chupa_alarm">Chupa Alarm</string>
     <string name="player">Team</string>
