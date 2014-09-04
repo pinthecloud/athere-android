@@ -119,11 +119,14 @@ public class BlobStorageHelper {
 			container = blobClient.getContainerReference(CONTAINER_NAME);
 			blob = container.getBlockBlobReference(id);
 			blob.delete();
+			
 			return true;
 		} catch (URISyntaxException e) {
-			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+			e.printStackTrace();
+			ExceptionManager.fireException(new AhException(frag, "deleteBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-			ExceptionManager.fireException(new AhException(frag, "downloadToFileSync", AhException.TYPE.BLOB_STORAGE_ERROR));
+			e.printStackTrace();
+//			ExceptionManager.fireException(new AhException(frag, "deleteBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 		return false;
 	}

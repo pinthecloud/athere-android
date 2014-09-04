@@ -12,8 +12,10 @@ import android.widget.TextView;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
+import com.pinthecloud.athere.model.AhUser;
 
 public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
@@ -21,6 +23,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 	private AhFragment fragment;
 	private int layoutId;
 	private CachedBlobStorageHelper blobStorageHelper;
+	private UserDBHelper userDBHelper;
 
 	public SquareChupaListAdapter(Context context, AhFragment frag, int layoutId) {
 		super(context, layoutId);
@@ -30,6 +33,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 		
 		AhApplication app = AhApplication.getInstance();
 		this.blobStorageHelper = app.getBlobStorageHelper();
+		this.userDBHelper = app.getUserDBHelper();
 	}
 
 	@Override
@@ -57,8 +61,11 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			 * Set UI component
 			 */
 			String isExit = lastChupaMap.get("isExit");
-			String userNickName = lastChupaMap.get("userNickName");
+//			String userNickName = lastChupaMap.get("userNickName");
 			String userId = lastChupaMap.get("userId");
+			AhUser u = userDBHelper.getUser(userId, true);
+			String userNickName = u.getNickName();
+			
 			//			String picStr = lastChupaMap.get("profilePic");
 			String chupaBadge = lastChupaMap.get("chupaBadge");
 			if (isExit.equals("true")) {

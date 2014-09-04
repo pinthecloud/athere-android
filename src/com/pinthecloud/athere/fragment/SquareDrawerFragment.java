@@ -225,6 +225,7 @@ public class SquareDrawerFragment extends AhFragment {
 				progressBar.setVisibility(View.GONE);
 
 				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				Log(_thisFragment, id);
 				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
 
 				app.removeSquarePreference(_thisFragment);
