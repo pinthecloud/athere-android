@@ -105,7 +105,7 @@ public class SquareDrawerFragment extends AhFragment {
 						appTracker.send(new HitBuilders.EventBuilder()
 						.setCategory(_thisFragment.getClass().getSimpleName())
 						.setAction("SendChupa")
-						.setLabel("DrawerSendChupa")
+						.setLabel("DrawerProfileSendChupa")
 						.build());
 
 						Intent intent = new Intent(context, ChupaChatActivity.class);

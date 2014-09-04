@@ -206,7 +206,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 						appTracker.send(new HitBuilders.EventBuilder()
 						.setCategory(frag.getClass().getSimpleName())
 						.setAction("ViewOthersProfile")
-						.setLabel("ChatsProfile")
+						.setLabel("ChatProfile")
 						.build());
 
 						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
@@ -216,7 +216,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 								appTracker.send(new HitBuilders.EventBuilder()
 								.setCategory(frag.getClass().getSimpleName())
 								.setAction("SendChupa")
-								.setLabel("ChatsSendChupa")
+								.setLabel("ChatSendChupa")
 								.build());
 
 								Intent intent = new Intent(context, ChupaChatActivity.class);

@@ -117,7 +117,7 @@ public class ChupaChatFragment extends AhFragment {
 				appTracker.send(new HitBuilders.EventBuilder()
 				.setCategory(_thisFragment.getClass().getSimpleName())
 				.setAction("ViewOthersProfile")
-				.setLabel("ViewOthersProfile")
+				.setLabel("ChupaProfile")
 				.build());
 
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, otherUser,
@@ -125,11 +125,11 @@ public class ChupaChatFragment extends AhFragment {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
-						appTracker.send(new HitBuilders.EventBuilder()
-						.setCategory(_thisFragment.getClass().getSimpleName())
-						.setAction("ProfileSendChupa")
-						.setLabel("ProfileSendChupa")
-						.build());
+//						appTracker.send(new HitBuilders.EventBuilder()
+//						.setCategory(_thisFragment.getClass().getSimpleName())
+//						.setAction("ProfileSendChupa")
+//						.setLabel("ProfileSendChupa")
+//						.build());
 					}
 
 					@Override
