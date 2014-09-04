@@ -145,7 +145,7 @@ public class SquareChatFragment extends AhFragment{
 			public void onCompleted(final AhMessage message) {
 				Log.d(AhGlobalVariable.LOG_TAG, "SquareChatFragment Message onComplete : " + message.getType() + " " + message.getContent());
 
-				// Chupa & User Update Message can't go through here
+				// Chupa & User Exit Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
 					return;
@@ -243,7 +243,7 @@ public class SquareChatFragment extends AhFragment{
 			messageDBHelper.addMessage(enterTalk);
 		}
 		if (id == null){
-			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK);
+			talks = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE);
 		} else {
 			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			talk = messageDBHelper.getMessage(Integer.parseInt(id));

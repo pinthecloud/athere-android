@@ -107,7 +107,6 @@ public class AhIntentService extends IntentService {
 				} else if (AhMessage.TYPE.FORCED_LOGOUT.equals(type)) {
 					FORCED_LOGOUT();
 				} else if (AhMessage.TYPE.ADMIN_MESSAGE.equals(type)) {
-					Log.e("ERROR", "in ADMIN_MESSAGE");
 					ADMIN_MESSAGE();
 				}
 			}
@@ -237,7 +236,8 @@ public class AhIntentService extends IntentService {
 
 
 	private void ADMIN_MESSAGE() {
-		throw new AhException("NOT IMPLEMENTED YET");
+		Log.e("ERROR", "NOT IMPLEMENTED");
+		TALK();
 	}
 
 
