@@ -6,8 +6,8 @@ import java.util.List;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.Square;
 
 public class JsonConverter {
 	private static JsonElement getJsonElement(JsonObject jo, String key) {
@@ -73,7 +73,7 @@ public class JsonConverter {
 			user.setCompanyNum(jo.get("companyNum").getAsInt());
 			user.setAge(jo.get("age").getAsInt());
 			user.setSquareId(jo.get("squareId").getAsString());
-			user.setChatEnable(jo.get("isChatEnable").getAsBoolean());
+//			user.setChatEnable(jo.get("isChatEnable").getAsBoolean());
 			user.setChupaEnable(jo.get("isChupaEnable").getAsBoolean());
 
 			list.add(user);

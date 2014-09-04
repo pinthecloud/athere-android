@@ -50,10 +50,10 @@ import com.pinthecloud.athere.util.FileUtil;
 public class AhApplication extends Application{
 	
 	// Windows Azure Mobile Service Keys
-	private final String APP_URL = "https://athere.azure-mobile.net/";
-	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
-	private final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
-	private final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
+	public final String APP_URL = "https://athere.azure-mobile.net/";
+	public final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	public final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
+	public final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
 
 	// Method Name
 	private final String FORCED_LOGOUT = "forced_logout";
@@ -129,6 +129,9 @@ public class AhApplication extends Application{
 	}
 	public MobileServiceClient getmClient() {
 		return mClient;
+	}
+	public void setmClient(MobileServiceClient client) {
+		mClient = client;
 	}
 	public MobileServiceTable<AhUser> getUserTable() {
 		return userTable;

@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
+import java.net.MalformedURLException;
+
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -16,10 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
-import com.pinthecloud.athere.activity.HongkunTestAcitivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
@@ -115,32 +118,45 @@ public class SplashFragment extends AhFragment {
 		 * Start Chupa Application
 		 */
 		// Erase Later (Exception for hongkun)
-		if (isHongkunTest()) return view;
+//		if (AhGlobalVariable.DEBUG_MODE) {
+//			isHongkunTest();
+//			return view;
+//		}
 		runChupa();
 		return view;
 	}
 
 
 	private boolean isHongkunTest() {
-		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
-		String myGal3 = "";
-		String httpAgent = System.getProperty("http.agent");
-		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-				|| myGal3.equals(httpAgent))))	// Galaxy 3
-			return false;
+//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+//		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
+//		String myGal3 = "";
+//		String httpAgent = System.getProperty("http.agent");
+//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
+//				|| myGal3.equals(httpAgent))))	// Galaxy 3
+//			return false;
 
 		new AlertDialog.Builder(context)
 		.setTitle("Routing Dialog")
-		.setMessage("Want to Go to HongkunTest?")
-		.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		.setMessage("Real or Test Server")
+		.setPositiveButton("Real", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) { 
-				startActivity(new Intent(activity, HongkunTestAcitivity.class)); 
-				activity.finish();
+				try {
+					MobileServiceClient mClient = AhApplication.getInstance().getmClient();
+					mClient = new MobileServiceClient(
+							AhApplication.getInstance().APP_URL,
+							AhApplication.getInstance().APP_KEY,
+							app);
+					app.setmClient(mClient);
+				} catch (MalformedURLException e) {
+					Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
+				}
+				runChupa();
+				
 			}
 		})
-		.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+		.setNegativeButton("Test", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				runChupa();
 			}
