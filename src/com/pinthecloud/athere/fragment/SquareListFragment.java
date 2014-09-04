@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
@@ -113,19 +112,5 @@ public class SquareListFragment extends AhFragment{
 				squareListAdapter.addAll(list);
 			}
 		});
-	}
-	
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
-	}
-	
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 }

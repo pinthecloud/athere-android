@@ -4,10 +4,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.ChupaChatFragment;
+import com.pinthecloud.athere.fragment.ProfileSettingsFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -35,8 +37,8 @@ public class ProfileSettingsActivity extends AhActivity{
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-		final ChupaChatFragment chupaChatFragment = new ChupaChatFragment();
-		fragmentTransaction.add(R.id.chupa_chat_container, chupaChatFragment);
+		ProfileSettingsFragment profileSettingsFragment = new ProfileSettingsFragment();
+		fragmentTransaction.add(R.id.profile_settings_container, profileSettingsFragment);
 		fragmentTransaction.commit();
 
 
@@ -58,5 +60,17 @@ public class ProfileSettingsActivity extends AhActivity{
 				}
 			}
 		});
+	}
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		// Respond to the action bar's Up/Home button
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

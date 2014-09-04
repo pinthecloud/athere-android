@@ -36,9 +36,12 @@ import com.pinthecloud.athere.model.AhUser;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
-	private final int NOTIFICATION = 0;
-	private final int SEND = 1;
-	private final int RECEIVE = 2;
+	private enum TYPE{
+		ADMIN,
+		NOTIFICATION,
+		SEND,
+		RECEIVE
+	}
 
 	private AhApplication app;
 	private Context context;
@@ -68,11 +71,13 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		View view = convertView;
 		int type = getItemViewType(position);
 		if (view == null) {
-			if(type == NOTIFICATION){
+			if(type == TYPE.ADMIN.ordinal()){
+
+			} else if(type == TYPE.NOTIFICATION.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
-			} else if(type == SEND){
+			} else if(type == TYPE.SEND.ordinal()){
 				view = inflater.inflate(R.layout.row_square_chat_list_send, parent, false);
-			} else if(type == RECEIVE){
+			} else if(type == TYPE.RECEIVE.ordinal()){
 				view = inflater.inflate(R.layout.row_square_chat_list_receive, parent, false);
 			}
 		}
@@ -83,9 +88,11 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Find UI component
 			 */
 			TextView messageText = null;
-			if(type == NOTIFICATION){
+			if(type == TYPE.ADMIN.ordinal()){
+				messageText = (TextView)view.findViewById(R.id.row_chat_admin_text);
+			} else if(type == TYPE.NOTIFICATION.ordinal()){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
-			} else if(type == SEND){
+			} else if(type == TYPE.SEND.ordinal()){
 				/*
 				 * Find UI component only in receive list
 				 */
@@ -140,7 +147,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 						return false;
 					}
 				});
-			} else if(type == RECEIVE){
+			} else if(type == TYPE.RECEIVE.ordinal()){
 				/*
 				 * Get other user and find common UI component
 				 */
@@ -246,7 +253,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	@Override
 	public int getViewTypeCount() {
-		return 3;
+		return TYPE.values().length;
 	}
 
 
@@ -254,13 +261,15 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	public int getItemViewType(int position) {
 		// Inflate different layout by user
 		AhMessage message = getItem(position);
-		if(message.isNotification()){
-			return NOTIFICATION;
-		}else{
+		if(message.isAdmin()){
+			return TYPE.ADMIN.ordinal();
+		} else if(message.isNotification()){
+			return TYPE.NOTIFICATION.ordinal();
+		} else{
 			if(message.isMine()){
-				return SEND;
+				return TYPE.SEND.ordinal();
 			} else{
-				return RECEIVE;
+				return TYPE.RECEIVE.ordinal();
 			}
 		}
 	}
@@ -278,7 +287,6 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				// Delete
 				messageDBHelper.deleteMessage(message.getId());
 				remove(getItem(position));
-				notifyDataSetChanged();
 			}
 			@Override
 			public void doNegativeThing(Bundle bundle) {

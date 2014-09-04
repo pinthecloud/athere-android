@@ -36,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -59,7 +58,6 @@ public class SquareProfileFragment extends AhFragment{
 
 	private final int GET_IMAGE_GALLERY_CODE = 1;
 
-	private Intent intent;
 	private Square square;
 	private ProgressBar progressBar;
 
@@ -67,6 +65,7 @@ public class SquareProfileFragment extends AhFragment{
 	private CameraPreview mCameraPreview;
 	private FrameLayout cameraView;
 	private ImageView profilePictureView;
+	private ImageButton profilePictureSelect;
 	private ImageButton cameraButton;
 	private ImageButton cameraRotateButton;
 
@@ -142,7 +141,7 @@ public class SquareProfileFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 
 		// Get parameter from previous activity intent
-		intent = activity.getIntent();
+		Intent intent = activity.getIntent();
 		square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
 	}
 
@@ -150,8 +149,8 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment onCreateView");
 		View view = inflater.inflate(R.layout.fragment_square_profile, container, false);
+
 
 		/*
 		 * Find UI component
@@ -162,6 +161,7 @@ public class SquareProfileFragment extends AhFragment{
 		cameraRotateButton = (ImageButton) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_picture);
+		profilePictureSelect = (ImageButton) view.findViewById(R.id.square_profile_frag_profile_picture_select_button);
 		nickNameEditText = (EditText) view.findViewById(R.id.square_profile_frag_nick_name_text);
 		companyNumberEditText = (EditText) view.findViewById(R.id.square_profile_frag_company_text);
 		completeButton = (ImageButton) view.findViewById(R.id.square_profile_frag_start_button);
@@ -174,65 +174,14 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
-				String title = getResources().getString(R.string.select);
-				String[] list = null;
-				if(isTookPicture){
-					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
-				}else{
-					list = getResources().getStringArray(R.array.profile_image_select_string_array);
-				}
-				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
-				callbacks[0] = new AhDialogCallback() {
+				profilePictureOnClick();
+			}
+		});
+		profilePictureSelect.setOnClickListener(new OnClickListener() {
 
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// Get image from gallery
-						intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image/*");
-						startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				callbacks[1] = new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// Get image from camera
-						// Set new camera by facing direction
-						releaseCameraAndRemoveView();
-						openCameraAndSetView();
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				if(list.length == 3){
-					callbacks[2] = new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							// Set profile image default
-							profilePictureView.setImageResource(R.drawable.launcher);
-
-							// Release camera and set button to re take
-							isCamera = false;
-							isTookPicture = false;
-							cameraButton.setVisibility(View.GONE);
-							cameraRotateButton.setVisibility(View.GONE);
-							completeButton.setEnabled(isCompleteButtonEnable());
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							// Do nothing
-						}
-					};
-				}
-				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
-				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			@Override
+			public void onClick(View v) {
+				profilePictureOnClick();
 			}
 		});
 
@@ -386,6 +335,7 @@ public class SquareProfileFragment extends AhFragment{
 					completeButton.setEnabled(false);
 					cameraButton.setEnabled(false);
 					cameraRotateButton.setEnabled(false);
+					profilePictureView.setEnabled(false);
 					nickNameEditText.setEnabled(false);
 					companyNumberEditText.setEnabled(false);
 
@@ -403,33 +353,29 @@ public class SquareProfileFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStart");
 		if(!isTookPicture){
 			if(isCamera){
 				openCameraAndSetView();
 			}else{
-				profilePictureView.setImageResource(R.drawable.launcher);
+				profilePictureView.setImageResource(R.drawable.profile_default);
 			}
 		}else{
 			profilePictureView.setImageBitmap(pictureBitmap);
 		}
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
 
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onStop");
 		profilePictureView.setImageBitmap(null);
 		releaseCameraAndRemoveView();
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(AhGlobalVariable.LOG_TAG, "SquareProfilFragment onActivityResult");
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onActivityResult");
 		switch(requestCode){
 		case GET_IMAGE_GALLERY_CODE:
 			if (resultCode == Activity.RESULT_OK) {
@@ -457,9 +403,9 @@ public class SquareProfileFragment extends AhFragment{
 					int degree = BitmapUtil.getImageOrientation(imagePath);
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
 				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfilFragment : " + e.getMessage());
+					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
 				} catch (IOException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of SquareProfilFragment : " + e.getMessage());
+					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
 				}
 
 
@@ -469,6 +415,7 @@ public class SquareProfileFragment extends AhFragment{
 				releaseCameraAndRemoveView();
 				isCamera = false;
 				isTookPicture = true;
+				profilePictureSelect.setVisibility(View.GONE);
 				cameraButton.setVisibility(View.GONE);
 				cameraRotateButton.setVisibility(View.GONE);
 				completeButton.setEnabled(isCompleteButtonEnable());
@@ -492,6 +439,7 @@ public class SquareProfileFragment extends AhFragment{
 		cameraView.addView(mCameraPreview);
 
 		profilePictureView.setImageBitmap(null);
+		profilePictureSelect.setVisibility(View.GONE);
 		profileInfoLayout.bringToFront();
 
 		isCamera = true;
@@ -514,6 +462,73 @@ public class SquareProfileFragment extends AhFragment{
 			mCamera.release();
 			mCamera = null;	
 		}
+	}
+
+
+	/*
+	 * Profile Image Click Listener
+	 */
+	private void profilePictureOnClick(){
+		String title = getResources().getString(R.string.select);
+		String[] list = null;
+		if(isTookPicture){
+			list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
+		}else{
+			list = getResources().getStringArray(R.array.profile_image_select_string_array);
+		}
+		AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
+		callbacks[0] = new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				// Get image from gallery
+				Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+				intent.setType("image/*");
+				startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				// Do nothing
+			}
+		};
+		callbacks[1] = new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				// Get image from camera
+				// Set new camera by facing direction
+				releaseCameraAndRemoveView();
+				openCameraAndSetView();
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				// Do nothing
+			}
+		};
+		if(list.length == 3){
+			callbacks[2] = new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					// Set profile image default
+					profilePictureView.setImageResource(R.drawable.profile_default);
+					profilePictureSelect.setVisibility(View.VISIBLE);
+
+					// Release camera and set button to re take
+					isCamera = false;
+					isTookPicture = false;
+					cameraButton.setVisibility(View.GONE);
+					cameraRotateButton.setVisibility(View.GONE);
+					completeButton.setEnabled(isCompleteButtonEnable());
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					// Do nothing
+				}
+			};
+		}
+		AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
+		listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 
 
@@ -541,7 +556,7 @@ public class SquareProfileFragment extends AhFragment{
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
 
-				userHelper.enterSquareAsync(_thisFragment, user, new AhPairEntityCallback<String, List<AhUser>>() {
+				userHelper.enterSquareAsync(frag, user, new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
@@ -555,7 +570,7 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
-				blobStorageHelper.uploadBitmapAsync(_thisFragment, userId, pictureBitmap, new AhEntityCallback<String>() {
+				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
 
 					@Override
 					public void onCompleted(String entity) {
@@ -579,6 +594,8 @@ public class SquareProfileFragment extends AhFragment{
 
 					@Override
 					public void onCompleted(AhMessage entity) {
+						progressBar.setVisibility(View.GONE);
+
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
@@ -591,11 +608,8 @@ public class SquareProfileFragment extends AhFragment{
 						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
 
 						// Set and move to next activity after clear previous activity
-						intent.setClass(context, SquareActivity.class);
+						Intent intent = new Intent(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-						// Dimiss progress bar
-						progressBar.setVisibility(View.GONE);
 						startActivity(intent);
 					}
 				});

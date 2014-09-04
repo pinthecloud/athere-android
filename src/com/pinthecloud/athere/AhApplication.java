@@ -48,8 +48,6 @@ import com.pinthecloud.athere.util.FileUtil;
  *
  */
 public class AhApplication extends Application{
-
-	
 	
 	// Windows Azure Mobile Service Keys
 	private final String APP_URL = "https://athere.azure-mobile.net/";
@@ -81,8 +79,6 @@ public class AhApplication extends Application{
 	// DB
 	private static UserDBHelper userDBHelper;
 	private static MessageDBHelper messageDBHelper;
-
-	private static AhUser currentChupaUser;
 
 
 	@Override
@@ -167,12 +163,6 @@ public class AhApplication extends Application{
 	public CachedBlobStorageHelper getBlobStorageHelper() {
 		return blobStorageHelper;
 	}
-	public AhUser getCurrentChupaUser() {
-		return currentChupaUser;
-	}
-	public void setCurrentChupaUser(AhUser user) {
-		currentChupaUser = user;
-	}
 
 
 	/*
@@ -227,13 +217,13 @@ public class AhApplication extends Application{
 		}, new Chainable() {
 
 			@Override
-			public void doNext(AhFragment frag) {
+			public void doNext(final AhFragment frag) {
 				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
 
 					@Override
 					public void onCompleted(JsonElement json, Exception exception,
 							ServiceFilterResponse response) {
-						removeSquarePreference();
+						removeSquarePreference(frag);
 						callback.onCompleted(true);
 					}
 				});
@@ -242,13 +232,13 @@ public class AhApplication extends Application{
 
 	}
 
-	public void removeSquarePreference(){
+	public void removeSquarePreference(AhFragment frag){
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.cleareAllBadgeNum();
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearCache();
-		blobStorageHelper.deleteBitmapAsync(null, pref.getString(AhGlobalVariable.USER_ID_KEY), null);
+		blobStorageHelper.deleteBitmapAsync(frag, pref.getString(AhGlobalVariable.USER_ID_KEY), null);
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);

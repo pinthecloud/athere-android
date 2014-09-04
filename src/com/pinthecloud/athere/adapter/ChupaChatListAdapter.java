@@ -25,9 +25,11 @@ import com.pinthecloud.athere.model.AhMessage;
 
 public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 
-	private final int NOTIFICATION = 0;
-	private final int SEND = 1;
-	private final int RECEIVE = 2;
+	private enum TYPE{
+		NOTIFICATION,
+		SEND,
+		RECEIVE
+	}
 
 	private Context context;
 	private Fragment frag;
@@ -51,11 +53,11 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 		View view = convertView;
 		int type = getItemViewType(position);
 		if (view == null) {
-			if(type == NOTIFICATION){
+			if(type == TYPE.NOTIFICATION.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
-			} else if(type == SEND){
+			} else if(type == TYPE.SEND.ordinal()){
 				view = inflater.inflate(R.layout.row_chupa_chat_list_send, parent, false);
-			} else if(type == RECEIVE){
+			} else if(type == TYPE.RECEIVE.ordinal()){
 				view = inflater.inflate(R.layout.row_chupa_chat_list_receive, parent, false);
 			}
 		}
@@ -66,9 +68,9 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 			 * Find UI component
 			 */
 			TextView messageText = null;
-			if(type == NOTIFICATION){
+			if(type == TYPE.NOTIFICATION.ordinal()){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
-			}else if(type == SEND){
+			}else if(type == TYPE.SEND.ordinal()){
 				/*
 				 * Find UI component only in receive list
 				 */
@@ -104,14 +106,14 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 					failButton.setVisibility(View.VISIBLE);
 					progressBar.setVisibility(View.GONE);
 				}
-				
-				
+
+
 				/*
 				 * Common UI component
 				 */
 				messageText = (TextView)view.findViewById(R.id.row_chupa_chat_list_send_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
-					
+
 					@Override
 					public boolean onLongClick(View v) {
 						boolean cancel = true;
@@ -122,13 +124,13 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 						return false;
 					}
 				});
-			} else if(type == RECEIVE){
+			} else if(type == TYPE.RECEIVE.ordinal()){
 				/*
 				 * Get other user and find Common UI component
 				 */
 				messageText = (TextView)view.findViewById(R.id.row_chupa_chat_list_receive_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
-					
+
 					@Override
 					public boolean onLongClick(View v) {
 						showReSendOrCancelDialog(message, position, false);
@@ -160,7 +162,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	@Override
 	public int getViewTypeCount() {
-		return 3;
+		return TYPE.values().length;
 	}
 
 
@@ -169,12 +171,12 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 		// Inflate different layout by user
 		AhMessage message = getItem(position);
 		if(message.isNotification()){
-			return NOTIFICATION;
+			return TYPE.NOTIFICATION.ordinal();
 		}else{
 			if(message.isMine()){
-				return SEND;
+				return TYPE.SEND.ordinal();
 			} else{
-				return RECEIVE;
+				return TYPE.RECEIVE.ordinal();
 			}
 		}
 	}
@@ -192,7 +194,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				// Delete
 				messageDBHelper.deleteMessage(message.getId());
 				remove(getItem(position));
-				notifyDataSetChanged();
 			}
 			@Override
 			public void doNegativeThing(Bundle bundle) {

@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -44,7 +43,7 @@ public class ChupaChatFragment extends AhFragment {
 	private TextView otherAge;
 	private TextView otherCompanyNumber;
 
-	private AhUser otherUser;
+	public static AhUser otherUser;
 	private boolean isOtherUserExit = false;
 	private boolean isTypedMessage = false;
 
@@ -63,17 +62,18 @@ public class ChupaChatFragment extends AhFragment {
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
 		otherUser = userDBHelper.getUser(userId, true);
-		app.setCurrentChupaUser(otherUser);
 	}
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_chupa_chat, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
 
-		// Remove Notification when the user enters the Chupa chat room.
+
+		/*
+		 * Remove Notification when the user enters the Chupa chat room.
+		 */
 		NotificationManager mNotificationManager = (NotificationManager) activity
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
@@ -216,17 +216,29 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-
 				// Only Chupa & Exit Message can go through
+				// Only other user who is going chupa with me can go through
 				if (!(message.getType().equals(AhMessage.TYPE.CHUPA.toString()) 
-						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString()))){
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())
+						|| message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString()))
+						|| !otherUser.getId().equals(message.getSenderId())){
 					return;
 				}
 
-				// If Exit Message, Check if it's related Exit
+
+				// If update message, check if it's related update
 				// (Don't go through other User Exit message)
-				if (message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())
-						&& !otherUser.getId().equals(message.getSenderId())) {
+				if(message.getType().equals(AhMessage.TYPE.UPDATE_USER_INFO.toString())){
+					otherUser = userDBHelper.getUser(otherUser.getId(), true);
+					activity.runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
+							otherNickName.setText(otherUser.getNickName());
+							otherCompanyNumber.setText("" + otherUser.getCompanyNum());
+						}
+					});
 					return;
 				}
 
@@ -241,9 +253,8 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
-		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
+		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}
 
@@ -252,10 +263,28 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStop() {
 		otherProfileImage.setImageBitmap(null);
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 	}
 
 
+	@Override
+	public void handleException(AhException ex) {
+		if(ex.getMethodName().equals("sendMessageAsync")){
+			AhMessage exMessage = (AhMessage)ex.getParameter();
+			exMessage.setStatus(AhMessage.STATUS.FAIL);
+			messageDBHelper.updateMessages(exMessage);
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					messageListAdapter.notifyDataSetChanged();
+				}
+			});
+		}else{
+			super.handleException(ex);	
+		}
+	}
+	
+	
 	public void sendChupa(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 		messageListAdapter.add(message);
@@ -370,24 +399,5 @@ public class ChupaChatFragment extends AhFragment {
 
 	private boolean isSenderButtonEnable() {
 		return isTypedMessage && !isOtherUserExit;
-	}
-
-
-	@Override
-	public void handleException(AhException ex) {
-		if(ex.getMethodName().equals("sendMessageAsync")){
-			AhMessage exMessage = (AhMessage)ex.getParameter();
-			exMessage.setStatus(AhMessage.STATUS.FAIL);
-			messageDBHelper.updateMessages(exMessage);
-			activity.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					messageListAdapter.notifyDataSetChanged();
-				}
-			});
-		}else{
-			super.handleException(ex);	
-		}
 	}
 }

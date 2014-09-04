@@ -20,19 +20,22 @@ public class AhActivity extends Activity{
 	protected AhApplication app;
 	protected PreferenceHelper pref;
 	protected AhActivity _thisActivity;
+	protected String simpleClassName;
 
 
 	public AhActivity(){
 		_thisActivity = this;
 		app = AhApplication.getInstance();
 		pref = app.getPref();
+		simpleClassName = _thisActivity.getClass().getSimpleName();
 	}
-	
-	
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreate");
+
 		
 		/*
 		 * Set FiveRocks
@@ -46,7 +49,7 @@ public class AhActivity extends Activity{
 	// Logging Method
 	protected void Log(AhActivity activity, Object... params){
 		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		Log.e("ERROR", activity.getClass().getName());
+		Log.e("ERROR", simpleClassName);
 		for(Object str : params) {
 			if (str == null) {
 				Log.e("ERROR", "null");
@@ -61,12 +64,14 @@ public class AhActivity extends Activity{
 	@Override
 	protected void onStart() {
 		super.onStart();
-		FiveRocks.onActivityStart(_thisActivity);	
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStart");
+		FiveRocks.onActivityStart(_thisActivity);
 	}
 
 
 	@Override
 	protected void onStop() {
+		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStop");
 		super.onStop();
 		FiveRocks.onActivityStop(_thisActivity);
 	}

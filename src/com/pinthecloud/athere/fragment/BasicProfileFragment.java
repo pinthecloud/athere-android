@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
@@ -221,19 +220,5 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
-	}
-
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
-	}
-
-
-	@Override
-	public void onStop() {
-		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 	}
 }
