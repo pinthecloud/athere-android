@@ -36,7 +36,7 @@ public class AhActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreate");
 
-		
+
 		/*
 		 * Set FiveRocks
 		 */

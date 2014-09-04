@@ -543,14 +543,16 @@ public class SquareProfileFragment extends AhFragment{
 
 		// Save info for user
 		String nickName = nickNameEditText.getText().toString();
-		int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-		
+		int companyNumber = 10;
+		if(!AhGlobalVariable.DEBUG_MODE){
+			companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
+		}
 		appTracker.send(new HitBuilders.EventBuilder()
 		.setCategory(_thisFragment.getClass().getSimpleName())
 		.setAction("CheckMemberNumber")
 		.setLabel("" + companyNumber)
 		.build());
-		
+
 		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
@@ -583,7 +585,7 @@ public class SquareProfileFragment extends AhFragment{
 
 					@Override
 					public void onCompleted(String entity) {
-						
+
 						// Do nothing
 					}
 				});

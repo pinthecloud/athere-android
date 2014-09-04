@@ -3,6 +3,7 @@ package com.pinthecloud.athere.adapter;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;

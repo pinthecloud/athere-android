@@ -241,7 +241,6 @@ public class AhIntentService extends IntentService {
 
 
 	private void ADMIN_MESSAGE() {
-		Log.e("ERROR", "NOT IMPLEMENTED");
 		TALK();
 	}
 

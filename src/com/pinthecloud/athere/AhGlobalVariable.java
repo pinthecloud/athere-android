@@ -6,14 +6,14 @@ public class AhGlobalVariable{
 	/*
 	 * Application
 	 */
-	public static final boolean DEBUG_MODE = false;
+	public static final boolean DEBUG_MODE = true;
 	public static final String GOOGLE_STORE_APP_ID = "com.pinthecloud.athere";
 	public static final String APP_NAME = "chupa";
 	public static final String LOG_TAG = "AtHere";
 	public static final String PROFILE_PICTURE_NAME = "profile_picture_name.png";
 	public static final String ANDROID = "Android";
-	
-	
+
+
 	/*
 	 * Int
 	 */
@@ -32,13 +32,13 @@ public class AhGlobalVariable{
 	/*
 	 * Key for external service
 	 */
-//	public static final String GCM_SENDER_ID = "838051405989";
+	//	public static final String GCM_SENDER_ID = "838051405989";
 	public static final String GCM_SENDER_ID = "750250117731";
 	public static final String Five_ROCKS_APP_ID = "53f9e732333a3895de000001";
 	public static final String Five_ROCKS_APP_KEY = "Mx8kZ2BxcZKXZPBz5UV8";
 	public static final String GA_PROPERTY_ID = "UA-53944359-1";
-	
-	
+
+
 	/*
 	 * String Key
 	 */

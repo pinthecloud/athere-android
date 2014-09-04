@@ -73,11 +73,6 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	}
 
 	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView) {
-		if (UserDBHelper.ADMIN_ID.equals(id)) {
-			Bitmap bm = BitmapFactory.decodeResource(frag.getResources(),R.drawable.launcher);
-			imageView.setImageBitmap(bm);
-			return;
-		}
 		if (cancelPotentialWork(id, imageView)) {
 			int w = imageView.getWidth();
 			int h = imageView.getHeight();
@@ -86,7 +81,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 				imageView.setImageBitmap(bitmap);
 			} else {
 				Bitmap mPlaceHolderBitmap = null;
-				if(placeHolderId <= 0){
+				if(placeHolderId != 0){
 					mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), placeHolderId, w, h);	
 				}
 
