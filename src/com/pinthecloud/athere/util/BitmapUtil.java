@@ -33,6 +33,9 @@ import android.util.Log;
 import com.pinthecloud.athere.AhGlobalVariable;
 
 public class BitmapUtil {
+	
+	public static final int COMPRESS_QUALITY = 80;
+	public static final int FIXED_MAX_WIDTH = 480;
 
 	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -77,6 +80,14 @@ public class BitmapUtil {
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length, options);
+	}
+	
+	public static Bitmap decodeInSampleSize(Bitmap bitmap, int reqWidth, int reqHeight) {
+		ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESS_QUALITY, byteArrayBitmapStream);
+		byte[] b = byteArrayBitmapStream.toByteArray();
+		
+		return decodeInSampleSize(b, reqWidth, reqHeight);
 	}
 
 

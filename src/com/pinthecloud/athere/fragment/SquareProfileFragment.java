@@ -108,7 +108,6 @@ public class SquareProfileFragment extends AhFragment{
 				//					pictureBitmap = BitmapFactory.decodeStream(app.getContentResolver().openInputStream(pictureFileUri));
 				//					pictureFile.delete();
 				pictureBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-
 				// Crop picture
 				// Rotate picture
 				int height = pictureBitmap.getHeight();
@@ -581,6 +580,34 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				
+				
+				/////////////////////////////////////////////////////////////
+				// TODO : Seungmin Lee
+				/////////////////////////////////////////////////////////////
+				
+				// Lowering the image quality will be done right before uploading to server
+				// 1) First, get the original Width & Height 
+				int width = pictureBitmap.getWidth();
+				int height = pictureBitmap.getHeight();
+				
+				Log(_thisFragment, "before : " + width + " : " + height);
+				
+				// if the width is greater then FIXED_MAX_WIDTH (480px)
+				if (width > BitmapUtil.FIXED_MAX_WIDTH) {
+					// Resize the Width & Height 
+					height = (BitmapUtil.FIXED_MAX_WIDTH * height) / width;
+					width = BitmapUtil.FIXED_MAX_WIDTH;
+				}
+				
+				Log(_thisFragment, "middle : " + width + " : " + height);
+				
+				// Resize pictureBitmap to given width and height
+				pictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, width, height);
+				
+				Log(_thisFragment, "after : " + pictureBitmap.getWidth() + " : " + pictureBitmap.getHeight());
+				
+				// Upload the resized image to server
 				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
 
 					@Override
@@ -589,6 +616,9 @@ public class SquareProfileFragment extends AhFragment{
 						// Do nothing
 					}
 				});
+				
+				
+				/////////////////////////////////////////////////////////////
 			}
 		}, new Chainable() {
 
