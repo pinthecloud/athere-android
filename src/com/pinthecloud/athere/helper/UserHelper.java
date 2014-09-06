@@ -14,7 +14,6 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
-import com.microsoft.windowsazure.mobileservices.TableDeleteCallback;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
@@ -56,25 +55,25 @@ public class UserHelper {
 	}
 
 
-	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-
-		userTable.insert(user, new TableOperationCallback<AhUser>() {
-
-			@Override
-			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
-				if (exception == null) {
-					callback.onCompleted(entity.getId());
-					AsyncChainer.notifyNext(frag);
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
-				}
-			}
-		});
-	}
+//	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//
+//		userTable.insert(user, new TableOperationCallback<AhUser>() {
+//
+//			@Override
+//			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
+//				if (exception == null) {
+//					callback.onCompleted(entity.getId());
+//					AsyncChainer.notifyNext(frag);
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//	}
 
 
 	public void addIdUserAsync(final AhFragment frag, AhIdUser user, final AhEntityCallback<AhIdUser> callback) {
@@ -128,25 +127,25 @@ public class UserHelper {
 	}
 
 
-	public void deleteUserAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-
-		userTable.delete(userId, new TableDeleteCallback() {
-
-			@Override
-			public void onCompleted(Exception e, ServiceFilterResponse response) {
-				if (e == null) {
-					callback.onCompleted(true);
-					AsyncChainer.notifyNext(frag);
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
-				}
-			}
-		});
-	}
+//	public void deleteUserAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//
+//		userTable.delete(userId, new TableDeleteCallback() {
+//
+//			@Override
+//			public void onCompleted(Exception e, ServiceFilterResponse response) {
+//				if (e == null) {
+//					callback.onCompleted(true);
+//					AsyncChainer.notifyNext(frag);
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//	}
 
 
 	public void exitSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<Boolean> callback) throws AhException {

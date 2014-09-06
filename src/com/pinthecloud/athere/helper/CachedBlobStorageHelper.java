@@ -2,7 +2,6 @@ package com.pinthecloud.athere.helper;
 
 import java.lang.ref.WeakReference;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -44,48 +43,69 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	}
 
 
-	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
-		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
-		if (bitmap != null) return bitmap;
+//	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
+//		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+//		if (bitmap != null) return bitmap;
+//
+//		bitmap = this.downloadBitmapSync(frag, id);
+//		if (bitmap == null) return null;
+//
+//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
+//		return bitmap;
+//	}
 
-		bitmap = this.downloadBitmapSync(frag, id);
-		if (bitmap == null) return null;
 
-		FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
-		return bitmap;
-	}
+//	public Bitmap getBitmapSync(final AhFragment frag, String id) {
+//		Bitmap bm = null;
+//
+//		bm = this.downloadBitmapSync(null, id);
+//		if (bm == null) return null;
+//		Bitmap smallBm = BitmapUtil.decodeInSampleSize(bm, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
+//		FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id + BitmapUtil.SMALL_PIC_SIZE);
+//		return bm;
+//	}
+	
+	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView, boolean isSmall) {
+		if (cancelPotentialWork(id, imageView)) {
+			Bitmap bitmap = null;
+			String origId = id;
+			if (isSmall){
+				id = id + BitmapUtil.SMALL_PIC_SIZE;
+			}
+			// Check from cache
+			bitmap = getBitmapFromMemCache(id);
+			
+			if (bitmap != null) {
+				imageView.setImageBitmap(bitmap);
+				return;
+			}
+			// Check from Disk
+			bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+			
+			if (bitmap != null) {
+				imageView.setImageBitmap(bitmap);
+				addBitmapToMemoryCache(id, bitmap);
+				return;
+			}
+			
+			// Get from the server
+			Bitmap mPlaceHolderBitmap = null;
+			if(placeHolderId != 0){
+				int w = imageView.getWidth();
+				int h = imageView.getHeight();
+				mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), placeHolderId, w, h);	
+			}
 
-
-	public Bitmap getBitmapSync(final Context context, String id, int placeHolderId) {
-		Bitmap bm = FileUtil.getImageFromInternalStorage(context, id);
-		if (bm != null) return bm;
-
-		bm = this.downloadBitmapSync(null, id);
-		if (bm == null) return null;
-
-		FileUtil.saveImageToInternalStorage(context, bm, id);
-		return bm;
+			BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView, isSmall);
+			AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
+			imageView.setImageDrawable(asyncDrawable);
+			task.execute(origId);
+		}
 	}
 
 	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView) {
-		if (cancelPotentialWork(id, imageView)) {
-			int w = imageView.getWidth();
-			int h = imageView.getHeight();
-			Bitmap bitmap = getBitmapFromMemCache(id + w + h);
-			if (bitmap != null) {
-				imageView.setImageBitmap(bitmap);
-			} else {
-				Bitmap mPlaceHolderBitmap = null;
-				if(placeHolderId != 0){
-					mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), placeHolderId, w, h);	
-				}
-
-				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView, placeHolderId);
-				AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
-				imageView.setImageDrawable(asyncDrawable);
-				task.execute(id);
-			}
-		}
+		this.setImageViewAsync(frag, id, placeHolderId, imageView, false);
 	}
 
 
@@ -93,23 +113,32 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		private AhFragment frag;
 		private WeakReference<ImageView> imageViewReference;
 		private String id = null;
-		private int placeHolderId;
+		private Boolean isSmall;
 
-		public BitmapWorkerTask(AhFragment frag, ImageView imageView, int placeHolderId) {
+		public BitmapWorkerTask(AhFragment frag, ImageView imageView, Boolean isSmall) {
 			// Use a WeakReference to ensure the ImageView can be garbage collected
 			this.frag = frag;
 			this.imageViewReference = new WeakReference<ImageView>(imageView);
-			this.placeHolderId = placeHolderId;
+			this.isSmall = isSmall;
 		}
 
 		// Decode image in background.
 		@Override
 		protected Bitmap doInBackground(String... params) {
 			this.id = params[0];
-			int w = imageViewReference.get().getWidth();
-			int h = imageViewReference.get().getHeight();
-			Bitmap bitmap = getBitmapSync(frag, id, placeHolderId, w, h);
-			addBitmapToMemoryCache(id + w + h, bitmap);
+
+			Bitmap bitmap = downloadBitmapSync(frag, id);
+			Bitmap smallBm = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+			
+			FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
+			FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id+BitmapUtil.SMALL_PIC_SIZE);
+
+			addBitmapToMemoryCache(id, bitmap);
+			addBitmapToMemoryCache(id+BitmapUtil.SMALL_PIC_SIZE, smallBm);
+			
+			if (this.isSmall) {
+				return smallBm;
+			}
 			return bitmap;
 		}
 

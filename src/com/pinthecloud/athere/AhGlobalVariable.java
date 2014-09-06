@@ -7,8 +7,8 @@ public class AhGlobalVariable{
 	 * Application
 	 */
 	public static final boolean DEBUG_MODE = true;
-	public static final String APP_NAME = "chupa";
 	public static final String GOOGLE_STORE_APP_ID = "com.pinthecloud.athere";
+	public static final String APP_NAME = "chupa";
 	public static final String ANDROID = "Android";
 	public static final String LOG_TAG = "AtHere";
 	public static final String FIRST_UPDATE = "FIRST_UPDATE_A";	// Change value when update

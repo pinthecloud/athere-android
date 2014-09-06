@@ -164,7 +164,7 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		//		refreshView(null);
+		refreshView(null);
 	}
 
 

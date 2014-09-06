@@ -577,6 +577,7 @@ public class SquareProfileFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				
 				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
 
 					@Override

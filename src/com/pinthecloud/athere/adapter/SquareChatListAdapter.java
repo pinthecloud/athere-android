@@ -203,8 +203,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				//						profileImage.setImageBitmap(entity);
 				//					}
 				//				});
-
-				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage);
+				
+				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage, true);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override

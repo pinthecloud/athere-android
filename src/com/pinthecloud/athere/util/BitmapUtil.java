@@ -33,6 +33,8 @@ import android.util.Log;
 import com.pinthecloud.athere.AhGlobalVariable;
 
 public class BitmapUtil {
+	
+	public static final int SMALL_PIC_SIZE = 53;
 
 	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		// First decode with inJustDecodeBounds=true to check dimensions
