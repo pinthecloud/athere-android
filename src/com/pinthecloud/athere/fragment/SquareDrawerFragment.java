@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -55,13 +54,12 @@ public class SquareDrawerFragment extends AhFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_drawer, container, false);
+		gaHelper.sendTimeingGA(
+				_thisFragment.getClass().getSimpleName(),
+				"DrawerTime",
+				"getDrawerTime");
 
-		appTracker.send(new HitBuilders.TimingBuilder()
-		.setCategory(_thisFragment.getClass().getSimpleName())
-		.setVariable("DrawerTime")
-		.setLabel("getDrawerTime")
-		.build());
-
+		
 		/*
 		 * Set Ui Component
 		 */
@@ -91,22 +89,20 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				appTracker.send(new HitBuilders.EventBuilder()
-				.setCategory(_thisFragment.getClass().getSimpleName())
-				.setAction("ViewOthersProfile")
-				.setLabel("DrawerProfile")
-				.build());
+				gaHelper.sendEventGA(
+						_thisFragment.getClass().getSimpleName(),
+						"ViewOthersProfile",
+						"DrawerProfile");
 
 				final AhUser user = participantListAdapter.getItem(position);
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
-						appTracker.send(new HitBuilders.EventBuilder()
-						.setCategory(_thisFragment.getClass().getSimpleName())
-						.setAction("SendChupa")
-						.setLabel("DrawerProfileSendChupa")
-						.build());
+						gaHelper.sendEventGA(
+								_thisFragment.getClass().getSimpleName(),
+								"SendChupa",
+								"DrawerProfileSendChupa");
 
 						Intent intent = new Intent(context, ChupaChatActivity.class);
 						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
@@ -224,10 +220,6 @@ public class SquareDrawerFragment extends AhFragment {
 			public void onCompleted(Boolean result) {
 				progressBar.setVisibility(View.GONE);
 
-				String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
-				Log(_thisFragment, id);
-				blobStorageHelper.deleteBitmapAsync(_thisFragment, id, null);
-
 				app.removeSquarePreference(_thisFragment);
 
 				Intent intent = new Intent(activity, SquareListActivity.class);
@@ -242,7 +234,7 @@ public class SquareDrawerFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		updateUserList();
-		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.PROFILE_PICTURE_NAME, R.drawable.profile_default, profileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.MY_PROFILE_PICTURE, R.drawable.profile_default, profileImage);
 	}
 
 

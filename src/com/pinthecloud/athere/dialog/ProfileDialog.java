@@ -120,7 +120,7 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set image
 		 */
-		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
+		String id = AhGlobalVariable.MY_PROFILE_PICTURE;
 		if(!user.getId().equals(id)){
 			id = user.getId();
 		}

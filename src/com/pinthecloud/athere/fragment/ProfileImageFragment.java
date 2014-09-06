@@ -58,7 +58,7 @@ public class ProfileImageFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
+		String id = AhGlobalVariable.MY_PROFILE_PICTURE;
 		if(!isMe){
 			id = user.getId();
 		}

@@ -12,10 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -103,12 +100,10 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
 				@Override
 				public void onClick(View v) {
-					Tracker appTracker = app.getTracker(TrackerName.APP_TRACKER);
-					appTracker.send(new HitBuilders.EventBuilder()
-					.setCategory(frag.getClass().getSimpleName())
-					.setAction("SendChupa")
-					.setLabel("DrawerSendChupa")
-					.build());
+					app.getGAHelper().sendEventGA(
+							frag.getClass().getSimpleName(),
+							"SendChupa",
+							"DrawerSendChupa");
 
 					Intent intent = new Intent(context, ChupaChatActivity.class);
 					intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());

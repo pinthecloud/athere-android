@@ -106,8 +106,8 @@ public class SplashFragment extends AhFragment {
 			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
 			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
 		}
-		
-		
+
+
 		/*
 		 * Check whether it is first time launching app after update
 		 */
@@ -115,8 +115,8 @@ public class SplashFragment extends AhFragment {
 			pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
 			pref.putString(AhGlobalVariable.FIRST_UPDATE, AhGlobalVariable.FIRST_UPDATE);
 		}
-		
-		
+
+
 		/*
 		 * Start Chupa Application
 		 */
@@ -192,7 +192,7 @@ public class SplashFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
-				
+
 				versionHelper.getServerAppVersionAsync(frag, new AhEntityCallback<AppVersion>() {
 
 					@Override

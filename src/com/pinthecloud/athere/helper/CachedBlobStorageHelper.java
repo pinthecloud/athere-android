@@ -5,15 +5,12 @@ import java.lang.ref.WeakReference;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
-import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -47,21 +44,19 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	}
 
 
-	public Bitmap getBitmapSync(final AhFragment frag, String id, int w, int h) {
-		//		synchronized(frag) {
-		Bitmap bm = FileUtil.getImageFromInternalStorage(frag.getActivity(), id, w, h);
-		if (bm != null) return bm;
+	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
+		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+		if (bitmap != null) return bitmap;
 
-		bm = this.downloadBitmapSync(frag, id);
-		if (bm == null) return null;
+		bitmap = this.downloadBitmapSync(frag, id);
+		if (bitmap == null) return null;
 
-		FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
-		return bm;
-		//		}
+		FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
+		return bitmap;
 	}
 
 
-	public Bitmap getBitmapSync(final Context context, String id) {
+	public Bitmap getBitmapSync(final Context context, String id, int placeHolderId) {
 		Bitmap bm = FileUtil.getImageFromInternalStorage(context, id);
 		if (bm != null) return bm;
 
@@ -85,7 +80,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 					mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), placeHolderId, w, h);	
 				}
 
-				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView);
+				BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView, placeHolderId);
 				AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
 				imageView.setImageDrawable(asyncDrawable);
 				task.execute(id);
@@ -98,21 +93,22 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		private AhFragment frag;
 		private WeakReference<ImageView> imageViewReference;
 		private String id = null;
+		private int placeHolderId;
 
-		public BitmapWorkerTask(AhFragment frag, ImageView imageView) {
+		public BitmapWorkerTask(AhFragment frag, ImageView imageView, int placeHolderId) {
 			// Use a WeakReference to ensure the ImageView can be garbage collected
 			this.frag = frag;
-			imageViewReference = new WeakReference<ImageView>(imageView);
+			this.imageViewReference = new WeakReference<ImageView>(imageView);
+			this.placeHolderId = placeHolderId;
 		}
 
 		// Decode image in background.
 		@Override
 		protected Bitmap doInBackground(String... params) {
-
-			id = params[0];
+			this.id = params[0];
 			int w = imageViewReference.get().getWidth();
 			int h = imageViewReference.get().getHeight();
-			Bitmap bitmap = getBitmapSync(frag, id, w, h);
+			Bitmap bitmap = getBitmapSync(frag, id, placeHolderId, w, h);
 			addBitmapToMemoryCache(id + w + h, bitmap);
 			return bitmap;
 		}
@@ -191,8 +187,8 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	private Bitmap getBitmapFromMemCache(String key) {
 		return mMemoryCache.get(key);
 	}
-	
-	
+
+
 	public void clearCache() {
 		mMemoryCache.evictAll();
 	}

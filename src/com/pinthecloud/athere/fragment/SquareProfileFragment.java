@@ -36,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -108,6 +107,7 @@ public class SquareProfileFragment extends AhFragment{
 				//					pictureBitmap = BitmapFactory.decodeStream(app.getContentResolver().openInputStream(pictureFileUri));
 				//					pictureFile.delete();
 				pictureBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+				
 				// Crop picture
 				// Rotate picture
 				int height = pictureBitmap.getHeight();
@@ -542,15 +542,11 @@ public class SquareProfileFragment extends AhFragment{
 
 		// Save info for user
 		String nickName = nickNameEditText.getText().toString();
-		int companyNumber = 10;
-		if(!AhGlobalVariable.DEBUG_MODE){
-			companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-		}
-		appTracker.send(new HitBuilders.EventBuilder()
-		.setCategory(_thisFragment.getClass().getSimpleName())
-		.setAction("CheckMemberNumber")
-		.setLabel("" + companyNumber)
-		.build());
+		int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
+		gaHelper.sendEventGA(
+				_thisFragment.getClass().getSimpleName(),
+				"CheckMemberNumber",
+				"" + companyNumber);
 
 		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
@@ -579,46 +575,15 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
-				
-				
-				/////////////////////////////////////////////////////////////
-				// TODO : Seungmin Lee
-				/////////////////////////////////////////////////////////////
-				
-				// Lowering the image quality will be done right before uploading to server
-				// 1) First, get the original Width & Height 
-				int width = pictureBitmap.getWidth();
-				int height = pictureBitmap.getHeight();
-				
-				Log(_thisFragment, "before : " + width + " : " + height);
-				
-				// if the width is greater then FIXED_MAX_WIDTH (480px)
-				if (width > BitmapUtil.FIXED_MAX_WIDTH) {
-					// Resize the Width & Height 
-					height = (BitmapUtil.FIXED_MAX_WIDTH * height) / width;
-					width = BitmapUtil.FIXED_MAX_WIDTH;
-				}
-				
-				Log(_thisFragment, "middle : " + width + " : " + height);
-				
-				// Resize pictureBitmap to given width and height
-				pictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, width, height);
-				
-				Log(_thisFragment, "after : " + pictureBitmap.getWidth() + " : " + pictureBitmap.getHeight());
-				
 				// Upload the resized image to server
+				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
 
 					@Override
 					public void onCompleted(String entity) {
-
 						// Do nothing
 					}
 				});
-				
-				
-				/////////////////////////////////////////////////////////////
 			}
 		}, new Chainable() {
 
@@ -647,7 +612,7 @@ public class SquareProfileFragment extends AhFragment{
 						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
+						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.MY_PROFILE_PICTURE);
 
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);

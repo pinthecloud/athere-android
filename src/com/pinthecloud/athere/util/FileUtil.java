@@ -64,8 +64,8 @@ public class FileUtil {
 		Log.e("ERROR", "mediaFile : "+mediaFile);
 		return mediaFile;
 	}
-	
-	
+
+
 	public static void clearAllFiles(Context context) {
 		File dir = context.getFilesDir();
 		boolean result = false;
@@ -109,29 +109,37 @@ public class FileUtil {
 	/*
 	 * look in internal storage
 	 */
-	public static Bitmap getImageFromInternalStorage(Context context, String filename) {
-		try {
-			File filePath = context.getFileStreamPath(filename);
-			FileInputStream fi = new FileInputStream(filePath);
-			return BitmapFactory.decodeStream(fi);
-		} catch (FileNotFoundException e) {
-			Log.e("ERROR", "FileNotFoundException");
-			return null;
-		}
-	}
-
-
-	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
-		
+	public static Bitmap getImageFromInternalStorage(Context context, String fileName) {
 		if (context == null) {
 			return null;
 		}
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-
-		// Calculate inSampleSize
-		options.inSampleSize = BitmapUtil.calculateSize(options, reqWidth, reqHeight);
-		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeFile(context.getFilesDir()+"/"+fileName, options);
+		return BitmapFactory.decodeFile(context.getFilesDir() + "/" + fileName);
+		//		try {
+		//			File filePath = context.getFileStreamPath(fileName);
+		//			FileInputStream fi = new FileInputStream(filePath);
+		//			return BitmapFactory.decodeStream(fi);
+		//		} catch (FileNotFoundException e) {
+		//			Log.d(AhGlobalVariable.LOG_TAG, "FileNotFoundException");
+		//			return null;
+		//		}
 	}
+
+
+	//	public static Bitmap getImageFromInternalStorage(Context context, String fileName, int reqWidth, int reqHeight) {
+	//		if (context == null) {
+	//			return null;
+	//		}
+	//
+	//		// First decode with inJustDecodeBounds=true to check dimensions
+	//		final BitmapFactory.Options options = new BitmapFactory.Options();
+	//		options.inJustDecodeBounds = true;
+	//		BitmapFactory.decodeFile(context.getFilesDir() + "/" + fileName, options);
+	//
+	//		// Calculate inSampleSize
+	//		options.inSampleSize = BitmapUtil.calculateSize(options, reqWidth, reqHeight);
+	//
+	//		// Decode bitmap with inSampleSize set
+	//		options.inJustDecodeBounds = false;
+	//		return BitmapFactory.decodeFile(context.getFilesDir() + "/" + fileName, options);
+	//	}
 }

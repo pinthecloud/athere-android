@@ -33,9 +33,6 @@ import android.util.Log;
 import com.pinthecloud.athere.AhGlobalVariable;
 
 public class BitmapUtil {
-	
-	public static final int COMPRESS_QUALITY = 80;
-	public static final int FIXED_MAX_WIDTH = 480;
 
 	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -48,8 +45,7 @@ public class BitmapUtil {
 
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeStream(context.getContentResolver()
-				.openInputStream(imageUri), null, options);
+		return BitmapFactory.decodeStream(context.getContentResolver().openInputStream(imageUri), null, options);
 	}
 
 
@@ -81,12 +77,12 @@ public class BitmapUtil {
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length, options);
 	}
-	
+
+
 	public static Bitmap decodeInSampleSize(Bitmap bitmap, int reqWidth, int reqHeight) {
 		ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-		bitmap.compress(Bitmap.CompressFormat.PNG, COMPRESS_QUALITY, byteArrayBitmapStream);
+		bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayBitmapStream);
 		byte[] b = byteArrayBitmapStream.toByteArray();
-		
 		return decodeInSampleSize(b, reqWidth, reqHeight);
 	}
 
@@ -103,8 +99,12 @@ public class BitmapUtil {
 
 			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
 			// height and width larger than the requested height and width.
+			//			while ((halfHeight / inSampleSize) > reqHeight
+			//					&& (halfWidth / inSampleSize) > reqWidth) {
+			//				inSampleSize *= 2;
+			//			}
 			while ((halfHeight / inSampleSize) > reqHeight
-					&& (halfWidth / inSampleSize) > reqWidth) {
+					|| (halfWidth / inSampleSize) > reqWidth) {
 				inSampleSize *= 2;
 			}
 		}
@@ -159,8 +159,8 @@ public class BitmapUtil {
 			throw e;
 		}
 	}
-	
-	
+
+
 	public static Bitmap rotate(Bitmap bitmap, int degree) {
 		int w = bitmap.getWidth();
 		int h = bitmap.getHeight();

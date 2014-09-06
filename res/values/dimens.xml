@@ -33,8 +33,8 @@
     <dimen name="square_drawer_participant_list_height">56dp</dimen>
     <dimen name="square_drawer_profile_left_margin">23.5dp</dimen>
     <dimen name="square_drawer_profile_height">100dp</dimen>
-    <dimen name="square_drawer_profile_circle_width">66.5dp</dimen>
-    <dimen name="square_drawer_profile_circle_height">66.5dp</dimen>
+    <dimen name="square_drawer_profile_picture_width">66.5dp</dimen>
+    <dimen name="square_drawer_profile_picture_height">66.5dp</dimen>
     <dimen name="square_drawer_profile_image_info_margin">20dp</dimen>
     <dimen name="square_drawer_profile_nick_name_bottom_margin">5dp</dimen>
     <dimen name="square_drawer_profile_age_left_margin">2dp</dimen>
@@ -138,8 +138,6 @@
     <dimen name="profile_settings_company_number_start_button_margin">10dp</dimen>
 
     <!-- Profile Dialog -->
-    <dimen name="profile_dialog_width">280dp</dimen>
-    <dimen name="profile_dialog_height">280dp</dimen>
     <dimen name="profile_dialog_top_margin">48dp</dimen>
     <dimen name="profile_dialog_send_button_height">52dp</dimen>
     <dimen name="profile_dialog_nick_name_info_height">56dp</dimen>

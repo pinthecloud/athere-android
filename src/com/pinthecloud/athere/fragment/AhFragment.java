@@ -8,11 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
@@ -22,6 +18,7 @@ import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
+import com.pinthecloud.athere.helper.GAHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -47,10 +44,10 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected UserDBHelper userDBHelper;
 	protected SquareHelper squareHelper;
 	protected CachedBlobStorageHelper blobStorageHelper;
-	protected Tracker appTracker;
+	protected GAHelper gaHelper;
 	protected String simpleClassName;
 
- 
+
 	public AhFragment(){
 		_thisFragment = this;
 		app = AhApplication.getInstance();
@@ -61,7 +58,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		userDBHelper = app.getUserDBHelper();
 		squareHelper = app.getSquareHelper();
 		blobStorageHelper = app.getBlobStorageHelper();
-		appTracker = app.getTracker(TrackerName.APP_TRACKER);
+		gaHelper = app.getGAHelper();
 		simpleClassName = _thisFragment.getClass().getSimpleName();
 	}
 
@@ -77,8 +74,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		/* 
 		 * Set google analytics
 		 */
-		appTracker.setScreenName(simpleClassName);
-		appTracker.send(new HitBuilders.AppViewBuilder().build());
+		gaHelper.sendScreenGA(simpleClassName);
 
 
 		/*
@@ -100,7 +96,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	public void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStart");
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
+		gaHelper.reportActivityStart(activity);
 	}
 
 
@@ -108,10 +104,10 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	public void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStop");
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
+		gaHelper.reportActivityStop(activity);
 	}
-	
-	
+
+
 	@Override
 	public void handleException(final AhException ex) {
 		Log(_thisFragment, "AhFragment handleException : " + ex.toString());

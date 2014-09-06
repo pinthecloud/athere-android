@@ -144,9 +144,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		/*
 		 * Set Event on picture image view
 		 */
-		int w = profilePictureView.getWidth();
-		int h = profilePictureView.getHeight();
-		pictureBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME, w, h);
+		pictureBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.MY_PROFILE_PICTURE);
 		profilePictureView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -567,7 +565,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
+						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.MY_PROFILE_PICTURE);
 						blobStorageHelper.clearCache();
 
 						// Set and move to next activity after clear previous activity

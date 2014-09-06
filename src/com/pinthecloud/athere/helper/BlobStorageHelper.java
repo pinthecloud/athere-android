@@ -55,7 +55,7 @@ public class BlobStorageHelper {
 			container = blobClient.getContainerReference(CONTAINER_NAME);
 			blob = container.getBlockBlobReference(id);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
 			blob.upload(new ByteArrayInputStream(baos.toByteArray()), baos.size());
 			baos.close();
 		} catch (URISyntaxException e) {

@@ -129,8 +129,8 @@
 
             <ImageView
                 android:id="@+id/square_drawer_frag_profile_image"
-                android:layout_width="@dimen/square_drawer_profile_circle_width"
-                android:layout_height="@dimen/square_drawer_profile_circle_height"
+                android:layout_width="@dimen/square_drawer_profile_picture_width"
+                android:layout_height="@dimen/square_drawer_profile_picture_height"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/square_drawer_profile_image_info_margin"
                 android:layout_marginRight="@dimen/square_drawer_profile_image_info_margin"

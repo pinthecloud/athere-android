@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
@@ -29,7 +28,7 @@ import com.pinthecloud.athere.model.AhIdUser;
 
 
 public class BasicProfileFragment extends AhFragment{
- 
+
 	private ProgressBar progressBar;
 	private EditText nickNameEditText;
 	private EditText birthYearEditText;
@@ -177,34 +176,26 @@ public class BasicProfileFragment extends AhFragment{
 						public void onCompleted(AhIdUser entity) {
 							progressBar.setVisibility(View.GONE);
 
-
 							/*
-							 * Check the gender
+							 * Save setting and move to next activity
 							 */
 							String gender = "Male";
 							if(!maleButton.isChecked()){
 								gender = "Female";
 							}
-							appTracker.send(new HitBuilders.EventBuilder()
-							.setCategory(_thisFragment.getClass().getSimpleName())
-							.setAction("CheckGender")
-							.setLabel(gender)
-							.build());
-
-							
-							/*
-							 * Save setting and move to next activity
-							 */
 							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
 							Calendar c = Calendar.getInstance();
 							int age = c.get(Calendar.YEAR) - (birthYear - 1);
 							
-							appTracker.send(new HitBuilders.EventBuilder()
-							.setCategory(_thisFragment.getClass().getSimpleName())
-							.setAction("CheckAge")
-							.setLabel("" + age)
-							.build());
-							
+							gaHelper.sendEventGA(
+									_thisFragment.getClass().getSimpleName(),
+									"CheckGender",
+									gender);
+							gaHelper.sendEventGA(
+									_thisFragment.getClass().getSimpleName(),
+									"CheckAge",
+									"" + age);
+
 							pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
 							pref.putInt(AhGlobalVariable.AGE_KEY, age);
 							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);

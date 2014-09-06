@@ -2,17 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:background="@android:color/white" >
 
-    <ImageView
+    <com.pinthecloud.athere.view.SquareImageView
         android:id="@+id/profile_dialog_profile"
-        android:layout_width="@dimen/profile_dialog_width"
-        android:layout_height="@dimen/profile_dialog_height"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:contentDescription="@string/profile_image" />
 
     <LinearLayout
         android:id="@+id/profile_dialog_info_layout"
-        android:layout_width="@dimen/profile_dialog_width"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/profile_dialog_nick_name_info_height"
         android:layout_alignBottom="@+id/profile_dialog_profile"
         android:background="@drawable/bg_profile_dialog_nick_name_info"
@@ -62,7 +63,7 @@
 
     <Button
         android:id="@+id/profile_dialog_send_button"
-        android:layout_width="@dimen/profile_dialog_width"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/profile_dialog_send_button_height"
         android:layout_below="@+id/profile_dialog_profile"
         android:background="@android:color/white"

@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquareChatListAdapter;
@@ -165,7 +164,7 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-//		refreshView(null);
+		//		refreshView(null);
 	}
 
 
@@ -190,11 +189,10 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				appTracker.send(new HitBuilders.EventBuilder()
-				.setCategory(_thisFragment.getClass().getSimpleName())
-				.setAction("SendChat")
-				.setLabel("Chat")
-				.build());
+				gaHelper.sendEventGA(
+						_thisFragment.getClass().getSimpleName(),
+						"SendChat",
+						"Chat");
 
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
@@ -224,7 +222,7 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */
-		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK)) {
+		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
 			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
 			String enterMessage = getResources().getString(R.string.enter_square_message);
 			String warningMessage = getResources().getString(R.string.behave_well_warning);

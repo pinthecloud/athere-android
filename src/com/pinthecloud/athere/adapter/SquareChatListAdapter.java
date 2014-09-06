@@ -15,10 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -212,22 +209,19 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 					@Override
 					public void onClick(View v) {
-						final Tracker appTracker = app.getTracker(TrackerName.APP_TRACKER);
-						appTracker.send(new HitBuilders.EventBuilder()
-						.setCategory(frag.getClass().getSimpleName())
-						.setAction("ViewOthersProfile")
-						.setLabel("ChatProfile")
-						.build());
+						app.getGAHelper().sendEventGA(
+								frag.getClass().getSimpleName(),
+								"ViewOthersProfile",
+								"ChatProfile");
 
 						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {
-								appTracker.send(new HitBuilders.EventBuilder()
-								.setCategory(frag.getClass().getSimpleName())
-								.setAction("SendChupa")
-								.setLabel("ChatSendChupa")
-								.build());
+								app.getGAHelper().sendEventGA(
+										frag.getClass().getSimpleName(),
+										"SendChupa",
+										"ChatSendChupa");
 
 								Intent intent = new Intent(context, ChupaChatActivity.class);
 								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
