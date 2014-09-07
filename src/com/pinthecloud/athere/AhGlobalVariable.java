@@ -6,7 +6,7 @@ public class AhGlobalVariable{
 	/*
 	 * Application
 	 */
-	public static final boolean DEBUG_MODE = false;
+	public static final boolean DEBUG_MODE = true;
 	public static final String GOOGLE_STORE_APP_ID = "com.pinthecloud.athere";
 	public static final String APP_NAME = "chupa";
 	public static final String ANDROID = "Android";

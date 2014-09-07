@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -129,9 +130,9 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 
 			Bitmap bitmap = downloadBitmapSync(frag, id);
 			Bitmap smallBm = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-			
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id+BitmapUtil.SMALL_PIC_SIZE);
+			if (bitmap == null) return null;
+			FileUtil.saveImageToInternalStorage(AhApplication.getInstance(), bitmap, id);
+			FileUtil.saveImageToInternalStorage(AhApplication.getInstance(), smallBm, id+BitmapUtil.SMALL_PIC_SIZE);
 
 			addBitmapToMemoryCache(id, bitmap);
 			addBitmapToMemoryCache(id+BitmapUtil.SMALL_PIC_SIZE, smallBm);

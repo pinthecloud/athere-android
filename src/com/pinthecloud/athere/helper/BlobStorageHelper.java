@@ -87,6 +87,7 @@ public class BlobStorageHelper {
 		if (frag != null) {
 			bm = BitmapFactory.decodeResource(frag.getActivity().getResources(), R.drawable.launcher);
 		}
+		if (bm == null) throw new AhException("HERE!");
 		return bm;
 	}
 
