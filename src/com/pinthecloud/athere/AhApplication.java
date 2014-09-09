@@ -15,13 +15,14 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.analysis.FiveRocksHelper;
+import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
-import com.pinthecloud.athere.helper.GAHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -74,6 +75,7 @@ public class AhApplication extends Application{
 	private static VersionHelper versionHelper;
 	private static CachedBlobStorageHelper blobStorageHelper;
 	private static GAHelper gaHelper;
+	private static FiveRocksHelper fiveRocksHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -119,6 +121,7 @@ public class AhApplication extends Application{
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
 		gaHelper = new GAHelper();
+		fiveRocksHelper = new FiveRocksHelper();
 	}
 
 	public static AhApplication getInstance(){
@@ -168,6 +171,9 @@ public class AhApplication extends Application{
 	}
 	public GAHelper getGAHelper() {
 		return gaHelper;
+	}
+	public FiveRocksHelper getFiveRocksHelper() {
+		return fiveRocksHelper;
 	}
 	
 

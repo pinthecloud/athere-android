@@ -40,7 +40,6 @@ public class MessageHelper {
 
 	
 	public void sendMessageAsync(final AhFragment frag, final AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
-
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED, message));
 			return;
@@ -59,7 +58,6 @@ public class MessageHelper {
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 
-		//mClient.setContext(frag.getActivity());
 		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
 
 			@Override
@@ -97,9 +95,7 @@ public class MessageHelper {
 	 * 
 	 */
 
-	
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
-
 	public void setMessageHandler(AhActivity activity, AhEntityCallback<AhMessage> callback){
 		map.put(activity.getClass().getName(), callback);
 	}
@@ -119,8 +115,7 @@ public class MessageHelper {
 	}
 	
 
-	/**
-	 * 
+	/*
 	 * Sync Method
 	 * NOT USING
 	 */

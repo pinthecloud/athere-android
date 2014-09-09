@@ -1,12 +1,12 @@
 package com.pinthecloud.athere.activity;
 
-import io.fiverocks.android.FiveRocks;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
@@ -19,6 +19,8 @@ public class AhActivity extends Activity{
 
 	protected AhApplication app;
 	protected PreferenceHelper pref;
+	protected FiveRocksHelper fiveRocksHelper;
+	
 	protected AhActivity _thisActivity;
 	protected String simpleClassName;
 
@@ -27,6 +29,7 @@ public class AhActivity extends Activity{
 		_thisActivity = this;
 		app = AhApplication.getInstance();
 		pref = app.getPref();
+		fiveRocksHelper = app.getFiveRocksHelper();
 		simpleClassName = _thisActivity.getClass().getSimpleName();
 	}
 
@@ -35,14 +38,7 @@ public class AhActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreate");
-
-
-		/*
-		 * Set FiveRocks
-		 */
-		FiveRocks.setDebugEnabled(true);
-		FiveRocks.init(_thisActivity, AhGlobalVariable.Five_ROCKS_APP_ID, AhGlobalVariable.Five_ROCKS_APP_KEY);
-		// FiveRocks.setUserCohortVariable(1, "DemoUser");
+		fiveRocksHelper.initFiveRocks(_thisActivity);
 	}
 
 
@@ -65,7 +61,7 @@ public class AhActivity extends Activity{
 	protected void onStart() {
 		super.onStart();
 		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStart");
-		FiveRocks.onActivityStart(_thisActivity);
+		fiveRocksHelper.onActivityStart(_thisActivity);
 	}
 
 
@@ -73,6 +69,6 @@ public class AhActivity extends Activity{
 	protected void onStop() {
 		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStop");
 		super.onStop();
-		FiveRocks.onActivityStop(_thisActivity);
+		fiveRocksHelper.onActivityStop(_thisActivity);
 	}
 }

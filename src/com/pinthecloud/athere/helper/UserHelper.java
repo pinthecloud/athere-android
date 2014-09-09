@@ -55,25 +55,25 @@ public class UserHelper {
 	}
 
 
-//	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
-//		if (!app.isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return;
-//		}
-//
-//		userTable.insert(user, new TableOperationCallback<AhUser>() {
-//
-//			@Override
-//			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
-//				if (exception == null) {
-//					callback.onCompleted(entity.getId());
-//					AsyncChainer.notifyNext(frag);
-//				} else {
-//					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
-//				}
-//			}
-//		});
-//	}
+	//	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
+	//		if (!app.isOnline()) {
+	//			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+	//			return;
+	//		}
+	//
+	//		userTable.insert(user, new TableOperationCallback<AhUser>() {
+	//
+	//			@Override
+	//			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
+	//				if (exception == null) {
+	//					callback.onCompleted(entity.getId());
+	//					AsyncChainer.notifyNext(frag);
+	//				} else {
+	//					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
+	//				}
+	//			}
+	//		});
+	//	}
 
 
 	public void addIdUserAsync(final AhFragment frag, AhIdUser user, final AhEntityCallback<AhIdUser> callback) {
@@ -127,25 +127,25 @@ public class UserHelper {
 	}
 
 
-//	public void deleteUserAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
-//		if (!app.isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return;
-//		}
-//
-//		userTable.delete(userId, new TableDeleteCallback() {
-//
-//			@Override
-//			public void onCompleted(Exception e, ServiceFilterResponse response) {
-//				if (e == null) {
-//					callback.onCompleted(true);
-//					AsyncChainer.notifyNext(frag);
-//				} else {
-//					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
-//				}
-//			}
-//		});
-//	}
+	//	public void deleteUserAsync(final AhFragment frag, String userId, final AhEntityCallback<Boolean> callback) throws AhException {
+	//		if (!app.isOnline()) {
+	//			ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+	//			return;
+	//		}
+	//
+	//		userTable.delete(userId, new TableDeleteCallback() {
+	//
+	//			@Override
+	//			public void onCompleted(Exception e, ServiceFilterResponse response) {
+	//				if (e == null) {
+	//					callback.onCompleted(true);
+	//					AsyncChainer.notifyNext(frag);
+	//				} else {
+	//					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
+	//				}
+	//			}
+	//		});
+	//	}
 
 
 	public void exitSquareAsync(final AhFragment frag, AhUser user, final AhEntityCallback<Boolean> callback) throws AhException {
@@ -157,7 +157,7 @@ public class UserHelper {
 		user.setRegistrationId("");
 		user.setProfilePic("");
 		JsonElement json = user.toJson();
-		
+
 		mClient.invokeApi(EXIT_SQUARE, json, new ApiJsonOperationCallback() {
 
 			@Override
@@ -173,7 +173,7 @@ public class UserHelper {
 		});
 	}
 
-	
+
 	public void getUserListAsync(final AhFragment frag, String squareId, final AhListCallback<AhUser> callback){
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -294,18 +294,15 @@ public class UserHelper {
 				}
 			}
 		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
-
 	}
 
-	//	private Map<String, AhEntityCallback<User>> map = new HashMap<String, AhEntityCallback<User>>();
-	AhEntityCallback<AhUser> _callback;
-	//	private final String USER_RECEIVED = "USER_RECEIVED";
+
+	private AhEntityCallback<AhUser> _callback;
 	public void setUserHandler(AhEntityCallback<AhUser> callback){
 		_callback = callback;
 	}
 
 	public void triggerUserEvent(AhUser user){
-		//		AhEntityCallback<User> callback = map.get(USER_RECEIVED);
 		if(_callback != null)
 			_callback.onCompleted(user);
 		else 
@@ -313,13 +310,7 @@ public class UserHelper {
 	}
 
 
-
-
-	//////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////
-
-	/**
-	 * 
+	/*
 	 * Sync Method
 	 * NOT USING
 	 */
@@ -483,5 +474,4 @@ public class UserHelper {
 	//		}
 	//		return true;
 	//	}
-
 }
