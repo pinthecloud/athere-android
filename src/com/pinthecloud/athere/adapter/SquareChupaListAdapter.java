@@ -77,7 +77,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				sender.setTextColor(context.getResources().getColor(android.R.color.black));
 			}
 			sender.setText(userNickName);
-			blobStorageHelper.setImageViewAsync(fragment, userId, R.drawable.profile_default, profileImage);
+			blobStorageHelper.setImageViewAsync(fragment, userId, R.drawable.profile_default, profileImage, true);
 			content.setText(contentString);
 			timeStamp.setText(hour + ":" + minute);
 			if (!chupaBadge.equals("0")) {

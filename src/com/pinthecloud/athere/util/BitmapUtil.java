@@ -31,7 +31,8 @@ import android.util.Base64;
 
 public class BitmapUtil {
 
-	public static final int SMALL_PIC_SIZE = 53;
+	public static final int SMALL_PIC_SIZE = 150;
+	public static final int BIG_PIC_SIZE = 720;
 
 	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -98,12 +99,8 @@ public class BitmapUtil {
 
 			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
 			// height and width larger than the requested height and width.
-			//			while ((halfHeight / inSampleSize) > reqHeight
-			//					&& (halfWidth / inSampleSize) > reqWidth) {
-			//				inSampleSize *= 2;
-			//			}
 			while ((halfHeight / inSampleSize) > reqHeight
-					|| (halfWidth / inSampleSize) > reqWidth) {
+					&& (halfWidth / inSampleSize) > reqWidth) {
 				inSampleSize *= 2;
 			}
 		}

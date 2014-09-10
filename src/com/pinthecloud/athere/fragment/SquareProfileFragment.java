@@ -109,6 +109,7 @@ public class SquareProfileFragment extends AhFragment{
 
 				// Crop picture
 				// Rotate picture
+				// Resize picture
 				int height = pictureBitmap.getHeight();
 				if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
 					pictureBitmap = BitmapUtil.crop(pictureBitmap, 0, 0, height, height);
@@ -118,6 +119,7 @@ public class SquareProfileFragment extends AhFragment{
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
 					pictureBitmap = BitmapUtil.flip(pictureBitmap);
 				}
+				pictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 
 				// Set taken picture to view
 				profilePictureView.setImageBitmap(pictureBitmap);
@@ -340,7 +342,6 @@ public class SquareProfileFragment extends AhFragment{
 
 					// Enter Square
 					enterSquare();
-
 				}
 			}
 		});
@@ -396,10 +397,8 @@ public class SquareProfileFragment extends AhFragment{
 				/*
 				 * Set the image
 				 */
-				int w = profilePictureView.getWidth();
-				int h = profilePictureView.getHeight();
 				try {
-					pictureBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, w, h);
+					pictureBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 					int degree = BitmapUtil.getImageOrientation(imagePath);
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
 				} catch (FileNotFoundException e) {
@@ -576,7 +575,6 @@ public class SquareProfileFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
-
 				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
 
 					@Override

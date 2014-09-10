@@ -232,7 +232,7 @@ public class SquareDrawerFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		updateUserList();
-		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.MY_PROFILE_PICTURE, R.drawable.profile_default, profileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.MY_PROFILE_PICTURE, R.drawable.profile_default, profileImage, false);
 	}
 
 

@@ -73,7 +73,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 				gender.setImageResource(R.drawable.profile_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
-			blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage);
+			blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage, true);
 
 
 			//			blobStorageHelper.downloadBitmapAsync(frag, user.getId(), new AhEntityCallback<Bitmap>() {

@@ -43,43 +43,43 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	}
 
 
-//	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
-//		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
-//		if (bitmap != null) return bitmap;
-//
-//		bitmap = this.downloadBitmapSync(frag, id);
-//		if (bitmap == null) return null;
-//
-//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
-//		return bitmap;
-//	}
+	//	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
+	//		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+	//		if (bitmap != null) return bitmap;
+	//
+	//		bitmap = this.downloadBitmapSync(frag, id);
+	//		if (bitmap == null) return null;
+	//
+	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
+	//		return bitmap;
+	//	}
 
 
-//	public Bitmap getBitmapSync(final AhFragment frag, String id) {
-//		Bitmap bm = null;
-//
-//		bm = this.downloadBitmapSync(null, id);
-//		if (bm == null) return null;
-//		Bitmap smallBm = BitmapUtil.decodeInSampleSize(bm, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
-//		FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id + BitmapUtil.SMALL_PIC_SIZE);
-//		return bm;
-//	}
-	
+	//	public Bitmap getBitmapSync(final AhFragment frag, String id) {
+	//		Bitmap bm = null;
+	//
+	//		bm = this.downloadBitmapSync(null, id);
+	//		if (bm == null) return null;
+	//		Bitmap smallBm = BitmapUtil.decodeInSampleSize(bm, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
+	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id + BitmapUtil.SMALL_PIC_SIZE);
+	//		return bm;
+	//	}
+
 	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView, boolean isSmall) {
 		if (cancelPotentialWork(id, imageView)) {
 			String origId = id;
 			if (isSmall){
 				id = id + BitmapUtil.SMALL_PIC_SIZE;
 			}
-			
+
 			// Check from cache
 			Bitmap bitmap = getBitmapFromMemCache(id);
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 				return;
 			}
-			
+
 			// Check from Disk
 			bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
 			if (bitmap != null) {
@@ -87,7 +87,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 				addBitmapToMemoryCache(id, bitmap);
 				return;
 			}
-			
+
 			// Get from the server
 			Bitmap mPlaceHolderBitmap = null;
 			if(placeHolderId != 0){
@@ -101,10 +101,6 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			imageView.setImageDrawable(asyncDrawable);
 			task.execute(origId);
 		}
-	}
-
-	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView) {
-		this.setImageViewAsync(frag, id, placeHolderId, imageView, false);
 	}
 
 
@@ -127,18 +123,20 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			this.id = params[0];
 
 			Bitmap bitmap = downloadBitmapSync(frag, id);
-			Bitmap smallBm = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-			
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id+BitmapUtil.SMALL_PIC_SIZE);
+			Bitmap bigBitmap = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
+			Bitmap smallBitmap = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 
-			addBitmapToMemoryCache(id, bitmap);
-			addBitmapToMemoryCache(id+BitmapUtil.SMALL_PIC_SIZE, smallBm);
-			
-			if (this.isSmall) {
-				return smallBm;
+			FileUtil.saveImageToInternalStorage(frag.getActivity(), bigBitmap, id);
+			FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBitmap, id+BitmapUtil.SMALL_PIC_SIZE);
+
+			addBitmapToMemoryCache(id, bigBitmap);
+			addBitmapToMemoryCache(id+BitmapUtil.SMALL_PIC_SIZE, smallBitmap);
+
+			if (!this.isSmall) {
+				return bigBitmap;
+			} else{
+				return smallBitmap;
 			}
-			return bitmap;
 		}
 
 		// Once complete, see if ImageView is still around and set bitmap.
