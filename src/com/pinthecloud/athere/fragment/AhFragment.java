@@ -2,6 +2,7 @@ package com.pinthecloud.athere.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,26 +69,16 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		context = getActivity();
 		activity = (AhActivity) context;
 		super.onCreate(savedInstanceState);
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreate");
 
-
-		/* 
-		 * Set google analytics
-		 */
+		LogSM(simpleClassName + " onCreate");
 		gaHelper.sendScreenGA(simpleClassName);
-
-
-		/*
-		 * Set static value
-		 */
 		ExceptionManager.setHandler(_thisFragment);
 	}
 
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreateView");
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		LogSM(simpleClassName + " onCreateView");
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
@@ -95,16 +86,23 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStart");
+		LogSM(simpleClassName + " onStart");
 		gaHelper.reportActivityStart(activity);
 	}
 
 
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStop");
+		LogSM(simpleClassName + " onStop");
 		super.onStop();
 		gaHelper.reportActivityStop(activity);
+	}
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		LogSM(simpleClassName + " onActivityResult");
 	}
 
 
@@ -135,16 +133,25 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 
 	protected void Log(AhFragment fragment, Object... params){
-		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
-		for(Object str : params) {
-			if (str == null) {
-				Log.e("ERROR", "null");
-				continue;
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
+			for(Object str : params) {
+				if (str == null) {
+					Log.e("ERROR", "null");
+					continue;
+				}
+				Log.e("ERROR", str.toString());
 			}
-			Log.e("ERROR", str.toString());
+			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		}
-		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	}
+
+
+	protected void LogSM(String params){
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.d("Seungmin", params);
+		}
 	}
 
 

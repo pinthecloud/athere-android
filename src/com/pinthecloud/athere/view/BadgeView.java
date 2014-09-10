@@ -253,7 +253,7 @@ public class BadgeView extends TextView{
 	}
 
 	@SuppressLint("NewApi")
-    @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private void show(boolean animate, Animation anim) {
 		if (getBackground() == null) {
 			if (badgeBg == null) {
@@ -342,19 +342,19 @@ public class BadgeView extends TextView{
 
 		switch (badgePosition) {
 		case POSITION_TOP_LEFT:
-			lp.gravity = Gravity.LEFT | Gravity.TOP;
+			lp.gravity = Gravity.START | Gravity.TOP;
 			lp.setMargins(badgeMarginH, badgeMarginV, 0, 0);
 			break;
 		case POSITION_TOP_RIGHT:
-			lp.gravity = Gravity.RIGHT | Gravity.TOP;
+			lp.gravity = Gravity.END | Gravity.TOP;
 			lp.setMargins(0, badgeMarginV, badgeMarginH, 0);
 			break;
 		case POSITION_BOTTOM_LEFT:
-			lp.gravity = Gravity.LEFT | Gravity.BOTTOM;
+			lp.gravity = Gravity.START | Gravity.BOTTOM;
 			lp.setMargins(badgeMarginH, 0, 0, badgeMarginV);
 			break;
 		case POSITION_BOTTOM_RIGHT:
-			lp.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+			lp.gravity = Gravity.END | Gravity.BOTTOM;
 			lp.setMargins(0, 0, badgeMarginH, badgeMarginV);
 			break;
 		case POSITION_CENTER:
@@ -362,7 +362,7 @@ public class BadgeView extends TextView{
 			lp.setMargins(0, 0, 0, 0);
 			break;
 		case POSITION_CENTER_VERTICAL_RIGHT:
-			lp.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+			lp.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
 			lp.setMargins(0, 0, 0, 0);
 			break;
 		default:

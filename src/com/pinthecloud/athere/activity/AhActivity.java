@@ -20,55 +20,64 @@ public class AhActivity extends Activity{
 	protected AhApplication app;
 	protected PreferenceHelper pref;
 	protected FiveRocksHelper fiveRocksHelper;
-	
-	protected AhActivity _thisActivity;
+
+	protected AhActivity thisActivity;
 	protected String simpleClassName;
 
 
 	public AhActivity(){
-		_thisActivity = this;
+		thisActivity = this;
 		app = AhApplication.getInstance();
 		pref = app.getPref();
 		fiveRocksHelper = app.getFiveRocksHelper();
-		simpleClassName = _thisActivity.getClass().getSimpleName();
+		simpleClassName = thisActivity.getClass().getSimpleName();
 	}
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreate");
-		fiveRocksHelper.initFiveRocks(_thisActivity);
+		LogSM(simpleClassName + " onCreate");
+		fiveRocksHelper.initFiveRocks(thisActivity);
 	}
 
 
 	// Logging Method
 	protected void Log(AhActivity activity, Object... params){
-		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		Log.e("ERROR", simpleClassName);
-		for(Object str : params) {
-			if (str == null) {
-				Log.e("ERROR", "null");
-				continue;
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			Log.e("ERROR", simpleClassName);
+			for(Object str : params) {
+				if (str == null) {
+					Log.e("ERROR", "null");
+					continue;
+				}
+				Log.e("ERROR", str.toString());
 			}
-			Log.e("ERROR", str.toString());
+			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		}
-		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	}
+
+
+	protected void LogSM(String params){
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.d("Seungmin", params);
+		}
 	}
 
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStart");
-		fiveRocksHelper.onActivityStart(_thisActivity);
+		LogSM(simpleClassName + " onStart");
+		fiveRocksHelper.onActivityStart(thisActivity);
 	}
 
 
 	@Override
 	protected void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStop");
+		LogSM(simpleClassName + " onStop");
 		super.onStop();
-		fiveRocksHelper.onActivityStop(_thisActivity);
+		fiveRocksHelper.onActivityStop(thisActivity);
 	}
 }

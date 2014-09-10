@@ -175,10 +175,8 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				Resources resources = getResources();
-				String title = resources.getString(R.string.exit_square);
-				String message = resources.getString(R.string.exit_square_consent_message);
-				AhAlertDialog escDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
+				String message = getResources().getString(R.string.exit_square_consent_message);
+				AhAlertDialog escDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {

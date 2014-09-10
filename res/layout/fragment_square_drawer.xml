@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/square_drawer_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_drawer_background"
@@ -23,7 +22,6 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/square_drawer_frag_setting_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_bar_height"
             android:background="@color/gray_drawer_background"
@@ -84,7 +82,6 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/square_drawer_frag_profile_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_bar_height"
             android:background="@android:color/white"
@@ -118,7 +115,6 @@
             android:background="@color/gray_line" />
 
         <RelativeLayout
-            android:id="@+id/square_drawer_frag_profile_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_profile_height"
             android:background="@android:color/white"
@@ -194,7 +190,6 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/square_drawer_frag_member_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_bar_height"
             android:background="@android:color/white"

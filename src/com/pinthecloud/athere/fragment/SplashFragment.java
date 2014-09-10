@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -201,13 +200,11 @@ public class SplashFragment extends AhFragment {
 						try {
 							clientVer = versionHelper.getClientAppVersion();
 						} catch (NameNotFoundException e) {
-							Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
 							clientVer = 0.11;
 						}
 						if (serverVer.getVersion() > clientVer) {
-							String title = getResources().getString(R.string.update_app_title);
 							String message = getResources().getString(R.string.update_app_message);
-							AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
+							AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
 								@Override
 								public void doPositiveThing(Bundle bundle) {
@@ -259,9 +256,9 @@ public class SplashFragment extends AhFragment {
 	@Override
 	public void handleException(AhException ex) {
 		if (ex.getType().equals(AhException.TYPE.GCM_REGISTRATION_FAIL)) {
-			String title = getResources().getString(R.string.googe_play_services_title);
-			String message = getResources().getString(R.string.googe_play_services_message);
-			new AhAlertDialog(title, message, true, new AhDialogCallback() {
+			String message = getResources().getString(R.string.google_play_services_message);
+			String install = getResources().getString(R.string.install);
+			new AhAlertDialog(null, message, install, null, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {

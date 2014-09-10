@@ -51,7 +51,7 @@ public class ChupaChatActivity extends AhActivity {
 			public void onCompleted(AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
 					String text = getResources().getString(R.string.forced_logout_title);
-					Toast toast = Toast.makeText(_thisActivity, text, Toast.LENGTH_LONG);
+					Toast toast = Toast.makeText(thisActivity, text, Toast.LENGTH_LONG);
 					toast.show();
 
 					Intent intent = new Intent(ChupaChatActivity.this, SquareListActivity.class);

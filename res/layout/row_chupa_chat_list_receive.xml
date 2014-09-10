@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/row_chupa_chat_list_receive_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -25,9 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:paddingBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
         android:layout_marginLeft="@dimen/chupa_chat_list_send_time_left_margin"
         android:layout_marginStart="@dimen/chupa_chat_list_send_time_left_margin"
+        android:paddingBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
         android:textColor="@color/gray_light"
         android:textSize="@dimen/font_small" />
 

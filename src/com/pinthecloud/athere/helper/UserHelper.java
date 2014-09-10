@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
@@ -301,12 +300,10 @@ public class UserHelper {
 	public void setUserHandler(AhEntityCallback<AhUser> callback){
 		_callback = callback;
 	}
-
 	public void triggerUserEvent(AhUser user){
-		if(_callback != null)
+		if(_callback != null){
 			_callback.onCompleted(user);
-		else 
-			Log.d(AhGlobalVariable.LOG_TAG, "No Such method in triggerUserEvent");
+		}
 	}
 
 

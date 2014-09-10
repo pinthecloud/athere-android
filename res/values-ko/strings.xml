@@ -11,59 +11,49 @@
     <string name="profile_image">프로필 사진</string>
     <string name="profile_settings">프로필 설정</string>
     <string name="my_profile">내 프로필</string>
-    <string name="blur_image">Blur Image</string>
-    <string name="on">키기</string>
-    <string name="off">끄기</string>
     <string name="male">남성</string>
     <string name="female">여성</string>
     <string name="delete">지우기</string>
     <string name="re_send">재전송</string>
     <string name="select">선택</string>
-    <string name="settings">설정</string>
     <string name="gender">성별</string>
     <string name="birth_of_year">출생연도</string>
     <string name="nick_name">닉네임</string>
     <string name="drawer">사이드바</string>
     <string name="rotate">카메라 돌리기</string>
     <string name="take">찍기</string>
-    <string name="dash">&#160;-&#160;</string>
     <string name="exit_square">이 그라운드 나가기</string>
     <string name="send">보내기</string>
     <string name="send_chupa">추파 보내기</string>
-    <string name="profile_setting">프로필 수정</string>
     <string name="chat_alarm">채팅알람</string>
     <string name="chupa_alarm">추파알람</string>
     <string name="player">참가팀</string>
     <string name="code">매장 코드</string>
-    <string name="confirm">확인</string>
-    <string name="hint">힌트</string>
     <string name="blank">없음</string>
     <string name="fail">취소</string>
     <string name="age">살</string>
     <string name="person">명</string>
     <string name="admin">관리자</string>
+    <string name="install">설치</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>
     <string name="max_nick_name_message">닉네임이 열 글자를 넘어갈 수 없어요.</string>
-    <string name="bad_camera_message">카메라가 미쳤어요. 죄송하지만 다시 찍어주세요</string>
     <string name="bad_nick_name_message">유효하지 않은 닉네임이에요.</string>
-    <string name="bad_enter_square_message">그라운드에 입장하는데 실패했어요. 다시 시도해주세요.</string>
     <string name="bad_square_code_message">잘못된 가게 코드예요. 다시 입력해주세요.</string>
-    <string name="no_profile_picture_message">힌트 사진을 까먹으셨네요.</string>
     <string name="exit_square_message">님이 그라운드를 나갔어요.</string>
     <string name="enter_square_message">님이 그라운드에 들어왔어요.</string>
     <string name="behave_well_warning">욕설,비방,불쾌한 메세지를 보낼 시 법적 책임을 물으실 수 있어요.</string>
     <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워져요. 나가시나요?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈어요.</string>
     <string name="forced_logout_title">로그아웃 되셨어요.</string>
-    <string name="googe_play_services_title">구글 플레이 서비스</string>
-    <string name="googe_play_services_message">추파를 이용하기 위해서는 해당 서비스를 설치해야 해요.</string>
-    <string name="update_app_title">업데이트</string>
+    <string name="google_play_services_message">추파를 이용하기 위해서는 구글 플레이 서비스를 설치해야 해요.</string>
     <string name="update_app_message">새로운 버전이 나왔어요. 업데이트 부탁드려요.</string>
     <string name="internet_not_connected_message">인터넷에 연결할 수 없어요. 연결상태를 확인해주세요.</string>
     <string name="send_message_fail_message">작업을 선택해주세요.</string>
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
+    <string name="review_message">평점을 남겨주시겠어요?</string>
+    <string name="no_today_message">나중에 할게요</string>
 
     <!-- String Array -->
 

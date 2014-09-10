@@ -3,8 +3,6 @@ package com.pinthecloud.athere.helper;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,7 +10,6 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
@@ -38,7 +35,7 @@ public class MessageHelper {
 		this.mClient = app.getmClient();
 	}
 
-	
+
 	public void sendMessageAsync(final AhFragment frag, final AhMessage message, final AhEntityCallback<AhMessage> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "sendMessageAsync", AhException.TYPE.INTERNET_NOT_CONNECTED, message));
@@ -106,14 +103,12 @@ public class MessageHelper {
 		this.triggerMessageEvent(frag.getClass().getName(), message);
 	}
 	public void triggerMessageEvent(String key, AhMessage message){
-		AhEntityCallback<AhMessage> _callback = map.get(key);
-		if(_callback != null) {
-			_callback.onCompleted(message);
+		AhEntityCallback<AhMessage> callback = map.get(key);
+		if(callback != null) {
+			callback.onCompleted(message);
 		}
-		else 
-			Log.d(AhGlobalVariable.LOG_TAG,"[MessageHelper.triggerMessage] map.get(MESSAGE_RECEIVED); :" + message.getType());
 	}
-	
+
 
 	/*
 	 * Sync Method

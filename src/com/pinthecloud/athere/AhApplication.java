@@ -6,7 +6,6 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -103,7 +102,7 @@ public class AhApplication extends Application{
 					AZURE_KEY,
 					this);
 		} catch (MalformedURLException e) {
-			Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
+			// Do nothing
 		}
 		pref = new PreferenceHelper(this);
 
@@ -175,7 +174,7 @@ public class AhApplication extends Application{
 	public FiveRocksHelper getFiveRocksHelper() {
 		return fiveRocksHelper;
 	}
-	
+
 
 	/*
 	 * @return true, if the App is connected with Internet.
@@ -261,15 +260,14 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
 	}
-	
-	
+
+
 	/*
 	 * Check nick name EditText
 	 */
 	public String checkNickName(String nickName){
-		Log.d(AhGlobalVariable.LOG_TAG, "CheckNickNameEditText");
-
 		// Set regular expression for checking nick name
 		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
 		String message = "";
