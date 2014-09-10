@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.util.LruCache;
 import android.widget.ImageView;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -17,11 +18,13 @@ import com.pinthecloud.athere.util.FileUtil;
 
 public class CachedBlobStorageHelper extends BlobStorageHelper {
 
+	private AhApplication app;
 	private LruCache<String, Bitmap> mMemoryCache;
 
 
 	public CachedBlobStorageHelper() {
 		super();
+		this.app = AhApplication.getInstance();
 
 		// Get max available VM memory, exceeding this amount will throw an
 		// OutOfMemory exception. Stored in kilobytes as LruCache takes an
@@ -123,11 +126,13 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			this.id = params[0];
 
 			Bitmap bitmap = downloadBitmapSync(frag, id);
+			if (bitmap == null) return null;
+
 			Bitmap bigBitmap = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 			Bitmap smallBitmap = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), bigBitmap, id);
-			FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBitmap, id+BitmapUtil.SMALL_PIC_SIZE);
+			FileUtil.saveImageToInternalStorage(app, bigBitmap, id);
+			FileUtil.saveImageToInternalStorage(app, smallBitmap, id+BitmapUtil.SMALL_PIC_SIZE);
 
 			addBitmapToMemoryCache(id, bigBitmap);
 			addBitmapToMemoryCache(id+BitmapUtil.SMALL_PIC_SIZE, smallBitmap);
