@@ -74,7 +74,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			if (isExit.equals("true")) {
 				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
 			} else {
-				sender.setTextColor(context.getResources().getColor(R.color.black));
+				sender.setTextColor(context.getResources().getColor(android.R.color.black));
 			}
 			sender.setText(userNickName);
 			blobStorageHelper.setImageViewAsync(fragment, userId, R.drawable.profile_default, profileImage);

@@ -5,7 +5,6 @@ import java.util.List;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -141,8 +140,6 @@ public class SquareChatFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " Message onComplete : " + message.getType() + " " + message.getContent());
-
 				// Chupa & Exit Square Message can't go through here
 				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
 						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
@@ -205,7 +202,7 @@ public class SquareChatFragment extends AhFragment{
 					}
 				});
 				refreshView(message.getId());
-			}
+			}	
 		});
 	}
 
@@ -216,9 +213,6 @@ public class SquareChatFragment extends AhFragment{
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
 	private void refreshView(final String id){
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " refreshView");
-
-
 		/*
 		 * Set ENTER, EXIT, TALK messages
 		 */

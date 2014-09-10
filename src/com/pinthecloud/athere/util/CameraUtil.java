@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
-import android.util.Log;
 import android.view.Surface;
-
-import com.pinthecloud.athere.AhGlobalVariable;
 
 public class CameraUtil {
 
@@ -38,7 +35,7 @@ public class CameraUtil {
 			}
 		}
 		catch (Exception e){
-			Log.d(AhGlobalVariable.LOG_TAG, "Error Camera is not available(in use or does not exist): " + e.getMessage());
+			// Do nothing
 		}
 		return c; // returns null if camera is unavailable
 	}

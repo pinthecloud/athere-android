@@ -69,21 +69,20 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	
 	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView, boolean isSmall) {
 		if (cancelPotentialWork(id, imageView)) {
-			Bitmap bitmap = null;
 			String origId = id;
 			if (isSmall){
 				id = id + BitmapUtil.SMALL_PIC_SIZE;
 			}
-			// Check from cache
-			bitmap = getBitmapFromMemCache(id);
 			
+			// Check from cache
+			Bitmap bitmap = getBitmapFromMemCache(id);
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 				return;
 			}
+			
 			// Check from Disk
 			bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
-			
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 				addBitmapToMemoryCache(id, bitmap);

@@ -6,7 +6,6 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -15,13 +14,14 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.analysis.FiveRocksHelper;
+import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
-import com.pinthecloud.athere.helper.GAHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -74,6 +74,7 @@ public class AhApplication extends Application{
 	private static VersionHelper versionHelper;
 	private static CachedBlobStorageHelper blobStorageHelper;
 	private static GAHelper gaHelper;
+	private static FiveRocksHelper fiveRocksHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -101,7 +102,7 @@ public class AhApplication extends Application{
 					AZURE_KEY,
 					this);
 		} catch (MalformedURLException e) {
-			Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
+			// Do nothing
 		}
 		pref = new PreferenceHelper(this);
 
@@ -119,6 +120,7 @@ public class AhApplication extends Application{
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
 		gaHelper = new GAHelper();
+		fiveRocksHelper = new FiveRocksHelper();
 	}
 
 	public static AhApplication getInstance(){
@@ -169,7 +171,10 @@ public class AhApplication extends Application{
 	public GAHelper getGAHelper() {
 		return gaHelper;
 	}
-	
+	public FiveRocksHelper getFiveRocksHelper() {
+		return fiveRocksHelper;
+	}
+
 
 	/*
 	 * @return true, if the App is connected with Internet.
@@ -255,15 +260,14 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
 	}
-	
-	
+
+
 	/*
 	 * Check nick name EditText
 	 */
 	public String checkNickName(String nickName){
-		Log.d(AhGlobalVariable.LOG_TAG, "CheckNickNameEditText");
-
 		// Set regular expression for checking nick name
 		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
 		String message = "";

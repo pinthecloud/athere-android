@@ -20,7 +20,6 @@ import android.provider.MediaStore.Images.Media;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -350,7 +349,7 @@ public class ProfileSettingsFragment extends AhFragment{
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onActivityResult");
+		super.onActivityResult(requestCode, resultCode, data);
 		switch(requestCode){
 		case GET_IMAGE_GALLERY_CODE:
 			if (resultCode == Activity.RESULT_OK) {
@@ -378,9 +377,9 @@ public class ProfileSettingsFragment extends AhFragment{
 					int degree = BitmapUtil.getImageOrientation(imagePath);
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
 				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				} catch (IOException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				}
 
 

@@ -19,7 +19,6 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -84,10 +83,8 @@ public class AhIntentService extends IntentService {
 			message = parseMessageString(messageStr);
 			user = parseUserString(messageStr);
 		} catch (JSONException e) {
-			Log.d(AhGlobalVariable.LOG_TAG, "Error while parsing Message Intent : " + e.getMessage());
 			return;
 		}
-		Log.d(AhGlobalVariable.LOG_TAG, "Received Message Type : " + message.getType());
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
 		new AhThread(new Runnable() {

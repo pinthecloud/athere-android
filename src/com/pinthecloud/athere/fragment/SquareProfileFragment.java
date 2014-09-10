@@ -22,7 +22,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -107,7 +106,7 @@ public class SquareProfileFragment extends AhFragment{
 				//					pictureBitmap = BitmapFactory.decodeStream(app.getContentResolver().openInputStream(pictureFileUri));
 				//					pictureFile.delete();
 				pictureBitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-				
+
 				// Crop picture
 				// Rotate picture
 				int height = pictureBitmap.getHeight();
@@ -376,7 +375,7 @@ public class SquareProfileFragment extends AhFragment{
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onActivityResult");
+		super.onActivityResult(requestCode, resultCode, data);
 		switch(requestCode){
 		case GET_IMAGE_GALLERY_CODE:
 			if (resultCode == Activity.RESULT_OK) {
@@ -404,9 +403,9 @@ public class SquareProfileFragment extends AhFragment{
 					int degree = BitmapUtil.getImageOrientation(imagePath);
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
 				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				} catch (IOException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				}
 
 
@@ -577,7 +576,7 @@ public class SquareProfileFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
-				
+
 				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
 
 					@Override
@@ -607,10 +606,12 @@ public class SquareProfileFragment extends AhFragment{
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						pref.putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
+
 						Time time = new Time();
 						time.setToNow();
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
-						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
 
 						// Save pictures to internal storage
 						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.MY_PROFILE_PICTURE);

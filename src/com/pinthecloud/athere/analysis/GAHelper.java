@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.helper;
+package com.pinthecloud.athere.analysis;
 
 import java.util.HashMap;
 
@@ -25,6 +25,8 @@ public class GAHelper {
 		ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
 	}
 	private HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
+	
+	private final String GA_PROPERTY_ID = "UA-53944359-1";
 	private AhApplication app;
 
 
@@ -37,7 +39,7 @@ public class GAHelper {
 	private synchronized Tracker getTracker(TrackerName trackerId) {
 		if (!mTrackers.containsKey(trackerId)) {
 			GoogleAnalytics analytics = GoogleAnalytics.getInstance(app);
-			Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(AhGlobalVariable.GA_PROPERTY_ID)
+			Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(GA_PROPERTY_ID)
 					: (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(R.xml.global_tracker)
 							: analytics.newTracker(R.xml.ecommerce_tracker);
 					mTrackers.put(trackerId, t);

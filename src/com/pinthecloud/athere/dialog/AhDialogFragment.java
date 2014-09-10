@@ -5,14 +5,29 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.activity.AhActivity;
+import com.pinthecloud.athere.analysis.GAHelper;
 
-public class AhDialogFragment extends DialogFragment{
+public class AhDialogFragment extends DialogFragment {
 
+	protected AhDialogFragment thisFragment;
 	protected Context context;
 	protected AhActivity activity;
+	protected GAHelper gaHelper;
+	protected String simpleClassName;
 	private boolean isShowing = false;
+
+
+	public AhDialogFragment() {
+		super();
+		this.thisFragment = this;
+		this.gaHelper = AhApplication.getInstance().getGAHelper();
+		this.simpleClassName =  thisFragment.getClass().getSimpleName();
+	}
 
 
 	@Override
@@ -20,6 +35,25 @@ public class AhDialogFragment extends DialogFragment{
 		context = getActivity();
 		activity = (AhActivity) context;
 		super.onCreate(savedInstanceState);
+
+		LogSM(simpleClassName + " onCreate");
+		gaHelper.sendScreenGA(simpleClassName);
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		LogSM(simpleClassName + " onStart");
+		gaHelper.reportActivityStart(activity);
+	}
+
+
+	@Override
+	public void onStop() {
+		LogSM(simpleClassName + " onStop");
+		super.onStop();
+		gaHelper.reportActivityStop(activity);
 	}
 
 
@@ -43,5 +77,12 @@ public class AhDialogFragment extends DialogFragment{
 
 	public boolean isShowing(){
 		return isShowing;
+	}
+
+
+	protected void LogSM(String params){
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.d("Seungmin", params);
+		}
 	}
 }
