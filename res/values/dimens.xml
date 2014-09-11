@@ -56,7 +56,7 @@
     <dimen name="square_chat_input_left_margin">12dp</dimen>
     <dimen name="square_chat_input_right_margin">4dp</dimen>
     <dimen name="square_chat_input_min_height">48dp</dimen>
-    <dimen name="square_chat_notification_text_bottom_margin">2dp</dimen>
+    <dimen name="square_chat_notification_text_bottom_margin">8dp</dimen>
     <dimen name="square_chat_notification_text_top_margin">3dp</dimen>
     <dimen name="square_chat_notification_text_left_margin">14px</dimen>
     <dimen name="square_chat_notification_text_right_margin">14px</dimen>
