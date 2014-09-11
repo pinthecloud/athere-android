@@ -15,10 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
@@ -72,7 +69,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 		int type = getItemViewType(position);
 		if (view == null) {
 			if(type == TYPE.ADMIN.ordinal()){
-
+				view = inflater.inflate(R.layout.row_chat_admin_list, parent, false);
 			} else if(type == TYPE.NOTIFICATION.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
 			} else if(type == TYPE.SEND.ordinal()){
@@ -84,12 +81,22 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		final AhMessage message = this.getItem(position);
 		if (message != null) {
-			/*
-			 * Find UI component
-			 */
 			TextView messageText = null;
 			if(type == TYPE.ADMIN.ordinal()){
-				messageText = (TextView)view.findViewById(R.id.row_chat_admin_text);
+				/*
+				 * Find Common UI component
+				 */
+				messageText = (TextView)view.findViewById(R.id.row_chat_admin_message);
+
+
+				/*
+				 * Find and Set UI component only in receive list
+				 */
+				String time = message.getTimeStamp();
+				String hour = time.substring(8, 10);
+				String minute = time.substring(10, 12);
+				TextView timeText = (TextView)view.findViewById(R.id.row_chat_admin_time);
+				timeText.setText(hour + ":" + minute);
 			} else if(type == TYPE.NOTIFICATION.ordinal()){
 				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
 			} else if(type == TYPE.SEND.ordinal()){
@@ -132,7 +139,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
 
 				/*
-				 * Common UI component
+				 * Find and Set Common UI component
 				 */
 				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
@@ -196,28 +203,25 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				//						profileImage.setImageBitmap(entity);
 				//					}
 				//				});
-
-				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.launcher, profileImage);
+				
+				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage, true);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
-						final Tracker appTracker = app.getTracker(TrackerName.APP_TRACKER);
-						appTracker.send(new HitBuilders.EventBuilder()
-						.setCategory(frag.getClass().getSimpleName())
-						.setAction("ViewOthersProfile")
-						.setLabel("ChatProfile")
-						.build());
+						app.getGAHelper().sendEventGA(
+								frag.getClass().getSimpleName(),
+								"ViewOthersProfile",
+								"ChatProfile");
 
 						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {
-								appTracker.send(new HitBuilders.EventBuilder()
-								.setCategory(frag.getClass().getSimpleName())
-								.setAction("SendChupa")
-								.setLabel("ChatSendChupa")
-								.build());
+								app.getGAHelper().sendEventGA(
+										frag.getClass().getSimpleName(),
+										"SendChupa",
+										"ChatSendChupa");
 
 								Intent intent = new Intent(context, ChupaChatActivity.class);
 								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());

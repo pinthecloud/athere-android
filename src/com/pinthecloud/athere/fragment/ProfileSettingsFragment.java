@@ -20,7 +20,6 @@ import android.provider.MediaStore.Images.Media;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -94,6 +93,7 @@ public class ProfileSettingsFragment extends AhFragment{
 
 				// Crop picture
 				// Rotate picture
+				// Resize picture
 				int height = pictureBitmap.getHeight();
 				if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
 					pictureBitmap = BitmapUtil.crop(pictureBitmap, 0, 0, height, height);
@@ -103,6 +103,7 @@ public class ProfileSettingsFragment extends AhFragment{
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
 					pictureBitmap = BitmapUtil.flip(pictureBitmap);
 				}
+				pictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 
 				// Set taken picture to view
 				profilePictureView.setImageBitmap(pictureBitmap);
@@ -144,9 +145,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		/*
 		 * Set Event on picture image view
 		 */
-		int w = profilePictureView.getWidth();
-		int h = profilePictureView.getHeight();
-		pictureBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.PROFILE_PICTURE_NAME, w, h);
+		pictureBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.MY_PROFILE_PICTURE);
 		profilePictureView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -352,7 +351,7 @@ public class ProfileSettingsFragment extends AhFragment{
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onActivityResult");
+		super.onActivityResult(requestCode, resultCode, data);
 		switch(requestCode){
 		case GET_IMAGE_GALLERY_CODE:
 			if (resultCode == Activity.RESULT_OK) {
@@ -373,16 +372,14 @@ public class ProfileSettingsFragment extends AhFragment{
 				/*
 				 * Set the image
 				 */
-				int w = profilePictureView.getWidth();
-				int h = profilePictureView.getHeight();
 				try {
-					pictureBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, w, h);
+					pictureBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 					int degree = BitmapUtil.getImageOrientation(imagePath);
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
 				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				} catch (IOException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				}
 
 
@@ -567,7 +564,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
+						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.MY_PROFILE_PICTURE);
 						blobStorageHelper.clearCache();
 
 						// Set and move to next activity after clear previous activity

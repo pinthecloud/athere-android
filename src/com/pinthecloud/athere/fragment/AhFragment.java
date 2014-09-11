@@ -2,20 +2,18 @@ package com.pinthecloud.athere.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhApplication.TrackerName;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
+import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
@@ -47,10 +45,10 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected UserDBHelper userDBHelper;
 	protected SquareHelper squareHelper;
 	protected CachedBlobStorageHelper blobStorageHelper;
-	protected Tracker appTracker;
+	protected GAHelper gaHelper;
 	protected String simpleClassName;
 
- 
+
 	public AhFragment(){
 		_thisFragment = this;
 		app = AhApplication.getInstance();
@@ -61,7 +59,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		userDBHelper = app.getUserDBHelper();
 		squareHelper = app.getSquareHelper();
 		blobStorageHelper = app.getBlobStorageHelper();
-		appTracker = app.getTracker(TrackerName.APP_TRACKER);
+		gaHelper = app.getGAHelper();
 		simpleClassName = _thisFragment.getClass().getSimpleName();
 	}
 
@@ -71,27 +69,16 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		context = getActivity();
 		activity = (AhActivity) context;
 		super.onCreate(savedInstanceState);
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreate");
 
-
-		/* 
-		 * Set google analytics
-		 */
-		appTracker.setScreenName(simpleClassName);
-		appTracker.send(new HitBuilders.AppViewBuilder().build());
-
-
-		/*
-		 * Set static value
-		 */
+		LogSM(simpleClassName + " onCreate");
+		gaHelper.sendScreenGA(simpleClassName);
 		ExceptionManager.setHandler(_thisFragment);
 	}
 
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onCreateView");
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		LogSM(simpleClassName + " onCreateView");
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
@@ -99,19 +86,26 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStart");
-		GoogleAnalytics.getInstance(app).reportActivityStart(activity);
+		LogSM(simpleClassName + " onStart");
+		gaHelper.reportActivityStart(activity);
 	}
 
 
 	@Override
 	public void onStop() {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onStop");
+		LogSM(simpleClassName + " onStop");
 		super.onStop();
-		GoogleAnalytics.getInstance(app).reportActivityStop(activity);
+		gaHelper.reportActivityStop(activity);
 	}
-	
-	
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		LogSM(simpleClassName + " onActivityResult");
+	}
+
+
 	@Override
 	public void handleException(final AhException ex) {
 		Log(_thisFragment, "AhFragment handleException : " + ex.toString());
@@ -139,16 +133,25 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 
 	protected void Log(AhFragment fragment, Object... params){
-		Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
-		for(Object str : params) {
-			if (str == null) {
-				Log.e("ERROR", "null");
-				continue;
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
+			for(Object str : params) {
+				if (str == null) {
+					Log.e("ERROR", "null");
+					continue;
+				}
+				Log.e("ERROR", str.toString());
 			}
-			Log.e("ERROR", str.toString());
+			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		}
-		Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	}
+
+
+	protected void LogSM(String params){
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.d("Seungmin", params);
+		}
 	}
 
 

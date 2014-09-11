@@ -15,7 +15,6 @@ public class ProfileImageFragment extends AhFragment{
 
 	private AhUser user;
 	private ImageView profileImage; 
-	private boolean isMe;
 
 
 	@Override
@@ -28,14 +27,7 @@ public class ProfileImageFragment extends AhFragment{
 		 */
 		Intent intent = activity.getIntent();
 		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
-		if(userId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
-			isMe = true;
-		}else{
-			isMe = false;
-		}
-
-		// If it is other user, get the user in DB
-		if(!isMe){
+		if(!userId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
 			user = userDBHelper.getUser(userId);
 		}
 	}
@@ -58,11 +50,11 @@ public class ProfileImageFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
-		if(!isMe){
+		String id = AhGlobalVariable.MY_PROFILE_PICTURE;
+		if(user != null){
 			id = user.getId();
 		}
-		blobStorageHelper.setImageViewAsync(_thisFragment, id, 0, profileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, id, 0, profileImage, false);
 	}
 
 

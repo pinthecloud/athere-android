@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
@@ -114,22 +113,17 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				appTracker.send(new HitBuilders.EventBuilder()
-				.setCategory(_thisFragment.getClass().getSimpleName())
-				.setAction("ViewOthersProfile")
-				.setLabel("ChupaProfile")
-				.build());
+				gaHelper.sendEventGA(
+						_thisFragment.getClass().getSimpleName(),
+						"ViewOthersProfile",
+						"ChupaProfile");
 
 				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, otherUser,
 						new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
-//						appTracker.send(new HitBuilders.EventBuilder()
-//						.setCategory(_thisFragment.getClass().getSimpleName())
-//						.setAction("ProfileSendChupa")
-//						.setLabel("ProfileSendChupa")
-//						.build());
+						// Do nothing
 					}
 
 					@Override
@@ -234,7 +228,7 @@ public class ChupaChatFragment extends AhFragment {
 
 						@Override
 						public void run() {
-							blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
+							blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage, true);
 							otherNickName.setText(otherUser.getNickName());
 							otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 						}
@@ -253,7 +247,7 @@ public class ChupaChatFragment extends AhFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage);
+		blobStorageHelper.setImageViewAsync(_thisFragment, otherUser.getId(), R.drawable.launcher, otherProfileImage, true);
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}
@@ -283,8 +277,8 @@ public class ChupaChatFragment extends AhFragment {
 			super.handleException(ex);	
 		}
 	}
-	
-	
+
+
 	public void sendChupa(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 		messageListAdapter.add(message);
@@ -299,11 +293,10 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				appTracker.send(new HitBuilders.EventBuilder()
-				.setCategory(_thisFragment.getClass().getSimpleName())
-				.setAction("SendChupa")
-				.setLabel("ChupaChat")
-				.build());
+				gaHelper.sendEventGA(
+						_thisFragment.getClass().getSimpleName(),
+						"SendChupa",
+						"ChupaChat");
 
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
@@ -320,7 +313,7 @@ public class ChupaChatFragment extends AhFragment {
 		});
 	}
 
- 
+
 	/*
 	 * Set sent and received chupas to list view
 	 */

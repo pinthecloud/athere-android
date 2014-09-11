@@ -2,6 +2,7 @@ package com.pinthecloud.athere.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,7 +13,7 @@ import com.pinthecloud.athere.model.Square;
 public class JsonConverter {
 	private static JsonElement getJsonElement(JsonObject jo, String key) {
 		JsonElement je = jo.get(key);
-		if (je == null) je = jo.get(key.toLowerCase());
+		if (je == null) je = jo.get(key.toLowerCase(Locale.US));
 		return je;
 	}
 	public static List<Square> convertToSquareList(JsonArray jsonArray) {
@@ -26,8 +27,6 @@ public class JsonConverter {
 			double latitude = jo.get("latitude").getAsDouble();
 			double longitude = jo.get("longitude").getAsDouble();
 			String whoMade = jo.get("whoMade").getAsString();
-//			int maleNum = jo.get("maleNum").getAsInt();
-//			int femaleNum = jo.get("femaleNum").getAsInt();
 			int maleNum = getJsonElement(jo, "maleNum").getAsInt();
 			int femaleNum = getJsonElement(jo, "femaleNum").getAsInt();
 			int distance = jo.get("distance").getAsInt();
@@ -73,14 +72,14 @@ public class JsonConverter {
 			user.setCompanyNum(jo.get("companyNum").getAsInt());
 			user.setAge(jo.get("age").getAsInt());
 			user.setSquareId(jo.get("squareId").getAsString());
-//			user.setChatEnable(jo.get("isChatEnable").getAsBoolean());
+			//			user.setChatEnable(jo.get("isChatEnable").getAsBoolean());
 			user.setChupaEnable(jo.get("isChupaEnable").getAsBoolean());
 
 			list.add(user);
 		}
 		return list;
 	}
-	
+
 	public static String convertToUserId(JsonElement json) {
 		JsonObject userListJson = json.getAsJsonObject();
 		JsonElement userList = userListJson.get("userId");

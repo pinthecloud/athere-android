@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -14,12 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
@@ -140,7 +144,7 @@ public class SquareActivity extends AhActivity{
 			public void onCompleted(AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
 					String text = getResources().getString(R.string.forced_logout_title);
-					Toast toast = Toast.makeText(_thisActivity, text, Toast.LENGTH_LONG);
+					Toast toast = Toast.makeText(thisActivity, text, Toast.LENGTH_LONG);
 					toast.show();
 
 					Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
@@ -156,10 +160,34 @@ public class SquareActivity extends AhActivity{
 
 	@Override
 	public void onBackPressed() {
+		// Close drawer
 		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 			mDrawerLayout.closeDrawer(mFragmentView);
 			return;
 		}
+
+		// Ask review
+		if(pref.getBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY)){
+			pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
+			String message = getResources().getString(R.string.review_message);
+			String cancelMessage = getResources().getString(R.string.no_today_message);
+			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, null, cancelMessage, true, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
+					startActivity(intent);
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					onBackPressed();
+				}
+			});
+			reviewDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			return;
+		}
+
+		// Back
 		super.onBackPressed();
 	}
 

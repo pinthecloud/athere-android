@@ -22,7 +22,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,7 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -111,6 +109,7 @@ public class SquareProfileFragment extends AhFragment{
 
 				// Crop picture
 				// Rotate picture
+				// Resize picture
 				int height = pictureBitmap.getHeight();
 				if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
 					pictureBitmap = BitmapUtil.crop(pictureBitmap, 0, 0, height, height);
@@ -120,6 +119,7 @@ public class SquareProfileFragment extends AhFragment{
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
 					pictureBitmap = BitmapUtil.flip(pictureBitmap);
 				}
+				pictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 
 				// Set taken picture to view
 				profilePictureView.setImageBitmap(pictureBitmap);
@@ -342,7 +342,6 @@ public class SquareProfileFragment extends AhFragment{
 
 					// Enter Square
 					enterSquare();
-
 				}
 			}
 		});
@@ -377,7 +376,7 @@ public class SquareProfileFragment extends AhFragment{
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(AhGlobalVariable.LOG_TAG, simpleClassName + " onActivityResult");
+		super.onActivityResult(requestCode, resultCode, data);
 		switch(requestCode){
 		case GET_IMAGE_GALLERY_CODE:
 			if (resultCode == Activity.RESULT_OK) {
@@ -398,16 +397,14 @@ public class SquareProfileFragment extends AhFragment{
 				/*
 				 * Set the image
 				 */
-				int w = profilePictureView.getWidth();
-				int h = profilePictureView.getHeight();
 				try {
-					pictureBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, w, h);
+					pictureBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 					int degree = BitmapUtil.getImageOrientation(imagePath);
 					pictureBitmap = BitmapUtil.rotate(pictureBitmap, degree);
 				} catch (FileNotFoundException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				} catch (IOException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
+					// Do nothing
 				}
 
 
@@ -544,13 +541,11 @@ public class SquareProfileFragment extends AhFragment{
 		// Save info for user
 		String nickName = nickNameEditText.getText().toString();
 		int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-		
-		appTracker.send(new HitBuilders.EventBuilder()
-		.setCategory(_thisFragment.getClass().getSimpleName())
-		.setAction("CheckMemberNumber")
-		.setLabel("" + companyNumber)
-		.build());
-		
+		gaHelper.sendEventGA(
+				_thisFragment.getClass().getSimpleName(),
+				"CheckMemberNumber",
+				"" + companyNumber);
+
 		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
@@ -578,12 +573,12 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
+				// Upload the resized image to server
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
 
 					@Override
 					public void onCompleted(String entity) {
-						
 						// Do nothing
 					}
 				});
@@ -609,13 +604,15 @@ public class SquareProfileFragment extends AhFragment{
 						// Save this setting and go to next activity
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						pref.putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
+
 						Time time = new Time();
 						time.setToNow();
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
-						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.PROFILE_PICTURE_NAME);
+						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.MY_PROFILE_PICTURE);
 
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);

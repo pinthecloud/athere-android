@@ -30,7 +30,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 		this.context = context;
 		this.fragment = frag;
 		this.layoutId = layoutId;
-		
+
 		AhApplication app = AhApplication.getInstance();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.userDBHelper = app.getUserDBHelper();
@@ -61,25 +61,24 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			 * Set UI component
 			 */
 			String isExit = lastChupaMap.get("isExit");
-//			String userNickName = lastChupaMap.get("userNickName");
 			String userId = lastChupaMap.get("userId");
-			AhUser u = userDBHelper.getUser(userId, true);
-			String userNickName = u.getNickName();
-			
+			AhUser user = userDBHelper.getUser(userId, true);
+			String userNickName = user.getNickName();
 			//			String picStr = lastChupaMap.get("profilePic");
 			String chupaBadge = lastChupaMap.get("chupaBadge");
-			if (isExit.equals("true")) {
-				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
-			} else {
-				sender.setTextColor(context.getResources().getColor(R.color.black));
-			}
-			sender.setText(userNickName);
-			blobStorageHelper.setImageViewAsync(fragment, userId, R.drawable.launcher, profileImage);
-
-			content.setText(lastChupaMap.get("content"));
+			String contentString = lastChupaMap.get("content");
 			String time = lastChupaMap.get("timeStamp");
 			String hour = time.substring(8, 10);
 			String minute = time.substring(10, 12);
+
+			if (isExit.equals("true")) {
+				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
+			} else {
+				sender.setTextColor(context.getResources().getColor(android.R.color.black));
+			}
+			sender.setText(userNickName);
+			blobStorageHelper.setImageViewAsync(fragment, userId, R.drawable.profile_default, profileImage, true);
+			content.setText(contentString);
 			timeStamp.setText(hour + ":" + minute);
 			if (!chupaBadge.equals("0")) {
 				badgeNum.setText(chupaBadge);
@@ -88,7 +87,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 				badgeNum.setVisibility(View.INVISIBLE);
 			}
 		}
-		
+
 		return view;
 	}
 }

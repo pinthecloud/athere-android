@@ -34,7 +34,7 @@ public class ProfileDialog extends AhDialogFragment{
 	private TextView ageText;
 	private TextView companyNumberText;
 	private Button sendChupaButton;
-	
+
 
 	public ProfileDialog(AhFragment frag, AhUser user, AhDialogCallback ahDialogCallback) {
 		super();
@@ -105,8 +105,8 @@ public class ProfileDialog extends AhDialogFragment{
 		});
 		if(user.getId().equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
 			sendChupaButton.setVisibility(View.GONE);
-			
-			
+
+
 		}
 
 		return view;
@@ -120,11 +120,11 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set image
 		 */
-		String id = AhGlobalVariable.PROFILE_PICTURE_NAME;
+		String id = AhGlobalVariable.MY_PROFILE_PICTURE;
 		if(!user.getId().equals(id)){
 			id = user.getId();
 		}
-		blobStorageHelper.setImageViewAsync(frag, id, 0, profileImage);
+		blobStorageHelper.setImageViewAsync(frag, id, R.drawable.dialog_profile_default, profileImage, false);
 
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);

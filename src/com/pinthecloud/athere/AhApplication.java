@@ -1,16 +1,12 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
-import java.util.HashMap;
 
 import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,6 +14,8 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.pinthecloud.athere.analysis.FiveRocksHelper;
+import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
@@ -48,12 +46,12 @@ import com.pinthecloud.athere.util.FileUtil;
  *
  */
 public class AhApplication extends Application{
-	
+
 	// Windows Azure Mobile Service Keys
-	public final String APP_URL = "https://athere.azure-mobile.net/";
-	public final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
-	public final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
-	public final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
+	private final String APP_URL = "https://athere.azure-mobile.net/";
+	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	private final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
+	private final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
 
 	// Method Name
 	private final String FORCED_LOGOUT = "forced_logout";
@@ -75,6 +73,8 @@ public class AhApplication extends Application{
 	private static MessageHelper messageHelper;
 	private static VersionHelper versionHelper;
 	private static CachedBlobStorageHelper blobStorageHelper;
+	private static GAHelper gaHelper;
+	private static FiveRocksHelper fiveRocksHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -84,7 +84,7 @@ public class AhApplication extends Application{
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+
 		String AZURE_URL;
 		String AZURE_KEY;
 		if (AhGlobalVariable.DEBUG_MODE) {
@@ -94,7 +94,7 @@ public class AhApplication extends Application{
 			AZURE_URL = APP_URL;
 			AZURE_KEY = APP_KEY;
 		}
-		
+
 		app = this;
 		try {
 			mClient = new MobileServiceClient(
@@ -102,7 +102,7 @@ public class AhApplication extends Application{
 					AZURE_KEY,
 					this);
 		} catch (MalformedURLException e) {
-			Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
+			// Do nothing
 		}
 		pref = new PreferenceHelper(this);
 
@@ -119,6 +119,8 @@ public class AhApplication extends Application{
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
+		gaHelper = new GAHelper();
+		fiveRocksHelper = new FiveRocksHelper();
 	}
 
 	public static AhApplication getInstance(){
@@ -165,6 +167,12 @@ public class AhApplication extends Application{
 	}
 	public CachedBlobStorageHelper getBlobStorageHelper() {
 		return blobStorageHelper;
+	}
+	public GAHelper getGAHelper() {
+		return gaHelper;
+	}
+	public FiveRocksHelper getFiveRocksHelper() {
+		return fiveRocksHelper;
 	}
 
 
@@ -252,6 +260,7 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
+		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
 	}
 
 
@@ -259,8 +268,6 @@ public class AhApplication extends Application{
 	 * Check nick name EditText
 	 */
 	public String checkNickName(String nickName){
-		Log.d(AhGlobalVariable.LOG_TAG, "CheckNickNameEditText");
-
 		// Set regular expression for checking nick name
 		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
 		String message = "";
@@ -279,30 +286,5 @@ public class AhApplication extends Application{
 			message = getResources().getString(R.string.max_nick_name_message);
 		}
 		return message;
-	}
-
-
-	/**
-	 * Enum used to identify the tracker that needs to be used for tracking.
-	 *
-	 * A single tracker is usually enough for most purposes. In case you do need multiple trackers,
-	 * storing them all in Application object helps ensure that they are created only once per
-	 * application instance.
-	 */
-	public enum TrackerName {
-		APP_TRACKER, // Tracker used only in this app.
-		GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
-		ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
-	}
-	private HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
-	public synchronized Tracker getTracker(TrackerName trackerId) {
-		if (!mTrackers.containsKey(trackerId)) {
-			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-			Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(AhGlobalVariable.GA_PROPERTY_ID)
-					: (trackerId == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(R.xml.global_tracker)
-							: analytics.newTracker(R.xml.ecommerce_tracker);
-					mTrackers.put(trackerId, t);
-		}
-		return mTrackers.get(trackerId);
 	}
 }

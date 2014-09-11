@@ -13,7 +13,6 @@
     <dimen name="basic_profile_complete_button_top_margin">10dp</dimen>
 
     <!-- Square -->
-    <dimen name="square_title_left_margin">16dp</dimen>
     <dimen name="square_tab_height">48dp</dimen>
 
     <!-- Square code dialog -->
@@ -33,14 +32,13 @@
     <dimen name="square_drawer_participant_list_height">56dp</dimen>
     <dimen name="square_drawer_profile_left_margin">23.5dp</dimen>
     <dimen name="square_drawer_profile_height">100dp</dimen>
-    <dimen name="square_drawer_profile_circle_width">66.5dp</dimen>
-    <dimen name="square_drawer_profile_circle_height">66.5dp</dimen>
+    <dimen name="square_drawer_profile_picture_width">66.5dp</dimen>
+    <dimen name="square_drawer_profile_picture_height">66.5dp</dimen>
     <dimen name="square_drawer_profile_image_info_margin">20dp</dimen>
     <dimen name="square_drawer_profile_nick_name_bottom_margin">5dp</dimen>
     <dimen name="square_drawer_profile_age_left_margin">2dp</dimen>
     <dimen name="square_drawer_profile_company_num_height">25dp</dimen>
     <dimen name="square_drawer_profile_age_gender_margin">6.5dp</dimen>
-    <dimen name="squre_drawer_playernum_margin">2dp</dimen>
     <dimen name="square_drawer_profile_gender_company_num_margin">4dp</dimen>
     <dimen name="square_drawer_bar_height">35dp</dimen>
     <dimen name="square_drawer_bar_left_margin">20dp</dimen>
@@ -68,8 +66,6 @@
     <dimen name="square_chat_list_receive_bottom_margin">5dp</dimen>
     <dimen name="square_chat_list_receive_profile_nick_name_margin">6.5dp</dimen>
     <dimen name="square_chat_list_receive_message_layout_top_margin">1dp</dimen>
-    <dimen name="square_chat_list_receive_message_layout_left_margin">0dp</dimen>
-    <dimen name="square_chat_list_receive_message_layout_right_margin">60dp</dimen>
     <dimen name="square_chat_list_receive_nick_name_gender_margin">3.5dp</dimen>
     <dimen name="square_chat_list_receive_content_left_margin">2dp</dimen>
     <dimen name="square_chat_list_receive_content_max_width">180dp</dimen>
@@ -93,7 +89,6 @@
     <dimen name="chupa_chat_other_gender_company_number_margin">3.5dp</dimen>
     <dimen name="chupa_chat_other_profile_width">33.5dp</dimen>
     <dimen name="chupa_chat_other_profile_height">33.5dp</dimen>
-    <dimen name="chupa_chat_left_margin">10.5dp</dimen>
     <dimen name="chupa_chat_list_receive_left_margin">12dp</dimen>
     <dimen name="chupa_chat_list_receive_right_margin">60dp</dimen>
     <dimen name="chupa_chat_list_receive_top_margin">3dp</dimen>
@@ -120,8 +115,6 @@
     <dimen name="square_chupa_list_profile_width">70dp</dimen>
     <dimen name="square_chupa_list_profile_height">70dp</dimen>
     <dimen name="square_chupa_list_profile_left_margin">18dp</dimen>
-    <dimen name="square_chupa_list_left_margin">48dp</dimen>
-    <dimen name="square_chupa_list_right_margin">48dp</dimen>
     <dimen name="square_chupa_list_profile_text_margin">16dp</dimen>
     <dimen name="square_chupa_list_time_right_margin">18dp</dimen>
     <dimen name="square_chupa_list_content_margin">5dp</dimen>
@@ -139,16 +132,12 @@
     <dimen name="profile_settings_company_number_start_button_margin">10dp</dimen>
 
     <!-- Profile Dialog -->
-    <dimen name="profile_dialog_width">280dp</dimen>
-    <dimen name="profile_dialog_height">280dp</dimen>
-    <dimen name="profile_dialog_top_margin">48dp</dimen>
     <dimen name="profile_dialog_send_button_height">52dp</dimen>
     <dimen name="profile_dialog_nick_name_info_height">56dp</dimen>
     <dimen name="profile_dialog_nick_name_top_margin">12dp</dimen>
     <dimen name="profile_dialog_nick_name_age_margin">10dp</dimen>
     <dimen name="profile_dialog_age_gender_margin">6dp</dimen>
     <dimen name="profile_dialog_gender_company_number_margin">4dp</dimen>
-    <dimen name="profile_dialog_info_send_button_margin">30dp</dimen>
 
     <!-- Font size -->
     <dimen name="font_x_large">22sp</dimen>

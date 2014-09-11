@@ -3,19 +3,16 @@
 
     <!-- gray -->
     <color name="gray_tab_text_unselected">#959595</color>
-
-<!-- Hwajung -->
-    <color name="dark_gray">#636363</color>
-    <color name="chupa_inputbar_background">#80f4f4f4</color>
-    <color name="chat_inputbar_background">#80ffffff</color>
-<!-- Seungmin -->
     <color name="gray_background">#eaeaea</color>
     <color name="gray_list_selector">#f4f4f4</color>
     <color name="gray_drawer_background">#f8f4f4f4</color>
     <color name="gray_line">#eeeeee</color>
-    <color name="black">#000000</color>
     <color name="gray_light">#bdbdbd</color>
-    <color name="gray_chat_input">#d2ffffff</color>
+    <color name="gray_dark">#636363</color>
+
+    <!-- Hwajung -->
+    <color name="chupa_inputbar_background">#80f4f4f4</color>
+    <color name="chat_inputbar_background">#80ffffff</color>
 
     <!-- red -->
     <color name="red">#d6003b</color>

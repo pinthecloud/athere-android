@@ -28,11 +28,11 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Base64;
-import android.util.Log;
-
-import com.pinthecloud.athere.AhGlobalVariable;
 
 public class BitmapUtil {
+
+	public static final int SMALL_PIC_SIZE = 150;
+	public static final int BIG_PIC_SIZE = 720;
 
 	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -45,8 +45,7 @@ public class BitmapUtil {
 
 		// Decode bitmap with inSampleSize set
 		options.inJustDecodeBounds = false;
-		return BitmapFactory.decodeStream(context.getContentResolver()
-				.openInputStream(imageUri), null, options);
+		return BitmapFactory.decodeStream(context.getContentResolver().openInputStream(imageUri), null, options);
 	}
 
 
@@ -80,6 +79,14 @@ public class BitmapUtil {
 	}
 
 
+	public static Bitmap decodeInSampleSize(Bitmap bitmap, int reqWidth, int reqHeight) {
+		ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayBitmapStream);
+		byte[] b = byteArrayBitmapStream.toByteArray();
+		return decodeInSampleSize(b, reqWidth, reqHeight);
+	}
+
+
 	public static int calculateSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
 		// Raw height and width of image
 		final int height = options.outHeight;
@@ -103,8 +110,6 @@ public class BitmapUtil {
 
 
 	public static int getImageOrientation(File imageFile) throws IOException{
-		Log.d(AhGlobalVariable.LOG_TAG, "BitmapHelper getImageOrientation");
-
 		try {
 			ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
 			int orientation = exif.getAttributeInt(
@@ -127,8 +132,6 @@ public class BitmapUtil {
 
 
 	public static int getImageOrientation(String imagePath) throws IOException{
-		Log.d(AhGlobalVariable.LOG_TAG, "BitmapHelper getImageOrientation");
-
 		try {
 			ExifInterface exif = new ExifInterface(imagePath);
 			int orientation = exif.getAttributeInt(
@@ -148,8 +151,8 @@ public class BitmapUtil {
 			throw e;
 		}
 	}
-	
-	
+
+
 	public static Bitmap rotate(Bitmap bitmap, int degree) {
 		int w = bitmap.getWidth();
 		int h = bitmap.getHeight();
@@ -236,7 +239,7 @@ public class BitmapUtil {
 			byte [] encodeByte = Base64.decode(str, Base64.DEFAULT);
 			bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
 		}catch(Exception e){
-			Log.d(AhGlobalVariable.LOG_TAG, "Error of BitmapUtil : " + e.getMessage());
+			// Do nothing
 		}
 		return bitmap;
 
@@ -282,8 +285,6 @@ public class BitmapUtil {
 
 	@SuppressLint("NewApi")
 	public static Bitmap blur(Context context, Bitmap sentBitmap, int radius) {
-		Log.d(AhGlobalVariable.LOG_TAG, "BitmapHelper blur");
-
 		if (VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
 			Bitmap bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
 

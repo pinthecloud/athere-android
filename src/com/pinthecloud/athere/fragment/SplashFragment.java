@@ -1,11 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
-import java.net.MalformedURLException;
-
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -13,13 +9,10 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
@@ -115,63 +108,72 @@ public class SplashFragment extends AhFragment {
 
 
 		/*
+		 * Check whether it is first time launching app after update
+		 */
+		if (pref.getString(AhGlobalVariable.FIRST_UPDATE).equals(PreferenceHelper.DEFAULT_STRING)) {
+			pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
+			pref.putString(AhGlobalVariable.FIRST_UPDATE, AhGlobalVariable.FIRST_UPDATE);
+		}
+
+
+		/*
 		 * Start Chupa Application
 		 */
 		// Erase Later (Exception for hongkun)
-//		if (AhGlobalVariable.DEBUG_MODE) {
-//			isHongkunTest();
-//			return view;
-//		}
+		//		if (AhGlobalVariable.DEBUG_MODE) {
+		//			isHongkunTest();
+		//			return view;
+		//		}
 		runChupa();
 		return view;
 	}
 
 
-	private boolean isHongkunTest() {
-//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-//		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
-//		String myGal3 = "";
-//		String httpAgent = System.getProperty("http.agent");
-//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-//				|| myGal3.equals(httpAgent))))	// Galaxy 3
-//			return false;
-
-		new AlertDialog.Builder(context)
-		.setTitle("Routing Dialog")
-		.setMessage("Real or Test Server")
-		.setPositiveButton("Real", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) { 
-				try {
-					MobileServiceClient mClient = AhApplication.getInstance().getmClient();
-					mClient = new MobileServiceClient(
-							AhApplication.getInstance().APP_URL,
-							AhApplication.getInstance().APP_KEY,
-							app);
-					app.setmClient(mClient);
-				} catch (MalformedURLException e) {
-					Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
-				}
-				runChupa();
-				
-			}
-		})
-		.setNegativeButton("Test", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				runChupa();
-			}
-		})
-		.setIcon(android.R.drawable.ic_dialog_alert)
-		.show();
-		return true;
-	}
+	//	private boolean isHongkunTest() {
+	//		
+	//		//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+	//		//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
+	//		//		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
+	//		//		String myGal3 = "";
+	//		//		String httpAgent = System.getProperty("http.agent");
+	//		//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
+	//		//				|| myGal3.equals(httpAgent))))	// Galaxy 3
+	//		//			return false;
+	//
+	//		new AlertDialog.Builder(context)
+	//		.setTitle("Routing Dialog")
+	//		.setMessage("Real or Test Server")
+	//		.setPositiveButton("Real", new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) { 
+	//				try {
+	//					MobileServiceClient mClient = AhApplication.getInstance().getmClient();
+	//					mClient = new MobileServiceClient(
+	//							AhApplication.getInstance().APP_URL,
+	//							AhApplication.getInstance().APP_KEY,
+	//							app);
+	//					app.setmClient(mClient);
+	//				} catch (MalformedURLException e) {
+	//					Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
+	//				}
+	//				runChupa();
+	//			}
+	//		})
+	//		.setNegativeButton("Test", new DialogInterface.OnClickListener() {
+	//			public void onClick(DialogInterface dialog, int which) {
+	//				runChupa();
+	//			}
+	//		})
+	//		.setIcon(android.R.drawable.ic_dialog_alert)
+	//		.show();
+	//		return true;
+	//	}
 
 
 	private void runChupa() {
 		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
 
 			@Override
-			public void doNext(AhFragment frag) {
+			public void doNext(final AhFragment frag) {
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
 					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
 
@@ -189,6 +191,7 @@ public class SplashFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
+
 				versionHelper.getServerAppVersionAsync(frag, new AhEntityCallback<AppVersion>() {
 
 					@Override
@@ -197,13 +200,11 @@ public class SplashFragment extends AhFragment {
 						try {
 							clientVer = versionHelper.getClientAppVersion();
 						} catch (NameNotFoundException e) {
-							Log.d(AhGlobalVariable.LOG_TAG, "Error of " + simpleClassName + " : " + e.getMessage());
-							clientVer = 0.1;
+							clientVer = 0.11;
 						}
 						if (serverVer.getVersion() > clientVer) {
-							String title = getResources().getString(R.string.update_app_title);
 							String message = getResources().getString(R.string.update_app_message);
-							AhAlertDialog updateDialog = new AhAlertDialog(title, message, true, new AhDialogCallback() {
+							AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
 								@Override
 								public void doPositiveThing(Bundle bundle) {
@@ -255,9 +256,9 @@ public class SplashFragment extends AhFragment {
 	@Override
 	public void handleException(AhException ex) {
 		if (ex.getType().equals(AhException.TYPE.GCM_REGISTRATION_FAIL)) {
-			String title = getResources().getString(R.string.googe_play_services_title);
-			String message = getResources().getString(R.string.googe_play_services_message);
-			new AhAlertDialog(title, message, true, new AhDialogCallback() {
+			String message = getResources().getString(R.string.google_play_services_message);
+			String install = getResources().getString(R.string.install);
+			new AhAlertDialog(null, message, install, null, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {

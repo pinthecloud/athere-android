@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/chupa_chat_frag_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f4ffffff"
+    android:background="@drawable/chupa_chat_bg"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/chupa_chat_frag_other_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/chupa_chat_other_bar_height"
+        android:background="@color/chupa_inputbar_background"
         android:gravity="start|center"
         android:orientation="horizontal"
         android:paddingEnd="0dp"
@@ -79,7 +78,6 @@
         android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
-        android:id="@+id/chupa_chat_frag_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/chupa_inputbar_background"

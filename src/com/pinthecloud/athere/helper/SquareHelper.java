@@ -138,6 +138,7 @@ public class SquareHelper {
 		});
 	}
 
+	
 	public Square getSquare(){
 		Square square = new Square();
 		square.setId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
@@ -146,8 +147,7 @@ public class SquareHelper {
 	}
 
 
-	/**
-	 * 
+	/*
 	 * Sync Method
 	 * NOT USING
 	 */

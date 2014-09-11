@@ -128,16 +128,11 @@ public class SquareChupaListFragment extends AhFragment{
 				throw new AhException("No User in Sender or Receive");
 			}
 			AhUser user = userDBHelper.getUser(userId);
-			// if there is No such User
-			if (user == null) {
-				// check whether it is exited.
-				if (userDBHelper.isUserExit(userId)) {
-					user = userDBHelper.getUser(userId, true);
-					isExit = "true";
-				} else {
-					throw new AhException("No User in UserDBHelper");
-				}
-			}
+			// check whether it is exited.
+			if (userDBHelper.isUserExit(userId)) {
+				user = userDBHelper.getUser(userId, true);
+				isExit = "true";
+			} 
 
 			profilePic = user.getProfilePic();
 			content = message.getContent();
