@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.model.AhUser;
 
 public class ProfileImageFragment extends AhFragment{
@@ -54,7 +55,8 @@ public class ProfileImageFragment extends AhFragment{
 		if(user != null){
 			id = user.getId();
 		}
-		blobStorageHelper.setImageViewAsync(_thisFragment, id, 0, profileImage, false);
+		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
+				id, 0, profileImage, true);
 	}
 
 

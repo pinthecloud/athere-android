@@ -26,10 +26,12 @@ import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.SquareChatFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
@@ -193,18 +195,8 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				} else{
 					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
-
-				//				int w = profileImage.getWidth();
-				//				int h = profileImage.getHeight();
-				//				blobStorageHelper.getBitmapAsync(frag, user.getId(), w, h, new AhEntityCallback<Bitmap>() {
-				//
-				//					@Override
-				//					public void onCompleted(Bitmap entity) {
-				//						profileImage.setImageBitmap(entity);
-				//					}
-				//				});
-				
-				blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage, true);
+				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
+						user.getId()+BitmapUtil.SMALL_PIC_SIZE, R.drawable.profile_default, profileImage, true);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override

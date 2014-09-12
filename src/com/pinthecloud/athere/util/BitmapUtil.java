@@ -170,8 +170,7 @@ public class BitmapUtil {
 
 
 	public static Bitmap cropOval(Bitmap bitmap) {
-		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-				bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+		Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(output);
 
 		final int color = 0xffff0000;
@@ -197,10 +196,9 @@ public class BitmapUtil {
 
 
 	public static Bitmap cropRound(Bitmap bitmap) {
-		int targetWidth = 125;
-		int targetHeight = 125;
-		Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
-				targetHeight, Bitmap.Config.ARGB_8888);
+		int targetWidth = bitmap.getWidth();
+		int targetHeight = bitmap.getHeight();
+		Bitmap targetBitmap = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888);
 
 		Canvas canvas = new Canvas(targetBitmap);
 		Path path = new Path();

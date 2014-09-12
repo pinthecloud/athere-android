@@ -40,6 +40,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
@@ -79,6 +80,7 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
+	private Bitmap circlePictureBitmap;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -97,7 +99,7 @@ public class SquareProfileFragment extends AhFragment{
 				// Get file from taken data
 				//					File pictureFile = FileUtil.getOutputMediaFile(FileUtil.MEDIA_TYPE_IMAGE);
 				//					if (pictureFile == null) {
-				//						ExceptionManager.fireException(new AhException(_thisFragment, "onPictureTaken", AhException.TYPE.SD_CARD_FAIL));
+				//						ExceptionManager.fireException(new AhException(thisFragment, "onPictureTaken", AhException.TYPE.SD_CARD_FAIL));
 				//					}
 				//					Uri pictureFileUri = Uri.fromFile(pictureFile);
 				//					FileOutputStream fos = new FileOutputStream(pictureFile);
@@ -542,7 +544,7 @@ public class SquareProfileFragment extends AhFragment{
 		String nickName = nickNameEditText.getText().toString();
 		int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
 		gaHelper.sendEventGA(
-				_thisFragment.getClass().getSimpleName(),
+				thisFragment.getClass().getSimpleName(),
 				"CheckMemberNumber",
 				"" + companyNumber);
 
@@ -552,7 +554,7 @@ public class SquareProfileFragment extends AhFragment{
 		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
 		pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, true);
 
-		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
 			@Override
 			public void doNext(AhFragment frag) {
@@ -575,13 +577,10 @@ public class SquareProfileFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
-				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
-
-					@Override
-					public void onCompleted(String entity) {
-						// Do nothing
-					}
-				});
+				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+				circlePictureBitmap = BitmapUtil.cropRound(circlePictureBitmap);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId + BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap, null);
 			}
 		}, new Chainable() {
 
@@ -612,8 +611,9 @@ public class SquareProfileFragment extends AhFragment{
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.MY_PROFILE_PICTURE);
-
+						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE, pictureBitmap);
+						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE + BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap);
+						
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -628,7 +628,7 @@ public class SquareProfileFragment extends AhFragment{
 		//
 		//			@Override
 		//			public void doNext(AhFragment frag) {
-		//				userHelper.getUserListAsync(_thisFragment, square.getId(), new AhListCallback<AhUser>() {
+		//				userHelper.getUserListAsync(thisFragment, square.getId(), new AhListCallback<AhUser>() {
 		//
 		//					@Override
 		//					public void onCompleted(List<AhUser> list, int count) {
@@ -660,7 +660,7 @@ public class SquareProfileFragment extends AhFragment{
 		//				.setReceiverId(square.getId())
 		//				.setType(AhMessage.TYPE.ENTER_SQUARE);
 		//				AhMessage message = messageBuilder.build();
-		//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+		//				messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
 		//
 		//					@Override
 		//					public void onCompleted(AhMessage entity) {
@@ -709,7 +709,7 @@ public class SquareProfileFragment extends AhFragment{
 		//				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
 		//						.equals(PreferenceHelper.DEFAULT_STRING)){
 		//					try {
-		//						String registrationId = userHelper.getRegistrationIdSync(_thisFragment);
+		//						String registrationId = userHelper.getRegistrationIdSync(thisFragment);
 		//						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
 		//					} catch (AhException e) {
 		//						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
@@ -729,12 +729,12 @@ public class SquareProfileFragment extends AhFragment{
 		//				// Get a user object from preference settings
 		//				// Enter a square with the user
 		//				final User user = userHelper.getMyUserInfo(false);
-		//				String id = userHelper.enterSquareSync(_thisFragment, user);
+		//				String id = userHelper.enterSquareSync(thisFragment, user);
 		//				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
 		//
 		//
 		//				// Get user list in the square and save it without me
-		//				List<User> userList = userHelper.getUserListSync(_thisFragment, square.getId());
+		//				List<User> userList = userHelper.getUserListSync(thisFragment, square.getId());
 		//				userDBHelper.addAllUsers(userList);
 		//				userDBHelper.deleteUser(id);
 		//
@@ -748,7 +748,7 @@ public class SquareProfileFragment extends AhFragment{
 		//				.setReceiverId(square.getId())
 		//				.setType(AhMessage.TYPE.ENTER_SQUARE);
 		//				AhMessage message = messageBuilder.build();
-		//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+		//				messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
 		//
 		//					@Override
 		//					public void onCompleted(AhMessage entity) {

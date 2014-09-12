@@ -31,7 +31,7 @@ public class SquareListFragment extends AhFragment{
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
 
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class SquareListFragment extends AhFragment{
 		/*
 		 * Set square list view
 		 */
-		squareListAdapter = new SquareListAdapter(context, R.layout.row_square_list);
+		squareListAdapter = new SquareListAdapter(context, thisFragment);
 		squareListView.setAdapter(squareListAdapter);
 		squareListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -103,7 +103,7 @@ public class SquareListFragment extends AhFragment{
 	 */
 	private void getNearSquares(){
 		mProgressBar.setVisibility(View.VISIBLE);
-		squareHelper.getSquareListAsync(_thisFragment, 0, 0, new AhListCallback<Square>() {
+		squareHelper.getSquareListAsync(thisFragment, 0, 0, new AhListCallback<Square>() {
 
 			@Override
 			public void onCompleted(List<Square> list, int count) {

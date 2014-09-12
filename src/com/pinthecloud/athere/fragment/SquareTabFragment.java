@@ -104,7 +104,7 @@ public class SquareTabFragment extends AhFragment{
 		/*
 		 * Set message handle
 		 */
-		messageHelper.setMessageHandler(_thisFragment, new AhEntityCallback<AhMessage>() {
+		messageHelper.setMessageHandler(thisFragment, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(final AhMessage message) {

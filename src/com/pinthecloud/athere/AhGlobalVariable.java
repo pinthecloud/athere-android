@@ -13,7 +13,7 @@ public class AhGlobalVariable{
 	public static final String MY_PROFILE_PICTURE = "my_profile_picture";
 	
 	public static final String FIRST_UPDATE = "FIRST_UPDATE";
-
+	
 	
 	/*
 	 * Int

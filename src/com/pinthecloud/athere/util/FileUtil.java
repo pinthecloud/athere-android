@@ -86,7 +86,7 @@ public class FileUtil {
 	}
 
 
-	public static String saveImageToInternalStorage(Context context, Bitmap image, String name) {
+	public static String saveImageToInternalStorage(Context context, String name, Bitmap image) {
 		FileOutputStream fos = null;
 		try {
 			// Use the compress method on the Bitmap object to write image to

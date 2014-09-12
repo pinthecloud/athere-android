@@ -107,23 +107,23 @@ public class HongkunTestFragment extends AhFragment {
 						square.setFemaleNum(0);
 						square.setLatitude(0);
 						square.setLongitude(0);
-						squareHelper.createSquareAsync(_thisFragment, square, new AhEntityCallback<Square>(){
+						squareHelper.createSquareAsync(thisFragment, square, new AhEntityCallback<Square>(){
 
 							@Override
 							public void onCompleted(Square entity) {
 								// TODO Auto-generated method stub
-								Log(_thisFragment, "OK");
+								Log(thisFragment, "OK");
 							}
 
 						});
 
 					} else if (b.getId() == btnArr[1].getId()) {
 						AhMessage message = messageDBHelper.getLastMessage(AhMessage.TYPE.TALK);
-						Log(_thisFragment, message);
+						Log(thisFragment, message);
 					} else if (b.getId() == btnArr[2].getId()) {
 						String filename = "gogo.png";
 						File filePath = context.getFileStreamPath(filename);
-						Log(_thisFragment, context.getFilesDir()+"/"+filename, filePath, context.getFilesDir()+"/"+filename.equals(filePath));
+						Log(thisFragment, context.getFilesDir()+"/"+filename, filePath, context.getFilesDir()+"/"+filename.equals(filePath));
 
 					} else if (b.getId() == btnArr[3].getId()) {
 						b.setText("deleteAll");
@@ -144,6 +144,6 @@ public class HongkunTestFragment extends AhFragment {
 
 	@Override
 	public void handleException(AhException ex) {
-		Log(_thisFragment, "in handle Hongkunyoo" + ex);
+		Log(thisFragment, "in handle Hongkunyoo" + ex);
 	}
 }

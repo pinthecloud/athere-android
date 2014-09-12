@@ -27,6 +27,7 @@ import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
@@ -170,11 +171,11 @@ public class AhIntentService extends IntentService {
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
 		} else {
-			blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
+			blobStorageHelper.downloadBitmapAsync(null, BlobStorageHelper.USER_PROFILE, user.getId(), new AhEntityCallback<Bitmap>() {
 
 				@Override
 				public void onCompleted(Bitmap entity) {
-					FileUtil.saveImageToInternalStorage(app, entity, user.getId());
+					FileUtil.saveImageToInternalStorage(app, user.getId(), entity);
 					if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
 						alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 					}
@@ -185,8 +186,6 @@ public class AhIntentService extends IntentService {
 
 
 	private void EXIT_SQUARE() {
-		//		int id = messageDBHelper.addMessage(message);
-		//		message.setId(String.valueOf(id));
 		userDBHelper.exitUser(user.getId());
 		AhUser _user = userDBHelper.getUser(user.getId(), true);
 		if (isRunning(app)) {
@@ -199,11 +198,11 @@ public class AhIntentService extends IntentService {
 
 	private void UPDATE_USER_INFO() {
 		userDBHelper.updateUser(user);
-		blobStorageHelper.downloadBitmapAsync(null, user.getId(), new AhEntityCallback<Bitmap>() {
+		blobStorageHelper.downloadBitmapAsync(null, BlobStorageHelper.USER_PROFILE, user.getId(), new AhEntityCallback<Bitmap>() {
 
 			@Override
 			public void onCompleted(Bitmap entity) {
-				FileUtil.saveImageToInternalStorage(app, entity, user.getId());
+				FileUtil.saveImageToInternalStorage(app, user.getId(), entity);
 				if (isRunning(app)) {
 					blobStorageHelper.clearCache();
 					String currentActivityName = getCurrentRunningActivityName(app);

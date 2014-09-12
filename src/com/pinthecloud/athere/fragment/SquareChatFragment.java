@@ -107,7 +107,7 @@ public class SquareChatFragment extends AhFragment{
 		 * Set message list view
 		 */
 		messageListAdapter = new SquareChatListAdapter
-				(context, _thisFragment);
+				(context, thisFragment);
 		messageListView.setAdapter(messageListAdapter);
 
 
@@ -182,12 +182,12 @@ public class SquareChatFragment extends AhFragment{
 		message.setId(String.valueOf(id));
 
 		// Send message to server
-		messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+		messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
 				gaHelper.sendEventGA(
-						_thisFragment.getClass().getSimpleName(),
+						thisFragment.getClass().getSimpleName(),
 						"SendChat",
 						"Chat");
 

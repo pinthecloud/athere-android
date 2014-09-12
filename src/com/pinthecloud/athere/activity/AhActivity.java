@@ -7,6 +7,7 @@ import android.util.Log;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
+import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
@@ -20,6 +21,7 @@ public class AhActivity extends Activity{
 	protected AhApplication app;
 	protected PreferenceHelper pref;
 	protected FiveRocksHelper fiveRocksHelper;
+	protected UserHabitHelper userHabitHelper;
 
 	protected AhActivity thisActivity;
 	protected String simpleClassName;
@@ -29,8 +31,10 @@ public class AhActivity extends Activity{
 		thisActivity = this;
 		app = AhApplication.getInstance();
 		pref = app.getPref();
-		fiveRocksHelper = app.getFiveRocksHelper();
 		simpleClassName = thisActivity.getClass().getSimpleName();
+		
+		fiveRocksHelper = app.getFiveRocksHelper();
+		userHabitHelper = app.getUserHabitHelper();
 	}
 
 
@@ -43,7 +47,7 @@ public class AhActivity extends Activity{
 
 
 	// Logging Method
-	protected void Log(AhActivity activity, Object... params){
+	public void Log(AhActivity activity, Object... params){
 		if(AhGlobalVariable.DEBUG_MODE){
 			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 			Log.e("ERROR", simpleClassName);
@@ -59,7 +63,7 @@ public class AhActivity extends Activity{
 	}
 
 
-	protected void LogSM(String params){
+	public void LogSM(String params){
 		if(AhGlobalVariable.DEBUG_MODE){
 			Log.d("Seungmin", params);
 		}
@@ -71,6 +75,7 @@ public class AhActivity extends Activity{
 		super.onStart();
 		LogSM(simpleClassName + " onStart");
 		fiveRocksHelper.onActivityStart(thisActivity);
+		userHabitHelper.activityStart(thisActivity);
 	}
 
 
@@ -79,5 +84,6 @@ public class AhActivity extends Activity{
 		LogSM(simpleClassName + " onStop");
 		super.onStop();
 		fiveRocksHelper.onActivityStop(thisActivity);
+		userHabitHelper.activityStop(thisActivity);
 	}
 }
