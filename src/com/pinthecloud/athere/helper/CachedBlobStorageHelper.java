@@ -46,36 +46,8 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	}
 
 
-	//	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
-	//		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
-	//		if (bitmap != null) return bitmap;
-	//
-	//		bitmap = this.downloadBitmapSync(frag, id);
-	//		if (bitmap == null) return null;
-	//
-	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
-	//		return bitmap;
-	//	}
-
-
-	//	public Bitmap getBitmapSync(final AhFragment frag, String id) {
-	//		Bitmap bm = null;
-	//
-	//		bm = this.downloadBitmapSync(null, id);
-	//		if (bm == null) return null;
-	//		Bitmap smallBm = BitmapUtil.decodeInSampleSize(bm, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
-	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id + BitmapUtil.SMALL_PIC_SIZE);
-	//		return bm;
-	//	}
-
-	public void setImageViewAsync(AhFragment frag, String id, int placeHolderId, ImageView imageView, boolean isSmall) {
+	public void setImageViewAsync(AhFragment frag, String containerName, String id, int placeHolderId, ImageView imageView, boolean isSave) {
 		if (cancelPotentialWork(id, imageView)) {
-			String origId = id;
-			if (isSmall){
-				id = id + BitmapUtil.SMALL_PIC_SIZE;
-			}
-
 			// Check from cache
 			Bitmap bitmap = getBitmapFromMemCache(id);
 			if (bitmap != null) {
@@ -99,10 +71,10 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 				mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), placeHolderId, w, h);	
 			}
 
-			BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView, isSmall);
+			BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView, isSave);
 			AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
 			imageView.setImageDrawable(asyncDrawable);
-			task.execute(origId);
+			task.execute(containerName, id);
 		}
 	}
 
@@ -111,37 +83,31 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 		private AhFragment frag;
 		private WeakReference<ImageView> imageViewReference;
 		private String id = null;
-		private Boolean isSmall;
+		private boolean isSave;
 
-		public BitmapWorkerTask(AhFragment frag, ImageView imageView, Boolean isSmall) {
+		public BitmapWorkerTask(AhFragment frag, ImageView imageView, boolean isSave) {
 			// Use a WeakReference to ensure the ImageView can be garbage collected
 			this.frag = frag;
 			this.imageViewReference = new WeakReference<ImageView>(imageView);
-			this.isSmall = isSmall;
+			this.isSave = isSave;
 		}
 
 		// Decode image in background.
 		@Override
 		protected Bitmap doInBackground(String... params) {
-			this.id = params[0];
+			String containerName = params[0];
+			this.id = params[1];
 
-			Bitmap bitmap = downloadBitmapSync(frag, id);
+			Bitmap bitmap = downloadBitmapSync(frag, containerName, id);
 			if (bitmap == null) return null;
 
-			Bitmap bigBitmap = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
-			Bitmap smallBitmap = BitmapUtil.decodeInSampleSize(bitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-
-			FileUtil.saveImageToInternalStorage(app, bigBitmap, id);
-			FileUtil.saveImageToInternalStorage(app, smallBitmap, id+BitmapUtil.SMALL_PIC_SIZE);
-
-			addBitmapToMemoryCache(id, bigBitmap);
-			addBitmapToMemoryCache(id+BitmapUtil.SMALL_PIC_SIZE, smallBitmap);
-
-			if (!this.isSmall) {
-				return bigBitmap;
-			} else{
-				return smallBitmap;
+			if(isSave){
+				FileUtil.saveImageToInternalStorage(app, id, bitmap);
 			}
+			addBitmapToMemoryCache(id, bitmap);
+
+
+			return bitmap;
 		}
 
 		// Once complete, see if ImageView is still around and set bitmap.
@@ -223,6 +189,30 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	public void clearCache() {
 		mMemoryCache.evictAll();
 	}
+
+
+	//	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
+	//		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+	//		if (bitmap != null) return bitmap;
+	//
+	//		bitmap = this.downloadBitmapSync(frag, id);
+	//		if (bitmap == null) return null;
+	//
+	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bitmap, id);
+	//		return bitmap;
+	//	}
+
+
+	//	public Bitmap getBitmapSync(final AhFragment frag, String id) {
+	//		Bitmap bm = null;
+	//
+	//		bm = this.downloadBitmapSync(null, id);
+	//		if (bm == null) return null;
+	//		Bitmap smallBm = BitmapUtil.decodeInSampleSize(bm, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), bm, id);
+	//		FileUtil.saveImageToInternalStorage(frag.getActivity(), smallBm, id + BitmapUtil.SMALL_PIC_SIZE);
+	//		return bm;
+	//	}
 
 
 	//	public void getBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {

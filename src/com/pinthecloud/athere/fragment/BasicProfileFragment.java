@@ -170,7 +170,7 @@ public class BasicProfileFragment extends AhFragment{
 					user.setAhId(androidId);
 					user.setPassword("");
 					user.setAndroidId(androidId);
-					userHelper.addIdUserAsync(_thisFragment, user, new AhEntityCallback<AhIdUser>() {
+					userHelper.addIdUserAsync(thisFragment, user, new AhEntityCallback<AhIdUser>() {
 
 						@Override
 						public void onCompleted(AhIdUser entity) {
@@ -188,11 +188,11 @@ public class BasicProfileFragment extends AhFragment{
 							int age = c.get(Calendar.YEAR) - (birthYear - 1);
 							
 							gaHelper.sendEventGA(
-									_thisFragment.getClass().getSimpleName(),
+									thisFragment.getClass().getSimpleName(),
 									"CheckGender",
 									gender);
 							gaHelper.sendEventGA(
-									_thisFragment.getClass().getSimpleName(),
+									thisFragment.getClass().getSimpleName(),
 									"CheckAge",
 									"" + age);
 

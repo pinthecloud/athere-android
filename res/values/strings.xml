@@ -35,6 +35,7 @@
     <string name="person">person</string>
     <string name="admin">Admin</string>
     <string name="install">Install</string>
+    <string name="square">Ground</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>

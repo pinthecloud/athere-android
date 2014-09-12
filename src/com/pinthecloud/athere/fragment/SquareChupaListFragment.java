@@ -46,7 +46,7 @@ public class SquareChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
-		squareChupaListAdapter = new SquareChupaListAdapter(context, _thisFragment, R.layout.row_square_chupa_list);
+		squareChupaListAdapter = new SquareChupaListAdapter(context, thisFragment, R.layout.row_square_chupa_list);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 

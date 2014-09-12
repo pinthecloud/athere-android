@@ -27,7 +27,8 @@ public class BlobStorageHelper {
 
 	private static final String storageConnectionString = 
 			"DefaultEndpointsProtocol=http;AccountName=athere;AccountKey=ldhgydlWndSIl7XfiaAQ+sibsNtVZ1Psebba1RpBKxMbyFVYUCMvvuQir0Ty7f0+8TnNLfFKc9yFlYpP6ZSuQQ==";
-	private static final String CONTAINER_NAME = "chupaprofile";
+	public static final String USER_PROFILE = "userprofile";
+	public static final String SQUARE_PROFILE = "squareprofile";
 	protected CloudBlobClient blobClient;
 
 
@@ -48,11 +49,11 @@ public class BlobStorageHelper {
 	}
 
 
-	public String uploadBitmapSync(final AhFragment frag, String id, Bitmap bitmap) {
+	public String uploadBitmapSync(final AhFragment frag, String containerName, String id, Bitmap bitmap) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		try {
-			container = blobClient.getContainerReference(CONTAINER_NAME);
+			container = blobClient.getContainerReference(containerName);
 			blob = container.getBlockBlobReference(id);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
@@ -69,11 +70,11 @@ public class BlobStorageHelper {
 	}
 
 
-	public Bitmap downloadBitmapSync(final AhFragment frag, String id) {
+	public Bitmap downloadBitmapSync(final AhFragment frag, String containerName, String id) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 		try {
-			container = blobClient.getContainerReference(CONTAINER_NAME);
+			container = blobClient.getContainerReference(containerName);
 			blob = container.getBlockBlobReference(id);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			blob.download(baos);
@@ -92,12 +93,12 @@ public class BlobStorageHelper {
 	}
 
 
-	public String downloadToFileSync(final AhFragment frag, String id, String path) {
+	public String downloadToFileSync(final AhFragment frag, String containerName, String id, String path) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 
 		try {
-			container = blobClient.getContainerReference(CONTAINER_NAME);
+			container = blobClient.getContainerReference(containerName);
 			blob = container.getBlockBlobReference(id);
 			blob.downloadToFile(frag.getActivity().getFilesDir() + "/" + path);
 			return frag.getActivity().getFilesDir() + "/" + path;
@@ -112,12 +113,12 @@ public class BlobStorageHelper {
 	}
 
 
-	public boolean deleteBitmapSync(final AhFragment frag, String id) {
+	public boolean deleteBitmapSync(final AhFragment frag, String containerName, String id) {
 		CloudBlobContainer container = null;
 		CloudBlockBlob blob = null;
 
 		try {
-			container = blobClient.getContainerReference(CONTAINER_NAME);
+			container = blobClient.getContainerReference(containerName);
 			blob = container.getBlockBlobReference(id);
 			blob.delete();
 			
@@ -133,13 +134,13 @@ public class BlobStorageHelper {
 	}
 
 
-	public void uploadBitmapAsync(final AhFragment frag, String id, final Bitmap bitmap, final AhEntityCallback<String> callback) {
+	public void uploadBitmapAsync(final AhFragment frag, final String containerName, String id, final Bitmap bitmap, final AhEntityCallback<String> callback) {
 		(new AsyncTask<String, Void, String>() {
 
 			@Override
 			protected String doInBackground(String... params) {
 				String id = params[0];
-				return uploadBitmapSync(frag, id, bitmap);
+				return uploadBitmapSync(frag, containerName, id, bitmap);
 			}
 
 			@Override
@@ -153,13 +154,13 @@ public class BlobStorageHelper {
 	}
 
 
-	public void downloadBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Bitmap> callback) {
+	public void downloadBitmapAsync(final AhFragment frag, final String containerName, String id, final AhEntityCallback<Bitmap> callback) {
 		(new AsyncTask<String, Void, Bitmap>() {
 
 			@Override
 			protected Bitmap doInBackground(String... params) {
 				String id = params[0];
-				return downloadBitmapSync(frag, id);
+				return downloadBitmapSync(frag, containerName, id);
 			}
 
 			@Override
@@ -173,13 +174,13 @@ public class BlobStorageHelper {
 	}
 
 
-	public void downloadToFileAsync(final AhFragment frag, String id, final Context context, final String path, final AhEntityCallback<String> callback) {
+	public void downloadToFileAsync(final AhFragment frag, final String containerName, String id, final Context context, final String path, final AhEntityCallback<String> callback) {
 		(new AsyncTask<String, Void, String>() {
 
 			@Override
 			protected String doInBackground(String... params) {
 				String id = params[0];
-				return downloadToFileSync(frag, id, path);
+				return downloadToFileSync(frag, containerName, id, path);
 			}
 
 			@Override
@@ -194,13 +195,13 @@ public class BlobStorageHelper {
 	}
 
 
-	public void deleteBitmapAsync(final AhFragment frag, String id, final AhEntityCallback<Boolean> callback) {
+	public void deleteBitmapAsync(final AhFragment frag, final String containerName, String id, final AhEntityCallback<Boolean> callback) {
 		(new AsyncTask<String, Void, Boolean>() {
 
 			@Override
 			protected Boolean doInBackground(String... params) {
 				String id = params[0];
-				return deleteBitmapSync(frag, id);
+				return deleteBitmapSync(frag, containerName, id);
 			}
 
 			@Override

@@ -16,11 +16,13 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.GAHelper;
+import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
@@ -73,8 +75,11 @@ public class AhApplication extends Application{
 	private static MessageHelper messageHelper;
 	private static VersionHelper versionHelper;
 	private static CachedBlobStorageHelper blobStorageHelper;
+	
+	// Analysis
 	private static GAHelper gaHelper;
 	private static FiveRocksHelper fiveRocksHelper;
+	private static UserHabitHelper userHabitHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -119,8 +124,10 @@ public class AhApplication extends Application{
 		messageHelper = new MessageHelper();
 		versionHelper = new VersionHelper();
 		blobStorageHelper = new CachedBlobStorageHelper();
+		
 		gaHelper = new GAHelper();
 		fiveRocksHelper = new FiveRocksHelper();
+		userHabitHelper = new UserHabitHelper();
 	}
 
 	public static AhApplication getInstance(){
@@ -174,7 +181,9 @@ public class AhApplication extends Application{
 	public FiveRocksHelper getFiveRocksHelper() {
 		return fiveRocksHelper;
 	}
-
+	public UserHabitHelper getUserHabitHelper() {
+		return userHabitHelper;
+	}
 
 	/*
 	 * @return true, if the App is connected with Internet.
@@ -249,7 +258,7 @@ public class AhApplication extends Application{
 		messageDBHelper.cleareAllBadgeNum();
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearCache();
-		blobStorageHelper.deleteBitmapAsync(frag, pref.getString(AhGlobalVariable.USER_ID_KEY), null);
+		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, pref.getString(AhGlobalVariable.USER_ID_KEY), null);
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);

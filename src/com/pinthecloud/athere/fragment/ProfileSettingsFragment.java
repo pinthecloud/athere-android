@@ -38,6 +38,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
@@ -73,6 +74,7 @@ public class ProfileSettingsFragment extends AhFragment{
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
+	private Bitmap circlePictureBitmap;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -519,7 +521,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 
-		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
 			@Override
 			public void doNext(AhFragment frag) {
@@ -536,14 +538,12 @@ public class ProfileSettingsFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
+				// Upload the resized image to server
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
-				blobStorageHelper.uploadBitmapAsync(frag, userId, pictureBitmap, new AhEntityCallback<String>() {
-
-					@Override
-					public void onCompleted(String entity) {
-						// Do nothing
-					}
-				});
+				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+				circlePictureBitmap = BitmapUtil.cropRound(circlePictureBitmap);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId + BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap, null);
 			}
 		}, new Chainable() {
 
@@ -564,7 +564,8 @@ public class ProfileSettingsFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, pictureBitmap, AhGlobalVariable.MY_PROFILE_PICTURE);
+						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE, pictureBitmap);
+						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE+BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap);
 						blobStorageHelper.clearCache();
 
 						// Set and move to next activity after clear previous activity

@@ -14,6 +14,7 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -124,7 +125,8 @@ public class ProfileDialog extends AhDialogFragment{
 		if(!user.getId().equals(id)){
 			id = user.getId();
 		}
-		blobStorageHelper.setImageViewAsync(frag, id, R.drawable.dialog_profile_default, profileImage, false);
+		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
+				id, R.drawable.dialog_profile_default, profileImage, true);
 
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);

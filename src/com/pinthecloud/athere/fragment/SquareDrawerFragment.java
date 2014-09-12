@@ -27,9 +27,11 @@ import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.ProfileDialog;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareDrawerFragment extends AhFragment {
 
@@ -55,7 +57,7 @@ public class SquareDrawerFragment extends AhFragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_square_drawer, container, false);
 		gaHelper.sendTimeingGA(
-				_thisFragment.getClass().getSimpleName(),
+				thisFragment.getClass().getSimpleName(),
 				"DrawerTime",
 				"getDrawerTime");
 
@@ -82,7 +84,7 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set user list
 		 */
 		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, _thisFragment, R.layout.row_square_drawer_participant_list);
+				(context, thisFragment, R.layout.row_square_drawer_participant_list);
 		participantListView.setAdapter(participantListAdapter);
 		participantListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -90,17 +92,17 @@ public class SquareDrawerFragment extends AhFragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				gaHelper.sendEventGA(
-						_thisFragment.getClass().getSimpleName(),
+						thisFragment.getClass().getSimpleName(),
 						"ViewOthersProfile",
 						"DrawerProfile");
 
 				final AhUser user = participantListAdapter.getItem(position);
-				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
+				ProfileDialog profileDialog = new ProfileDialog(thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
 						gaHelper.sendEventGA(
-								_thisFragment.getClass().getSimpleName(),
+								thisFragment.getClass().getSimpleName(),
 								"SendChupa",
 								"DrawerProfileSendChupa");
 
@@ -133,7 +135,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 				boolean isChecked = chatAlarmButton.isChecked();
 				pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, isChecked);
-				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
+				userHelper.updateMyUserAsync(thisFragment, new AhEntityCallback<AhUser>() {
 
 					@Override
 					public void onCompleted(AhUser entity) {
@@ -153,7 +155,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 				boolean isChecked = chupaAlarmButton.isChecked();
 				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
-				userHelper.updateMyUserAsync(_thisFragment, new AhEntityCallback<AhUser>() {
+				userHelper.updateMyUserAsync(thisFragment, new AhEntityCallback<AhUser>() {
 
 					@Override
 					public void onCompleted(AhUser entity) {
@@ -212,13 +214,13 @@ public class SquareDrawerFragment extends AhFragment {
 		progressBar.bringToFront();
 
 		AhUser user = userHelper.getMyUserInfo(true);
-		userHelper.exitSquareAsync(_thisFragment, user, new AhEntityCallback<Boolean>() {
+		userHelper.exitSquareAsync(thisFragment, user, new AhEntityCallback<Boolean>() {
 
 			@Override
 			public void onCompleted(Boolean result) {
 				progressBar.setVisibility(View.GONE);
 
-				app.removeSquarePreference(_thisFragment);
+				app.removeSquarePreference(thisFragment);
 
 				Intent intent = new Intent(activity, SquareListActivity.class);
 				startActivity(intent);
@@ -232,7 +234,8 @@ public class SquareDrawerFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		updateUserList();
-		blobStorageHelper.setImageViewAsync(_thisFragment, AhGlobalVariable.MY_PROFILE_PICTURE, R.drawable.profile_default, profileImage, false);
+		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
+				AhGlobalVariable.MY_PROFILE_PICTURE+BitmapUtil.SMALL_PIC_SIZE, R.drawable.profile_default, profileImage, true);
 	}
 
 
@@ -258,7 +261,7 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				ProfileDialog profileDialog = new ProfileDialog(_thisFragment, user, new AhDialogCallback() {
+				ProfileDialog profileDialog = new ProfileDialog(thisFragment, user, new AhDialogCallback() {
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
@@ -346,12 +349,12 @@ public class SquareDrawerFragment extends AhFragment {
  * This was placed inside exitSqure
  */
 
-//AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+//AsyncChainer.asyncChain(thisFragment, new Chainable(){
 //
 //			@Override
 //			public void doNext(AhFragment frag) {
 //				AhUser user = userHelper.getMyUserInfo(true);
-//				userHelper.exitSquareAsync(_thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
+//				userHelper.exitSquareAsync(thisFragment, user.getId(), new AhEntityCallback<Boolean>() {
 //
 //					@Override
 //					public void onCompleted(Boolean entity) {
@@ -373,11 +376,11 @@ public class SquareDrawerFragment extends AhFragment {
 //				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
 //				.setType(AhMessage.TYPE.EXIT_SQUARE);
 //				AhMessage message = messageBuilder.build();
-//				messageHelper.sendMessageAsync(_thisFragment, message, new AhEntityCallback<AhMessage>() {
+//				messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
 //
 //					@Override
 //					public void onCompleted(AhMessage entity) {
-//						final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+//						final Intent intent = new Intent(thisFragment.getActivity(), SquareListActivity.class);
 //						activity.runOnUiThread(new Runnable() {
 //
 //							@Override
@@ -402,8 +405,8 @@ public class SquareDrawerFragment extends AhFragment {
 //			@Override
 //			public void run() {
 //				User user = userHelper.getMyUserInfo(true);
-//				userHelper.exitSquareSync(_thisFragment, user.getId());
-////				userHelper.unRegisterGcmSync(_thisFragment);
+//				userHelper.exitSquareSync(thisFragment, user.getId());
+////				userHelper.unRegisterGcmSync(thisFragment);
 //				userDBHelper.deleteAllUsers();
 //				messageDBHelper.deleteAllMessages();
 //
@@ -416,7 +419,7 @@ public class SquareDrawerFragment extends AhFragment {
 //				.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
 //				.setType(AhMessage.TYPE.EXIT_SQUARE);
 //				AhMessage message = messageBuilder.build();
-//				messageHelper.sendMessageSync(_thisFragment, message);
+//				messageHelper.sendMessageSync(thisFragment, message);
 //
 //				pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 //				pref.removePref(AhGlobalVariable.USER_ID_KEY);
@@ -425,7 +428,7 @@ public class SquareDrawerFragment extends AhFragment {
 //				pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
 //				pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
 //				pref.removePref(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY);
-//				final Intent intent = new Intent(_thisFragment.getActivity(), SquareListActivity.class);
+//				final Intent intent = new Intent(thisFragment.getActivity(), SquareListActivity.class);
 //				activity.runOnUiThread(new Runnable() {
 //
 //					@Override

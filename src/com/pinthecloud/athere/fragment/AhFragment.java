@@ -33,7 +33,7 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
  */
 public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
-	protected AhFragment _thisFragment;
+	protected AhFragment thisFragment;
 	protected AhApplication app;
 	protected Context context;
 	protected AhActivity activity;
@@ -50,7 +50,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 
 	public AhFragment(){
-		_thisFragment = this;
+		thisFragment = this;
 		app = AhApplication.getInstance();
 		pref = app.getPref();
 		messageHelper = app.getMessageHelper();
@@ -60,7 +60,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 		squareHelper = app.getSquareHelper();
 		blobStorageHelper = app.getBlobStorageHelper();
 		gaHelper = app.getGAHelper();
-		simpleClassName = _thisFragment.getClass().getSimpleName();
+		simpleClassName = thisFragment.getClass().getSimpleName();
 	}
 
 
@@ -72,7 +72,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 		LogSM(simpleClassName + " onCreate");
 		gaHelper.sendScreenGA(simpleClassName);
-		ExceptionManager.setHandler(_thisFragment);
+		ExceptionManager.setHandler(thisFragment);
 	}
 
 
@@ -108,7 +108,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 	@Override
 	public void handleException(final AhException ex) {
-		Log(_thisFragment, "AhFragment handleException : " + ex.toString());
+		Log(thisFragment, "AhFragment handleException : " + ex.toString());
 
 		AhAlertDialog exceptionDialog = null;
 		String title = ex.getType().toString();
@@ -132,7 +132,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 
-	protected void Log(AhFragment fragment, Object... params){
+	public void Log(AhFragment fragment, Object... params){
 		if(AhGlobalVariable.DEBUG_MODE){
 			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 			Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
@@ -148,7 +148,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	}
 
 
-	protected void LogSM(String params){
+	public void LogSM(String params){
 		if(AhGlobalVariable.DEBUG_MODE){
 			Log.d("Seungmin", params);
 		}

@@ -17,8 +17,10 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 
@@ -73,7 +75,8 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 				gender.setImageResource(R.drawable.profile_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
-			blobStorageHelper.setImageViewAsync(frag, user.getId(), R.drawable.profile_default, profileImage, true);
+			blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
+					user.getId()+BitmapUtil.SMALL_PIC_SIZE, R.drawable.profile_default, profileImage, true);
 
 
 			//			blobStorageHelper.downloadBitmapAsync(frag, user.getId(), new AhEntityCallback<Bitmap>() {

@@ -76,13 +76,13 @@ public class SplashFragment extends AhFragment {
 			int lastHour = Integer.parseInt(lastArray[3]);
 
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				app.removeSquarePreference(_thisFragment);
+				app.removeSquarePreference(thisFragment);
 			} else if(currentDay > lastDay && lastHour < 12){
-				app.removeSquarePreference(_thisFragment);
+				app.removeSquarePreference(thisFragment);
 			} else if(currentDay > lastDay && currentHour >= 12){
-				app.removeSquarePreference(_thisFragment);
+				app.removeSquarePreference(thisFragment);
 			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
-				app.removeSquarePreference(_thisFragment);
+				app.removeSquarePreference(thisFragment);
 			}
 		}
 
@@ -170,7 +170,7 @@ public class SplashFragment extends AhFragment {
 
 
 	private void runChupa() {
-		AsyncChainer.asyncChain(_thisFragment, new Chainable(){
+		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
 			@Override
 			public void doNext(final AhFragment frag) {
