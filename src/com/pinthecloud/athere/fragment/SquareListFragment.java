@@ -1,5 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -108,6 +110,26 @@ public class SquareListFragment extends AhFragment{
 			@Override
 			public void onCompleted(List<Square> list, int count) {
 				mProgressBar.setVisibility(View.GONE);
+
+				// Sort square list by distance and premium
+				Collections.sort(list, new Comparator<Square>(){
+
+					@Override
+					public int compare(Square lhs, Square rhs) {
+						return lhs.getDistance() > rhs.getDistance() ? 1 : 
+							lhs.getDistance() < rhs.getDistance() ? -1 : 0;
+					}
+				});
+				Collections.sort(list, new Comparator<Square>(){
+
+					@Override
+					public int compare(Square lhs, Square rhs) {
+						return lhs.isAdmin() == rhs.isAdmin() ? 0 : 
+							!lhs.isAdmin() ? 1 : -1;
+					}
+				});
+
+				// Add loaded square
 				squareListAdapter.clear();
 				squareListAdapter.addAll(list);
 			}

@@ -31,7 +31,7 @@ import android.util.Base64;
 
 public class BitmapUtil {
 
-	public static final int SMALL_PIC_SIZE = 150;
+	public static final int SMALL_PIC_SIZE = 140;
 	public static final int BIG_PIC_SIZE = 720;
 
 	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {

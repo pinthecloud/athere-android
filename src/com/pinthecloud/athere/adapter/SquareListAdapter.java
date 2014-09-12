@@ -53,8 +53,10 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			/*
 			 * Set UI component
 			 */
-			blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
-					square.getWhoMade(), 0, background, false);
+			if(square.isAdmin()){
+				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
+						square.getWhoMade(), 0, background, false);	
+			}
 			squareNameText.setText(square.getName());
 			maleNumText.setText(""+square.getMaleNum());
 			femaleNumText.setText(""+square.getFemaleNum());
