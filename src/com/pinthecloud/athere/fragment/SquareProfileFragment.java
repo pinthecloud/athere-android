@@ -580,7 +580,7 @@ public class SquareProfileFragment extends AhFragment{
 				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 				circlePictureBitmap = BitmapUtil.cropRound(circlePictureBitmap);
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
-				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId + BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap, null);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, circlePictureBitmap, null);
 			}
 		}, new Chainable() {
 
@@ -611,8 +611,9 @@ public class SquareProfileFragment extends AhFragment{
 						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE, pictureBitmap);
-						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE + BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap);
+						String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
+						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
 						
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);

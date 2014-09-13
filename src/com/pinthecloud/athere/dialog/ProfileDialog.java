@@ -106,8 +106,6 @@ public class ProfileDialog extends AhDialogFragment{
 		});
 		if(user.getId().equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
 			sendChupaButton.setVisibility(View.GONE);
-
-
 		}
 
 		return view;
@@ -117,17 +115,8 @@ public class ProfileDialog extends AhDialogFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		/*
-		 * Set image
-		 */
-		String id = AhGlobalVariable.MY_PROFILE_PICTURE;
-		if(!user.getId().equals(id)){
-			id = user.getId();
-		}
 		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
-				id, R.drawable.dialog_profile_default, profileImage, true);
-
+				user.getId(), R.drawable.dialog_profile_default, profileImage, true);
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
 		}else{

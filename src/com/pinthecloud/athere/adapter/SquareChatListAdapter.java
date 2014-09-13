@@ -31,7 +31,6 @@ import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 
@@ -196,7 +195,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
 				}
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
-						user.getId()+BitmapUtil.SMALL_PIC_SIZE, R.drawable.profile_default, profileImage, true);
+						user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
 				profileImage.setOnClickListener(new OnClickListener() {
 
 					@Override
@@ -222,7 +221,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 							@Override
 							public void doNegativeThing(Bundle bundle) {
 								Intent intent = new Intent(context, ProfileImageActivity.class);
-								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+								intent.putExtra(AhGlobalVariable.USER_KEY, user);
 								context.startActivity(intent);
 							}
 						});

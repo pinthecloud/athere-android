@@ -31,7 +31,6 @@ import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareDrawerFragment extends AhFragment {
 
@@ -61,7 +60,7 @@ public class SquareDrawerFragment extends AhFragment {
 				"DrawerTime",
 				"getDrawerTime");
 
-		
+
 		/*
 		 * Set Ui Component
 		 */
@@ -113,7 +112,7 @@ public class SquareDrawerFragment extends AhFragment {
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						Intent intent = new Intent(context, ProfileImageActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						intent.putExtra(AhGlobalVariable.USER_KEY, user);
 						context.startActivity(intent);
 					}
 				});
@@ -234,8 +233,9 @@ public class SquareDrawerFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		updateUserList();
+		String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				AhGlobalVariable.MY_PROFILE_PICTURE+BitmapUtil.SMALL_PIC_SIZE, R.drawable.profile_default, profileImage, true);
+				userId+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
 	}
 
 
@@ -272,7 +272,7 @@ public class SquareDrawerFragment extends AhFragment {
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						Intent intent = new Intent(context, ProfileImageActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+						intent.putExtra(AhGlobalVariable.USER_KEY, user);
 						context.startActivity(intent);
 					}
 				});

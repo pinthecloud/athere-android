@@ -147,7 +147,8 @@ public class ProfileSettingsFragment extends AhFragment{
 		/*
 		 * Set Event on picture image view
 		 */
-		pictureBitmap = FileUtil.getImageFromInternalStorage(context, AhGlobalVariable.MY_PROFILE_PICTURE);
+		String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+		pictureBitmap = FileUtil.getImageFromInternalStorage(context, userId);
 		profilePictureView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -543,7 +544,7 @@ public class ProfileSettingsFragment extends AhFragment{
 				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 				circlePictureBitmap = BitmapUtil.cropRound(circlePictureBitmap);
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
-				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId + BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap, null);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, circlePictureBitmap, null);
 			}
 		}, new Chainable() {
 
@@ -564,8 +565,9 @@ public class ProfileSettingsFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE, pictureBitmap);
-						FileUtil.saveImageToInternalStorage(app, AhGlobalVariable.MY_PROFILE_PICTURE+BitmapUtil.SMALL_PIC_SIZE, circlePictureBitmap);
+						String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
+						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
 						blobStorageHelper.clearCache();
 
 						// Set and move to next activity after clear previous activity

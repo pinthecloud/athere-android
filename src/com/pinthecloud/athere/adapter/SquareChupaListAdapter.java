@@ -11,13 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
 
 public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
@@ -80,7 +80,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			}
 			sender.setText(userNickName);
 			blobStorageHelper.setImageViewAsync(fragment, BlobStorageHelper.USER_PROFILE, 
-					userId+BitmapUtil.SMALL_PIC_SIZE, R.drawable.profile_default, profileImage, true);
+					userId+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
 			content.setText(contentString);
 			timeStamp.setText(hour + ":" + minute);
 			if (!chupaBadge.equals("0")) {

@@ -27,10 +27,7 @@ public class ProfileImageFragment extends AhFragment{
 		 * Get user id from previous activity
 		 */
 		Intent intent = activity.getIntent();
-		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
-		if(!userId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
-			user = userDBHelper.getUser(userId);
-		}
+		user = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
 
 
@@ -51,12 +48,8 @@ public class ProfileImageFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		String id = AhGlobalVariable.MY_PROFILE_PICTURE;
-		if(user != null){
-			id = user.getId();
-		}
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				id, 0, profileImage, true);
+				user.getId(), 0, profileImage, true);
 	}
 
 

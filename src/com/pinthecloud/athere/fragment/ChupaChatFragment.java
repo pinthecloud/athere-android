@@ -30,7 +30,6 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.util.BitmapUtil;
 
 public class ChupaChatFragment extends AhFragment {
 
@@ -131,7 +130,7 @@ public class ChupaChatFragment extends AhFragment {
 					@Override
 					public void doNegativeThing(Bundle bundle) {
 						Intent intent = new Intent(context, ProfileImageActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, otherUser.getId());
+						intent.putExtra(AhGlobalVariable.USER_KEY, otherUser);
 						context.startActivity(intent);
 					}
 				});
@@ -231,7 +230,7 @@ public class ChupaChatFragment extends AhFragment {
 						@Override
 						public void run() {
 							blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-									otherUser.getId()+BitmapUtil.SMALL_PIC_SIZE, R.drawable.launcher, otherProfileImage, true);
+									otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
 							otherNickName.setText(otherUser.getNickName());
 							otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 						}
@@ -251,7 +250,7 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				otherUser.getId()+BitmapUtil.SMALL_PIC_SIZE, R.drawable.launcher, otherProfileImage, true);
+				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
 		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}

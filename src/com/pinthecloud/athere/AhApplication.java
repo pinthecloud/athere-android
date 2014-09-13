@@ -36,7 +36,6 @@ import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.FileUtil;
 
@@ -259,10 +258,10 @@ public class AhApplication extends Application{
 		messageDBHelper.cleareAllBadgeNum();
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearCache();
-		
+
 		String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);
-		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+BitmapUtil.SMALL_PIC_SIZE, null);
+		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+AhGlobalVariable.SMALL, null);
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
