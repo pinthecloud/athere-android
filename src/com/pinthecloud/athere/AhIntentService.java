@@ -14,11 +14,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -27,7 +27,6 @@ import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
-import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
@@ -35,6 +34,7 @@ import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class AhIntentService extends IntentService {
@@ -76,8 +76,7 @@ public class AhIntentService extends IntentService {
 		 * Parsing the data from server
 		 */
 		String unRegisterd = intent.getStringExtra("unregistered");
-		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID))
-			return;
+		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID)) return;
 
 		try {
 			String messageStr = intent.getExtras().getString("message");
@@ -120,13 +119,19 @@ public class AhIntentService extends IntentService {
 	private void TALK() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
+
+		boolean isChatEnable = pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
 		if (isRunning(app)) {
+			// Is the Chupa App Running
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
-		} else {
-			if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+			if (!isActivityRunning(app, SquareActivity.class) && isChatEnable){
+				// Is the User is Not in SquareActivity
 				alertNotification(AhMessage.TYPE.TALK);
 			}
+		} else if(isChatEnable){
+			// if App Not Running
+			alertNotification(AhMessage.TYPE.TALK);
 		}
 	}
 
@@ -134,28 +139,28 @@ public class AhIntentService extends IntentService {
 	private void CHUPA() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-		messageDBHelper.increaseBadgeNum(message.getChupaCommunId());
+		messageDBHelper.increaseChupaBadgeNum(message.getChupaCommunId());
 
-		// Is the Chupa App Running
 		if (isRunning(app)) {
+			// Is the Chupa App Running
 			String currentActivityName = getCurrentRunningActivityName(app);
-			AhUser currentChupaUser = ChupaChatFragment.otherUser;
-			// Is the User in ChupaActivity
 			if (isActivityRunning(app, ChupaChatActivity.class)){
-				// Is the currentUser talking is the same user from the server.
+				// Is the User in ChupaActivity
+				AhUser currentChupaUser = ChupaChatFragment.otherUser;
 				if (currentChupaUser != null && currentChupaUser.getId().equals(message.getSenderId())) {
+					// Is the currentUser talking is the same user from the server.
 					messageHelper.triggerMessageEvent(currentActivityName, message);
-					// Or the server from the user is different from the current User talking
 				} else {
+					// Or the server from the user is different from the current User talking
 					alertNotification(AhMessage.TYPE.CHUPA);
 				}
-				// Is the User is Not in ChupaActivity
 			} else {
+				// Is the User is Not in ChupaActivity
 				messageHelper.triggerMessageEvent(currentActivityName, message);
 				alertNotification(AhMessage.TYPE.CHUPA);
 			}
-			// if App Not Running
 		} else {
+			// if App Not Running
 			alertNotification(AhMessage.TYPE.CHUPA);
 		}
 	}
@@ -164,23 +169,14 @@ public class AhIntentService extends IntentService {
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-
 		userDBHelper.addUser(user);
+
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
-		} else {
-			blobStorageHelper.downloadBitmapAsync(null, BlobStorageHelper.USER_PROFILE, user.getId(), new AhEntityCallback<Bitmap>() {
-
-				@Override
-				public void onCompleted(Bitmap entity) {
-					FileUtil.saveImageToInternalStorage(app, user.getId(), entity);
-					if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
-						alertNotification(AhMessage.TYPE.ENTER_SQUARE);
-					}
-				}
-			});
+		} else if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+			alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 		}
 	}
 
@@ -198,19 +194,16 @@ public class AhIntentService extends IntentService {
 
 	private void UPDATE_USER_INFO() {
 		userDBHelper.updateUser(user);
-		blobStorageHelper.downloadBitmapAsync(null, BlobStorageHelper.USER_PROFILE, user.getId(), new AhEntityCallback<Bitmap>() {
+		FileUtil.clearFile(app, message.getSenderId());
+		FileUtil.clearFile(app, message.getSenderId()+AhGlobalVariable.SMALL);
+		blobStorageHelper.clearCache(message.getSenderId());
+		blobStorageHelper.clearCache(message.getSenderId()+AhGlobalVariable.SMALL);
 
-			@Override
-			public void onCompleted(Bitmap entity) {
-				FileUtil.saveImageToInternalStorage(app, user.getId(), entity);
-				if (isRunning(app)) {
-					blobStorageHelper.clearCache();
-					String currentActivityName = getCurrentRunningActivityName(app);
-					messageHelper.triggerMessageEvent(currentActivityName, message);
-					userHelper.triggerUserEvent(user);
-				}
-			}
-		});
+		if (isRunning(app)) {
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
+			userHelper.triggerUserEvent(user);
+		}
 	}
 
 
@@ -224,7 +217,6 @@ public class AhIntentService extends IntentService {
 
 			@Override
 			public void onCompleted(Boolean entity) {
-
 				if (isRunning(app)){
 					String currentActivityName = getCurrentRunningActivityName(app);
 					messageHelper.triggerMessageEvent(currentActivityName, message);
@@ -252,8 +244,8 @@ public class AhIntentService extends IntentService {
 		String title = "";
 		String content = "";
 		Resources resources = _this.getResources();
-		AhUser sentUser = userDBHelper.getUser(message.getSenderId());
 		if (AhMessage.TYPE.TALK.equals(type)){
+			Log.d("Seungmin", "asdf");
 			title = message.getSender();
 			content = message.getContent();
 			resultIntent.setClass(_this, SquareActivity.class);
@@ -262,10 +254,10 @@ public class AhIntentService extends IntentService {
 			String age = resources.getString(R.string.age);
 			String person = resources.getString(R.string.person);
 			String gender = resources.getString(R.string.male);
-			if(!sentUser.isMale()){
+			if(!user.isMale()){
 				gender = resources.getString(R.string.female);
 			}
-			content = gender + " " + sentUser.getAge() + age + " " + sentUser.getCompanyNum() + person;
+			content = gender + " " + user.getAge() + age + " " + user.getCompanyNum() + person;
 			resultIntent.setClass(_this, SquareActivity.class);
 		} else if (AhMessage.TYPE.CHUPA.equals(type)){
 			title = message.getSender() +" " + resources.getString(R.string.send_chupa_notification_title);
@@ -286,19 +278,20 @@ public class AhIntentService extends IntentService {
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(_this);
 
 		// Adds the back stack for the Intent (but not the Intent itself)
-		if (AhMessage.TYPE.CHUPA.equals(type))
+		if (AhMessage.TYPE.CHUPA.equals(type)){
 			stackBuilder.addParentStack(ChupaChatActivity.class);
+		}
 
 		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
-		//				stackBuilder.addNextIntentWithParentStack(resultIntent);
 
+		// Set intent and bitmap
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		Bitmap bitmap = null;
-		if (sentUser == null){
-			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.launcher);
-		} else {
-			bitmap = FileUtil.getImageFromInternalStorage(app, sentUser.getId());
+		if(user != null){
+			bitmap = FileUtil.getImageFromInternalStorage(app, user.getId()+AhGlobalVariable.SMALL);
+		}else{
+			bitmap = BitmapUtil.decodeInSampleSize(getResources(), R.drawable.launcher, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 		}
 
 
@@ -334,7 +327,6 @@ public class AhIntentService extends IntentService {
 	private boolean isRunning(Context context) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
-
 		for (RunningTaskInfo task : tasks) {
 			if (context.getPackageName().equalsIgnoreCase(task.topActivity.getPackageName())) 
 				return true;                                  
@@ -346,7 +338,6 @@ public class AhIntentService extends IntentService {
 	private boolean isActivityRunning(Context context, Class<?> clazz) {
 		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningTaskInfo> tasks = activityManager.getRunningTasks(Integer.MAX_VALUE);
-
 		for (RunningTaskInfo task : tasks) {
 			if (task.topActivity.getClassName().equals(clazz.getName())) {
 				return true;
@@ -414,15 +405,13 @@ public class AhIntentService extends IntentService {
 	 * @return userId String related to the sent message
 	 */
 	private AhUser parseUserString(String message) throws JSONException {
-		//		String jsonStr = intent.getExtras().getString("user");
-		//return intent.getExtras().getString("userId");
 		JSONObject messageObj = new JSONObject(message);
 		String jsonStr = messageObj.getString("user");
+		if (jsonStr == null || jsonStr.equals("null")) return null;
+
 		AhUser _user = new AhUser();
 		JSONObject jo = null;
-		if (jsonStr == null || "null".equals(jsonStr)) {
-			return null;
-		}
+
 		try {
 			jo = new JSONObject(jsonStr);
 
@@ -453,7 +442,6 @@ public class AhIntentService extends IntentService {
 			_user.setAhIdUserKey(ahIdUserKey);
 
 		} catch (JSONException e) {
-			e.printStackTrace();
 			throw e;
 		}
 		return _user;

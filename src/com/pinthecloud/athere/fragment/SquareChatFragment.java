@@ -2,6 +2,8 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.List;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +21,7 @@ import com.pinthecloud.athere.adapter.SquareChatListAdapter;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.Square;
 
 public class SquareChatFragment extends AhFragment{
 
@@ -27,7 +30,7 @@ public class SquareChatFragment extends AhFragment{
 
 	private ListView messageListView;
 	private SquareChatListAdapter messageListAdapter;
-	private String squareId;
+	private Square square;
 
 	private List<AhMessage> talks;
 	private AhMessage talk;
@@ -38,9 +41,9 @@ public class SquareChatFragment extends AhFragment{
 	}
 
 
-	public SquareChatFragment(String squareId) {
+	public SquareChatFragment(Square square) {
 		super();
-		this.squareId = squareId;
+		this.square = square;
 	}
 
 
@@ -94,7 +97,7 @@ public class SquareChatFragment extends AhFragment{
 				messageBuilder.setContent(messageEditText.getText().toString())
 				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
 				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-				.setReceiverId(squareId)
+				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.TALK);
 				AhMessage sendTalk = messageBuilder.build();
 				sendTalk(sendTalk);
@@ -161,6 +164,9 @@ public class SquareChatFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
+		NotificationManager mNotificationManager = (NotificationManager) activity
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		mNotificationManager.cancel(1);
 		refreshView(null);
 	}
 
@@ -199,10 +205,11 @@ public class SquareChatFragment extends AhFragment{
 					@Override
 					public void run() {
 						messageListAdapter.remove(message);
+						messageListAdapter.notifyDataSetChanged();
 					}
 				});
 				refreshView(message.getId());
-			}	
+			}
 		});
 	}
 

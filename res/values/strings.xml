@@ -44,7 +44,7 @@
     <string name="bad_square_code_message">Square code is wrong. Please enter again.</string>
     <string name="exit_square_message">leaves ground.</string>
     <string name="enter_square_message">enters ground.</string>
-    <string name="behave_well_warning">You have a legal responsibility for any kinds of insult, abuse words.</string>
+    <string name="behave_well_warning">You have a legal responsibility for\nany kinds of insult, abuse words.</string>
     <string name="exit_square_consent_message">Every chat and chupa will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
     <string name="forced_logout_title">You have been logout.</string>
@@ -67,7 +67,7 @@
         <item>Take picture</item>
     </string-array>
     <string-array name="square_tab_string_array">
-        <item>chat</item>
+        <item>talk</item>
         <item>chupa</item>
     </string-array>
 

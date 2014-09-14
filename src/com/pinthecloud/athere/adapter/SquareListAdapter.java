@@ -55,7 +55,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			 */
 			if(square.isAdmin()){
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
-						square.getWhoMade(), 0, background, false);	
+						square.getId(), 0, background, false);
 			}
 			squareNameText.setText(square.getName());
 			maleNumText.setText(""+square.getMaleNum());

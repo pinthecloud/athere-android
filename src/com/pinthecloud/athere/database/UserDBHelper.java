@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhUser;
 
 public class UserDBHelper extends SQLiteOpenHelper {
@@ -46,6 +48,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	private SQLiteDatabase mDb;
 	private AtomicInteger mCount = new AtomicInteger();
+	
 
 	public UserDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -185,29 +188,33 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return this.getUser(id, false);
 	}
 
+	
 	public synchronized AhUser getUser(String id, boolean includingExits){
 		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("getUser(String id, boolean includingExits)");
-		AhUser user = this.getAdminUser();
-		String _query = ID + "=?";
+		UserHelper userHelper = AhApplication.getInstance().getUserHelper();
+		AhUser user = userHelper.getAdminUser(id);
+		
+		String query = ID + "=?";
 		String[] args = new String[] { id };
-
 		if (!includingExits) {
-			_query = ID + "=? and " + HAS_BEEN_OUT + "=?";
+			query = ID + "=? and " + HAS_BEEN_OUT + "=?";
 			args = new String[] { id, "0" };
 		}
-		Cursor cursor = db.query(TABLE_NAME, null, _query,
+		
+		Cursor cursor = db.query(TABLE_NAME, null, query,
 				args, null, null, null, null);
 		if (cursor != null) {
 			if(cursor.moveToFirst()){
 				user = convertToUser(cursor);
 			}
 		}
-		//		db.close();
+		
 		this.closeDatabase("getUser(String id, boolean includingExits)");
 		return user;
 	}
 
+	
 	public boolean isUserExist(String userId){
 		boolean isExist = false;
 		//		SQLiteDatabase db = this.getReadableDatabase();
@@ -375,21 +382,5 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.delete(TABLE_NAME, null, null);
 		//		db.close();
 		this.closeDatabase("deleteAllUsers");
-	}
-
-	
-	public static final String ADMIN_ID = "PintheCloud";
-	private AhUser getAdminUser() {
-		AhUser user = new AhUser();
-		user.setId(UserDBHelper.ADMIN_ID);
-		user.setNickName("관리자");
-		user.setProfilePic("");
-		user.setMale(true);
-		user.setCompanyNum(0);
-		user.setAge(40);
-		user.setSquareId("NO_SQUARE_ID");
-		user.setChupaEnable(true);
-		user.setAhIdUserKey("NO_AH_ID_USER_KEY");
-		return user;
 	}
 }

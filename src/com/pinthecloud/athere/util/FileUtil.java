@@ -65,6 +65,11 @@ public class FileUtil {
 	}
 
 
+	public static void clearFile(Context context, String name) {
+		context.deleteFile(name);
+	}
+	
+	
 	public static void clearAllFiles(Context context) {
 		File dir = context.getFilesDir();
 		boolean result = false;
