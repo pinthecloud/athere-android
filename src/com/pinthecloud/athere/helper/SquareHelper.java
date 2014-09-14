@@ -27,6 +27,7 @@ public class SquareHelper {
 	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
 
+	public static final double DEFAULT_RANGE = 600;
 
 	/**
 	 * Model tables
@@ -45,6 +46,7 @@ public class SquareHelper {
 	 */
 	private final String currentLatitude = "currentLatitude";
 	private final String currentLongitude = "currentLongitude";
+	private final String range = "range";
 
 
 	public SquareHelper() {
@@ -60,7 +62,7 @@ public class SquareHelper {
 	/*
 	 *  Async Task Methods
 	 */
-	public void getSquareListAsync(final AhFragment frag, double latitude, double longitude, final AhListCallback<Square> callback) throws AhException{
+	public void getSquareListAsync(final AhFragment frag, double latitude, double longitude, double rangeNum, final AhListCallback<Square> callback) throws AhException{
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getSquareListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -69,6 +71,7 @@ public class SquareHelper {
 		JsonObject jo = new JsonObject();
 		jo.addProperty(currentLatitude, latitude);
 		jo.addProperty(currentLongitude, longitude);
+		jo.addProperty(range, rangeNum);
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);

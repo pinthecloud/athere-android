@@ -67,6 +67,7 @@ public class AhException extends RuntimeException {
 		NO_USER_ID,
 		GCM_REGISTRATION_FAIL,
 		BLOB_STORAGE_ERROR,
-		SD_CARD_FAIL
+		SD_CARD_FAIL,
+		CONNECTION_FAILED
 	}
 }

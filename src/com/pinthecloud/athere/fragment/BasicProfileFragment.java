@@ -14,10 +14,12 @@ import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
@@ -38,8 +40,10 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isTypedNickName = false;
 	private boolean isPickedBirthYear = false;
-
-
+	
+	private ImageView sudoImage;
+	private int countSudo = 0;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -53,8 +57,21 @@ public class BasicProfileFragment extends AhFragment{
 		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_year_text);
 		maleButton = (RadioButton) view.findViewById(R.id.basic_profile_frag_male_button);
 		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_complete_button);
+		sudoImage = (ImageView) view.findViewById(R.id.basic_profile_frag_image_view_for_su);
 
-
+		sudoImage.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				countSudo++;
+				
+				if (countSudo == 5) {
+					AhApplication.setSudo();
+					Toast.makeText(thisFragment.getActivity(), "Super User Activated!", Toast.LENGTH_LONG).show();;
+				}
+			}
+		});
 		/*
 		 * Set nick name edit text
 		 */

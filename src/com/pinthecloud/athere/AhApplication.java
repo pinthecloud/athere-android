@@ -299,4 +299,12 @@ public class AhApplication extends Application{
 		}
 		return message;
 	}
+	
+	private static String SUDO_KEY = "SUDO_KEY";
+	public static void setSudo() {
+		pref.putBoolean(SUDO_KEY, true);
+	}
+	public static boolean isSudo() {
+		return pref.getBoolean(SUDO_KEY);
+	}
 }

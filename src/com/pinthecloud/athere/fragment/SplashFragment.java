@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
@@ -20,6 +22,7 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
+import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -175,6 +178,11 @@ public class SplashFragment extends AhFragment {
 			@Override
 			public void doNext(final AhFragment frag) {
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
+					int errorCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
+					if (errorCode != ConnectionResult.SUCCESS) {
+						ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+						return;
+					}
 					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
 
 						@Override

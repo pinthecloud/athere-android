@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
 
+
 public class AhGlobalVariable{
 
 	/*
@@ -14,7 +15,6 @@ public class AhGlobalVariable{
 	public static final String SMALL = "_small";
 	
 	public static final String FIRST_UPDATE = "FIRST_UPDATE";
-	
 	
 	/*
 	 * Int
@@ -68,4 +68,5 @@ public class AhGlobalVariable{
 
 	public static final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
 	public static final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
+
 }
