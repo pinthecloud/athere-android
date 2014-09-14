@@ -17,6 +17,7 @@ import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.microsoft.windowsazure.mobileservices.TableQueryCallback;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -34,15 +35,20 @@ public class UserHelper {
 	private PreferenceHelper pref;
 
 
-	/**
+	/*
 	 * Model tables
 	 */
 	private MobileServiceTable<AhUser> userTable;
 	private MobileServiceTable<AhIdUser> idUserTable;
 	private MobileServiceClient mClient;
 
+
+	/*
+	 * Methods name
+	 */
 	private final String ENTER_SQUARE = "enter_square";
 	private final String EXIT_SQUARE = "exit_square";
+
 
 	public UserHelper() {
 		super();
@@ -259,6 +265,21 @@ public class UserHelper {
 		user.setChupaEnable(pref.getBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY));
 		user.setChatEnable(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY));
 		user.setAhIdUserKey(pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
+		return user;
+	}
+
+	public AhUser getAdminUser(String id) {
+		AhUser user = new AhUser();
+		user.setId(id);
+		user.setNickName(app.getResources().getString(R.string.admin));
+		user.setProfilePic("NOT_IN_USE");
+		user.setMale(true);
+		user.setCompanyNum(0);
+		user.setAge(0);
+		user.setAhIdUserKey("NO_AH_ID_USER_KEY");
+		user.setSquareId("NO_SQUARE_ID");
+		user.setChatEnable(false);
+		user.setChupaEnable(false);
 		return user;
 	}
 

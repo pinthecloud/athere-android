@@ -56,6 +56,26 @@ public class SplashFragment extends AhFragment {
 
 
 		/*
+		 * Get device resolution and set it
+		 */
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
+		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
+		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
+		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
+
+
+		/*
+		 * Get unique android id
+		 */
+		if(pref.getString(AhGlobalVariable.ANDROID_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
+			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
+			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
+		}
+
+
+		/*
 		 * If time is up, remove local preferences.
 		 */
 		if(pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY)){
@@ -84,26 +104,6 @@ public class SplashFragment extends AhFragment {
 			} else if(currentDay == lastDay && lastHour < 12 && currentHour >= 12){
 				app.removeSquarePreference(thisFragment);
 			}
-		}
-
-
-		/*
-		 * Get device resolution and set it
-		 */
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
-		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
-		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
-		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
-
-
-		/*
-		 * Get unique android id
-		 */
-		if(pref.getString(AhGlobalVariable.ANDROID_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
-			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
-			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
 		}
 
 

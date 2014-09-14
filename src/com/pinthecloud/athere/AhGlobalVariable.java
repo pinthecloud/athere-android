@@ -10,7 +10,6 @@ public class AhGlobalVariable{
 	public static final String GOOGLE_STORE_APP_ID = "com.pinthecloud.athere";
 	public static final String APP_NAME = "chupa";
 	public static final String ANDROID = "Android";
-//	public static final String MY_PROFILE_PICTURE = "my_profile_picture";
 	public static final String SMALL = "_small";
 	
 	public static final String FIRST_UPDATE = "FIRST_UPDATE";

@@ -66,8 +66,8 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			String userId = lastChupaMap.get("userId");
 			AhUser user = userDBHelper.getUser(userId, true);
 			String userNickName = user.getNickName();
-			//			String picStr = lastChupaMap.get("profilePic");
-			String chupaBadge = lastChupaMap.get("chupaBadge");
+			String chupaBadgeString = lastChupaMap.get("chupaBadge");
+			int chupaBadge = Integer.parseInt(chupaBadgeString);
 			String contentString = lastChupaMap.get("content");
 			String time = lastChupaMap.get("timeStamp");
 			String hour = time.substring(8, 10);
@@ -83,8 +83,8 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 					userId+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
 			content.setText(contentString);
 			timeStamp.setText(hour + ":" + minute);
-			if (!chupaBadge.equals("0")) {
-				badgeNum.setText(chupaBadge);
+			if (chupaBadge > 0) {
+				badgeNum.setText(""+chupaBadge);
 				badgeNum.setVisibility(View.VISIBLE);
 			}else{
 				badgeNum.setVisibility(View.INVISIBLE);

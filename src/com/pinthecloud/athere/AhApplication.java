@@ -189,8 +189,7 @@ public class AhApplication extends Application{
 	 * @return true, if the App is connected with Internet.
 	 */
 	public boolean isOnline(){
-		ConnectivityManager cm = 
-				(ConnectivityManager)app.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager cm = (ConnectivityManager)app.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 	}
@@ -255,9 +254,9 @@ public class AhApplication extends Application{
 	public void removeSquarePreference(AhFragment frag){
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
-		messageDBHelper.cleareAllBadgeNum();
+		messageDBHelper.clearAllChupaBadgeNum();
 		FileUtil.clearAllFiles(app);
-		blobStorageHelper.clearCache();
+		blobStorageHelper.clearAllCache();
 
 		String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);

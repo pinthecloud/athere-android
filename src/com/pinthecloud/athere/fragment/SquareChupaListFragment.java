@@ -101,12 +101,12 @@ public class SquareChupaListFragment extends AhFragment{
 		});
 	}
 
-	
+
 	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
 		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 		for(AhMessage message : lastChupaList){
 			Map<String, String> map = new HashMap<String, String>();
-			
+
 			String profilePic = "";
 			String userNickName = "";
 			String userId = "";
@@ -115,7 +115,7 @@ public class SquareChupaListFragment extends AhFragment{
 			String chupaCommunId = "";
 			String isExit = "false";
 			String chupaBadge = "";
-			
+
 			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -128,17 +128,19 @@ public class SquareChupaListFragment extends AhFragment{
 				throw new AhException("No User in Sender or Receive");
 			}
 			AhUser user = userDBHelper.getUser(userId);
+
 			// check whether it is exited.
 			if (userDBHelper.isUserExit(userId)) {
 				user = userDBHelper.getUser(userId, true);
 				isExit = "true";
-			} 
+			}
 
 			profilePic = user.getProfilePic();
 			content = message.getContent();
 			timeStamp = message.getTimeStamp();
 			chupaCommunId = message.getChupaCommunId();
-			chupaBadge = "" + messageDBHelper.getBadgeNum(message.getChupaCommunId());
+			chupaBadge = "" + messageDBHelper.getChupaBadgeNum(message.getChupaCommunId());
+
 			map.put("profilePic", profilePic);
 			map.put("userNickName", userNickName);
 			map.put("userId", userId);
@@ -147,7 +149,7 @@ public class SquareChupaListFragment extends AhFragment{
 			map.put("chupaCommunId", chupaCommunId);
 			map.put("isExit", isExit);
 			map.put("chupaBadge", chupaBadge);
-			
+
 			list.add(map);
 		}
 		return list;

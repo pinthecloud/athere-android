@@ -73,12 +73,13 @@ public class ChupaChatFragment extends AhFragment {
 
 		/*
 		 * Remove Notification when the user enters the Chupa chat room.
+		 * Set chupaCommunId and Remove badge.
 		 */
 		NotificationManager mNotificationManager = (NotificationManager) activity
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
 
-
+		
 		/*
 		 * Set UI component
 		 */
@@ -99,7 +100,7 @@ public class ChupaChatFragment extends AhFragment {
 		mActionBar.setTitle(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 
-
+		
 		/*
 		 * Set message listview
 		 */
@@ -322,14 +323,14 @@ public class ChupaChatFragment extends AhFragment {
 	 */
 	private void refreshView(String chupaCommunId, final String id) {
 		if (chupaCommunId == null || chupaCommunId.equals("")) throw new AhException("No chupaCommunId");
-
-
+		
+		
 		/*
 		 * Clear badge numbers displayed on chupa list
 		 */
-		messageDBHelper.clearBadgeNum(chupaCommunId);
-
-
+		messageDBHelper.clearChupaBadgeNum(chupaCommunId);
+		
+		
 		/*
 		 * Get every chupa by chupaCommunId
 		 */

@@ -26,8 +26,9 @@ public class SquareTabFragment extends AhFragment{
 	private ViewPager mViewPager;
 	private SquarePagerAdapter mSquarePagerAdapter;
 	private PagerSlidingTabStrip tabs;
+
 	private View chupaTabBadge;
-	private BadgeView badge;
+	private BadgeView chupaBadge;
 
 	private Square square;
 
@@ -65,7 +66,7 @@ public class SquareTabFragment extends AhFragment{
 		 */
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
+		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), tabs, square);
 
 		// Set up the ViewPager with the sections adapter.
 		int startTab = pref.getInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
@@ -75,7 +76,6 @@ public class SquareTabFragment extends AhFragment{
 		// Set up tabs with the view pager
 		tabs.setStartTab(startTab);
 		tabs.setViewPager(mViewPager);
-		chupaTabBadge = tabs.getTabBadgeView(SQUARE_CHUPA_TAB);
 		tabs.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
@@ -89,16 +89,17 @@ public class SquareTabFragment extends AhFragment{
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
+		chupaTabBadge = tabs.getTabBadgeView(SQUARE_CHUPA_TAB);
 
 
 		/*
 		 * Set badge
 		 */
-		badge = new BadgeView(context, chupaTabBadge);
-		badge.setTextColor(Color.RED);
-		badge.setBadgeBackgroundColor(Color.WHITE);
-		badge.setTextSize(BADGE_SIZE);
-		badge.setBadgePosition(BadgeView.POSITION_CENTER_VERTICAL_RIGHT);
+		chupaBadge = new BadgeView(context, chupaTabBadge);
+		chupaBadge.setTextColor(Color.RED);
+		chupaBadge.setBadgeBackgroundColor(Color.WHITE);
+		chupaBadge.setTextSize(BADGE_SIZE);
+		chupaBadge.setBadgePosition(BadgeView.POSITION_CENTER_VERTICAL_RIGHT);
 
 
 		/*
@@ -108,11 +109,9 @@ public class SquareTabFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				// Chupa & Exit Message can go through here
-				// Chupa & Exit Message need to be update visually in ChupaChatList Fragment
-				refreshView();
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);
+				refreshView();
 			}
 		});
 
@@ -128,16 +127,16 @@ public class SquareTabFragment extends AhFragment{
 
 
 	private void refreshView(){
-		final int totalNum = messageDBHelper.getAllBadgeNum();
+		final int chupaBadgeTotalNum = messageDBHelper.getAllChupaBadgeNum();
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
-				if(totalNum != 0){
-					badge.setText("" + totalNum);
-					badge.show();	
+				if(chupaBadgeTotalNum > 0){
+					chupaBadge.setText("" + chupaBadgeTotalNum);
+					chupaBadge.show();	
 				}else{
-					badge.hide();
+					chupaBadge.hide();
 				}
 			}
 		});

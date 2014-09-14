@@ -568,7 +568,8 @@ public class ProfileSettingsFragment extends AhFragment{
 						String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
 						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
-						blobStorageHelper.clearCache();
+						blobStorageHelper.clearCache(userId);
+						blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
 
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);
