@@ -48,15 +48,15 @@ public class SplashFragment extends AhFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_splash, container, false);
-
-
+		
+		
 		/*
 		 * Set notification removed when launched app 
 		 */
 		NotificationManager mNotificationManager =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-
+		
 
 		/*
 		 * Get device resolution and set it

@@ -27,7 +27,6 @@ public class SquareHelper {
 	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
 
-	public static final double DEFAULT_RANGE = 600;
 
 	/**
 	 * Model tables
@@ -46,7 +45,6 @@ public class SquareHelper {
 	 */
 	private final String currentLatitude = "currentLatitude";
 	private final String currentLongitude = "currentLongitude";
-	private final String range = "range";
 
 
 	public SquareHelper() {
@@ -62,7 +60,7 @@ public class SquareHelper {
 	/*
 	 *  Async Task Methods
 	 */
-	public void getSquareListAsync(final AhFragment frag, double latitude, double longitude, double rangeNum, final AhListCallback<Square> callback) throws AhException{
+	public void getSquareListAsync(final AhFragment frag, double latitude, double longitude, final AhListCallback<Square> callback) throws AhException{
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getSquareListAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -71,7 +69,6 @@ public class SquareHelper {
 		JsonObject jo = new JsonObject();
 		jo.addProperty(currentLatitude, latitude);
 		jo.addProperty(currentLongitude, longitude);
-		jo.addProperty(range, rangeNum);
 
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
@@ -97,18 +94,22 @@ public class SquareHelper {
 	}
 
 
-	public void createSquareAsync(AhFragment frag, String name, double latitude, double longitude, final AhEntityCallback<Square> callback) throws AhException {
-		String whoMade = pref.getString(AhGlobalVariable.USER_ID_KEY);
-
-		if (whoMade.equals(PreferenceHelper.DEFAULT_STRING)) {
-			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+	public void createSquareAsync(final AhFragment frag, String name, double latitude, double longitude,
+			int range, int resetTime, final AhEntityCallback<Square> callback) throws AhException {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
 		}
 
 		Square square = new Square();
 		square.setName(name);
 		square.setLatitude(latitude);
 		square.setLongitude(longitude);
-		square.setWhoMade(whoMade);
+		square.setWhoMade(pref.getString(AhGlobalVariable.USER_ID_KEY));
+		square.setCode("");
+		square.setAdmin(false);
+		square.setRange(range);
+		square.setResetTime(resetTime);
 
 		int maleNum = 0;
 		int femaleNum = 0;
@@ -117,16 +118,6 @@ public class SquareHelper {
 
 		square.setMaleNum(maleNum);
 		square.setFemaleNum(femaleNum);
-
-		this.createSquareAsync(frag, square, callback);
-	}
-
-
-	public void createSquareAsync(final AhFragment frag, Square square, final AhEntityCallback<Square> callback) throws AhException {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
 
 		squareTable.insert(square, new TableOperationCallback<Square>() {
 
@@ -141,7 +132,7 @@ public class SquareHelper {
 		});
 	}
 
-	
+
 	public Square getSquare(){
 		Square square = new Square();
 		square.setId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));

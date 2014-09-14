@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
@@ -40,10 +39,11 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isTypedNickName = false;
 	private boolean isPickedBirthYear = false;
-	
+
 	private ImageView sudoImage;
 	private int countSudo = 0;
-	
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -59,19 +59,23 @@ public class BasicProfileFragment extends AhFragment{
 		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_complete_button);
 		sudoImage = (ImageView) view.findViewById(R.id.basic_profile_frag_image_view_for_su);
 
+
+		/*
+		 * Super user
+		 */
 		sudoImage.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				countSudo++;
-				
 				if (countSudo == 5) {
-					AhApplication.setSudo();
+					pref.putBoolean(AhGlobalVariable.SUDO_KEY, true);
 					Toast.makeText(thisFragment.getActivity(), "Super User Activated!", Toast.LENGTH_LONG).show();;
 				}
 			}
 		});
+
+
 		/*
 		 * Set nick name edit text
 		 */
@@ -203,7 +207,7 @@ public class BasicProfileFragment extends AhFragment{
 							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
 							Calendar c = Calendar.getInstance();
 							int age = c.get(Calendar.YEAR) - (birthYear - 1);
-							
+
 							gaHelper.sendEventGA(
 									thisFragment.getClass().getSimpleName(),
 									"CheckGender",

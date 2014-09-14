@@ -42,6 +42,7 @@ public class JsonConverter {
 //		if (je == null) je = jo.get(key.toLowerCase(Locale.US));
 //		return je;
 //	}
+	
 	public static List<Square> convertToSquareList(JsonArray jsonArray) {
 		List<Square> list = new ArrayList<Square>();
 
@@ -58,6 +59,8 @@ public class JsonConverter {
 			int distance = getValue(jo, ("distance"), TYPE.INT).getAsInt();
 			boolean isAdmin = getValue(jo, ("isAdmin"), TYPE.BOOLEAN).getAsBoolean();
 			String code = getValue(jo, ("code"), TYPE.STRING).getAsString();
+			int resetTime = getValue(jo, ("resetTime"), TYPE.INT).getAsInt();
+			int range = getValue(jo, ("range"), TYPE.INT).getAsInt();
 
 			Square square = new Square();
 			square.setId(id);
@@ -70,6 +73,8 @@ public class JsonConverter {
 			square.setDistance(distance);
 			square.setAdmin(isAdmin);
 			square.setCode(code);
+			square.setResetTime(resetTime);
+			square.setRange(range);
 
 			list.add(square);
 		}

@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
@@ -28,27 +27,27 @@ import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareCodeDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
-import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 
 public class SquareListFragment extends AhFragment implements
-	GooglePlayServicesClient.ConnectionCallbacks,
-	GooglePlayServicesClient.OnConnectionFailedListener{
+GooglePlayServicesClient.ConnectionCallbacks,
+GooglePlayServicesClient.OnConnectionFailedListener{
 
 	private ActionBar mActionBar;
 	private ProgressBar mProgressBar;
 
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
-	
+
 	private LocationClient mLocationClient;
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		View view = inflater.inflate(R.layout.fragment_square_list, container, false);
 
 		/*
@@ -57,7 +56,7 @@ public class SquareListFragment extends AhFragment implements
 		mActionBar = activity.getActionBar();
 		squareListView = (ListView)view.findViewById(R.id.square_list_frag_list);
 		mProgressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
-		
+
 		/*
 		 * Set Action Bar
 		 */
@@ -104,10 +103,22 @@ public class SquareListFragment extends AhFragment implements
 				}
 			}
 		});
-		
 		mLocationClient = new LocationClient(this.getActivity(), this, this);
 
 		return view;
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		mLocationClient.connect();
+	}
+
+	@Override
+	public void onStop() {
+		mLocationClient.disconnect();
+		super.onStop();
 	}
 
 
@@ -117,10 +128,16 @@ public class SquareListFragment extends AhFragment implements
 	 */
 	private void getNearSquares(){
 		mProgressBar.setVisibility(View.VISIBLE);
+
 		Location loc = mLocationClient.getLastLocation();
-		double range = SquareHelper.DEFAULT_RANGE;
-		if (AhApplication.isSudo()) range = -1234;
-		squareHelper.getSquareListAsync(thisFragment, loc.getLatitude(), loc.getLongitude(), range, new AhListCallback<Square>() {
+		double latitude = loc.getLatitude();
+		double longitude = loc.getLongitude();
+		if(pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
+			latitude = -1;
+			longitude = -1;
+		}
+
+		squareHelper.getSquareListAsync(thisFragment, latitude, longitude, new AhListCallback<Square>() {
 
 			@Override
 			public void onCompleted(List<Square> list, int count) {
@@ -154,35 +171,17 @@ public class SquareListFragment extends AhFragment implements
 
 	@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
-		// TODO Auto-generated method stub
 		ExceptionManager.fireException(new AhException(AhException.TYPE.CONNECTION_FAILED));
 	}
 
 
 	@Override
 	public void onConnected(Bundle arg0) {
-		// TODO Auto-generated method stub
 		getNearSquares();
 	}
 
 
 	@Override
 	public void onDisconnected() {
-		// TODO Auto-generated method stub
-	}
-	
-	@Override
-	public void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-		mLocationClient.connect();
-		
-	}
-	
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		mLocationClient.disconnect();
-		super.onStop();
 	}
 }

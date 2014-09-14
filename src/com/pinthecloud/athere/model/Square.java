@@ -32,6 +32,8 @@ public class Square implements Parcelable {
 	private String code;
 	@com.google.gson.annotations.SerializedName("resetTime")
 	private int resetTime;
+	@com.google.gson.annotations.SerializedName("range")
+	private int range;
 
 	public String getId() {
 		return id;
@@ -99,6 +101,12 @@ public class Square implements Parcelable {
 	public void setResetTime(int resetTime) {
 		this.resetTime = resetTime;
 	}
+	public int getRange() {
+		return range;
+	}
+	public void setRange(int range) {
+		this.range = range;
+	}
 	
 	public static Parcelable.Creator<Square> getCreator() {
 		return CREATOR;
@@ -121,6 +129,7 @@ public class Square implements Parcelable {
 		dest.writeInt(isAdmin? 1: 0);
 		dest.writeString(code);
 		dest.writeInt(resetTime);
+		dest.writeInt(range);
 	}
 
 	public void readToParcel(Parcel in){
@@ -135,6 +144,7 @@ public class Square implements Parcelable {
 		isAdmin = in.readInt() == 1;
 		code = in.readString();
 		resetTime = in.readInt();
+		range = in.readInt();
 	}
 
 	public static final Parcelable.Creator<Square> CREATOR = new Creator<Square>(){

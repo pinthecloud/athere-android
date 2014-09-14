@@ -107,15 +107,13 @@ public class HongkunTestFragment extends AhFragment {
 						square.setFemaleNum(0);
 						square.setLatitude(0);
 						square.setLongitude(0);
-						squareHelper.createSquareAsync(thisFragment, square, new AhEntityCallback<Square>(){
-
-							@Override
-							public void onCompleted(Square entity) {
-								// TODO Auto-generated method stub
-								Log(thisFragment, "OK");
-							}
-
-						});
+//						squareHelper.createSquareAsync(thisFragment, square, new AhEntityCallback<Square>(){
+//
+//							@Override
+//							public void onCompleted(Square entity) {
+//								Log(thisFragment, "OK");
+//							}
+//						});
 
 					} else if (b.getId() == btnArr[1].getId()) {
 						AhMessage message = messageDBHelper.getLastMessage(AhMessage.TYPE.TALK);

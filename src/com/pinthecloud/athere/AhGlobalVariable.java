@@ -64,6 +64,7 @@ public class AhGlobalVariable{
 	public static final String ANDROID_ID_KEY = "ANDROID_ID_KEY";
 	public static final String USER_ID_KEY = "USER_ID_KEY";
 	public static final String AH_ID_USER_KEY = "AH_ID_USER_KEY";
+	public static final String SUDO_KEY = "SUDO_KEY";
 
 	public static final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
 	public static final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
