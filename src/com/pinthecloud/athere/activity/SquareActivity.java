@@ -175,7 +175,7 @@ public class SquareActivity extends AhActivity{
 				@Override
 				public void doPositiveThing(Bundle bundle) {
 					pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
 					startActivity(intent);
 				}
 				@Override

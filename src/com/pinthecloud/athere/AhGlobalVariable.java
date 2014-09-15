@@ -8,7 +8,8 @@ public class AhGlobalVariable{
 	 * Application
 	 */
 	public static final boolean DEBUG_MODE = true;
-	public static final String GOOGLE_STORE_APP_ID = "com.pinthecloud.athere";
+	public static final String GOOGLE_PLAY_APP_ID = "com.pinthecloud.athere";
+	public static final String GOOGLE_PLAY_SERVICE_APP_ID = "com.google.android.gms";
 	public static final String APP_NAME = "chupa";
 	public static final String ANDROID = "Android";
 	public static final String SMALL = "_small";
@@ -51,6 +52,7 @@ public class AhGlobalVariable{
 	public static final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
 	public static final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
 	public static final String REVIEW_DIALOG_KEY = "REVIEW_DIALOG_KEY";
+	public static final String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
 	
 	public static final String NICK_NAME_KEY = "NICK_NAME_KEY";
 	public static final String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";

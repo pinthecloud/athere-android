@@ -18,7 +18,6 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 
@@ -107,13 +106,13 @@ public class HongkunTestFragment extends AhFragment {
 						square.setFemaleNum(0);
 						square.setLatitude(0);
 						square.setLongitude(0);
-//						squareHelper.createSquareAsync(thisFragment, square, new AhEntityCallback<Square>(){
-//
-//							@Override
-//							public void onCompleted(Square entity) {
-//								Log(thisFragment, "OK");
-//							}
-//						});
+						//						squareHelper.createSquareAsync(thisFragment, square, new AhEntityCallback<Square>(){
+						//
+						//							@Override
+						//							public void onCompleted(Square entity) {
+						//								Log(thisFragment, "OK");
+						//							}
+						//						});
 
 					} else if (b.getId() == btnArr[1].getId()) {
 						AhMessage message = messageDBHelper.getLastMessage(AhMessage.TYPE.TALK);

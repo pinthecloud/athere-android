@@ -76,7 +76,7 @@ public class AhIntentService extends IntentService {
 		 * Parsing the data from server
 		 */
 		String unRegisterd = intent.getStringExtra("unregistered");
-		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_STORE_APP_ID)) return;
+		if (unRegisterd != null && unRegisterd.equals(AhGlobalVariable.GOOGLE_PLAY_APP_ID)) return;
 
 		try {
 			String messageStr = intent.getExtras().getString("message");

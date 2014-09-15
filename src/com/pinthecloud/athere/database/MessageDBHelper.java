@@ -748,11 +748,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 		// Badges table name
 		private static final String CHUPA_BADGE_TABLE_NAME = "chupa_badges";
-		private static final String TALK_BADGE_TABLE_NAME = "talk_badges";
-
-		// Talk badges Table Columns names
-		private final String TALK_BADGE_ID = "badge_id";
-		private final String TALK_BADGE_COUNT = "count";
 
 		// Chupa badges Table Columns names
 		private final String CHUPA_BADGE_ID = "badge_id";
@@ -783,18 +778,12 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		// Creating Tables
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			String CREATE_TALK_BADGES_TABLE = "CREATE TABLE " + TALK_BADGE_TABLE_NAME + 
-					"("
-					+ TALK_BADGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
-					+ TALK_BADGE_COUNT + " INTEGER"
-					+")";
 			String CREATE_CHUPA_BADGES_TABLE = "CREATE TABLE " + CHUPA_BADGE_TABLE_NAME + 
 					"("
 					+ CHUPA_BADGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," 
 					+ CHUPA_BADGE_COMMUN_ID + " TEXT,"
 					+ CHUPA_BADGE_COUNT + " INTEGER"
 					+")";
-			db.execSQL(CREATE_TALK_BADGES_TABLE);
 			db.execSQL(CREATE_CHUPA_BADGES_TABLE);
 		}
 
@@ -818,7 +807,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 
 		public void dropTable(SQLiteDatabase db) {
-			db.execSQL("DROP TABLE IF EXISTS " + TALK_BADGE_TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + CHUPA_BADGE_TABLE_NAME);
 		}
 
