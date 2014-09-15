@@ -61,6 +61,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 			ImageButton chupaButton = (ImageButton)view.findViewById(R.id.drawer_user_chupa_btn);
 			TextView companyNumber = (TextView) view.findViewById(R.id.drawer_user_company_num);
 
+			
 			/*
 			 * Set UI component
 			 */

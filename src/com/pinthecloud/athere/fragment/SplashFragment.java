@@ -47,16 +47,17 @@ public class SplashFragment extends AhFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_splash, container, false);
-		
-		
+
+
 		/*
 		 * Set notification removed when launched app 
 		 */
 		NotificationManager mNotificationManager =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-		
+
 
 		/*
 		 * Get device resolution and set it
@@ -216,7 +217,7 @@ public class SplashFragment extends AhFragment {
 
 								@Override
 								public void doPositiveThing(Bundle bundle) {
-									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_STORE_APP_ID));
+									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
 									startActivity(intent);
 								}
 								@Override
@@ -270,7 +271,7 @@ public class SplashFragment extends AhFragment {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.gms"));
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_SERVICE_APP_ID));
 					startActivity(intent);
 					activity.finish();
 				}

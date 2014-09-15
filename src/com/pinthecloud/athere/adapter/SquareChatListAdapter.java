@@ -289,7 +289,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				messageDBHelper.deleteMessage(message.getId());
 				remove(getItem(position));
 				SquareChatFragment squareChatFragment = (SquareChatFragment)frag;
-				squareChatFragment.sendTalk(message);
+				squareChatFragment.sendChat(message);
 			}
 		});
 		reSendOrCancelDialog.show(frag.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);

@@ -55,6 +55,8 @@
     <string name="number_of_member_question">How many with you?</string>
     <string name="review_message">Would you give us star?</string>
     <string name="no_today_message">Later do it</string>
+    <string name="location_consent_message">Chupa use location information. Do you agree?</string>
+    <string name="location_setting_message">Please enable location access.</string>
 
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">

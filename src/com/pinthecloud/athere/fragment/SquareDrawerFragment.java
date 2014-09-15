@@ -54,6 +54,7 @@ public class SquareDrawerFragment extends AhFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_square_drawer, container, false);
 		gaHelper.sendTimeingGA(
 				thisFragment.getClass().getSimpleName(),

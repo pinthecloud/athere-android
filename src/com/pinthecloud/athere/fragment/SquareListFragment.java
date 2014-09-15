@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
@@ -27,13 +27,15 @@ import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareCodeDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
+import com.pinthecloud.athere.helper.LocationHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 
 public class SquareListFragment extends AhFragment implements
 GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener{
+GooglePlayServicesClient.OnConnectionFailedListener,
+LocationListener{
 
 	private ActionBar mActionBar;
 	private ProgressBar mProgressBar;
@@ -41,13 +43,13 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
 
-	private LocationClient mLocationClient;
+	private LocationHelper locationHelper;
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_square_list, container, false);
 
 		/*
@@ -103,7 +105,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				}
 			}
 		});
-		mLocationClient = new LocationClient(this.getActivity(), this, this);
+		locationHelper = new LocationHelper(activity, this, this);
 
 		return view;
 	}
@@ -112,12 +114,13 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	@Override
 	public void onStart() {
 		super.onStart();
-		mLocationClient.connect();
+		locationHelper.connect(activity);
 	}
+
 
 	@Override
 	public void onStop() {
-		mLocationClient.disconnect();
+		locationHelper.disconnect();
 		super.onStop();
 	}
 
@@ -126,10 +129,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	 * Get square near from user
 	 * Now it just gets all squares cause of location law. (lati and longi is 0)
 	 */
-	private void getNearSquares(){
-		mProgressBar.setVisibility(View.VISIBLE);
-
-		Location loc = mLocationClient.getLastLocation();
+	private void getNearSquares(Location loc){
 		double latitude = loc.getLatitude();
 		double longitude = loc.getLongitude();
 		if(pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
@@ -170,18 +170,32 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 
 	@Override
-	public void onConnectionFailed(ConnectionResult arg0) {
-		ExceptionManager.fireException(new AhException(AhException.TYPE.CONNECTION_FAILED));
+	public void onConnectionFailed(ConnectionResult result) {
+		ExceptionManager.fireException(new AhException(AhException.TYPE.LOCATION_CONNECTION_FAILED));
 	}
 
 
 	@Override
-	public void onConnected(Bundle arg0) {
-		getNearSquares();
+	public void onConnected(Bundle connectionHint) {
+		mProgressBar.setVisibility(View.VISIBLE);
+
+		Location loc = locationHelper.getLastLocation();
+		if(loc == null){
+			locationHelper.requestLocationUpdates(this);
+		}else{
+			getNearSquares(loc);
+		}
 	}
 
 
 	@Override
 	public void onDisconnected() {
+	}
+
+
+	@Override
+	public void onLocationChanged(Location location) {
+		locationHelper.removeLocationUpdates(this);
+		getNearSquares(location);
 	}
 }

@@ -68,6 +68,6 @@ public class AhException extends RuntimeException {
 		GCM_REGISTRATION_FAIL,
 		BLOB_STORAGE_ERROR,
 		SD_CARD_FAIL,
-		CONNECTION_FAILED
+		LOCATION_CONNECTION_FAILED
 	}
 }

@@ -55,6 +55,8 @@
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
     <string name="review_message">평점을 남겨주시겠어요?</string>
     <string name="no_today_message">나중에 할게요</string>
+    <string name="location_consent_message">추파는 위치정보를 사용해요. 괜찮아요?</string>
+    <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
 
     <!-- String Array -->
 
