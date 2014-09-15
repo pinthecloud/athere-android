@@ -17,6 +17,8 @@ public class JsonConverter {
 		INT,
 		BOOLEAN
 	}
+	
+	
 	private static JsonElement getDefaultValue(TYPE type) {
 		String jsonString = "";
 		
@@ -31,17 +33,20 @@ public class JsonConverter {
 		return new JsonParser().parse(jsonString);
 	}
 	
+	
 	private static JsonElement getValue(JsonObject jo, String key, TYPE type) {
 		JsonElement je = jo.get(key);
 		if (je == null) return getDefaultValue(type);
 		return je;
 	}
 	
+	
 //	private static JsonElement getJsonElement(JsonObject jo, String key) {
 //		JsonElement je = jo.get(key);
 //		if (je == null) je = jo.get(key.toLowerCase(Locale.US));
 //		return je;
 //	}
+	
 	
 	public static List<Square> convertToSquareList(JsonArray jsonArray) {
 		List<Square> list = new ArrayList<Square>();
@@ -81,6 +86,7 @@ public class JsonConverter {
 		return list;
 	}
 
+	
 	public static List<AhUser> convertToUserList(JsonElement json){
 		List<AhUser> list = new ArrayList<AhUser>();
 
@@ -108,6 +114,7 @@ public class JsonConverter {
 		return list;
 	}
 
+	
 	public static String convertToUserId(JsonElement json) {
 		JsonObject userListJson = json.getAsJsonObject();
 		JsonElement userList = userListJson.get("userId");

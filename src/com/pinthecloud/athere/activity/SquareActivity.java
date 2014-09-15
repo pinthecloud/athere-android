@@ -142,19 +142,17 @@ public class SquareActivity extends AhActivity{
 			@Override
 			public void onCompleted(AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
-					final String text = getResources().getString(R.string.forced_logout_title);
+					final String toastMessage = getResources().getString(R.string.forced_logout_title);
 					thisActivity.runOnUiThread(new Runnable() {
-						
+
 						@Override
 						public void run() {
-							// TODO Auto-generated method stub
-							Toast toast = Toast.makeText(thisActivity, text, Toast.LENGTH_LONG);
+							Toast toast = Toast.makeText(thisActivity, toastMessage, Toast.LENGTH_LONG);
 							toast.show();
 						}
 					});
-					
 
-					Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
+					Intent intent = new Intent(thisActivity, SquareListActivity.class);
 					startActivity(intent);
 					finish();
 					return;

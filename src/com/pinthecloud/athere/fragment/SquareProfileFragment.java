@@ -562,7 +562,6 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo(false);
-
 				userHelper.enterSquareAsync(frag, user, new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
@@ -602,9 +601,10 @@ public class SquareProfileFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save this setting and go to next activity
-						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
 						pref.putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
+						pref.putInt(AhGlobalVariable.SQUARE_RESET_KEY, square.getResetTime());
 						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
 
 						Time time = new Time();
@@ -786,8 +786,6 @@ public class SquareProfileFragment extends AhFragment{
 	}
 
 
-	//	
-	//	
 	//	private void profileImageOnClick(){
 	//		String select = getResources().getString(R.string.select);
 	//		final String[] selectList = getResources().getStringArray(R.array.profile_image_select_string_array);

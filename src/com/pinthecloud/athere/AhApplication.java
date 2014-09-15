@@ -240,7 +240,8 @@ public class AhApplication extends Application{
 //
 //	}
 
-	public static void removeSquarePreference(AhFragment frag){
+	
+	public void removeSquarePreference(AhFragment frag){
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.clearAllChupaBadgeNum();
@@ -255,12 +256,13 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
 		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
 		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);
+		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_RESET_KEY);
+		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
 	}
 
 

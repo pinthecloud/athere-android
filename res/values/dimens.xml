@@ -108,7 +108,6 @@
     <dimen name="square_list_admin_height">110dp</dimen>
     <dimen name="square_list_member_right_margin">5dp</dimen>
     <dimen name="square_list_member_left_margin">4dp</dimen>
-    <dimen name="square_list_member_margin">3.5dp</dimen>
     <dimen name="square_list_name_member_margin">10dp</dimen>
 
     <!-- Square chupa list -->

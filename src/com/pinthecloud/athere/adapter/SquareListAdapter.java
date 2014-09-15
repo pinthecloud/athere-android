@@ -46,8 +46,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			 */
 			ImageView background = (ImageView)view.findViewById(R.id.row_square_list_background);
 			TextView squareNameText = (TextView)view.findViewById(R.id.row_square_list_name);
-			TextView maleNumText = (TextView)view.findViewById(R.id.row_square_list_male_number);
-			TextView femaleNumText = (TextView)view.findViewById(R.id.row_square_list_female_number);
+			TextView memberNumText = (TextView)view.findViewById(R.id.row_square_list_member_number);
 
 
 			/*
@@ -58,8 +57,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 						square.getId(), 0, background, false);
 			}
 			squareNameText.setText(square.getName());
-			maleNumText.setText(""+square.getMaleNum());
-			femaleNumText.setText(""+square.getFemaleNum());
+			memberNumText.setText(""+square.getMaleNum()+square.getFemaleNum());
 		}
 		return view;
 	}
