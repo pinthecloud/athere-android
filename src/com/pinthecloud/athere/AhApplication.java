@@ -7,20 +7,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
-import com.pinthecloud.athere.exception.AhException;
-import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
@@ -29,14 +22,10 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhIdUser;
-import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppVersion;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.FileUtil;
 
 
@@ -56,7 +45,7 @@ public class AhApplication extends Application{
 	private final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
 
 	// Method Name
-	private final String FORCED_LOGOUT = "forced_logout";
+//	private final String FORCED_LOGOUT = "forced_logout";
 
 	// Application
 	private static AhApplication app;
@@ -195,63 +184,63 @@ public class AhApplication extends Application{
 	}
 
 
-	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<Boolean> callback) {
-		if (!isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "forcedLogoutAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
+//	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<Boolean> callback) {
+//		if (!isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "forcedLogoutAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//
+//		JsonObject jo = new JsonObject();
+//		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
+//		jo.addProperty("ahIdUserKey", pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
+//		jo.addProperty("isMale", pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
+//		jo.addProperty("squareId", pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
+//
+//		Gson g = new Gson();
+//		final JsonElement json = g.fromJson(jo, JsonElement.class);
+//
+//		String exitMessage = app.getResources().getString(R.string.exit_square_message);
+//		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+//		AhMessage.Builder messageBuilder = new AhMessage.Builder();
+//		messageBuilder.setContent(nickName + " : " + exitMessage)
+//		.setSender(nickName)
+//		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+//		.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+//		.setType(AhMessage.TYPE.EXIT_SQUARE);
+//		final AhMessage message = messageBuilder.build();
+//
+//		AsyncChainer.asyncChain(frag, new Chainable(){
+//
+//			@Override
+//			public void doNext(AhFragment frag) {
+//				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+//
+//					@Override
+//					public void onCompleted(AhMessage entity) {
+//
+//					}
+//				});
+//			}
+//
+//		}, new Chainable() {
+//
+//			@Override
+//			public void doNext(final AhFragment frag) {
+//				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
+//
+//					@Override
+//					public void onCompleted(JsonElement json, Exception exception,
+//							ServiceFilterResponse response) {
+//						removeSquarePreference(frag);
+//						callback.onCompleted(true);
+//					}
+//				});
+//			}
+//		});
+//
+//	}
 
-		JsonObject jo = new JsonObject();
-		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
-		jo.addProperty("ahIdUserKey", pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
-		jo.addProperty("isMale", pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
-		jo.addProperty("squareId", pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-
-		Gson g = new Gson();
-		final JsonElement json = g.fromJson(jo, JsonElement.class);
-
-		String exitMessage = app.getResources().getString(R.string.exit_square_message);
-		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		messageBuilder.setContent(nickName + " : " + exitMessage)
-		.setSender(nickName)
-		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-		.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-		.setType(AhMessage.TYPE.EXIT_SQUARE);
-		final AhMessage message = messageBuilder.build();
-
-		AsyncChainer.asyncChain(frag, new Chainable(){
-
-			@Override
-			public void doNext(AhFragment frag) {
-				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-
-					@Override
-					public void onCompleted(AhMessage entity) {
-
-					}
-				});
-			}
-
-		}, new Chainable() {
-
-			@Override
-			public void doNext(final AhFragment frag) {
-				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
-
-					@Override
-					public void onCompleted(JsonElement json, Exception exception,
-							ServiceFilterResponse response) {
-						removeSquarePreference(frag);
-						callback.onCompleted(true);
-					}
-				});
-			}
-		});
-
-	}
-
-	public void removeSquarePreference(AhFragment frag){
+	public static void removeSquarePreference(AhFragment frag){
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.clearAllChupaBadgeNum();

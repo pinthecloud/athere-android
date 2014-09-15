@@ -31,7 +31,6 @@ import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -87,6 +86,7 @@ public class AhIntentService extends IntentService {
 		}
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
+		Log.e("ERROR", type.toString());
 		new AhThread(new Runnable() {
 
 			public void run() {
@@ -213,18 +213,25 @@ public class AhIntentService extends IntentService {
 
 
 	private void FORCED_LOGOUT() {
-		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
-
-			@Override
-			public void onCompleted(Boolean entity) {
-				if (isRunning(app)){
-					String currentActivityName = getCurrentRunningActivityName(app);
-					messageHelper.triggerMessageEvent(currentActivityName, message);
-				} else {
-					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
-				}
-			}
-		});
+//		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
+//
+//			@Override
+//			public void onCompleted(Boolean entity) {
+//				if (isRunning(app)){
+//					String currentActivityName = getCurrentRunningActivityName(app);
+//					messageHelper.triggerMessageEvent(currentActivityName, message);
+//				} else {
+//					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
+//				}
+//			}
+//		});
+		AhApplication.removeSquarePreference(null);
+		if (isRunning(app)){
+			String currentActivityName = getCurrentRunningActivityName(app);
+			messageHelper.triggerMessageEvent(currentActivityName, message);
+		} else {
+			alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
+		}
 	}
 
 

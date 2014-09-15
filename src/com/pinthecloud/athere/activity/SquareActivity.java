@@ -52,7 +52,6 @@ public class SquareActivity extends AhActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
 
-
 		/*
 		 * Set Helper and get square
 		 */
@@ -143,9 +142,17 @@ public class SquareActivity extends AhActivity{
 			@Override
 			public void onCompleted(AhMessage message) {
 				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
-					String text = getResources().getString(R.string.forced_logout_title);
-					Toast toast = Toast.makeText(thisActivity, text, Toast.LENGTH_LONG);
-					toast.show();
+					final String text = getResources().getString(R.string.forced_logout_title);
+					thisActivity.runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							Toast toast = Toast.makeText(thisActivity, text, Toast.LENGTH_LONG);
+							toast.show();
+						}
+					});
+					
 
 					Intent intent = new Intent(SquareActivity.this, SquareListActivity.class);
 					startActivity(intent);
