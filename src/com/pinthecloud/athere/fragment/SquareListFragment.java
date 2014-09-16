@@ -2,7 +2,6 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -83,7 +82,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				final Square square = squareListAdapter.getItem(position);
+				final Square square = squareListAdapter.getItem(--position);
 				if(square.getCode().equals("")){
 					Intent intent = new Intent(context, SquareProfileActivity.class);
 					intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
@@ -160,13 +159,13 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	 */
 	private void getNearSquares(){
 		mProgressBar.setVisibility(View.VISIBLE);
-		
+
 		Location loc = locationHelper.getLastLocation();
 		if(loc == null){
 			locationHelper.requestLocationUpdates(locationListener);
 			return;
 		}
-		
+
 		double latitude = loc.getLatitude();
 		double longitude = loc.getLongitude();
 		if(pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
@@ -180,9 +179,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			public void onCompleted(List<Square> list, int count) {
 				mProgressBar.setVisibility(View.GONE);
 
-				LinkedList<Square> linkedList = new LinkedList<Square>();
-				linkedList.addAll(list);
-				
 				// Sort square list by distance and premium
 				Collections.sort(list, new Comparator<Square>(){
 
@@ -203,7 +199,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 				// Add loaded square
 				squareListAdapter.clear();
-				squareListAdapter.addAll(linkedList);
+				squareListAdapter.addAll(list);
 			}
 		});
 	}

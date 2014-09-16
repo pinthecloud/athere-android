@@ -50,6 +50,7 @@ public class BasicProfileFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);		
 
+		
 		/*
 		 * Find UI component
 		 */
