@@ -22,14 +22,14 @@
             android:layout_height="@dimen/divider_height"
             android:background="@color/gray_line" />
 
-        <ListView
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
             android:id="@+id/square_list_frag_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:divider="@null"
-            android:listSelector="@drawable/list_selector_bg" >
-        </ListView>
+            android:listSelector="@drawable/list_selector_bg" />
 
         <View
             android:layout_width="match_parent"

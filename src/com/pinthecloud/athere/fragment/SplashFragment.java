@@ -180,18 +180,17 @@ public class SplashFragment extends AhFragment {
 			@Override
 			public void doNext(final AhFragment frag) {
 				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
-					int errorCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-					if (errorCode != ConnectionResult.SUCCESS) {
-						ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
-						return;
-					}
-					userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
+					if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+						userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
 
-						@Override
-						public void onCompleted(String registrationId) {
-							pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-						}
-					});
+							@Override
+							public void onCompleted(String registrationId) {
+								pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+							}
+						});
+					}else{
+						ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+					}
 				} else {
 					AsyncChainer.notifyNext(frag);
 				}

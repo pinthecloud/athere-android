@@ -2,6 +2,7 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.ActionBar;
@@ -20,6 +21,9 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationListener;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
@@ -34,16 +38,17 @@ import com.pinthecloud.athere.model.Square;
 
 public class SquareListFragment extends AhFragment implements
 GooglePlayServicesClient.ConnectionCallbacks,
-GooglePlayServicesClient.OnConnectionFailedListener,
-LocationListener{
+GooglePlayServicesClient.OnConnectionFailedListener{
 
 	private ActionBar mActionBar;
 	private ProgressBar mProgressBar;
 
+	private PullToRefreshListView pullToRefreshListView;
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
 
 	private LocationHelper locationHelper;
+	private LocationListener locationListener;
 
 
 	@Override
@@ -56,8 +61,11 @@ LocationListener{
 		 * Set UI component
 		 */
 		mActionBar = activity.getActionBar();
-		squareListView = (ListView)view.findViewById(R.id.square_list_frag_list);
 		mProgressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
+		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
+		squareListView = pullToRefreshListView.getRefreshableView();
+		registerForContextMenu(squareListView);
+
 
 		/*
 		 * Set Action Bar
@@ -105,7 +113,28 @@ LocationListener{
 				}
 			}
 		});
+		pullToRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				locationHelper.requestLocationUpdates(locationListener);
+			}
+		});
+
+
+		/*
+		 * Set location helper and listener 
+		 */
 		locationHelper = new LocationHelper(activity, this, this);
+		locationListener = new LocationListener() {
+
+			@Override
+			public void onLocationChanged(Location location) {
+				locationHelper.removeLocationUpdates(locationListener);
+				getNearSquares();
+				pullToRefreshListView.onRefreshComplete();
+			}
+		};
 
 		return view;
 	}
@@ -129,7 +158,15 @@ LocationListener{
 	 * Get square near from user
 	 * Now it just gets all squares cause of location law. (lati and longi is 0)
 	 */
-	private void getNearSquares(Location loc){
+	private void getNearSquares(){
+		mProgressBar.setVisibility(View.VISIBLE);
+		
+		Location loc = locationHelper.getLastLocation();
+		if(loc == null){
+			locationHelper.requestLocationUpdates(locationListener);
+			return;
+		}
+		
 		double latitude = loc.getLatitude();
 		double longitude = loc.getLongitude();
 		if(pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
@@ -143,6 +180,9 @@ LocationListener{
 			public void onCompleted(List<Square> list, int count) {
 				mProgressBar.setVisibility(View.GONE);
 
+				LinkedList<Square> linkedList = new LinkedList<Square>();
+				linkedList.addAll(list);
+				
 				// Sort square list by distance and premium
 				Collections.sort(list, new Comparator<Square>(){
 
@@ -163,7 +203,7 @@ LocationListener{
 
 				// Add loaded square
 				squareListAdapter.clear();
-				squareListAdapter.addAll(list);
+				squareListAdapter.addAll(linkedList);
 			}
 		});
 	}
@@ -177,25 +217,11 @@ LocationListener{
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		mProgressBar.setVisibility(View.VISIBLE);
-
-		Location loc = locationHelper.getLastLocation();
-		if(loc == null){
-			locationHelper.requestLocationUpdates(this);
-		}else{
-			getNearSquares(loc);
-		}
+		getNearSquares();
 	}
 
 
 	@Override
 	public void onDisconnected() {
-	}
-
-
-	@Override
-	public void onLocationChanged(Location location) {
-		locationHelper.removeLocationUpdates(this);
-		getNearSquares(location);
 	}
 }
