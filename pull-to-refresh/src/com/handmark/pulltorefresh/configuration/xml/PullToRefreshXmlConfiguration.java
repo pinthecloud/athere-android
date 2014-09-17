@@ -20,13 +20,12 @@ import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.handmark.pulltorefresh.library.R;
-import com.handmark.pulltorefresh.library.internal.Assert;
-import com.handmark.pulltorefresh.library.internal.Utils;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
+
+import com.handmark.pulltorefresh.library.R;
+import com.handmark.pulltorefresh.library.internal.Assert;
 
 /**
  * {@code PullToRefreshXmlConfiguration} is an information set of PullToRefresh. It contains a list of indicator layouts and of loading layouts. An information set of PullToRefresh is converted from pulltorefresh.xml.<br />

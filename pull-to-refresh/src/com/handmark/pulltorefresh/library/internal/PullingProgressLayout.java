@@ -15,17 +15,14 @@
  *******************************************************************************/
 package com.handmark.pulltorefresh.library.internal;
 
-import com.handmark.pulltorefresh.library.R;
-
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
+import com.handmark.pulltorefresh.library.R;
 /**
  * Layout Class displaying specialized progress bar whose progress starts from center,
  * @author Wonjun Kim

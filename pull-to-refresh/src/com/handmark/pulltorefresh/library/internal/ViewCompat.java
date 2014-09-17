@@ -19,8 +19,6 @@ package com.handmark.pulltorefresh.library.internal;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.handmark.pulltorefresh.configuration.xml.PullToRefreshXmlConfiguration;
-
 import android.annotation.TargetApi;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;

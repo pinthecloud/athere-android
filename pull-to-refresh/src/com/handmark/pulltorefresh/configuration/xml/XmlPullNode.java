@@ -17,7 +17,6 @@ package com.handmark.pulltorefresh.configuration.xml;
 
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -145,7 +144,7 @@ class XmlPullNode {
 		 */
 		void process(XmlPullParser parser) throws XmlPullParserException, IOException;
 	}
-	
+
 	/**
 	 * {@XmlPullNodeContainer} is a container for saving {@code repeatLimit}. And check the limit to occur an error. <br />
 	 * NOTE : Justly, this Class is not thread-safe. :)
@@ -188,7 +187,7 @@ class XmlPullNode {
 				decreaseRepeatLimit();
 				return node;
 			}
-			
+
 			// throw an error
 			if (repeatLimit == 0) {
 				String tagName = node.getName();

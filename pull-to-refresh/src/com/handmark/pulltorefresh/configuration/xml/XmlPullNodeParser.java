@@ -21,8 +21,6 @@ import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.Log;
-
 import com.handmark.pulltorefresh.configuration.xml.XmlPullParserWrapper.DocumentState;
 import com.handmark.pulltorefresh.library.internal.Assert;
 /**
@@ -65,13 +63,13 @@ abstract class XmlPullNodeParser<R> {
 		if ( isParsed == true ) {
 			return getResult();
 		}
-		
+
 		// First, Find the root node.
 		DocumentState documentState;
-		
+
 		String rootName = rootNode.getName();
 		documentState = parser.nextStartTagByName(rootName);
-		
+
 		if ( documentState.END.equals(documentState)) {
 			throw new XmlPullParserException(rootName + " tag has not found.");
 		}
@@ -95,25 +93,25 @@ abstract class XmlPullNodeParser<R> {
 	private void parseInternal(XmlPullNode currentNode) throws XmlPullParserException, IOException {
 		// NOTE : too many permissions to node
 		currentNode.getCallback().process(parser);
-		
+
 		while ( true ) {
-	
+
 			// if document is end during finding the end tag of this current node, it throws the exception below. 
 			if ( parser.isEndDocument() ) {
 				throw new XmlPullParserException("XML document is invalid.");
 			}			
-			
+
 			// if the end tag is found, parsing this scope is being ended.
 			if ( parser.isEndTag() && parser.matchCurrentTagName(currentNode.getName())) {
 				break;
 			}
-			
+
 			// get next tag
 			parser.next();
-			
+
 			// when a child node is found, deeply parsing
 			if ( parser.isStartTag() ) {
-				
+
 				String currentTagName = parser.getName();
 				XmlPullNode childNode = currentNode.getChild(currentTagName);
 				if ( childNode != null ) {

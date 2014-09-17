@@ -24,9 +24,8 @@ import android.view.View;
 
 import com.handmark.pulltorefresh.configuration.xml.PullToRefreshXmlConfiguration;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.internal.IndicatorLayout;
 import com.handmark.pulltorefresh.library.internal.DefaultIndicatorLayout;
-import com.handmark.pulltorefresh.library.internal.Utils;
+import com.handmark.pulltorefresh.library.internal.IndicatorLayout;
 /**
  * Factory which creates indicator layouts 
  * <br />Indicator layouts must be listed in pulltorefresh.xml as "PullToRefresh/IndicatorLayouts/layout" nodes
