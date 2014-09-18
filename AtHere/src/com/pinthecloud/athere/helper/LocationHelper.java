@@ -52,61 +52,12 @@ public class LocationHelper {
 	}
 
 
-	private boolean isLocationEnabled(AhActivity activity){
-		if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) 
-				&& !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-			return false;
-		}
-		else{
-			return true;
-		}
+	public boolean isConnected(){
+		return mLocationClient.isConnected();
 	}
 
 
 	public void connect(final AhActivity activity){
-		/*
-		 * Get user consent for location information
-		 */
-		if(!pref.getBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY)){
-			String message = activity.getResources().getString(R.string.location_consent_message);
-			AhAlertDialog locConsentDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
-
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					pref.putBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY, true);
-					connect(activity);
-				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					// do nothing
-				}
-			});
-			locConsentDialog.show(activity.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			return;
-		}
-
-
-		/*
-		 * Set enable location service
-		 */
-		if(!isLocationEnabled(activity)){
-			String message = activity.getResources().getString(R.string.location_setting_message);
-			AhAlertDialog locSettingDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
-
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					Intent intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-					activity.startActivity(intent);
-				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					// do nothing
-				}
-			});
-			locSettingDialog.show(activity.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			return;
-		}
-
 		mLocationClient.connect();
 	}
 
@@ -128,5 +79,69 @@ public class LocationHelper {
 
 	public void removeLocationUpdates(LocationListener listener){
 		mLocationClient.removeLocationUpdates(listener);
+	}
+
+
+	private boolean isLocationEnabled(AhActivity activity){
+		if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) 
+				&& !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+
+
+	public boolean isLocationAccess(AhActivity activity){
+		return pref.getBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY) && isLocationEnabled(activity);
+	}
+
+
+	public void getLocationAccess(final AhActivity activity, final AhDialogCallback callback){
+		/*
+		 * Get user consent for location information
+		 */
+		if(!pref.getBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY)){
+			String message = activity.getResources().getString(R.string.location_consent_message);
+			AhAlertDialog locConsentDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					pref.putBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY, true);
+					getLocationAccess(activity, callback);
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					callback.doNegativeThing(bundle);
+				}
+			});
+			locConsentDialog.show(activity.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			return;
+		}
+
+
+		/*
+		 * Set enable location service
+		 */
+		if(!isLocationEnabled(activity)){
+			String message = activity.getResources().getString(R.string.location_setting_message);
+			AhAlertDialog locSettingDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					Intent intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					activity.startActivity(intent);
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					callback.doNegativeThing(bundle);
+				}
+			});
+			locSettingDialog.show(activity.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			return;
+		}
+
+		callback.doPositiveThing(null);
 	}
 }

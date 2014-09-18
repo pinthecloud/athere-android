@@ -57,6 +57,7 @@
     <string name="no_today_message">나중에 할게요</string>
     <string name="location_consent_message">추파는 위치정보를 사용해요. 괜찮아요?</string>
     <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
+    <string name="far_message">이 그라운드는 들어가기에 너무 멀리있어요.</string>
 
     <!-- String Array -->
 

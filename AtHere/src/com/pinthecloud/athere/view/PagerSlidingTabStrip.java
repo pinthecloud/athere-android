@@ -218,13 +218,11 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			@SuppressLint("NewApi")
 			@Override
 			public void onGlobalLayout() {
-
 				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
 					getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				} else {
 					getViewTreeObserver().removeOnGlobalLayoutListener(this);
 				}
-
 				currentPosition = pager.getCurrentItem();
 				scrollToChild(currentPosition, 0);
 			}

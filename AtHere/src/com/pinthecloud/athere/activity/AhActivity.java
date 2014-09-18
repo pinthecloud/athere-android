@@ -1,6 +1,8 @@
 package com.pinthecloud.athere.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -26,13 +28,15 @@ public class AhActivity extends Activity{
 	protected AhActivity thisActivity;
 	protected String simpleClassName;
 
+	private boolean isDestroyed = false;
+
 
 	public AhActivity(){
 		thisActivity = this;
 		app = AhApplication.getInstance();
 		pref = app.getPref();
 		simpleClassName = thisActivity.getClass().getSimpleName();
-		
+
 		fiveRocksHelper = app.getFiveRocksHelper();
 		userHabitHelper = app.getUserHabitHelper();
 	}
@@ -85,5 +89,24 @@ public class AhActivity extends Activity{
 		super.onStop();
 		fiveRocksHelper.onActivityStop(thisActivity);
 		userHabitHelper.activityStop(thisActivity);
+	}
+
+
+	@Override
+	protected void onDestroy() {
+		LogSM(simpleClassName + " onDestroy");
+		super.onDestroy();
+		isDestroyed = true;
+	}
+
+
+	@SuppressLint("NewApi")
+	@Override
+	public boolean isDestroyed() {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			return isDestroyed;
+		} else {
+			return super.isDestroyed();
+		}
 	}
 }

@@ -59,7 +59,6 @@ public class ProfileSettingsFragment extends AhFragment{
 	private CameraPreview mCameraPreview;
 	private FrameLayout cameraView;
 	private ImageView profilePictureView;
-	private ImageButton profilePictureSelect;
 	private ImageButton cameraButton;
 	private ImageButton cameraRotateButton;
 
@@ -139,7 +138,6 @@ public class ProfileSettingsFragment extends AhFragment{
 		cameraRotateButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.profile_settings_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.profile_settings_frag_profile_picture);
-		profilePictureSelect = (ImageButton) view.findViewById(R.id.profile_settings_frag_profile_picture_select_button);
 		nickNameEditText = (EditText) view.findViewById(R.id.profile_settings_frag_nick_name_text);
 		companyNumberEditText = (EditText) view.findViewById(R.id.profile_settings_frag_company_text);
 		completeButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_start_button);
@@ -151,13 +149,6 @@ public class ProfileSettingsFragment extends AhFragment{
 		String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 		pictureBitmap = FileUtil.getImageFromInternalStorage(context, userId);
 		profilePictureView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				profilePictureOnClick();
-			}
-		});
-		profilePictureSelect.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -393,7 +384,6 @@ public class ProfileSettingsFragment extends AhFragment{
 				releaseCameraAndRemoveView();
 				isCamera = false;
 				isTookPicture = true;
-				profilePictureSelect.setVisibility(View.GONE);
 				cameraButton.setVisibility(View.GONE);
 				cameraRotateButton.setVisibility(View.GONE);
 				completeButton.setEnabled(isCompleteButtonEnable());
@@ -417,7 +407,6 @@ public class ProfileSettingsFragment extends AhFragment{
 		cameraView.addView(mCameraPreview);
 
 		profilePictureView.setImageBitmap(null);
-		profilePictureSelect.setVisibility(View.GONE);
 		profileInfoLayout.bringToFront();
 
 		isCamera = true;
@@ -489,8 +478,7 @@ public class ProfileSettingsFragment extends AhFragment{
 				@Override
 				public void doPositiveThing(Bundle bundle) {
 					// Set profile image default
-					profilePictureView.setImageResource(R.drawable.profile_default);
-					profilePictureSelect.setVisibility(View.VISIBLE);
+					profilePictureView.setImageResource(R.drawable.bg_ground_profile_default);
 
 					// Release camera and set button to re take
 					isCamera = false;

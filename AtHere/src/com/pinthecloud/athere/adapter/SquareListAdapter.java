@@ -47,6 +47,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			ImageView background = (ImageView)view.findViewById(R.id.row_square_list_background);
 			TextView squareNameText = (TextView)view.findViewById(R.id.row_square_list_name);
 			TextView memberNumText = (TextView)view.findViewById(R.id.row_square_list_member_number);
+			TextView distanceText = (TextView)view.findViewById(R.id.row_square_list_distance);
 
 
 			/*
@@ -55,9 +56,20 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			if(square.isAdmin()){
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
 						square.getId(), 0, background, false);
+				squareNameText.setTextColor(context.getResources().getColor(android.R.color.white));
 			}
 			squareNameText.setText(square.getName());
-			memberNumText.setText(""+square.getMaleNum()+square.getFemaleNum());
+
+			int memberNum = square.getMaleNum() + square.getFemaleNum();
+			memberNumText.setText(""+memberNum);
+
+			int distance = square.getDistance();
+			String unit = context.getResources().getString(R.string.meter);
+			if((distance / 1000) >= 1){
+				distance /= 1000;  // km
+				unit = frag.getResources().getString(R.string.kilometer);	
+			}
+			distanceText.setText(distance + unit);
 		}
 		return view;
 	}

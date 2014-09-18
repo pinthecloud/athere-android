@@ -263,7 +263,7 @@ public class UserHelper {
 		user.setSquareId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
 		user.setChupaEnable(pref.getBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY));
 		user.setChatEnable(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY));
-		user.setAhIdUserKey(pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
+		user.setAhIdUserKey(pref.getString(AhGlobalVariable.USER_AH_ID_KEY));
 		return user;
 	}
 

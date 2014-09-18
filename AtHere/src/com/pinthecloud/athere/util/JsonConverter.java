@@ -65,7 +65,8 @@ public class JsonConverter {
 			boolean isAdmin = getValue(jo, ("isAdmin"), TYPE.BOOLEAN).getAsBoolean();
 			String code = getValue(jo, ("code"), TYPE.STRING).getAsString();
 			int resetTime = getValue(jo, ("resetTime"), TYPE.INT).getAsInt();
-			int range = getValue(jo, ("range"), TYPE.INT).getAsInt();
+			int entryRange = getValue(jo, ("entryRange"), TYPE.INT).getAsInt();
+			int showRange = getValue(jo, ("showRange"), TYPE.INT).getAsInt();
 
 			Square square = new Square();
 			square.setId(id);
@@ -79,7 +80,8 @@ public class JsonConverter {
 			square.setAdmin(isAdmin);
 			square.setCode(code);
 			square.setResetTime(resetTime);
-			square.setRange(range);
+			square.setEntryRange(entryRange);
+			square.setShowRange(showRange);
 
 			list.add(square);
 		}

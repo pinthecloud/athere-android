@@ -28,17 +28,6 @@
                 android:src="@drawable/bg_ground_profile_default" />
 
             <ImageButton
-                android:id="@+id/square_profile_frag_profile_picture_select_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/square_profile_frag_profile_picture"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/square_profile_camera_button_bottom_margin"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/profile_image"
-                android:src="@drawable/ground_profile_default_select" />
-
-            <ImageButton
                 android:id="@+id/square_profile_frag_self_camera_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

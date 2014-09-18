@@ -9,6 +9,7 @@
         android:id="@+id/row_square_list_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="fitXY"
         android:layout_above="@+id/row_square_list_line"
         android:contentDescription="@string/square" />
 
@@ -24,23 +25,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/square_list_name_member_margin"
-            android:textColor="@android:color/white"
             android:textSize="@dimen/font_large" />
 
-        <TextView
-            android:id="@+id/row_square_list_member_number"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/square_drawer_profile_company_num_height"
-            android:background="@drawable/bg_groundlist_member_w"
-            android:drawableLeft="@drawable/peoplenum"
-            android:drawableStart="@drawable/peoplenum"
-            android:gravity="center"
-            android:paddingEnd="@dimen/square_list_member_right_margin"
-            android:paddingLeft="@dimen/square_list_member_left_margin"
-            android:paddingRight="@dimen/square_list_member_right_margin"
-            android:paddingStart="@dimen/square_list_member_left_margin"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/font_medium" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+
+            <TextView
+                android:id="@+id/row_square_list_member_number"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/square_drawer_profile_company_num_height"
+                android:layout_marginEnd="@dimen/square_list_member_distance_margin"
+                android:layout_marginRight="@dimen/square_list_member_distance_margin"
+                android:background="@drawable/bg_groundlist_member_w"
+                android:drawableLeft="@drawable/peoplenum"
+                android:drawableStart="@drawable/peoplenum"
+                android:gravity="center"
+                android:paddingEnd="@dimen/square_list_member_right_margin"
+                android:paddingLeft="@dimen/square_list_member_left_margin"
+                android:paddingRight="@dimen/square_list_member_right_margin"
+                android:paddingStart="@dimen/square_list_member_left_margin"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_medium" />
+
+            <TextView
+                android:id="@+id/row_square_list_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/square_drawer_profile_company_num_height"
+                android:background="@drawable/bg_groundlist_member_m"
+                android:gravity="center"
+                android:paddingEnd="@dimen/square_list_member_right_margin"
+                android:paddingLeft="@dimen/square_list_member_left_margin"
+                android:paddingRight="@dimen/square_list_member_right_margin"
+                android:paddingStart="@dimen/square_list_member_left_margin"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/font_medium" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <View

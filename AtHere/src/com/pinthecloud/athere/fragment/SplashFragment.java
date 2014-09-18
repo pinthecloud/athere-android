@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -78,7 +79,7 @@ public class SplashFragment extends AhFragment {
 			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
 		}
 
-
+		
 		/*
 		 * If time is up, remove local preferences.
 		 */
@@ -243,22 +244,25 @@ public class SplashFragment extends AhFragment {
 	/*
 	 * Move to next activity by user status
 	 */
+	@SuppressLint("NewApi")
 	public void goToNextActivity() {
-		boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
-		boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+		if(!activity.isDestroyed()){
+			boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
+			boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 
-		Intent intent = new Intent();
-		if (!isLoggedInUser){
-			// New User
-			intent.setClass(context, BasicProfileActivity.class);
-		} else if(!isLooggedInSquare){
-			// Already logged in
-			intent.setClass(context, SquareListActivity.class);
-		} else{
-			// Has entered a square
-			intent.setClass(context, SquareActivity.class);
+			Intent intent = new Intent();
+			if (!isLoggedInUser){
+				// New User
+				intent.setClass(context, BasicProfileActivity.class);
+			} else if(!isLooggedInSquare){
+				// Already logged in
+				intent.setClass(context, SquareListActivity.class);
+			} else{
+				// Has entered a square
+				intent.setClass(context, SquareActivity.class);
+			}
+			startActivity(intent);
 		}
-		startActivity(intent);
 	}
 
 

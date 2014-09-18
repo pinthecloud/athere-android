@@ -65,7 +65,6 @@ public class SquareProfileFragment extends AhFragment{
 	private CameraPreview mCameraPreview;
 	private FrameLayout cameraView;
 	private ImageView profilePictureView;
-	private ImageButton profilePictureSelect;
 	private ImageButton cameraButton;
 	private ImageButton cameraRotateButton;
 
@@ -165,7 +164,6 @@ public class SquareProfileFragment extends AhFragment{
 		cameraRotateButton = (ImageButton) view.findViewById(R.id.square_profile_frag_self_camera_button);
 		profileInfoLayout = (LinearLayout) view.findViewById(R.id.square_profile_frag_profile_info_layout);
 		profilePictureView = (ImageView) view.findViewById(R.id.square_profile_frag_profile_picture);
-		profilePictureSelect = (ImageButton) view.findViewById(R.id.square_profile_frag_profile_picture_select_button);
 		nickNameEditText = (EditText) view.findViewById(R.id.square_profile_frag_nick_name_text);
 		companyNumberEditText = (EditText) view.findViewById(R.id.square_profile_frag_company_text);
 		completeButton = (ImageButton) view.findViewById(R.id.square_profile_frag_start_button);
@@ -175,13 +173,6 @@ public class SquareProfileFragment extends AhFragment{
 		 * Set Event on picture image view
 		 */
 		profilePictureView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				profilePictureOnClick();
-			}
-		});
-		profilePictureSelect.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -417,7 +408,6 @@ public class SquareProfileFragment extends AhFragment{
 				releaseCameraAndRemoveView();
 				isCamera = false;
 				isTookPicture = true;
-				profilePictureSelect.setVisibility(View.GONE);
 				cameraButton.setVisibility(View.GONE);
 				cameraRotateButton.setVisibility(View.GONE);
 				completeButton.setEnabled(isCompleteButtonEnable());
@@ -441,7 +431,6 @@ public class SquareProfileFragment extends AhFragment{
 		cameraView.addView(mCameraPreview);
 
 		profilePictureView.setImageBitmap(null);
-		profilePictureSelect.setVisibility(View.GONE);
 		profileInfoLayout.bringToFront();
 
 		isCamera = true;
@@ -513,8 +502,7 @@ public class SquareProfileFragment extends AhFragment{
 				@Override
 				public void doPositiveThing(Bundle bundle) {
 					// Set profile image default
-					profilePictureView.setImageResource(R.drawable.profile_default);
-					profilePictureSelect.setVisibility(View.VISIBLE);
+					profilePictureView.setImageResource(R.drawable.bg_ground_profile_default);
 
 					// Release camera and set button to re take
 					isCamera = false;
@@ -615,7 +603,7 @@ public class SquareProfileFragment extends AhFragment{
 						String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
 						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
-						
+
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

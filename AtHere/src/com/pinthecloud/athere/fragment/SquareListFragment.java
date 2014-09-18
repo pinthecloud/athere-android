@@ -83,32 +83,43 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				final Square square = squareListAdapter.getItem(--position);
-				if(square.getCode().equals("")){
-					Intent intent = new Intent(context, SquareProfileActivity.class);
-					intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
-					startActivity(intent);
-				} else{
-					SquareCodeDialog codeDialog = new SquareCodeDialog(square, new AhDialogCallback() {
 
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							String code = bundle.getString(AhGlobalVariable.CODE_VALUE_KEY);
-							if(code.equals(square.getCode())){
-								Intent intent = new Intent(context, SquareProfileActivity.class);
-								intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
-								startActivity(intent);
-							}else{
-								String message = getResources().getString(R.string.bad_square_code_message);
-								Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-								toast.show();
+				/*
+				 * If enough close to enter or it is super user, check code.
+				 * Otherwise, cannot enter.
+				 */
+				if(square.getDistance() <= square.getEntryRange() || pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
+					if(square.getCode().equals("")){
+						Intent intent = new Intent(context, SquareProfileActivity.class);
+						intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
+						startActivity(intent);
+					} else{
+						SquareCodeDialog codeDialog = new SquareCodeDialog(square, new AhDialogCallback() {
+
+							@Override
+							public void doPositiveThing(Bundle bundle) {
+								String code = bundle.getString(AhGlobalVariable.CODE_VALUE_KEY);
+								if(code.equals(square.getCode())){
+									Intent intent = new Intent(context, SquareProfileActivity.class);
+									intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
+									startActivity(intent);
+								}else{
+									String message = getResources().getString(R.string.bad_square_code_message);
+									Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+									toast.show();
+								}
 							}
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							// do nothing		
-						}
-					});
-					codeDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+							@Override
+							public void doNegativeThing(Bundle bundle) {
+								// do nothing		
+							}
+						});
+						codeDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+					}
+				} else{
+					String message = getResources().getString(R.string.far_message);
+					Toast.makeText(activity, message, Toast.LENGTH_LONG)
+					.show();;
 				}
 			}
 		});
@@ -116,7 +127,21 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				locationHelper.requestLocationUpdates(locationListener);
+				if(locationHelper.isLocationAccess(activity)){
+					locationHelper.requestLocationUpdates(locationListener);
+				} else{
+					locationHelper.getLocationAccess(activity, new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							locationHelper.requestLocationUpdates(locationListener);	
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							pullToRefreshListView.onRefreshComplete();	
+						}
+					});
+				}
 			}
 		});
 
@@ -130,8 +155,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			@Override
 			public void onLocationChanged(Location location) {
 				locationHelper.removeLocationUpdates(locationListener);
-				getNearSquares();
-				pullToRefreshListView.onRefreshComplete();
+				getNearSquares(View.GONE);
 			}
 		};
 
@@ -157,8 +181,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	 * Get square near from user
 	 * Now it just gets all squares cause of location law. (lati and longi is 0)
 	 */
-	private void getNearSquares(){
-		mProgressBar.setVisibility(View.VISIBLE);
+	private void getNearSquares(int progressVisible){
+		mProgressBar.setVisibility(progressVisible);
 
 		Location loc = locationHelper.getLastLocation();
 		if(loc == null){
@@ -168,16 +192,12 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 		double latitude = loc.getLatitude();
 		double longitude = loc.getLongitude();
-		if(pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
-			latitude = -1;
-			longitude = -1;
-		}
-
 		squareHelper.getSquareListAsync(thisFragment, latitude, longitude, new AhListCallback<Square>() {
 
 			@Override
 			public void onCompleted(List<Square> list, int count) {
 				mProgressBar.setVisibility(View.GONE);
+				pullToRefreshListView.onRefreshComplete();
 
 				// Sort square list by distance and premium
 				Collections.sort(list, new Comparator<Square>(){
@@ -213,7 +233,21 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		getNearSquares();
+		if(locationHelper.isLocationAccess(activity)){
+			getNearSquares(View.VISIBLE);
+		} else{
+			locationHelper.getLocationAccess(activity, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					getNearSquares(View.VISIBLE);
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					// Do nothing
+				}
+			});
+		}
 	}
 
 

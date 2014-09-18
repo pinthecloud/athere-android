@@ -36,6 +36,8 @@
     <string name="admin">Admin</string>
     <string name="install">Install</string>
     <string name="square">Ground</string>
+    <string name="meter">m</string>
+    <string name="kilometer">km</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
@@ -57,6 +59,7 @@
     <string name="no_today_message">Later do it</string>
     <string name="location_consent_message">Chupa use location information. Do you agree?</string>
     <string name="location_setting_message">Please enable location access.</string>
+    <string name="far_message">This ground is too far to enter.</string>
 
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">

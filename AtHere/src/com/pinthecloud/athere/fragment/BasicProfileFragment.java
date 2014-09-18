@@ -70,9 +70,10 @@ public class BasicProfileFragment extends AhFragment{
 			@Override
 			public void onClick(View v) {
 				countSudo++;
-				if (countSudo == 5) {
+				if (countSudo == 10) {
 					pref.putBoolean(AhGlobalVariable.SUDO_KEY, true);
-					Toast.makeText(thisFragment.getActivity(), "Super User Activated!", Toast.LENGTH_LONG).show();;
+					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
+					.show();;
 				}
 			}
 		});
@@ -224,7 +225,7 @@ public class BasicProfileFragment extends AhFragment{
 							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
 							pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
 							pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-							pref.putString(AhGlobalVariable.AH_ID_USER_KEY, entity.getAhId());
+							pref.putString(AhGlobalVariable.USER_AH_ID_KEY, entity.getAhId());
 
 							Intent intent = new Intent(context, SquareListActivity.class);
 							startActivity(intent);
