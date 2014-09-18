@@ -204,6 +204,13 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 					@Override
 					public int compare(Square lhs, Square rhs) {
+						return lhs.getName().compareTo(rhs.getName());
+					}
+				});
+				Collections.sort(list, new Comparator<Square>(){
+
+					@Override
+					public int compare(Square lhs, Square rhs) {
 						return lhs.getDistance() > rhs.getDistance() ? 1 : 
 							lhs.getDistance() < rhs.getDistance() ? -1 : 0;
 					}

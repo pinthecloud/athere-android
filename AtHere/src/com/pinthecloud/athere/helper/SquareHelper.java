@@ -94,8 +94,8 @@ public class SquareHelper {
 	}
 
 
-	public void createSquareAsync(final AhFragment frag, String name, double latitude, double longitude,
-			int showRange, int entryRange, int resetTime, final AhEntityCallback<Square> callback) throws AhException {
+	public void createSquareAsync(final AhFragment frag, String name, double latitude, double longitude, boolean isAdmin, 
+			String code, int showRange, int entryRange, int resetTime, final AhEntityCallback<Square> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -106,19 +106,13 @@ public class SquareHelper {
 		square.setLatitude(latitude);
 		square.setLongitude(longitude);
 		square.setWhoMade(pref.getString(AhGlobalVariable.USER_AH_ID_KEY));
-		square.setCode("");
-		square.setAdmin(false);
+		square.setCode(code);
+		square.setAdmin(isAdmin);
 		square.setShowRange(showRange);
 		square.setEntryRange(entryRange);
 		square.setResetTime(resetTime);
-
-		int maleNum = 0;
-		int femaleNum = 0;
-		if(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY)) maleNum++;
-		else femaleNum++;
-
-		square.setMaleNum(maleNum);
-		square.setFemaleNum(femaleNum);
+		square.setMaleNum(0);
+		square.setFemaleNum(0);
 
 		squareTable.insert(square, new TableOperationCallback<Square>() {
 
