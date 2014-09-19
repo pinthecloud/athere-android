@@ -44,9 +44,6 @@ public class AhApplication extends Application{
 	private final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
 	private final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
 
-	// Method Name
-//	private final String FORCED_LOGOUT = "forced_logout";
-
 	// Application
 	private static AhApplication app;
 	private static PreferenceHelper pref;
@@ -254,11 +251,14 @@ public class AhApplication extends Application{
 
 		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
 		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);
 		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
+		
+		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
+		pref.removePref(AhGlobalVariable.IS_GIRLS_CHAT_ENABLE_KEY);
+		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+		
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_RESET_KEY);

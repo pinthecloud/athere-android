@@ -132,6 +132,7 @@ public class SquareHelper {
 		Square square = new Square();
 		square.setId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
 		square.setName(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
+		square.setResetTime(pref.getInt(AhGlobalVariable.SQUARE_RESET_KEY));
 		return square;
 	}
 

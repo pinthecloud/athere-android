@@ -25,8 +25,10 @@
     <string name="exit_square">이 그라운드 나가기</string>
     <string name="send">보내기</string>
     <string name="send_chupa">추파 보내기</string>
-    <string name="chat_alarm">채팅알람</string>
-    <string name="chupa_alarm">추파알람</string>
+    <string name="alarm">알람</string>
+    <string name="chat">채팅</string>
+    <string name="girls_chat">여자챗</string>
+    <string name="chupa">추파</string>
     <string name="player">참가팀</string>
     <string name="code">매장 코드</string>
     <string name="blank">없음</string>

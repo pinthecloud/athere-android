@@ -541,7 +541,6 @@ public class SquareProfileFragment extends AhFragment{
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-		pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, true);
 
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -590,6 +589,8 @@ public class SquareProfileFragment extends AhFragment{
 
 						// Save this setting and go to next activity
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, true);
+						pref.putBoolean(AhGlobalVariable.IS_GIRLS_CHAT_ENABLE_KEY, true);
 						pref.putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putInt(AhGlobalVariable.SQUARE_RESET_KEY, square.getResetTime());

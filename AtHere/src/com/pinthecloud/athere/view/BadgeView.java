@@ -101,7 +101,6 @@ public class BadgeView extends TextView{
 	}
 
 	private void init(Context context, View target, int tabIndex) {
-
 		this.context = context;
 		this.target = target;
 		this.targetTabIndex = tabIndex;
@@ -132,11 +131,9 @@ public class BadgeView extends TextView{
 		} else {
 			show();
 		}
-
 	}
 
 	private void applyTo(View target) {
-
 		LayoutParams lp = target.getLayoutParams();
 		ViewParent parent = target.getParent();
 		FrameLayout container = new FrameLayout(context);
@@ -154,7 +151,6 @@ public class BadgeView extends TextView{
 			container.addView(this);
 
 		} else {
-
 			// TODO verify that parent is indeed a ViewGroup
 			ViewGroup group = (ViewGroup) parent; 
 			int index = group.indexOfChild(target);
@@ -168,9 +164,7 @@ public class BadgeView extends TextView{
 			container.addView(this);
 
 			group.invalidate();
-
 		}
-
 	}
 
 	/**
@@ -337,7 +331,6 @@ public class BadgeView extends TextView{
 	}
 
 	private void applyLayoutParams() {
-
 		FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
 		switch (badgePosition) {

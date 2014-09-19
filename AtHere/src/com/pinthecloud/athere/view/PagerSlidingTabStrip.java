@@ -196,9 +196,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	}
 
 	public void notifyDataSetChanged() {
-
 		tabsContainer.removeAllViews();
-
 		tabCount = pager.getAdapter().getCount();
 
 		for (int i = 0; i < tabCount; i++) {
@@ -230,7 +228,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	}
 
 	private void addTextTab(final int position, String title) {
-
 		TextView tab = new TextView(getContext());
 		tab.setText(title);
 		tab.setGravity(Gravity.CENTER);
@@ -251,7 +248,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	}
 
 	private void addIconTab(final int position, int resId) {
-
 		ImageButton tab = new ImageButton(getContext());
 		tab.setImageResource(resId);
 
@@ -285,16 +281,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	}
 
 	private void updateTabStyles() {
-
 		for (int i = 0; i < tabCount; i++) {
-
 			RelativeLayout layout = (RelativeLayout)tabsContainer.getChildAt(i);
 
 			View v = layout.getChildAt(0);
 			v.setBackgroundResource(tabBackgroundResId);
 
 			if (v instanceof TextView) {
-
 				TextView tab = (TextView) v;
 				tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
 				tab.setTypeface(tabTypeface, tabTypefaceStyle);
@@ -332,7 +325,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 	}
 
 	private void scrollToChild(int position, int offset) {
-
 		if (tabCount == 0) {
 			return;
 		}
@@ -347,7 +339,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			lastScrollX = newScrollX;
 			scrollTo(newScrollX, 0);
 		}
-
 	}
 
 	@Override

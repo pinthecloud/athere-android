@@ -54,19 +54,22 @@ public class AhGlobalVariable{
 	public static final String REVIEW_DIALOG_KEY = "REVIEW_DIALOG_KEY";
 	public static final String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
 	
+	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
+	public static final String ANDROID_ID_KEY = "ANDROID_ID_KEY";
+	public static final String USER_AH_ID_KEY = "AH_ID_USER_KEY";
+	public static final String USER_ID_KEY = "USER_ID_KEY";
+	public static final String SUDO_KEY = "SUDO_KEY";
+	
 	public static final String NICK_NAME_KEY = "NICK_NAME_KEY";
 	public static final String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";
 	public static final String AGE_KEY = "AGE_KEY";
 	public static final String IS_MALE_KEY = "IS_MALE_KEY";
-	public static final String IS_CHUPA_ENABLE_KEY = "IS_CHUPA_ENABLE_KEY";
-	public static final String IS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
-	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
-	public static final String ANDROID_ID_KEY = "ANDROID_ID_KEY";
-	public static final String USER_ID_KEY = "USER_ID_KEY";
-	public static final String USER_AH_ID_KEY = "AH_ID_USER_KEY";
-	public static final String SUDO_KEY = "SUDO_KEY";
 
+	public static final String IS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
+	public static final String IS_GIRLS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
+	public static final String IS_CHUPA_ENABLE_KEY = "IS_CHUPA_ENABLE_KEY";
+	
 	public static final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
 	public static final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
 	public static final String SQUARE_RESET_KEY = "SQUARE_RESET_KEY";

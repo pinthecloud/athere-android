@@ -8,7 +8,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/chupa_chat_other_bar_height"
-        android:background="@color/chupa_inputbar_background"
         android:gravity="start|center"
         android:orientation="horizontal"
         android:paddingEnd="0dp"
