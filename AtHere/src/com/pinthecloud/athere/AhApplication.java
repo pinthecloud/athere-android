@@ -256,7 +256,6 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
 		
 		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.IS_GIRLS_CHAT_ENABLE_KEY);
 		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
 		
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);

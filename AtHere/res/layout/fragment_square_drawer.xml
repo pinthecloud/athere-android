@@ -49,7 +49,7 @@
             android:layout_height="@dimen/divider_height"
             android:background="@color/gray_line" />
 
-        <LinearLayout
+       <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_bar_height"
             android:background="@color/gray_drawer_background"
@@ -82,32 +82,6 @@
                     android:textOn="" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/square_drawer_frag_girls_chat_alarm_layout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/square_drawer_setting_bar_text_toggle_margin"
-                    android:layout_marginRight="@dimen/square_drawer_setting_bar_text_toggle_margin"
-                    android:text="@string/girls_chat"
-                    android:textColor="@color/gray_tab_text_unselected"
-                    android:textSize="@dimen/font_medium" />
-
-                <ToggleButton
-                    android:id="@+id/square_drawer_frag_girls_chat_alarm_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:button="@drawable/on_off_toggle_bg"
-                    android:textOff=""
-                    android:textOn="" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"

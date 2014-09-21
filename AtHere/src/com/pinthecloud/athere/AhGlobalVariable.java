@@ -7,7 +7,7 @@ public class AhGlobalVariable{
 	/*
 	 * Application
 	 */
-	public static final boolean DEBUG_MODE = true;
+	public static final boolean DEBUG_MODE = false;
 	public static final String GOOGLE_PLAY_APP_ID = "com.pinthecloud.athere";
 	public static final String GOOGLE_PLAY_SERVICE_APP_ID = "com.google.android.gms";
 	public static final String APP_NAME = "chupa";
@@ -67,7 +67,6 @@ public class AhGlobalVariable{
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 
 	public static final String IS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
-	public static final String IS_GIRLS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
 	public static final String IS_CHUPA_ENABLE_KEY = "IS_CHUPA_ENABLE_KEY";
 	
 	public static final String SQUARE_ID_KEY = "SQUARE_ID_KEY";

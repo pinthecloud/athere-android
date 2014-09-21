@@ -13,7 +13,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -37,9 +36,7 @@ import com.pinthecloud.athere.model.AhUser;
 public class SquareDrawerFragment extends AhFragment {
 
 	private ProgressBar progressBar;
-	private LinearLayout girlsChatAlarmlayout;
 	private ToggleButton chatAlarmButton;
-	private ToggleButton girlsChatAlarmButton;
 	private ToggleButton chupaAlarmButton;
 	private RelativeLayout profileLayout;
 	private ImageView profileImage;
@@ -70,9 +67,7 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set Ui Component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
-		girlsChatAlarmlayout = (LinearLayout) view.findViewById(R.id.square_drawer_frag_girls_chat_alarm_layout);
 		chatAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_alarm_button);
-		girlsChatAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_girls_chat_alarm_button);
 		chupaAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_alarm_button);
 		profileLayout = (RelativeLayout) view.findViewById(R.id.square_drawer_frag_profile_layout);
 		profileImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
@@ -117,14 +112,6 @@ public class SquareDrawerFragment extends AhFragment {
 			public void onClick(View v) {
 				boolean isChecked = chatAlarmButton.isChecked();
 				pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, isChecked);
-			}
-		});
-		girlsChatAlarmButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				boolean isChecked = girlsChatAlarmButton.isChecked();
-				pref.putBoolean(AhGlobalVariable.IS_GIRLS_CHAT_ENABLE_KEY, isChecked);
 			}
 		});
 		chupaAlarmButton.setOnClickListener(new OnClickListener() {
@@ -233,7 +220,6 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set alarm toggle button
 		 */
 		chatAlarmButton.setChecked(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY));
-		girlsChatAlarmButton.setChecked(pref.getBoolean(AhGlobalVariable.IS_GIRLS_CHAT_ENABLE_KEY));
 		chupaAlarmButton.setChecked(user.isChupaEnable());
 
 
@@ -262,11 +248,9 @@ public class SquareDrawerFragment extends AhFragment {
 		if(user.isMale()){
 			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
 			profileCompanyNumText.setTextColor(resources.getColor(R.color.blue));
-			girlsChatAlarmlayout.setVisibility(View.GONE);
 		} else{
 			profileGenderImage.setImageResource(R.drawable.profile_gender_w);
 			profileCompanyNumText.setTextColor(resources.getColor(R.color.dark_red));
-			girlsChatAlarmlayout.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -310,7 +294,7 @@ public class SquareDrawerFragment extends AhFragment {
 		return count;
 	}
 
-	
+
 	private void showProfileDialog(final AhUser user){
 		ProfileDialog profileDialog = new ProfileDialog(thisFragment, user, new AhDialogCallback() {
 

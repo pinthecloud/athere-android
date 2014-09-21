@@ -94,7 +94,7 @@ public class SquareHelper {
 	}
 
 
-	public void createSquareAsync(final AhFragment frag, String name, double latitude, double longitude, boolean isAdmin, 
+	public void createSquareAsync(final AhFragment frag, String name, String whoMade, double latitude, double longitude, boolean isAdmin, 
 			String code, int showRange, int entryRange, int resetTime, final AhEntityCallback<Square> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -105,7 +105,7 @@ public class SquareHelper {
 		square.setName(name);
 		square.setLatitude(latitude);
 		square.setLongitude(longitude);
-		square.setWhoMade(pref.getString(AhGlobalVariable.USER_AH_ID_KEY));
+		square.setWhoMade(whoMade);
 		square.setCode(code);
 		square.setAdmin(isAdmin);
 		square.setShowRange(showRange);
