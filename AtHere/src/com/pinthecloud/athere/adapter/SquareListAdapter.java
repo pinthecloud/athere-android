@@ -45,7 +45,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			if(type == TYPE.NORMAL.ordinal()){
 				view = inflater.inflate(R.layout.row_square_list, parent, false);
 			} else if(type == TYPE.ADMIN.ordinal()){
-				view = inflater.inflate(R.layout.row_square_list, parent, false);
+				view = inflater.inflate(R.layout.row_square_list_admin, parent, false);
 			} 
 		}
 
@@ -54,18 +54,28 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			/*
 			 * Find UI component
 			 */
-			ImageView background = (ImageView)view.findViewById(R.id.row_square_list_background);
-			TextView squareNameText = (TextView)view.findViewById(R.id.row_square_list_name);
-			TextView distanceText = (TextView)view.findViewById(R.id.row_square_list_distance);
+			TextView squareNameText = null;
+			TextView distanceText = null;
+			if(type == TYPE.NORMAL.ordinal()){
+				/*
+				 * Find Common UI component
+				 */
+				squareNameText = (TextView)view.findViewById(R.id.row_square_list_name);
+				distanceText = (TextView)view.findViewById(R.id.row_square_list_distance);
+			} else if(type == TYPE.ADMIN.ordinal()){
+				/*
+				 * Find Common UI component
+				 */
+				squareNameText = (TextView)view.findViewById(R.id.row_square_list_admin_name);
+				distanceText = (TextView)view.findViewById(R.id.row_square_list_admin_distance);
 
 
-			/*
-			 * Set UI component by type
-			 */
-			if(type == TYPE.ADMIN.ordinal()){
+				/*
+				 * Set UI component only in admin square list
+				 */
+				ImageView background = (ImageView)view.findViewById(R.id.row_square_list_admin_background);
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
 						square.getId(), 0, background, false);
-				squareNameText.setTextColor(context.getResources().getColor(android.R.color.white));
 			}
 
 

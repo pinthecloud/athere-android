@@ -7,25 +7,12 @@ public class AhGlobalVariable{
 	/*
 	 * Application
 	 */
-	public static final boolean DEBUG_MODE = false;
+	public static final boolean DEBUG_MODE = true;
 	public static final String GOOGLE_PLAY_APP_ID = "com.pinthecloud.athere";
 	public static final String GOOGLE_PLAY_SERVICE_APP_ID = "com.google.android.gms";
 	public static final String APP_NAME = "chupa";
 	public static final String ANDROID = "Android";
 	public static final String SMALL = "_small";
-	
-	public static final String FIRST_UPDATE = "FIRST_UPDATE";
-	
-	/*
-	 * Int
-	 */
-	public static final int ANGLE_90 = 90;
-	public static final int ANGLE_270 = 270;
-
-	public static int DEVICE_WIDTH;
-	public static int DEVICE_HEIGHT;
-	public static int DEVICE_DPI;
-	public static float DEVICE_DENSITY;
 
 	
 	/*

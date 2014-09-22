@@ -171,6 +171,7 @@ public class AhApplication extends Application{
 		return userHabitHelper;
 	}
 
+
 	/*
 	 * @return true, if the App is connected with Internet.
 	 */
@@ -181,63 +182,63 @@ public class AhApplication extends Application{
 	}
 
 
-//	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<Boolean> callback) {
-//		if (!isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "forcedLogoutAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return;
-//		}
-//
-//		JsonObject jo = new JsonObject();
-//		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
-//		jo.addProperty("ahIdUserKey", pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
-//		jo.addProperty("isMale", pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
-//		jo.addProperty("squareId", pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-//
-//		Gson g = new Gson();
-//		final JsonElement json = g.fromJson(jo, JsonElement.class);
-//
-//		String exitMessage = app.getResources().getString(R.string.exit_square_message);
-//		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-//		AhMessage.Builder messageBuilder = new AhMessage.Builder();
-//		messageBuilder.setContent(nickName + " : " + exitMessage)
-//		.setSender(nickName)
-//		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-//		.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
-//		.setType(AhMessage.TYPE.EXIT_SQUARE);
-//		final AhMessage message = messageBuilder.build();
-//
-//		AsyncChainer.asyncChain(frag, new Chainable(){
-//
-//			@Override
-//			public void doNext(AhFragment frag) {
-//				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-//
-//					@Override
-//					public void onCompleted(AhMessage entity) {
-//
-//					}
-//				});
-//			}
-//
-//		}, new Chainable() {
-//
-//			@Override
-//			public void doNext(final AhFragment frag) {
-//				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
-//
-//					@Override
-//					public void onCompleted(JsonElement json, Exception exception,
-//							ServiceFilterResponse response) {
-//						removeSquarePreference(frag);
-//						callback.onCompleted(true);
-//					}
-//				});
-//			}
-//		});
-//
-//	}
+	//	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<Boolean> callback) {
+	//		if (!isOnline()) {
+	//			ExceptionManager.fireException(new AhException(frag, "forcedLogoutAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+	//			return;
+	//		}
+	//
+	//		JsonObject jo = new JsonObject();
+	//		jo.addProperty("userId", pref.getString(AhGlobalVariable.USER_ID_KEY));
+	//		jo.addProperty("ahIdUserKey", pref.getString(AhGlobalVariable.AH_ID_USER_KEY));
+	//		jo.addProperty("isMale", pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
+	//		jo.addProperty("squareId", pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
+	//
+	//		Gson g = new Gson();
+	//		final JsonElement json = g.fromJson(jo, JsonElement.class);
+	//
+	//		String exitMessage = app.getResources().getString(R.string.exit_square_message);
+	//		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+	//		AhMessage.Builder messageBuilder = new AhMessage.Builder();
+	//		messageBuilder.setContent(nickName + " : " + exitMessage)
+	//		.setSender(nickName)
+	//		.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+	//		.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+	//		.setType(AhMessage.TYPE.EXIT_SQUARE);
+	//		final AhMessage message = messageBuilder.build();
+	//
+	//		AsyncChainer.asyncChain(frag, new Chainable(){
+	//
+	//			@Override
+	//			public void doNext(AhFragment frag) {
+	//				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+	//
+	//					@Override
+	//					public void onCompleted(AhMessage entity) {
+	//
+	//					}
+	//				});
+	//			}
+	//
+	//		}, new Chainable() {
+	//
+	//			@Override
+	//			public void doNext(final AhFragment frag) {
+	//				mClient.invokeApi(FORCED_LOGOUT, json, new ApiJsonOperationCallback() {
+	//
+	//					@Override
+	//					public void onCompleted(JsonElement json, Exception exception,
+	//							ServiceFilterResponse response) {
+	//						removeSquarePreference(frag);
+	//						callback.onCompleted(true);
+	//					}
+	//				});
+	//			}
+	//		});
+	//
+	//	}
 
-	
+
 	public void removeSquarePreference(AhFragment frag){
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
@@ -254,10 +255,10 @@ public class AhApplication extends Application{
 		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
 		pref.removePref(AhGlobalVariable.USER_ID_KEY);
 		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
-		
+
 		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
 		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-		
+
 		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
 		pref.removePref(AhGlobalVariable.SQUARE_RESET_KEY);

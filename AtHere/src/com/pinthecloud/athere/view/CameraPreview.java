@@ -8,8 +8,8 @@ import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.util.CameraUtil;
+import com.pinthecloud.athere.util.WindowUtil;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -65,7 +65,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		parameters.setPictureSize(pictureSize.width, pictureSize.height);
 		parameters.setPictureFormat(ImageFormat.JPEG);
 		mCamera.setParameters(parameters);
-		mCamera.setDisplayOrientation(AhGlobalVariable.ANGLE_90);
+		mCamera.setDisplayOrientation(WindowUtil.ANGLE_90);
 
 		try {
 			// start preview with new settings

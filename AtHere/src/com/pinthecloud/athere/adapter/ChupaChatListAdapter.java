@@ -78,6 +78,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 				ImageButton failButton = (ImageButton)view.findViewById(R.id.row_chupa_chat_list_send_fail);
 				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_chupa_chat_list_send_progress_bar);
 
+				
 				/*
 				 * Set UI component only in send list
 				 */

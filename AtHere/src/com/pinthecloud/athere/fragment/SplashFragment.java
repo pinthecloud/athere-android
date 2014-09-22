@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.text.format.Time;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,17 +60,6 @@ public class SplashFragment extends AhFragment {
 
 
 		/*
-		 * Get device resolution and set it
-		 */
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
-		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
-		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
-		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
-
-
-		/*
 		 * Get unique android id
 		 */
 		if(pref.getString(AhGlobalVariable.ANDROID_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
@@ -79,71 +67,7 @@ public class SplashFragment extends AhFragment {
 			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
 		}
 
-
-		//		squareHelper.createSquareAsync(thisFragment, "홍대 놀이터", "pinthecloud", 37.552204, 126.923314, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "강남역", "pinthecloud", 37.497991, 127.027617, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "대학로 마로니에공원", "pinthecloud", 37.580561, 127.002804, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "종로 젊음의 거리", "pinthecloud", 37.569710, 126.985848, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "여의도 공원", "pinthecloud", 37.526139, 126.922140, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "뚝섬 유원지", "pinthecloud", 37.529509, 127.067718, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "건대 맛의거리", "pinthecloud", 37.541466, 127.068792, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "서울 어린이대공원", "pinthecloud", 37.548455, 127.080901, false, "", Integer.MAX_VALUE, 1000, 23, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-		//		squareHelper.createSquareAsync(thisFragment, "건대 왕대박", "wangdaibak", 37.541466, 127.068792, true, "4387", Integer.MAX_VALUE, 500, 12, new AhEntityCallback<Square>() {
-		//
-		//			@Override
-		//			public void onCompleted(Square entity) {
-		//
-		//			}
-		//		});
-
+		
 		/*
 		 * If time is up, remove local preferences.
 		 */
@@ -174,15 +98,6 @@ public class SplashFragment extends AhFragment {
 			} else if(currentDay == lastDay && lastHour < resetTime && currentHour >= resetTime){
 				app.removeSquarePreference(thisFragment);
 			}
-		}
-
-
-		/*
-		 * Check whether it is first time launching app after update
-		 */
-		if (pref.getString(AhGlobalVariable.FIRST_UPDATE).equals(PreferenceHelper.DEFAULT_STRING)) {
-			pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
-			pref.putString(AhGlobalVariable.FIRST_UPDATE, AhGlobalVariable.FIRST_UPDATE);
 		}
 
 
