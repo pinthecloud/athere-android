@@ -259,6 +259,8 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set participant list view
 		 */
+		final int maleNum = getMaleNum(participantListAdapter);
+		final int femaleNum = getFemaleNum(participantListAdapter);
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
@@ -270,8 +272,8 @@ public class SquareDrawerFragment extends AhFragment {
 				/*
 				 * Set member number text
 				 */
-				maleNumText.setText("" + getMaleNum(participantListAdapter));
-				femaleNumText.setText("" + getFemaleNum(participantListAdapter));
+				maleNumText.setText("" + maleNum);
+				femaleNumText.setText("" + femaleNum);
 			}
 		});
 	}
