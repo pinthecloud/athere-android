@@ -32,14 +32,6 @@ public class AhUser implements Parcelable{
 	@com.google.gson.annotations.SerializedName("ahIdUserKey")
 	private String ahIdUserKey;
 
-	public static final Parcelable.Creator<AhUser> CREATOR = new Creator<AhUser>(){
-		public AhUser createFromParcel(Parcel in){
-			return new AhUser(in);
-		}
-		public AhUser[] newArray(int size){
-			return new AhUser[size];
-		}
-	};
 
 	public AhUser() {
 
@@ -113,10 +105,25 @@ public class AhUser implements Parcelable{
 	public void setAhIdUserKey(String ahIdUserKey) {
 		this.ahIdUserKey = ahIdUserKey;
 	}
+	
+	
+	/*
+	 * Parcelable
+	 */
+	public static final Parcelable.Creator<AhUser> CREATOR = new Creator<AhUser>(){
+		public AhUser createFromParcel(Parcel in){
+			return new AhUser(in);
+		}
+		public AhUser[] newArray(int size){
+			return new AhUser[size];
+		}
+	};
+	
 	@Override
 	public int describeContents() {
 		return 0;
 	}
+	
 	@Override
 	public void writeToParcel(Parcel dest, int frags) {
 		dest.writeString(id);
@@ -131,6 +138,7 @@ public class AhUser implements Parcelable{
 		dest.writeInt(isChupaEnable? 1 : 0);
 		dest.writeString(ahIdUserKey);
 	}
+	
 	public void readToParcel(Parcel in){
 		id = in.readString();
 		nickName = in.readString();
@@ -145,6 +153,46 @@ public class AhUser implements Parcelable{
 		ahIdUserKey = in.readString();
 	}
 
+	
+	/*
+	 * Utility
+	 */
+	@Override
+	public String toString() {
+		return  "{ id : "+this.id + " \n "+
+				" nickName : "+this.nickName + " \n "+
+				" mobileId : "+this.mobileId + " \n "+
+				" registrationId : "+ (this.registrationId.length() < 20 ? 
+						this.registrationId.substring(0, this.registrationId.length() - 1) : this.registrationId.substring(0, 20)) + " \n "+
+						" isMale : "+this.isMale + " \n "+
+						" companyNum : "+this.companyNum + " \n "+
+						" age : "+this.age + " \n "+
+						" isChupaEnable : "+this.isChupaEnable + " \n "+
+						" squareId : "+this.squareId + 
+						" ahIdUserKey : " + ahIdUserKey + " }";
+	}
+
+	public JsonObject toJson() {
+		JsonObject jo = new JsonObject();
+		jo.addProperty("id", this.id);
+		jo.addProperty("nickName", this.nickName);
+		jo.addProperty("profilePic", this.profilePic);
+		jo.addProperty("mobileId", this.mobileId);
+		jo.addProperty("registrationId", this.registrationId);
+		jo.addProperty("isMale", this.isMale);
+		jo.addProperty("companyNum", this.companyNum);
+		jo.addProperty("age", this.age);
+		jo.addProperty("squareId", this.squareId);
+		jo.addProperty("isChupaEnable", this.isChupaEnable);
+		jo.addProperty("ahIdUserKey", this.ahIdUserKey);
+
+		return jo;
+	}
+	
+	
+	/*
+	 * Test
+	 */
 	public static AhUser addUserTest(){
 		AhUser user = new AhUser();
 		user.id = getRandomString();
@@ -176,37 +224,5 @@ public class AhUser implements Parcelable{
 	private static int getRandomInt(){
 		Random random = new Random();
 		return random.nextInt(40);
-	}
-
-	public String toString() {
-		return 
-				"{ id : "+this.id + " \n "+
-				" nickName : "+this.nickName + " \n "+
-				" mobileId : "+this.mobileId + " \n "+
-				" registrationId : "+ (this.registrationId.length() < 20 ? 
-						this.registrationId.substring(0, this.registrationId.length() - 1) : this.registrationId.substring(0, 20)) + " \n "+
-						" isMale : "+this.isMale + " \n "+
-						" companyNum : "+this.companyNum + " \n "+
-						" age : "+this.age + " \n "+
-						" isChupaEnable : "+this.isChupaEnable + " \n "+
-						" squareId : "+this.squareId + 
-						" ahIdUserKey : " + ahIdUserKey + " }";
-	}
-
-	public JsonObject toJson() {
-		JsonObject jo = new JsonObject();
-		jo.addProperty("id", this.id);
-		jo.addProperty("nickName", this.nickName);
-		jo.addProperty("profilePic", this.profilePic);
-		jo.addProperty("mobileId", this.mobileId);
-		jo.addProperty("registrationId", this.registrationId);
-		jo.addProperty("isMale", this.isMale);
-		jo.addProperty("companyNum", this.companyNum);
-		jo.addProperty("age", this.age);
-		jo.addProperty("squareId", this.squareId);
-		jo.addProperty("isChupaEnable", this.isChupaEnable);
-		jo.addProperty("ahIdUserKey", this.ahIdUserKey);
-
-		return jo;
 	}
 }

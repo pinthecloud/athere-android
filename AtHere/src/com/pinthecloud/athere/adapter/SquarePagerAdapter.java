@@ -6,8 +6,8 @@ import android.content.Context;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.SquareChatFragment;
-import com.pinthecloud.athere.fragment.SquareChupaListFragment;
+import com.pinthecloud.athere.fragment.ChatFragment;
+import com.pinthecloud.athere.fragment.ChupaRoomListFragment;
 import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip.IconTabProvider;
@@ -16,15 +16,15 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 
 	private String[] titles;
 	private int[] titleIcons = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
-	public SquareChatFragment squareChatFragment;
-	public SquareChupaListFragment squareChupaListFragment;
+	public ChatFragment squareChatFragment;
+	public ChupaRoomListFragment squareChupaListFragment;
 
 
 	public SquarePagerAdapter(Context context, FragmentManager fm, PagerSlidingTabStrip tabs, Square square) {
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);
-		squareChatFragment = new SquareChatFragment(square);
-		squareChupaListFragment = new SquareChupaListFragment();
+		squareChatFragment = new ChatFragment(square);
+		squareChupaListFragment = new ChupaRoomListFragment();
 	}
 
 

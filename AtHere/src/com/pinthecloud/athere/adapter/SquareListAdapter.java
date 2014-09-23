@@ -43,7 +43,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 		int type = getItemViewType(position);
 		if (view == null) {
 			if(type == TYPE.NORMAL.ordinal()){
-				view = inflater.inflate(R.layout.row_square_list, parent, false);
+				view = inflater.inflate(R.layout.row_square_list_normal, parent, false);
 			} else if(type == TYPE.ADMIN.ordinal()){
 				view = inflater.inflate(R.layout.row_square_list_admin, parent, false);
 			} 

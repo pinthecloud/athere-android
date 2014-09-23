@@ -7,7 +7,7 @@ import com.pinthecloud.athere.activity.AhActivity;
 
 public class UserHabitHelper {
 
-	private final String USER_HABIT_KEY = "2028c9a3c48fe760421cd5354e64fc3336b1d447";
+	private final String USER_HABIT_KEY = "06374d75c6ade6b5d2f6365df933120e106e413e";
 
 
 	public void activityStart(AhActivity activity){

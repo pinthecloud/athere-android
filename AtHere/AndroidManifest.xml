@@ -81,7 +81,7 @@
             android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
-        <activity android:name=".activity.HongkunTestAcitivity" />
+        <activity android:name=".activity.HongkunTestActivity" />
         <activity
             android:name=".activity.SquareActivity"
             android:icon="@drawable/actionbar_logo"

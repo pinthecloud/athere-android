@@ -115,10 +115,20 @@ public class Square implements Parcelable {
 	public void setEntryRange(int entryRange) {
 		this.entryRange = entryRange;
 	}
+
 	
-	public static Parcelable.Creator<Square> getCreator() {
-		return CREATOR;
-	}
+	/*
+	 * Parcelable
+	 */
+	public static final Parcelable.Creator<Square> CREATOR = new Creator<Square>(){
+		public Square createFromParcel(Parcel in){
+			return new Square(in);
+		}
+		public Square[] newArray(int size){
+			return new Square[size];
+		}
+	};
+	
 	@Override
 	public int describeContents() {
 		return 0;
@@ -156,13 +166,4 @@ public class Square implements Parcelable {
 		showRange = in.readInt();
 		entryRange = in.readInt();
 	}
-
-	public static final Parcelable.Creator<Square> CREATOR = new Creator<Square>(){
-		public Square createFromParcel(Parcel in){
-			return new Square(in);
-		}
-		public Square[] newArray(int size){
-			return new Square[size];
-		}
-	};
 }

@@ -67,7 +67,7 @@ public class SplashFragment extends AhFragment {
 			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
 		}
 
-		
+
 		/*
 		 * If time is up, remove local preferences.
 		 */

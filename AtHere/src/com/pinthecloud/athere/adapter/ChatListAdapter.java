@@ -25,14 +25,14 @@ import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.fragment.SquareChatFragment;
+import com.pinthecloud.athere.fragment.ChatFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 
-public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
+public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	private enum TYPE{
 		ADMIN,
@@ -51,7 +51,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 	private CachedBlobStorageHelper blobStorageHelper;
 
 
-	public SquareChatListAdapter(Context context, AhFragment frag) {
+	public ChatListAdapter(Context context, AhFragment frag) {
 		super(context, 0);
 		this.context = context;
 		this.frag = frag;
@@ -74,9 +74,9 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 			} else if(type == TYPE.NOTIFICATION.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
 			} else if(type == TYPE.SEND.ordinal()){
-				view = inflater.inflate(R.layout.row_square_chat_list_send, parent, false);
+				view = inflater.inflate(R.layout.row_chat_list_send, parent, false);
 			} else if(type == TYPE.RECEIVE.ordinal()){
-				view = inflater.inflate(R.layout.row_square_chat_list_receive, parent, false);
+				view = inflater.inflate(R.layout.row_chat_list_receive, parent, false);
 			}
 		}
 
@@ -288,7 +288,7 @@ public class SquareChatListAdapter extends ArrayAdapter<AhMessage> {
 				// Re Send
 				messageDBHelper.deleteMessage(message.getId());
 				remove(getItem(position));
-				SquareChatFragment squareChatFragment = (SquareChatFragment)frag;
+				ChatFragment squareChatFragment = (ChatFragment)frag;
 				squareChatFragment.sendChat(message);
 			}
 		});
