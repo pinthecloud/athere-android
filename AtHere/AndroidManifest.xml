@@ -49,7 +49,8 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.pinthecloud.athere.AhIntentService" />
+        <service android:name="com.pinthecloud.athere.AhIntentService" >
+            </service>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -106,6 +107,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.SquareActivity" />
         </activity>
+        <activity android:name="com.facebook.LoginActivity"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                  android:label="@string/app_name" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +20,12 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.LoginButton;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
@@ -41,7 +48,31 @@ public class BasicProfileFragment extends AhFragment{
 	private boolean isPickedBirthYear = false;
 
 	private ImageView sudoImage;
+	
 	private int countSudo = 0;
+	
+	private LoginButton fbBtn;
+	private UiLifecycleHelper uiHelper;
+	
+	
+	private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+
+    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
+        @Override
+        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+            Log(thisFragment, error);
+        }
+
+        @Override
+        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+            Log(thisFragment, "onComplete", data);
+        }
+    };
 
 
 	@Override
@@ -50,7 +81,8 @@ public class BasicProfileFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);		
 
-		
+		uiHelper = new UiLifecycleHelper(this.getActivity(), callback);
+        uiHelper.onCreate(savedInstanceState);
 		/*
 		 * Find UI component
 		 */
@@ -60,6 +92,7 @@ public class BasicProfileFragment extends AhFragment{
 		maleButton = (RadioButton) view.findViewById(R.id.basic_profile_frag_male_button);
 		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_complete_button);
 		sudoImage = (ImageView) view.findViewById(R.id.basic_profile_frag_image_view_for_su);
+		fbBtn = (LoginButton) view.findViewById(R.id.facebook_login_button);
 
 
 		/*
@@ -236,6 +269,23 @@ public class BasicProfileFragment extends AhFragment{
 			}
 		});
 		completeButton.setEnabled(false);
+		
+		fbBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log(thisFragment, "clicked");
+			}
+		});
+		
+		fbBtn.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+            @Override
+            public void onUserInfoFetched(GraphUser user) {
+                Log(thisFragment, user);
+            }
+        });
+		
 		return view;
 	}
 
@@ -243,4 +293,51 @@ public class BasicProfileFragment extends AhFragment{
 	private boolean isCompleteButtonEnable(){
 		return isTypedNickName && isPickedBirthYear;
 	}
+	
+	@Override
+    public void onResume() {
+        super.onResume();
+        Session session = Session.getActiveSession();
+        if (session != null &&
+               (session.isOpened() || session.isClosed()) ) {
+            onSessionStateChange(session, session.getState(), null);
+        }
+        uiHelper.onResume();
+    }
+	
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if (session.isOpened()) {
+        	Log(thisFragment, "Logged in...");
+        } else {
+        	Log(thisFragment, "Logged out...");
+        }
+    }
+
+    private void updateUI() {
+    	
+    }
 }

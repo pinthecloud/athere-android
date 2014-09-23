@@ -60,7 +60,8 @@
     <string name="location_consent_message">Chupa use location information. Do you agree?</string>
     <string name="location_setting_message">Please enable location access.</string>
     <string name="far_message">This ground is too far to enter.</string>
-
+	<string name="facebook_app_id">383936855088677</string>
+    
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">
         <item>Select picture from Album</item>
@@ -80,5 +81,6 @@
          Reference
         <string name="dash">&#160;-&#160;</string>
     -->
+    
 
 </resources>
