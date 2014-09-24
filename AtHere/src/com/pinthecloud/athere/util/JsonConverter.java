@@ -108,7 +108,6 @@ public class JsonConverter {
 			user.setCompanyNum(getValue(jo, ("companyNum"), TYPE.INT).getAsInt());
 			user.setAge(getValue(jo, ("age"), TYPE.INT).getAsInt());
 			user.setSquareId(getValue(jo, ("squareId"), TYPE.STRING).getAsString());
-			//			user.setChatEnable(jo.get("isChatEnable").getAsBoolean());
 			user.setChupaEnable(getValue(jo, ("isChupaEnable"), TYPE.BOOLEAN).getAsBoolean());
 
 			list.add(user);

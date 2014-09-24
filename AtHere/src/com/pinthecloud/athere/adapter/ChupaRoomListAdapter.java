@@ -19,7 +19,7 @@ import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.model.AhUser;
 
-public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
+public class ChupaRoomListAdapter extends ArrayAdapter<Map<String,String>> {
 
 	private Context context;
 	private AhFragment fragment;
@@ -27,7 +27,7 @@ public class SquareChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 	private CachedBlobStorageHelper blobStorageHelper;
 	private UserDBHelper userDBHelper;
 
-	public SquareChupaListAdapter(Context context, AhFragment frag, int layoutId) {
+	public ChupaRoomListAdapter(Context context, AhFragment frag, int layoutId) {
 		super(context, layoutId);
 		this.context = context;
 		this.fragment = frag;

@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.text.format.Time;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,17 +60,6 @@ public class SplashFragment extends AhFragment {
 
 
 		/*
-		 * Get device resolution and set it
-		 */
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		AhGlobalVariable.DEVICE_WIDTH = displayMetrics.widthPixels;
-		AhGlobalVariable.DEVICE_HEIGHT = displayMetrics.heightPixels;
-		AhGlobalVariable.DEVICE_DPI = displayMetrics.densityDpi;
-		AhGlobalVariable.DEVICE_DENSITY = displayMetrics.density;
-
-
-		/*
 		 * Get unique android id
 		 */
 		if(pref.getString(AhGlobalVariable.ANDROID_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
@@ -79,7 +67,7 @@ public class SplashFragment extends AhFragment {
 			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
 		}
 
-		
+
 		/*
 		 * If time is up, remove local preferences.
 		 */
@@ -110,15 +98,6 @@ public class SplashFragment extends AhFragment {
 			} else if(currentDay == lastDay && lastHour < resetTime && currentHour >= resetTime){
 				app.removeSquarePreference(thisFragment);
 			}
-		}
-
-
-		/*
-		 * Check whether it is first time launching app after update
-		 */
-		if (pref.getString(AhGlobalVariable.FIRST_UPDATE).equals(PreferenceHelper.DEFAULT_STRING)) {
-			pref.removePref(AhGlobalVariable.REGISTRATION_ID_KEY);
-			pref.putString(AhGlobalVariable.FIRST_UPDATE, AhGlobalVariable.FIRST_UPDATE);
 		}
 
 

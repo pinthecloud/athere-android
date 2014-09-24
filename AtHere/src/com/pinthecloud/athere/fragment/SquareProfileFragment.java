@@ -52,6 +52,7 @@ import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
+import com.pinthecloud.athere.util.WindowUtil;
 import com.pinthecloud.athere.view.CameraPreview;
 
 public class SquareProfileFragment extends AhFragment{
@@ -114,10 +115,10 @@ public class SquareProfileFragment extends AhFragment{
 				int height = pictureBitmap.getHeight();
 				if(cameraFacing == CameraInfo.CAMERA_FACING_BACK){
 					pictureBitmap = BitmapUtil.crop(pictureBitmap, 0, 0, height, height);
-					pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_90);
+					pictureBitmap = BitmapUtil.rotate(pictureBitmap, WindowUtil.ANGLE_90);
 				}else{
-					pictureBitmap = BitmapUtil.crop(pictureBitmap, AhGlobalVariable.DEVICE_HEIGHT - height, 0, height, height);
-					pictureBitmap = BitmapUtil.rotate(pictureBitmap, AhGlobalVariable.ANGLE_270);
+					pictureBitmap = BitmapUtil.crop(pictureBitmap, WindowUtil.getDeviceHeight(activity) - height, 0, height, height);
+					pictureBitmap = BitmapUtil.rotate(pictureBitmap, WindowUtil.ANGLE_270);
 					pictureBitmap = BitmapUtil.flip(pictureBitmap);
 				}
 				pictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
@@ -541,7 +542,6 @@ public class SquareProfileFragment extends AhFragment{
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
 		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-		pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, true);
 
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -590,6 +590,7 @@ public class SquareProfileFragment extends AhFragment{
 
 						// Save this setting and go to next activity
 						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
+						pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, true);
 						pref.putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putInt(AhGlobalVariable.SQUARE_RESET_KEY, square.getResetTime());

@@ -54,6 +54,7 @@ public class ProfileDialog extends AhDialogFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog_profile, container, false);
 
+		
 		/*
 		 * Find UI component
 		 */

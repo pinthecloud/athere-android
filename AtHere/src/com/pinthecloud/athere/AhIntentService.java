@@ -431,7 +431,6 @@ public class AhIntentService extends IntentService {
 			int companyNum = jo.getInt("companyNum");
 			int age = jo.getInt("age");
 			String squareId = jo.getString("squareId");
-			boolean isChatEnable = jo.getBoolean("isChatEnable");
 			boolean isChupaEnable = jo.getBoolean("isChupaEnable");
 			String ahIdUserKey = jo.getString("ahIdUserKey");
 
@@ -444,7 +443,6 @@ public class AhIntentService extends IntentService {
 			_user.setCompanyNum(companyNum);
 			_user.setAge(age);
 			_user.setSquareId(squareId);
-			_user.setChatEnable(isChatEnable);
 			_user.setChupaEnable(isChupaEnable);
 			_user.setAhIdUserKey(ahIdUserKey);
 

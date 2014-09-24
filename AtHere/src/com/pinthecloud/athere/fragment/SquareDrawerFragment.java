@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -37,12 +38,12 @@ public class SquareDrawerFragment extends AhFragment {
 	private ProgressBar progressBar;
 	private ToggleButton chatAlarmButton;
 	private ToggleButton chupaAlarmButton;
-	private ImageButton profileSettingsButton;
+	private RelativeLayout profileLayout;
 	private ImageView profileImage;
 	private ImageView profileGenderImage;
 	private TextView profileNickNameText;
-	private TextView profileAgeText;
 	private TextView profileCompanyNumText;
+	private ImageButton profileSettingsButton;
 	private TextView maleNumText;
 	private TextView femaleNumText;
 	private Button exitButton;
@@ -68,15 +69,15 @@ public class SquareDrawerFragment extends AhFragment {
 		progressBar = (ProgressBar) view.findViewById(R.id.square_drawer_frag_progress_bar);
 		chatAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chat_alarm_button);
 		chupaAlarmButton = (ToggleButton) view.findViewById(R.id.square_drawer_frag_chupa_alarm_button);
-		profileSettingsButton = (ImageButton) view.findViewById(R.id.square_drawer_frag_profile_bar_settings);
-		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
-		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
+		profileLayout = (RelativeLayout) view.findViewById(R.id.square_drawer_frag_profile_layout);
 		profileImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_image);
 		profileGenderImage = (ImageView) view.findViewById(R.id.square_drawer_frag_profile_gender);
 		profileNickNameText= (TextView) view.findViewById(R.id.square_drawer_frag_profile_nick_name);
-		profileAgeText = (TextView) view.findViewById(R.id.square_drawer_frag_profile_age);
 		profileCompanyNumText = (TextView) view.findViewById(R.id.square_drawer_frag_profile_company_num);
+		profileSettingsButton = (ImageButton) view.findViewById(R.id.square_drawer_frag_profile_bar_settings);
 		participantListView = (ListView) view.findViewById(R.id.square_drawer_frag_participant_list);
+		maleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_male_text);
+		femaleNumText = (TextView) view.findViewById(R.id.square_drawer_frag_member_female_text);
 		exitButton = (Button) view.findViewById(R.id.square_drawer_frag_exit_button);
 
 
@@ -97,27 +98,7 @@ public class SquareDrawerFragment extends AhFragment {
 						"DrawerProfile");
 
 				final AhUser user = participantListAdapter.getItem(position);
-				ProfileDialog profileDialog = new ProfileDialog(thisFragment, user, new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						gaHelper.sendEventGA(
-								thisFragment.getClass().getSimpleName(),
-								"SendChupa",
-								"DrawerProfileSendChupa");
-
-						Intent intent = new Intent(context, ChupaChatActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
-						context.startActivity(intent);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						Intent intent = new Intent(context, ProfileImageActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, user);
-						context.startActivity(intent);
-					}
-				});
-				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				showProfileDialog(user);
 			}
 		});
 
@@ -129,20 +110,8 @@ public class SquareDrawerFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
-				progressBar.setVisibility(View.VISIBLE);
-				progressBar.bringToFront();
-				chatAlarmButton.setEnabled(false);
-
 				boolean isChecked = chatAlarmButton.isChecked();
 				pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, isChecked);
-				userHelper.updateMyUserAsync(thisFragment, new AhEntityCallback<AhUser>() {
-
-					@Override
-					public void onCompleted(AhUser entity) {
-						progressBar.setVisibility(View.GONE);
-						chatAlarmButton.setEnabled(true);
-					}
-				});
 			}
 		});
 		chupaAlarmButton.setOnClickListener(new OnClickListener() {
@@ -250,33 +219,22 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set alarm toggle button
 		 */
-		chatAlarmButton.setChecked(user.isChatEnable());
+		chatAlarmButton.setChecked(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY));
 		chupaAlarmButton.setChecked(user.isChupaEnable());
 
 
 		/*
-		 * Set profile image
+		 * Set profile
 		 */
-		profileImage.setOnClickListener(new OnClickListener() {
+		profileLayout.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				ProfileDialog profileDialog = new ProfileDialog(thisFragment, user, new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						Intent intent = new Intent(context, ChupaChatActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
-						context.startActivity(intent);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						Intent intent = new Intent(context, ProfileImageActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, user);
-						context.startActivity(intent);
-					}
-				});
-				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				gaHelper.sendEventGA(
+						thisFragment.getClass().getSimpleName(),
+						"ViewMyProfile",
+						"DrawerProfile");
+				showProfileDialog(user);
 			}
 		});
 
@@ -285,7 +243,6 @@ public class SquareDrawerFragment extends AhFragment {
 		 * Set profile information text and gender image
 		 */
 		profileNickNameText.setText(user.getNickName());
-		profileAgeText.setText("" + user.getAge());
 		profileCompanyNumText.setText("" + user.getCompanyNum());
 		Resources resources = getResources();
 		if(user.isMale()){
@@ -325,9 +282,6 @@ public class SquareDrawerFragment extends AhFragment {
 		for(int i = 0 ; i < list.getCount() ; i++) {
 			if (list.getItem(i).isMale()) count++;
 		}
-		//		for(AhUser user : list){
-		//			if (user.isMale()) count++;
-		//		}
 		return count;
 	}
 
@@ -337,10 +291,32 @@ public class SquareDrawerFragment extends AhFragment {
 		for(int i = 0 ; i < list.getCount() ; i++) {
 			if (!list.getItem(i).isMale()) count++;
 		}
-		//		for(AhUser user : list){
-		//			if (!user.isMale()) count++;
-		//		}
 		return count;
+	}
+
+
+	private void showProfileDialog(final AhUser user){
+		ProfileDialog profileDialog = new ProfileDialog(thisFragment, user, new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				gaHelper.sendEventGA(
+						thisFragment.getClass().getSimpleName(),
+						"SendChupa",
+						"DrawerProfileSendChupa");
+
+				Intent intent = new Intent(context, ChupaChatActivity.class);
+				intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+				context.startActivity(intent);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				Intent intent = new Intent(context, ProfileImageActivity.class);
+				intent.putExtra(AhGlobalVariable.USER_KEY, user);
+				context.startActivity(intent);
+			}
+		});
+		profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 }
 

@@ -66,16 +66,6 @@ public class AhMessage implements Parcelable {
 	private int status = STATUS.SENDING.getValue();
 
 
-	public static final Parcelable.Creator<AhMessage> CREATOR = new Creator<AhMessage>(){
-		public AhMessage createFromParcel(Parcel in){
-			return new AhMessage(in);
-		}
-		public AhMessage[] newArray(int size){
-			return new AhMessage[size]; 
-		}
-	};
-
-
 	private AhMessage() {
 	}
 	public AhMessage(Parcel in){
@@ -127,21 +117,19 @@ public class AhMessage implements Parcelable {
 		this.status = status.getValue();
 	}
 
-
-	@Override
-	public String toString() {
-		return "{ id : "+this.id + " \n " + 
-				" type : "+this.type + " \n " +
-				" content : "+this.content + " \n " + 
-				" sender : "+this.sender + " \n " + 
-				" senderId : "+this.senderId + " \n " +
-				" receiver : "+this.receiver + " \n " + 
-				" receiverId : "+this.receiverId + " \n " +
-				" timeStamp : "+this.timeStamp + " \n " +
-				" chupaCommunId : "+this.chupaCommunId  + " \n " +
-				" status : "+this.status + " }";
-	}
-
+	
+	/*
+	 * Parcelable
+	 */
+	public static final Parcelable.Creator<AhMessage> CREATOR = new Creator<AhMessage>(){
+		public AhMessage createFromParcel(Parcel in){
+			return new AhMessage(in);
+		}
+		public AhMessage[] newArray(int size){
+			return new AhMessage[size]; 
+		}
+	};
+	
 	@Override
 	public int describeContents() {
 		return 0;
@@ -174,6 +162,24 @@ public class AhMessage implements Parcelable {
 		status = in.readInt();
 	}
 
+	
+	/*
+	 * Utility
+	 */
+	@Override
+	public String toString() {
+		return "{ id : "+this.id + " \n " + 
+				" type : "+this.type + " \n " +
+				" content : "+this.content + " \n " + 
+				" sender : "+this.sender + " \n " + 
+				" senderId : "+this.senderId + " \n " +
+				" receiver : "+this.receiver + " \n " + 
+				" receiverId : "+this.receiverId + " \n " +
+				" timeStamp : "+this.timeStamp + " \n " +
+				" chupaCommunId : "+this.chupaCommunId  + " \n " +
+				" status : "+this.status + " }";
+	}
+	
 	
 	public boolean isMine(){
 		PreferenceHelper pref = AhApplication.getInstance().getPref();

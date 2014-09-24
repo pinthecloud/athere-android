@@ -18,15 +18,15 @@ import android.widget.ListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
-import com.pinthecloud.athere.adapter.SquareChupaListAdapter;
+import com.pinthecloud.athere.adapter.ChupaRoomListAdapter;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 
-public class SquareChupaListFragment extends AhFragment{
+public class ChupaRoomListFragment extends AhFragment{
 
-	private SquareChupaListAdapter squareChupaListAdapter;
+	private ChupaRoomListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
 	private ImageView blankImage;
 
@@ -35,7 +35,7 @@ public class SquareChupaListFragment extends AhFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_square_chupa_list, container, false);
+		View view = inflater.inflate(R.layout.fragment_chupa_room_list, container, false);
 
 		/*
 		 * Set UI component
@@ -47,7 +47,7 @@ public class SquareChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
-		squareChupaListAdapter = new SquareChupaListAdapter(context, thisFragment, R.layout.row_square_chupa_list);
+		squareChupaListAdapter = new ChupaRoomListAdapter(context, thisFragment, R.layout.row_chupa_room_list);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 

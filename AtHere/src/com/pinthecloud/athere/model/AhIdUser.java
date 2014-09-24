@@ -9,7 +9,8 @@ public class AhIdUser {
 	private String password;
 	@com.google.gson.annotations.SerializedName("androidId")
 	private String androidId;
-	
+
+
 	public String getId() {
 		return id;
 	}

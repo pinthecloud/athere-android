@@ -17,31 +17,31 @@ import android.widget.ListView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.adapter.SquareChatListAdapter;
+import com.pinthecloud.athere.adapter.ChatListAdapter;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
 
-public class SquareChatFragment extends AhFragment{
+public class ChatFragment extends AhFragment{
 
 	private EditText messageEditText;
 	private ImageButton sendButton;
 
 	private ListView messageListView;
-	private SquareChatListAdapter messageListAdapter;
+	private ChatListAdapter messageListAdapter;
 	private Square square;
 
 	private List<AhMessage> chats;
 	private AhMessage chat;
 
 
-	public SquareChatFragment() {
+	public ChatFragment() {
 		super();
 	}
 
 
-	public SquareChatFragment(Square square) {
+	public ChatFragment(Square square) {
 		super();
 		this.square = square;
 	}
@@ -51,7 +51,7 @@ public class SquareChatFragment extends AhFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_square_chat, container, false);
+		View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
 
 		/*
@@ -110,7 +110,7 @@ public class SquareChatFragment extends AhFragment{
 		/*
 		 * Set message list view
 		 */
-		messageListAdapter = new SquareChatListAdapter
+		messageListAdapter = new ChatListAdapter
 				(context, thisFragment);
 		messageListView.setAdapter(messageListAdapter);
 

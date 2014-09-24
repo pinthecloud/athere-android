@@ -56,11 +56,13 @@ public class SquareTabFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_square_tab, container, false);
 
+		
 		/*
 		 * Set UI Component
 		 */
 		mViewPager = (ViewPager) view.findViewById(R.id.square_tab_frag_pager);
 		tabs = (PagerSlidingTabStrip) view.findViewById(R.id.square_tab_frag_tab);
+
 
 		/*
 		 * Set tab
