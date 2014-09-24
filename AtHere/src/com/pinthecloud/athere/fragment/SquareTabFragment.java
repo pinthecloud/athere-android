@@ -19,8 +19,8 @@ import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 
 public class SquareTabFragment extends AhFragment{
 
-	public static final int SQUARE_CHAT_TAB = 0;
-	public static final int SQUARE_CHUPA_TAB = 1;
+	public static final int CHAT_TAB = 0;
+	public static final int CHUPA_TAB = 1;
 	private final int BADGE_SIZE = 21;
 
 	private ViewPager mViewPager;
@@ -92,7 +92,7 @@ public class SquareTabFragment extends AhFragment{
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
-		chupaTabBadge = tabs.getTabBadgeView(SQUARE_CHUPA_TAB);
+		chupaTabBadge = tabs.getTabBadgeView(CHUPA_TAB);
 
 
 		/*

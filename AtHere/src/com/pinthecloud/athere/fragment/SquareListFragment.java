@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ public class SquareListFragment extends AhFragment implements
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener{
 
-	private ActionBar mActionBar;
 	private ProgressBar mProgressBar;
 
 	private PullToRefreshListView pullToRefreshListView;
@@ -59,19 +57,12 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		/*
 		 * Set UI component
 		 */
-		mActionBar = activity.getActionBar();
 		mProgressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
 		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
 		squareListView = pullToRefreshListView.getRefreshableView();
 		registerForContextMenu(squareListView);
 
-
-		/*
-		 * Set Action Bar
-		 */
-		mActionBar.setTitle(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-
-
+		
 		/*
 		 * Set square list view
 		 */

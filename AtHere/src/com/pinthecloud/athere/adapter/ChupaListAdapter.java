@@ -19,7 +19,7 @@ import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.model.AhUser;
 
-public class ChupaRoomListAdapter extends ArrayAdapter<Map<String,String>> {
+public class ChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 
 	private Context context;
 	private AhFragment fragment;
@@ -27,7 +27,7 @@ public class ChupaRoomListAdapter extends ArrayAdapter<Map<String,String>> {
 	private CachedBlobStorageHelper blobStorageHelper;
 	private UserDBHelper userDBHelper;
 
-	public ChupaRoomListAdapter(Context context, AhFragment frag, int layoutId) {
+	public ChupaListAdapter(Context context, AhFragment frag, int layoutId) {
 		super(context, layoutId);
 		this.context = context;
 		this.fragment = frag;
@@ -52,11 +52,11 @@ public class ChupaRoomListAdapter extends ArrayAdapter<Map<String,String>> {
 			/*
 			 * Find UI component
 			 */
-			final ImageView profileImage = (ImageView)view.findViewById(R.id.square_chupa_list_profile_pic);
-			TextView sender = (TextView)view.findViewById(R.id.square_chupa_list_sender);
-			TextView content = (TextView)view.findViewById(R.id.square_chupa_list_content);
-			TextView timeStamp = (TextView)view.findViewById(R.id.square_chupa_list_timestamp);
-			TextView badgeNum = (TextView)view.findViewById(R.id.square_chupa_list_badge_num);
+			final ImageView profileImage = (ImageView)view.findViewById(R.id.chupa_list_profile_pic);
+			TextView sender = (TextView)view.findViewById(R.id.chupa_list_sender);
+			TextView content = (TextView)view.findViewById(R.id.chupa_list_content);
+			TextView timeStamp = (TextView)view.findViewById(R.id.chupa_list_timestamp);
+			TextView badgeNum = (TextView)view.findViewById(R.id.chupa_list_badge_num);
 
 
 			/*
