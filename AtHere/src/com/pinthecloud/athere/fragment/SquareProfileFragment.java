@@ -594,7 +594,7 @@ public class SquareProfileFragment extends AhFragment{
 						pref.putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
 						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
 						pref.putInt(AhGlobalVariable.SQUARE_RESET_KEY, square.getResetTime());
-						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
+						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.CHAT_TAB);
 
 						Time time = new Time();
 						time.setToNow();

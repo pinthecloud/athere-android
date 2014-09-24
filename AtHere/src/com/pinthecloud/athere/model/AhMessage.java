@@ -254,7 +254,6 @@ public class AhMessage implements Parcelable {
 	 * Message Builder Class
 	 */
 	public static class Builder {
-
 		private String id;
 		private String type;
 		private String content;
@@ -321,6 +320,7 @@ public class AhMessage implements Parcelable {
 			return this;
 		}
 
+		
 		public AhMessage build(){
 			AhMessage message = new AhMessage();
 			message.id = id;

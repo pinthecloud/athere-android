@@ -57,9 +57,9 @@ public class ChatFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
-		messageListView = (ListView) view.findViewById(R.id.square_chat_frag_list);
-		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
-		sendButton = (ImageButton) view.findViewById(R.id.square_chat_frag_send_button);
+		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
+		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
+		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
 
 
 		/*

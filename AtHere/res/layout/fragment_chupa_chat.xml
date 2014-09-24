@@ -82,25 +82,25 @@
         android:layout_height="wrap_content"
         android:background="@color/chupa_inputbar_background"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/square_chat_input_bottom_margin"
-        android:paddingTop="@dimen/square_chat_input_top_margin" >
+        android:paddingBottom="@dimen/chat_input_bottom_margin"
+        android:paddingTop="@dimen/chat_input_top_margin" >
 
         <EditText
             android:id="@+id/chupa_chat_frag_message_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/square_chat_input_layout_left_margin"
-            android:layout_marginStart="@dimen/square_chat_input_layout_left_margin"
+            android:layout_marginLeft="@dimen/chat_input_layout_left_margin"
+            android:layout_marginStart="@dimen/chat_input_layout_left_margin"
             android:layout_weight="1"
             android:background="@drawable/bg_inputbar_highlight"
             android:ems="10"
             android:inputType="textMultiLine"
             android:maxLines="3"
-            android:paddingEnd="@dimen/square_chat_input_right_margin"
-            android:paddingLeft="@dimen/square_chat_input_left_margin"
-            android:paddingRight="@dimen/square_chat_input_right_margin"
-            android:paddingStart="@dimen/square_chat_input_left_margin"
+            android:paddingEnd="@dimen/chat_input_right_margin"
+            android:paddingLeft="@dimen/chat_input_left_margin"
+            android:paddingRight="@dimen/chat_input_right_margin"
+            android:paddingStart="@dimen/chat_input_left_margin"
             android:textSize="@dimen/font_large" >
 
             <requestFocus />
