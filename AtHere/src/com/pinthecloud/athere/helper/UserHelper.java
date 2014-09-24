@@ -24,7 +24,6 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
-import com.pinthecloud.athere.model.AhIdUser;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.JsonConverter;
@@ -39,7 +38,6 @@ public class UserHelper {
 	 * Model tables
 	 */
 	private MobileServiceTable<AhUser> userTable;
-	private MobileServiceTable<AhIdUser> idUserTable;
 	private MobileServiceClient mClient;
 
 
@@ -56,60 +54,61 @@ public class UserHelper {
 		this.pref = app.getPref();
 		this.userTable = app.getUserTable();
 		this.mClient = app.getmClient();
-		this.idUserTable = app.getIdUserTable();
 	}
 
 
-	//	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<String> callback) throws AhException {
-	//		if (!app.isOnline()) {
-	//			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-	//			return;
-	//		}
-	//
-	//		userTable.insert(user, new TableOperationCallback<AhUser>() {
-	//
-	//			@Override
-	//			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
-	//				if (exception == null) {
-	//					callback.onCompleted(entity.getId());
-	//					AsyncChainer.notifyNext(frag);
-	//				} else {
-	//					ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.SERVER_ERROR));
-	//				}
-	//			}
-	//		});
-	//	}
-
-
-	public void addIdUserAsync(final AhFragment frag, AhIdUser user, final AhEntityCallback<AhIdUser> callback) {
+	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback) throws AhException {
 		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 
-		idUserTable.insert(user, new TableOperationCallback<AhIdUser>() {
+		userTable.insert(user, new TableOperationCallback<AhUser>() {
 
 			@Override
-			public void onCompleted(AhIdUser _user, Exception exception,
-					ServiceFilterResponse response) {
+			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
-					callback.onCompleted(_user);
+					callback.onCompleted(entity);
 					AsyncChainer.notifyNext(frag);
 				} else {
-					ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.SERVER_ERROR));
+					ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
 	}
 
 
-	public void enterSquareAsync(final AhFragment frag, AhUser user, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
+//	public void addIdUserAsync(final AhFragment frag, AhIdUser user, final AhEntityCallback<AhIdUser> callback) {
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//
+//		idUserTable.insert(user, new TableOperationCallback<AhIdUser>() {
+//
+//			@Override
+//			public void onCompleted(AhIdUser _user, Exception exception,
+//					ServiceFilterResponse response) {
+//				if (exception == null) {
+//					callback.onCompleted(_user);
+//					AsyncChainer.notifyNext(frag);
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//	}
+
+
+	public void enterSquareAsync(final AhFragment frag, String userId, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 
-		JsonObject jo = user.toJson();
+		JsonObject jo = new JsonObject();
+		jo.addProperty("id", userId);
+		
 		Gson g = new Gson();
 		JsonElement json = g.fromJson(jo, JsonElement.class);
 
@@ -244,49 +243,67 @@ public class UserHelper {
 	}
 
 	public void updateMyUserAsync(final AhFragment frag, AhEntityCallback<AhUser> callback){
-		AhUser user = this.getMyUserInfo(true);
+		AhUser user = this.getMyUserInfo();
 		this.updateUserAsync(frag, user, callback);
 	}
 
-	public AhUser getMyUserInfo(boolean hasId) {
-		String profilePic = "NOT_IN_USE";
-
+	public AhUser getMyUserInfo() {
+		String id = pref.getString(AhGlobalVariable.ID_KEY);
+		String ahId = pref.getString(AhGlobalVariable.AH_ID_KEY);
+		String mobileId = pref.getString(AhGlobalVariable.MOBILE_ID_KEY);
+		String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
+		boolean isMale = pref.getBoolean(AhGlobalVariable.IS_MALE_KEY);
+		int birthYear = pref.getInt(AhGlobalVariable.BIRTH_YEAR_KEY);
+		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+		boolean isChupaEnable = pref.getBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
+		int companyNum = pref.getInt(AhGlobalVariable.COMPANY_NUMBER_KEY);
+		
 		AhUser user = new AhUser();
-		if(hasId)
-			user.setId(pref.getString(AhGlobalVariable.USER_ID_KEY));
-		user.setNickName(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
-		user.setProfilePic(profilePic);
-		user.setRegistrationId(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY));
-		user.setCompanyNum(pref.getInt(AhGlobalVariable.COMPANY_NUMBER_KEY));
-		user.setAge(pref.getInt(AhGlobalVariable.AGE_KEY));
-		user.setMale(pref.getBoolean(AhGlobalVariable.IS_MALE_KEY));
-		user.setSquareId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-		user.setChupaEnable(pref.getBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY));
-		user.setAhIdUserKey(pref.getString(AhGlobalVariable.USER_AH_ID_KEY));
+		user.setId(id);
+		user.setAhId(ahId);
+		user.setMobileId(mobileId);
+		user.setRegistrationId(registrationId);
+		user.setMale(isMale);
+		user.setBirthYear(birthYear);
+		user.setNickName(nickName);
+		user.setChupaEnable(isChupaEnable);
+		user.setCompanyNum(companyNum);
+		
 		return user;
+	}
+	
+	public void setMyUserInfo(AhUser user) {
+		pref.putString(AhGlobalVariable.ID_KEY, user.getId());
+		pref.putString(AhGlobalVariable.AH_ID_KEY, user.getAhId());
+		pref.putString(AhGlobalVariable.MOBILE_ID_KEY, user.getMobileId());
+		pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, user.getRegistrationId());
+		pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, user.isMale());
+		pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, user.getBirthYear());
+		pref.putString(AhGlobalVariable.NICK_NAME_KEY, user.getNickName());
+		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, user.isChupaEnable());
+		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, user.getCompanyNum());
+
 	}
 
 	public AhUser getAdminUser(String id) {
 		AhUser user = new AhUser();
 		user.setId(id);
-		user.setNickName(app.getResources().getString(R.string.admin));
-		user.setProfilePic("NOT_IN_USE");
+		user.setAhId(AhGlobalVariable.APP_NAME);
+		user.setMobileId("");
 		user.setMale(true);
-		user.setCompanyNum(0);
-		user.setAge(0);
-		user.setAhIdUserKey("NO_AH_ID_USER_KEY");
-		user.setSquareId("NO_SQUARE_ID");
+		user.setBirthYear(1985);
+		user.setProfilePic("NOT_IN_USE");
+		user.setNickName(app.getResources().getString(R.string.admin));
 		user.setChupaEnable(false);
+		user.setCompanyNum(0);
 		return user;
 	}
-
 
 	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
-
 
 		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
 

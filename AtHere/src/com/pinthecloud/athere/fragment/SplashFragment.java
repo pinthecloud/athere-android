@@ -62,9 +62,9 @@ public class SplashFragment extends AhFragment {
 		/*
 		 * Get unique android id
 		 */
-		if(pref.getString(AhGlobalVariable.ANDROID_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
+		if(pref.getString(AhGlobalVariable.MOBILE_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
 			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
-			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
+			pref.putString(AhGlobalVariable.MOBILE_ID_KEY, androidId);
 		}
 
 

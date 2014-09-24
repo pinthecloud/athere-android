@@ -58,7 +58,7 @@ public class SquareActivity extends AhActivity{
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
-		user = userHelper.getMyUserInfo(true);
+		user = userHelper.getMyUserInfo();
 		square = squareHelper.getSquare();
 
 

@@ -182,7 +182,7 @@ public class SquareDrawerFragment extends AhFragment {
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
-		AhUser user = userHelper.getMyUserInfo(true);
+		AhUser user = userHelper.getMyUserInfo();
 		userHelper.exitSquareAsync(thisFragment, user, new AhEntityCallback<Boolean>() {
 
 			@Override

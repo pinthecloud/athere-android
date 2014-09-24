@@ -549,12 +549,11 @@ public class SquareProfileFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Get a user object from preference settings
 				// Enter a square with the user
-				final AhUser user = userHelper.getMyUserInfo(false);
-				userHelper.enterSquareAsync(frag, user, new AhPairEntityCallback<String, List<AhUser>>() {
+				final String userId = userHelper.getMyUserInfo().getId();
+				userHelper.enterSquareAsync(frag, userId, new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
-						pref.putString(AhGlobalVariable.USER_ID_KEY, userId);
 						userDBHelper.addAllUsers(list);
 					}
 				});
@@ -575,7 +574,7 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				String enterMessage = getResources().getString(R.string.enter_square_message);
-				AhUser user = userHelper.getMyUserInfo(true);
+				AhUser user = userHelper.getMyUserInfo();
 				AhMessage message = new AhMessage.Builder()
 				.setContent(user.getNickName() + " " + enterMessage)
 				.setSender(user.getNickName())

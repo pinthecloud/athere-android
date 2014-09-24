@@ -24,12 +24,11 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhIdUser;
+import com.pinthecloud.athere.model.AhUser;
 
 
 public class BasicProfileFragment extends AhFragment{
@@ -239,18 +238,41 @@ public class BasicProfileFragment extends AhFragment{
 					progressBar.setVisibility(View.VISIBLE);
 					completeButton.setEnabled(false);
 
+//					private String id;
+//					private String ahId;
+//					private String mobileId;
+//					private String mobileType = "Android";
+//					private String registrationId;
+//					private boolean isMale;
+//					private int birthYear;
+//					private String profilePic = "NOT_IN_USE";
+//					private String nickName;
+//					private boolean isChupaEnable;
+//					private int companyNum;
 
 					// Save this setting and go to next activity
-					String androidId = pref.getString(AhGlobalVariable.ANDROID_ID_KEY);
-					String facebookId = pref.getString(AhGlobalVariable.FACEBOOK_ID);
-					AhIdUser user = new AhIdUser();
-					user.setAhId(facebookId);
-					user.setPassword("");
-					user.setAndroidId(androidId);
-					userHelper.addIdUserAsync(thisFragment, user, new AhEntityCallback<AhIdUser>() {
+					String ahId = pref.getString(AhGlobalVariable.FACEBOOK_ID);
+					String mobileId = pref.getString(AhGlobalVariable.MOBILE_ID_KEY);
+					String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
+					boolean isMale = maleButton.isChecked();
+					int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
+					boolean isChupaEnable = true;
+					int companyNum = 0;
+					
+					AhUser user = new AhUser();
+					user.setAhId(ahId);
+					user.setMobileId(mobileId);
+					user.setRegistrationId(registrationId);
+					user.setMale(isMale);
+					user.setBirthYear(birthYear);
+					user.setNickName(nickNameEditText.getText().toString());
+					user.setChupaEnable(isChupaEnable);
+					user.setCompanyNum(companyNum);
+					
+					userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 
 						@Override
-						public void onCompleted(AhIdUser entity) {
+						public void onCompleted(AhUser entity) {
 							progressBar.setVisibility(View.GONE);
 
 							/*
@@ -260,9 +282,7 @@ public class BasicProfileFragment extends AhFragment{
 							if(!maleButton.isChecked()){
 								gender = "Female";
 							}
-							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
-							int age = AhApplication.calculateAge(birthYearEditText.getText().toString());
-
+							
 							gaHelper.sendEventGA(
 									thisFragment.getClass().getSimpleName(),
 									"CheckGender",
@@ -270,15 +290,13 @@ public class BasicProfileFragment extends AhFragment{
 							gaHelper.sendEventGA(
 									thisFragment.getClass().getSimpleName(),
 									"CheckAge",
-									"" + age);
+									"" + entity.getAge());
 
-							pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
-							pref.putInt(AhGlobalVariable.AGE_KEY, age);
 							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-							pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
-							pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-							pref.putString(AhGlobalVariable.USER_AH_ID_KEY, entity.getAhId());
-
+							pref.putString(AhGlobalVariable.ID_KEY, entity.getId());
+							
+							Log(thisFragment, userHelper.getMyUserInfo());
+							
 							Intent intent = new Intent(context, SquareListActivity.class);
 							startActivity(intent);
 							activity.finish();

@@ -368,7 +368,7 @@ public class ChupaChatFragment extends AhFragment {
 			.setContent(nickName + " " + exitMessage)
 			.setSender(nickName)
 			.setSenderId(otherUser.getId())
-			.setReceiverId(otherUser.getSquareId())
+			.setReceiverId(squareHelper.getSquare().getId())
 			.setType(AhMessage.TYPE.EXIT_SQUARE)
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp().build();

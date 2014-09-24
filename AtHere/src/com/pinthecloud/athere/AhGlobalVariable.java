@@ -43,14 +43,16 @@ public class AhGlobalVariable{
 	
 	public static final String FACEBOOK_ID = "FACEBOOK_ID";
 	public static final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
-	public static final String ANDROID_ID_KEY = "ANDROID_ID_KEY";
-	public static final String USER_AH_ID_KEY = "AH_ID_USER_KEY";
+//	public static final String ANDROID_ID_KEY = "ANDROID_ID_KEY";
+//	public static final String USER_AH_ID_KEY = "AH_ID_USER_KEY";
 	public static final String USER_ID_KEY = "USER_ID_KEY";
 	public static final String SUDO_KEY = "SUDO_KEY";
 	
+	public static final String ID_KEY = "ID_KEY";
+	public static final String AH_ID_KEY = "AH_ID_KEY";
+	public static final String MOBILE_ID_KEY = "MOBILE_ID_KEY";
 	public static final String NICK_NAME_KEY = "NICK_NAME_KEY";
 	public static final String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";
-	public static final String AGE_KEY = "AGE_KEY";
 	public static final String IS_MALE_KEY = "IS_MALE_KEY";
 	public static final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 

@@ -27,7 +27,7 @@ public class SquareHelper {
 	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
 
-
+	private String currentSquareId;
 	/**
 	 * Model tables
 	 */
