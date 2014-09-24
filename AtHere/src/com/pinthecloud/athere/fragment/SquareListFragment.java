@@ -10,13 +10,17 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationListener;
@@ -25,6 +29,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.BasicProfileActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareCodeDialog;
@@ -65,7 +70,26 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		squareListView = pullToRefreshListView.getRefreshableView();
 		registerForContextMenu(squareListView);
 
-
+		
+		// DO NOT REMOVE THIS SCRIPT!!
+		if (pref.getBoolean(AhGlobalVariable.SUDO_KEY)) {
+			Button b = new Button(getActivity());
+			b.setText("Go to BasicProfile");
+			b.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					pref.removePref(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
+					Session.getActiveSession().close();
+					Intent intent = new Intent(context, BasicProfileActivity.class);
+					startActivity(intent);
+					activity.finish();
+				}
+			});
+			getActivity().addContentView(b, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		}
+		
 		/*
 		 * Set Action Bar
 		 */

@@ -63,12 +63,10 @@ public class BasicProfileFragment extends AhFragment{
     private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
         @Override
         public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-            Log(thisFragment, error);
         }
 
         @Override
         public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-            Log(thisFragment, "onComplete", data);
         }
     };
 
@@ -194,9 +192,10 @@ public class BasicProfileFragment extends AhFragment{
 //		birthYearEditText.setFocusable(false);
 //		birthYearEditText.setFocusableInTouchMode(false);
 		
-		maleButton.setEnabled(false);
-		femaleButton.setEnabled(false);
-//		maleButton.setClickable(false);
+//		maleButton.setEnabled(false);
+//		femaleButton.setEnabled(false);
+		maleButton.setClickable(false);
+		femaleButton.setClickable(false);
 //		maleButton.setFocusable(false);
 //		maleButton.setFocusableInTouchMode(false);
 
@@ -212,10 +211,19 @@ public class BasicProfileFragment extends AhFragment{
 				if (session.isClosed()) {
 					return;
 				}
+				
+				if (birthYearEditText.getText().toString().equals("")) {
+					Toast.makeText(context, "생일 허가를 해주세요.", Toast.LENGTH_LONG).show();
+					Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(getActivity(), Arrays.asList("user_birthday"));
+					session.requestNewReadPermissions(newPermissionsRequest);
+					session.close();
+					fbBtn.setVisibility(View.VISIBLE);
+					return;
+				}
+				
 				String nickName = nickNameEditText.getText().toString().trim();
 				nickNameEditText.setText(nickName);
 				nickNameEditText.setSelection(nickName.length());
-
 
 				// Save gender and birth year infomation to preference
 				String message = app.checkNickName(nickName);
@@ -285,16 +293,18 @@ public class BasicProfileFragment extends AhFragment{
 		fbBtn.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser user) {
-                Log(thisFragment, user);
                 if (user == null) {
                 	maleButton.setChecked(true);
                 	birthYearEditText.setText("");
                     nickNameEditText.setText("");
                     return;
                 }
-                
                 String birthday = user.getBirthday();
-                String birthYear = birthday.substring(6, birthday.length());
+                String birthYear = "";
+                if (birthday != null) {
+                	birthYear = birthday.substring(6, birthday.length());
+                }
+                
                 String gender = (String)user.getProperty("gender");
                 String name = user.getFirstName();
                 if ("male".equals(gender))
@@ -303,9 +313,11 @@ public class BasicProfileFragment extends AhFragment{
                 	maleButton.setChecked(false);
                 
                 pref.putString(AhGlobalVariable.FACEBOOK_ID, user.getId());
+                Log(thisFragment, user.getId());
                 birthYearEditText.setText(birthYear);
                 nickNameEditText.setText(name);
                 completeButton.setEnabled(true);
+                fbBtn.setVisibility(View.GONE);
             }
         });
 		
