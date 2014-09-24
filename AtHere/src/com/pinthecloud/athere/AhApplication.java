@@ -1,6 +1,7 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
+import java.util.Calendar;
 
 import android.app.Application;
 import android.content.Context;
@@ -288,5 +289,14 @@ public class AhApplication extends Application{
 			message = getResources().getString(R.string.max_nick_name_message);
 		}
 		return message;
+	}
+	
+	public static int calculateAge(String birthYear) {
+		return calculateAge(Integer.parseInt(birthYear));
+	}
+	
+	public static int calculateAge(int birthYear) {
+		Calendar c = Calendar.getInstance();
+		return c.get(Calendar.YEAR) - (birthYear - 1);
 	}
 }

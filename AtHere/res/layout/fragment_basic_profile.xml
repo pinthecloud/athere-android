@@ -58,6 +58,7 @@
                 android:button="@android:color/transparent" />
 
             <RadioButton
+                android:id="@+id/basic_profile_frag_female_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/gender_female_toggle_bg"
