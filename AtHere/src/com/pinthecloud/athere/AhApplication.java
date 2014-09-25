@@ -41,7 +41,6 @@ public class AhApplication extends Application{
 
 	// Application
 	private static AhApplication app;
-	private static PreferenceHelper pref;
 
 	// Mobile Service instances
 	private static MobileServiceClient mClient;
@@ -86,7 +85,6 @@ public class AhApplication extends Application{
 		} catch (MalformedURLException e) {
 			// Do nothing
 		}
-		pref = new PreferenceHelper(this);
 
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
@@ -104,9 +102,6 @@ public class AhApplication extends Application{
 
 	public static AhApplication getInstance(){
 		return app;
-	}
-	public PreferenceHelper getPref() {
-		return pref;
 	}
 	public MobileServiceClient getmClient() {
 		return mClient;
@@ -220,24 +215,17 @@ public class AhApplication extends Application{
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearAllCache();
 
-		String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
+//		String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
+		String id = userHelper.getMyUserInfo().getId();
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+AhGlobalVariable.SMALL, null);
 
-		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-		pref.removePref(AhGlobalVariable.USER_ID_KEY);
-		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
-
-//		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-
-		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_RESET_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
+		PreferenceHelper.getInstance().removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
+		
+		userHelper.userLogout();
+		squareHelper.removeMySquareInfo();
 	}
+	
 
 
 	/*

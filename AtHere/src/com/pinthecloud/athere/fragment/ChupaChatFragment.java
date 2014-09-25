@@ -98,7 +98,7 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set Action Bar
 		 */
-		mActionBar.setTitle(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
+		mActionBar.setTitle(squareHelper.getMySquareInfo().getName());
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 
 		
@@ -184,12 +184,13 @@ public class ChupaChatFragment extends AhFragment {
 
 			@Override
 			public void onClick(View v) {
+				AhUser myUser = userHelper.getMyUserInfo();
 				// Make message
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
 
 				messageBuilder.setContent(messageEditText.getText().toString())
-				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
-				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setSender(myUser.getNickName())
+				.setSenderId(myUser.getId())
 				.setReceiver(otherUser.getNickName())
 				.setReceiverId(otherUser.getId())
 				.setType(AhMessage.TYPE.CHUPA)
@@ -253,7 +254,7 @@ public class ChupaChatFragment extends AhFragment {
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
 				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
-		String chupaCommunId = AhMessage.buildChupaCommunId(pref.getString(AhGlobalVariable.USER_ID_KEY), otherUser.getId());
+		String chupaCommunId = AhMessage.buildChupaCommunId(userHelper.getMyUserInfo().getId(), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}
 
@@ -368,7 +369,7 @@ public class ChupaChatFragment extends AhFragment {
 			.setContent(nickName + " " + exitMessage)
 			.setSender(nickName)
 			.setSenderId(otherUser.getId())
-			.setReceiverId(squareHelper.getSquare().getId())
+			.setReceiverId(squareHelper.getMySquareInfo().getId())
 			.setType(AhMessage.TYPE.EXIT_SQUARE)
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp().build();

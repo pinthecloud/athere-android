@@ -52,7 +52,7 @@ public class UserHelper {
 	public UserHelper() {
 		super();
 		this.app = AhApplication.getInstance();
-		this.pref = app.getPref();
+		this.pref = PreferenceHelper.getInstance();
 		this.mClient = app.getmClient();
 		this.userTable = mClient.getTable(AhUser.class);
 		this.squareUserTable = mClient.getTable(SquareUser.class);
@@ -265,17 +265,32 @@ public class UserHelper {
 		AhUser user = this.getMyUserInfo();
 		this.updateUserAsync(frag, user, callback);
 	}
+	
+	
+	
+	private String USER_ID_KEY = "USER_ID_KEY";
+	private String AH_ID_KEY = "AH_ID_KEY";
+	private String MOBILE_ID_KEY = "MOBILE_ID_KEY";
+	private String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
+	private String IS_MALE_KEY = "IS_MALE_KEY";
+	private String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";
+	private String NICK_NAME_KEY = "NICK_NAME_KEY";
+	private String IS_CHUPA_ENABLE_KEY = "IS_CHUPA_ENABLE_KEY";
+	private String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
+	private String IS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
+	private String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";
 
 	public AhUser getMyUserInfo() {
-		String id = pref.getString(AhGlobalVariable.ID_KEY);
-		String ahId = pref.getString(AhGlobalVariable.AH_ID_KEY);
-		String mobileId = pref.getString(AhGlobalVariable.MOBILE_ID_KEY);
-		String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
-		boolean isMale = pref.getBoolean(AhGlobalVariable.IS_MALE_KEY);
-		int birthYear = pref.getInt(AhGlobalVariable.BIRTH_YEAR_KEY);
-		String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
-		boolean isChupaEnable = pref.getBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-		int companyNum = pref.getInt(AhGlobalVariable.COMPANY_NUMBER_KEY);
+		String id = pref.getString(USER_ID_KEY);
+		String ahId = pref.getString(AH_ID_KEY);
+		String mobileId = pref.getString(MOBILE_ID_KEY);
+		String registrationId = pref.getString(REGISTRATION_ID_KEY);
+		boolean isMale = pref.getBoolean(IS_MALE_KEY);
+		int birthYear = pref.getInt(BIRTH_YEAR_KEY);
+		String nickName = pref.getString(NICK_NAME_KEY);
+		boolean isChupaEnable = pref.getBoolean(IS_CHUPA_ENABLE_KEY);
+		int companyNum = pref.getInt(COMPANY_NUMBER_KEY);
+		boolean isChatEnable = pref.getBoolean(IS_CHAT_ENABLE_KEY);
 		
 		AhUser user = new AhUser();
 		user.setId(id);
@@ -287,21 +302,96 @@ public class UserHelper {
 		user.setNickName(nickName);
 		user.setChupaEnable(isChupaEnable);
 		user.setCompanyNum(companyNum);
+		user.setChatEnable(isChatEnable);
 		
 		return user;
 	}
 	
-	public void setMyUserInfo(AhUser user) {
-		pref.putString(AhGlobalVariable.ID_KEY, user.getId());
-		pref.putString(AhGlobalVariable.AH_ID_KEY, user.getAhId());
-		pref.putString(AhGlobalVariable.MOBILE_ID_KEY, user.getMobileId());
-		pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, user.getRegistrationId());
-		pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, user.isMale());
-		pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, user.getBirthYear());
-		pref.putString(AhGlobalVariable.NICK_NAME_KEY, user.getNickName());
-		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, user.isChupaEnable());
-		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, user.getCompanyNum());
-
+//	public void setMyUserInfo(AhUser user) {
+//		pref.putString(USER_ID_KEY, user.getId());
+//		pref.putString(AH_ID_KEY, user.getAhId());
+//		pref.putString(MOBILE_ID_KEY, user.getMobileId());
+//		pref.putString(REGISTRATION_ID_KEY, user.getRegistrationId());
+//		pref.putBoolean(IS_MALE_KEY, user.isMale());
+//		pref.putInt(BIRTH_YEAR_KEY, user.getBirthYear());
+//		pref.putString(NICK_NAME_KEY, user.getNickName());
+//		pref.putBoolean(IS_CHUPA_ENABLE_KEY, user.isChupaEnable());
+//		pref.putInt(COMPANY_NUMBER_KEY, user.getCompanyNum());
+//	}
+	public boolean isLoggedInUser() {
+		return pref.getBoolean(IS_LOGGED_IN_USER_KEY);
+	}
+	
+	public void setLoggedInUser(boolean loggedIn) {
+		pref.putBoolean(IS_LOGGED_IN_USER_KEY, loggedIn);
+	}
+	
+	public boolean hasRegistrationId() {
+		return !pref.getString(REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING);
+	}
+	public boolean hasMobileId() {
+		return !pref.getString(MOBILE_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING);
+	}
+	
+	public UserHelper setMyId(String id) {
+		pref.putString(USER_ID_KEY, id);
+		return this;
+	}
+	public UserHelper setMyAhId(String ahId) {
+		pref.putString(AH_ID_KEY, ahId);
+		return this;
+	}
+	public UserHelper setMyMobileId(String id) {
+		pref.putString(MOBILE_ID_KEY, id);
+		return this;
+	}
+	public UserHelper setMyRegistrationId(String id) {
+		pref.putString(REGISTRATION_ID_KEY, id);
+		return this;
+	}
+	public UserHelper setMyMale(boolean isMale) {
+		pref.putBoolean(IS_MALE_KEY, isMale);
+		return this;
+	}
+	public UserHelper setMyBirthYear(int birthYear) {
+		pref.putInt(BIRTH_YEAR_KEY, birthYear);
+		return this;
+	}
+	public UserHelper setMyNickName(String nickName) {
+		pref.putString(NICK_NAME_KEY, nickName);
+		return this;
+	}public UserHelper setMyChupaEnable(boolean isChupaEnable) {
+		pref.putBoolean(IS_CHUPA_ENABLE_KEY, isChupaEnable);
+		return this;
+	}
+	public UserHelper setMyCompanyNum(int num) {
+		pref.putInt(COMPANY_NUMBER_KEY, num);
+		return this;
+	}
+	public UserHelper setMyChatEnable(boolean isChatEnable) {
+		pref.putBoolean(IS_CHAT_ENABLE_KEY, isChatEnable);
+		return this;
+	}
+	
+//	public void removeMyUserInfo() {
+//		pref.removePref(USER_ID_KEY);
+//		pref.removePref(AH_ID_KEY);
+//		pref.removePref(MOBILE_ID_KEY);
+//		pref.removePref(REGISTRATION_ID_KEY);
+//		pref.removePref(IS_MALE_KEY);
+//		pref.removePref(BIRTH_YEAR_KEY);
+//		pref.removePref(NICK_NAME_KEY);
+//		pref.removePref(IS_CHUPA_ENABLE_KEY);
+//		pref.removePref(COMPANY_NUMBER_KEY);
+//		pref.removePref(IS_CHAT_ENABLE_KEY);
+//		pref.removePref(IS_LOGGED_IN_USER_KEY);
+//	}
+	
+	public void userLogout() {
+		pref.removePref(COMPANY_NUMBER_KEY);
+		pref.removePref(USER_ID_KEY);
+		pref.removePref(IS_CHAT_ENABLE_KEY);
+		pref.removePref(IS_CHUPA_ENABLE_KEY);
 	}
 
 	public AhUser getAdminUser(String id) {

@@ -21,7 +21,6 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -37,7 +36,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected AhApplication app;
 	protected Context context;
 	protected AhActivity activity;
-	protected PreferenceHelper pref;
 
 	protected MessageHelper messageHelper;
 	protected MessageDBHelper messageDBHelper;
@@ -52,7 +50,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	public AhFragment(){
 		thisFragment = this;
 		app = AhApplication.getInstance();
-		pref = app.getPref();
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();

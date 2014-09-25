@@ -31,7 +31,6 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
@@ -43,7 +42,6 @@ public class AhIntentService extends IntentService {
 
 	private Context _this;
 	private AhApplication app;
-	private PreferenceHelper pref;
 
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
@@ -63,7 +61,6 @@ public class AhIntentService extends IntentService {
 		super(name);
 		_this = this;
 		app = AhApplication.getInstance();
-		pref = app.getPref();
 
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
@@ -123,7 +120,8 @@ public class AhIntentService extends IntentService {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
 
-		boolean isChatEnable = pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
+		boolean isChatEnable = userHelper.getMyUserInfo().isChatEnable();
+		
 		if (isRunning(app)) {
 			// Is the Chupa App Running
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -178,7 +176,7 @@ public class AhIntentService extends IntentService {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
-		} else if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+		} else if(userHelper.getMyUserInfo().isChatEnable()){
 			alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 		}
 	}

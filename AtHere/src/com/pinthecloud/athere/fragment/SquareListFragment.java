@@ -35,6 +35,7 @@ import com.pinthecloud.athere.dialog.SquareCodeDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.LocationHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
@@ -69,7 +70,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 		
 		// DO NOT REMOVE THIS SCRIPT!!
-		if (pref.getBoolean(AhGlobalVariable.SUDO_KEY)) {
+		if (PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)) {
 			Button b = new Button(getActivity());
 			b.setText("Go to BasicProfile");
 			b.setOnClickListener(new OnClickListener() {
@@ -77,8 +78,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					pref.removePref(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
-					Session.getActiveSession().close();
+					Session session = Session.getActiveSession();
+					if (session == null) return;
+					session.close();
+					
 					Intent intent = new Intent(context, BasicProfileActivity.class);
 					startActivity(intent);
 					activity.finish();
@@ -104,7 +107,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				 * If enough close to enter or it is super user, check code.
 				 * Otherwise, cannot enter.
 				 */
-				if(square.getDistance() <= square.getEntryRange() || pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
+				if(square.getDistance() <= square.getEntryRange() || PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 					if(square.getCode().equals("")){
 						Intent intent = new Intent(context, SquareProfileActivity.class);
 						intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);

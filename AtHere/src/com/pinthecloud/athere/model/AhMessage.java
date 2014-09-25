@@ -6,10 +6,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.Time;
 
-import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.helper.PreferenceHelper;
-
 public class AhMessage implements Parcelable {
 
 	public enum STATUS{
@@ -181,10 +177,10 @@ public class AhMessage implements Parcelable {
 	}
 	
 	
-	public boolean isMine(){
-		PreferenceHelper pref = AhApplication.getInstance().getPref();
-		return senderId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY));
-	}
+//	public boolean isMine(){
+//		PreferenceHelper pref = AhApplication.getInstance().getPref();
+//		return senderId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY));
+//	}
 
 	
 	public boolean isNotification(){

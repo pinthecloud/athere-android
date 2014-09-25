@@ -28,6 +28,7 @@ import com.facebook.widget.LoginButton;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
 
@@ -100,7 +101,7 @@ public class BasicProfileFragment extends AhFragment{
 			public void onClick(View v) {
 				countSudo++;
 				if (countSudo == 10) {
-					pref.putBoolean(AhGlobalVariable.SUDO_KEY, true);
+					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
 					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
 					.show();
 				}
@@ -240,25 +241,13 @@ public class BasicProfileFragment extends AhFragment{
 					completeButton.setEnabled(false);
 
 					// Save this setting and go to next activity
-					String ahId = pref.getString(AhGlobalVariable.FACEBOOK_ID);
-					String mobileId = pref.getString(AhGlobalVariable.MOBILE_ID_KEY);
-					String registrationId = pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY);
-					boolean isMale = maleButton.isChecked();
-					int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
-					boolean isChupaEnable = true;
-					int companyNum = 0;
 					
-					AhUser user = new AhUser();
-					user.setAhId(ahId);
-					user.setMobileId(mobileId);
-					user.setRegistrationId(registrationId);
-					user.setMale(isMale);
-					user.setBirthYear(birthYear);
-					user.setNickName(nickNameEditText.getText().toString());
-					user.setChupaEnable(isChupaEnable);
-					user.setCompanyNum(companyNum);
+					userHelper.setMyMale(maleButton.isChecked())
+					.setMyBirthYear(Integer.parseInt(birthYearEditText.getText().toString()))
+					.setMyChupaEnable(true)
+					.setMyCompanyNum(0);
 					
-					userHelper.setMyUserInfo(user);
+					AhUser user = userHelper.getMyUserInfo();
 					
 					userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 
@@ -282,9 +271,9 @@ public class BasicProfileFragment extends AhFragment{
 									thisFragment.getClass().getSimpleName(),
 									"CheckAge",
 									"" + entity.getAge());
-
-							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-							pref.putString(AhGlobalVariable.ID_KEY, entity.getId());
+							
+							squareHelper.setLoggedInSquare(true);
+							userHelper.setMyId(entity.getId());
 							
 							Intent intent = new Intent(context, SquareListActivity.class);
 							startActivity(intent);
@@ -319,14 +308,14 @@ public class BasicProfileFragment extends AhFragment{
                 else
                 	maleButton.setChecked(false);
                 
-                pref.putString(AhGlobalVariable.FACEBOOK_ID, user.getId());
+                userHelper.setMyAhId(user.getId());
                 ArrayList<String> arr = new ArrayList<String>();
                 arr.add("1482905955291892");
                 arr.add("643223775792443");
                 if (arr.contains(user.getId())) {
                 	Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
 					.show();
-                	pref.putBoolean(AhGlobalVariable.SUDO_KEY, true);
+                	PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
                 }
 
                 Log(thisFragment, user.getId());

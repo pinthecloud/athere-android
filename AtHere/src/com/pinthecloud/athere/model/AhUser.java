@@ -31,6 +31,8 @@ public class AhUser implements Parcelable{
 	@com.google.gson.annotations.SerializedName("companyNum")
 	private int companyNum;
 	
+	private boolean isChatEnable;
+	
 	public AhUser() {
 		
 	}
@@ -132,6 +134,14 @@ public class AhUser implements Parcelable{
 		return c.get(Calendar.YEAR) - (getBirthYear() - 1);
 	}
 	
+	public void setChatEnable(boolean isChatEnable) {
+		this.isChatEnable = isChatEnable;
+	}
+	
+	public boolean isChatEnable() {
+		return this.isChatEnable;
+	}
+	
 	/*
 	 * Parcelable
 	 */
@@ -162,6 +172,7 @@ public class AhUser implements Parcelable{
 		dest.writeString(getNickName());
 		dest.writeInt(isChupaEnable() ? 1 : 0);
 		dest.writeInt(getCompanyNum());
+		dest.writeInt(isChatEnable() ? 1 : 0);
 	}
 
 	public void readToParcel(Parcel in){
@@ -176,6 +187,7 @@ public class AhUser implements Parcelable{
 		setNickName(in.readString());
 		setChupaEnable(in.readInt() == 1);
 		setCompanyNum(in.readInt());
+		setChatEnable(in.readInt() == 1);
 	}
 
 	/*
@@ -184,7 +196,7 @@ public class AhUser implements Parcelable{
 	@Override
 	public String toString() {
 		return concate(getId(), getAhId(), getMobileId(), getMobileType(), getRegistrationId(),
-				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable(), getCompanyNum());
+				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable(), getCompanyNum(), isChatEnable());
 	}
 	
 	private String concate(Object... args) {

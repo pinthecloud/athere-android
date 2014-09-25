@@ -22,6 +22,7 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,6 +42,7 @@ import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.dialog.NumberPickerDialog;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
@@ -205,7 +207,8 @@ public class SquareProfileFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		nickNameEditText.setText(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
+		AhUser myUser = userHelper.getMyUserInfo();
+		nickNameEditText.setText(myUser.getNickName());
 
 
 		/*
@@ -538,9 +541,9 @@ public class SquareProfileFragment extends AhFragment{
 				"CheckMemberNumber",
 				"" + companyNumber);
 
-		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
-		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
-		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
+		userHelper.setMyNickName(nickName)
+		.setMyCompanyNum(companyNumber);
+		squareHelper.setMySquareId(square.getId());
 
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -562,10 +565,18 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
-				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				String userId = userHelper.getMyUserInfo().getId();
 				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 				circlePictureBitmap = BitmapUtil.cropRound(circlePictureBitmap);
-				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, new AhEntityCallback<String>() {
+					
+					@Override
+					public void onCompleted(String entity) {
+						// TODO Auto-generated method stub
+						Log.e("ERROR", "upload complete" + entity);
+						
+					}
+				});
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, circlePictureBitmap, null);
 			}
 		}, new Chainable() {
@@ -587,19 +598,20 @@ public class SquareProfileFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save this setting and go to next activity
-						pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-						pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, true);
-						pref.putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
-						pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-						pref.putInt(AhGlobalVariable.SQUARE_RESET_KEY, square.getResetTime());
-						pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.CHAT_TAB);
-
 						Time time = new Time();
 						time.setToNow();
-						pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
+						
+						userHelper.setMyChatEnable(true);
+						PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+						squareHelper.setMySquareName(square.getName())
+						.setMySquareResetTime(square.getResetTime())
+						.setLoggedInSquare(true)
+						.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+						.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
 
+						
 						// Save pictures to internal storage
-						String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+						String userId = userHelper.getMyUserInfo().getId();
 						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
 						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
 
@@ -611,160 +623,6 @@ public class SquareProfileFragment extends AhFragment{
 				});
 			}
 		});
-
-
-		//		, new Chainable() {
-		//
-		//			@Override
-		//			public void doNext(AhFragment frag) {
-		//				userHelper.getUserListAsync(thisFragment, square.getId(), new AhListCallback<AhUser>() {
-		//
-		//					@Override
-		//					public void onCompleted(List<AhUser> list, int count) {
-		////						userDBHelper.addAllUsers(list);
-		//						for(AhUser user : list) {
-		//							Bitmap bm = BitmapUtil.convertToBitmap(user.getProfilePic());
-		//							String imagePath = FileUtil.saveImageToInternalStorage(app, bm, user.getId());
-		//							user.setProfilePic(imagePath);
-		//							userDBHelper.addUser(user);
-		//						}
-		//
-		//						// Remove Me from User DB Table.
-		//						userDBHelper.deleteUser(pref.getString(AhGlobalVariable.USER_ID_KEY));
-		//					}
-		//				});
-		//
-		//			}
-		//		}, new Chainable() {
-		//
-		//			@Override
-		//			public void doNext(AhFragment frag) {
-		//				// Send message to server for notifying entering
-		//				String enterMessage = getResources().getString(R.string.enter_square_message);
-		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		//				AhUser user = userHelper.getMyUserInfo(true);
-		//				messageBuilder.setContent(user.getNickName() + " : " + enterMessage)
-		//				.setSender(user.getNickName())
-		//				.setSenderId(user.getId())
-		//				.setReceiverId(square.getId())
-		//				.setType(AhMessage.TYPE.ENTER_SQUARE);
-		//				AhMessage message = messageBuilder.build();
-		//				messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
-		//
-		//					@Override
-		//					public void onCompleted(AhMessage entity) {
-		//						// Do nothing
-		//					}
-		//				});
-		//
-		//				// Save this setting and go to next activity
-		//				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-		//				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-		//				Time time = new Time();
-		//				time.setToNow();
-		//				pref.putString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time.format("%Y:%m:%d:%H"));
-		//				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, SquareTabFragment.SQUARE_CHAT_TAB);
-		//				
-		//				
-		//				// Set and move to next activity after clear previous activity
-		//				intent.setClass(context, SquareActivity.class);
-		//				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		//
-		//				activity.runOnUiThread(new Runnable(){
-		//
-		//					@Override
-		//					public void run() {
-		//						// Dimiss progress bar
-		//						progressBar.setVisibility(View.GONE);
-		//						startActivity(intent);
-		//					}
-		//				});
-		//			}
-		//		});
-
-
-
-		/**
-		 *  DO NOT REMOVE
-		 *  NEED FOR REFERENCE
-		 */
-		//		new AhThread(new Runnable() {
-		//
-		//			@Override
-		//			public void run() {
-		//				/*
-		//				 * If user haven't got registration key, get it
-		//				 */
-		//				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY)
-		//						.equals(PreferenceHelper.DEFAULT_STRING)){
-		//					try {
-		//						String registrationId = userHelper.getRegistrationIdSync(thisFragment);
-		//						pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
-		//					} catch (AhException e) {
-		//						Log.d(AhGlobalVariable.LOG_TAG, "SquareProfileFragment enterSquare : " + e.getMessage());
-		//					}
-		//				}
-		//
-		//				// Save info for user
-		//				String nickName = nickNameEditText.getText().toString();
-		//				int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-		//				pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
-		//				pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
-		//				pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-		//				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
-		//				pref.putBoolean(AhGlobalVariable.IS_CHAT_ALARM_ENABLE_KEY, true);
-		//
-		//
-		//				// Get a user object from preference settings
-		//				// Enter a square with the user
-		//				final User user = userHelper.getMyUserInfo(false);
-		//				String id = userHelper.enterSquareSync(thisFragment, user);
-		//				pref.putString(AhGlobalVariable.USER_ID_KEY, id);
-		//
-		//
-		//				// Get user list in the square and save it without me
-		//				List<User> userList = userHelper.getUserListSync(thisFragment, square.getId());
-		//				userDBHelper.addAllUsers(userList);
-		//				userDBHelper.deleteUser(id);
-		//
-		//
-		//				// Send message to server for notifying entering
-		//				String enterMessage = getResources().getString(R.string.enter_square_message);
-		//				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-		//				messageBuilder.setContent(nickName + " : " + enterMessage)
-		//				.setSender(user.getNickName())
-		//				.setSenderId(id)
-		//				.setReceiverId(square.getId())
-		//				.setType(AhMessage.TYPE.ENTER_SQUARE);
-		//				AhMessage message = messageBuilder.build();
-		//				messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
-		//
-		//					@Override
-		//					public void onCompleted(AhMessage entity) {
-		//						// Do nothing
-		//					}
-		//				});
-		//
-		//				// Save this setting and go to next activity
-		//				pref.putString(AhGlobalVariable.SQUARE_NAME_KEY, square.getName());
-		//				pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY, true);
-		//				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, AhGlobalVariable.SQUARE_CHAT_TAB);
-		//
-		//				// Set and move to next activity after clear previous activity
-		//				intent.setClass(context, SquareActivity.class);
-		//				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		//
-		//				activity.runOnUiThread(new Runnable(){
-		//
-		//					@Override
-		//					public void run() {
-		//						// Dimiss progress bar
-		//						progressBar.setVisibility(View.GONE);
-		//						startActivity(intent);
-		//					}
-		//				});
-		//			}
-		//		}).start();
 	}
 
 

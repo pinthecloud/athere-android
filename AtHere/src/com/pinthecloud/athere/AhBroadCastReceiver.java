@@ -13,7 +13,7 @@ public class AhBroadCastReceiver extends WakefulBroadcastReceiver {
 		String regId = intent.getExtras().getString("registration_id");
 		if(regId != null && !regId.equals("")) {
 			// Save registration id
-			AhApplication.getInstance().getPref().putString(AhGlobalVariable.REGISTRATION_ID_KEY, regId);
+			AhApplication.getInstance().getUserHelper().setMyRegistrationId(regId);
 		} else{
 			
 			/*
