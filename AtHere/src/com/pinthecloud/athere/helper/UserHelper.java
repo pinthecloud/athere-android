@@ -6,7 +6,6 @@ import java.util.List;
 import android.os.AsyncTask;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
@@ -25,6 +24,7 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.SquareUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.JsonConverter;
 
@@ -38,6 +38,7 @@ public class UserHelper {
 	 * Model tables
 	 */
 	private MobileServiceTable<AhUser> userTable;
+	private MobileServiceTable<SquareUser> squareUserTable;
 	private MobileServiceClient mClient;
 
 
@@ -52,8 +53,9 @@ public class UserHelper {
 		super();
 		this.app = AhApplication.getInstance();
 		this.pref = app.getPref();
-		this.userTable = app.getUserTable();
 		this.mClient = app.getmClient();
+		this.userTable = mClient.getTable(AhUser.class);
+		this.squareUserTable = mClient.getTable(SquareUser.class);
 	}
 
 
@@ -72,6 +74,26 @@ public class UserHelper {
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
+				}
+			}
+		});
+	}
+	
+	public void addSquareUserAsync(final AhFragment frag, SquareUser user, final AhEntityCallback<SquareUser> callback) throws AhException {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "addSquareUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+		
+		squareUserTable.insert(user, new TableOperationCallback<SquareUser>() {
+
+			@Override
+			public void onCompleted(SquareUser entity, Exception exception, ServiceFilterResponse response) {
+				if (exception == null) {
+					callback.onCompleted(entity);
+					AsyncChainer.notifyNext(frag);
+				} else {
+					ExceptionManager.fireException(new AhException(frag, "addSquareUserAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
@@ -100,17 +122,14 @@ public class UserHelper {
 //	}
 
 
-	public void enterSquareAsync(final AhFragment frag, String userId, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
+	public void enterSquareAsync(final AhFragment frag, AhUser user, String squareId, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
 
-		JsonObject jo = new JsonObject();
-		jo.addProperty("id", userId);
-		
-		Gson g = new Gson();
-		JsonElement json = g.fromJson(jo, JsonElement.class);
+		JsonObject json = user.toJson();
+		json.addProperty("squareId", squareId);
 
 		mClient.invokeApi(ENTER_SQUARE, json, new ApiJsonOperationCallback() {
 

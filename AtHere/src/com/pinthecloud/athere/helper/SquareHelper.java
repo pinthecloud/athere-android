@@ -26,9 +26,8 @@ public class SquareHelper {
 	private AhApplication app;
 	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
-
-	private String currentSquareId;
-	/**
+	
+	/*
 	 * Model tables
 	 */
 	private MobileServiceTable<Square> squareTable;
@@ -52,7 +51,7 @@ public class SquareHelper {
 		this.app = AhApplication.getInstance();
 		this.mClient = app.getmClient();
 		this.pref = app.getPref();
-		this.squareTable = app.getSquareTable();
+		this.squareTable = app.getmClient().getTable(Square.class);
 	}
 
 

@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
@@ -22,9 +21,6 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
-import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.model.AppVersion;
-import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.FileUtil;
 
 
@@ -49,9 +45,6 @@ public class AhApplication extends Application{
 
 	// Mobile Service instances
 	private static MobileServiceClient mClient;
-	private static MobileServiceTable<AhUser> userTable;
-	private static MobileServiceTable<Square> squareTable;
-	private static MobileServiceTable<AppVersion> appVersionTable;
 
 	// Helper
 	private static UserHelper userHelper;
@@ -98,10 +91,6 @@ public class AhApplication extends Application{
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
 
-		userTable = mClient.getTable(AhUser.class);
-		squareTable = mClient.getTable(Square.class);
-		appVersionTable = mClient.getTable(AppVersion.class);
-
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
 		messageHelper = new MessageHelper();
@@ -124,15 +113,6 @@ public class AhApplication extends Application{
 	}
 	public void setmClient(MobileServiceClient client) {
 		mClient = client;
-	}
-	public MobileServiceTable<AhUser> getUserTable() {
-		return userTable;
-	}
-	public MobileServiceTable<Square> getSquareTable() {
-		return squareTable;
-	}
-	public MobileServiceTable<AppVersion> getAppVersionTable() {
-		return appVersionTable;
 	}
 	public UserDBHelper getUserDBHelper() {
 		return userDBHelper;

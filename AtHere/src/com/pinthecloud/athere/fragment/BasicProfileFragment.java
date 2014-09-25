@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.content.Intent;
@@ -101,7 +102,7 @@ public class BasicProfileFragment extends AhFragment{
 				if (countSudo == 10) {
 					pref.putBoolean(AhGlobalVariable.SUDO_KEY, true);
 					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
-					.show();;
+					.show();
 				}
 			}
 		});
@@ -238,18 +239,6 @@ public class BasicProfileFragment extends AhFragment{
 					progressBar.setVisibility(View.VISIBLE);
 					completeButton.setEnabled(false);
 
-//					private String id;
-//					private String ahId;
-//					private String mobileId;
-//					private String mobileType = "Android";
-//					private String registrationId;
-//					private boolean isMale;
-//					private int birthYear;
-//					private String profilePic = "NOT_IN_USE";
-//					private String nickName;
-//					private boolean isChupaEnable;
-//					private int companyNum;
-
 					// Save this setting and go to next activity
 					String ahId = pref.getString(AhGlobalVariable.FACEBOOK_ID);
 					String mobileId = pref.getString(AhGlobalVariable.MOBILE_ID_KEY);
@@ -268,6 +257,8 @@ public class BasicProfileFragment extends AhFragment{
 					user.setNickName(nickNameEditText.getText().toString());
 					user.setChupaEnable(isChupaEnable);
 					user.setCompanyNum(companyNum);
+					
+					userHelper.setMyUserInfo(user);
 					
 					userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 
@@ -294,8 +285,6 @@ public class BasicProfileFragment extends AhFragment{
 
 							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
 							pref.putString(AhGlobalVariable.ID_KEY, entity.getId());
-							
-							Log(thisFragment, userHelper.getMyUserInfo());
 							
 							Intent intent = new Intent(context, SquareListActivity.class);
 							startActivity(intent);
@@ -331,6 +320,15 @@ public class BasicProfileFragment extends AhFragment{
                 	maleButton.setChecked(false);
                 
                 pref.putString(AhGlobalVariable.FACEBOOK_ID, user.getId());
+                ArrayList<String> arr = new ArrayList<String>();
+                arr.add("1482905955291892");
+                arr.add("643223775792443");
+                if (arr.contains(user.getId())) {
+                	Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
+					.show();
+                	pref.putBoolean(AhGlobalVariable.SUDO_KEY, true);
+                }
+
                 Log(thisFragment, user.getId());
                 birthYearEditText.setText(birthYear);
                 nickNameEditText.setText(name);

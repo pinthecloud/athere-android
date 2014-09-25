@@ -172,7 +172,7 @@ public class AhIntentService extends IntentService {
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-		userDBHelper.addUser(user);
+		userDBHelper.addIfNotExistOrUpdate(user);
 
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);

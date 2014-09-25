@@ -541,7 +541,6 @@ public class SquareProfileFragment extends AhFragment{
 		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
 		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
 		pref.putString(AhGlobalVariable.SQUARE_ID_KEY, square.getId());
-		pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, true);
 
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -549,8 +548,8 @@ public class SquareProfileFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Get a user object from preference settings
 				// Enter a square with the user
-				final String userId = userHelper.getMyUserInfo().getId();
-				userHelper.enterSquareAsync(frag, userId, new AhPairEntityCallback<String, List<AhUser>>() {
+				final AhUser user = userHelper.getMyUserInfo();
+				userHelper.enterSquareAsync(frag, user, square.getId(), new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
