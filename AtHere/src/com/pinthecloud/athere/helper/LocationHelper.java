@@ -12,7 +12,6 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.AhActivity;
@@ -30,12 +29,13 @@ public class LocationHelper {
 	private LocationClient mLocationClient;
 	private LocationRequest locationRequest;
 
-
+	private String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
+	
 	public LocationHelper(AhActivity activity, 
 			ConnectionCallbacks connectionCallbacks, 
 			OnConnectionFailedListener onConnectionFailedListener) {
 		super();
-		pref = AhApplication.getInstance().getPref();
+		pref = PreferenceHelper.getInstance();
 		manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 		mLocationClient = new LocationClient(activity, 
 				connectionCallbacks, 
@@ -94,7 +94,7 @@ public class LocationHelper {
 
 
 	public boolean isLocationAccess(AhActivity activity){
-		return pref.getBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY) && isLocationEnabled(activity);
+		return pref.getBoolean(LOCATION_CONSENT_KEY) && isLocationEnabled(activity);
 	}
 
 
@@ -102,13 +102,13 @@ public class LocationHelper {
 		/*
 		 * Get user consent for location information
 		 */
-		if(!pref.getBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY)){
+		if(!pref.getBoolean(LOCATION_CONSENT_KEY)){
 			String message = activity.getResources().getString(R.string.location_consent_message);
 			AhAlertDialog locConsentDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
-					pref.putBoolean(AhGlobalVariable.LOCATION_CONSENT_KEY, true);
+					pref.putBoolean(LOCATION_CONSENT_KEY, true);
 					getLocationAccess(activity, callback);
 				}
 				@Override

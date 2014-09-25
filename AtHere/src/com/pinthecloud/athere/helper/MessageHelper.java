@@ -70,7 +70,7 @@ public class MessageHelper {
 		});
 
 	}
-
+	
 
 	/**
 	 *  ===[The Message Triggering Propagation Mechanism]===

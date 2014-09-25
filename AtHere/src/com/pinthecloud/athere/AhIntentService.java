@@ -20,6 +20,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
@@ -29,18 +31,17 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
+import com.pinthecloud.athere.util.JsonConverter;
 
 public class AhIntentService extends IntentService {
 
 	private Context _this;
 	private AhApplication app;
-	private PreferenceHelper pref;
 
 	private MessageHelper messageHelper;
 	private MessageDBHelper messageDBHelper;
@@ -60,7 +61,6 @@ public class AhIntentService extends IntentService {
 		super(name);
 		_this = this;
 		app = AhApplication.getInstance();
-		pref = app.getPref();
 
 		messageHelper = app.getMessageHelper();
 		messageDBHelper = app.getMessageDBHelper();
@@ -120,7 +120,8 @@ public class AhIntentService extends IntentService {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
 
-		boolean isChatEnable = pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
+		boolean isChatEnable = userHelper.getMyUserInfo().isChatEnable();
+		
 		if (isRunning(app)) {
 			// Is the Chupa App Running
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -169,13 +170,13 @@ public class AhIntentService extends IntentService {
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-		userDBHelper.addUser(user);
+		userDBHelper.addIfNotExistOrUpdate(user);
 
 		if (isRunning(app)) {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
-		} else if(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY)){
+		} else if(userHelper.getMyUserInfo().isChatEnable()){
 			alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 		}
 	}
@@ -416,39 +417,10 @@ public class AhIntentService extends IntentService {
 		String jsonStr = messageObj.getString("user");
 		if (jsonStr == null || jsonStr.equals("null")) return null;
 
-		AhUser _user = new AhUser();
-		JSONObject jo = null;
-
-		try {
-			jo = new JSONObject(jsonStr);
-
-			String id = jo.getString("id");
-			String nickName = jo.getString("nickName");
-			String profilePic = jo.getString("profilePic");
-			String mobileId = jo.getString("mobileId");
-			String registrationId = jo.getString("registrationId");
-			boolean isMale = jo.getBoolean("isMale");
-			int companyNum = jo.getInt("companyNum");
-			int age = jo.getInt("age");
-			String squareId = jo.getString("squareId");
-			boolean isChupaEnable = jo.getBoolean("isChupaEnable");
-			String ahIdUserKey = jo.getString("ahIdUserKey");
-
-			_user.setId(id);
-			_user.setNickName(nickName);
-			_user.setProfilePic(profilePic);
-			_user.setMobileId(mobileId);
-			_user.setRegistrationId(registrationId);
-			_user.setMale(isMale);
-			_user.setCompanyNum(companyNum);
-			_user.setAge(age);
-			_user.setSquareId(squareId);
-			_user.setChupaEnable(isChupaEnable);
-			_user.setAhIdUserKey(ahIdUserKey);
-
-		} catch (JSONException e) {
-			throw e;
-		}
+		AhUser _user = null;
+		JsonObject jo = new JsonParser().parse(jsonStr).getAsJsonObject();
+		
+		_user = JsonConverter.convertToUser(jo);
 		return _user;
 	}
 }

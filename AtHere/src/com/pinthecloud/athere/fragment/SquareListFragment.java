@@ -9,13 +9,17 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationListener;
@@ -24,12 +28,14 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.BasicProfileActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareCodeDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.LocationHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
@@ -63,6 +69,30 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		registerForContextMenu(squareListView);
 
 		
+		// DO NOT REMOVE THIS SCRIPT!!
+		if (PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)) {
+			Button b = new Button(getActivity());
+			b.setText("Go to BasicProfile");
+			b.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Session session = Session.getActiveSession();
+					if (session != null) {
+						session.close();
+					}
+					
+					
+					Intent intent = new Intent(context, BasicProfileActivity.class);
+					startActivity(intent);
+					activity.finish();
+				}
+			});
+			getActivity().addContentView(b, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		}
+		
+
 		/*
 		 * Set square list view
 		 */
@@ -79,7 +109,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				 * If enough close to enter or it is super user, check code.
 				 * Otherwise, cannot enter.
 				 */
-				if(square.getDistance() <= square.getEntryRange() || pref.getBoolean(AhGlobalVariable.SUDO_KEY)){
+				if(square.getDistance() <= square.getEntryRange() || PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 					if(square.getCode().equals("")){
 						Intent intent = new Intent(context, SquareProfileActivity.class);
 						intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);

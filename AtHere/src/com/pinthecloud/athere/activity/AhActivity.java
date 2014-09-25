@@ -10,7 +10,6 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 
 /**
  *  Base class for every activity.
@@ -21,7 +20,6 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 public class AhActivity extends Activity{
 
 	protected AhApplication app;
-	protected PreferenceHelper pref;
 	protected FiveRocksHelper fiveRocksHelper;
 	protected UserHabitHelper userHabitHelper;
 
@@ -34,7 +32,6 @@ public class AhActivity extends Activity{
 	public AhActivity(){
 		thisActivity = this;
 		app = AhApplication.getInstance();
-		pref = app.getPref();
 		simpleClassName = thisActivity.getClass().getSimpleName();
 
 		fiveRocksHelper = app.getFiveRocksHelper();

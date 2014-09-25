@@ -21,6 +21,7 @@ import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.fragment.SquareDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -58,8 +59,8 @@ public class SquareActivity extends AhActivity{
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
-		user = userHelper.getMyUserInfo(true);
-		square = squareHelper.getSquare();
+		user = userHelper.getMyUserInfo();
+		square = squareHelper.getMySquareInfo();
 
 
 		/*
@@ -172,20 +173,20 @@ public class SquareActivity extends AhActivity{
 		}
 
 		// Ask review
-		if(pref.getBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY)){
+		if(PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY)){
 			String message = getResources().getString(R.string.review_message);
 			String cancelMessage = getResources().getString(R.string.no_today_message);
 			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, null, cancelMessage, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
-					pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
+					PreferenceHelper.getInstance().removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
 					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
 					startActivity(intent);
 				}
 				@Override
 				public void doNegativeThing(Bundle bundle) {
-					pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
+					PreferenceHelper.getInstance().removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
 					finish();
 				}
 			});

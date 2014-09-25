@@ -116,12 +116,13 @@ public class ChupaListFragment extends AhFragment{
 			String chupaCommunId = "";
 			String isExit = "false";
 			String chupaBadge = "";
-
-			if (message.isMine()) {
+			
+			String myId = userHelper.getMyUserInfo().getId();
+			if (message.getSenderId().equals(myId)) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
 				userNickName = message.getReceiver();
-			} else if (pref.getString(AhGlobalVariable.USER_ID_KEY).equals(message.getReceiverId())) {
+			} else if (myId.equals(message.getReceiverId())) {
 				// the other user is Sender
 				userId = message.getSenderId();
 				userNickName = message.getSender();

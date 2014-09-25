@@ -1,7 +1,6 @@
 package com.pinthecloud.athere;
 
 import java.net.MalformedURLException;
-import java.util.Calendar;
 
 import android.app.Application;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
@@ -23,10 +21,6 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
-import com.pinthecloud.athere.model.AhIdUser;
-import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.model.AppVersion;
-import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.FileUtil;
 
 
@@ -47,14 +41,9 @@ public class AhApplication extends Application{
 
 	// Application
 	private static AhApplication app;
-	private static PreferenceHelper pref;
 
 	// Mobile Service instances
 	private static MobileServiceClient mClient;
-	private static MobileServiceTable<AhUser> userTable;
-	private static MobileServiceTable<AhIdUser> idUserTable;
-	private static MobileServiceTable<Square> squareTable;
-	private static MobileServiceTable<AppVersion> appVersionTable;
 
 	// Helper
 	private static UserHelper userHelper;
@@ -96,15 +85,9 @@ public class AhApplication extends Application{
 		} catch (MalformedURLException e) {
 			// Do nothing
 		}
-		pref = new PreferenceHelper(this);
 
 		userDBHelper = new UserDBHelper(this);
 		messageDBHelper = new MessageDBHelper(this);
-
-		userTable = mClient.getTable(AhUser.class);
-		idUserTable = mClient.getTable(AhIdUser.class);
-		squareTable = mClient.getTable(Square.class);
-		appVersionTable = mClient.getTable(AppVersion.class);
 
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();
@@ -120,26 +103,11 @@ public class AhApplication extends Application{
 	public static AhApplication getInstance(){
 		return app;
 	}
-	public PreferenceHelper getPref() {
-		return pref;
-	}
 	public MobileServiceClient getmClient() {
 		return mClient;
 	}
 	public void setmClient(MobileServiceClient client) {
 		mClient = client;
-	}
-	public MobileServiceTable<AhUser> getUserTable() {
-		return userTable;
-	}
-	public MobileServiceTable<AhIdUser> getIdUserTable() {
-		return idUserTable;
-	}
-	public MobileServiceTable<Square> getSquareTable() {
-		return squareTable;
-	}
-	public MobileServiceTable<AppVersion> getAppVersionTable() {
-		return appVersionTable;
 	}
 	public UserDBHelper getUserDBHelper() {
 		return userDBHelper;
@@ -247,24 +215,17 @@ public class AhApplication extends Application{
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearAllCache();
 
-		String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
+//		String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
+		String id = userHelper.getMyUserInfo().getId();
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+AhGlobalVariable.SMALL, null);
 
-		pref.removePref(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(AhGlobalVariable.COMPANY_NUMBER_KEY);
-		pref.removePref(AhGlobalVariable.USER_ID_KEY);
-		pref.removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
-
-		pref.removePref(AhGlobalVariable.IS_CHAT_ENABLE_KEY);
-		pref.removePref(AhGlobalVariable.IS_CHUPA_ENABLE_KEY);
-
-		pref.removePref(AhGlobalVariable.SQUARE_ID_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_NAME_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_RESET_KEY);
-		pref.removePref(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
+		PreferenceHelper.getInstance().removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
+		
+		userHelper.userLogout();
+		squareHelper.removeMySquareInfo();
 	}
+	
 
 
 	/*
@@ -291,12 +252,12 @@ public class AhApplication extends Application{
 		return message;
 	}
 	
-	public static int calculateAge(String birthYear) {
-		return calculateAge(Integer.parseInt(birthYear));
-	}
-	
-	public static int calculateAge(int birthYear) {
-		Calendar c = Calendar.getInstance();
-		return c.get(Calendar.YEAR) - (birthYear - 1);
-	}
+//	public static int calculateAge(String birthYear) {
+//		return calculateAge(Integer.parseInt(birthYear));
+//	}
+//	
+//	public static int calculateAge(int birthYear) {
+//		Calendar c = Calendar.getInstance();
+//		return c.get(Calendar.YEAR) - (birthYear - 1);
+//	}
 }

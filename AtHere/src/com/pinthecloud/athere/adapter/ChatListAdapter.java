@@ -28,6 +28,7 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.ChatFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
@@ -46,6 +47,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 	private AhFragment frag;
 	private LayoutInflater inflater;
 
+	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
 	private MessageDBHelper messageDBHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
@@ -59,6 +61,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		this.app = AhApplication.getInstance(); 
 		this.userDBHelper = app.getUserDBHelper();
+		this.userHelper = app.getUserHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
 	}
@@ -261,7 +264,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		} else if(message.isNotification()){
 			return TYPE.NOTIFICATION.ordinal();
 		} else{
-			if(message.isMine()){
+			if(message.getSenderId().equals(userHelper.getMyUserInfo().getId())){
 				return TYPE.SEND.ordinal();
 			} else{
 				return TYPE.RECEIVE.ordinal();

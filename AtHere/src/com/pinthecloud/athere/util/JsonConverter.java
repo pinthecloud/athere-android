@@ -96,24 +96,60 @@ public class JsonConverter {
 		JsonElement userList = userListJson.get("list");
 		JsonArray jsonArray = userList.getAsJsonArray();
 		for(int i = 0 ; i < jsonArray.size() ; i++){
+			
 			JsonElement jsonElement = jsonArray.get(i);
 			JsonObject jo = jsonElement.getAsJsonObject();
-			AhUser user = new AhUser();
-			user.setId(getValue(jo, ("id"), TYPE.STRING).getAsString());
-			user.setNickName(getValue(jo, ("nickName"), TYPE.STRING).getAsString());
-			user.setProfilePic(getValue(jo, ("profilePic"), TYPE.STRING).getAsString());
-			user.setMobileId(getValue(jo, ("mobileId"), TYPE.STRING).getAsString());
-			user.setRegistrationId(getValue(jo, ("registrationId"), TYPE.STRING).getAsString());
-			user.setMale(getValue(jo, ("isMale"), TYPE.BOOLEAN).getAsBoolean());
-			user.setCompanyNum(getValue(jo, ("companyNum"), TYPE.INT).getAsInt());
-			user.setAge(getValue(jo, ("age"), TYPE.INT).getAsInt());
-			user.setSquareId(getValue(jo, ("squareId"), TYPE.STRING).getAsString());
-			user.setChupaEnable(getValue(jo, ("isChupaEnable"), TYPE.BOOLEAN).getAsBoolean());
+			AhUser user = JsonConverter.convertToUser(jo);
 
 			list.add(user);
 		}
 		return list;
 	}
+	
+	public static AhUser convertToUser(JsonObject jo) {
+		AhUser user = new AhUser();
+		
+		user.setId(getValue(jo, ("id"), TYPE.STRING).getAsString());
+		user.setAhId(getValue(jo, ("ahId"), TYPE.STRING).getAsString());
+		user.setMobileId(getValue(jo, ("mobileId"), TYPE.STRING).getAsString());
+		user.setMobileType(getValue(jo, ("mobileType"), TYPE.STRING).getAsString());
+		user.setRegistrationId(getValue(jo, ("registrationId"), TYPE.STRING).getAsString());
+		user.setMale(getValue(jo, ("isMale"), TYPE.BOOLEAN).getAsBoolean());
+		user.setBirthYear(getValue(jo, ("birthYear"), TYPE.INT).getAsInt());
+		user.setProfilePic(getValue(jo, ("profilePic"), TYPE.STRING).getAsString());
+		user.setNickName(getValue(jo, ("nickName"), TYPE.STRING).getAsString());
+		user.setChupaEnable(getValue(jo, ("isChupaEnable"), TYPE.BOOLEAN).getAsBoolean());
+		user.setCompanyNum(getValue(jo, ("companyNum"), TYPE.INT).getAsInt());
+		return user;
+	}
+	
+	
+	
+//	public static List<AhUser> convertToUserList(JsonElement json){
+//		List<AhUser> list = new ArrayList<AhUser>();
+//
+//		JsonObject userListJson = json.getAsJsonObject();
+//		JsonElement userList = userListJson.get("list");
+//		JsonArray jsonArray = userList.getAsJsonArray();
+//		for(int i = 0 ; i < jsonArray.size() ; i++){
+//			JsonElement jsonElement = jsonArray.get(i);
+//			JsonObject jo = jsonElement.getAsJsonObject();
+//			AhUser user = new AhUser();
+//			user.setId(getValue(jo, ("id"), TYPE.STRING).getAsString());
+//			user.setNickName(getValue(jo, ("nickName"), TYPE.STRING).getAsString());
+//			user.setProfilePic(getValue(jo, ("profilePic"), TYPE.STRING).getAsString());
+//			user.setMobileId(getValue(jo, ("mobileId"), TYPE.STRING).getAsString());
+//			user.setRegistrationId(getValue(jo, ("registrationId"), TYPE.STRING).getAsString());
+//			user.setMale(getValue(jo, ("isMale"), TYPE.BOOLEAN).getAsBoolean());
+//			user.setCompanyNum(getValue(jo, ("companyNum"), TYPE.INT).getAsInt());
+//			user.setAge(getValue(jo, ("age"), TYPE.INT).getAsInt());
+//			user.setSquareId(getValue(jo, ("squareId"), TYPE.STRING).getAsString());
+//			user.setChupaEnable(getValue(jo, ("isChupaEnable"), TYPE.BOOLEAN).getAsBoolean());
+//
+//			list.add(user);
+//		}
+//		return list;
+//	}
 
 	
 	public static String convertToUserId(JsonElement json) {

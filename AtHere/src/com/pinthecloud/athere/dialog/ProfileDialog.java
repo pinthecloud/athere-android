@@ -11,12 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhUser;
 
@@ -25,9 +24,10 @@ public class ProfileDialog extends AhDialogFragment{
 	private AhDialogCallback ahDialogCallback;
 	private AhApplication app;
 	private AhFragment frag;
-	private PreferenceHelper pref;
 	private AhUser user;
 	private CachedBlobStorageHelper blobStorageHelper;
+	
+	private UserHelper userHelper;
 
 	private ImageView profileImage;
 	private ImageView genderImage;
@@ -42,7 +42,7 @@ public class ProfileDialog extends AhDialogFragment{
 		this.frag = frag;
 		this.ahDialogCallback = ahDialogCallback;
 		this.app = AhApplication.getInstance();
-		this.pref = app.getPref();
+		this.userHelper = app.getUserHelper();
 		this.user = user;
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		setStyle(STYLE_NO_TITLE, 0);
@@ -105,7 +105,7 @@ public class ProfileDialog extends AhDialogFragment{
 				dismiss();
 			}
 		});
-		if(user.getId().equals(pref.getString(AhGlobalVariable.USER_ID_KEY))){
+		if(user.getId().equals(userHelper.getMyUserInfo().getId())){
 			sendChupaButton.setVisibility(View.GONE);
 		}
 

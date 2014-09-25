@@ -34,7 +34,7 @@ public class VersionHelper {
 
 	public VersionHelper() {
 		app = AhApplication.getInstance();
-		appVersionTable = app.getAppVersionTable();
+		appVersionTable = app.getmClient().getTable(AppVersion.class);
 	}
 
 
