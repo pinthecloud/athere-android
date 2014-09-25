@@ -245,7 +245,8 @@ public class BasicProfileFragment extends AhFragment{
 					userHelper.setMyMale(maleButton.isChecked())
 					.setMyBirthYear(Integer.parseInt(birthYearEditText.getText().toString()))
 					.setMyChupaEnable(true)
-					.setMyCompanyNum(0);
+					.setMyCompanyNum(0)
+					.setMyNickName(nickName);
 					
 					AhUser user = userHelper.getMyUserInfo();
 					
@@ -272,7 +273,7 @@ public class BasicProfileFragment extends AhFragment{
 									"CheckAge",
 									"" + entity.getAge());
 							
-							squareHelper.setLoggedInSquare(true);
+							userHelper.setLoggedInUser(true);
 							userHelper.setMyId(entity.getId());
 							
 							Intent intent = new Intent(context, SquareListActivity.class);

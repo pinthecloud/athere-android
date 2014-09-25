@@ -389,7 +389,7 @@ public class UserHelper {
 	
 	public void userLogout() {
 		pref.removePref(COMPANY_NUMBER_KEY);
-		pref.removePref(USER_ID_KEY);
+//		pref.removePref(USER_ID_KEY);
 		pref.removePref(IS_CHAT_ENABLE_KEY);
 		pref.removePref(IS_CHUPA_ENABLE_KEY);
 	}

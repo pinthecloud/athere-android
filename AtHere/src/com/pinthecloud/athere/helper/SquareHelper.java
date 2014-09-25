@@ -155,7 +155,7 @@ public class SquareHelper {
 		pref.removePref(SQUARE_RESET_KEY);
 		pref.removePref(IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(SQUARE_EXIT_TAB_KEY);
-		pref.removePref(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+//		pref.removePref(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
 	}
 	public SquareHelper setMySquareId(String id) {
 		pref.putString(SQUARE_ID_KEY, id);

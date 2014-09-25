@@ -79,8 +79,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					Session session = Session.getActiveSession();
-					if (session == null) return;
-					session.close();
+					if (session != null) {
+						session.close();
+					}
+					
 					
 					Intent intent = new Intent(context, BasicProfileActivity.class);
 					startActivity(intent);
