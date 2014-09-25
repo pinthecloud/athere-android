@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -10,13 +11,14 @@
     android:paddingStart="@dimen/chat_list_receive_left_margin"
     android:paddingTop="@dimen/chat_list_receive_top_margin" >
 
-    <ImageView
+    <com.pinthecloud.athere.view.CircleImageView
         android:id="@+id/row_chat_list_receive_profile"
         android:layout_width="@dimen/chat_profile_width"
         android:layout_height="@dimen/chat_profile_height"
         android:layout_marginEnd="@dimen/chat_list_receive_profile_nick_name_margin"
         android:layout_marginRight="@dimen/chat_list_receive_profile_nick_name_margin"
-        android:contentDescription="@string/profile_image" />
+        app:civBorderColor="@color/gray_line"
+        app:civBorderWidth="@dimen/divider_height" />
 
     <RelativeLayout
         android:id="@+id/row_chat_list_receive_profile_into_layout"

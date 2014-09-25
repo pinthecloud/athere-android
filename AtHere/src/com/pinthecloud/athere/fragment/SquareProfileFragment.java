@@ -566,7 +566,6 @@ public class SquareProfileFragment extends AhFragment{
 				// Upload the resized image to server
 				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
 				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-				circlePictureBitmap = BitmapUtil.cropRound(circlePictureBitmap);
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, circlePictureBitmap, null);
 			}
