@@ -39,37 +39,37 @@
     <dimen name="square_drawer_member_bar_gender_margin">3.5dp</dimen>
     <dimen name="square_drawer_setting_bar_text_toggle_margin">6.5dp</dimen>
 
-    <!-- Square chat -->
-    <dimen name="square_chat_profile_width">38dp</dimen>
-    <dimen name="square_chat_profile_height">38dp</dimen>
-    <dimen name="square_chat_input_top_margin">3dp</dimen>
-    <dimen name="square_chat_input_bottom_margin">3dp</dimen>
-    <dimen name="square_chat_input_layout_left_margin">8dp</dimen>
-    <dimen name="square_chat_input_left_margin">12dp</dimen>
-    <dimen name="square_chat_input_right_margin">4dp</dimen>
-    <dimen name="square_chat_input_min_height">48dp</dimen>
-    <dimen name="square_chat_notification_text_bottom_margin">8dp</dimen>
-    <dimen name="square_chat_notification_text_top_margin">3dp</dimen>
-    <dimen name="square_chat_notification_text_left_margin">14px</dimen>
-    <dimen name="square_chat_notification_text_right_margin">14px</dimen>
-    <dimen name="square_chat_list_receive_left_margin">10dp</dimen>
-    <dimen name="square_chat_list_receive_right_margin">60dp</dimen>
-    <dimen name="square_chat_list_receive_top_margin">5dp</dimen>
-    <dimen name="square_chat_list_receive_bottom_margin">5dp</dimen>
-    <dimen name="square_chat_list_receive_profile_nick_name_margin">6.5dp</dimen>
-    <dimen name="square_chat_list_receive_message_layout_top_margin">1dp</dimen>
-    <dimen name="square_chat_list_receive_nick_name_gender_margin">3.5dp</dimen>
-    <dimen name="square_chat_list_receive_content_left_margin">2dp</dimen>
-    <dimen name="square_chat_list_receive_content_max_width">180dp</dimen>
-    <dimen name="square_chat_list_send_time_right_margin">3dp</dimen>
-    <dimen name="square_chat_list_send_time_left_margin">3dp</dimen>
-    <dimen name="square_chat_list_send_time_bottom_margin">1dp</dimen>
-    <dimen name="square_chat_list_send_right_margin">8dp</dimen>
-    <dimen name="square_chat_list_send_left_margin">60dp</dimen>
-    <dimen name="square_chat_list_send_top_margin">3dp</dimen>
-    <dimen name="square_chat_list_send_bottom_margin">3dp</dimen>
-    <dimen name="square_chat_list_send_progress_width">14dp</dimen>
-    <dimen name="square_chat_list_send_progress_height">14dp</dimen>
+    <!-- Chat -->
+    <dimen name="chat_profile_width">38dp</dimen>
+    <dimen name="chat_profile_height">38dp</dimen>
+    <dimen name="chat_input_top_margin">3dp</dimen>
+    <dimen name="chat_input_bottom_margin">3dp</dimen>
+    <dimen name="chat_input_layout_left_margin">8dp</dimen>
+    <dimen name="chat_input_left_margin">12dp</dimen>
+    <dimen name="chat_input_right_margin">4dp</dimen>
+    <dimen name="chat_input_min_height">48dp</dimen>
+    <dimen name="chat_notification_text_bottom_margin">8dp</dimen>
+    <dimen name="chat_notification_text_top_margin">3dp</dimen>
+    <dimen name="chat_notification_text_left_margin">14px</dimen>
+    <dimen name="chat_notification_text_right_margin">14px</dimen>
+    <dimen name="chat_list_receive_left_margin">10dp</dimen>
+    <dimen name="chat_list_receive_right_margin">60dp</dimen>
+    <dimen name="chat_list_receive_top_margin">5dp</dimen>
+    <dimen name="chat_list_receive_bottom_margin">5dp</dimen>
+    <dimen name="chat_list_receive_profile_nick_name_margin">6.5dp</dimen>
+    <dimen name="chat_list_receive_message_layout_top_margin">1dp</dimen>
+    <dimen name="chat_list_receive_nick_name_gender_margin">3.5dp</dimen>
+    <dimen name="chat_list_receive_content_left_margin">2dp</dimen>
+    <dimen name="chat_list_receive_content_max_width">180dp</dimen>
+    <dimen name="chat_list_send_time_right_margin">3dp</dimen>
+    <dimen name="chat_list_send_time_left_margin">3dp</dimen>
+    <dimen name="chat_list_send_time_bottom_margin">1dp</dimen>
+    <dimen name="chat_list_send_right_margin">8dp</dimen>
+    <dimen name="chat_list_send_left_margin">60dp</dimen>
+    <dimen name="chat_list_send_top_margin">3dp</dimen>
+    <dimen name="chat_list_send_bottom_margin">3dp</dimen>
+    <dimen name="chat_list_send_progress_width">14dp</dimen>
+    <dimen name="chat_list_send_progress_height">14dp</dimen>
 
     <!-- Chupa chat -->
     <dimen name="chupa_chat_other_bar_height">56dp</dimen>
@@ -103,14 +103,14 @@
     <dimen name="square_list_member_left_margin">4dp</dimen>
     <dimen name="square_list_name_distance_margin">10dp</dimen>
 
-    <!-- Square chupa list -->
-    <dimen name="square_chupa_list_height">88dp</dimen>
-    <dimen name="square_chupa_list_profile_width">70dp</dimen>
-    <dimen name="square_chupa_list_profile_height">70dp</dimen>
-    <dimen name="square_chupa_list_profile_left_margin">18dp</dimen>
-    <dimen name="square_chupa_list_profile_text_margin">16dp</dimen>
-    <dimen name="square_chupa_list_time_right_margin">18dp</dimen>
-    <dimen name="square_chupa_list_content_margin">5dp</dimen>
+    <!-- Chupa list -->
+    <dimen name="chupa_list_height">88dp</dimen>
+    <dimen name="chupa_list_profile_width">70dp</dimen>
+    <dimen name="chupa_list_profile_height">70dp</dimen>
+    <dimen name="chupa_list_profile_left_margin">18dp</dimen>
+    <dimen name="chupa_list_profile_text_margin">16dp</dimen>
+    <dimen name="chupa_list_time_right_margin">18dp</dimen>
+    <dimen name="chupa_list_content_margin">5dp</dimen>
 
     <!-- Square profile -->
     <dimen name="square_profile_text_width">260dp</dimen>

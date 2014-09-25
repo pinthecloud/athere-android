@@ -26,11 +26,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />    
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".AhApplication"
@@ -70,32 +70,28 @@
         <activity android:name=".activity.AhActivity" />
         <activity
             android:name=".activity.BasicProfileActivity"
-            android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.SquareListActivity"
             android:icon="@drawable/actionbar_logo"
+            android:label="@string/square"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SquareProfileActivity"
-            android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
         <activity android:name=".activity.HongkunTestActivity" />
         <activity
             android:name=".activity.SquareActivity"
-            android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.ProfileImageActivity"
-            android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.ProfileSettingsActivity"
-            android:icon="@drawable/actionbar_logo"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
         <activity
