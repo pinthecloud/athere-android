@@ -11,7 +11,6 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -26,9 +25,8 @@ public class SquareHelper {
 	private AhApplication app;
 	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
-
-
-	/**
+	
+	/*
 	 * Model tables
 	 */
 	private MobileServiceTable<Square> squareTable;
@@ -51,8 +49,8 @@ public class SquareHelper {
 		super();
 		this.app = AhApplication.getInstance();
 		this.mClient = app.getmClient();
-		this.pref = app.getPref();
-		this.squareTable = app.getSquareTable();
+		this.pref = PreferenceHelper.getInstance();
+		this.squareTable = app.getmClient().getTable(Square.class);
 	}
 
 
@@ -126,15 +124,64 @@ public class SquareHelper {
 			}
 		});
 	}
+	
+	private String SQUARE_ID_KEY = "SQUARE_ID_KEY";
+	private String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
+	private String SQUARE_RESET_KEY = "SQUARE_RESET_KEY";
+	private String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
+	private String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
+	private String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
 
-
-	public Square getSquare(){
+	public Square getMySquareInfo(){
 		Square square = new Square();
-		square.setId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-		square.setName(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
-		square.setResetTime(pref.getInt(AhGlobalVariable.SQUARE_RESET_KEY));
+		square.setId(pref.getString(SQUARE_ID_KEY));
+		square.setName(pref.getString(SQUARE_NAME_KEY));
+		square.setResetTime(pref.getInt(SQUARE_RESET_KEY));
 		return square;
 	}
+	public boolean isLoggedInSquare() {
+		return pref.getBoolean(IS_LOGGED_IN_SQUARE_KEY);
+	}
+	public int getSquareExitTab() {
+		return pref.getInt(SQUARE_EXIT_TAB_KEY);
+	}
+	public String getTimeStampAtLoggedInSquare() {
+		return pref.getString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+	}
+	
+	public void removeMySquareInfo() {
+		pref.removePref(SQUARE_ID_KEY);
+		pref.removePref(SQUARE_NAME_KEY);
+		pref.removePref(SQUARE_RESET_KEY);
+		pref.removePref(IS_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(SQUARE_EXIT_TAB_KEY);
+//		pref.removePref(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+	}
+	public SquareHelper setMySquareId(String id) {
+		pref.putString(SQUARE_ID_KEY, id);
+		return this;
+	}
+	public SquareHelper setMySquareName(String name) {
+		pref.putString(SQUARE_NAME_KEY, name);
+		return this;
+	} 
+	public SquareHelper setMySquareResetTime(int resetTime) {
+		pref.putInt(SQUARE_RESET_KEY, resetTime);
+		return this;
+	} 
+	public SquareHelper setLoggedInSquare(boolean isLogged) {
+		pref.putBoolean(IS_LOGGED_IN_SQUARE_KEY, isLogged);
+		return this;
+	}
+	public SquareHelper setSquareExitTab(int pos) {
+		pref.putInt(SQUARE_EXIT_TAB_KEY, pos);
+		return this;
+	}
+	public SquareHelper setTimeStampAtLoggedInSquare(String time) {
+		pref.putString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time);
+		return this;
+	}
+	
 
 
 	/*

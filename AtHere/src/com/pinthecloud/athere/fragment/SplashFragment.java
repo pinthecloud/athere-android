@@ -23,7 +23,6 @@ import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -35,7 +34,6 @@ import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 public class SplashFragment extends AhFragment {
 
 	private VersionHelper versionHelper;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,16 +60,16 @@ public class SplashFragment extends AhFragment {
 		/*
 		 * Get unique android id
 		 */
-		if(pref.getString(AhGlobalVariable.ANDROID_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
+		if (!userHelper.hasMobileId()) {
 			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
-			pref.putString(AhGlobalVariable.ANDROID_ID_KEY, androidId);
+			userHelper.setMyMobileId(androidId);
 		}
-
+		
 
 		/*
 		 * If time is up, remove local preferences.
 		 */
-		if(pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY)){
+		if(squareHelper.isLoggedInSquare()){
 			Time time = new Time();
 			time.setToNow();
 			String currentTime = time.format("%Y:%m:%d:%H");
@@ -81,14 +79,14 @@ public class SplashFragment extends AhFragment {
 			int currentDay = Integer.parseInt(currentArray[2]);
 			int currentHour = Integer.parseInt(currentArray[3]);
 
-			String lastLoggedInSquareTime = pref.getString(AhGlobalVariable.TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+			String lastLoggedInSquareTime = squareHelper.getTimeStampAtLoggedInSquare();
 			String[] lastArray = lastLoggedInSquareTime.split(":");
 			int lastYear = Integer.parseInt(lastArray[0]);
 			int lastMonth = Integer.parseInt(lastArray[1]);
 			int lastDay = Integer.parseInt(lastArray[2]);
 			int lastHour = Integer.parseInt(lastArray[3]);
 
-			int resetTime = pref.getInt(AhGlobalVariable.SQUARE_RESET_KEY);
+			int resetTime = squareHelper.getMySquareInfo().getResetTime();
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
 				app.removeSquarePreference(thisFragment);
 			} else if(currentDay > lastDay && lastHour < resetTime){
@@ -159,13 +157,13 @@ public class SplashFragment extends AhFragment {
 
 			@Override
 			public void doNext(final AhFragment frag) {
-				if(pref.getString(AhGlobalVariable.REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING)){
+				if(!userHelper.hasRegistrationId()){
 					if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
 						userHelper.getRegistrationIdAsync(frag, new AhEntityCallback<String>(){
 
 							@Override
 							public void onCompleted(String registrationId) {
-								pref.putString(AhGlobalVariable.REGISTRATION_ID_KEY, registrationId);
+								userHelper.setMyRegistrationId(registrationId);
 							}
 						});
 					}else{
@@ -226,8 +224,8 @@ public class SplashFragment extends AhFragment {
 	@SuppressLint("NewApi")
 	public void goToNextActivity() {
 		if(!activity.isDestroyed()){
-			boolean isLoggedInUser = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY);
-			boolean isLooggedInSquare = pref.getBoolean(AhGlobalVariable.IS_LOGGED_IN_SQUARE_KEY);
+			boolean isLoggedInUser = userHelper.isLoggedInUser();
+			boolean isLooggedInSquare = squareHelper.isLoggedInSquare();
 
 			Intent intent = new Intent();
 			if (!isLoggedInUser){

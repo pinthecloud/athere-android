@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -72,7 +71,7 @@ public class SquareTabFragment extends AhFragment{
 		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), tabs, square);
 
 		// Set up the ViewPager with the sections adapter.
-		int startTab = pref.getInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
+		int startTab = squareHelper.getSquareExitTab();
 		mViewPager.setAdapter(mSquarePagerAdapter);
 		mViewPager.setCurrentItem(startTab);
 
@@ -83,7 +82,7 @@ public class SquareTabFragment extends AhFragment{
 
 			@Override
 			public void onPageSelected(int position) {
-				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, position);
+				squareHelper.setSquareExitTab(position);
 			}
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

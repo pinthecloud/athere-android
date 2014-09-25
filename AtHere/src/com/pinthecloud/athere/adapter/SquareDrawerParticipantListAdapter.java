@@ -3,6 +3,7 @@ package com.pinthecloud.athere.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -75,6 +76,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 				gender.setImageResource(R.drawable.profile_gender_w);
 				companyNumber.setTextColor(resources.getColor(R.color.dark_red));
 			}
+			Log.e("ERROR", BlobStorageHelper.USER_PROFILE + " : "+user.getId()+AhGlobalVariable.SMALL);
 			blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
 					user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
 

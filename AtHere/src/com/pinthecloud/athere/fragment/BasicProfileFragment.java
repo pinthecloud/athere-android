@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.content.Intent;
@@ -24,12 +25,12 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.FacebookDialog;
 import com.facebook.widget.LoginButton;
-import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
+import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhIdUser;
+import com.pinthecloud.athere.model.AhUser;
 
 
 public class BasicProfileFragment extends AhFragment{
@@ -63,12 +64,10 @@ public class BasicProfileFragment extends AhFragment{
     private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
         @Override
         public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-            Log(thisFragment, error);
         }
 
         @Override
         public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-            Log(thisFragment, "onComplete", data);
         }
     };
 
@@ -102,9 +101,9 @@ public class BasicProfileFragment extends AhFragment{
 			public void onClick(View v) {
 				countSudo++;
 				if (countSudo == 10) {
-					pref.putBoolean(AhGlobalVariable.SUDO_KEY, true);
+					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
 					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
-					.show();;
+					.show();
 				}
 			}
 		});
@@ -194,9 +193,10 @@ public class BasicProfileFragment extends AhFragment{
 //		birthYearEditText.setFocusable(false);
 //		birthYearEditText.setFocusableInTouchMode(false);
 		
-		maleButton.setEnabled(false);
-		femaleButton.setEnabled(false);
-//		maleButton.setClickable(false);
+//		maleButton.setEnabled(false);
+//		femaleButton.setEnabled(false);
+		maleButton.setClickable(false);
+		femaleButton.setClickable(false);
 //		maleButton.setFocusable(false);
 //		maleButton.setFocusableInTouchMode(false);
 
@@ -212,10 +212,19 @@ public class BasicProfileFragment extends AhFragment{
 				if (session.isClosed()) {
 					return;
 				}
+				
+				if (birthYearEditText.getText().toString().equals("")) {
+					Toast.makeText(context, "생일 허가를 해주세요.", Toast.LENGTH_LONG).show();
+					Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(getActivity(), Arrays.asList("user_birthday"));
+					session.requestNewReadPermissions(newPermissionsRequest);
+					session.close();
+					fbBtn.setVisibility(View.VISIBLE);
+					return;
+				}
+				
 				String nickName = nickNameEditText.getText().toString().trim();
 				nickNameEditText.setText(nickName);
 				nickNameEditText.setSelection(nickName.length());
-
 
 				// Save gender and birth year infomation to preference
 				String message = app.checkNickName(nickName);
@@ -231,18 +240,20 @@ public class BasicProfileFragment extends AhFragment{
 					progressBar.setVisibility(View.VISIBLE);
 					completeButton.setEnabled(false);
 
-
 					// Save this setting and go to next activity
-					String androidId = pref.getString(AhGlobalVariable.ANDROID_ID_KEY);
-					String facebookId = pref.getString(AhGlobalVariable.FACEBOOK_ID);
-					AhIdUser user = new AhIdUser();
-					user.setAhId(facebookId);
-					user.setPassword("");
-					user.setAndroidId(androidId);
-					userHelper.addIdUserAsync(thisFragment, user, new AhEntityCallback<AhIdUser>() {
+					
+					userHelper.setMyMale(maleButton.isChecked())
+					.setMyBirthYear(Integer.parseInt(birthYearEditText.getText().toString()))
+					.setMyChupaEnable(true)
+					.setMyCompanyNum(0)
+					.setMyNickName(nickName);
+					
+					AhUser user = userHelper.getMyUserInfo();
+					
+					userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 
 						@Override
-						public void onCompleted(AhIdUser entity) {
+						public void onCompleted(AhUser entity) {
 							progressBar.setVisibility(View.GONE);
 
 							/*
@@ -252,9 +263,7 @@ public class BasicProfileFragment extends AhFragment{
 							if(!maleButton.isChecked()){
 								gender = "Female";
 							}
-							int birthYear = Integer.parseInt(birthYearEditText.getText().toString());
-							int age = AhApplication.calculateAge(birthYearEditText.getText().toString());
-
+							
 							gaHelper.sendEventGA(
 									thisFragment.getClass().getSimpleName(),
 									"CheckGender",
@@ -262,15 +271,11 @@ public class BasicProfileFragment extends AhFragment{
 							gaHelper.sendEventGA(
 									thisFragment.getClass().getSimpleName(),
 									"CheckAge",
-									"" + age);
-
-							pref.putInt(AhGlobalVariable.BIRTH_YEAR_KEY, birthYear);
-							pref.putInt(AhGlobalVariable.AGE_KEY, age);
-							pref.putBoolean(AhGlobalVariable.IS_LOGGED_IN_USER_KEY, true);
-							pref.putBoolean(AhGlobalVariable.IS_MALE_KEY, maleButton.isChecked());
-							pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickNameEditText.getText().toString());
-							pref.putString(AhGlobalVariable.USER_AH_ID_KEY, entity.getAhId());
-
+									"" + entity.getAge());
+							
+							userHelper.setLoggedInUser(true);
+							userHelper.setMyId(entity.getId());
+							
 							Intent intent = new Intent(context, SquareListActivity.class);
 							startActivity(intent);
 							activity.finish();
@@ -285,16 +290,18 @@ public class BasicProfileFragment extends AhFragment{
 		fbBtn.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser user) {
-                Log(thisFragment, user);
                 if (user == null) {
                 	maleButton.setChecked(true);
                 	birthYearEditText.setText("");
                     nickNameEditText.setText("");
                     return;
                 }
-                
                 String birthday = user.getBirthday();
-                String birthYear = birthday.substring(6, birthday.length());
+                String birthYear = "";
+                if (birthday != null) {
+                	birthYear = birthday.substring(6, birthday.length());
+                }
+                
                 String gender = (String)user.getProperty("gender");
                 String name = user.getFirstName();
                 if ("male".equals(gender))
@@ -302,10 +309,21 @@ public class BasicProfileFragment extends AhFragment{
                 else
                 	maleButton.setChecked(false);
                 
-                pref.putString(AhGlobalVariable.FACEBOOK_ID, user.getId());
+                userHelper.setMyAhId(user.getId());
+                ArrayList<String> arr = new ArrayList<String>();
+                arr.add("1482905955291892");
+                arr.add("643223775792443");
+                if (arr.contains(user.getId())) {
+                	Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
+					.show();
+                	PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
+                }
+
+                Log(thisFragment, user.getId());
                 birthYearEditText.setText(birthYear);
                 nickNameEditText.setText(name);
                 completeButton.setEnabled(true);
+                fbBtn.setVisibility(View.GONE);
             }
         });
 		

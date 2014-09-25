@@ -129,7 +129,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_profile_settings, container, false);
 
-
+		AhUser myUser = userHelper.getMyUserInfo();
 		/*
 		 * Set UI component
 		 */
@@ -147,7 +147,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		/*
 		 * Set Event on picture image view
 		 */
-		String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+		String userId = userHelper.getMyUserInfo().getId();
 		pictureBitmap = FileUtil.getImageFromInternalStorage(context, userId);
 		profilePictureView.setOnClickListener(new OnClickListener() {
 
@@ -181,7 +181,7 @@ public class ProfileSettingsFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		nickNameEditText.setText(pref.getString(AhGlobalVariable.NICK_NAME_KEY));
+		nickNameEditText.setText(myUser.getNickName());
 
 
 		/*
@@ -238,7 +238,7 @@ public class ProfileSettingsFragment extends AhFragment{
 			}
 		});
 		companyNumberEditText.setInputType(InputType.TYPE_NULL);
-		companyNumberEditText.setText("" + pref.getInt(AhGlobalVariable.COMPANY_NUMBER_KEY));
+		companyNumberEditText.setText("" + myUser.getCompanyNum());
 
 
 		/*
@@ -509,8 +509,8 @@ public class ProfileSettingsFragment extends AhFragment{
 		// Save info for user
 		String nickName = nickNameEditText.getText().toString();
 		int companyNumber = Integer.parseInt(companyNumberEditText.getText().toString());
-		pref.putString(AhGlobalVariable.NICK_NAME_KEY, nickName);
-		pref.putInt(AhGlobalVariable.COMPANY_NUMBER_KEY, companyNumber);
+		userHelper.setMyNickName(nickName)
+		.setMyCompanyNum(companyNumber);
 
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -530,7 +530,7 @@ public class ProfileSettingsFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
-				String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+				String userId = userHelper.getMyUserInfo().getId();
 				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, circlePictureBitmap, null);
@@ -540,12 +540,12 @@ public class ProfileSettingsFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				String enterMessage = getResources().getString(R.string.enter_square_message);
-				AhUser user = userHelper.getMyUserInfo(true);
+				AhUser user = userHelper.getMyUserInfo();
 				AhMessage message = new AhMessage.Builder()
 				.setContent(user.getNickName() + " " + enterMessage)
 				.setSender(user.getNickName())
 				.setSenderId(user.getId())
-				.setReceiverId(user.getSquareId())
+				.setReceiverId(squareHelper.getMySquareInfo().getId())
 				.setType(AhMessage.TYPE.UPDATE_USER_INFO).build();
 				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
 
@@ -554,7 +554,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						progressBar.setVisibility(View.GONE);
 
 						// Save pictures to internal storage
-						String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+						String userId = userHelper.getMyUserInfo().getId();
 						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
 						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
 						blobStorageHelper.clearCache(userId);

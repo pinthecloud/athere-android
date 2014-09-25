@@ -111,7 +111,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				boolean isChecked = chatAlarmButton.isChecked();
-				pref.putBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY, isChecked);
+				userHelper.setMyChatEnable(isChecked);
 			}
 		});
 		chupaAlarmButton.setOnClickListener(new OnClickListener() {
@@ -123,7 +123,7 @@ public class SquareDrawerFragment extends AhFragment {
 				chupaAlarmButton.setEnabled(false);
 
 				boolean isChecked = chupaAlarmButton.isChecked();
-				pref.putBoolean(AhGlobalVariable.IS_CHUPA_ENABLE_KEY, isChecked);
+				userHelper.setMyChupaEnable(isChecked);
 				userHelper.updateMyUserAsync(thisFragment, new AhEntityCallback<AhUser>() {
 
 					@Override
@@ -182,7 +182,7 @@ public class SquareDrawerFragment extends AhFragment {
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
-		AhUser user = userHelper.getMyUserInfo(true);
+		AhUser user = userHelper.getMyUserInfo();
 		userHelper.exitSquareAsync(thisFragment, user, new AhEntityCallback<Boolean>() {
 
 			@Override
@@ -202,7 +202,7 @@ public class SquareDrawerFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		updateUserList();
-		String userId = pref.getString(AhGlobalVariable.USER_ID_KEY);
+		String userId = userHelper.getMyUserInfo().getId();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
 				userId+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
 	}
@@ -219,7 +219,7 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set alarm toggle button
 		 */
-		chatAlarmButton.setChecked(pref.getBoolean(AhGlobalVariable.IS_CHAT_ENABLE_KEY));
+		chatAlarmButton.setChecked(userHelper.getMyUserInfo().isChatEnable());
 		chupaAlarmButton.setChecked(user.isChupaEnable());
 
 
