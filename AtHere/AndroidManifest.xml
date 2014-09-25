@@ -50,7 +50,7 @@
         </receiver>
 
         <service android:name="com.pinthecloud.athere.AhIntentService" >
-            </service>
+        </service>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -68,6 +68,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.AhActivity" />
+        <activity
+            android:name=".activity.GuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.BasicProfileActivity"
             android:screenOrientation="portrait"
@@ -103,10 +107,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.SquareActivity" />
         </activity>
-        <activity android:name="com.facebook.LoginActivity"
-                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
-                  android:label="@string/app_name" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
     </application>
 
 </manifest>
