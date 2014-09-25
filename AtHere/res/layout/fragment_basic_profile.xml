@@ -82,14 +82,14 @@
             android:background="@android:color/transparent"
             android:contentDescription="@android:string/ok"
             android:src="@drawable/ok_image_button_bg" />
-        
+
         <com.facebook.widget.LoginButton
-                android:id="@+id/facebook_login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                facebook:confirm_logout="false"
-                facebook:fetch_user_info="true"/>
+            android:id="@+id/facebook_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            facebook:confirm_logout="false"
+            facebook:fetch_user_info="true" />
     </LinearLayout>
 
 </RelativeLayout>
