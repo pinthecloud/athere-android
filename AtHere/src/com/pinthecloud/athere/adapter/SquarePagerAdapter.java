@@ -9,7 +9,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ChatFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip.IconTabProvider;
 
 public class SquarePagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider{
@@ -20,7 +19,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 	public ChupaListFragment squareChupaListFragment;
 
 
-	public SquarePagerAdapter(Context context, FragmentManager fm, PagerSlidingTabStrip tabs, Square square) {
+	public SquarePagerAdapter(Context context, FragmentManager fm, Square square) {
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);
 		squareChatFragment = new ChatFragment(square);

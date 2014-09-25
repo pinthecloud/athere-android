@@ -37,6 +37,7 @@
     <string name="admin">관리자</string>
     <string name="install">설치</string>
     <string name="square">그라운드</string>
+    <string name="guide">가이드</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>

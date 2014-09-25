@@ -39,6 +39,7 @@
     <string name="square">Ground</string>
     <string name="meter">m</string>
     <string name="kilometer">km</string>
+    <string name="guide">guide</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>

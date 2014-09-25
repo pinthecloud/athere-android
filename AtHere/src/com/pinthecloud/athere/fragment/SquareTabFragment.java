@@ -69,7 +69,7 @@ public class SquareTabFragment extends AhFragment{
 		 */
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), tabs, square);
+		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
 
 		// Set up the ViewPager with the sections adapter.
 		int startTab = pref.getInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
