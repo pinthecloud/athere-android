@@ -2,7 +2,11 @@
 
     <!-- Common -->
     <dimen name="divider_height">2dp</dimen>
-    <dimen name="square_drawer_width">300dp</dimen>
+
+    <!-- Drawer -->
+    <dimen name="app_drawer_offset">60dp</dimen>
+    <dimen name="app_drawer_shadow_width">15dp</dimen>
+    <dimen name="notification_drawer_width">300dp</dimen>
 
     <!-- Basic Profile -->
     <dimen name="basic_profile_nick_name_text_width">240dp</dimen>

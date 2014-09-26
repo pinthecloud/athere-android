@@ -37,6 +37,7 @@
     <string name="install">설치</string>
     <string name="square">그라운드</string>
     <string name="guide">가이드</string>
+    <string name="notification">알림</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>
@@ -55,8 +56,7 @@
     <string name="send_message_fail_message">작업을 선택해주세요.</string>
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
     <string name="review_message">내가 자주가는 장소의 소식이 궁금하신가요? 추가를 원하시는 그라운드를 리뷰로 말씀해주세요.</string>
-    <string name="review_yes_message_1">거기를 원해요!</string>
-    <string name="review_yes_message_2">저 여깄어요!</string>
+    <string name="no_today_message">나중에 할게요</string>
     <string name="location_consent_message">추파는 위치정보를 사용해요. 괜찮아요?</string>
     <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
     <string name="far_message">이 그라운드는 들어가기에 너무 멀리있어요.</string>

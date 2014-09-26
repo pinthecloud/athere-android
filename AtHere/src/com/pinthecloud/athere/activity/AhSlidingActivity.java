@@ -1,36 +1,35 @@
 package com.pinthecloud.athere.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
+import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.fragment.AppDrawerFragment;
 
-/**
- *  Base class for every activity.
- *  Provides AhApplication reference for subclasses.
- *  Every Activity is a container for each Fragment.
- *  Fragments do the real works.
- */
-public class AhActivity extends Activity {
+public class AhSlidingActivity extends SlidingActivity{
 
 	protected AhApplication app;
 	protected FiveRocksHelper fiveRocksHelper;
 	protected UserHabitHelper userHabitHelper;
 
-	protected AhActivity thisActivity;
+	protected AhSlidingActivity thisActivity;
 	protected String simpleClassName;
 
 	private boolean isDestroyed = false;
 
 
-	public AhActivity(){
+	public AhSlidingActivity(){
 		thisActivity = this;
 		app = AhApplication.getInstance();
 		simpleClassName = thisActivity.getClass().getSimpleName();
@@ -40,10 +39,28 @@ public class AhActivity extends Activity {
 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		LogSM(simpleClassName + " onCreate");
 		fiveRocksHelper.initFiveRocks(thisActivity);
+
+		
+		/*
+		 * Set App Drawer
+		 */
+		setBehindContentView(R.layout.frame_app_drawer);
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
+		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
+		fragmentTransaction.commit();
+
+		SlidingMenu sm = getSlidingMenu();
+		sm.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
+		sm.setShadowDrawable(R.drawable.app_drawer_shadow);
+		sm.setBehindOffsetRes(R.dimen.app_drawer_offset);
+		sm.setFadeDegree(0.35f);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 	}
 
 

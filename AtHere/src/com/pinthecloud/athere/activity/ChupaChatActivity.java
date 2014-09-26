@@ -22,7 +22,7 @@ public class ChupaChatActivity extends AhActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_chupa_chat);
+		setContentView(R.layout.frame_activity);
 
 
 		/*
@@ -38,7 +38,7 @@ public class ChupaChatActivity extends AhActivity {
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 		final ChupaChatFragment chupaChatFragment = new ChupaChatFragment();
-		fragmentTransaction.add(R.id.chupa_chat_container, chupaChatFragment);
+		fragmentTransaction.add(R.id.activity_container, chupaChatFragment);
 		fragmentTransaction.commit();
 
 

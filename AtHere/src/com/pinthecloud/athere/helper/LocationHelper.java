@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -14,14 +15,13 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 public class LocationHelper {
 
 	private String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
-	
+
 	private final int UPDATE_INTERVAL = 5000;
 	private final int FASTEST_INTERVAL = 1000;
 
@@ -31,14 +31,14 @@ public class LocationHelper {
 	private LocationClient mLocationClient;
 	private LocationRequest locationRequest;
 
-	
-	public LocationHelper(AhActivity activity, 
+
+	public LocationHelper(Context context, 
 			ConnectionCallbacks connectionCallbacks, 
 			OnConnectionFailedListener onConnectionFailedListener) {
 		super();
 		pref = PreferenceHelper.getInstance();
-		manager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-		mLocationClient = new LocationClient(activity, 
+		manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		mLocationClient = new LocationClient(context, 
 				connectionCallbacks, 
 				onConnectionFailedListener);
 		locationRequest = LocationRequest.create();
@@ -58,7 +58,7 @@ public class LocationHelper {
 	}
 
 
-	public void connect(final AhActivity activity){
+	public void connect(){
 		mLocationClient.connect();
 	}
 
@@ -83,7 +83,7 @@ public class LocationHelper {
 	}
 
 
-	private boolean isLocationEnabled(AhActivity activity){
+	private boolean isLocationEnabled(){
 		if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) 
 				&& !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
 			return false;
@@ -94,12 +94,12 @@ public class LocationHelper {
 	}
 
 
-	public boolean isLocationAccess(AhActivity activity){
-		return pref.getBoolean(LOCATION_CONSENT_KEY) && isLocationEnabled(activity);
+	public boolean isLocationAccess(){
+		return pref.getBoolean(LOCATION_CONSENT_KEY) && isLocationEnabled();
 	}
 
 
-	public void getLocationAccess(final AhActivity activity, final AhDialogCallback callback){
+	public void getLocationAccess(final Activity activity, final AhDialogCallback callback){
 		/*
 		 * Get user consent for location information
 		 */
@@ -125,7 +125,7 @@ public class LocationHelper {
 		/*
 		 * Set enable location service
 		 */
-		if(!isLocationEnabled(activity)){
+		if(!isLocationEnabled()){
 			String message = activity.getResources().getString(R.string.location_setting_message);
 			AhAlertDialog locSettingDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 

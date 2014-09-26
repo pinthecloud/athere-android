@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/square_list_height"
-    android:background="@drawable/drawer_list_selector_bg"
+    android:background="@drawable/list_white_selector_bg"
     android:orientation="vertical" >
 
     <LinearLayout

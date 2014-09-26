@@ -40,6 +40,7 @@
     <string name="meter">m</string>
     <string name="kilometer">km</string>
     <string name="guide">guide</string>
+    <string name="notification">Notification</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
@@ -58,8 +59,7 @@
     <string name="send_message_fail_message">Select action.</string>
     <string name="number_of_member_question">How many with you?</string>
     <string name="review_message">Do you want to hear favorite place\'s news? Tell us your ground by review.</string>
-    <string name="review_yes_message_1">I want that place!</string>
-    <string name="review_yes_message_2">I\'m here!</string>
+    <string name="no_today_message">I will do</string>
     <string name="location_consent_message">Chupa use location information. Do you agree?</string>
     <string name="location_setting_message">Please enable location access.</string>
     <string name="far_message">This ground is too far to enter.</string>
