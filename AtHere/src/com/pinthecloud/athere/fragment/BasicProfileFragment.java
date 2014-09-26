@@ -31,6 +31,7 @@ import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.SquareUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;

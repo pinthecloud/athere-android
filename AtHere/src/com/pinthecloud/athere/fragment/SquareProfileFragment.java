@@ -82,6 +82,8 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
 	private Bitmap smallPictureBitmap;
+	
+	private boolean isPreview = true;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -551,7 +553,7 @@ public class SquareProfileFragment extends AhFragment{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo();
-				userHelper.enterSquareAsync(frag, user, square.getId(), new AhPairEntityCallback<String, List<AhUser>>() {
+				userHelper.enterSquareAsync(frag, user, square.getId(), isPreview, new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
@@ -573,6 +575,32 @@ public class SquareProfileFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
+				if (isPreview) {
+					Time time = new Time();
+					time.setToNow();
+
+					userHelper.setMyChatEnable(true);
+					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+					squareHelper.setMySquareName(square.getName())
+					.setMySquareResetTime(square.getResetTime())
+					.setLoggedInSquare(true)
+					.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+					.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
+
+					// Save pictures to internal storage
+					String userId = userHelper.getMyUserInfo().getId();
+					FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
+					FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
+
+					// Set and move to next activity after clear previous activity
+					Intent intent = new Intent(context, SquareActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(intent);
+					
+					
+					AsyncChainer.notifyNext(frag);
+					return;
+				}
 				String enterMessage = getResources().getString(R.string.enter_square_message);
 				AhUser user = userHelper.getMyUserInfo();
 				AhMessage message = new AhMessage.Builder()
