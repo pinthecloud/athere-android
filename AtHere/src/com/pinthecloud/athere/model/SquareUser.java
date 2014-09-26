@@ -8,6 +8,7 @@ public class SquareUser {
 	@com.google.gson.annotations.SerializedName("userId")
 	private String userId;
 	
+	
 	public String getId() {
 		return id;
 	}

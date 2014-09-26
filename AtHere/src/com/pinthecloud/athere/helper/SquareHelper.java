@@ -22,27 +22,22 @@ import com.pinthecloud.athere.util.JsonConverter;
 
 public class SquareHelper {
 
+	private final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
+	private final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
+	private final String SQUARE_RESET_KEY = "SQUARE_RESET_KEY";
+	private final String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
+	private final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
+	private final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
+
+	private final String GET_NEAR_SQUARE = "get_near_square";
+	
+	private final String currentLatitude = "currentLatitude";
+	private final String currentLongitude = "currentLongitude";
+	
 	private AhApplication app;
 	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
-	
-	/*
-	 * Model tables
-	 */
 	private MobileServiceTable<Square> squareTable;
-
-
-	/*
-	 * Methods name
-	 */
-	private final String GET_NEAR_SQUARE = "get_near_square";
-
-
-	/*
-	 * String
-	 */
-	private final String currentLatitude = "currentLatitude";
-	private final String currentLongitude = "currentLongitude";
 
 
 	public SquareHelper() {
@@ -52,7 +47,6 @@ public class SquareHelper {
 		this.pref = PreferenceHelper.getInstance();
 		this.squareTable = app.getmClient().getTable(Square.class);
 	}
-
 
 
 	/*
@@ -124,13 +118,6 @@ public class SquareHelper {
 			}
 		});
 	}
-	
-	private String SQUARE_ID_KEY = "SQUARE_ID_KEY";
-	private String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
-	private String SQUARE_RESET_KEY = "SQUARE_RESET_KEY";
-	private String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
-	private String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
-	private String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
 
 	public Square getMySquareInfo(){
 		Square square = new Square();

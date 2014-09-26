@@ -96,7 +96,6 @@ public class JsonConverter {
 		JsonElement userList = userListJson.get("list");
 		JsonArray jsonArray = userList.getAsJsonArray();
 		for(int i = 0 ; i < jsonArray.size() ; i++){
-			
 			JsonElement jsonElement = jsonArray.get(i);
 			JsonObject jo = jsonElement.getAsJsonObject();
 			AhUser user = JsonConverter.convertToUser(jo);
@@ -108,7 +107,6 @@ public class JsonConverter {
 	
 	public static AhUser convertToUser(JsonObject jo) {
 		AhUser user = new AhUser();
-		
 		user.setId(getValue(jo, ("id"), TYPE.STRING).getAsString());
 		user.setAhId(getValue(jo, ("ahId"), TYPE.STRING).getAsString());
 		user.setMobileId(getValue(jo, ("mobileId"), TYPE.STRING).getAsString());
@@ -123,6 +121,12 @@ public class JsonConverter {
 		return user;
 	}
 	
+	
+	public static String convertToUserId(JsonElement json) {
+		JsonObject userListJson = json.getAsJsonObject();
+		JsonElement userList = userListJson.get("userId");
+		return userList.getAsString();
+	}
 	
 	
 //	public static List<AhUser> convertToUserList(JsonElement json){
@@ -150,11 +154,4 @@ public class JsonConverter {
 //		}
 //		return list;
 //	}
-
-	
-	public static String convertToUserId(JsonElement json) {
-		JsonObject userListJson = json.getAsJsonObject();
-		JsonElement userList = userListJson.get("userId");
-		return userList.getAsString();
-	}
 }

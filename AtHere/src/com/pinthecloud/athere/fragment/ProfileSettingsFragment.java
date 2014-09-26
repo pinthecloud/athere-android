@@ -74,7 +74,7 @@ public class ProfileSettingsFragment extends AhFragment{
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
-	private Bitmap circlePictureBitmap;
+	private Bitmap smallPictureBitmap;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -531,9 +531,9 @@ public class ProfileSettingsFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
 				String userId = userHelper.getMyUserInfo().getId();
-				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+				smallPictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
-				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, circlePictureBitmap, null);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, smallPictureBitmap, null);
 			}
 		}, new Chainable() {
 
@@ -556,7 +556,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						// Save pictures to internal storage
 						String userId = userHelper.getMyUserInfo().getId();
 						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
-						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
+						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
 						blobStorageHelper.clearCache(userId);
 						blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
 

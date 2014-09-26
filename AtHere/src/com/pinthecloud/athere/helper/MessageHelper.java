@@ -20,13 +20,10 @@ import com.pinthecloud.athere.util.AsyncChainer;
 
 public class MessageHelper {
 
+	private final String SEND_MESSAGE = "send_message";
+	
 	private AhApplication app;
 	private MobileServiceClient mClient;
-
-	/*
-	 * Methods name
-	 */
-	private final String SEND_MESSAGE = "send_message";
 
 
 	public MessageHelper() {

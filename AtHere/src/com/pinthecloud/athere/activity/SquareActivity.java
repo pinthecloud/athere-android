@@ -175,8 +175,9 @@ public class SquareActivity extends AhActivity{
 		// Ask review
 		if(PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY)){
 			String message = getResources().getString(R.string.review_message);
-			String cancelMessage = getResources().getString(R.string.no_today_message);
-			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, null, cancelMessage, true, new AhDialogCallback() {
+			String yesMessage1 = getResources().getString(R.string.review_yes_message_1);
+			String yesMessage2 = getResources().getString(R.string.review_yes_message_2);
+			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, yesMessage1, yesMessage2, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
@@ -187,7 +188,8 @@ public class SquareActivity extends AhActivity{
 				@Override
 				public void doNegativeThing(Bundle bundle) {
 					PreferenceHelper.getInstance().removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
-					finish();
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
+					startActivity(intent);
 				}
 			});
 			reviewDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);

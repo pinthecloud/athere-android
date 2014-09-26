@@ -3,7 +3,8 @@
 
     <!-- Default -->
     <string name="app_name">chupa</string>
-
+	<string name="facebook_app_id">383936855088677</string>
+	
     <!-- Word -->
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
@@ -17,7 +18,6 @@
     <string name="re_send">Re-send</string>
     <string name="select">Select</string>
     <string name="gender">Gender</string>
-    <string name="birth_of_year">Birth of Year</string>
     <string name="nick_name">Nick Name</string>
     <string name="drawer">Drawer</string>
     <string name="rotate">Rotate</string>
@@ -58,11 +58,13 @@
     <string name="send_message_fail_message">Select action.</string>
     <string name="number_of_member_question">How many with you?</string>
     <string name="review_message">Do you want to hear favorite place\'s news? Tell us your ground by review.</string>
-    <string name="no_today_message">Later do it</string>
+    <string name="review_yes_message_1">I want that place!</string>
+    <string name="review_yes_message_2">I\'m here!</string>
     <string name="location_consent_message">Chupa use location information. Do you agree?</string>
     <string name="location_setting_message">Please enable location access.</string>
     <string name="far_message">This ground is too far to enter.</string>
-	<string name="facebook_app_id">383936855088677</string>
+    <string name="no_facebook_upload_message">We doesn\'t upload any contents on facebook.</string>
+    <string name="birthday_access_message">We need birthday for calculating age.</string>
     
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">

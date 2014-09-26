@@ -17,7 +17,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.BasicProfileActivity;
+import com.pinthecloud.athere.activity.GuideActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
@@ -230,7 +230,7 @@ public class SplashFragment extends AhFragment {
 			Intent intent = new Intent();
 			if (!isLoggedInUser){
 				// New User
-				intent.setClass(context, BasicProfileActivity.class);
+				intent.setClass(context, GuideActivity.class);
 			} else if(!isLooggedInSquare){
 				// Already logged in
 				intent.setClass(context, SquareListActivity.class);

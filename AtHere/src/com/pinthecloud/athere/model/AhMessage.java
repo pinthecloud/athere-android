@@ -68,6 +68,8 @@ public class AhMessage implements Parcelable {
 		this();
 		readToParcel(in);
 	}
+	
+	
 	public String getId() {
 		return id;
 	}

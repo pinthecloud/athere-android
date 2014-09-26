@@ -20,6 +20,8 @@ import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 public class LocationHelper {
 
+	private String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
+	
 	private final int UPDATE_INTERVAL = 5000;
 	private final int FASTEST_INTERVAL = 1000;
 
@@ -29,7 +31,6 @@ public class LocationHelper {
 	private LocationClient mLocationClient;
 	private LocationRequest locationRequest;
 
-	private String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
 	
 	public LocationHelper(AhActivity activity, 
 			ConnectionCallbacks connectionCallbacks, 

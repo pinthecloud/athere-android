@@ -22,7 +22,6 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -82,7 +81,7 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText nickNameEditText;
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
-	private Bitmap circlePictureBitmap;
+	private Bitmap smallPictureBitmap;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -566,18 +565,9 @@ public class SquareProfileFragment extends AhFragment{
 			public void doNext(AhFragment frag) {
 				// Upload the resized image to server
 				String userId = userHelper.getMyUserInfo().getId();
-				circlePictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-				circlePictureBitmap = BitmapUtil.cropRound(circlePictureBitmap);
-				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, new AhEntityCallback<String>() {
-					
-					@Override
-					public void onCompleted(String entity) {
-						// TODO Auto-generated method stub
-						Log.e("ERROR", "upload complete" + entity);
-						
-					}
-				});
-				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, circlePictureBitmap, null);
+				smallPictureBitmap = BitmapUtil.decodeInSampleSize(pictureBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, pictureBitmap, null);
+				blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, smallPictureBitmap, null);
 			}
 		}, new Chainable() {
 
@@ -600,7 +590,7 @@ public class SquareProfileFragment extends AhFragment{
 						// Save this setting and go to next activity
 						Time time = new Time();
 						time.setToNow();
-						
+
 						userHelper.setMyChatEnable(true);
 						PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
 						squareHelper.setMySquareName(square.getName())
@@ -609,11 +599,10 @@ public class SquareProfileFragment extends AhFragment{
 						.setSquareExitTab(SquareTabFragment.CHAT_TAB)
 						.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
 
-						
 						// Save pictures to internal storage
 						String userId = userHelper.getMyUserInfo().getId();
 						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
-						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, circlePictureBitmap);
+						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
 
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);
@@ -629,147 +618,4 @@ public class SquareProfileFragment extends AhFragment{
 	private boolean isCompleteButtonEnable(){
 		return isTookPicture && isTypedMember && isTypedNickName;
 	}
-
-
-	//	private void profileImageOnClick(){
-	//		String select = getResources().getString(R.string.select);
-	//		final String[] selectList = getResources().getStringArray(R.array.profile_image_select_string_array);
-	//
-	//		// Show dialog for selecting where to get profile image
-	//		altBuilder = new AlertDialog.Builder(context);
-	//		altBuilder.setTitle(select);
-	//		altBuilder.setItems(selectList, new DialogInterface.OnClickListener() {
-	//			public void onClick(DialogInterface dialog, int item) {
-	//				final int ALBUM = 0;
-	//				final int CAMERA = 1;
-	//				final int DELETE = 2;
-	//				Intent intent = null;
-	//
-	//				switch(item){
-	//				case ALBUM:
-	//					// Get image from gallery
-	//					intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
-	//					intent.setType("image/*");
-	//					startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
-	//					break;
-	//
-	//				case CAMERA:
-	//					// create Intent to take a picture and return control to the calling application
-	//					// create a file to save the image
-	//					// set the image file name
-	//					// start the image capture Intent
-	//					intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	//					fileUri = FileHelper.getOutputMediaFileUri(FileHelper.MEDIA_TYPE_IMAGE);
-	//					intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-	//					startActivityForResult(intent, CAPTURE_IMAGE_CAMERA_CODE);
-	//					break;
-	//
-	//				case DELETE:
-	//					String delete = getResources().getString(R.string.delete);
-	//					String deleteMessage = getResources().getString(R.string.delete_profile_image_message);
-	//					String yes = getResources().getString(R.string.yes);
-	//					String no = getResources().getString(R.string.no);
-	//
-	//					// Show dialog for confirming to delete profile image
-	//					altBuilder = new AlertDialog.Builder(context);
-	//					altBuilder.setTitle(delete);
-	//					altBuilder.setMessage(deleteMessage);
-	//					altBuilder.setPositiveButton(yes, new DialogInterface.OnClickListener() {
-	//
-	//						@Override
-	//						public void onClick(DialogInterface dialog, int which) {
-	//							// Set profile image default
-	//							profileImage.setImageDrawable(getResources()
-	//									.getDrawable(R.drawable.profile_default_image));
-	//						}
-	//					});
-	//					altBuilder.setNegativeButton(no, new DialogInterface.OnClickListener() {
-	//
-	//						@Override
-	//						public void onClick(DialogInterface dialog, int which) {
-	//							// Keep current profile image
-	//						}
-	//					});
-	//					AlertDialog alertDialog = altBuilder.create();
-	//					alertDialog.setCanceledOnTouchOutside(true);
-	//					alertDialog.show();
-	//					break;
-	//				}
-	//			}
-	//		});
-	//		AlertDialog alertDialog = altBuilder.create();
-	//		alertDialog.setCanceledOnTouchOutside(true);
-	//		alertDialog.show();
-	//	}
-	//
-	//
-	//	private void profileImageOnActivityResult(int requestCode, int resultCode, Intent data){
-	//		switch(requestCode){
-	//		case CAPTURE_IMAGE_CAMERA_CODE:
-	//			if (resultCode == Activity.RESULT_OK) {
-	//				try {
-	//					/*
-	//					 * Get image from camera
-	//					 * Set the image to profile image after resize
-	//					 */
-	//					Bitmap profileImageBitmap = BitmapHelper.resize(context, fileUri, 
-	//							profileImage.getWidth(), profileImage.getHeight());
-	//					profileImage.setImageBitmap(profileImageBitmap);
-	//				} catch (FileNotFoundException e) {
-	//					// If it thorws error,
-	//					// Set profile image default
-	//					profileImage.setImageDrawable(getResources()
-	//							.getDrawable(R.drawable.profile_default_image));
-	//				}
-	//			} else if (resultCode == Activity.RESULT_CANCELED) {
-	//				// User cancelled the image capture
-	//			} else {
-	//				// Image capture failed, advise user
-	//				String message = getResources().getString(R.string.bad_camera_message);
-	//				Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-	//			}
-	//			break;
-	//
-	//		case GET_IMAGE_GALLERY_CODE:
-	//			if (resultCode == Activity.RESULT_OK) {
-	//				/*
-	//				 * Get image from gallery
-	//				 */
-	//				Uri imageUri = data.getData();
-	//				String[] filePathColumn = { MediaStore.Images.Media.DATA };
-	//
-	//				Cursor cursor = context.getContentResolver().query(imageUri,
-	//						filePathColumn, null, null, null);
-	//				cursor.moveToFirst();
-	//
-	//				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-	//				String imagePath = cursor.getString(columnIndex);
-	//				cursor.close();
-	//
-	//
-	//				/*
-	//				 * Set the image to profile image after resize
-	//				 */
-	//				try {
-	//					File file = new File(imagePath);
-	//					Uri absoluteImageUri = Uri.fromFile(file);
-	//					Bitmap imageBitmap = BitmapHelper.resize(context, absoluteImageUri, 
-	//							profileImage.getWidth(), profileImage.getHeight());
-	//					profileImage.setImageBitmap(imageBitmap);
-	//				} catch (FileNotFoundException e) {
-	//					// If it thorws error,
-	//					// Set profile image default
-	//					profileImage.setImageDrawable(getResources()
-	//							.getDrawable(R.drawable.profile_default_image));
-	//				}
-	//			} else if (resultCode == Activity.RESULT_CANCELED) {
-	//				// User cancelled the get image
-	//			} else {
-	//				// Get image failed, advise user
-	//				String message = getResources().getString(R.string.bad_gallery_message);
-	//				Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-	//			}
-	//			break;
-	//		}	
-	//	}
 }

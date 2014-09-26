@@ -11,13 +11,12 @@
     <string name="profile_image">프로필 사진</string>
     <string name="profile_settings">프로필 설정</string>
     <string name="my_profile">내 프로필</string>
-    <string name="male">남성</string>
-    <string name="female">여성</string>
+    <string name="male">남</string>
+    <string name="female">여</string>
     <string name="delete">지우기</string>
     <string name="re_send">재전송</string>
     <string name="select">선택</string>
     <string name="gender">성별</string>
-    <string name="birth_of_year">출생연도</string>
     <string name="nick_name">닉네임</string>
     <string name="drawer">사이드바</string>
     <string name="rotate">카메라 돌리기</string>
@@ -56,10 +55,13 @@
     <string name="send_message_fail_message">작업을 선택해주세요.</string>
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
     <string name="review_message">내가 자주가는 장소의 소식이 궁금하신가요? 추가를 원하시는 그라운드를 리뷰로 말씀해주세요.</string>
-    <string name="no_today_message">나중에 할게요</string>
+    <string name="review_yes_message_1">거기를 원해요!</string>
+    <string name="review_yes_message_2">저 여깄어요!</string>
     <string name="location_consent_message">추파는 위치정보를 사용해요. 괜찮아요?</string>
     <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
     <string name="far_message">이 그라운드는 들어가기에 너무 멀리있어요.</string>
+    <string name="no_facebook_upload_message">저희는 어떤 것도 페이스북에 올리지 않아요.</string>
+    <string name="birthday_access_message">나이 계산을 위해 생일이 필요해요.</string>
 
     <!-- String Array -->
 

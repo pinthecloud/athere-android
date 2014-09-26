@@ -9,15 +9,15 @@ import com.pinthecloud.athere.AhApplication;
 
 public class PreferenceHelper {
 
-	private SharedPreferences pref;
-
 	public static final String DEFAULT_STRING = "DEFAULT_STRING";
 	public static final int DEFAULT_INT = 0;
 	public static final boolean DEFAULT_BOOLEAN = false;
 	public static final float DEFAULT_FLOAT = 0;
 	
-	private static PreferenceHelper prefHelper = null;
+	private SharedPreferences pref;
 	
+	
+	private static PreferenceHelper prefHelper = null;
 	public static PreferenceHelper getInstance() {
 		if (prefHelper == null) {
 			prefHelper = new PreferenceHelper(AhApplication.getInstance());

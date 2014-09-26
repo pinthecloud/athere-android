@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -7,14 +8,6 @@
         android:id="@+id/guide_image_frag_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/guide"
-        android:scaleType="fitXY"
-        android:src="@drawable/bg_chat_msg_recieved" />
-
-    <Button
-        android:id="@+id/guide_image_frag_login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:contentDescription="@string/guide" />
 
 </RelativeLayout>

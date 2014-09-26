@@ -33,6 +33,7 @@ public class AhUser implements Parcelable{
 	
 	private boolean isChatEnable;
 	
+	
 	public AhUser() {
 		
 	}
@@ -41,106 +42,84 @@ public class AhUser implements Parcelable{
 		readToParcel(in);
 	}
 	
+	
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 	public String getAhId() {
 		return ahId;
 	}
-
 	public void setAhId(String ahId) {
 		this.ahId = ahId;
 	}
-
 	public String getMobileId() {
 		return mobileId;
 	}
-
 	public void setMobileId(String mobileId) {
 		this.mobileId = mobileId;
 	}
-
 	public String getMobileType() {
 		return mobileType;
 	}
-
 	public void setMobileType(String mobileType) {
 		this.mobileType = mobileType;
 	}
-
 	public String getRegistrationId() {
 		return registrationId;
 	}
-
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
 	}
-
 	public boolean isMale() {
 		return isMale;
 	}
-
 	public void setMale(boolean isMale) {
 		this.isMale = isMale;
 	}
-
 	public int getBirthYear() {
 		return birthYear;
 	}
-
 	public void setBirthYear(int birthYear) {
 		this.birthYear = birthYear;
 	}
-
 	public String getProfilePic() {
 		return profilePic;
 	}
-
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
 	}
-
 	public String getNickName() {
 		return nickName;
 	}
-
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
-
 	public boolean isChupaEnable() {
 		return isChupaEnable;
 	}
-
 	public void setChupaEnable(boolean isChupaEnable) {
 		this.isChupaEnable = isChupaEnable;
 	}
-
 	public int getCompanyNum() {
 		return companyNum;
 	}
-
 	public void setCompanyNum(int companyNum) {
 		this.companyNum = companyNum;
 	}
-	
 	public int getAge() {
 		Calendar c = Calendar.getInstance();
 		return c.get(Calendar.YEAR) - (getBirthYear() - 1);
 	}
-	
 	public void setChatEnable(boolean isChatEnable) {
 		this.isChatEnable = isChatEnable;
 	}
-	
 	public boolean isChatEnable() {
 		return this.isChatEnable;
 	}
+
 	
 	/*
 	 * Parcelable
