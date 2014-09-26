@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -266,8 +267,8 @@ public class BasicProfileFragment extends AhFragment{
 								""+user.getAge());
 
 						// Save pictures to internal storage
-						FileUtil.saveImageToInternalStorage(app, user.getId(), profileImageBitmap);
-						FileUtil.saveImageToInternalStorage(app, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, user.getId(), profileImageBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap);
 
 						// Move to next activity
 						Intent intent = new Intent(context, SquareListActivity.class);
@@ -321,17 +322,46 @@ public class BasicProfileFragment extends AhFragment{
 				imagePath = cursor.getString(columnIndex);
 				cursor.close();
 				break;
+				
 			case GET_IMAGE_CAMERA_CODE:
+				Uri tempImageUri = null;
+				if(imageUri == null){
+					if(data == null){
+						tempImageUri = FileUtil.getLastCaptureBitmapUri(context);
+					} else{
+						tempImageUri = data.getData();
+
+						// Intent pass data as Bitmap
+						if(tempImageUri == null){
+							Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+							tempImageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
+							FileUtil.saveBitmapToFile(context, tempImageUri, bitmap);
+						}
+					}
+				} else{
+					tempImageUri = imageUri;
+				}
+
+				imageUri = tempImageUri;
 				imagePath = imageUri.getPath();
 				break;
 			}
-			
-			
+
+
 			/*
 			 * Set the image
 			 */
 			try {
 				profileImageBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
+
+				int width = profileImageBitmap.getWidth();
+				int height = profileImageBitmap.getHeight();
+				if(height < width){
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, height, height);
+				} else{
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, width, width);
+				}
+
 				int degree = BitmapUtil.getImageOrientation(imagePath);
 				profileImageBitmap = BitmapUtil.rotate(profileImageBitmap, degree);
 			} catch (FileNotFoundException e) {
@@ -341,6 +371,15 @@ public class BasicProfileFragment extends AhFragment{
 			}
 			isTakenProfileImage = true;
 			startButton.setEnabled(isStartButtonEnable());
+			
+			
+			/*
+			 * If get image from camera, delete file
+			 */
+			if(requestCode == GET_IMAGE_CAMERA_CODE){
+				File file = new File(imagePath);
+				file.delete();
+			}
 		}
 	}
 

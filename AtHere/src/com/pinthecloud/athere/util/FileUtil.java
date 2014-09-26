@@ -9,10 +9,12 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
@@ -33,7 +35,6 @@ public class FileUtil {
 	public static File getOutputMediaFile(int type){
 		// To be safe, you should check that the SDCard is mounted
 		// using Environment.getExternalStorageState() before doing this.
-
 		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
 				Environment.DIRECTORY_PICTURES), AhGlobalVariable.APP_NAME);
 
@@ -48,7 +49,7 @@ public class FileUtil {
 
 		// Create a media file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-		File mediaFile;
+		File mediaFile = null;
 		if (type == MEDIA_TYPE_IMAGE){
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
 					"IMG_"+ timeStamp + ".jpg");
@@ -65,8 +66,8 @@ public class FileUtil {
 	public static void clearFile(Context context, String name) {
 		context.deleteFile(name);
 	}
-	
-	
+
+
 	public static void clearAllFiles(Context context) {
 		File dir = context.getFilesDir();
 		boolean result = false;
@@ -88,14 +89,28 @@ public class FileUtil {
 	}
 
 
-	public static String saveImageToInternalStorage(Context context, String name, Bitmap image) {
-		FileOutputStream fos = null;
+	// 특정  Uri 경로에 Bitmap 저장.
+	public static File saveBitmapToFile(Context context, Uri uri, Bitmap bitmap){
+		File file = null;
 		try {
-			// Use the compress method on the Bitmap object to write image to
-			// the OutputStream
-			fos = context.openFileOutput(name, Context.MODE_PRIVATE);
+			file = new File(uri.getPath());
+			FileOutputStream fos = new FileOutputStream(file);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			throw new AhException("FileNotFoundException");
+		} catch (IOException e) {
+			throw new AhException("IOException");
+		}
+		return file;
+	}
+
+
+	public static void saveBitmapToInternalStorage(Context context, String name, Bitmap image) {
+		try {
+			// Use the compress method on the Bitmap object to write image to the OutputStream
 			// Writing the bitmap to the output stream
-			if (image == null) throw new AhException("saveImage");
+			FileOutputStream fos = context.openFileOutput(name, Context.MODE_PRIVATE);
 			image.compress(Bitmap.CompressFormat.PNG, 100, fos);
 			fos.close();
 		} catch (FileNotFoundException e) {
@@ -103,14 +118,30 @@ public class FileUtil {
 		} catch (IOException e) {
 			throw new AhException("IOException");
 		}
-		return name;
+	}
+
+
+	public static Uri getLastCaptureBitmapUri(Context context){
+		Uri uri =null;
+		String[] IMAGE_PROJECTION = {
+				MediaStore.Images.ImageColumns.DATA, 
+				MediaStore.Images.ImageColumns._ID,
+		};
+		Cursor cursorImages = context.getContentResolver().query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				IMAGE_PROJECTION, null, null,null);
+		if (cursorImages != null && cursorImages.moveToLast()) {
+			uri = Uri.parse(cursorImages.getString(0)); //경로
+			cursorImages.close(); // 커서 사용이 끝나면 꼭 닫아준다.
+		}
+		return uri;  
 	}
 
 
 	/*
 	 * look in internal storage
 	 */
-	public static Bitmap getImageFromInternalStorage(Context context, String fileName) {
+	public static Bitmap getBitmapFromInternalStorage(Context context, String fileName) {
 		if (context == null) {
 			return null;
 		}

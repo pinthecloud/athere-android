@@ -297,7 +297,7 @@ public class AhIntentService extends IntentService {
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		Bitmap bitmap = null;
 		if(user != null){
-			bitmap = FileUtil.getImageFromInternalStorage(app, user.getId()+AhGlobalVariable.SMALL);
+			bitmap = FileUtil.getBitmapFromInternalStorage(app, user.getId()+AhGlobalVariable.SMALL);
 		}else{
 			bitmap = BitmapUtil.decodeInSampleSize(getResources(), R.drawable.launcher, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
 		}
