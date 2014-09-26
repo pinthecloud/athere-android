@@ -43,8 +43,8 @@
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
-    <string name="max_nick_name_message">Please type in less then 16 letters.</string>
-    <string name="bad_nick_name_message">This is invalid nick name.</string>
+    <string name="max_nick_name_message">Please type in less then 10 letters.</string>
+    <string name="bad_nick_name_message">Special letter is not good as nick name.</string>
     <string name="bad_square_code_message">Square code is wrong. Please enter again.</string>
     <string name="exit_square_message">leaves ground.</string>
     <string name="enter_square_message">enters ground.</string>

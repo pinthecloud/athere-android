@@ -1,66 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <ProgressBar
-        android:id="@+id/guide_frag_progress_bar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone" />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/guide_frag_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4" />
+
+    <com.viewpagerindicator.UnderlinePageIndicator
+        android:id="@+id/guide_frag_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/gray_line" />
 
     <LinearLayout
+        android:id="@+id/guide_frag_login_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/guide_login_right_margin"
+        android:paddingLeft="@dimen/guide_login_left_margin"
+        android:paddingRight="@dimen/guide_login_right_margin"
+        android:paddingStart="@dimen/guide_login_left_margin" >
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/guide_frag_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4" />
+        <com.facebook.widget.LoginButton
+            android:id="@+id/guide_frag_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/guide_login_button_bottom_margin"
+            facebook:confirm_logout="false"
+            facebook:fetch_user_info="true" />
 
-        <com.viewpagerindicator.UnderlinePageIndicator
-            android:id="@+id/guide_frag_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="@color/gray_line" />
-
-        <LinearLayout
-            android:id="@+id/guide_frag_login_layout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingEnd="@dimen/guide_login_right_margin"
-            android:paddingLeft="@dimen/guide_login_left_margin"
-            android:paddingRight="@dimen/guide_login_right_margin"
-            android:paddingStart="@dimen/guide_login_left_margin" >
-
-            <com.facebook.widget.LoginButton
-                android:id="@+id/guide_frag_login_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/guide_login_button_bottom_margin"
-                facebook:confirm_logout="false"
-                facebook:fetch_user_info="true" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/no_facebook_upload_message"
-                android:textSize="@dimen/font_medium" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_facebook_upload_message"
+            android:textSize="@dimen/font_medium" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

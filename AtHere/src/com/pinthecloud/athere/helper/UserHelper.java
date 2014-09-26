@@ -66,12 +66,12 @@ public class UserHelper {
 	public boolean hasMobileId() {
 		return !pref.getString(MOBILE_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING);
 	}
-	public UserHelper setMyId(String id) {
-		pref.putString(USER_ID_KEY, id);
-		return this;
-	}
 	public UserHelper setMyAhId(String ahId) {
 		pref.putString(AH_ID_KEY, ahId);
+		return this;
+	}
+	public UserHelper setMyId(String id) {
+		pref.putString(USER_ID_KEY, id);
 		return this;
 	}
 	public UserHelper setMyMobileId(String id) {

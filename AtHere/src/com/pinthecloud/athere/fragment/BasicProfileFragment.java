@@ -1,7 +1,16 @@
 package com.pinthecloud.athere.fragment;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,24 +19,43 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
+import com.pinthecloud.athere.dialog.AhAlertListDialog;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
+import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
 
 public class BasicProfileFragment extends AhFragment{
 
+	private final int GET_IMAGE_GALLERY_CODE = 0;
+	private final int GET_IMAGE_CAMERA_CODE = 1;
+
 	private ProgressBar progressBar;
+	private ImageView profileImageView;
+
+	private Uri imageUri;
+	private Bitmap profileImageBitmap;
+	private Bitmap smallProfileImageBitmap;
+
+	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
 	private EditText birthYearEditText;
 	private ImageButton startButton;
 
-	private boolean isTypedNickName = false;
-	private boolean isPickedProfileImage = false;
+	private boolean isTypedNickName = true;
+	private boolean isTakenProfileImage = false;
 
 
 	@Override
@@ -42,9 +70,80 @@ public class BasicProfileFragment extends AhFragment{
 		 * Find UI component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.basic_profile_frag_progress_bar);
-		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_edit_text);
+		profileImageView = (ImageView) view.findViewById(R.id.basic_profile_frag_profile_image);
+		nickNameWarningText = (TextView) view.findViewById(R.id.basic_profile_frag_nick_name_warning_text);
+		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_text);
 		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_birth_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
+
+
+		/*
+		 * Set Event on profile image view
+		 */
+		profileImageView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String title = getResources().getString(R.string.select);
+				String[] list = null;
+				if(isTakenProfileImage){
+					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
+				}else{
+					list = getResources().getStringArray(R.array.profile_image_select_string_array);
+				}
+				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
+				callbacks[0] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from gallery
+						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+						intent.setType("image/*");
+						startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				callbacks[1] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// create Intent to take a picture and return control to the calling application
+						// create a file to save the image
+						// set the image file name
+						// start the image capture Intent
+						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						imageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+						startActivityForResult(intent, GET_IMAGE_CAMERA_CODE);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				if(list.length == 3){
+					callbacks[2] = new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							// Set profile image default
+							profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+							isTakenProfileImage = false;
+							startButton.setEnabled(isStartButtonEnable());
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							// Do nothing
+						}
+					};
+				}
+				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
+				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
 
 
 		/*
@@ -61,7 +160,7 @@ public class BasicProfileFragment extends AhFragment{
 				}else{
 					isTypedNickName = true;
 				}
-				startButton.setEnabled(isCompleteButtonEnable());
+				startButton.setEnabled(isStartButtonEnable());
 			}
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -103,10 +202,9 @@ public class BasicProfileFragment extends AhFragment{
 				 */
 				String message = app.checkNickName(nickName);
 				if(!message.equals("")){
-					Toast.makeText(context, message, Toast.LENGTH_LONG)
-					.show();
+					nickNameWarningText.setText(message);
 					return;
-				} 
+				}
 
 
 				/*
@@ -116,21 +214,45 @@ public class BasicProfileFragment extends AhFragment{
 				 * Save this setting and go to next activity
 				 */
 				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
 				startButton.setEnabled(false);
 
 				userHelper.setMyChupaEnable(true)
 				.setMyCompanyNum(0)
 				.setMyNickName(nickName);
 
-				AhUser user = userHelper.getMyUserInfo();
-				userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
+				AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
 					@Override
-					public void onCompleted(AhUser entity) {
-						progressBar.setVisibility(View.GONE);
+					public void doNext(AhFragment frag) {
+						// Get a user object from preference and Add the user
+						AhUser user = userHelper.getMyUserInfo();
+						userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 
+							@Override
+							public void onCompleted(AhUser entity) {
+								userHelper.setLoggedInUser(true)
+								.setMyId(entity.getId());
+							}
+						});
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						// Upload bit and small profile images
+						String userId = userHelper.getMyUserInfo().getId();
+						smallProfileImageBitmap = BitmapUtil.decodeInSampleSize(profileImageBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, profileImageBitmap, null);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						AhUser user = userHelper.getMyUserInfo();
 						String gender = "Male";
-						if(!entity.isMale()){
+						if(!user.isMale()){
 							gender = "Female";
 						}
 						gaHelper.sendEventGA(
@@ -140,11 +262,13 @@ public class BasicProfileFragment extends AhFragment{
 						gaHelper.sendEventGA(
 								thisFragment.getClass().getSimpleName(),
 								"CheckAge",
-								""+entity.getAge());
+								""+user.getAge());
 
-						userHelper.setLoggedInUser(true)
-						.setMyId(entity.getId());
+						// Save pictures to internal storage
+						FileUtil.saveImageToInternalStorage(app, user.getId(), profileImageBitmap);
+						FileUtil.saveImageToInternalStorage(app, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap);
 
+						// Move to next activity
 						Intent intent = new Intent(context, SquareListActivity.class);
 						startActivity(intent);
 						activity.finish();
@@ -152,11 +276,75 @@ public class BasicProfileFragment extends AhFragment{
 				});
 			}
 		});
+		startButton.setEnabled(false);
 
 		return view;
 	}
 
-	private boolean isCompleteButtonEnable(){
-		return isTypedNickName && isPickedProfileImage;
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(!isTakenProfileImage){
+			profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+		}else{
+			profileImageView.setImageBitmap(profileImageBitmap);
+		}
+	}
+
+
+	@Override
+	public void onStop() {
+		profileImageView.setImageBitmap(null);
+		super.onStop();
+	}
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK){
+			/*
+			 * Get image URI and path from gallery or camera
+			 */
+			String imagePath = null;
+			switch(requestCode){
+			case GET_IMAGE_GALLERY_CODE:
+				imageUri = data.getData();
+				String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+				Cursor cursor = context.getContentResolver().query(imageUri, filePathColumn, null, null, null);
+				cursor.moveToFirst();
+
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				imagePath = cursor.getString(columnIndex);
+				cursor.close();
+				break;
+			case GET_IMAGE_CAMERA_CODE:
+				imagePath = imageUri.getPath();
+				break;
+			}
+			
+			
+			/*
+			 * Set the image
+			 */
+			try {
+				profileImageBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
+				int degree = BitmapUtil.getImageOrientation(imagePath);
+				profileImageBitmap = BitmapUtil.rotate(profileImageBitmap, degree);
+			} catch (FileNotFoundException e) {
+				// Do nothing
+			} catch (IOException e) {
+				// Do nothing
+			}
+			isTakenProfileImage = true;
+			startButton.setEnabled(isStartButtonEnable());
+		}
+	}
+
+
+	private boolean isStartButtonEnable(){
+		return isTypedNickName && isTakenProfileImage;
 	}
 }

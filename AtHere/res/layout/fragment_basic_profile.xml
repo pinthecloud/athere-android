@@ -14,24 +14,34 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
+    <com.pinthecloud.athere.view.SquareImageView
+        android:id="@+id/basic_profile_frag_profile_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/profile_image"
+        android:src="@drawable/bg_ground_profile_default" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/basic_profile_frag_profile_image"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="@dimen/basic_profile_wrapper_top_margin" >
+        android:paddingEnd="@dimen/basic_profile_profile_right_margin"
+        android:paddingLeft="@dimen/basic_profile_profile_left_margin"
+        android:paddingRight="@dimen/basic_profile_profile_right_margin"
+        android:paddingStart="@dimen/basic_profile_profile_left_margin" >
 
-        <ImageView
+        <TextView
+            android:id="@+id/basic_profile_frag_nick_name_warning_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/basic_profile_logo_bottom_margin"
-            android:contentDescription="@string/logo"
-            android:src="@drawable/setup" />
+            android:textSize="@dimen/font_medium" />
 
         <EditText
-            android:id="@+id/basic_profile_frag_nick_name_edit_text"
+            android:id="@+id/basic_profile_frag_nick_name_text"
             android:layout_width="@dimen/basic_profile_nick_name_text_width"
-            android:layout_height="@dimen/basic_profile_text_height"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
             android:hint="@string/nick_name"
@@ -42,7 +52,7 @@
         <EditText
             android:id="@+id/basic_profile_frag_birth_gender_text"
             android:layout_width="@dimen/basic_profile_birth_gender_text_width"
-            android:layout_height="@dimen/basic_profile_text_height"
+            android:layout_height="wrap_content"
             android:ems="10"
             android:enabled="false"
             android:gravity="center"
@@ -53,7 +63,6 @@
             android:id="@+id/basic_profile_frag_start_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/basic_profile_complete_button_top_margin"
             android:background="@android:color/transparent"
             android:contentDescription="@android:string/ok"
             android:src="@drawable/ok_image_button_bg" />

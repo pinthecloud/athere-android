@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
@@ -28,7 +27,6 @@ import com.viewpagerindicator.UnderlinePageIndicator;
 
 public class GuideFragment extends AhFragment{
 
-	private ProgressBar progressBar;
 	private ViewPager mPager;
 	private UnderlinePageIndicator indicator;
 
@@ -69,7 +67,6 @@ public class GuideFragment extends AhFragment{
 		/*
 		 * Find UI component
 		 */
-		progressBar = (ProgressBar) view.findViewById(R.id.guide_frag_progress_bar);
 		mPager = (ViewPager)view.findViewById(R.id.guide_frag_viewpager);
 		indicator = (UnderlinePageIndicator)view.findViewById(R.id.guide_frag_indicator);
 		loginButton = (LoginButton)view.findViewById(R.id.guide_frag_login_button);
@@ -95,9 +92,8 @@ public class GuideFragment extends AhFragment{
 				if (session == null || session.isClosed() || user == null) {
 					return;
 				}
-				progressBar.setVisibility(View.VISIBLE);
-				
-				
+
+
 				/*
 				 * Get auth and information from facebook
 				 */
@@ -138,7 +134,6 @@ public class GuideFragment extends AhFragment{
 					.show();
 					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
 				}
-				Log(thisFragment, user.getId());
 
 
 				/*

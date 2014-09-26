@@ -5,12 +5,10 @@
     <dimen name="square_drawer_width">300dp</dimen>
 
     <!-- Basic Profile -->
-    <dimen name="basic_profile_wrapper_top_margin">10dp</dimen>
-    <dimen name="basic_profile_logo_bottom_margin">20dp</dimen>
     <dimen name="basic_profile_nick_name_text_width">240dp</dimen>
     <dimen name="basic_profile_birth_gender_text_width">100dp</dimen>
-    <dimen name="basic_profile_text_height">50dp</dimen>
-    <dimen name="basic_profile_complete_button_top_margin">10dp</dimen>
+    <dimen name="basic_profile_profile_left_margin">10dp</dimen>
+    <dimen name="basic_profile_profile_right_margin">10dp</dimen>
 
     <!-- Guide -->
     <dimen name="guide_login_left_margin">10dp</dimen>

@@ -233,7 +233,7 @@ public class AhApplication extends Application{
 	 */
 	public String checkNickName(String nickName){
 		// Set regular expression for checking nick name
-		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,15}$";
+		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,10}$";
 		String message = "";
 
 		/*

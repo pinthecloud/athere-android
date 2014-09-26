@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
@@ -57,10 +56,8 @@ public class FileUtil {
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
 					"VID_"+ timeStamp + ".mp4");
 		} else {
-			Log.e("ERROR", "type : "+type);
 			return null;
 		}
-		Log.e("ERROR", "mediaFile : "+mediaFile);
 		return mediaFile;
 	}
 
