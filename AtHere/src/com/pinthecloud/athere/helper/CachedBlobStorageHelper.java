@@ -56,7 +56,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			}
 
 			// Check from Disk
-			bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+			bitmap = FileUtil.getBitmapFromInternalStorage(frag.getActivity(), id);
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 				addBitmapToMemoryCache(id, bitmap);
@@ -102,7 +102,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (bitmap == null) return null;
 
 			if(isSave){
-				FileUtil.saveImageToInternalStorage(app, id, bitmap);
+				FileUtil.saveBitmapToInternalStorage(app, id, bitmap);
 			}
 			addBitmapToMemoryCache(id, bitmap);
 

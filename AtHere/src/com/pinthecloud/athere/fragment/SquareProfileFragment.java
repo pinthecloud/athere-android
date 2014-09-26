@@ -601,8 +601,8 @@ public class SquareProfileFragment extends AhFragment{
 
 						// Save pictures to internal storage
 						String userId = userHelper.getMyUserInfo().getId();
-						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
-						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, userId, pictureBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
 
 						// Set and move to next activity after clear previous activity
 						Intent intent = new Intent(context, SquareActivity.class);

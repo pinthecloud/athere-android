@@ -53,6 +53,15 @@ public class UserHelper {
 	private MobileServiceClient mClient;
 
 	
+	public UserHelper() {
+		super();
+		this.app = AhApplication.getInstance();
+		this.pref = PreferenceHelper.getInstance();
+		this.mClient = app.getmClient();
+		this.userTable = mClient.getTable(AhUser.class);
+		this.squareUserTable = mClient.getTable(SquareUser.class);
+	}
+	
 	public boolean isLoggedInUser() {
 		return pref.getBoolean(IS_LOGGED_IN_USER_KEY);
 	}
@@ -105,16 +114,7 @@ public class UserHelper {
 		pref.putBoolean(IS_CHAT_ENABLE_KEY, isChatEnable);
 		return this;
 	}
-	
-	
-	public UserHelper() {
-		super();
-		this.app = AhApplication.getInstance();
-		this.pref = PreferenceHelper.getInstance();
-		this.mClient = app.getmClient();
-		this.userTable = mClient.getTable(AhUser.class);
-		this.squareUserTable = mClient.getTable(SquareUser.class);
-	}
+
 
 	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback) throws AhException {
 		if (!app.isOnline()) {

@@ -148,7 +148,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		 * Set Event on picture image view
 		 */
 		String userId = userHelper.getMyUserInfo().getId();
-		pictureBitmap = FileUtil.getImageFromInternalStorage(context, userId);
+		pictureBitmap = FileUtil.getBitmapFromInternalStorage(context, userId);
 		profilePictureView.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -555,8 +555,8 @@ public class ProfileSettingsFragment extends AhFragment{
 
 						// Save pictures to internal storage
 						String userId = userHelper.getMyUserInfo().getId();
-						FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
-						FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, userId, pictureBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
 						blobStorageHelper.clearCache(userId);
 						blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
 
