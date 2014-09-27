@@ -11,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.facebook.Session;
@@ -37,6 +38,7 @@ import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.LocationHelper;
 import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 
@@ -44,8 +46,10 @@ public class SquareListFragment extends AhFragment implements
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener{
 
-	private ProgressBar mProgressBar;
-
+	private ProgressBar progressBar;
+	private Button locationAccessButton;
+	private Button refreshButton;
+	private LinearLayout listLayout;
 	private PullToRefreshListView pullToRefreshListView;
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
@@ -63,10 +67,14 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		/*
 		 * Set UI component
 		 */
-		mProgressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
+		listLayout = (LinearLayout)view.findViewById(R.id.square_list_frag_list_layout);
+		locationAccessButton = (Button)view.findViewById(R.id.square_list_frag_location_access_button);
+		refreshButton = (Button)view.findViewById(R.id.square_list_frag_refresh_button);
+		progressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
 		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
 		squareListView = pullToRefreshListView.getRefreshableView();
 		registerForContextMenu(squareListView);
+
 
 		/*
 		 * For easy developing, make back button to super user
@@ -94,6 +102,25 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 
 		/*
+		 * Set button
+		 */
+		locationAccessButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				locationHelper.connect();
+			}
+		});
+		refreshButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				updateNearSquares(View.VISIBLE, locationListener);
+			}
+		});
+
+
+		/*
 		 * Set square list view
 		 */
 		squareListAdapter = new SquareListAdapter(context, thisFragment);
@@ -103,18 +130,42 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				final Square square = squareListAdapter.getItem(--position);
+				if(!locationHelper.isLocationAccess()){
+					locationHelper.getLocationAccess(activity, new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							progressBar.setVisibility(View.VISIBLE);
+							progressBar.bringToFront();
+							locationHelper.requestLocationUpdates(locationListener);
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							locationAccessButton.setVisibility(View.VISIBLE);
+							listLayout.setVisibility(View.GONE);
+						}
+					});
+					return;
+				}
+
 
 				/*
 				 * If enough close to enter or it is super user, check code.
 				 * Otherwise, cannot enter.
 				 */
-				if(square.getDistance() <= square.getEntryRange() || PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
+				final Square square = squareListAdapter.getItem(--position);
+				if(square.getDistance() <= square.getEntryRange() 
+						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
+
 					if(square.getCode().equals("")){
+
+						// This square doesn't have code
 						Intent intent = new Intent(context, SquareProfileActivity.class);
 						intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
 						startActivity(intent);
 					} else{
+
+						// This square has code
 						SquareCodeDialog codeDialog = new SquareCodeDialog(square, new AhDialogCallback() {
 
 							@Override
@@ -148,21 +199,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				if(locationHelper.isLocationAccess()){
-					locationHelper.requestLocationUpdates(locationListener);
-				} else{
-					locationHelper.getLocationAccess(activity, new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							locationHelper.requestLocationUpdates(locationListener);	
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							pullToRefreshListView.onRefreshComplete();	
-						}
-					});
-				}
+				updateNearSquares(View.GONE, locationListener);
 			}
 		});
 
@@ -174,9 +211,16 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		locationListener = new LocationListener() {
 
 			@Override
-			public void onLocationChanged(Location location) {
-				locationHelper.removeLocationUpdates(locationListener);
-				getNearSquares(View.GONE);
+			public void onLocationChanged(Location loc) {
+				locationHelper.removeLocationUpdates(this);
+				getNearSquares(loc);
+				locationHelper.getAddress(loc, new AhEntityCallback<String>() {
+
+					@Override
+					public void onCompleted(String entity) {
+						refreshButton.setText(entity);
+					}
+				});
 			}
 		};
 
@@ -187,6 +231,13 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	@Override
 	public void onStart() {
 		super.onStart();
+		if(locationHelper.isLocationAccess()){
+			locationAccessButton.setVisibility(View.GONE);
+			listLayout.setVisibility(View.VISIBLE);
+		}else{
+			locationAccessButton.setVisibility(View.VISIBLE);
+			listLayout.setVisibility(View.GONE);
+		}
 		locationHelper.connect();
 	}
 
@@ -202,22 +253,14 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	 * Get square near from user
 	 * Now it just gets all squares cause of location law. (lati and longi is 0)
 	 */
-	private void getNearSquares(int progressVisible){
-		mProgressBar.setVisibility(progressVisible);
-
-		Location loc = locationHelper.getLastLocation();
-		if(loc == null){
-			locationHelper.requestLocationUpdates(locationListener);
-			return;
-		}
-
+	private void getNearSquares(Location loc){
 		double latitude = loc.getLatitude();
 		double longitude = loc.getLongitude();
 		squareHelper.getSquareListAsync(thisFragment, latitude, longitude, new AhListCallback<Square>() {
 
 			@Override
 			public void onCompleted(List<Square> list, int count) {
-				mProgressBar.setVisibility(View.GONE);
+				progressBar.setVisibility(View.GONE);
 				pullToRefreshListView.onRefreshComplete();
 
 				// Sort square list by distance and premium
@@ -253,6 +296,30 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	}
 
 
+	private void updateNearSquares(int progressBarVisible, final LocationListener locationListener){
+		if(locationHelper.isLocationAccess()){
+			progressBar.setVisibility(progressBarVisible);
+			progressBar.bringToFront();
+			locationHelper.requestLocationUpdates(locationListener);
+		} else{
+			locationHelper.getLocationAccess(activity, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					locationHelper.requestLocationUpdates(locationListener);
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					progressBar.setVisibility(View.GONE);
+					pullToRefreshListView.onRefreshComplete();
+					locationAccessButton.setVisibility(View.VISIBLE);
+					listLayout.setVisibility(View.GONE);
+				}
+			});
+		}
+	}
+
+
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		ExceptionManager.fireException(new AhException(AhException.TYPE.LOCATION_CONNECTION_FAILED));
@@ -262,17 +329,35 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		if(locationHelper.isLocationAccess()){
-			getNearSquares(View.VISIBLE);
+			progressBar.setVisibility(View.VISIBLE);
+			progressBar.bringToFront();
+
+			Location loc = locationHelper.getLastLocation();
+			if(loc == null){
+				locationHelper.requestLocationUpdates(locationListener);
+				return;
+			}
+
+			getNearSquares(loc);
+			locationHelper.getAddress(loc, new AhEntityCallback<String>() {
+
+				@Override
+				public void onCompleted(String entity) {
+					refreshButton.setText(entity);
+				}
+			});
 		} else{
 			locationHelper.getLocationAccess(activity, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
-					getNearSquares(View.VISIBLE);
+					locationAccessButton.setVisibility(View.GONE);
+					listLayout.setVisibility(View.VISIBLE);
+					locationHelper.connect();
 				}
 				@Override
 				public void doNegativeThing(Bundle bundle) {
-					// Do nothing
+					locationHelper.disconnect();
 				}
 			});
 		}

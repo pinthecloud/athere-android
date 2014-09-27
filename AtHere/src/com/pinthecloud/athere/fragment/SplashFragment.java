@@ -1,6 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -64,7 +63,7 @@ public class SplashFragment extends AhFragment {
 			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
 			userHelper.setMyMobileId(androidId);
 		}
-		
+
 
 		/*
 		 * If time is up, remove local preferences.
@@ -189,6 +188,7 @@ public class SplashFragment extends AhFragment {
 						} catch (NameNotFoundException e) {
 							clientVer = 0.11;
 						}
+						
 						if (serverVer.getVersion() > clientVer) {
 							String message = getResources().getString(R.string.update_app_message);
 							AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
@@ -221,17 +221,13 @@ public class SplashFragment extends AhFragment {
 	/*
 	 * Move to next activity by user status
 	 */
-	@SuppressLint("NewApi")
 	public void goToNextActivity() {
-		if(!activity.isDestroyed()){
-			boolean isLoggedInUser = userHelper.isLoggedInUser();
-			boolean isLooggedInSquare = squareHelper.isLoggedInSquare();
-
+		if(thisFragment.isAdded()){
 			Intent intent = new Intent();
-			if (!isLoggedInUser){
+			if (!userHelper.isLoggedInUser()){
 				// New User
 				intent.setClass(context, GuideActivity.class);
-			} else if(!isLooggedInSquare){
+			} else if(!squareHelper.isLoggedInSquare()){
 				// Already logged in
 				intent.setClass(context, SquareListActivity.class);
 			} else{
