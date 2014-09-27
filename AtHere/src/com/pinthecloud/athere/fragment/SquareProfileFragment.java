@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -83,7 +85,6 @@ public class SquareProfileFragment extends AhFragment{
 	private Bitmap pictureBitmap;
 	private Bitmap smallPictureBitmap;
 	
-	private boolean isPreview = true;
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -338,9 +339,25 @@ public class SquareProfileFragment extends AhFragment{
 					profilePictureView.setEnabled(false);
 					nickNameEditText.setEnabled(false);
 					companyNumberEditText.setEnabled(false);
-
+					
+					
+					new AlertDialog.Builder(context)
+							.setTitle("Enter Square")
+							.setMessage("Enter Preview?")
+							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									enterSquare(true);
+								}
+							})
+							.setNegativeButton("No", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									enterSquare(false);
+								}
+							})
+							.setIcon(android.R.drawable.ic_dialog_alert)
+							.show();	
 					// Enter Square
-					enterSquare();
+//					enterSquare(false);
 				}
 			}
 		});
@@ -530,7 +547,8 @@ public class SquareProfileFragment extends AhFragment{
 	/*
 	 * Enter a square 
 	 */
-	private void enterSquare(){
+	private void enterSquare(final boolean isPreview){
+		squareHelper.setPreview(isPreview);
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 
@@ -576,29 +594,7 @@ public class SquareProfileFragment extends AhFragment{
 			@Override
 			public void doNext(AhFragment frag) {
 				if (isPreview) {
-					Time time = new Time();
-					time.setToNow();
-
-					userHelper.setMyChatEnable(true);
-					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
-					squareHelper.setMySquareName(square.getName())
-					.setMySquareResetTime(square.getResetTime())
-					.setLoggedInSquare(true)
-					.setSquareExitTab(SquareTabFragment.CHAT_TAB)
-					.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
-
-					// Save pictures to internal storage
-					String userId = userHelper.getMyUserInfo().getId();
-					FileUtil.saveImageToInternalStorage(app, userId, pictureBitmap);
-					FileUtil.saveImageToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
-
-					// Set and move to next activity after clear previous activity
-					Intent intent = new Intent(context, SquareActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
-					
-					
-					AsyncChainer.notifyNext(frag);
+					finishEnterSquare();
 					return;
 				}
 				String enterMessage = getResources().getString(R.string.enter_square_message);
@@ -613,31 +609,59 @@ public class SquareProfileFragment extends AhFragment{
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						progressBar.setVisibility(View.GONE);
-
-						// Save this setting and go to next activity
-						Time time = new Time();
-						time.setToNow();
-
-						userHelper.setMyChatEnable(true);
-						PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
-						squareHelper.setMySquareName(square.getName())
-						.setMySquareResetTime(square.getResetTime())
-						.setLoggedInSquare(true)
-						.setSquareExitTab(SquareTabFragment.CHAT_TAB)
-						.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
-
-						// Save pictures to internal storage
-						String userId = userHelper.getMyUserInfo().getId();
-						FileUtil.saveBitmapToInternalStorage(app, userId, pictureBitmap);
-						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
-
-						// Set and move to next activity after clear previous activity
-						Intent intent = new Intent(context, SquareActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
+//						progressBar.setVisibility(View.GONE);
+//
+//						// Save this setting and go to next activity
+//						Time time = new Time();
+//						time.setToNow();
+//
+//						userHelper.setMyChatEnable(true);
+//						PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+//						squareHelper.setMySquareName(square.getName())
+//						.setMySquareResetTime(square.getResetTime())
+//						.setLoggedInSquare(true)
+//						.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+//						.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
+//
+//						// Save pictures to internal storage
+//						String userId = userHelper.getMyUserInfo().getId();
+//						FileUtil.saveBitmapToInternalStorage(app, userId, pictureBitmap);
+//						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
+//
+//						// Set and move to next activity after clear previous activity
+//						Intent intent = new Intent(context, SquareActivity.class);
+//						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//						startActivity(intent);
+						
+						finishEnterSquare();
 					}
 				});
+			}
+			
+			private void finishEnterSquare() {
+				progressBar.setVisibility(View.GONE);
+
+				// Save this setting and go to next activity
+				Time time = new Time();
+				time.setToNow();
+
+				userHelper.setMyChatEnable(true);
+				PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+				squareHelper.setMySquareName(square.getName())
+				.setMySquareResetTime(square.getResetTime())
+				.setLoggedInSquare(true)
+				.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+				.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
+
+				// Save pictures to internal storage
+				String userId = userHelper.getMyUserInfo().getId();
+				FileUtil.saveBitmapToInternalStorage(app, userId, pictureBitmap);
+				FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
+
+				// Set and move to next activity after clear previous activity
+				Intent intent = new Intent(context, SquareActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
 			}
 		});
 	}

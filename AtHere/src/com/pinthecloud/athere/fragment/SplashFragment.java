@@ -223,7 +223,9 @@ public class SplashFragment extends AhFragment {
 	 */
 	@SuppressLint("NewApi")
 	public void goToNextActivity() {
-		if(!activity.isDestroyed()){
+		
+		// activity.isDestroyed() method throws java.lang.NoSuchMethodError
+//		if(!activity.isDestroyed()){
 			boolean isLoggedInUser = userHelper.isLoggedInUser();
 			boolean isLooggedInSquare = squareHelper.isLoggedInSquare();
 
@@ -239,7 +241,7 @@ public class SplashFragment extends AhFragment {
 				intent.setClass(context, SquareActivity.class);
 			}
 			startActivity(intent);
-		}
+//		}
 	}
 
 

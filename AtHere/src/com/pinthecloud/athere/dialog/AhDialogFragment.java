@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.dialog;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -9,14 +10,13 @@ import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.analysis.GAHelper;
 
 public class AhDialogFragment extends DialogFragment {
 
 	protected AhDialogFragment thisFragment;
 	protected Context context;
-	protected AhActivity activity;
+	protected Activity activity;
 	protected GAHelper gaHelper;
 	protected String simpleClassName;
 	private boolean isShowing = false;
@@ -33,7 +33,7 @@ public class AhDialogFragment extends DialogFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		context = getActivity();
-		activity = (AhActivity) context;
+		activity = (Activity) context;
 		super.onCreate(savedInstanceState);
 
 		LogSM(simpleClassName + " onCreate");

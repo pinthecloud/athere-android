@@ -28,6 +28,8 @@ public class SquareHelper {
 	private final String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
 	private final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
 	private final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
+	private final String IS_PREVIEW_KEY = "IS_PREVIEW_KEY";
+	
 
 	private final String GET_NEAR_SQUARE = "get_near_square";
 	
@@ -57,6 +59,9 @@ public class SquareHelper {
 	public String getTimeStampAtLoggedInSquare() {
 		return pref.getString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
 	}
+	public Boolean isPreview() {
+		return pref.getBoolean(IS_PREVIEW_KEY);
+	}
 	public SquareHelper setMySquareId(String id) {
 		pref.putString(SQUARE_ID_KEY, id);
 		return this;
@@ -79,6 +84,10 @@ public class SquareHelper {
 	}
 	public SquareHelper setTimeStampAtLoggedInSquare(String time) {
 		pref.putString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time);
+		return this;
+	}
+	public SquareHelper setPreview(Boolean isPreview) {
+		pref.putBoolean(IS_PREVIEW_KEY, isPreview);
 		return this;
 	}
 	
