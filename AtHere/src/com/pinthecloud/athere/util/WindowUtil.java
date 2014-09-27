@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -15,21 +16,21 @@ public class WindowUtil {
 	/*
 	 * Get device resolution and set it
 	 */
-	public static int getDeviceWidth(AhActivity activity){
+	public static int getDeviceWidth(Activity activity){
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.widthPixels;
 	}
 
 
-	public static int getDeviceHeight(AhActivity activity){
+	public static int getDeviceHeight(Activity activity){
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		return displayMetrics.heightPixels;
 	}
 
 
-	public static int getDeviceDPI(AhActivity activity){
+	public static int getDeviceDPI(Activity activity){
 		/*
 		 * Get device resolution and set it
 		 */

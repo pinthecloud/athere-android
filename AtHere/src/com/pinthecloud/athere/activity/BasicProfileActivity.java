@@ -13,17 +13,15 @@ public class BasicProfileActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_basic_profile);
+		setContentView(R.layout.frame_activity);
 
-		//		uiHelper = new UiLifecycleHelper(this, callback);
-		//		uiHelper.onCreate(savedInstanceState);
 		/*
 		 * Set Fragment to container
 		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		BasicProfileFragment basicProfileFragment = new BasicProfileFragment();
-		fragmentTransaction.add(R.id.basic_profile_container, basicProfileFragment);
+		fragmentTransaction.add(R.id.activity_container, basicProfileFragment);
 		fragmentTransaction.commit();
 	}
 }

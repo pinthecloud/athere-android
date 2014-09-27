@@ -160,7 +160,7 @@
             android:id="@+id/square_drawer_frag_profile_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_participant_list_height"
-            android:background="@drawable/drawer_list_selector_bg"
+            android:background="@drawable/list_white_selector_bg"
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical"
             android:paddingEnd="@dimen/square_drawer_participant_list_right_margin"

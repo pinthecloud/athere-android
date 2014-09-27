@@ -22,7 +22,7 @@ public class ProfileSettingsActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profile_settings);
+		setContentView(R.layout.frame_activity);
 
 
 		/*
@@ -38,7 +38,7 @@ public class ProfileSettingsActivity extends AhActivity{
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 		ProfileSettingsFragment profileSettingsFragment = new ProfileSettingsFragment();
-		fragmentTransaction.add(R.id.profile_settings_container, profileSettingsFragment);
+		fragmentTransaction.add(R.id.activity_container, profileSettingsFragment);
 		fragmentTransaction.commit();
 
 

@@ -14,7 +14,7 @@ public class SquareProfileActivity extends AhActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_square_profile);
+		setContentView(R.layout.frame_activity);
 
 
 		/*
@@ -22,9 +22,8 @@ public class SquareProfileActivity extends AhActivity {
 		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
 		SquareProfileFragment squareProfileFragment = new SquareProfileFragment();
-		fragmentTransaction.add(R.id.square_profile_container, squareProfileFragment);
+		fragmentTransaction.add(R.id.activity_container, squareProfileFragment);
 		fragmentTransaction.commit();
 	}
 }

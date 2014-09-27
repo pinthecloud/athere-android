@@ -21,7 +21,7 @@ public class ProfileImageActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_profile_image);
+		setContentView(R.layout.frame_activity);
 
 
 		/*
@@ -35,9 +35,8 @@ public class ProfileImageActivity extends AhActivity{
 		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
 		ProfileImageFragment profileImageFragment = new ProfileImageFragment();
-		fragmentTransaction.add(R.id.profile_image_container, profileImageFragment);
+		fragmentTransaction.add(R.id.activity_container, profileImageFragment);
 		fragmentTransaction.commit();
 
 

@@ -16,7 +16,7 @@ public class GuideActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_guide);
+		setContentView(R.layout.frame_activity);
 
 
 		/*
@@ -25,7 +25,7 @@ public class GuideActivity extends AhActivity{
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		guideFragment = new GuideFragment();
-		fragmentTransaction.add(R.id.guide_container, guideFragment);
+		fragmentTransaction.add(R.id.activity_container, guideFragment);
 		fragmentTransaction.commit();
 	}
 

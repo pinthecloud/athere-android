@@ -2,13 +2,14 @@ package com.pinthecloud.athere.analysis;
 
 import java.util.HashMap;
 
+import android.app.Activity;
+
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.AhActivity;
 
 public class GAHelper {
 
@@ -85,14 +86,14 @@ public class GAHelper {
 	}
 
 
-	public void reportActivityStart(AhActivity activity){
+	public void reportActivityStart(Activity activity){
 		if(!AhGlobalVariable.DEBUG_MODE){
 			GoogleAnalytics.getInstance(app).reportActivityStart(activity);
 		}
 	}
 
 
-	public void reportActivityStop(AhActivity activity){
+	public void reportActivityStop(Activity activity){
 		if(!AhGlobalVariable.DEBUG_MODE){
 			GoogleAnalytics.getInstance(app).reportActivityStop(activity);
 		}

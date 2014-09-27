@@ -68,30 +68,30 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		squareListView = pullToRefreshListView.getRefreshableView();
 		registerForContextMenu(squareListView);
 
-		
-		// DO NOT REMOVE THIS SCRIPT!!
+		/*
+		 * For easy developing, make back button to super user
+		 * DO NOT REMOVE THIS SCRIPT!
+		 */
 		if (PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)) {
-			Button b = new Button(getActivity());
+			Button b = new Button(activity);
 			b.setText("Go to BasicProfile");
 			b.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					Session session = Session.getActiveSession();
 					if (session != null) {
 						session.close();
 					}
-					
-					
+
 					Intent intent = new Intent(context, BasicProfileActivity.class);
 					startActivity(intent);
 					activity.finish();
 				}
 			});
-			getActivity().addContentView(b, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			activity.addContentView(b, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		}
-		
+
 
 		/*
 		 * Set square list view
@@ -148,7 +148,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				if(locationHelper.isLocationAccess(activity)){
+				if(locationHelper.isLocationAccess()){
 					locationHelper.requestLocationUpdates(locationListener);
 				} else{
 					locationHelper.getLocationAccess(activity, new AhDialogCallback() {
@@ -187,7 +187,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	@Override
 	public void onStart() {
 		super.onStart();
-		locationHelper.connect(activity);
+		locationHelper.connect();
 	}
 
 
@@ -261,7 +261,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		if(locationHelper.isLocationAccess(activity)){
+		if(locationHelper.isLocationAccess()){
 			getNearSquares(View.VISIBLE);
 		} else{
 			locationHelper.getLocationAccess(activity, new AhDialogCallback() {

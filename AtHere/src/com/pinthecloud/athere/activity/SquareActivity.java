@@ -1,13 +1,11 @@
 package com.pinthecloud.athere.activity;
 
-import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,12 +28,10 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
 
-public class SquareActivity extends AhActivity{
+public class SquareActivity extends AhSlidingActivity {
 
 	private Square square;
 	private AhUser user;
-
-	private ActionBar mActionBar;
 
 	private FragmentManager fragmentManager;
 	private DrawerLayout mDrawerLayout; 
@@ -49,9 +45,10 @@ public class SquareActivity extends AhActivity{
 
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
+
 
 		/*
 		 * Set Helper and get square
@@ -61,23 +58,16 @@ public class SquareActivity extends AhActivity{
 		messageHelper = app.getMessageHelper();
 		user = userHelper.getMyUserInfo();
 		square = squareHelper.getMySquareInfo();
+		getActionBar().setTitle(square.getName());
 
 
 		/*
 		 * Set UI Component
 		 */
-		mActionBar = getActionBar();
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_layout);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_drawer_layout);
 		mFragmentView = findViewById(R.id.square_drawer_fragment);
 		fragmentManager = getFragmentManager();
 		mSquareDrawerFragment = (SquareDrawerFragment) fragmentManager.findFragmentById(R.id.square_drawer_fragment);
-
-
-		/*
-		 * Set Action Bar
-		 */
-		mActionBar.setDisplayShowHomeEnabled(false);
-		mActionBar.setTitle(square.getName());
 
 
 		/*
@@ -92,13 +82,11 @@ public class SquareActivity extends AhActivity{
 		/*
 		 * Set Drawer
 		 */
-		mSquareDrawerFragment.setUp(mFragmentView, mDrawerLayout, user);
-
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 				mDrawerLayout, /* DrawerLayout object */
-				R.drawable.sidebar, /* nav drawer image to replace 'Up' caret */
+				R.drawable.indicator_notification_drawer, /* nav drawer image to replace 'Up' caret */
 				R.string.drawer_open, /* "open drawer" description for accessibility */
 				R.string.drawer_close /* "close drawer" description for accessibility */
 				)
@@ -131,8 +119,8 @@ public class SquareActivity extends AhActivity{
 		});
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		// set a custom shadow that overlays the main content when the drawer opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		// Set drawer fragment up with information got from activity
+		mSquareDrawerFragment.setUp(mFragmentView, mDrawerLayout, user);
 
 
 		/*
@@ -175,9 +163,8 @@ public class SquareActivity extends AhActivity{
 		// Ask review
 		if(PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY)){
 			String message = getResources().getString(R.string.review_message);
-			String yesMessage1 = getResources().getString(R.string.review_yes_message_1);
-			String yesMessage2 = getResources().getString(R.string.review_yes_message_2);
-			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, yesMessage1, yesMessage2, true, new AhDialogCallback() {
+			String cancelMessage = getResources().getString(R.string.no_today_message);
+			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, null, cancelMessage, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
@@ -188,8 +175,7 @@ public class SquareActivity extends AhActivity{
 				@Override
 				public void doNegativeThing(Bundle bundle) {
 					PreferenceHelper.getInstance().removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
-					startActivity(intent);
+					finish();
 				}
 			});
 			reviewDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
@@ -214,7 +200,7 @@ public class SquareActivity extends AhActivity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
-		case R.id.menu_square_drawer:
+		case R.id.menu_notification:
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{

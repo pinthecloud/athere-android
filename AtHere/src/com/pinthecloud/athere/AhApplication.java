@@ -251,13 +251,4 @@ public class AhApplication extends Application{
 		}
 		return message;
 	}
-	
-//	public static int calculateAge(String birthYear) {
-//		return calculateAge(Integer.parseInt(birthYear));
-//	}
-//	
-//	public static int calculateAge(int birthYear) {
-//		Calendar c = Calendar.getInstance();
-//		return c.get(Calendar.YEAR) - (birthYear - 1);
-//	}
 }
