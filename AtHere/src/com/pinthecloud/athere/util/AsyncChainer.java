@@ -103,6 +103,17 @@ public class AsyncChainer {
 			c.doNext(frag);
 		}
 	}
+	
+	public static void clearChain(AhFragment frag) {
+		Class<?> clazz = null;
+		if (frag == null) {
+			clazz = AhFragment.class;
+		} else {
+			clazz = frag.getClass();
+		}
+		Queue<Chainable> queue = mapQueue.get(clazz.getName());
+		queue.clear();
+	}
 
 	
 	public static interface Chainable {

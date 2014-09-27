@@ -114,8 +114,28 @@ public class UserHelper {
 		pref.putBoolean(IS_CHAT_ENABLE_KEY, isChatEnable);
 		return this;
 	}
+	
+//	public void checkNickName(final AhFragment frag, String nickName, final AhEntityCallback<Boolean> callback) {
+//		if (!app.isOnline()) {
+//			ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+//			return;
+//		}
+//
+//		userTable.insert(user, new TableOperationCallback<AhUser>() {
+//
+//			@Override
+//			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
+//				if (exception == null) {
+//					callback.onCompleted(entity);
+//					AsyncChainer.notifyNext(frag);
+//				} else {
+//					ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
+//				}
+//			}
+//		});
+//	}
 
-
+	
 	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -130,7 +150,12 @@ public class UserHelper {
 					callback.onCompleted(entity);
 					AsyncChainer.notifyNext(frag);
 				} else {
-					ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
+					if (response.getContent().contains(AhException.TYPE.DUPLICATED_NICK_NAME.toString())) { 
+						ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.DUPLICATED_NICK_NAME));
+					} else {
+						ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
+					}
+					
 				}
 			}
 		});

@@ -27,12 +27,13 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
+import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
-import com.pinthecloud.athere.model.SquareUser;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
@@ -386,5 +387,28 @@ public class BasicProfileFragment extends AhFragment{
 
 	private boolean isStartButtonEnable(){
 		return isTypedNickName && isTakenProfileImage;
+	}
+	
+	@Override
+	public void handleException(AhException ex) {
+		// TODO Auto-generated method stub
+		if (ex.getType().equals(AhException.TYPE.DUPLICATED_NICK_NAME)) {
+			AsyncChainer.clearChain(this);
+			progressBar.setVisibility(View.GONE);
+			new AhAlertDialog(null, AhException.TYPE.DUPLICATED_NICK_NAME.toString(), "OK", null, true, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					
+				}
+			}).show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			return;
+		} else {
+			super.handleException(ex);
+		}
 	}
 }
