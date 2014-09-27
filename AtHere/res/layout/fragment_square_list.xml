@@ -22,29 +22,15 @@
         android:id="@+id/square_list_frag_location_access_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/square_list_frag_action_bar_line"
-        android:text="Location_access" />
+        android:layout_below="@+id/square_list_frag_action_bar_line" />
 
-    <LinearLayout
-        android:id="@+id/square_list_frag_list_layout"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/square_list_frag_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/square_list_frag_action_bar_line"
-        android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/square_list_frag_refresh_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Refresh" />
-
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            xmlns:ptr="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/square_list_frag_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_background"
-            android:divider="@null" />
-    </LinearLayout>
+        android:background="@color/gray_background"
+        android:divider="@null" />
 
 </RelativeLayout>

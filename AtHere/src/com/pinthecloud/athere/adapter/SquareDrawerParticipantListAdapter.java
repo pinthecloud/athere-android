@@ -27,14 +27,12 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 	private AhApplication app;
 	private Context context;
 	private AhFragment frag;
-	private int layoutId;
 	private CachedBlobStorageHelper blobStorageHelper;
 
-	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment, int layoutId) {
-		super(context, layoutId);
+	public SquareDrawerParticipantListAdapter(Context context, AhFragment fragment) {
+		super(context, 0);
 		this.context = context;
 		this.frag = fragment;
-		this.layoutId = layoutId;
 
 		this.app = AhApplication.getInstance();
 		this.blobStorageHelper = app.getBlobStorageHelper();
@@ -47,7 +45,7 @@ public class SquareDrawerParticipantListAdapter extends ArrayAdapter<AhUser> {
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) 
 					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(this.layoutId, parent, false);
+			view = inflater.inflate(R.layout.row_square_drawer_participant_list, parent, false);
 		}
 
 

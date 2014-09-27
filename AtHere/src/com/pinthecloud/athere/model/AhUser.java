@@ -2,10 +2,12 @@ package com.pinthecloud.athere.model;
 
 import java.util.Calendar;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.JsonObject;
+import com.pinthecloud.athere.R;
 
 public class AhUser implements Parcelable{
 	@com.google.gson.annotations.SerializedName("id")
@@ -109,17 +111,24 @@ public class AhUser implements Parcelable{
 	public void setCompanyNum(int companyNum) {
 		this.companyNum = companyNum;
 	}
-	public int getAge() {
-		Calendar c = Calendar.getInstance();
-		return c.get(Calendar.YEAR) - (getBirthYear() - 1);
-	}
 	public void setChatEnable(boolean isChatEnable) {
 		this.isChatEnable = isChatEnable;
 	}
 	public boolean isChatEnable() {
 		return this.isChatEnable;
 	}
-
+	public int getAge() {
+		Calendar c = Calendar.getInstance();
+		return c.get(Calendar.YEAR) - (getBirthYear() - 1);
+	}
+	public String getGenderString(Context context){
+		if(isMale){
+			return context.getResources().getString(R.string.male);
+		}else{
+			return context.getResources().getString(R.string.female);
+		}
+	}
+	
 	
 	/*
 	 * Parcelable

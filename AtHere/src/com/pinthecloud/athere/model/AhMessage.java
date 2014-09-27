@@ -64,6 +64,7 @@ public class AhMessage implements Parcelable {
 
 	private AhMessage() {
 	}
+	
 	public AhMessage(Parcel in){
 		this();
 		readToParcel(in);

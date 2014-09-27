@@ -6,4 +6,10 @@
     android:clickable="true"
     android:orientation="vertical" >
 
+    <ListView
+        android:id="@+id/notification_drawer_frag_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
 </LinearLayout>

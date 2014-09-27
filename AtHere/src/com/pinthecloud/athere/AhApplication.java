@@ -215,7 +215,6 @@ public class AhApplication extends Application{
 		FileUtil.clearAllFiles(app);
 		blobStorageHelper.clearAllCache();
 
-//		String id = pref.getString(AhGlobalVariable.USER_ID_KEY);
 		String id = userHelper.getMyUserInfo().getId();
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);
 		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+AhGlobalVariable.SMALL, null);

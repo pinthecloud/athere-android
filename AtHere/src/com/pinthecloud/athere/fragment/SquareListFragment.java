@@ -3,7 +3,7 @@ package com.pinthecloud.athere.fragment;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,13 +14,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.Session;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationListener;
@@ -29,7 +26,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.BasicProfileActivity;
 import com.pinthecloud.athere.activity.SquareProfileActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareCodeDialog;
@@ -42,22 +38,25 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
 import com.pinthecloud.athere.model.Square;
 
+
+
 public class SquareListFragment extends AhFragment implements
 GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener{
 
 	private ProgressBar progressBar;
 	private Button locationAccessButton;
-	private Button refreshButton;
-	private LinearLayout listLayout;
 	private PullToRefreshListView pullToRefreshListView;
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
+	private View squareListHeader;
+	private TextView addressText;
 
 	private LocationHelper locationHelper;
 	private LocationListener locationListener;
 
 
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -67,38 +66,38 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		/*
 		 * Set UI component
 		 */
-		listLayout = (LinearLayout)view.findViewById(R.id.square_list_frag_list_layout);
 		locationAccessButton = (Button)view.findViewById(R.id.square_list_frag_location_access_button);
-		refreshButton = (Button)view.findViewById(R.id.square_list_frag_refresh_button);
 		progressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
 		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
 		squareListView = pullToRefreshListView.getRefreshableView();
 		registerForContextMenu(squareListView);
+		squareListHeader = inflater.inflate(R.layout.row_square_list_header, null, false);
+		addressText = (TextView)squareListHeader.findViewById(R.id.row_square_list_header_address);
 
 
 		/*
 		 * For easy developing, make back button to super user
 		 * DO NOT REMOVE THIS SCRIPT!
 		 */
-		if (PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)) {
-			Button b = new Button(activity);
-			b.setText("Go to BasicProfile");
-			b.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					Session session = Session.getActiveSession();
-					if (session != null) {
-						session.close();
-					}
-
-					Intent intent = new Intent(context, BasicProfileActivity.class);
-					startActivity(intent);
-					activity.finish();
-				}
-			});
-			activity.addContentView(b, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		}
+		//		if (PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)) {
+		//			Button b = new Button(activity);
+		//			b.setText("Go to BasicProfile");
+		//			b.setOnClickListener(new OnClickListener() {
+		//
+		//				@Override
+		//				public void onClick(View v) {
+		//					Session session = Session.getActiveSession();
+		//					if (session != null) {
+		//						session.close();
+		//					}
+		//
+		//					Intent intent = new Intent(context, BasicProfileActivity.class);
+		//					startActivity(intent);
+		//					activity.finish();
+		//				}
+		//			});
+		//			activity.addContentView(b, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		//		}
 
 
 		/*
@@ -111,7 +110,13 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				locationHelper.connect();
 			}
 		});
-		refreshButton.setOnClickListener(new OnClickListener() {
+
+
+		/*
+		 * Set square list view
+		 */
+		squareListView.addHeaderView(squareListHeader);
+		squareListHeader.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -119,10 +124,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			}
 		});
 
-
-		/*
-		 * Set square list view
-		 */
 		squareListAdapter = new SquareListAdapter(context, thisFragment);
 		squareListView.setAdapter(squareListAdapter);
 		squareListView.setOnItemClickListener(new OnItemClickListener() {
@@ -142,7 +143,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 						@Override
 						public void doNegativeThing(Bundle bundle) {
 							locationAccessButton.setVisibility(View.VISIBLE);
-							listLayout.setVisibility(View.GONE);
+							pullToRefreshListView.setVisibility(View.GONE);
 						}
 					});
 					return;
@@ -153,7 +154,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				 * If enough close to enter or it is super user, check code.
 				 * Otherwise, cannot enter.
 				 */
-				final Square square = squareListAdapter.getItem(--position);
+				position -= 2;
+				final Square square = squareListAdapter.getItem(position);
 				if(square.getDistance() <= square.getEntryRange() 
 						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 
@@ -218,7 +220,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 					@Override
 					public void onCompleted(String entity) {
-						refreshButton.setText(entity);
+						addressText.setText(entity);
 					}
 				});
 			}
@@ -233,10 +235,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		super.onStart();
 		if(locationHelper.isLocationAccess()){
 			locationAccessButton.setVisibility(View.GONE);
-			listLayout.setVisibility(View.VISIBLE);
+			pullToRefreshListView.setVisibility(View.VISIBLE);
 		}else{
 			locationAccessButton.setVisibility(View.VISIBLE);
-			listLayout.setVisibility(View.GONE);
+			pullToRefreshListView.setVisibility(View.GONE);
 		}
 		locationHelper.connect();
 	}
@@ -313,7 +315,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 					progressBar.setVisibility(View.GONE);
 					pullToRefreshListView.onRefreshComplete();
 					locationAccessButton.setVisibility(View.VISIBLE);
-					listLayout.setVisibility(View.GONE);
+					pullToRefreshListView.setVisibility(View.GONE);
 				}
 			});
 		}
@@ -343,7 +345,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 				@Override
 				public void onCompleted(String entity) {
-					refreshButton.setText(entity);
+					addressText.setText(entity);
 				}
 			});
 		} else{
@@ -352,7 +354,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				@Override
 				public void doPositiveThing(Bundle bundle) {
 					locationAccessButton.setVisibility(View.GONE);
-					listLayout.setVisibility(View.VISIBLE);
+					pullToRefreshListView.setVisibility(View.VISIBLE);
 					locationHelper.connect();
 				}
 				@Override

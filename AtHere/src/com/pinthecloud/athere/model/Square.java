@@ -4,12 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Square implements Parcelable {
-	public Square(){
-	}
-	public Square(Parcel in){
-		readToParcel(in);
-	}
-
 	@com.google.gson.annotations.SerializedName("id")
 	private String id;
 	@com.google.gson.annotations.SerializedName("whoMade")
@@ -37,6 +31,14 @@ public class Square implements Parcelable {
 	@com.google.gson.annotations.SerializedName("entryRange")
 	private int entryRange;
 
+	
+	public Square(){
+	}
+	public Square(Parcel in){
+		readToParcel(in);
+	}
+	
+	
 	public String getId() {
 		return id;
 	}
