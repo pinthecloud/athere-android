@@ -188,7 +188,7 @@ public class SplashFragment extends AhFragment {
 						} catch (NameNotFoundException e) {
 							clientVer = 0.11;
 						}
-						
+
 						if (serverVer.getVersion() > clientVer) {
 							String message = getResources().getString(R.string.update_app_message);
 							AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {

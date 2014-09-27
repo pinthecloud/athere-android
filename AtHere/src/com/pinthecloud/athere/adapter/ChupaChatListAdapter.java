@@ -20,7 +20,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 
@@ -36,7 +35,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	private Fragment frag;
 	private LayoutInflater inflater;
 	private MessageDBHelper messageDBHelper;
-	private UserHelper userHelper;
 
 	public ChupaChatListAdapter(Context context, Fragment frag) {
 		super(context, 0);
@@ -46,7 +44,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		AhApplication app = AhApplication.getInstance();
 		this.messageDBHelper = app.getMessageDBHelper();
-		this.userHelper = app.getUserHelper();
 	}
 
 
@@ -176,7 +173,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 		if(message.isNotification()){
 			return TYPE.NOTIFICATION.ordinal();
 		}else{
-			if(message.getSenderId().equals(userHelper.getMyUserInfo().getId())){
+			if(message.isMine()){
 				return TYPE.SEND.ordinal();
 			} else{
 				return TYPE.RECEIVE.ordinal();

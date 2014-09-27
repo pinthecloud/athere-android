@@ -1,9 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,10 +17,10 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.adapter.ChupaListAdapter;
-import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.Chupa;
 
 public class ChupaListFragment extends AhFragment{
 
@@ -54,7 +52,7 @@ public class ChupaListFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, squareChupaListAdapter.getItem(position).get("userId"));
+				intent.putExtra(AhGlobalVariable.USER_KEY, squareChupaListAdapter.getItem(position).getUserId());
 				startActivity(intent);
 			}
 		});
@@ -103,57 +101,39 @@ public class ChupaListFragment extends AhFragment{
 	}
 
 
-	private List<Map<String, String>> convertToMap(List<AhMessage> lastChupaList) {
-		List<Map<String,String>> list = new ArrayList<Map<String, String>>();
+	private List<Chupa> convertToMap(List<AhMessage> lastChupaList) {
+		List<Chupa> chupaList = new ArrayList<Chupa>();
 		for(AhMessage message : lastChupaList){
-			Map<String, String> map = new HashMap<String, String>();
+			Chupa chupa = new Chupa();
 
-			String profilePic = "";
-			String userNickName = "";
-			String userId = "";
-			String content = "";
-			String timeStamp = "";
-			String chupaCommunId = "";
-			String isExit = "false";
-			String chupaBadge = "";
+			String userId = null;
+			boolean isExit = false;
 			
-			String myId = userHelper.getMyUserInfo().getId();
-			if (message.getSenderId().equals(myId)) {
+			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
-				userNickName = message.getReceiver();
-			} else if (myId.equals(message.getReceiverId())) {
+			} else {
 				// the other user is Sender
 				userId = message.getSenderId();
-				userNickName = message.getSender();
-			} else {
-				throw new AhException("No User in Sender or Receive");
 			}
-			AhUser user = userDBHelper.getUser(userId);
+			
+			chupa.setUserId(userId);
+			AhUser user = userDBHelper.getUser(userId, true);
+			chupa.setUserNickName(user != null ? user.getNickName() : "Unkown");
 
 			// check whether it is exited.
 			if (userDBHelper.isUserExit(userId)) {
-				user = userDBHelper.getUser(userId, true);
-				isExit = "true";
+				isExit = true;
 			}
+			chupa.setExit(isExit);
 
-			profilePic = user.getProfilePic();
-			content = message.getContent();
-			timeStamp = message.getTimeStamp();
-			chupaCommunId = message.getChupaCommunId();
-			chupaBadge = "" + messageDBHelper.getChupaBadgeNum(message.getChupaCommunId());
+			chupa.setContent(message.getContent());
+			chupa.setTimeStamp(message.getTimeStamp());
+			chupa.setId(message.getChupaCommunId());
+			chupa.setBadgeNum(messageDBHelper.getChupaBadgeNum(message.getChupaCommunId()));
 
-			map.put("profilePic", profilePic);
-			map.put("userNickName", userNickName);
-			map.put("userId", userId);
-			map.put("content", content);
-			map.put("timeStamp", timeStamp);
-			map.put("chupaCommunId", chupaCommunId);
-			map.put("isExit", isExit);
-			map.put("chupaBadge", chupaBadge);
-
-			list.add(map);
+			chupaList.add(chupa);
 		}
-		return list;
+		return chupaList;
 	}
 }

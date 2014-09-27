@@ -313,7 +313,7 @@ public class BasicProfileFragment extends AhFragment{
 				imagePath = cursor.getString(columnIndex);
 				cursor.close();
 				break;
-				
+
 			case GET_IMAGE_CAMERA_CODE:
 				Uri tempImageUri = null;
 				if(imageUri == null){
@@ -362,8 +362,8 @@ public class BasicProfileFragment extends AhFragment{
 			}
 			isTakenProfileImage = true;
 			startButton.setEnabled(isStartButtonEnable());
-			
-			
+
+
 			/*
 			 * If get image from camera, delete file
 			 */
