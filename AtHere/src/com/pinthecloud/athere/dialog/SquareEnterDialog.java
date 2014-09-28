@@ -112,6 +112,7 @@ public class SquareEnterDialog extends AhDialogFragment{
 			@Override
 			public void onClick(View v) {
 				ahDialogCallback.doNegativeThing(null);
+				dismiss();
 			}
 		});
 

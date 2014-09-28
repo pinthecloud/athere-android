@@ -14,7 +14,6 @@ import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -154,12 +153,9 @@ public class AhApplication extends Application{
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.clearAllChupaBadgeNum();
-		FileUtil.clearAllFiles(app);
+		String userId = userHelper.getMyUserInfo().getId();
+		FileUtil.clearAllFilesExceptSomeFiles(app, userId, userId+AhGlobalVariable.SMALL);
 		blobStorageHelper.clearAllCache();
-
-		String id = userHelper.getMyUserInfo().getId();
-		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);
-		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+AhGlobalVariable.SMALL, null);
 
 		userHelper.userLogout();
 		squareHelper.removeMySquareInfo();

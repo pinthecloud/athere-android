@@ -14,6 +14,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
+import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhUser;
@@ -32,6 +33,7 @@ public class ProfileDialog extends AhDialogFragment{
 	private TextView companyNumberText;
 	private Button sendChupaButton;
 
+	private SquareHelper squareHelper;
 	private UserHelper userHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
 
@@ -39,10 +41,11 @@ public class ProfileDialog extends AhDialogFragment{
 	public ProfileDialog(AhFragment frag, AhUser user, AhDialogCallback ahDialogCallback) {
 		super();
 		this.frag = frag;
+		this.user = user;
 		this.ahDialogCallback = ahDialogCallback;
 		this.app = AhApplication.getInstance();
+		this.squareHelper = app.getSquareHelper();
 		this.userHelper = app.getUserHelper();
-		this.user = user;
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		setStyle(STYLE_NO_TITLE, 0);
 	}
@@ -91,7 +94,7 @@ public class ProfileDialog extends AhDialogFragment{
 				dismiss();
 			}
 		});
-		if(user.getId().equals(userHelper.getMyUserInfo().getId())){
+		if(user.getId().equals(userHelper.getMyUserInfo().getId()) || squareHelper.isPreview()){
 			sendChupaButton.setVisibility(View.GONE);
 		}
 

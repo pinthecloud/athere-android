@@ -184,7 +184,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				if(square.getDistance() <= square.getEntryRange() 
 						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 
-					square.setCode("1");
 					if(square.getCode().equals("")){
 						enterSquare(square, false);
 					} else{

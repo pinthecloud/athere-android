@@ -244,9 +244,15 @@ public class ProfileSettingsFragment extends AhFragment{
 
 					@Override
 					public void doNext(AhFragment frag) {
-						if (squareHelper.isPreview()) {
+						if (!squareHelper.isLoggedInSquare() || squareHelper.isPreview()) {
 							progressBar.setVisibility(View.GONE);
-							saveInformationAndEnterSquare(user.getId());
+							saveProfileImage(user.getId());
+							
+							if(squareHelper.isPreview()){
+								Intent intent = new Intent(context, SquareActivity.class);
+								startActivity(intent);	
+							}
+							activity.finish();
 							return;
 						}
 
@@ -262,7 +268,10 @@ public class ProfileSettingsFragment extends AhFragment{
 							@Override
 							public void onCompleted(AhMessage entity) {
 								progressBar.setVisibility(View.GONE);
-								saveInformationAndEnterSquare(user.getId());
+								saveProfileImage(user.getId());
+								Intent intent = new Intent(context, SquareActivity.class);
+								startActivity(intent);
+								activity.finish();
 							}
 						});
 					}
@@ -377,15 +386,11 @@ public class ProfileSettingsFragment extends AhFragment{
 	/*
 	 * Save this setting and go to next activity
 	 */
-	private void saveInformationAndEnterSquare(String userId) {
+	private void saveProfileImage(String userId) {
 		FileUtil.saveBitmapToInternalStorage(app, userId, profileImageBitmap);
 		FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallProfileImageBitmap);
 		blobStorageHelper.clearCache(userId);
 		blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
-
-		Intent intent = new Intent(context, SquareActivity.class);
-		startActivity(intent);
-		activity.finish();
 	}
 
 

@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.helper;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

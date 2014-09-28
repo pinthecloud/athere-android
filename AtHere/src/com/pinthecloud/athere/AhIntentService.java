@@ -212,18 +212,18 @@ public class AhIntentService extends IntentService {
 
 
 	private void FORCED_LOGOUT() {
-//		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
-//
-//			@Override
-//			public void onCompleted(Boolean entity) {
-//				if (isRunning(app)){
-//					String currentActivityName = getCurrentRunningActivityName(app);
-//					messageHelper.triggerMessageEvent(currentActivityName, message);
-//				} else {
-//					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
-//				}
-//			}
-//		});
+		//		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
+		//
+		//			@Override
+		//			public void onCompleted(Boolean entity) {
+		//				if (isRunning(app)){
+		//					String currentActivityName = getCurrentRunningActivityName(app);
+		//					messageHelper.triggerMessageEvent(currentActivityName, message);
+		//				} else {
+		//					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
+		//				}
+		//			}
+		//		});
 		app.removeSquarePreference(null);
 		if (isRunning(app)){
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -417,7 +417,7 @@ public class AhIntentService extends IntentService {
 
 		AhUser _user = null;
 		JsonObject jo = new JsonParser().parse(jsonStr).getAsJsonObject();
-		
+
 		_user = JsonConverter.convertToUser(jo);
 		return _user;
 	}

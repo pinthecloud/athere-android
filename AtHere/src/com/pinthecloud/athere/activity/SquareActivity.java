@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
+import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.fragment.ChatFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -29,8 +31,7 @@ import com.pinthecloud.athere.model.Square;
 public class SquareActivity extends AhSlidingActivity {
 
 	private ProgressBar progressBar;
-	private SquareTabFragment squareTabFragment;
-
+	private AhFragment contentFragment;
 	private DrawerLayout mDrawerLayout; 
 	private View mFragmentView;
 	private ChupaListFragment chupaListFragment;
@@ -38,7 +39,6 @@ public class SquareActivity extends AhSlidingActivity {
 	private MessageHelper messageHelper;
 	private UserHelper userHelper;
 	private SquareHelper squareHelper;
-	private Square square;
 
 
 	@Override
@@ -53,18 +53,18 @@ public class SquareActivity extends AhSlidingActivity {
 		messageHelper = app.getMessageHelper();
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
-		square = squareHelper.getMySquareInfo();
-		getActionBar().setTitle(square.getName());
+		Square square = squareHelper.getMySquareInfo();
 
 
 		/*
-		 * Set UI Component
+		 * Set UI Component and drawer
 		 */
+		getActionBar().setTitle(square.getName());
 		progressBar = (ProgressBar) findViewById(R.id.square_progress_bar);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_drawer_layout);
-		mFragmentView = findViewById(R.id.notification_drawer_fragment);
+		mFragmentView = findViewById(R.id.square_notification_drawer_fragment);
 		FragmentManager fragmentManager = getFragmentManager();
-		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.notification_drawer_fragment);
+		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_notification_drawer_fragment);
 		chupaListFragment.setUp(mDrawerLayout);
 
 
@@ -72,8 +72,12 @@ public class SquareActivity extends AhSlidingActivity {
 		 * Set tab
 		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		squareTabFragment = new SquareTabFragment(square);
-		fragmentTransaction.add(R.id.square_tab_layout, squareTabFragment);
+		if(squareHelper.isPreview()){
+			contentFragment = new ChatFragment(square);	
+		}else{
+			contentFragment = new SquareTabFragment(square);
+		}
+		fragmentTransaction.add(R.id.square_tab_layout, contentFragment);
 		fragmentTransaction.commit();
 
 
@@ -100,7 +104,8 @@ public class SquareActivity extends AhSlidingActivity {
 					finish();
 					return;
 				}
-				messageHelper.triggerMessageEvent(squareTabFragment, message);
+				messageHelper.triggerMessageEvent(contentFragment, message);
+				messageHelper.triggerMessageEvent(chupaListFragment, message);
 			}
 		});
 	}
@@ -192,17 +197,17 @@ public class SquareActivity extends AhSlidingActivity {
 		progressBar.bringToFront();
 
 		AhUser user = userHelper.getMyUserInfo();
-		userHelper.exitSquareAsync(squareTabFragment, user, new AhEntityCallback<Boolean>() {
+		userHelper.exitSquareAsync(contentFragment, user, new AhEntityCallback<Boolean>() {
 
 			@Override
 			public void onCompleted(Boolean result) {
 				progressBar.setVisibility(View.GONE);
 
-				app.removeSquarePreference(squareTabFragment);
+				app.removeSquarePreference(contentFragment);
 				Intent intent = new Intent(thisActivity, SquareListActivity.class);
 				startActivity(intent);
 				finish();
 			}
 		});
-	}	
+	}
 }

@@ -27,7 +27,7 @@ public class SquareListActivity extends AhSlidingActivity {
 
 
 		/*
-		 * Set UI component
+		 * Set UI Component and drawer
 		 */
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_list_drawer_layout);
 		mFragmentView = findViewById(R.id.square_list_notification_drawer_fragment);

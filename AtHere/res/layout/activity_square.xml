@@ -20,7 +20,7 @@
     </RelativeLayout>
 
     <fragment
-        android:id="@+id/notification_drawer_fragment"
+        android:id="@+id/square_notification_drawer_fragment"
         android:name="com.pinthecloud.athere.fragment.ChupaListFragment"
         android:layout_width="@dimen/notification_drawer_width"
         android:layout_height="match_parent"

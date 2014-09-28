@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.Time;
+import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
@@ -21,7 +23,7 @@ public class FileUtil {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
-	
+
 	public static final int MEDIA_TYPE_GALLERY = 1;
 	public static final int MEDIA_TYPE_CAMERA = 2;
 
@@ -72,23 +74,25 @@ public class FileUtil {
 	}
 
 
-	public static void clearAllFiles(Context context) {
+	public static void clearAllFilesExceptSomeFiles(Context context, String... names) {
 		File dir = context.getFilesDir();
-		boolean result = false;
-		if (dir.isDirectory()) {
-			File[] files = dir.listFiles();
-			for (File file : files) {
-				if (file.isFile()) {
-					result = file.delete();
-					if (!result) {
-						throw new AhException("File remove Error");
-					}
-				} else {
-					throw new AhException("File remove Error");
-				}
-			}
-		} else {
+		if(!dir.isDirectory()){
 			throw new AhException("File remove Error");
+		}
+
+		for (File file : dir.listFiles()) {
+			if(!file.isFile()){
+				throw new AhException("File remove Error");
+			}
+
+			if(names != null && Arrays.asList(names).contains(file.getName())){
+				Log.d("Seungmin", "here");
+				continue;
+			}
+
+			if (!file.delete()) {
+				throw new AhException("File remove Error");
+			}
 		}
 	}
 
