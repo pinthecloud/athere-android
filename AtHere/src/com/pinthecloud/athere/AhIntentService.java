@@ -86,7 +86,6 @@ public class AhIntentService extends IntentService {
 		}
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
-		Log.e("ERROR", type.toString());
 		new AhThread(new Runnable() {
 
 			public void run() {

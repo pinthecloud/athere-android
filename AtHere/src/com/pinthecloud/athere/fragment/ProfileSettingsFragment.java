@@ -250,14 +250,13 @@ public class ProfileSettingsFragment extends AhFragment{
 							return;
 						}
 
-						String enterMessage = getResources().getString(R.string.enter_square_message);
 						final AhUser user = userHelper.getMyUserInfo();
 						AhMessage message = new AhMessage.Builder()
-						.setContent(user.getNickName() + " " + enterMessage)
+						.setContent(user.getNickName())
 						.setSender(user.getNickName())
 						.setSenderId(user.getId())
 						.setReceiverId(squareHelper.getMySquareInfo().getId())
-						.setType(AhMessage.TYPE.ENTER_SQUARE).build();
+						.setType(AhMessage.TYPE.UPDATE_USER_INFO).build();
 						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
 
 							@Override

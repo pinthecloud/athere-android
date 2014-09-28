@@ -5,11 +5,11 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
@@ -19,21 +19,25 @@ import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
 
 public class SquareActivity extends AhSlidingActivity {
 
-	private FragmentManager fragmentManager;
-	private DrawerLayout mDrawerLayout; 
-	private ActionBarDrawerToggle mDrawerToggle;
-	private View mFragmentView;
-	private ChupaListFragment mChupaListFragment;
+	private ProgressBar progressBar;
+	private SquareTabFragment squareTabFragment;
 
-	private SquareHelper squareHelper;
+	private DrawerLayout mDrawerLayout; 
+	private View mFragmentView;
+	private ChupaListFragment chupaListFragment;
+
 	private MessageHelper messageHelper;
+	private UserHelper userHelper;
+	private SquareHelper squareHelper;
 	private Square square;
 
 
@@ -41,14 +45,14 @@ public class SquareActivity extends AhSlidingActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
 		/*
 		 * Set Helper and get square
 		 */
-		squareHelper = app.getSquareHelper();
 		messageHelper = app.getMessageHelper();
+		userHelper = app.getUserHelper();
+		squareHelper = app.getSquareHelper();
 		square = squareHelper.getMySquareInfo();
 		getActionBar().setTitle(square.getName());
 
@@ -56,63 +60,21 @@ public class SquareActivity extends AhSlidingActivity {
 		/*
 		 * Set UI Component
 		 */
+		progressBar = (ProgressBar) findViewById(R.id.square_progress_bar);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_drawer_layout);
 		mFragmentView = findViewById(R.id.notification_drawer_fragment);
-		fragmentManager = getFragmentManager();
-		mChupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.notification_drawer_fragment);
+		FragmentManager fragmentManager = getFragmentManager();
+		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.notification_drawer_fragment);
+		chupaListFragment.setUp(mDrawerLayout);
 
 
 		/*
 		 * Set tab
 		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		final SquareTabFragment mSquareTabFragment = new SquareTabFragment(square);
-		fragmentTransaction.add(R.id.square_tab_layout, mSquareTabFragment);
+		squareTabFragment = new SquareTabFragment(square);
+		fragmentTransaction.add(R.id.square_tab_layout, squareTabFragment);
 		fragmentTransaction.commit();
-
-
-		/*
-		 * Set Drawer
-		 */
-		// ActionBarDrawerToggle ties together the the proper interactions
-		// between the navigation drawer and the action bar app icon.
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-				mDrawerLayout, /* DrawerLayout object */
-				R.drawable.indicator_notification_drawer, /* nav drawer image to replace 'Up' caret */
-				R.string.drawer_open, /* "open drawer" description for accessibility */
-				R.string.drawer_close /* "close drawer" description for accessibility */
-				)
-		{
-			@Override
-			public void onDrawerOpened(View drawerView) {
-				super.onDrawerOpened(drawerView);
-				if (!mChupaListFragment.isAdded()) {
-					return;
-				}
-				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-			}
-
-			@Override
-			public void onDrawerClosed(View drawerView) {
-				super.onDrawerClosed(drawerView);
-				if (!mChupaListFragment.isAdded()) {
-					return;
-				}
-				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-			}
-		};
-
-		// Defer code dependent on restoration of previous instance state.
-		mDrawerLayout.post(new Runnable() {
-			@Override
-			public void run() {
-				mDrawerToggle.syncState();
-			}
-		});
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-		// Set drawer fragment up with information got from activity
-		mChupaListFragment.setUp(mFragmentView, mDrawerLayout);
 
 
 		/*
@@ -138,7 +100,7 @@ public class SquareActivity extends AhSlidingActivity {
 					finish();
 					return;
 				}
-				messageHelper.triggerMessageEvent(mSquareTabFragment, message);
+				messageHelper.triggerMessageEvent(squareTabFragment, message);
 			}
 		});
 	}
@@ -192,7 +154,11 @@ public class SquareActivity extends AhSlidingActivity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			toggle();
+			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
+				mDrawerLayout.closeDrawer(mFragmentView);
+			}else{
+				toggle();
+			}
 			return true;
 		case R.id.menu_notification:
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
@@ -201,7 +167,42 @@ public class SquareActivity extends AhSlidingActivity {
 				mDrawerLayout.openDrawer(mFragmentView);
 			}
 			return true;
+		case R.id.menu_more:
+			String message = getResources().getString(R.string.exit_square_consent_message);
+			AhAlertDialog escDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					exitSquare();
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					// Do nothing
+				}
+			});
+			escDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+
+	private void exitSquare() {
+		progressBar.setVisibility(View.VISIBLE);
+		progressBar.bringToFront();
+
+		AhUser user = userHelper.getMyUserInfo();
+		userHelper.exitSquareAsync(squareTabFragment, user, new AhEntityCallback<Boolean>() {
+
+			@Override
+			public void onCompleted(Boolean result) {
+				progressBar.setVisibility(View.GONE);
+
+				app.removeSquarePreference(squareTabFragment);
+				Intent intent = new Intent(thisActivity, SquareListActivity.class);
+				startActivity(intent);
+				finish();
+			}
+		});
+	}	
 }

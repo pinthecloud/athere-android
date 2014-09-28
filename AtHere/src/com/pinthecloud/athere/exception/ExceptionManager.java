@@ -21,8 +21,9 @@ public class ExceptionManager {
 			clazz = ex.fromWho().getClass();
 		}
 		Handler handler = map.get(clazz.getName());
-		if (handler != null)
+		if (handler != null){
 			handler.handleException(ex);
+		}
 	}
 
 	public static interface Handler {

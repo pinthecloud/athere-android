@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -167,7 +166,7 @@ public class BlobStorageHelper {
 	}
 
 
-	public void downloadToFileAsync(final AhFragment frag, final String containerName, String id, final Context context, final String path, final AhEntityCallback<String> callback) {
+	public void downloadToFileAsync(final AhFragment frag, final String containerName, String id, final String path, final AhEntityCallback<String> callback) {
 		(new AsyncTask<String, Void, String>() {
 
 			@Override

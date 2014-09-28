@@ -42,6 +42,7 @@
     <string name="kilometer">km</string>
     <string name="guide">guide</string>
     <string name="notification">Notification</string>
+    <string name="more">More</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
@@ -50,7 +51,7 @@
     <string name="bad_entry_code_message">This is wrong entry code.</string>
     <string name="exit_square_message">leaves ground.</string>
     <string name="enter_square_message">enters ground.</string>
-    <string name="behave_well_warning">You have a legal responsibility for\nany kinds of insult, abuse words.</string>
+    <string name="behave_well_warning">Have good chatting.</string>
     <string name="exit_square_consent_message">Every chat and chupa will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
     <string name="forced_logout_title">You have been logout.</string>
