@@ -60,8 +60,8 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 				/*
 				 * Find Common UI component
 				 */
-				squareNameText = (TextView)view.findViewById(R.id.row_square_list_name);
-				distanceText = (TextView)view.findViewById(R.id.row_square_list_distance);
+				squareNameText = (TextView)view.findViewById(R.id.row_square_list_normal_name);
+				distanceText = (TextView)view.findViewById(R.id.row_square_list_normal_distance);
 			} else if(type == TYPE.ADMIN.ordinal()){
 				/*
 				 * Find Common UI component

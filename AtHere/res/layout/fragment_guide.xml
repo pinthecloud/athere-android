@@ -15,11 +15,11 @@
     <com.viewpagerindicator.UnderlinePageIndicator
         android:id="@+id/guide_frag_indicator"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height" />
+        android:layout_height="@dimen/line_height" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
+        android:layout_height="@dimen/line_height"
         android:background="@color/gray_line" />
 
     <LinearLayout

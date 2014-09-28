@@ -11,7 +11,6 @@ public class GuidePagerAdapter extends FragmentPagerAdapter {
 
 	private int[] contents = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
 
-
 	public GuidePagerAdapter(FragmentManager fm) {
 		super(fm);
 	}

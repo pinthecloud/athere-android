@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.format.Time;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
@@ -48,7 +46,10 @@ public class FileUtil {
 		}
 
 		// Create a media file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+		//		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+		Time time = new Time();
+		time.setToNow();
+		String timeStamp = time.format("%Y%m%d_%H%M%S");
 		File mediaFile = null;
 		if (type == MEDIA_TYPE_IMAGE){
 			mediaFile = new File(mediaStorageDir.getPath() + File.separator +

@@ -18,7 +18,7 @@
         android:layout_marginEnd="@dimen/chat_list_receive_profile_nick_name_margin"
         android:layout_marginRight="@dimen/chat_list_receive_profile_nick_name_margin"
         app:civBorderColor="@color/gray_line"
-        app:civBorderWidth="@dimen/divider_height" />
+        app:civBorderWidth="@dimen/line_height" />
 
     <RelativeLayout
         android:id="@+id/row_chat_list_receive_profile_into_layout"

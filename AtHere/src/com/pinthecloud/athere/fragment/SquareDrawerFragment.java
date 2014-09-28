@@ -84,8 +84,7 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set user list
 		 */
-		participantListAdapter = new SquareDrawerParticipantListAdapter
-				(context, thisFragment, R.layout.row_square_drawer_participant_list);
+		participantListAdapter = new SquareDrawerParticipantListAdapter(context, thisFragment);
 		participantListView.setAdapter(participantListAdapter);
 		participantListView.setOnItemClickListener(new OnItemClickListener() {
 

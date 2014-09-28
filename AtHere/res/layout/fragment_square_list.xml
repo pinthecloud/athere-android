@@ -12,23 +12,25 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <LinearLayout
+    <View
+        android:id="@+id/square_list_frag_action_bar_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_height"
+        android:background="@color/gray_line" />
+
+    <Button
+        android:id="@+id/square_list_frag_location_access_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/square_list_frag_action_bar_line" />
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/square_list_frag_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:background="@color/gray_line" />
-
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            xmlns:ptr="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/square_list_frag_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/gray_background"
-            android:divider="@null" />
-    </LinearLayout>
+        android:layout_below="@+id/square_list_frag_action_bar_line"
+        android:background="@color/gray_background"
+        android:divider="@null" />
 
 </RelativeLayout>

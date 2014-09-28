@@ -10,7 +10,6 @@ public class SquareUser {
 	@com.google.gson.annotations.SerializedName("isPreview")
 	private boolean isPreview;
 	
-	
 	public String getId() {
 		return id;
 	}

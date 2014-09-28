@@ -1,8 +1,6 @@
 package com.pinthecloud.athere.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -26,8 +24,6 @@ public class AhActivity extends Activity {
 
 	protected AhActivity thisActivity;
 	protected String simpleClassName;
-
-	private boolean isDestroyed = false;
 
 
 	public AhActivity(){
@@ -69,18 +65,6 @@ public class AhActivity extends Activity {
 	protected void onDestroy() {
 		LogSM(simpleClassName + " onDestroy");
 		super.onDestroy();
-		isDestroyed = true;
-	}
-
-
-	@SuppressLint("NewApi")
-	@Override
-	public boolean isDestroyed() {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			return isDestroyed;
-		} else {
-			return super.isDestroyed();
-		}
 	}
 
 

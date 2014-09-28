@@ -178,12 +178,8 @@ public class BasicProfileFragment extends AhFragment{
 		/*
 		 * Set gender and birth year edit text
 		 */
-		boolean isMale = user.isMale();
 		int age = user.getAge();
-		String gender = getResources().getString(R.string.male);
-		if(!isMale){
-			gender = getResources().getString(R.string.female);
-		}
+		String gender = user.getGenderString(context);
 		birthYearEditText.setText(age + " " + gender);
 
 
@@ -254,14 +250,10 @@ public class BasicProfileFragment extends AhFragment{
 					@Override
 					public void doNext(AhFragment frag) {
 						AhUser user = userHelper.getMyUserInfo();
-						String gender = "Male";
-						if(!user.isMale()){
-							gender = "Female";
-						}
 						gaHelper.sendEventGA(
 								thisFragment.getClass().getSimpleName(),
 								"CheckGender",
-								gender);
+								user.getGenderString(context));
 						gaHelper.sendEventGA(
 								thisFragment.getClass().getSimpleName(),
 								"CheckAge",
@@ -323,7 +315,7 @@ public class BasicProfileFragment extends AhFragment{
 				imagePath = cursor.getString(columnIndex);
 				cursor.close();
 				break;
-				
+
 			case GET_IMAGE_CAMERA_CODE:
 				Uri tempImageUri = null;
 				if(imageUri == null){
@@ -372,8 +364,8 @@ public class BasicProfileFragment extends AhFragment{
 			}
 			isTakenProfileImage = true;
 			startButton.setEnabled(isStartButtonEnable());
-			
-			
+
+
 			/*
 			 * If get image from camera, delete file
 			 */
