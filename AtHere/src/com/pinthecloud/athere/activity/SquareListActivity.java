@@ -10,9 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.NotificationDrawerFragment;
+import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
-import com.pinthecloud.athere.model.AhUser;
 
 
 public class SquareListActivity extends AhSlidingActivity {
@@ -21,8 +20,7 @@ public class SquareListActivity extends AhSlidingActivity {
 	private DrawerLayout mDrawerLayout; 
 	private ActionBarDrawerToggle mDrawerToggle;
 	private View mFragmentView;
-	private NotificationDrawerFragment mNotificationDrawerFragment;
-	private AhUser user;
+	private ChupaListFragment mChupaListFragment;
 
 
 	@Override
@@ -38,7 +36,7 @@ public class SquareListActivity extends AhSlidingActivity {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_list_drawer_layout);
 		mFragmentView = findViewById(R.id.square_list_notification_drawer_fragment);
 		fragmentManager = getFragmentManager();
-		mNotificationDrawerFragment = (NotificationDrawerFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
+		mChupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
 
 
 		/*
@@ -66,7 +64,7 @@ public class SquareListActivity extends AhSlidingActivity {
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				if (!mNotificationDrawerFragment.isAdded()) {
+				if (!mChupaListFragment.isAdded()) {
 					return;
 				}
 				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
@@ -75,7 +73,7 @@ public class SquareListActivity extends AhSlidingActivity {
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				super.onDrawerClosed(drawerView);
-				if (!mNotificationDrawerFragment.isAdded()) {
+				if (!mChupaListFragment.isAdded()) {
 					return;
 				}
 				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
@@ -92,7 +90,17 @@ public class SquareListActivity extends AhSlidingActivity {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		// Set drawer fragment up with information got from activity
-		mNotificationDrawerFragment.setUp(mFragmentView, mDrawerLayout, user);
+		mChupaListFragment.setUp(mFragmentView, mDrawerLayout);
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
+			mDrawerLayout.closeDrawer(mFragmentView);
+			return;
+		}
+		super.onBackPressed();
 	}
 
 
@@ -118,15 +126,5 @@ public class SquareListActivity extends AhSlidingActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-
-	@Override
-	public void onBackPressed() {
-		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
-			mDrawerLayout.closeDrawer(mFragmentView);
-			return;
-		}
-		super.onBackPressed();
 	}
 }

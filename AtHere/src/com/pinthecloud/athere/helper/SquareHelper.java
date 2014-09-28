@@ -29,38 +29,41 @@ public class SquareHelper {
 	private final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
 	private final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
 	private final String IS_PREVIEW_KEY = "IS_PREVIEW_KEY";
+	private final String IS_REVIEW_KEY = "IS_REVIEW_KEY";
 	
-
 	private final String GET_NEAR_SQUARE = "get_near_square";
-	
+
 	private final String currentLatitude = "currentLatitude";
 	private final String currentLongitude = "currentLongitude";
-	
+
 	private AhApplication app;
-	private MobileServiceClient mClient;
 	private PreferenceHelper pref;
+	private MobileServiceClient mClient;
 	private MobileServiceTable<Square> squareTable;
 
 
 	public SquareHelper() {
 		super();
 		this.app = AhApplication.getInstance();
-		this.mClient = app.getmClient();
 		this.pref = PreferenceHelper.getInstance();
+		this.mClient = app.getmClient();
 		this.squareTable = app.getmClient().getTable(Square.class);
 	}
 
 	public boolean isLoggedInSquare() {
 		return pref.getBoolean(IS_LOGGED_IN_SQUARE_KEY);
 	}
+	public Boolean isPreview() {
+		return pref.getBoolean(IS_PREVIEW_KEY);
+	}
+	public Boolean isReview() {
+		return pref.getBoolean(IS_REVIEW_KEY);
+	}
 	public int getSquareExitTab() {
 		return pref.getInt(SQUARE_EXIT_TAB_KEY);
 	}
 	public String getTimeStampAtLoggedInSquare() {
 		return pref.getString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
-	}
-	public Boolean isPreview() {
-		return pref.getBoolean(IS_PREVIEW_KEY);
 	}
 	public SquareHelper setMySquareId(String id) {
 		pref.putString(SQUARE_ID_KEY, id);
@@ -90,8 +93,12 @@ public class SquareHelper {
 		pref.putBoolean(IS_PREVIEW_KEY, isPreview);
 		return this;
 	}
-	
-	
+	public SquareHelper setReview(boolean isReview) {
+		pref.putBoolean(IS_REVIEW_KEY, isReview);
+		return this;
+	}
+
+
 	public Square getMySquareInfo(){
 		Square square = new Square();
 		square.setId(pref.getString(SQUARE_ID_KEY));
@@ -99,18 +106,19 @@ public class SquareHelper {
 		square.setResetTime(pref.getInt(SQUARE_RESET_KEY));
 		return square;
 	}
-	
-	
+
+
 	public void removeMySquareInfo() {
 		pref.removePref(SQUARE_ID_KEY);
 		pref.removePref(SQUARE_NAME_KEY);
 		pref.removePref(SQUARE_RESET_KEY);
-		pref.removePref(IS_LOGGED_IN_SQUARE_KEY);
 		pref.removePref(SQUARE_EXIT_TAB_KEY);
-//		pref.removePref(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(IS_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(IS_PREVIEW_KEY);
+		pref.removePref(IS_REVIEW_KEY);
 	}	
-	
-	
+
+
 	/*
 	 *  Async Task Methods
 	 */
@@ -180,8 +188,8 @@ public class SquareHelper {
 			}
 		});
 	}
-	
-	
+
+
 	/*
 	 * Sync Method
 	 * NOT USING

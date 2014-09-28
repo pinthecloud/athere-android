@@ -21,6 +21,9 @@ public class FileUtil {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
+	
+	public static final int MEDIA_TYPE_GALLERY = 1;
+	public static final int MEDIA_TYPE_CAMERA = 2;
 
 
 	/** Create a file Uri for saving an image or video */

@@ -40,9 +40,6 @@ import com.pinthecloud.athere.util.FileUtil;
 
 public class BasicProfileFragment extends AhFragment{
 
-	private final int GET_IMAGE_GALLERY_CODE = 0;
-	private final int GET_IMAGE_CAMERA_CODE = 1;
-
 	private ProgressBar progressBar;
 	private ImageView profileImageView;
 
@@ -100,7 +97,7 @@ public class BasicProfileFragment extends AhFragment{
 						// Get image from gallery
 						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
 						intent.setType("image/*");
-						startActivityForResult(intent, GET_IMAGE_GALLERY_CODE);
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_GALLERY);
 					}
 					@Override
 					public void doNegativeThing(Bundle bundle) {
@@ -118,7 +115,7 @@ public class BasicProfileFragment extends AhFragment{
 						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 						imageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
 						intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-						startActivityForResult(intent, GET_IMAGE_CAMERA_CODE);
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_CAMERA);
 					}
 					@Override
 					public void doNegativeThing(Bundle bundle) {
@@ -207,16 +204,17 @@ public class BasicProfileFragment extends AhFragment{
 				/*
 				 * Proper nick name
 				 * Show progress bar
-				 * Disable complete button for preventing double click
+				 * Disable UI components for preventing double click
 				 * Save this setting and go to next activity
 				 */
 				progressBar.setVisibility(View.VISIBLE);
 				progressBar.bringToFront();
+				profileImageView.setEnabled(false);
+				nickNameEditText.setEnabled(false);
 				startButton.setEnabled(false);
 
-				userHelper.setMyChupaEnable(true)
-				.setMyCompanyNum(0)
-				.setMyNickName(nickName);
+				userHelper.setMyNickName(nickName)
+				.setMyChupaEnable(true);
 
 				AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -228,8 +226,8 @@ public class BasicProfileFragment extends AhFragment{
 
 							@Override
 							public void onCompleted(AhUser entity) {
-								userHelper.setLoggedInUser(true)
-								.setMyId(entity.getId());
+								userHelper.setMyId(entity.getId())
+								.setLoggedInUser(true);
 							}
 						});
 					}
@@ -238,10 +236,10 @@ public class BasicProfileFragment extends AhFragment{
 					@Override
 					public void doNext(AhFragment frag) {
 						// Upload bit and small profile images
-						String userId = userHelper.getMyUserInfo().getId();
+						AhUser user = userHelper.getMyUserInfo();
 						smallProfileImageBitmap = BitmapUtil.decodeInSampleSize(profileImageBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, profileImageBitmap, null);
-						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId(), profileImageBitmap, null);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
 					}
 				}, new Chainable() {
 
@@ -257,7 +255,7 @@ public class BasicProfileFragment extends AhFragment{
 								"CheckAge",
 								""+user.getAge());
 
-						// Save pictures to internal storage
+						// Save profile images to internal storage
 						FileUtil.saveBitmapToInternalStorage(app, user.getId(), profileImageBitmap);
 						FileUtil.saveBitmapToInternalStorage(app, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap);
 
@@ -302,7 +300,7 @@ public class BasicProfileFragment extends AhFragment{
 			 */
 			String imagePath = null;
 			switch(requestCode){
-			case GET_IMAGE_GALLERY_CODE:
+			case FileUtil.MEDIA_TYPE_GALLERY:
 				imageUri = data.getData();
 				String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
@@ -314,7 +312,7 @@ public class BasicProfileFragment extends AhFragment{
 				cursor.close();
 				break;
 
-			case GET_IMAGE_CAMERA_CODE:
+			case FileUtil.MEDIA_TYPE_CAMERA:
 				Uri tempImageUri = null;
 				if(imageUri == null){
 					if(data == null){
@@ -367,7 +365,7 @@ public class BasicProfileFragment extends AhFragment{
 			/*
 			 * If get image from camera, delete file
 			 */
-			if(requestCode == GET_IMAGE_CAMERA_CODE){
+			if(requestCode == FileUtil.MEDIA_TYPE_CAMERA){
 				File file = new File(imagePath);
 				file.delete();
 			}

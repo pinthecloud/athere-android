@@ -120,8 +120,7 @@ public class AhIntentService extends IntentService {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
 
-		boolean isChatEnable = userHelper.getMyUserInfo().isChatEnable();
-		
+		boolean isChatEnable = userHelper.isChatEnable();
 		if (isRunning(app)) {
 			// Is the Chupa App Running
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -176,7 +175,7 @@ public class AhIntentService extends IntentService {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
-		} else if(userHelper.getMyUserInfo().isChatEnable()){
+		} else if(userHelper.isChatEnable()){
 			alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 		}
 	}

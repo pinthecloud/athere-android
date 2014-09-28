@@ -6,28 +6,38 @@
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/square_code_dialog_bottom_margin"
-    android:paddingTop="@dimen/square_code_dialog_top_margin" >
+    android:paddingBottom="@dimen/square_enter_dialog_bottom_margin"
+    android:paddingTop="@dimen/square_enter_dialog_top_margin" >
+
+    <TextView
+        android:id="@+id/square_enter_dialog_code_warning_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <EditText
-        android:id="@+id/square_code_dialog_code_edit_text"
+        android:id="@+id/square_enter_dialog_code_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/square_code_dialog_code_enter_button_margin"
         android:ems="10"
         android:gravity="center"
-        android:hint="@string/code"
+        android:hint="@string/entry_code"
         android:inputType="text"
         android:maxLength="10"
         android:textSize="@dimen/font_large" >
     </EditText>
 
     <ImageButton
-        android:id="@+id/square_code_dialog_enter_button"
+        android:id="@+id/square_enter_dialog_enter_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
         android:src="@drawable/ok_image_button_bg" />
+
+    <Button
+        android:id="@+id/square_enter_dialog_preview_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Preview" />
 
 </LinearLayout>

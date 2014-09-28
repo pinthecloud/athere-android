@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ public class ChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
-		squareChupaListAdapter = new ChupaListAdapter(context, thisFragment, R.layout.row_chupa_list);
+		squareChupaListAdapter = new ChupaListAdapter(context, thisFragment);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -108,7 +109,7 @@ public class ChupaListFragment extends AhFragment{
 
 			String userId = null;
 			boolean isExit = false;
-			
+
 			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -116,7 +117,7 @@ public class ChupaListFragment extends AhFragment{
 				// the other user is Sender
 				userId = message.getSenderId();
 			}
-			
+
 			chupa.setUserId(userId);
 			AhUser user = userDBHelper.getUser(userId, true);
 			chupa.setUserNickName(user != null ? user.getNickName() : "Unkown");
@@ -135,5 +136,10 @@ public class ChupaListFragment extends AhFragment{
 			chupaList.add(chupa);
 		}
 		return chupaList;
+	}
+
+
+	public void setUp(View fragmentView, DrawerLayout drawerLayout) {
+		
 	}
 }

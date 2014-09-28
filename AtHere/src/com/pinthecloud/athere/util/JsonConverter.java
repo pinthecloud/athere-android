@@ -21,7 +21,6 @@ public class JsonConverter {
 	
 	private static JsonElement getDefaultValue(TYPE type) {
 		String jsonString = "";
-		
 		switch(type) {
 		case STRING : break;
 		case DOUBLE : jsonString = "0.0"; break;
@@ -29,7 +28,6 @@ public class JsonConverter {
 		case BOOLEAN : jsonString = "false"; break;
 		default : break;
 		}
-		
 		return new JsonParser().parse(jsonString);
 	}
 	
@@ -50,7 +48,6 @@ public class JsonConverter {
 	
 	public static List<Square> convertToSquareList(JsonArray jsonArray) {
 		List<Square> list = new ArrayList<Square>();
-
 		for (int i = 0 ; i < jsonArray.size() ; i++) {
 			JsonElement jsonElement = jsonArray.get(i);
 			JsonObject jo = jsonElement.getAsJsonObject();
@@ -91,7 +88,6 @@ public class JsonConverter {
 	
 	public static List<AhUser> convertToUserList(JsonElement json){
 		List<AhUser> list = new ArrayList<AhUser>();
-
 		JsonObject userListJson = json.getAsJsonObject();
 		JsonElement userList = userListJson.get("list");
 		JsonArray jsonArray = userList.getAsJsonArray();

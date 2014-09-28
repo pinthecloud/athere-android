@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.util;
+package com.pinthecloud.athere.deprecated;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,9 @@ import android.view.Surface;
 
 public class CameraUtil {
 
-	/** Check if this device has a camera */
+	/*
+	 * Check if this device has a camera 
+	 */
 	public static boolean checkCameraHardware(Context context) {
 		if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
 			// this device has a camera
@@ -21,7 +23,9 @@ public class CameraUtil {
 	}
 
 
-	/** A safe way to get an instance of the Camera object. */
+	/*
+	 * A safe way to get an instance of the Camera object.
+	 */
 	public static Camera getCameraInstance(int mode){
 		Camera c = null;
 		try {
@@ -64,8 +68,8 @@ public class CameraUtil {
 	}
 
 
+	// Search for the front facing camera
 	public static int findFrontFacingCameraID() {
-		// Search for the front facing camera
 		int cameraId = -1;
 		int numberOfCameras = Camera.getNumberOfCameras();
 		for (int i = 0; i < numberOfCameras; i++) {

@@ -28,13 +28,10 @@ import com.pinthecloud.athere.interfaces.AhEntityCallback;
 
 public class LocationHelper {
 
-	private String LOCATION_CONSENT_KEY = "LOCATION_CONSENT_KEY";
-
 	private final int UPDATE_INTERVAL = 5000;
 	private final int FASTEST_INTERVAL = 1000;
 
 	private Context context;
-	private PreferenceHelper pref;
 	private LocationManager manager;
 	private LocationClient mLocationClient;
 	private LocationRequest locationRequest;
@@ -45,7 +42,6 @@ public class LocationHelper {
 			OnConnectionFailedListener onConnectionFailedListener) {
 		super();
 		this.context = context;
-		pref = PreferenceHelper.getInstance();
 		manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		mLocationClient = new LocationClient(context, 
 				connectionCallbacks, 
@@ -92,67 +88,30 @@ public class LocationHelper {
 	}
 
 
-	private boolean isLocationEnabled(){
-		if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) 
-				&& !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
-
-
-	public boolean isLocationAccess(){
-		return pref.getBoolean(LOCATION_CONSENT_KEY) && isLocationEnabled();
+	public boolean isLocationEnabled(){
+		return (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) 
+				|| manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER));
 	}
 
 
 	public void getLocationAccess(final Activity activity, final AhDialogCallback callback){
 		/*
-		 * Get user consent for location information
-		 */
-		if(!pref.getBoolean(LOCATION_CONSENT_KEY)){
-			String message = activity.getResources().getString(R.string.location_consent_message);
-			AhAlertDialog locConsentDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
-
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					pref.putBoolean(LOCATION_CONSENT_KEY, true);
-					getLocationAccess(activity, callback);
-				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					callback.doNegativeThing(bundle);
-				}
-			});
-			locConsentDialog.show(activity.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			return;
-		}
-
-
-		/*
 		 * Set enable location service
 		 */
-		if(!isLocationEnabled()){
-			String message = activity.getResources().getString(R.string.location_setting_message);
-			AhAlertDialog locSettingDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
+		String message = activity.getResources().getString(R.string.location_setting_message);
+		AhAlertDialog locSettingDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					Intent intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-					activity.startActivity(intent);
-				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					callback.doNegativeThing(bundle);
-				}
-			});
-			locSettingDialog.show(activity.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			return;
-		}
-
-		callback.doPositiveThing(null);
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				Intent intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+				activity.startActivity(intent);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				callback.doNegativeThing(bundle);
+			}
+		});
+		locSettingDialog.show(activity.getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 	}
 
 

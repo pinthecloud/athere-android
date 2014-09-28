@@ -3,10 +3,12 @@ package com.pinthecloud.athere.fragment;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +19,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationListener;
@@ -26,9 +28,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.SquareProfileActivity;
+import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
-import com.pinthecloud.athere.dialog.SquareCodeDialog;
+import com.pinthecloud.athere.dialog.SquareEnterDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.LocationHelper;
@@ -36,7 +38,12 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
+import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 
 
 
@@ -131,14 +138,15 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				if(!locationHelper.isLocationAccess()){
+				/*
+				 * Check location service
+				 */
+				if(!locationHelper.isLocationEnabled()){
 					locationHelper.getLocationAccess(activity, new AhDialogCallback() {
 
 						@Override
 						public void doPositiveThing(Bundle bundle) {
-							progressBar.setVisibility(View.VISIBLE);
-							progressBar.bringToFront();
-							locationHelper.requestLocationUpdates(locationListener);
+							// Do nothing
 						}
 						@Override
 						public void doNegativeThing(Bundle bundle) {
@@ -151,49 +159,44 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 
 				/*
-				 * If enough close to enter or it is super user, check code.
-				 * Otherwise, cannot enter.
+				 * Get square and make enter dialog
 				 */
 				position -= 2;
 				final Square square = squareListAdapter.getItem(position);
+				Bundle bundle = new Bundle();
+				SquareEnterDialog enterDialog = new SquareEnterDialog(square, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						enterSquare(square, false);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						enterSquare(square, true);
+					}
+				});
+
+
+				/*
+				 * If enough close to enter or it is super user, check code.
+				 * Otherwise, cannot enter.
+				 */
 				if(square.getDistance() <= square.getEntryRange() 
 						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 
 					if(square.getCode().equals("")){
-
-						// This square doesn't have code
-						Intent intent = new Intent(context, SquareProfileActivity.class);
-						intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
-						startActivity(intent);
+						enterSquare(square, false);
 					} else{
-
 						// This square has code
-						SquareCodeDialog codeDialog = new SquareCodeDialog(square, new AhDialogCallback() {
-
-							@Override
-							public void doPositiveThing(Bundle bundle) {
-								String code = bundle.getString(AhGlobalVariable.CODE_VALUE_KEY);
-								if(code.equals(square.getCode())){
-									Intent intent = new Intent(context, SquareProfileActivity.class);
-									intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
-									startActivity(intent);
-								}else{
-									String message = getResources().getString(R.string.bad_square_code_message);
-									Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-									toast.show();
-								}
-							}
-							@Override
-							public void doNegativeThing(Bundle bundle) {
-								// do nothing		
-							}
-						});
-						codeDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+						bundle.putBoolean(SquareEnterDialog.SHOW_CODE, true);
+						enterDialog.setArguments(bundle);
+						enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 					}
 				} else{
-					String message = getResources().getString(R.string.far_message);
-					Toast.makeText(activity, message, Toast.LENGTH_LONG)
-					.show();;
+					// This square has code
+					bundle.putBoolean(SquareEnterDialog.SHOW_CODE, false);
+					enterDialog.setArguments(bundle);
+					enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 				}
 			}
 		});
@@ -233,7 +236,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	@Override
 	public void onStart() {
 		super.onStart();
-		if(locationHelper.isLocationAccess()){
+		if(locationHelper.isLocationEnabled()){
 			locationAccessButton.setVisibility(View.GONE);
 			pullToRefreshListView.setVisibility(View.VISIBLE);
 		}else{
@@ -248,6 +251,82 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	public void onStop() {
 		locationHelper.disconnect();
 		super.onStop();
+	}
+
+
+	/*
+	 * Enter a square 
+	 */
+	private void enterSquare(final Square square, final boolean isPreview){
+		progressBar.setVisibility(View.VISIBLE);
+		progressBar.bringToFront();
+
+		AsyncChainer.asyncChain(thisFragment, new Chainable(){
+
+			@Override
+			public void doNext(AhFragment frag) {
+				// Get a user object from preference settings
+				// Enter a square with the user
+				final AhUser user = userHelper.getMyUserInfo();
+				userHelper.enterSquareAsync(frag, user, square.getId(), isPreview, new AhPairEntityCallback<String, List<AhUser>>() {
+
+					@Override
+					public void onCompleted(String userId, List<AhUser> list) {
+						userDBHelper.addAllUsers(list);
+					}
+				});
+			}
+		}, new Chainable() {
+
+			@Override
+			public void doNext(AhFragment frag) {
+				if (isPreview) {
+					progressBar.setVisibility(View.GONE);
+					saveInformationAndEnterSquare(square, isPreview);
+					return;
+				}
+
+				String enterMessage = getResources().getString(R.string.enter_square_message);
+				AhUser user = userHelper.getMyUserInfo();
+				AhMessage message = new AhMessage.Builder()
+				.setContent(user.getNickName() + " " + enterMessage)
+				.setSender(user.getNickName())
+				.setSenderId(user.getId())
+				.setReceiverId(square.getId())
+				.setType(AhMessage.TYPE.ENTER_SQUARE).build();
+				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+
+					@Override
+					public void onCompleted(AhMessage entity) {
+						progressBar.setVisibility(View.GONE);
+						saveInformationAndEnterSquare(square, isPreview);
+					}
+				});
+			}
+		});
+	}
+
+
+	/*
+	 * Save this setting and go to next activity
+	 */
+	private void saveInformationAndEnterSquare(Square square, boolean isPreview) {
+		Time time = new Time();
+		time.setToNow();
+
+		userHelper.setChatEnable(true);
+		squareHelper.setMySquareId(square.getId())
+		.setMySquareName(square.getName())
+		.setMySquareResetTime(square.getResetTime())
+		.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+		.setLoggedInSquare(true)
+		.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"))
+		.setPreview(isPreview)
+		.setReview(true);
+
+		Intent intent = new Intent(context, SquareActivity.class);
+		startActivity(intent);
+		activity.finish();
 	}
 
 
@@ -299,7 +378,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 
 	private void updateNearSquares(int progressBarVisible, final LocationListener locationListener){
-		if(locationHelper.isLocationAccess()){
+		if(locationHelper.isLocationEnabled()){
 			progressBar.setVisibility(progressBarVisible);
 			progressBar.bringToFront();
 			locationHelper.requestLocationUpdates(locationListener);
@@ -308,7 +387,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
-					locationHelper.requestLocationUpdates(locationListener);
+					// Do nohting
 				}
 				@Override
 				public void doNegativeThing(Bundle bundle) {
@@ -330,7 +409,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-		if(locationHelper.isLocationAccess()){
+		if(locationHelper.isLocationEnabled()){
 			progressBar.setVisibility(View.VISIBLE);
 			progressBar.bringToFront();
 
@@ -353,9 +432,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
-					locationAccessButton.setVisibility(View.GONE);
-					pullToRefreshListView.setVisibility(View.VISIBLE);
-					locationHelper.connect();
+					// Do nothing
 				}
 				@Override
 				public void doNegativeThing(Bundle bundle) {

@@ -1,6 +1,5 @@
 package com.pinthecloud.athere.dialog;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +24,6 @@ public class ProfileDialog extends AhDialogFragment{
 	private AhApplication app;
 	private AhFragment frag;
 	private AhUser user;
-	private CachedBlobStorageHelper blobStorageHelper;
-	
-	private UserHelper userHelper;
 
 	private ImageView profileImage;
 	private ImageView genderImage;
@@ -35,6 +31,9 @@ public class ProfileDialog extends AhDialogFragment{
 	private TextView ageText;
 	private TextView companyNumberText;
 	private Button sendChupaButton;
+
+	private UserHelper userHelper;
+	private CachedBlobStorageHelper blobStorageHelper;
 
 
 	public ProfileDialog(AhFragment frag, AhUser user, AhDialogCallback ahDialogCallback) {
@@ -54,7 +53,7 @@ public class ProfileDialog extends AhDialogFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog_profile, container, false);
 
-		
+
 		/*
 		 * Find UI component
 		 */
@@ -69,13 +68,12 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set UI Component
 		 */
-		Resources resources = getResources();
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
-			companyNumberText.setTextColor(resources.getColor(R.color.blue));
+			companyNumberText.setTextColor(getResources().getColor(R.color.blue));
 		}else{
 			genderImage.setImageResource(R.drawable.profile_gender_w);
-			companyNumberText.setTextColor(resources.getColor(R.color.dark_red));
+			companyNumberText.setTextColor(getResources().getColor(R.color.dark_red));
 		}
 		nickNameText.setText(user.getNickName());
 		ageText.setText("" + user.getAge());
@@ -83,19 +81,7 @@ public class ProfileDialog extends AhDialogFragment{
 
 
 		/*
-		 * Set profile image
-		 */
-		profileImage.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ahDialogCallback.doNegativeThing(null);
-			}
-		});
-
-
-		/*
-		 * Set eventon button
+		 * Set event on chupa button
 		 */
 		sendChupaButton.setOnClickListener(new OnClickListener() {
 
@@ -109,6 +95,18 @@ public class ProfileDialog extends AhDialogFragment{
 			sendChupaButton.setVisibility(View.GONE);
 		}
 
+
+		/*
+		 * Set profile image
+		 */
+		profileImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ahDialogCallback.doNegativeThing(null);
+			}
+		});
+
 		return view;
 	}
 
@@ -118,11 +116,6 @@ public class ProfileDialog extends AhDialogFragment{
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
 				user.getId(), R.drawable.dialog_profile_default, profileImage, true);
-		if(user.isMale()){
-			genderImage.setImageResource(R.drawable.profile_gender_m);
-		}else{
-			genderImage.setImageResource(R.drawable.profile_gender_w);
-		}
 	}
 
 

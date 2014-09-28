@@ -31,20 +31,18 @@ public class AhUser implements Parcelable{
 	@com.google.gson.annotations.SerializedName("isChupaEnable")
 	private boolean isChupaEnable;
 	@com.google.gson.annotations.SerializedName("companyNum")
-	private int companyNum;
-	
-	private boolean isChatEnable;
-	
-	
+	private int companyNum = 0;
+
+
 	public AhUser() {
-		
+
 	}
 	public AhUser(Parcel in){
 		this();
 		readToParcel(in);
 	}
-	
-	
+
+
 	public String getId() {
 		return id;
 	}
@@ -111,12 +109,6 @@ public class AhUser implements Parcelable{
 	public void setCompanyNum(int companyNum) {
 		this.companyNum = companyNum;
 	}
-	public void setChatEnable(boolean isChatEnable) {
-		this.isChatEnable = isChatEnable;
-	}
-	public boolean isChatEnable() {
-		return this.isChatEnable;
-	}
 	public int getAge() {
 		Calendar c = Calendar.getInstance();
 		return c.get(Calendar.YEAR) - (getBirthYear() - 1);
@@ -128,8 +120,8 @@ public class AhUser implements Parcelable{
 			return context.getResources().getString(R.string.female);
 		}
 	}
-	
-	
+
+
 	/*
 	 * Parcelable
 	 */
@@ -141,7 +133,7 @@ public class AhUser implements Parcelable{
 			return new AhUser[size]; 
 		}
 	};
-	
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -160,7 +152,6 @@ public class AhUser implements Parcelable{
 		dest.writeString(getNickName());
 		dest.writeInt(isChupaEnable() ? 1 : 0);
 		dest.writeInt(getCompanyNum());
-		dest.writeInt(isChatEnable() ? 1 : 0);
 	}
 
 	public void readToParcel(Parcel in){
@@ -175,8 +166,8 @@ public class AhUser implements Parcelable{
 		setNickName(in.readString());
 		setChupaEnable(in.readInt() == 1);
 		setCompanyNum(in.readInt());
-		setChatEnable(in.readInt() == 1);
 	}
+
 
 	/*
 	 * Utility
@@ -184,9 +175,9 @@ public class AhUser implements Parcelable{
 	@Override
 	public String toString() {
 		return concate(getId(), getAhId(), getMobileId(), getMobileType(), getRegistrationId(),
-				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable(), getCompanyNum(), isChatEnable());
+				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable(), getCompanyNum());
 	}
-	
+
 	private String concate(Object... args) {
 		String str = "";
 		for(Object arg : args) {
@@ -197,7 +188,7 @@ public class AhUser implements Parcelable{
 
 	public JsonObject toJson() {
 		JsonObject jo = new JsonObject();
-		
+
 		jo.addProperty("id", getId());
 		jo.addProperty("ahId", getAhId());
 		jo.addProperty("mobileId", getMobileId());
@@ -209,33 +200,33 @@ public class AhUser implements Parcelable{
 		jo.addProperty("nickName", getNickName());
 		jo.addProperty("isChupaEnable", isChupaEnable());
 		jo.addProperty("companyNum", getCompanyNum());
-		
+
 		return jo;
 	}
-	
-	
+
+
 	/*
 	 * Test
 	 */
-//	public static AhUser addUserTest(){
-//		AhUser user = new AhUser();
-//		return user;
-//	}
-//
-//	private static String getRandomString(){
-//		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-//		StringBuilder sb = new StringBuilder();
-//		Random random = new Random();
-//		for (int i = 0; i < random.nextInt(25); i++) {
-//			char c = chars[random.nextInt(chars.length)];
-//			sb.append(c);
-//		}
-//		String output = sb.toString();
-//		return output;
-//	}
-//
-//	private static int getRandomInt(){
-//		Random random = new Random();
-//		return random.nextInt(40);
-//	}
+	//	public static AhUser addUserTest(){
+	//		AhUser user = new AhUser();
+	//		return user;
+	//	}
+	//
+	//	private static String getRandomString(){
+	//		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+	//		StringBuilder sb = new StringBuilder();
+	//		Random random = new Random();
+	//		for (int i = 0; i < random.nextInt(25); i++) {
+	//			char c = chars[random.nextInt(chars.length)];
+	//			sb.append(c);
+	//		}
+	//		String output = sb.toString();
+	//		return output;
+	//	}
+	//
+	//	private static int getRandomInt(){
+	//		Random random = new Random();
+	//		return random.nextInt(40);
+	//	}
 }

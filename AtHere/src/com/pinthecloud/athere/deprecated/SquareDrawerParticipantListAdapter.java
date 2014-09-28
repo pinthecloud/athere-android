@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.adapter;
+package com.pinthecloud.athere.deprecated;
 
 import android.content.Context;
 import android.content.Intent;

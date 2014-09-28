@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.fragment;
+package com.pinthecloud.athere.deprecated;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,9 +41,9 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
-import com.pinthecloud.athere.dialog.NumberPickerDialog;
+import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhPairEntityCallback;
@@ -53,10 +53,8 @@ import com.pinthecloud.athere.model.Square;
 import com.pinthecloud.athere.util.AsyncChainer;
 import com.pinthecloud.athere.util.AsyncChainer.Chainable;
 import com.pinthecloud.athere.util.BitmapUtil;
-import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.FileUtil;
 import com.pinthecloud.athere.util.WindowUtil;
-import com.pinthecloud.athere.view.CameraPreview;
 
 public class SquareProfileFragment extends AhFragment{
 
@@ -84,7 +82,7 @@ public class SquareProfileFragment extends AhFragment{
 	private EditText companyNumberEditText;
 	private Bitmap pictureBitmap;
 	private Bitmap smallPictureBitmap;
-	
+
 
 	private ShutterCallback mShutterCallback = new ShutterCallback() {
 
@@ -339,25 +337,25 @@ public class SquareProfileFragment extends AhFragment{
 					profilePictureView.setEnabled(false);
 					nickNameEditText.setEnabled(false);
 					companyNumberEditText.setEnabled(false);
-					
-					
+
+
 					new AlertDialog.Builder(context)
-							.setTitle("Enter Square")
-							.setMessage("Enter Preview?")
-							.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int which) {
-									enterSquare(true);
-								}
-							})
-							.setNegativeButton("No", new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int which) {
-									enterSquare(false);
-								}
-							})
-							.setIcon(android.R.drawable.ic_dialog_alert)
-							.show();	
+					.setTitle("Enter Square")
+					.setMessage("Enter Preview?")
+					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							enterSquare(true);
+						}
+					})
+					.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							enterSquare(false);
+						}
+					})
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.show();	
 					// Enter Square
-//					enterSquare(false);
+					//					enterSquare(false);
 				}
 			}
 		});
@@ -560,8 +558,7 @@ public class SquareProfileFragment extends AhFragment{
 				"CheckMemberNumber",
 				"" + companyNumber);
 
-		userHelper.setMyNickName(nickName)
-		.setMyCompanyNum(companyNumber);
+		userHelper.setMyNickName(nickName);
 		squareHelper.setMySquareId(square.getId());
 
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
@@ -609,35 +606,35 @@ public class SquareProfileFragment extends AhFragment{
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-//						progressBar.setVisibility(View.GONE);
-//
-//						// Save this setting and go to next activity
-//						Time time = new Time();
-//						time.setToNow();
-//
-//						userHelper.setMyChatEnable(true);
-//						PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
-//						squareHelper.setMySquareName(square.getName())
-//						.setMySquareResetTime(square.getResetTime())
-//						.setLoggedInSquare(true)
-//						.setSquareExitTab(SquareTabFragment.CHAT_TAB)
-//						.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
-//
-//						// Save pictures to internal storage
-//						String userId = userHelper.getMyUserInfo().getId();
-//						FileUtil.saveBitmapToInternalStorage(app, userId, pictureBitmap);
-//						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
-//
-//						// Set and move to next activity after clear previous activity
-//						Intent intent = new Intent(context, SquareActivity.class);
-//						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//						startActivity(intent);
-						
+						//						progressBar.setVisibility(View.GONE);
+						//
+						//						// Save this setting and go to next activity
+						//						Time time = new Time();
+						//						time.setToNow();
+						//
+						//						userHelper.setMyChatEnable(true);
+						//						PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+						//						squareHelper.setMySquareName(square.getName())
+						//						.setMySquareResetTime(square.getResetTime())
+						//						.setLoggedInSquare(true)
+						//						.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+						//						.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
+						//
+						//						// Save pictures to internal storage
+						//						String userId = userHelper.getMyUserInfo().getId();
+						//						FileUtil.saveBitmapToInternalStorage(app, userId, pictureBitmap);
+						//						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallPictureBitmap);
+						//
+						//						// Set and move to next activity after clear previous activity
+						//						Intent intent = new Intent(context, SquareActivity.class);
+						//						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+						//						startActivity(intent);
+
 						finishEnterSquare();
 					}
 				});
 			}
-			
+
 			private void finishEnterSquare() {
 				progressBar.setVisibility(View.GONE);
 
@@ -645,13 +642,13 @@ public class SquareProfileFragment extends AhFragment{
 				Time time = new Time();
 				time.setToNow();
 
-				userHelper.setMyChatEnable(true);
-				PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.REVIEW_DIALOG_KEY, true);
+				userHelper.setChatEnable(true);
 				squareHelper.setMySquareName(square.getName())
 				.setMySquareResetTime(square.getResetTime())
 				.setLoggedInSquare(true)
 				.setSquareExitTab(SquareTabFragment.CHAT_TAB)
-				.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"));
+				.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"))
+				.setReview(true);
 
 				// Save pictures to internal storage
 				String userId = userHelper.getMyUserInfo().getId();

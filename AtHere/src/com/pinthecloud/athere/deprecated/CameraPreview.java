@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.view;
+package com.pinthecloud.athere.deprecated;
 
 import java.io.IOException;
 
@@ -8,7 +8,6 @@ import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.pinthecloud.athere.util.CameraUtil;
 import com.pinthecloud.athere.util.WindowUtil;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {

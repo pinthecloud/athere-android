@@ -1,11 +1,11 @@
-package com.pinthecloud.athere.activity;
+package com.pinthecloud.athere.deprecated;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.SquareProfileFragment;
+import com.pinthecloud.athere.activity.AhActivity;
 
 
 public class SquareProfileActivity extends AhActivity {

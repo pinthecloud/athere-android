@@ -29,7 +29,7 @@
     <string name="chat">채팅</string>
     <string name="chupa">추파</string>
     <string name="player">참가팀</string>
-    <string name="code">매장 코드</string>
+    <string name="entry_code">입장 코드</string>
     <string name="blank">없음</string>
     <string name="fail">취소</string>
     <string name="age">살</string>
@@ -44,7 +44,7 @@
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>
     <string name="max_nick_name_message">닉네임이 열 글자를 넘을 수 없어요.</string>
     <string name="bad_nick_name_message">완성되지 않거나 특수한 문자는 닉네임으로 적절하지 않아요.</string>
-    <string name="bad_square_code_message">잘못된 가게 코드예요. 다시 입력해주세요.</string>
+    <string name="bad_entry_code_message">잘못된 입장 코드예요.</string>
     <string name="exit_square_message">님이 그라운드를 나갔어요.</string>
     <string name="enter_square_message">님이 그라운드에 들어왔어요.</string>
     <string name="behave_well_warning">욕설,비방,불쾌한 메세지를 보낼 시\n법적 책임을 물으실 수 있어요.</string>
@@ -60,7 +60,6 @@
     <string name="no_today_message">나중에 할게요</string>
     <string name="location_consent_message">추파는 위치정보를 사용해요. 괜찮아요?</string>
     <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
-    <string name="far_message">이 그라운드는 들어가기에 너무 멀리있어요.</string>
     <string name="no_facebook_upload_message">저희는 어떤 것도 페이스북에 올리지 않아요.</string>
     <string name="birthday_access_message">나이 계산을 위해 생일이 필요해요.</string>
 

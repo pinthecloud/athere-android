@@ -17,7 +17,6 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.helper.VersionHelper;
@@ -151,6 +150,48 @@ public class AhApplication extends Application{
 	}
 
 
+	public void removeSquarePreference(AhFragment frag){
+		userDBHelper.deleteAllUsers();
+		messageDBHelper.deleteAllMessages();
+		messageDBHelper.clearAllChupaBadgeNum();
+		FileUtil.clearAllFiles(app);
+		blobStorageHelper.clearAllCache();
+
+		String id = userHelper.getMyUserInfo().getId();
+		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);
+		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+AhGlobalVariable.SMALL, null);
+
+		userHelper.userLogout();
+		squareHelper.removeMySquareInfo();
+	}
+
+
+
+	/*
+	 * Check nick name EditText
+	 */
+	public String checkNickName(String nickName){
+		// Set regular expression for checking nick name
+		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,10}$";
+		String message = "";
+
+		/*
+		 * Check logic whether this nick name is valid or not
+		 * If user doesn't type in proper nick name,
+		 * can't go to next activity
+		 */
+		// Check length of nick name
+		if(nickName.length() < 2){
+			message = getResources().getString(R.string.min_nick_name_message);
+		} else if(!nickName.matches(nickNameRegx)){
+			message = getResources().getString(R.string.bad_nick_name_message);
+		} else if(nickName.length() > 10){
+			message = getResources().getString(R.string.max_nick_name_message);
+		}
+		return message;
+	}
+
+
 	//	public void forcedLogoutAsync (final AhFragment frag, final AhEntityCallback<Boolean> callback) {
 	//		if (!isOnline()) {
 	//			ExceptionManager.fireException(new AhException(frag, "forcedLogoutAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -204,50 +245,5 @@ public class AhApplication extends Application{
 	//				});
 	//			}
 	//		});
-	//
 	//	}
-
-
-	public void removeSquarePreference(AhFragment frag){
-		userDBHelper.deleteAllUsers();
-		messageDBHelper.deleteAllMessages();
-		messageDBHelper.clearAllChupaBadgeNum();
-		FileUtil.clearAllFiles(app);
-		blobStorageHelper.clearAllCache();
-
-		String id = userHelper.getMyUserInfo().getId();
-		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id, null);
-		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, id+AhGlobalVariable.SMALL, null);
-
-		PreferenceHelper.getInstance().removePref(AhGlobalVariable.REVIEW_DIALOG_KEY);
-		
-		userHelper.userLogout();
-		squareHelper.removeMySquareInfo();
-	}
-	
-
-
-	/*
-	 * Check nick name EditText
-	 */
-	public String checkNickName(String nickName){
-		// Set regular expression for checking nick name
-		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,10}$";
-		String message = "";
-
-		/*
-		 * Check logic whether this nick name is valid or not
-		 * If user doesn't type in proper nick name,
-		 * can't go to next activity
-		 */
-		// Check length of nick name
-		if(nickName.length() < 2){
-			message = getResources().getString(R.string.min_nick_name_message);
-		} else if(!nickName.matches(nickNameRegx)){
-			message = getResources().getString(R.string.bad_nick_name_message);
-		} else if(nickName.length() > 10){
-			message = getResources().getString(R.string.max_nick_name_message);
-		}
-		return message;
-	}
 }
