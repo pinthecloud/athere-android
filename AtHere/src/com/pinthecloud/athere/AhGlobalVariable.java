@@ -26,9 +26,7 @@ public class AhGlobalVariable{
 	public static final String DIALOG_KEY = "DIALOG_KEY";
 	public static final String SQUARE_KEY = "SQUARE_KEY";
 	public static final String USER_KEY = "USER_KEY";
-	public static final String REVIEW_DIALOG_KEY = "REVIEW_DIALOG_KEY";
-	public static final String NUMBER_PICKER_VALUE_KEY = "NUMBER_PICKER_VALUE_KEY";
-	public static final String CODE_VALUE_KEY = "CODE_VALUE_KEY";
 	public static final String SUDO_KEY = "SUDO_KEY";
-	//	public static final String FACEBOOK_ID = "FACEBOOK_ID";
+	
+	public static final String NUMBER_PICKER_VALUE_KEY = "NUMBER_PICKER_VALUE_KEY";
 }

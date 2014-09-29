@@ -30,7 +30,7 @@
     <string name="chat">Chat</string>
     <string name="chupa">Chupa</string>
     <string name="player">Team</string>
-    <string name="code">Code</string>
+    <string name="entry_code">Entry Code</string>
     <string name="blank">Blank</string>
     <string name="fail">Fail</string>
     <string name="age">age</string>
@@ -42,15 +42,16 @@
     <string name="kilometer">km</string>
     <string name="guide">guide</string>
     <string name="notification">Notification</string>
+    <string name="more">More</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
     <string name="max_nick_name_message">Please type in less then 10 letters.</string>
     <string name="bad_nick_name_message">Special letter is not good as nick name.</string>
-    <string name="bad_square_code_message">Square code is wrong. Please enter again.</string>
+    <string name="bad_entry_code_message">This is wrong entry code.</string>
     <string name="exit_square_message">leaves ground.</string>
     <string name="enter_square_message">enters ground.</string>
-    <string name="behave_well_warning">You have a legal responsibility for\nany kinds of insult, abuse words.</string>
+    <string name="behave_well_warning">Have good chatting.</string>
     <string name="exit_square_consent_message">Every chat and chupa will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
     <string name="forced_logout_title">You have been logout.</string>
@@ -63,7 +64,6 @@
     <string name="no_today_message">I will do</string>
     <string name="location_consent_message">Chupa use location information. Do you agree?</string>
     <string name="location_setting_message">Please enable location access.</string>
-    <string name="far_message">This ground is too far to enter.</string>
     <string name="no_facebook_upload_message">We doesn\'t upload any contents on facebook.</string>
     <string name="birthday_access_message">We need birthday for calculating age.</string>
     

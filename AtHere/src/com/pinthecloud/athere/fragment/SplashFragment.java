@@ -101,26 +101,19 @@ public class SplashFragment extends AhFragment {
 		/*
 		 * Start Chupa Application
 		 */
-		// Erase Later (Exception for hongkun)
-		//		if (AhGlobalVariable.DEBUG_MODE) {
-		//			isHongkunTest();
-		//			return view;
-		//		}
+		//		isHongkunTest();
 		runChupa();
 		return view;
 	}
 
 
-	//	private boolean isHongkunTest() {
-	//		
-	//		//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-	//		//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-	//		//		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
-	//		//		String myGal3 = "";
-	//		//		String httpAgent = System.getProperty("http.agent");
-	//		//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-	//		//				|| myGal3.equals(httpAgent))))	// Galaxy 3
-	//		//			return false;
+	//	private void hongkunTest() {
+	//
+	//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+	//		String httpAgent = System.getProperty("http.agent");
+	//		if (!myGal2.equals(httpAgent)){
+	//			return;
+	//		}
 	//
 	//		new AlertDialog.Builder(context)
 	//		.setTitle("Routing Dialog")
@@ -135,7 +128,6 @@ public class SplashFragment extends AhFragment {
 	//							app);
 	//					app.setmClient(mClient);
 	//				} catch (MalformedURLException e) {
-	//					Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
 	//				}
 	//				runChupa();
 	//			}
@@ -147,7 +139,6 @@ public class SplashFragment extends AhFragment {
 	//		})
 	//		.setIcon(android.R.drawable.ic_dialog_alert)
 	//		.show();
-	//		return true;
 	//	}
 
 

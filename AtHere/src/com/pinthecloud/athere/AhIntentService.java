@@ -86,7 +86,6 @@ public class AhIntentService extends IntentService {
 		}
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
-		Log.e("ERROR", type.toString());
 		new AhThread(new Runnable() {
 
 			public void run() {
@@ -120,8 +119,7 @@ public class AhIntentService extends IntentService {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
 
-		boolean isChatEnable = userHelper.getMyUserInfo().isChatEnable();
-		
+		boolean isChatEnable = userHelper.isChatEnable();
 		if (isRunning(app)) {
 			// Is the Chupa App Running
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -176,7 +174,7 @@ public class AhIntentService extends IntentService {
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
 			userHelper.triggerUserEvent(user);
-		} else if(userHelper.getMyUserInfo().isChatEnable()){
+		} else if(userHelper.isChatEnable()){
 			alertNotification(AhMessage.TYPE.ENTER_SQUARE);
 		}
 	}
@@ -214,18 +212,18 @@ public class AhIntentService extends IntentService {
 
 
 	private void FORCED_LOGOUT() {
-//		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
-//
-//			@Override
-//			public void onCompleted(Boolean entity) {
-//				if (isRunning(app)){
-//					String currentActivityName = getCurrentRunningActivityName(app);
-//					messageHelper.triggerMessageEvent(currentActivityName, message);
-//				} else {
-//					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
-//				}
-//			}
-//		});
+		//		AhApplication.getInstance().forcedLogoutAsync(null, new AhEntityCallback<Boolean>() {
+		//
+		//			@Override
+		//			public void onCompleted(Boolean entity) {
+		//				if (isRunning(app)){
+		//					String currentActivityName = getCurrentRunningActivityName(app);
+		//					messageHelper.triggerMessageEvent(currentActivityName, message);
+		//				} else {
+		//					alertNotification(AhMessage.TYPE.FORCED_LOGOUT);
+		//				}
+		//			}
+		//		});
 		app.removeSquarePreference(null);
 		if (isRunning(app)){
 			String currentActivityName = getCurrentRunningActivityName(app);
@@ -419,7 +417,7 @@ public class AhIntentService extends IntentService {
 
 		AhUser _user = null;
 		JsonObject jo = new JsonParser().parse(jsonStr).getAsJsonObject();
-		
+
 		_user = JsonConverter.convertToUser(jo);
 		return _user;
 	}

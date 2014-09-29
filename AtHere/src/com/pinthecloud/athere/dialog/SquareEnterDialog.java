@@ -7,23 +7,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.Square;
 
-public class SquareCodeDialog extends AhDialogFragment{
+public class SquareEnterDialog extends AhDialogFragment{
+
+	public static final String SHOW_CODE = "SHOW_CODE"; 
+	private boolean showCode;
+
+	private TextView warningText;
+	private EditText codeText;
+	private ImageButton enterButton;
+	private Button previewButton;
 
 	private AhDialogCallback ahDialogCallback;
 	private Square square;
-	private EditText codeText;
-	private ImageButton enterButton;
 
 
-	public SquareCodeDialog(Square square, AhDialogCallback ahDialogCallback) {
+	public SquareEnterDialog(Square square, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
 		this.square = square;
@@ -34,13 +41,27 @@ public class SquareCodeDialog extends AhDialogFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		getDialog().setTitle(square.getName());
-		View view = inflater.inflate(R.layout.dialog_square_code, container, false);
+		View view = inflater.inflate(R.layout.dialog_square_enter, container, false);
+		showCode = getArguments().getBoolean(SHOW_CODE);
 
+		
 		/*
 		 * Find UI component
 		 */
-		codeText = (EditText) view.findViewById(R.id.square_code_dialog_code_edit_text);
-		enterButton = (ImageButton) view.findViewById(R.id.square_code_dialog_enter_button);
+		warningText = (TextView) view.findViewById(R.id.square_enter_dialog_code_warning_text);
+		codeText = (EditText) view.findViewById(R.id.square_enter_dialog_code_text);
+		enterButton = (ImageButton) view.findViewById(R.id.square_enter_dialog_enter_button);
+		previewButton = (Button) view.findViewById(R.id.square_enter_dialog_preview_button);
+
+
+		/*
+		 * Set UI
+		 */
+		if(!showCode){
+			warningText.setVisibility(View.GONE);
+			codeText.setVisibility(View.GONE);
+			enterButton.setVisibility(View.GONE);
+		}
 
 
 		/*
@@ -66,21 +87,34 @@ public class SquareCodeDialog extends AhDialogFragment{
 			}
 		});
 
+
 		/*
-		 * Set enter button event
+		 * Set button event
 		 */
+		enterButton.setEnabled(false);
 		enterButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				String code = codeText.getText().toString().trim();
-				Bundle bundle = new Bundle();
-				bundle.putString(AhGlobalVariable.CODE_VALUE_KEY, code);
-				ahDialogCallback.doPositiveThing(bundle);
+				if(code.equals(square.getCode())){
+					ahDialogCallback.doPositiveThing(null);
+					dismiss();
+				}else{
+					codeText.setText(code);
+					codeText.setSelection(code.length());
+					warningText.setText(getResources().getString(R.string.bad_entry_code_message));
+				}
+			}
+		});
+		previewButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ahDialogCallback.doNegativeThing(null);
 				dismiss();
 			}
 		});
-		enterButton.setEnabled(false);
 
 		return view;
 	}

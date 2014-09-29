@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.fragment;
+package com.pinthecloud.athere.deprecated;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -25,9 +25,9 @@ import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.activity.ProfileSettingsActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
-import com.pinthecloud.athere.adapter.SquareDrawerParticipantListAdapter;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.ProfileDialog;
+import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -110,7 +110,7 @@ public class SquareDrawerFragment extends AhFragment {
 			@Override
 			public void onClick(View v) {
 				boolean isChecked = chatAlarmButton.isChecked();
-				userHelper.setMyChatEnable(isChecked);
+				userHelper.setChatEnable(isChecked);
 			}
 		});
 		chupaAlarmButton.setOnClickListener(new OnClickListener() {
@@ -218,7 +218,7 @@ public class SquareDrawerFragment extends AhFragment {
 		/*
 		 * Set alarm toggle button
 		 */
-		chatAlarmButton.setChecked(userHelper.getMyUserInfo().isChatEnable());
+		chatAlarmButton.setChecked(userHelper.isChatEnable());
 		chupaAlarmButton.setChecked(user.isChupaEnable());
 
 

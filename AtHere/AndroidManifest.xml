@@ -83,10 +83,9 @@
             android:name=".activity.SquareListActivity"
             android:icon="@drawable/actionbar_logo"
             android:label="@string/square"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppDrawerTheme" />
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SquareProfileActivity"
+            android:name="com.pinthecloud.athere.deprecated.SquareProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen" />
         <activity android:name=".activity.HongkunTestActivity" />

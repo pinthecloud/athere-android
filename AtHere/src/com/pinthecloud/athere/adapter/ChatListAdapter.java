@@ -57,7 +57,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		this.frag = frag;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		this.app = AhApplication.getInstance(); 
+		this.app = AhApplication.getInstance();
 		this.userDBHelper = app.getUserDBHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
@@ -205,7 +205,8 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 								"ViewOthersProfile",
 								"ChatProfile");
 
-						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
+						ProfileDialog profileDialog = new ProfileDialog(frag, user, 
+								new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {

@@ -1,6 +1,5 @@
 package com.pinthecloud.athere.dialog;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
+import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhUser;
@@ -25,9 +25,6 @@ public class ProfileDialog extends AhDialogFragment{
 	private AhApplication app;
 	private AhFragment frag;
 	private AhUser user;
-	private CachedBlobStorageHelper blobStorageHelper;
-	
-	private UserHelper userHelper;
 
 	private ImageView profileImage;
 	private ImageView genderImage;
@@ -36,14 +33,19 @@ public class ProfileDialog extends AhDialogFragment{
 	private TextView companyNumberText;
 	private Button sendChupaButton;
 
+	private SquareHelper squareHelper;
+	private UserHelper userHelper;
+	private CachedBlobStorageHelper blobStorageHelper;
+
 
 	public ProfileDialog(AhFragment frag, AhUser user, AhDialogCallback ahDialogCallback) {
 		super();
 		this.frag = frag;
+		this.user = user;
 		this.ahDialogCallback = ahDialogCallback;
 		this.app = AhApplication.getInstance();
+		this.squareHelper = app.getSquareHelper();
 		this.userHelper = app.getUserHelper();
-		this.user = user;
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		setStyle(STYLE_NO_TITLE, 0);
 	}
@@ -54,7 +56,7 @@ public class ProfileDialog extends AhDialogFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog_profile, container, false);
 
-		
+
 		/*
 		 * Find UI component
 		 */
@@ -69,17 +71,32 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Set UI Component
 		 */
-		Resources resources = getResources();
 		if(user.isMale()){
 			genderImage.setImageResource(R.drawable.profile_gender_m);
-			companyNumberText.setTextColor(resources.getColor(R.color.blue));
+			companyNumberText.setTextColor(getResources().getColor(R.color.blue));
 		}else{
 			genderImage.setImageResource(R.drawable.profile_gender_w);
-			companyNumberText.setTextColor(resources.getColor(R.color.dark_red));
+			companyNumberText.setTextColor(getResources().getColor(R.color.dark_red));
 		}
 		nickNameText.setText(user.getNickName());
 		ageText.setText("" + user.getAge());
 		companyNumberText.setText("" + user.getCompanyNum());
+
+
+		/*
+		 * Set event on chupa button
+		 */
+		sendChupaButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ahDialogCallback.doPositiveThing(null);
+				dismiss();
+			}
+		});
+		if(user.getId().equals(userHelper.getMyUserInfo().getId()) || squareHelper.isPreview()){
+			sendChupaButton.setVisibility(View.GONE);
+		}
 
 
 		/*
@@ -93,22 +110,6 @@ public class ProfileDialog extends AhDialogFragment{
 			}
 		});
 
-
-		/*
-		 * Set eventon button
-		 */
-		sendChupaButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ahDialogCallback.doPositiveThing(null);
-				dismiss();
-			}
-		});
-		if(user.getId().equals(userHelper.getMyUserInfo().getId())){
-			sendChupaButton.setVisibility(View.GONE);
-		}
-
 		return view;
 	}
 
@@ -118,11 +119,6 @@ public class ProfileDialog extends AhDialogFragment{
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
 				user.getId(), R.drawable.dialog_profile_default, profileImage, true);
-		if(user.isMale()){
-			genderImage.setImageResource(R.drawable.profile_gender_m);
-		}else{
-			genderImage.setImageResource(R.drawable.profile_gender_w);
-		}
 	}
 
 

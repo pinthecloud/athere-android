@@ -1,4 +1,4 @@
-package com.pinthecloud.athere.dialog;
+package com.pinthecloud.athere.deprecated;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.NumberPicker;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.dialog.AhDialogFragment;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 
 public class NumberPickerDialog extends AhDialogFragment {

@@ -3,8 +3,11 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,9 @@ import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Chupa;
 
 public class ChupaListFragment extends AhFragment{
+
+	private ActionBarDrawerToggle mDrawerToggle;
+	private DrawerLayout mDrawerLayout;
 
 	private ChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
@@ -45,7 +51,7 @@ public class ChupaListFragment extends AhFragment{
 		/*
 		 * Set square chupa list view
 		 */
-		squareChupaListAdapter = new ChupaListAdapter(context, thisFragment, R.layout.row_chupa_list);
+		squareChupaListAdapter = new ChupaListAdapter(context, thisFragment);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -108,7 +114,7 @@ public class ChupaListFragment extends AhFragment{
 
 			String userId = null;
 			boolean isExit = false;
-			
+
 			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -116,7 +122,7 @@ public class ChupaListFragment extends AhFragment{
 				// the other user is Sender
 				userId = message.getSenderId();
 			}
-			
+
 			chupa.setUserId(userId);
 			AhUser user = userDBHelper.getUser(userId, true);
 			chupa.setUserNickName(user != null ? user.getNickName() : "Unkown");
@@ -135,5 +141,60 @@ public class ChupaListFragment extends AhFragment{
 			chupaList.add(chupa);
 		}
 		return chupaList;
+	}
+
+
+	/**
+	 * Users of this fragment must call this method to set up the navigation
+	 * drawer interactions.
+	 * 
+	 * @param fragmentId
+	 *            The android:id of this fragment in its activity's layout.
+	 * @param drawerLayout
+	 *            The DrawerLayout containing this fragment's UI.
+	 */
+	public void setUp(DrawerLayout drawerLayout) {
+		mDrawerLayout = drawerLayout;
+
+		ActionBar actionBar = activity.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+
+		// ActionBarDrawerToggle ties together the the proper interactions
+		// between the navigation drawer and the action bar app icon.
+		mDrawerToggle = new ActionBarDrawerToggle(activity, /* host Activity */
+				mDrawerLayout, /* DrawerLayout object */
+				R.drawable.indicator_drawer, /* nav drawer image to replace 'Up' caret */
+				R.string.drawer_open, /* "open drawer" description for accessibility */
+				R.string.drawer_close /* "close drawer" description for accessibility */
+				)
+		{
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				if (!isAdded()) {
+					return;
+				}
+				activity.invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+			}
+
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				if (!isAdded()) {
+					return;
+				}
+				activity.invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+		// Defer code dependent on restoration of previous instance state.
+		mDrawerLayout.post(new Runnable() {
+			@Override
+			public void run() {
+				mDrawerToggle.syncState();
+			}
+		});
 	}
 }

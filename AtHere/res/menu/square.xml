@@ -4,7 +4,12 @@
     <item
         android:id="@+id/menu_notification"
         android:icon="@drawable/indicator_notification_drawer"
-        android:title="@string/notification"
-        android:showAsAction="always" />
+        android:showAsAction="ifRoom"
+        android:title="@string/notification"/>
+    <item
+        android:id="@+id/menu_more"
+        android:icon="@drawable/actionbar_setting"
+        android:showAsAction="ifRoom"
+        android:title="@string/more"/>
 
 </menu>

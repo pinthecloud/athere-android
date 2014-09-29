@@ -37,14 +37,13 @@ public class UserHelper {
 	private final String NICK_NAME_KEY = "NICK_NAME_KEY";
 	private final String IS_MALE_KEY = "IS_MALE_KEY";
 	private final String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";
-	private final String COMPANY_NUMBER_KEY = "COMPANY_NUMBER_KEY";
 	private final String IS_CHAT_ENABLE_KEY = "IS_CHAT_ENABLE_KEY";
 	private final String IS_CHUPA_ENABLE_KEY = "IS_CHUPA_ENABLE_KEY";
 	private final String IS_LOGGED_IN_USER_KEY = "IS_LOGGED_IN_USER_KEY";
-	
+
 	private final String ENTER_SQUARE = "enter_square";
 	private final String EXIT_SQUARE = "exit_square";
-	
+
 	private AhApplication app;
 	private PreferenceHelper pref;
 
@@ -52,7 +51,7 @@ public class UserHelper {
 	private MobileServiceTable<SquareUser> squareUserTable;
 	private MobileServiceClient mClient;
 
-	
+
 	public UserHelper() {
 		super();
 		this.app = AhApplication.getInstance();
@@ -61,7 +60,7 @@ public class UserHelper {
 		this.userTable = mClient.getTable(AhUser.class);
 		this.squareUserTable = mClient.getTable(SquareUser.class);
 	}
-	
+
 	public boolean isLoggedInUser() {
 		return pref.getBoolean(IS_LOGGED_IN_USER_KEY);
 	}
@@ -69,11 +68,12 @@ public class UserHelper {
 		pref.putBoolean(IS_LOGGED_IN_USER_KEY, loggedIn);
 		return this;
 	}
-	public boolean hasRegistrationId() {
-		return !pref.getString(REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING);
+	public boolean isChatEnable() {
+		return pref.getBoolean(IS_CHAT_ENABLE_KEY);
 	}
-	public boolean hasMobileId() {
-		return !pref.getString(MOBILE_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING);
+	public UserHelper setChatEnable(boolean isChatEnable) {
+		pref.putBoolean(IS_CHAT_ENABLE_KEY, isChatEnable);
+		return this;
 	}
 	public UserHelper setMyAhId(String ahId) {
 		pref.putString(AH_ID_KEY, ahId);
@@ -83,9 +83,15 @@ public class UserHelper {
 		pref.putString(USER_ID_KEY, id);
 		return this;
 	}
+	public boolean hasMobileId() {
+		return !pref.getString(MOBILE_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING);
+	}
 	public UserHelper setMyMobileId(String id) {
 		pref.putString(MOBILE_ID_KEY, id);
 		return this;
+	}
+	public boolean hasRegistrationId() {
+		return !pref.getString(REGISTRATION_ID_KEY).equals(PreferenceHelper.DEFAULT_STRING);
 	}
 	public UserHelper setMyRegistrationId(String id) {
 		pref.putString(REGISTRATION_ID_KEY, id);
@@ -106,35 +112,6 @@ public class UserHelper {
 		pref.putBoolean(IS_CHUPA_ENABLE_KEY, isChupaEnable);
 		return this;
 	}
-	public UserHelper setMyCompanyNum(int num) {
-		pref.putInt(COMPANY_NUMBER_KEY, num);
-		return this;
-	}
-	public UserHelper setMyChatEnable(boolean isChatEnable) {
-		pref.putBoolean(IS_CHAT_ENABLE_KEY, isChatEnable);
-		return this;
-	}
-	
-//	public void checkNickName(final AhFragment frag, String nickName, final AhEntityCallback<Boolean> callback) {
-//		if (!app.isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return;
-//		}
-//
-//		userTable.insert(user, new TableOperationCallback<AhUser>() {
-//
-//			@Override
-//			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
-//				if (exception == null) {
-//					callback.onCompleted(entity);
-//					AsyncChainer.notifyNext(frag);
-//				} else {
-//					ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
-//				}
-//			}
-//		});
-//	}
-
 	
 	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback) throws AhException {
 		if (!app.isOnline()) {
@@ -160,13 +137,13 @@ public class UserHelper {
 			}
 		});
 	}
-	
+
 	public void addSquareUserAsync(final AhFragment frag, SquareUser user, final AhEntityCallback<SquareUser> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "addSquareUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
 		}
-		
+
 		squareUserTable.insert(user, new TableOperationCallback<SquareUser>() {
 
 			@Override
@@ -182,26 +159,26 @@ public class UserHelper {
 		});
 	}
 
-//	public void addIdUserAsync(final AhFragment frag, AhIdUser user, final AhEntityCallback<AhIdUser> callback) {
-//		if (!app.isOnline()) {
-//			ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.INTERNET_NOT_CONNECTED));
-//			return;
-//		}
-//
-//		idUserTable.insert(user, new TableOperationCallback<AhIdUser>() {
-//
-//			@Override
-//			public void onCompleted(AhIdUser _user, Exception exception,
-//					ServiceFilterResponse response) {
-//				if (exception == null) {
-//					callback.onCompleted(_user);
-//					AsyncChainer.notifyNext(frag);
-//				} else {
-//					ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.SERVER_ERROR));
-//				}
-//			}
-//		});
-//	}
+	//	public void addIdUserAsync(final AhFragment frag, AhIdUser user, final AhEntityCallback<AhIdUser> callback) {
+	//		if (!app.isOnline()) {
+	//			ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.INTERNET_NOT_CONNECTED));
+	//			return;
+	//		}
+	//
+	//		idUserTable.insert(user, new TableOperationCallback<AhIdUser>() {
+	//
+	//			@Override
+	//			public void onCompleted(AhIdUser _user, Exception exception,
+	//					ServiceFilterResponse response) {
+	//				if (exception == null) {
+	//					callback.onCompleted(_user);
+	//					AsyncChainer.notifyNext(frag);
+	//				} else {
+	//					ExceptionManager.fireException(new AhException(frag, "addAhIdUser", AhException.TYPE.SERVER_ERROR));
+	//				}
+	//			}
+	//		});
+	//	}
 
 	public void enterSquareAsync(final AhFragment frag, AhUser user, String squareId, boolean isPreview, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
 		if (!app.isOnline()) {
@@ -344,8 +321,24 @@ public class UserHelper {
 		this.updateUserAsync(frag, user, callback);
 	}
 
+	public AhUser getAdminUser(String id) {
+		AhUser user = new AhUser();
+		user.setId(id);
+		user.setAhId(AhGlobalVariable.APP_NAME);
+		user.setMobileId("");
+		user.setRegistrationId("");
+		user.setMale(true);
+		user.setBirthYear(1900);
+		user.setNickName(app.getResources().getString(R.string.admin));
+		user.setChupaEnable(true);
+		return user;
+	}
+	
 	public AhUser getMyUserInfo() {
 		String id = pref.getString(USER_ID_KEY);
+		if(id.equals(PreferenceHelper.DEFAULT_STRING)){
+			id = null;
+		}
 		String ahId = pref.getString(AH_ID_KEY);
 		String mobileId = pref.getString(MOBILE_ID_KEY);
 		String registrationId = pref.getString(REGISTRATION_ID_KEY);
@@ -353,9 +346,7 @@ public class UserHelper {
 		int birthYear = pref.getInt(BIRTH_YEAR_KEY);
 		String nickName = pref.getString(NICK_NAME_KEY);
 		boolean isChupaEnable = pref.getBoolean(IS_CHUPA_ENABLE_KEY);
-		int companyNum = pref.getInt(COMPANY_NUMBER_KEY);
-		boolean isChatEnable = pref.getBoolean(IS_CHAT_ENABLE_KEY);
-		
+
 		AhUser user = new AhUser();
 		user.setId(id);
 		user.setAhId(ahId);
@@ -365,57 +356,12 @@ public class UserHelper {
 		user.setBirthYear(birthYear);
 		user.setNickName(nickName);
 		user.setChupaEnable(isChupaEnable);
-		user.setCompanyNum(companyNum);
-		user.setChatEnable(isChatEnable);
-		
 		return user;
-	}
-	
-//	public void setMyUserInfo(AhUser user) {
-//		pref.putString(USER_ID_KEY, user.getId());
-//		pref.putString(AH_ID_KEY, user.getAhId());
-//		pref.putString(MOBILE_ID_KEY, user.getMobileId());
-//		pref.putString(REGISTRATION_ID_KEY, user.getRegistrationId());
-//		pref.putBoolean(IS_MALE_KEY, user.isMale());
-//		pref.putInt(BIRTH_YEAR_KEY, user.getBirthYear());
-//		pref.putString(NICK_NAME_KEY, user.getNickName());
-//		pref.putBoolean(IS_CHUPA_ENABLE_KEY, user.isChupaEnable());
-//		pref.putInt(COMPANY_NUMBER_KEY, user.getCompanyNum());
-//	}
-	
-//	public void removeMyUserInfo() {
-//		pref.removePref(USER_ID_KEY);
-//		pref.removePref(AH_ID_KEY);
-//		pref.removePref(MOBILE_ID_KEY);
-//		pref.removePref(REGISTRATION_ID_KEY);
-//		pref.removePref(IS_MALE_KEY);
-//		pref.removePref(BIRTH_YEAR_KEY);
-//		pref.removePref(NICK_NAME_KEY);
-//		pref.removePref(IS_CHUPA_ENABLE_KEY);
-//		pref.removePref(COMPANY_NUMBER_KEY);
-//		pref.removePref(IS_CHAT_ENABLE_KEY);
-//		pref.removePref(IS_LOGGED_IN_USER_KEY);
-//	}
-	
-	public void userLogout() {
-		pref.removePref(COMPANY_NUMBER_KEY);
-//		pref.removePref(USER_ID_KEY);
-		pref.removePref(IS_CHAT_ENABLE_KEY);
-		pref.removePref(IS_CHUPA_ENABLE_KEY);
 	}
 
-	public AhUser getAdminUser(String id) {
-		AhUser user = new AhUser();
-		user.setId(id);
-		user.setAhId(AhGlobalVariable.APP_NAME);
-		user.setMobileId("");
-		user.setMale(true);
-		user.setBirthYear(1985);
-		user.setProfilePic("NOT_IN_USE");
-		user.setNickName(app.getResources().getString(R.string.admin));
-		user.setChupaEnable(false);
-		user.setCompanyNum(0);
-		return user;
+	public void userLogout() {
+		pref.removePref(IS_CHAT_ENABLE_KEY);
+		pref.removePref(IS_CHUPA_ENABLE_KEY);
 	}
 
 	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {

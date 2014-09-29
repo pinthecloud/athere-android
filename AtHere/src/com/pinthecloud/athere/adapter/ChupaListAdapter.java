@@ -20,15 +20,13 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 
 	private Context context;
 	private AhFragment fragment;
-	private int layoutId;
 	private CachedBlobStorageHelper blobStorageHelper;
 //	private UserDBHelper userDBHelper;
 
-	public ChupaListAdapter(Context context, AhFragment frag, int layoutId) {
-		super(context, layoutId);
+	public ChupaListAdapter(Context context, AhFragment frag) {
+		super(context, 0);
 		this.context = context;
 		this.fragment = frag;
-		this.layoutId = layoutId;
 
 		AhApplication app = AhApplication.getInstance();
 		this.blobStorageHelper = app.getBlobStorageHelper();
@@ -41,7 +39,7 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) 
 					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(this.layoutId, parent, false);
+			view = inflater.inflate(R.layout.row_chupa_list, parent, false);
 		}
 
 		Chupa chupa = getItem(position);
