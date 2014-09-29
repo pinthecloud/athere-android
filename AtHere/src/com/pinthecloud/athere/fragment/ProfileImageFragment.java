@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ public class ProfileImageFragment extends AhFragment{
 
 	private AhUser user;
 	private ImageView profileImage; 
+	private PhotoViewAttacher mAttacher;
 
 
 	@Override
@@ -42,6 +44,7 @@ public class ProfileImageFragment extends AhFragment{
 		 * Set UI component
 		 */
 		profileImage = (ImageView) view.findViewById(R.id.profile_image_frag_view);
+		mAttacher = new PhotoViewAttacher(profileImage);
 		return view;
 	}
 
@@ -51,6 +54,7 @@ public class ProfileImageFragment extends AhFragment{
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
 				user.getId(), 0, profileImage, true);
+		mAttacher.update();
 	}
 
 

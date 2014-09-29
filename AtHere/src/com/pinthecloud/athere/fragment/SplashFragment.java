@@ -1,6 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -17,7 +16,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.BasicProfileActivity;
+import com.pinthecloud.athere.activity.GuideActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
@@ -64,7 +63,7 @@ public class SplashFragment extends AhFragment {
 			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
 			userHelper.setMyMobileId(androidId);
 		}
-		
+
 
 		/*
 		 * If time is up, remove local preferences.
@@ -102,26 +101,19 @@ public class SplashFragment extends AhFragment {
 		/*
 		 * Start Chupa Application
 		 */
-		// Erase Later (Exception for hongkun)
-		//		if (AhGlobalVariable.DEBUG_MODE) {
-		//			isHongkunTest();
-		//			return view;
-		//		}
+		//		isHongkunTest();
 		runChupa();
 		return view;
 	}
 
 
-	//	private boolean isHongkunTest() {
-	//		
-	//		//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
-	//		//		//		String note = "Dalvik/1.6.0 (Linux; U; Android 4.4.2; SHV-E250S Build/KOT49H)";
-	//		//		//		String myGal3 = "Dalvik/1.6.0 (Linux; U; Android 4.3; SHW-M440S Build/JSS15J)";
-	//		//		String myGal3 = "";
-	//		//		String httpAgent = System.getProperty("http.agent");
-	//		//		if (!((myGal2.equals(httpAgent)			// hongkunyoo Galaxy 2 
-	//		//				|| myGal3.equals(httpAgent))))	// Galaxy 3
-	//		//			return false;
+	//	private void hongkunTest() {
+	//
+	//		String myGal2 = "Dalvik/1.6.0 (Linux; U; Android 4.0.4; SHW-M250K Build/IMM76D)";
+	//		String httpAgent = System.getProperty("http.agent");
+	//		if (!myGal2.equals(httpAgent)){
+	//			return;
+	//		}
 	//
 	//		new AlertDialog.Builder(context)
 	//		.setTitle("Routing Dialog")
@@ -136,7 +128,6 @@ public class SplashFragment extends AhFragment {
 	//							app);
 	//					app.setmClient(mClient);
 	//				} catch (MalformedURLException e) {
-	//					Log.d(AhGlobalVariable.LOG_TAG, "AhApplication onCreate : " + e.getMessage());
 	//				}
 	//				runChupa();
 	//			}
@@ -148,7 +139,6 @@ public class SplashFragment extends AhFragment {
 	//		})
 	//		.setIcon(android.R.drawable.ic_dialog_alert)
 	//		.show();
-	//		return true;
 	//	}
 
 
@@ -189,6 +179,7 @@ public class SplashFragment extends AhFragment {
 						} catch (NameNotFoundException e) {
 							clientVer = 0.11;
 						}
+
 						if (serverVer.getVersion() > clientVer) {
 							String message = getResources().getString(R.string.update_app_message);
 							AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
@@ -221,17 +212,13 @@ public class SplashFragment extends AhFragment {
 	/*
 	 * Move to next activity by user status
 	 */
-	@SuppressLint("NewApi")
 	public void goToNextActivity() {
-		if(!activity.isDestroyed()){
-			boolean isLoggedInUser = userHelper.isLoggedInUser();
-			boolean isLooggedInSquare = squareHelper.isLoggedInSquare();
-
+		if(thisFragment.isAdded()){
 			Intent intent = new Intent();
-			if (!isLoggedInUser){
+			if (!userHelper.isLoggedInUser()){
 				// New User
-				intent.setClass(context, BasicProfileActivity.class);
-			} else if(!isLooggedInSquare){
+				intent.setClass(context, GuideActivity.class);
+			} else if(!squareHelper.isLoggedInSquare()){
 				// Already logged in
 				intent.setClass(context, SquareListActivity.class);
 			} else{

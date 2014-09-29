@@ -18,18 +18,13 @@ import com.pinthecloud.athere.util.AsyncChainer;
 
 public class VersionHelper {
 
-	private AhApplication app;
-
-	/**
-	 * Model tables
-	 */
-	private MobileServiceTable<AppVersion> appVersionTable;
-
-
 	public enum TYPE {
 		MANDATORY,
 		OPTIONAL
 	}
+	
+	private AhApplication app;
+	private MobileServiceTable<AppVersion> appVersionTable;
 
 
 	public VersionHelper() {

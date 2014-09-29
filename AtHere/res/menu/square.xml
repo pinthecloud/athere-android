@@ -2,9 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/menu_square_drawer"
-        android:icon="@drawable/sidebar"
-        android:title="@string/drawer"
-        android:showAsAction="always" />
+        android:id="@+id/menu_notification"
+        android:icon="@drawable/indicator_notification_drawer"
+        android:showAsAction="ifRoom"
+        android:title="@string/notification"/>
+    <item
+        android:id="@+id/menu_more"
+        android:icon="@drawable/actionbar_setting"
+        android:showAsAction="ifRoom"
+        android:title="@string/more"/>
 
 </menu>

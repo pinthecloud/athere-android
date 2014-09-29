@@ -17,13 +17,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/square_drawer_frag_exit_button_divider"
+        android:layout_above="@+id/square_drawer_frag_exit_button_line"
         android:layout_alignParentTop="true"
         android:orientation="vertical" >
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
+            android:layout_height="@dimen/line_height"
             android:background="@color/gray_line" />
 
         <RelativeLayout
@@ -46,7 +46,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
+            android:layout_height="@dimen/line_height"
             android:background="@color/gray_line" />
 
         <LinearLayout
@@ -153,14 +153,14 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
+            android:layout_height="@dimen/line_height"
             android:background="@color/gray_line" />
 
         <RelativeLayout
             android:id="@+id/square_drawer_frag_profile_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/square_drawer_participant_list_height"
-            android:background="@drawable/drawer_list_selector_bg"
+            android:background="@drawable/list_white_selector_bg"
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical"
             android:paddingEnd="@dimen/square_drawer_participant_list_right_margin"
@@ -181,7 +181,7 @@
                     android:layout_marginEnd="@dimen/square_drawer_participant_list_profile_nick_margin"
                     android:layout_marginRight="@dimen/square_drawer_participant_list_profile_nick_margin"
                     app:civBorderColor="@color/gray_line"
-                    app:civBorderWidth="@dimen/divider_height" />
+                    app:civBorderWidth="@dimen/line_height" />
 
                 <TextView
                     android:id="@+id/square_drawer_frag_profile_nick_name"
@@ -238,9 +238,9 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/square_drawer_frag_exit_button_divider"
+        android:id="@+id/square_drawer_frag_exit_button_line"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
+        android:layout_height="@dimen/line_height"
         android:layout_above="@+id/square_drawer_frag_exit_button"
         android:background="@color/gray_line" />
 

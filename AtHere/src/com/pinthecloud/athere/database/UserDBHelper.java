@@ -21,9 +21,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	// Database Version
 
 	private static int DATABASE_VERSION = 2;
-//	static{
-//		
-//	}
+
 	// Database Name
 	private static final String DATABASE_NAME = "userManagerDB";
 
@@ -42,12 +40,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	private final String NICK_NAME = "nick_name";
 	private final String IS_CHUPA_ENABLE = "is_chupa_enable";
 	private final String COMPANY_NUM = "company_num";
-	
+
 	private final String HAS_BEEN_OUT = "has_been_out";
 
 	private SQLiteDatabase mDb;
 	private AtomicInteger mCount = new AtomicInteger();
-	
+
 
 	public UserDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -88,7 +86,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				+ NICK_NAME + " TEXT,"
 				+ IS_CHUPA_ENABLE + " INTEGER,"
 				+ COMPANY_NUM + " INTEGER,"
-				
+
 				+ HAS_BEEN_OUT + " INTEGER"
 				+")";
 		db.execSQL(CREATE_TABLE);
@@ -122,6 +120,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 	}
 
+	
 	/**
 	 * All CRUD(Create, Read, Update, Delete) Operations
 	 */
@@ -140,25 +139,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		//		db.close(); // Closing database connection
 		this.closeDatabase("addUser");
 	}
-	
-	private ContentValues setAndGetValue(AhUser user) {
-		ContentValues values = new ContentValues();
-		values.put(ID, user.getId());
-		values.put(AH_ID, user.getAhId());
-		values.put(MOBILE_ID, user.getMobileId());
-		values.put(MOBILE_TYPE, user.getMobileType());
-		values.put(REGISTRATION_ID, user.getRegistrationId());
-		values.put(IS_MALE, user.isMale());
-		values.put(BIRTH_YEAR, user.getBirthYear());
-		values.put(PROFILE_PIC, user.getProfilePic());
-		values.put(NICK_NAME, user.getNickName());
-		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
-		values.put(COMPANY_NUM, user.getCompanyNum());
-		
-		values.put(HAS_BEEN_OUT, false);
-		return values;
-	}
-
 
 	public void addAllUsers(List<AhUser> list){
 
@@ -175,40 +155,53 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		//		db.close(); // Closing database connection
 		this.closeDatabase("addAllUsers");
 	}
+	
+	private ContentValues setAndGetValue(AhUser user) {
+		ContentValues values = new ContentValues();
+		values.put(ID, user.getId());
+		values.put(AH_ID, user.getAhId());
+		values.put(MOBILE_ID, user.getMobileId());
+		values.put(MOBILE_TYPE, user.getMobileType());
+		values.put(REGISTRATION_ID, user.getRegistrationId());
+		values.put(IS_MALE, user.isMale());
+		values.put(BIRTH_YEAR, user.getBirthYear());
+		values.put(PROFILE_PIC, user.getProfilePic());
+		values.put(NICK_NAME, user.getNickName());
+		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
+		values.put(COMPANY_NUM, user.getCompanyNum());
 
+		values.put(HAS_BEEN_OUT, false);
+		return values;
+	}
 
 	// Getting single contact
 	public AhUser getUser(String id) {
 		return this.getUser(id, false);
 	}
 
-	
 	public synchronized AhUser getUser(String id, boolean includingExits){
 		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("getUser(String id, boolean includingExits)");
 		UserHelper userHelper = AhApplication.getInstance().getUserHelper();
 		AhUser user = userHelper.getAdminUser(id);
-		
+
 		String query = ID + "=?";
 		String[] args = new String[] { id };
 		if (!includingExits) {
 			query = ID + "=? and " + HAS_BEEN_OUT + "=?";
 			args = new String[] { id, "0" };
 		}
-		
-		Cursor cursor = db.query(TABLE_NAME, null, query,
-				args, null, null, null, null);
-		if (cursor != null) {
-			if(cursor.moveToFirst()){
-				user = convertToUser(cursor);
-			}
+
+		Cursor cursor = db.query(TABLE_NAME, null, query, args, null, null, null, null);
+		if (cursor != null && cursor.moveToFirst()) {
+			user = convertToUser(cursor);
 		}
-		
+
 		this.closeDatabase("getUser(String id, boolean includingExits)");
 		return user;
 	}
 
-	
+
 	public boolean isUserExist(String userId){
 		boolean isExist = false;
 		//		SQLiteDatabase db = this.getReadableDatabase();
@@ -219,7 +212,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		if (cursor != null) {
 			isExist = cursor.moveToFirst();
 		}
-		//		db.close();
+
 		this.closeDatabase("isUserExist");
 		return isExist;
 	}
@@ -231,16 +224,14 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = db.query(TABLE_NAME, new String[]{ HAS_BEEN_OUT }, ID + "=?",
 				new String[] { userId }, null, null, null, null);
-		if (cursor != null) {
-			if (cursor.moveToFirst()) {
-				if (cursor.getInt(0) == 1){
-					isExit = true;
-				} else {
-					isExit = false;
-				}
+		if (cursor != null && cursor.moveToFirst()) {
+			if (cursor.getInt(0) == 1){
+				isExit = true;
+			} else {
+				isExit = false;
 			}
 		}
-		//		db.close();
+
 		this.closeDatabase("isUserExit(String userId)");
 		return isExit;
 	}
@@ -254,6 +245,83 @@ public class UserDBHelper extends SQLiteOpenHelper {
 			this.addUser(user);
 	}
 
+	// Getting All Contacts
+	public List<AhUser> getAllUsers() {
+		return this.getAllUsers(false);
+	}
+
+	public List<AhUser> getAllUsers(boolean includingExits) {
+		List<AhUser> users = new ArrayList<AhUser>();
+
+		// Select All Query
+		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
+		String[] args = null;
+		if (!includingExits) {
+			selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE " + HAS_BEEN_OUT + "=?";
+			args = new String[] { "0" };
+		}
+
+		//		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.openDatabase("getAllUsers(boolean includingExits)");
+		Cursor cursor = db.rawQuery(selectQuery, args);
+
+		// looping through all rows and adding to list
+		if (cursor != null && cursor.moveToFirst()) {
+			do {
+				users.add(convertToUser(cursor));
+			} while (cursor.moveToNext());
+		}
+
+		this.closeDatabase("getAllUsers(boolean includingExits)");
+		return users;
+	}
+
+	// Updating single contact
+	public void updateUser(AhUser user) {
+		if (user == null) return;
+
+		//		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.openDatabase("updateUser");
+		ContentValues values = setAndGetValue(user);
+
+		// Inserting Row
+		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });
+		this.closeDatabase("updateUser");
+	}
+
+	// Deleting single contact
+	public void deleteUser(String id) {
+		SQLiteDatabase db = this.openDatabase("deleteUser");
+		db.delete(TABLE_NAME, ID + " = ?", new String[] { id });
+		this.closeDatabase("deleteUser");
+	}
+
+	public void exitUser(String id) {
+		if (id == null || id.equals("")) return;
+
+		//		SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.openDatabase("exitUser(String id)");
+
+		ContentValues values = new ContentValues();
+		values.put(HAS_BEEN_OUT, true);
+		
+		// Inserting Row
+		db.update(TABLE_NAME, values, ID + "=?", new String[] { id });
+		this.closeDatabase("exitUser(String id)");
+
+		//		String query = "UPDATE " + TABLE_NAME + " SET " + HAS_BEEN_OUT+"=?"+
+		//				" WHERE " + ID + "=?";
+		//		String [] selectionArgs = new String[]{ String.valueOf(1), id};
+		//		db.rawQuery(query, selectionArgs);
+		//		db.close();
+	}
+
+	public void deleteAllUsers() {
+		SQLiteDatabase db = this.openDatabase("deleteAllUsers");
+		db.delete(TABLE_NAME, null, null);
+		this.closeDatabase("deleteAllUsers");
+	}
+	
 	private AhUser convertToUser(Cursor cursor) {
 		AhUser user = new AhUser();
 		String _id = cursor.getString(0);
@@ -279,91 +347,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		user.setNickName(nickName);
 		user.setChupaEnable(chupaEnable);		
 		user.setCompanyNum(companyNum);
+		
 		return user;
-	}
-
-
-	// Getting All Contacts
-	public List<AhUser> getAllUsers() {
-		return this.getAllUsers(false);
-	}
-
-	public List<AhUser> getAllUsers(boolean includingExits) {
-		List<AhUser> users = new ArrayList<AhUser>();
-
-		// Select All Query
-		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
-		String[] args = null;
-		if (!includingExits) {
-			selectQuery = "SELECT  * FROM " + TABLE_NAME + " WHERE " + HAS_BEEN_OUT + "=?";
-			args = new String[] { "0" };
-		}
-
-		//		SQLiteDatabase db = this.getWritableDatabase();
-		SQLiteDatabase db = this.openDatabase("getAllUsers(boolean includingExits)");
-		Cursor cursor = db.rawQuery(selectQuery, args);
-
-		// looping through all rows and adding to list
-		if (cursor.moveToFirst()) {
-			do {
-				users.add(convertToUser(cursor));
-			} while (cursor.moveToNext());
-		}
-		//		db.close();
-		this.closeDatabase("getAllUsers(boolean includingExits)");
-		return users;
-	}
-
-	// Updating single contact
-	public void updateUser(AhUser user) {
-
-		if (user == null) return;
-
-		//		SQLiteDatabase db = this.getWritableDatabase();
-		SQLiteDatabase db = this.openDatabase("updateUser");
-
-		ContentValues values = setAndGetValue(user);
-
-		// Inserting Row
-		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });
-		//		db.close(); // Closing database connection
-		this.closeDatabase("updateUser");
-	}
-
-	// Deleting single contact
-	public void deleteUser(String id) {
-		//		SQLiteDatabase db = this.getWritableDatabase();
-		SQLiteDatabase db = this.openDatabase("deleteUser");
-		db.delete(TABLE_NAME, ID + " = ?", new String[] { id });
-		//		db.close();
-		this.closeDatabase("deleteUser");
-	}
-
-	public void exitUser(String id) {
-		if (id == null || id.equals("")) return;
-
-		//		SQLiteDatabase db = this.getWritableDatabase();
-		SQLiteDatabase db = this.openDatabase("exitUser(String id)");
-
-		ContentValues values = new ContentValues();
-		values.put(HAS_BEEN_OUT, true);
-		// Inserting Row
-		db.update(TABLE_NAME, values, ID + "=?", new String[] { id });
-		//		db.close(); // Closing database connection
-		this.closeDatabase("exitUser(String id)");
-
-		//		String query = "UPDATE " + TABLE_NAME + " SET " + HAS_BEEN_OUT+"=?"+
-		//				" WHERE " + ID + "=?";
-		//		String [] selectionArgs = new String[]{ String.valueOf(1), id};
-		//		db.rawQuery(query, selectionArgs);
-		//		db.close();
-	}
-
-	public void deleteAllUsers() {
-		//		SQLiteDatabase db = this.getWritableDatabase();
-		SQLiteDatabase db = this.openDatabase("deleteAllUsers");
-		db.delete(TABLE_NAME, null, null);
-		//		db.close();
-		this.closeDatabase("deleteAllUsers");
 	}
 }

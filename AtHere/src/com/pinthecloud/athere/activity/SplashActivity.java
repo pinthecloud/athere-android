@@ -22,7 +22,7 @@ public class SplashActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash);
+		setContentView(R.layout.frame_activity);
 
 
 		/*
@@ -32,7 +32,7 @@ public class SplashActivity extends AhActivity{
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
 		SplashFragment splashFragment = new SplashFragment ();
-		fragmentTransaction.add(R.id.splash_container, splashFragment);
+		fragmentTransaction.add(R.id.activity_container, splashFragment);
 		fragmentTransaction.commit();
 	}
 }

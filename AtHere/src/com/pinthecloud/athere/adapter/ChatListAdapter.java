@@ -28,7 +28,6 @@ import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.ChatFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
@@ -47,7 +46,6 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 	private AhFragment frag;
 	private LayoutInflater inflater;
 
-	private UserHelper userHelper;
 	private UserDBHelper userDBHelper;
 	private MessageDBHelper messageDBHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
@@ -59,9 +57,8 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		this.frag = frag;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		this.app = AhApplication.getInstance(); 
+		this.app = AhApplication.getInstance();
 		this.userDBHelper = app.getUserDBHelper();
-		this.userHelper = app.getUserHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
 	}
@@ -208,7 +205,8 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 								"ViewOthersProfile",
 								"ChatProfile");
 
-						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
+						ProfileDialog profileDialog = new ProfileDialog(frag, user, 
+								new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {
@@ -264,7 +262,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		} else if(message.isNotification()){
 			return TYPE.NOTIFICATION.ordinal();
 		} else{
-			if(message.getSenderId().equals(userHelper.getMyUserInfo().getId())){
+			if(message.isMine()){
 				return TYPE.SEND.ordinal();
 			} else{
 				return TYPE.RECEIVE.ordinal();

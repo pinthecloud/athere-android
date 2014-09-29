@@ -31,8 +31,8 @@ import android.util.Base64;
 
 public class BitmapUtil {
 
-	public static final int SMALL_PIC_SIZE = 140;
-	public static final int BIG_PIC_SIZE = 720;
+	public static final int SMALL_PIC_SIZE = 100;
+	public static final int BIG_PIC_SIZE = 480;
 
 	public static Bitmap decodeInSampleSize(Context context, Uri imageUri, int reqWidth, int reqHeight) throws FileNotFoundException {
 		// First decode with inJustDecodeBounds=true to check dimensions
@@ -240,20 +240,6 @@ public class BitmapUtil {
 			// Do nothing
 		}
 		return bitmap;
-
-		//		byte[] bytes;
-		//		try {
-		//			bytes = str.getBytes("UTF-8");
-		//			int offset = 0;
-		//			int length = bytes.length;
-		//			
-		//			Bitmap img = BitmapFactory.decodeByteArray(bytes, offset, length);
-		//			
-		//			return img;
-		//		} catch (UnsupportedEncodingException e) {
-		//			e.printStackTrace();
-		//			return null;
-		//		}
 	}
 
 
@@ -263,21 +249,6 @@ public class BitmapUtil {
 		byte [] b = baos.toByteArray();
 		String temp = Base64.encodeToString(b, Base64.DEFAULT);
 		return temp;
-
-		//		int bytes = img.getByteCount();
-		//
-		//		ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
-		//		img.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
-		//
-		//		byte[] array = buffer.array();
-		//		String returnStr = null;
-		//		try {
-		//			returnStr = new String(array, "UTF-8");
-		//		} catch (UnsupportedEncodingException e) {
-		//			e.printStackTrace();
-		//			returnStr = null;
-		//		}
-		//		return returnStr;
 	}
 
 
@@ -297,34 +268,6 @@ public class BitmapUtil {
 			output.copyTo(bitmap);
 			return bitmap;
 		}
-
-		// Stack Blur v1.0 from
-		// http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
-		//
-		// Java Author: Mario Klingemann <mario at quasimondo.com>
-		// http://incubator.quasimondo.com
-		// created Feburary 29, 2004
-		// Android port : Yahel Bouaziz <yahel at kayenko.com>
-		// http://www.kayenko.com
-		// ported april 5th, 2012
-
-		// This is a compromise between Gaussian Blur and Box blur
-		// It creates much better looking blurs than Box Blur, but is
-		// 7x faster than my Gaussian Blur implementation.
-		//
-		// I called it Stack Blur because this describes best how this
-		// filter works internally: it creates a kind of moving stack
-		// of colors whilst scanning through the image. Thereby it
-		// just has to add one new block of color to the right side
-		// of the stack and remove the leftmost color. The remaining
-		// colors on the topmost layer of the stack are either added on
-		// or reduced by one, depending on if they are on the right or
-		// on the left side of the stack.
-		//
-		// If you are using this algorithm in your code please add
-		// the following line:
-		//
-		// Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
 
 		Bitmap bitmap = sentBitmap.copy(sentBitmap.getConfig(), true);
 

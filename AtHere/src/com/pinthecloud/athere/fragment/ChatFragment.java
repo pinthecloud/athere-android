@@ -84,6 +84,9 @@ public class ChatFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
+		if(squareHelper.isPreview()){
+			messageEditText.setEnabled(false);
+		}
 
 
 		/*

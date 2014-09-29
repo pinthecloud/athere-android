@@ -68,7 +68,7 @@ public class SquareTabFragment extends AhFragment{
 		 */
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), tabs, square);
+		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
 
 		// Set up the ViewPager with the sections adapter.
 		int startTab = squareHelper.getSquareExitTab();
@@ -111,8 +111,8 @@ public class SquareTabFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
-				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.chatFragment, message);
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.memberFragment, message);
 				refreshView();
 			}
 		});

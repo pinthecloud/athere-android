@@ -1,7 +1,5 @@
 package com.pinthecloud.athere.adapter;
 
-import java.util.Map;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,29 +11,26 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
-import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.model.Chupa;
 
-public class ChupaListAdapter extends ArrayAdapter<Map<String,String>> {
+public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 
 	private Context context;
 	private AhFragment fragment;
-	private int layoutId;
 	private CachedBlobStorageHelper blobStorageHelper;
-	private UserDBHelper userDBHelper;
+//	private UserDBHelper userDBHelper;
 
-	public ChupaListAdapter(Context context, AhFragment frag, int layoutId) {
-		super(context, layoutId);
+	public ChupaListAdapter(Context context, AhFragment frag) {
+		super(context, 0);
 		this.context = context;
 		this.fragment = frag;
-		this.layoutId = layoutId;
 
 		AhApplication app = AhApplication.getInstance();
 		this.blobStorageHelper = app.getBlobStorageHelper();
-		this.userDBHelper = app.getUserDBHelper();
+//		this.userDBHelper = app.getUserDBHelper();
 	}
 
 	@Override
@@ -44,17 +39,17 @@ public class ChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) 
 					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(this.layoutId, parent, false);
+			view = inflater.inflate(R.layout.row_chupa_list, parent, false);
 		}
 
-		Map<String,String> lastChupaMap = getItem(position);
-		if (lastChupaMap != null) {
+		Chupa chupa = getItem(position);
+		if (chupa != null) {
 			/*
 			 * Find UI component
 			 */
 			final ImageView profileImage = (ImageView)view.findViewById(R.id.chupa_list_profile_pic);
 			TextView sender = (TextView)view.findViewById(R.id.chupa_list_sender);
-			TextView content = (TextView)view.findViewById(R.id.chupa_list_content);
+			TextView contentView = (TextView)view.findViewById(R.id.chupa_list_content);
 			TextView timeStamp = (TextView)view.findViewById(R.id.chupa_list_timestamp);
 			TextView badgeNum = (TextView)view.findViewById(R.id.chupa_list_badge_num);
 
@@ -62,18 +57,18 @@ public class ChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			/*
 			 * Set UI component
 			 */
-			String isExit = lastChupaMap.get("isExit");
-			String userId = lastChupaMap.get("userId");
-			AhUser user = userDBHelper.getUser(userId, true);
-			String userNickName = user.getNickName();
-			String chupaBadgeString = lastChupaMap.get("chupaBadge");
-			int chupaBadge = Integer.parseInt(chupaBadgeString);
-			String contentString = lastChupaMap.get("content");
-			String time = lastChupaMap.get("timeStamp");
+			boolean isExit = chupa.isExit();
+			String userId = chupa.getUserId();
+//			AhUser user = userDBHelper.getUser(userId, true);
+//			String userNickName = user.getNickName();
+			String userNickName = chupa.getUserNickName();
+			int chupaBadge = chupa.getBadgeNum();
+			String content = chupa.getContent();
+			String time = chupa.getTimeStamp();
 			String hour = time.substring(8, 10);
 			String minute = time.substring(10, 12);
 
-			if (isExit.equals("true")) {
+			if (isExit) {
 				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
 			} else {
 				sender.setTextColor(context.getResources().getColor(android.R.color.black));
@@ -81,10 +76,10 @@ public class ChupaListAdapter extends ArrayAdapter<Map<String,String>> {
 			sender.setText(userNickName);
 			blobStorageHelper.setImageViewAsync(fragment, BlobStorageHelper.USER_PROFILE, 
 					userId+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
-			content.setText(contentString);
+			contentView.setText(content);
 			timeStamp.setText(hour + ":" + minute);
 			if (chupaBadge > 0) {
-				badgeNum.setText(""+chupaBadge);
+				badgeNum.setText(String.valueOf(chupaBadge));
 				badgeNum.setVisibility(View.VISIBLE);
 			}else{
 				badgeNum.setVisibility(View.INVISIBLE);

@@ -46,7 +46,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	private SQLiteDatabase mDb;
 	private AtomicInteger mCount = new AtomicInteger();
 
-	
+
 	public MessageDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		badgeDBHelper = new BadgeDBHelper(context);
@@ -64,7 +64,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			mDb.close();
 		}
 	}
-	
+
 	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
@@ -112,7 +112,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	/**
 	 * All CRUD(Create, Read, Update, Delete) Operations
 	 */
-	
+
 	private void putValueWithoutNull(ContentValues values, String id, String value){
 		if (value == null) value = "";
 		values.put(id, value);
@@ -171,11 +171,12 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = db.query(TABLE_NAME, null, ID + " = ?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
-		if (cursor != null){
-			cursor.moveToFirst();
+
+		AhMessage message = null;
+		if (cursor != null && cursor.moveToFirst()){
+			message = convertToMessage(cursor);
 		}
 
-		AhMessage message = convertToMessage(cursor);
 		this.closeDatabase("getMessage");
 		return message;
 	}
@@ -330,9 +331,8 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		if (cursor != null && cursor.moveToFirst()) {
 			message = convertToMessage(cursor);
 		}
-		//		db.close();
-		this.closeDatabase("getLastMessage(AhMessage.TYPE type)");
 
+		this.closeDatabase("getLastMessage(AhMessage.TYPE type)");
 		return message;
 	}
 
@@ -696,6 +696,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		.setTimeStamp(timeStamp)
 		.setChupaCommunId(chupaCommunId)
 		.setStatus(status);
+		
 		return messageBuilder.build();
 	}
 

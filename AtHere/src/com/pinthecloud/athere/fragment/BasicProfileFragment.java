@@ -1,12 +1,18 @@
 package com.pinthecloud.athere.fragment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,60 +22,38 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.FacebookDialog;
-import com.facebook.widget.LoginButton;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
-import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.dialog.AhAlertListDialog;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
+import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
+import com.pinthecloud.athere.util.BitmapUtil;
+import com.pinthecloud.athere.util.FileUtil;
 
 
 public class BasicProfileFragment extends AhFragment{
 
 	private ProgressBar progressBar;
+	private ImageView profileImageView;
+
+	private Uri imageUri;
+	private Bitmap profileImageBitmap;
+	private Bitmap smallProfileImageBitmap;
+
+	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
 	private EditText birthYearEditText;
-//	private NumberPickerDialog yearPickerDialog;
-	private RadioButton maleButton;
-	private RadioButton femaleButton;
-	private ImageButton completeButton;
+	private ImageButton startButton;
 
-	private boolean isTypedNickName = false;
-//	private boolean isPickedBirthYear = false;
-
-	private ImageView sudoImage;
-	
-	private int countSudo = 0;
-	
-	private LoginButton fbBtn;
-	public UiLifecycleHelper uiHelper;
-	
-	
-	private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
-
-    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
-        @Override
-        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-        }
-
-        @Override
-        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-        }
-    };
+	private boolean isTypedNickName = true;
+	private boolean isTakenProfileImage = false;
 
 
 	@Override
@@ -77,34 +61,85 @@ public class BasicProfileFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);		
+		AhUser user = userHelper.getMyUserInfo();
 
-		uiHelper = new UiLifecycleHelper(this.getActivity(), callback);
-        uiHelper.onCreate(savedInstanceState);
+
 		/*
 		 * Find UI component
 		 */
 		progressBar = (ProgressBar) view.findViewById(R.id.basic_profile_frag_progress_bar);
-		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_edit_text);
-		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_year_text);
-		maleButton = (RadioButton) view.findViewById(R.id.basic_profile_frag_male_button);
-		femaleButton = (RadioButton) view.findViewById(R.id.basic_profile_frag_female_button);
-		completeButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_complete_button);
-		sudoImage = (ImageView) view.findViewById(R.id.basic_profile_frag_image_view_for_su);
-		fbBtn = (LoginButton) view.findViewById(R.id.facebook_login_button);
-		
+		profileImageView = (ImageView) view.findViewById(R.id.basic_profile_frag_profile_image);
+		nickNameWarningText = (TextView) view.findViewById(R.id.basic_profile_frag_nick_name_warning_text);
+		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_text);
+		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_birth_gender_text);
+		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
+
+
 		/*
-		 * Super user
+		 * Set Event on profile image view
 		 */
-		sudoImage.setOnClickListener(new OnClickListener() {
+		profileImageView.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				countSudo++;
-				if (countSudo == 10) {
-					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
-					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
-					.show();
+				String title = getResources().getString(R.string.select);
+				String[] list = null;
+				if(isTakenProfileImage){
+					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
+				}else{
+					list = getResources().getStringArray(R.array.profile_image_select_string_array);
 				}
+				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
+				callbacks[0] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from gallery
+						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+						intent.setType("image/*");
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_GALLERY);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				callbacks[1] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// create Intent to take a picture and return control to the calling application
+						// create a file to save the image
+						// set the image file name
+						// start the image capture Intent
+						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						imageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_CAMERA);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				if(list.length == 3){
+					callbacks[2] = new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							// Set profile image default
+							profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+							isTakenProfileImage = false;
+							startButton.setEnabled(isStartButtonEnable());
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							// Do nothing
+						}
+					};
+				}
+				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
+				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
 
@@ -112,6 +147,7 @@ public class BasicProfileFragment extends AhFragment{
 		/*
 		 * Set nick name edit text
 		 */
+		nickNameEditText.setText(user.getNickName());
 		nickNameEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -122,7 +158,7 @@ public class BasicProfileFragment extends AhFragment{
 				}else{
 					isTypedNickName = true;
 				}
-				completeButton.setEnabled(isCompleteButtonEnable());
+				startButton.setEnabled(isStartButtonEnable());
 			}
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -135,242 +171,209 @@ public class BasicProfileFragment extends AhFragment{
 
 
 		/*
-		 * Set birth year edit text and year picker dialog
+		 * Set gender and birth year edit text
 		 */
-//		yearPickerDialog = new NumberPickerDialog(1950, 2000, 1990, new AhDialogCallback() {
-//
-//			@Override
-//			public void doPositiveThing(Bundle bundle) {
-//				// Set edit text to birth year use picked
-//				int birthYear = bundle.getInt(AhGlobalVariable.NUMBER_PICKER_VALUE_KEY);
-//				birthYearEditText.setText("" + birthYear);
-//			}
-//
-//			@Override
-//			public void doNegativeThing(Bundle bundle) {
-//				// do nothing				
-//			}
-//		});
-//		birthYearEditText.addTextChangedListener(new TextWatcher() {
-//
-//			@Override
-//			public void onTextChanged(CharSequence s, int start, int before, int count) {
-//				String birthYear = s.toString().trim();
-//				if(birthYear.length() < 1){
-//					isPickedBirthYear = false;
-//				}else{
-//					isPickedBirthYear = true;
-//				}
-//				completeButton.setEnabled(isCompleteButtonEnable());
-//			}
-//			@Override
-//			public void beforeTextChanged(CharSequence s, int start, int count,
-//					int after) {
-//			}
-//			@Override
-//			public void afterTextChanged(Editable s) {
-//			}
-//		});
-//		birthYearEditText.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				yearPickerDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-//			}
-//		});
-//		birthYearEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-//
-//			@Override
-//			public void onFocusChange(View v, boolean hasFocus) {
-//				if(hasFocus){
-//					yearPickerDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-//				}
-//			}
-//		});
-		birthYearEditText.setInputType(InputType.TYPE_NULL);
-//		birthYearEditText.setEnabled(false);
-		birthYearEditText.setClickable(false);
-//		birthYearEditText.setFocusable(false);
-//		birthYearEditText.setFocusableInTouchMode(false);
-		
-//		maleButton.setEnabled(false);
-//		femaleButton.setEnabled(false);
-		maleButton.setClickable(false);
-		femaleButton.setClickable(false);
-//		maleButton.setFocusable(false);
-//		maleButton.setFocusableInTouchMode(false);
+		int age = user.getAge();
+		String gender = user.getGenderString(context);
+		birthYearEditText.setText(age + " " + gender);
+
 
 		/*
 		 * Set Start Button
 		 */
-		completeButton.setOnClickListener(new OnClickListener() {
+		startButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// Remove blank of along side.
-				Session session = Session.getActiveSession();
-				if (session.isClosed()) {
-					return;
-				}
-				
-				if (birthYearEditText.getText().toString().equals("")) {
-					Toast.makeText(context, "생일 허가를 해주세요.", Toast.LENGTH_LONG).show();
-					Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(getActivity(), Arrays.asList("user_birthday"));
-					session.requestNewReadPermissions(newPermissionsRequest);
-					session.close();
-					fbBtn.setVisibility(View.VISIBLE);
-					return;
-				}
-				
 				String nickName = nickNameEditText.getText().toString().trim();
 				nickNameEditText.setText(nickName);
 				nickNameEditText.setSelection(nickName.length());
 
-				// Save gender and birth year infomation to preference
+
+				/*
+				 * Unproper nick name
+				 * Show warning toast for each situation
+				 */
 				String message = app.checkNickName(nickName);
 				if(!message.equals("")){
-					// Unproper nick name
-					// Show warning toast for each situation
-					Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
-					toast.show();
-				} else{
-					// Proper nick name
-					// Show progress bar
-					// Disable complete button for preventing double click
-					progressBar.setVisibility(View.VISIBLE);
-					completeButton.setEnabled(false);
-
-					// Save this setting and go to next activity
-					
-					userHelper.setMyMale(maleButton.isChecked())
-					.setMyBirthYear(Integer.parseInt(birthYearEditText.getText().toString()))
-					.setMyChupaEnable(true)
-					.setMyCompanyNum(0)
-					.setMyNickName(nickName);
-					
-					AhUser user = userHelper.getMyUserInfo();
-					
-					userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
-
-						@Override
-						public void onCompleted(AhUser entity) {
-							progressBar.setVisibility(View.GONE);
-
-							/*
-							 * Save setting and move to next activity
-							 */
-							String gender = "Male";
-							if(!maleButton.isChecked()){
-								gender = "Female";
-							}
-							
-							gaHelper.sendEventGA(
-									thisFragment.getClass().getSimpleName(),
-									"CheckGender",
-									gender);
-							gaHelper.sendEventGA(
-									thisFragment.getClass().getSimpleName(),
-									"CheckAge",
-									"" + entity.getAge());
-							
-							userHelper.setLoggedInUser(true);
-							userHelper.setMyId(entity.getId());
-							
-							Intent intent = new Intent(context, SquareListActivity.class);
-							startActivity(intent);
-							activity.finish();
-						}
-					});
+					nickNameWarningText.setText(message);
+					return;
 				}
+
+
+				/*
+				 * Proper nick name
+				 * Show progress bar
+				 * Disable UI components for preventing double click
+				 * Save this setting and go to next activity
+				 */
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+				profileImageView.setEnabled(false);
+				nickNameEditText.setEnabled(false);
+				startButton.setEnabled(false);
+
+				userHelper.setMyNickName(nickName)
+				.setMyChupaEnable(true);
+
+				AsyncChainer.asyncChain(thisFragment, new Chainable(){
+
+					@Override
+					public void doNext(AhFragment frag) {
+						// Get a user object from preference and Add the user
+						AhUser user = userHelper.getMyUserInfo();
+						userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
+
+							@Override
+							public void onCompleted(AhUser entity) {
+								userHelper.setMyId(entity.getId())
+								.setLoggedInUser(true);
+							}
+						});
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						// Upload bit and small profile images
+						AhUser user = userHelper.getMyUserInfo();
+						smallProfileImageBitmap = BitmapUtil.decodeInSampleSize(profileImageBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId(), profileImageBitmap, null);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						AhUser user = userHelper.getMyUserInfo();
+						gaHelper.sendEventGA(
+								thisFragment.getClass().getSimpleName(),
+								"CheckGender",
+								user.getGenderString(context));
+						gaHelper.sendEventGA(
+								thisFragment.getClass().getSimpleName(),
+								"CheckAge",
+								""+user.getAge());
+
+						// Save profile images to internal storage
+						FileUtil.saveBitmapToInternalStorage(app, user.getId(), profileImageBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap);
+
+						// Move to next activity
+						Intent intent = new Intent(context, SquareListActivity.class);
+						startActivity(intent);
+						activity.finish();
+					}
+				});
 			}
 		});
-		completeButton.setEnabled(false);
-		
-		fbBtn.setReadPermissions(Arrays.asList("user_birthday"));
-		fbBtn.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
-            @Override
-            public void onUserInfoFetched(GraphUser user) {
-                if (user == null) {
-                	maleButton.setChecked(true);
-                	birthYearEditText.setText("");
-                    nickNameEditText.setText("");
-                    return;
-                }
-                String birthday = user.getBirthday();
-                String birthYear = "";
-                if (birthday != null) {
-                	birthYear = birthday.substring(6, birthday.length());
-                }
-                
-                String gender = (String)user.getProperty("gender");
-                String name = user.getFirstName();
-                if ("male".equals(gender))
-                	maleButton.setChecked(true);
-                else
-                	maleButton.setChecked(false);
-                
-                userHelper.setMyAhId(user.getId());
-                ArrayList<String> arr = new ArrayList<String>();
-                arr.add("1482905955291892");
-                arr.add("643223775792443");
-                if (arr.contains(user.getId())) {
-                	Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
-					.show();
-                	PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
-                }
+		startButton.setEnabled(false);
 
-                Log(thisFragment, user.getId());
-                birthYearEditText.setText(birthYear);
-                nickNameEditText.setText(name);
-                completeButton.setEnabled(true);
-                fbBtn.setVisibility(View.GONE);
-            }
-        });
-		
 		return view;
 	}
 
 
-	private boolean isCompleteButtonEnable(){
-		return isTypedNickName && Session.getActiveSession().isOpened();
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(!isTakenProfileImage){
+			profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+		}else{
+			profileImageView.setImageBitmap(profileImageBitmap);
+		}
 	}
-	
+
+
 	@Override
-    public void onResume() {
-        super.onResume();
-        Session session = Session.getActiveSession();
-        if (session != null &&
-               (session.isOpened() || session.isClosed()) ) {
-            onSessionStateChange(session, session.getState(), null);
-        }
-        uiHelper.onResume();
-    }
-	
+	public void onStop() {
+		profileImageView.setImageBitmap(null);
+		super.onStop();
+	}
+
+
 	@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
-    }
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK){
+			/*
+			 * Get image URI and path from gallery or camera
+			 */
+			String imagePath = null;
+			switch(requestCode){
+			case FileUtil.MEDIA_TYPE_GALLERY:
+				imageUri = data.getData();
+				String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
-    }
+				Cursor cursor = context.getContentResolver().query(imageUri, filePathColumn, null, null, null);
+				cursor.moveToFirst();
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        uiHelper.onPause();
-    }
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				imagePath = cursor.getString(columnIndex);
+				cursor.close();
+				break;
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        uiHelper.onDestroy();
-    }
+			case FileUtil.MEDIA_TYPE_CAMERA:
+				Uri tempImageUri = null;
+				if(imageUri == null){
+					if(data == null){
+						tempImageUri = FileUtil.getLastCaptureBitmapUri(context);
+					} else{
+						tempImageUri = data.getData();
 
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        
-    }
+						// Intent pass data as Bitmap
+						if(tempImageUri == null){
+							Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+							tempImageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
+							FileUtil.saveBitmapToFile(context, tempImageUri, bitmap);
+						}
+					}
+				} else{
+					tempImageUri = imageUri;
+				}
+
+				imageUri = tempImageUri;
+				imagePath = imageUri.getPath();
+				break;
+			}
+
+
+			/*
+			 * Set the image
+			 */
+			try {
+				profileImageBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
+
+				int width = profileImageBitmap.getWidth();
+				int height = profileImageBitmap.getHeight();
+				if(height < width){
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, height, height);
+				} else{
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, width, width);
+				}
+
+				int degree = BitmapUtil.getImageOrientation(imagePath);
+				profileImageBitmap = BitmapUtil.rotate(profileImageBitmap, degree);
+			} catch (FileNotFoundException e) {
+				// Do nothing
+			} catch (IOException e) {
+				// Do nothing
+			}
+			isTakenProfileImage = true;
+			startButton.setEnabled(isStartButtonEnable());
+
+
+			/*
+			 * If get image from camera, delete file
+			 */
+			if(requestCode == FileUtil.MEDIA_TYPE_CAMERA){
+				File file = new File(imagePath);
+				file.delete();
+			}
+		}
+	}
+
+
+	private boolean isStartButtonEnable(){
+		return isTypedNickName && isTakenProfileImage;
+	}
 }

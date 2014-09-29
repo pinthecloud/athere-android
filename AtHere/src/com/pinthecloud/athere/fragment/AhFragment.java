@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.fragment;
 
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
@@ -36,7 +36,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected AhFragment thisFragment;
 	protected AhApplication app;
 	protected Context context;
-	protected AhActivity activity;
+	protected Activity activity;
 
 	protected MessageHelper messageHelper;
 	protected MessageDBHelper messageDBHelper;
@@ -65,7 +65,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		context = getActivity();
-		activity = (AhActivity) context;
+		activity = (Activity) context;
 		super.onCreate(savedInstanceState);
 
 		LogSM(simpleClassName + " onCreate");

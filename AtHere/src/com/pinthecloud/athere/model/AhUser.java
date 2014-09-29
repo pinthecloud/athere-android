@@ -2,10 +2,12 @@ package com.pinthecloud.athere.model;
 
 import java.util.Calendar;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.JsonObject;
+import com.pinthecloud.athere.R;
 
 public class AhUser implements Parcelable{
 	@com.google.gson.annotations.SerializedName("id")
@@ -29,119 +31,97 @@ public class AhUser implements Parcelable{
 	@com.google.gson.annotations.SerializedName("isChupaEnable")
 	private boolean isChupaEnable;
 	@com.google.gson.annotations.SerializedName("companyNum")
-	private int companyNum;
-	
-	private boolean isChatEnable;
-	
+	private int companyNum = 0;
+
+
 	public AhUser() {
-		
+
 	}
 	public AhUser(Parcel in){
 		this();
 		readToParcel(in);
 	}
-	
+
+
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 	public String getAhId() {
 		return ahId;
 	}
-
 	public void setAhId(String ahId) {
 		this.ahId = ahId;
 	}
-
 	public String getMobileId() {
 		return mobileId;
 	}
-
 	public void setMobileId(String mobileId) {
 		this.mobileId = mobileId;
 	}
-
 	public String getMobileType() {
 		return mobileType;
 	}
-
 	public void setMobileType(String mobileType) {
 		this.mobileType = mobileType;
 	}
-
 	public String getRegistrationId() {
 		return registrationId;
 	}
-
 	public void setRegistrationId(String registrationId) {
 		this.registrationId = registrationId;
 	}
-
 	public boolean isMale() {
 		return isMale;
 	}
-
 	public void setMale(boolean isMale) {
 		this.isMale = isMale;
 	}
-
 	public int getBirthYear() {
 		return birthYear;
 	}
-
 	public void setBirthYear(int birthYear) {
 		this.birthYear = birthYear;
 	}
-
 	public String getProfilePic() {
 		return profilePic;
 	}
-
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
 	}
-
 	public String getNickName() {
 		return nickName;
 	}
-
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
-
 	public boolean isChupaEnable() {
 		return isChupaEnable;
 	}
-
 	public void setChupaEnable(boolean isChupaEnable) {
 		this.isChupaEnable = isChupaEnable;
 	}
-
 	public int getCompanyNum() {
 		return companyNum;
 	}
-
 	public void setCompanyNum(int companyNum) {
 		this.companyNum = companyNum;
 	}
-	
 	public int getAge() {
 		Calendar c = Calendar.getInstance();
 		return c.get(Calendar.YEAR) - (getBirthYear() - 1);
 	}
-	
-	public void setChatEnable(boolean isChatEnable) {
-		this.isChatEnable = isChatEnable;
+	public String getGenderString(Context context){
+		if(isMale){
+			return context.getResources().getString(R.string.male);
+		}else{
+			return context.getResources().getString(R.string.female);
+		}
 	}
-	
-	public boolean isChatEnable() {
-		return this.isChatEnable;
-	}
-	
+
+
 	/*
 	 * Parcelable
 	 */
@@ -153,7 +133,7 @@ public class AhUser implements Parcelable{
 			return new AhUser[size]; 
 		}
 	};
-	
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -172,7 +152,6 @@ public class AhUser implements Parcelable{
 		dest.writeString(getNickName());
 		dest.writeInt(isChupaEnable() ? 1 : 0);
 		dest.writeInt(getCompanyNum());
-		dest.writeInt(isChatEnable() ? 1 : 0);
 	}
 
 	public void readToParcel(Parcel in){
@@ -187,8 +166,8 @@ public class AhUser implements Parcelable{
 		setNickName(in.readString());
 		setChupaEnable(in.readInt() == 1);
 		setCompanyNum(in.readInt());
-		setChatEnable(in.readInt() == 1);
 	}
+
 
 	/*
 	 * Utility
@@ -196,9 +175,9 @@ public class AhUser implements Parcelable{
 	@Override
 	public String toString() {
 		return concate(getId(), getAhId(), getMobileId(), getMobileType(), getRegistrationId(),
-				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable(), getCompanyNum(), isChatEnable());
+				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable(), getCompanyNum());
 	}
-	
+
 	private String concate(Object... args) {
 		String str = "";
 		for(Object arg : args) {
@@ -209,7 +188,7 @@ public class AhUser implements Parcelable{
 
 	public JsonObject toJson() {
 		JsonObject jo = new JsonObject();
-		
+
 		jo.addProperty("id", getId());
 		jo.addProperty("ahId", getAhId());
 		jo.addProperty("mobileId", getMobileId());
@@ -221,33 +200,33 @@ public class AhUser implements Parcelable{
 		jo.addProperty("nickName", getNickName());
 		jo.addProperty("isChupaEnable", isChupaEnable());
 		jo.addProperty("companyNum", getCompanyNum());
-		
+
 		return jo;
 	}
-	
-	
+
+
 	/*
 	 * Test
 	 */
-//	public static AhUser addUserTest(){
-//		AhUser user = new AhUser();
-//		return user;
-//	}
-//
-//	private static String getRandomString(){
-//		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-//		StringBuilder sb = new StringBuilder();
-//		Random random = new Random();
-//		for (int i = 0; i < random.nextInt(25); i++) {
-//			char c = chars[random.nextInt(chars.length)];
-//			sb.append(c);
-//		}
-//		String output = sb.toString();
-//		return output;
-//	}
-//
-//	private static int getRandomInt(){
-//		Random random = new Random();
-//		return random.nextInt(40);
-//	}
+	//	public static AhUser addUserTest(){
+	//		AhUser user = new AhUser();
+	//		return user;
+	//	}
+	//
+	//	private static String getRandomString(){
+	//		char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+	//		StringBuilder sb = new StringBuilder();
+	//		Random random = new Random();
+	//		for (int i = 0; i < random.nextInt(25); i++) {
+	//			char c = chars[random.nextInt(chars.length)];
+	//			sb.append(c);
+	//		}
+	//		String output = sb.toString();
+	//		return output;
+	//	}
+	//
+	//	private static int getRandomInt(){
+	//		Random random = new Random();
+	//		return random.nextInt(40);
+	//	}
 }
