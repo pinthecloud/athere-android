@@ -246,7 +246,6 @@ public class ChatFragment extends AhFragment{
 		if (id == null){
 			chats = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE);
 		} else {
-			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			chat = messageDBHelper.getMessage(Integer.parseInt(id));
 		}
 

@@ -30,10 +30,10 @@ import com.pinthecloud.athere.util.JsonConverter;
 
 public class UserHelper {
 
+	private final String USER_ID_KEY = "USER_ID_KEY";
+	private final String AH_ID_KEY = "AH_ID_KEY";
 	private final String MOBILE_ID_KEY = "MOBILE_ID_KEY";
 	private final String REGISTRATION_ID_KEY = "REGISTRATION_ID_KEY";
-	private final String AH_ID_KEY = "AH_ID_KEY";
-	private final String USER_ID_KEY = "USER_ID_KEY";
 	private final String NICK_NAME_KEY = "NICK_NAME_KEY";
 	private final String IS_MALE_KEY = "IS_MALE_KEY";
 	private final String BIRTH_YEAR_KEY = "BIRTH_YEAR_KEY";
@@ -329,7 +329,7 @@ public class UserHelper {
 		user.setChupaEnable(true);
 		return user;
 	}
-	
+
 	public AhUser getMyUserInfo() {
 		String id = pref.getString(USER_ID_KEY);
 		if(id.equals(PreferenceHelper.DEFAULT_STRING)){
@@ -355,9 +355,19 @@ public class UserHelper {
 		return user;
 	}
 
-	public void userLogout() {
+	public void removeMySquareUserInfo() {
 		pref.removePref(IS_CHAT_ENABLE_KEY);
 		pref.removePref(IS_CHUPA_ENABLE_KEY);
+	}
+
+	public void removeMyUserInfo() {
+		pref.removePref(AH_ID_KEY);
+		pref.removePref(IS_MALE_KEY);
+		pref.removePref(BIRTH_YEAR_KEY);
+		pref.removePref(NICK_NAME_KEY);
+		pref.removePref(IS_CHAT_ENABLE_KEY);
+		pref.removePref(IS_CHUPA_ENABLE_KEY);
+		pref.removePref(IS_LOGGED_IN_USER_KEY);
 	}
 
 	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {

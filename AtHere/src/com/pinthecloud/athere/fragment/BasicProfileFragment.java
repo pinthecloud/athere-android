@@ -28,6 +28,7 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
+import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -369,6 +370,15 @@ public class BasicProfileFragment extends AhFragment{
 				File file = new File(imagePath);
 				file.delete();
 			}
+		}
+	}
+
+
+	@Override
+	public void handleException(final AhException ex) {
+		if(ex.getType().equals(AhException.TYPE.DUPLICATED_NICK_NAME)){
+			String message = getResources().getString(R.string.internet_not_connected_message);
+			nickNameWarningText.setText(message);
 		}
 	}
 
