@@ -54,6 +54,19 @@ public class AsyncChainer {
 	public static interface Chainable {
 		public void doNext(AhFragment frag);
 	}
+
+
+	public static void clearChain(AhFragment frag) {
+		// TODO Auto-generated method stub
+		Class<?> clazz = null;
+		if (frag == null) {
+			clazz = AhFragment.class;
+		} else {
+			clazz = frag.getClass();
+		}
+		Queue<Chainable> queue = mapQueue.get(clazz.getName());
+		queue.clear();
+	}
 }
 
 

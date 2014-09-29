@@ -112,8 +112,7 @@ public class UserHelper {
 		pref.putBoolean(IS_CHUPA_ENABLE_KEY, isChupaEnable);
 		return this;
 	}
-
-
+	
 	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -128,7 +127,12 @@ public class UserHelper {
 					callback.onCompleted(entity);
 					AsyncChainer.notifyNext(frag);
 				} else {
-					ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
+					if (response.getContent().contains(AhException.TYPE.DUPLICATED_NICK_NAME.toString())) { 
+						ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.DUPLICATED_NICK_NAME));
+					} else {
+						ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.SERVER_ERROR));
+					}
+					
 				}
 			}
 		});
