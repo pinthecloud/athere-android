@@ -1,7 +1,6 @@
 package com.pinthecloud.athere.helper;
 
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -185,7 +184,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	private Bitmap getBitmapFromMemCache(String key) {
 		return mMemoryCache.get(key);
 	}
-	
+
 	public void clearCache(String id) {
 		mMemoryCache.remove(id);
 	}
@@ -193,8 +192,8 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	public void clearAllCache() {
 		mMemoryCache.evictAll();
 	}
-	
-	
+
+
 	//	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
 	//		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
 	//		if (bitmap != null) return bitmap;

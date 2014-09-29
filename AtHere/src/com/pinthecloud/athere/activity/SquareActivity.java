@@ -201,9 +201,7 @@ public class SquareActivity extends AhSlidingActivity {
 
 			@Override
 			public void onCompleted(Boolean result) {
-				progressBar.setVisibility(View.GONE);
-
-				app.removeSquarePreference(contentFragment);
+				app.removeMySquarePreference(contentFragment);
 				Intent intent = new Intent(thisActivity, SquareListActivity.class);
 				startActivity(intent);
 				finish();

@@ -3,6 +3,7 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.activity.ProfileSettingsActivity;
+import com.pinthecloud.athere.activity.SettingsActivity;
 import com.pinthecloud.athere.adapter.AppDrawerListAdapter;
 import com.pinthecloud.athere.dialog.ProfileDialog;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
@@ -28,6 +30,10 @@ import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppDrawerListItem;
 
 public class AppDrawerFragment extends AhFragment{
+
+	private final int SETTINGS = 0;
+	private final int REVIEW = 1;
+	private final int SHARE = 2;
 
 	private ImageView profileImageView;
 	private TextView nickNameText;
@@ -118,7 +124,24 @@ public class AppDrawerFragment extends AhFragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO
+				Intent intent = null;
+				switch(position){
+				case SETTINGS:
+					intent = new Intent(context, SettingsActivity.class);
+					startActivity(intent);
+					break;
+				case REVIEW:
+					intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
+					startActivity(intent);
+					break;
+				case SHARE:
+					intent = new Intent();
+					intent.setAction(Intent.ACTION_SEND);
+					intent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_sentence));
+					intent.setType("text/plain");
+					startActivity(Intent.createChooser(intent, getResources().getText(R.string.share_to)));
+					break;
+				}
 			}
 		});
 
@@ -127,8 +150,9 @@ public class AppDrawerFragment extends AhFragment{
 		 * Set list item
 		 */
 		ArrayList<AppDrawerListItem> items = new ArrayList<AppDrawerListItem>();
-		items.add(new AppDrawerListItem(R.drawable.tabbar_chat_text, "content1", "badge1"));
-		items.add(new AppDrawerListItem(R.drawable.tabbar_chupa_text, "content2", "badge2"));
+		items.add(new AppDrawerListItem(R.drawable.tabbar_chat_text, "Settings", "content1"));
+		items.add(new AppDrawerListItem(R.drawable.tabbar_chat_text, "Review", "content2"));
+		items.add(new AppDrawerListItem(R.drawable.tabbar_chupa_text, "Share", "content3"));
 		appDrawerListAdapter.addAll(items);
 
 		return view;

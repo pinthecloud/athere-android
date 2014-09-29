@@ -40,15 +40,18 @@
     <string name="guide">가이드</string>
     <string name="notification">알림</string>
     <string name="more">더보기</string>
+    <string name="share_to">공유할 대상:</string>
+    <string name="settings">설정</string>
+    <string name="facebook_login">페이스북으로 로그인 하기</string>
+    <string name="facebook_logout">로그아웃</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>
     <string name="max_nick_name_message">닉네임이 열 글자를 넘을 수 없어요.</string>
     <string name="bad_nick_name_message">완성되지 않거나 특수한 문자는 닉네임으로 적절하지 않아요.</string>
     <string name="bad_entry_code_message">잘못된 입장 코드예요.</string>
-    <string name="exit_square_message">님이 그라운드를 나갔어요.</string>
     <string name="enter_square_message">님이 그라운드에 들어왔어요.</string>
-    <string name="behave_well_warning">우리 재미있게 대화해요.</string>
+    <string name="exit_square_message">님이 그라운드를 나갔어요.</string>
     <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워져요. 나가시나요?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈어요.</string>
     <string name="forced_logout_title">로그아웃 되셨어요.</string>
@@ -63,6 +66,9 @@
     <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
     <string name="no_facebook_upload_message">저희는 어떤 것도 페이스북에 올리지 않아요.</string>
     <string name="birthday_access_message">나이 계산을 위해 생일이 필요해요.</string>
+    <string name="greeting_sentence">모두에게 인사를 건네보세요.</string>
+    <string name="share_sentence">같이 추파 던질래요? 지금 같은 공간에 있는 사람들을 만날 수 있어요!\nwww.sendchupa.com</string>
+    <string name="duplicated_nick_name_message">다른 사람이 이미 사용하고 있는 닉네임 이에요.</string>
 
     <!-- String Array -->
 

@@ -87,13 +87,13 @@ public class SplashFragment extends AhFragment {
 
 			int resetTime = squareHelper.getMySquareInfo().getResetTime();
 			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				app.removeSquarePreference(thisFragment);
+				app.removeMySquarePreference(thisFragment);
 			} else if(currentDay > lastDay && lastHour < resetTime){
-				app.removeSquarePreference(thisFragment);
+				app.removeMySquarePreference(thisFragment);
 			} else if(currentDay > lastDay && currentHour >= resetTime){
-				app.removeSquarePreference(thisFragment);
+				app.removeMySquarePreference(thisFragment);
 			} else if(currentDay == lastDay && lastHour < resetTime && currentHour >= resetTime){
-				app.removeSquarePreference(thisFragment);
+				app.removeMySquarePreference(thisFragment);
 			}
 		}
 

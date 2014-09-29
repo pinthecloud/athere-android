@@ -14,6 +14,7 @@ import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
 import com.pinthecloud.athere.helper.SquareHelper;
@@ -149,16 +150,39 @@ public class AhApplication extends Application{
 	}
 
 
-	public void removeSquarePreference(AhFragment frag){
+	/*
+	 * Remove preference about square user entered.
+	 */
+	public void removeMySquarePreference(AhFragment frag){
+		// Remove other users and messages.
 		userDBHelper.deleteAllUsers();
 		messageDBHelper.deleteAllMessages();
 		messageDBHelper.clearAllChupaBadgeNum();
+
+		// Remove others' profile image.
 		String userId = userHelper.getMyUserInfo().getId();
-		FileUtil.clearAllFilesExceptSomeFiles(app, userId, userId+AhGlobalVariable.SMALL);
+		FileUtil.clearAllFilesExceptSomeFiles(app, new String[]{ userId, userId+AhGlobalVariable.SMALL });
 		blobStorageHelper.clearAllCache();
 
-		userHelper.userLogout();
+		// Remove my preference
+		userHelper.removeMySquareUserInfo();
 		squareHelper.removeMySquareInfo();
+	}
+
+
+	/*
+	 * Remove preference about me.
+	 */
+	public void removeMyUserPreference(AhFragment frag){
+		// Remove my profile image.
+		String userId = userHelper.getMyUserInfo().getId();
+		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId, null);
+		blobStorageHelper.deleteBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, userId+AhGlobalVariable.SMALL, null);
+		FileUtil.clearAllFilesExceptSomeFiles(app, null);
+		blobStorageHelper.clearAllCache();
+
+		// Remove my preference
+		userHelper.removeMyUserInfo();
 	}
 
 
