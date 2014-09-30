@@ -1,8 +1,6 @@
 package com.pinthecloud.athere.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -10,7 +8,7 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
+import com.pinthecloud.athere.fragment.AhFragment;
 
 /**
  *  Base class for every activity.
@@ -18,25 +16,20 @@ import com.pinthecloud.athere.helper.PreferenceHelper;
  *  Every Activity is a container for each Fragment.
  *  Fragments do the real works.
  */
-public class AhActivity extends Activity{
+public class AhActivity extends Activity {
 
 	protected AhApplication app;
-	protected PreferenceHelper pref;
 	protected FiveRocksHelper fiveRocksHelper;
 	protected UserHabitHelper userHabitHelper;
 
 	protected AhActivity thisActivity;
 	protected String simpleClassName;
 
-	private boolean isDestroyed = false;
-
 
 	public AhActivity(){
 		thisActivity = this;
 		app = AhApplication.getInstance();
-		pref = app.getPref();
 		simpleClassName = thisActivity.getClass().getSimpleName();
-
 		fiveRocksHelper = app.getFiveRocksHelper();
 		userHabitHelper = app.getUserHabitHelper();
 	}
@@ -47,30 +40,6 @@ public class AhActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		LogSM(simpleClassName + " onCreate");
 		fiveRocksHelper.initFiveRocks(thisActivity);
-	}
-
-
-	// Logging Method
-	public void Log(AhActivity activity, Object... params){
-		if(AhGlobalVariable.DEBUG_MODE){
-			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			Log.e("ERROR", simpleClassName);
-			for(Object str : params) {
-				if (str == null) {
-					Log.e("ERROR", "null");
-					continue;
-				}
-				Log.e("ERROR", str.toString());
-			}
-			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-		}
-	}
-
-
-	public void LogSM(String params){
-		if(AhGlobalVariable.DEBUG_MODE){
-			Log.d("Seungmin", params);
-		}
 	}
 
 
@@ -96,17 +65,28 @@ public class AhActivity extends Activity{
 	protected void onDestroy() {
 		LogSM(simpleClassName + " onDestroy");
 		super.onDestroy();
-		isDestroyed = true;
 	}
 
 
-	@SuppressLint("NewApi")
-	@Override
-	public boolean isDestroyed() {
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			return isDestroyed;
-		} else {
-			return super.isDestroyed();
+	public void Log(AhFragment fragment, Object... params){
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
+			for(Object str : params) {
+				if (str == null) {
+					Log.e("ERROR", "null");
+					continue;
+				}
+				Log.e("ERROR", str.toString());
+			}
+			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+		}
+	}
+
+
+	public void LogSM(String params){
+		if(AhGlobalVariable.DEBUG_MODE){
+			Log.d("Seungmin", params);
 		}
 	}
 }

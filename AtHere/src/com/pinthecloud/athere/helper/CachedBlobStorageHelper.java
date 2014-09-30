@@ -56,7 +56,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			}
 
 			// Check from Disk
-			bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
+			bitmap = FileUtil.getBitmapFromInternalStorage(frag.getActivity(), id);
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 				addBitmapToMemoryCache(id, bitmap);
@@ -102,7 +102,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (bitmap == null) return null;
 
 			if(isSave){
-				FileUtil.saveImageToInternalStorage(app, id, bitmap);
+				FileUtil.saveBitmapToInternalStorage(app, id, bitmap);
 			}
 			addBitmapToMemoryCache(id, bitmap);
 
@@ -184,7 +184,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	private Bitmap getBitmapFromMemCache(String key) {
 		return mMemoryCache.get(key);
 	}
-	
+
 	public void clearCache(String id) {
 		mMemoryCache.remove(id);
 	}
@@ -192,8 +192,8 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 	public void clearAllCache() {
 		mMemoryCache.evictAll();
 	}
-	
-	
+
+
 	//	public Bitmap getBitmapSync(final AhFragment frag, String id, int placeHolderId, int w, int h) {
 	//		Bitmap bitmap = FileUtil.getImageFromInternalStorage(frag.getActivity(), id);
 	//		if (bitmap != null) return bitmap;

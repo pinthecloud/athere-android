@@ -11,7 +11,6 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceTable;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.microsoft.windowsazure.mobileservices.TableOperationCallback;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -23,38 +22,101 @@ import com.pinthecloud.athere.util.JsonConverter;
 
 public class SquareHelper {
 
-	private AhApplication app;
-	private MobileServiceClient mClient;
-	private PreferenceHelper pref;
-
-
-	/**
-	 * Model tables
-	 */
-	private MobileServiceTable<Square> squareTable;
-
-
-	/*
-	 * Methods name
-	 */
+	private final String SQUARE_ID_KEY = "SQUARE_ID_KEY";
+	private final String SQUARE_NAME_KEY = "SQUARE_NAME_KEY";
+	private final String SQUARE_RESET_KEY = "SQUARE_RESET_KEY";
+	private final String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
+	private final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
+	private final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
+	private final String IS_PREVIEW_KEY = "IS_PREVIEW_KEY";
+	private final String IS_REVIEW_KEY = "IS_REVIEW_KEY";
+	
 	private final String GET_NEAR_SQUARE = "get_near_square";
 
-
-	/*
-	 * String
-	 */
 	private final String currentLatitude = "currentLatitude";
 	private final String currentLongitude = "currentLongitude";
+
+	private AhApplication app;
+	private PreferenceHelper pref;
+	private MobileServiceClient mClient;
+	private MobileServiceTable<Square> squareTable;
 
 
 	public SquareHelper() {
 		super();
 		this.app = AhApplication.getInstance();
+		this.pref = PreferenceHelper.getInstance();
 		this.mClient = app.getmClient();
-		this.pref = app.getPref();
-		this.squareTable = app.getSquareTable();
+		this.squareTable = app.getmClient().getTable(Square.class);
 	}
 
+	public boolean isLoggedInSquare() {
+		return pref.getBoolean(IS_LOGGED_IN_SQUARE_KEY);
+	}
+	public Boolean isPreview() {
+		return pref.getBoolean(IS_PREVIEW_KEY);
+	}
+	public Boolean isReview() {
+		return pref.getBoolean(IS_REVIEW_KEY);
+	}
+	public int getSquareExitTab() {
+		return pref.getInt(SQUARE_EXIT_TAB_KEY);
+	}
+	public String getTimeStampAtLoggedInSquare() {
+		return pref.getString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY);
+	}
+	public SquareHelper setMySquareId(String id) {
+		pref.putString(SQUARE_ID_KEY, id);
+		return this;
+	}
+	public SquareHelper setMySquareName(String name) {
+		pref.putString(SQUARE_NAME_KEY, name);
+		return this;
+	} 
+	public SquareHelper setMySquareResetTime(int resetTime) {
+		pref.putInt(SQUARE_RESET_KEY, resetTime);
+		return this;
+	} 
+	public SquareHelper setLoggedInSquare(boolean isLogged) {
+		pref.putBoolean(IS_LOGGED_IN_SQUARE_KEY, isLogged);
+		return this;
+	}
+	public SquareHelper setSquareExitTab(int pos) {
+		pref.putInt(SQUARE_EXIT_TAB_KEY, pos);
+		return this;
+	}
+	public SquareHelper setTimeStampAtLoggedInSquare(String time) {
+		pref.putString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time);
+		return this;
+	}
+	public SquareHelper setPreview(Boolean isPreview) {
+		pref.putBoolean(IS_PREVIEW_KEY, isPreview);
+		return this;
+	}
+	public SquareHelper setReview(boolean isReview) {
+		pref.putBoolean(IS_REVIEW_KEY, isReview);
+		return this;
+	}
+
+
+	public Square getMySquareInfo(){
+		Square square = new Square();
+		square.setId(pref.getString(SQUARE_ID_KEY));
+		square.setName(pref.getString(SQUARE_NAME_KEY));
+		square.setResetTime(pref.getInt(SQUARE_RESET_KEY));
+		return square;
+	}
+
+
+	public void removeMySquareInfo() {
+		pref.removePref(SQUARE_ID_KEY);
+		pref.removePref(SQUARE_NAME_KEY);
+		pref.removePref(SQUARE_RESET_KEY);
+		pref.removePref(SQUARE_EXIT_TAB_KEY);
+		pref.removePref(IS_LOGGED_IN_SQUARE_KEY);
+		pref.removePref(IS_PREVIEW_KEY);
+		pref.removePref(IS_REVIEW_KEY);
+	}	
 
 
 	/*
@@ -125,15 +187,6 @@ public class SquareHelper {
 				}
 			}
 		});
-	}
-
-
-	public Square getSquare(){
-		Square square = new Square();
-		square.setId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY));
-		square.setName(pref.getString(AhGlobalVariable.SQUARE_NAME_KEY));
-		square.setResetTime(pref.getInt(AhGlobalVariable.SQUARE_RESET_KEY));
-		return square;
 	}
 
 

@@ -59,7 +59,6 @@ public class HongkunTestActivity extends AhActivity {
 			fragmentTransaction.add(R.id.hongkun_test_container, hongFrag);
 			fragmentTransaction.commit();
 		} catch(AhException ex){
-			Log(this,"HERE : ",ex);
 		}
 		
 	}

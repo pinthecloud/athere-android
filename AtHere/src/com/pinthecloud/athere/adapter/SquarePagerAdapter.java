@@ -7,24 +7,23 @@ import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.ChatFragment;
-import com.pinthecloud.athere.fragment.ChupaRoomListFragment;
+import com.pinthecloud.athere.fragment.MemberFragment;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip.IconTabProvider;
 
 public class SquarePagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider{
 
 	private String[] titles;
 	private int[] titleIcons = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
-	public ChatFragment squareChatFragment;
-	public ChupaRoomListFragment squareChupaListFragment;
+	public ChatFragment chatFragment;
+	public MemberFragment memberFragment;
 
 
-	public SquarePagerAdapter(Context context, FragmentManager fm, PagerSlidingTabStrip tabs, Square square) {
+	public SquarePagerAdapter(Context context, FragmentManager fm, Square square) {
 		super(fm);
 		this.titles = context.getResources().getStringArray(R.array.square_tab_string_array);
-		squareChatFragment = new ChatFragment(square);
-		squareChupaListFragment = new ChupaRoomListFragment();
+		chatFragment = new ChatFragment(square);
+		memberFragment = new MemberFragment(square);
 	}
 
 
@@ -45,9 +44,9 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 		Fragment fragment = null;
 		switch(position){
 		case 0:
-			return this.squareChatFragment;
+			return this.chatFragment;
 		case 1:
-			return this.squareChupaListFragment;
+			return this.memberFragment;
 		}
 		return fragment;
 	}

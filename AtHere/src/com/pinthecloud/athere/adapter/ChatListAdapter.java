@@ -57,7 +57,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		this.frag = frag;
 		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		this.app = AhApplication.getInstance(); 
+		this.app = AhApplication.getInstance();
 		this.userDBHelper = app.getUserDBHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 		this.messageDBHelper = app.getMessageDBHelper();
@@ -104,9 +104,9 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Find UI component only in receive list
 				 */
-				TextView timeText = (TextView)view.findViewById(R.id.row_square_chat_list_send_time);
-				ImageButton failButton = (ImageButton)view.findViewById(R.id.row_square_chat_list_send_fail);
-				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_square_chat_list_send_progress_bar);
+				TextView timeText = (TextView)view.findViewById(R.id.row_chat_list_send_time);
+				ImageButton failButton = (ImageButton)view.findViewById(R.id.row_chat_list_send_fail);
+				ProgressBar progressBar = (ProgressBar)view.findViewById(R.id.row_chat_list_send_progress_bar);
 
 
 				/*
@@ -142,7 +142,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Find and Set Common UI component
 				 */
-				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_send_message);
+				messageText = (TextView)view.findViewById(R.id.row_chat_list_send_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
 
 					@Override
@@ -161,7 +161,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				final AhUser user = userDBHelper.getUser(message.getSenderId(), true);
 				if (user == null) return view;
-				messageText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_message);
+				messageText = (TextView)view.findViewById(R.id.row_chat_list_receive_message);
 				messageText.setOnLongClickListener(new OnLongClickListener() {
 
 					@Override
@@ -175,10 +175,10 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Find UI component only in receive list
 				 */
-				TextView timeText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_time);
-				TextView nickNameText = (TextView)view.findViewById(R.id.row_square_chat_list_receive_nick_name);
-				final ImageView profileImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_profile);
-				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_square_chat_list_receive_gender);
+				TextView timeText = (TextView)view.findViewById(R.id.row_chat_list_receive_time);
+				TextView nickNameText = (TextView)view.findViewById(R.id.row_chat_list_receive_nick_name);
+				final ImageView profileImage = (ImageView)view.findViewById(R.id.row_chat_list_receive_profile);
+				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_chat_list_receive_gender);
 
 
 				/*
@@ -205,7 +205,8 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 								"ViewOthersProfile",
 								"ChatProfile");
 
-						ProfileDialog profileDialog = new ProfileDialog(frag, user, new AhDialogCallback() {
+						ProfileDialog profileDialog = new ProfileDialog(frag, user, 
+								new AhDialogCallback() {
 
 							@Override
 							public void doPositiveThing(Bundle bundle) {

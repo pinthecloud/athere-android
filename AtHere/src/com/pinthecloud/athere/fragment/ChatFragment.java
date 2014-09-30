@@ -15,12 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.ChatListAdapter;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
+import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
 
 public class ChatFragment extends AhFragment{
@@ -57,9 +57,9 @@ public class ChatFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
-		messageListView = (ListView) view.findViewById(R.id.square_chat_frag_list);
-		messageEditText = (EditText) view.findViewById(R.id.square_chat_frag_message_text);
-		sendButton = (ImageButton) view.findViewById(R.id.square_chat_frag_send_button);
+		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
+		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
+		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
 
 
 		/*
@@ -84,6 +84,9 @@ public class ChatFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
+		if(squareHelper.isPreview()){
+			messageEditText.setEnabled(false);
+		}
 
 
 		/*
@@ -93,11 +96,12 @@ public class ChatFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
+				AhUser myUser = userHelper.getMyUserInfo();
 				// Make message and send it
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
 				messageBuilder.setContent(messageEditText.getText().toString())
-				.setSender(pref.getString(AhGlobalVariable.NICK_NAME_KEY))
-				.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
+				.setSender(myUser.getNickName())
+				.setSenderId(myUser.getId())
 				.setReceiverId(square.getId())
 				.setType(AhMessage.TYPE.TALK);
 				AhMessage sendChat = messageBuilder.build();
@@ -225,14 +229,15 @@ public class ChatFragment extends AhFragment{
 		 * Set ENTER, EXIT, CHAT messages
 		 */
 		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
-			String nickName = pref.getString(AhGlobalVariable.NICK_NAME_KEY);
+			AhUser myUser = userHelper.getMyUserInfo();
+			String nickName = myUser.getNickName();
 			String enterMessage = getResources().getString(R.string.enter_square_message);
-			String warningMessage = getResources().getString(R.string.behave_well_warning);
+			String warningMessage = getResources().getString(R.string.greeting_sentence);
 			AhMessage enterChat = new AhMessage.Builder()
 			.setContent(nickName + " " + enterMessage + "\n" + warningMessage)
 			.setSender(nickName)
-			.setSenderId(pref.getString(AhGlobalVariable.USER_ID_KEY))
-			.setReceiverId(pref.getString(AhGlobalVariable.SQUARE_ID_KEY))
+			.setSenderId(myUser.getId())
+			.setReceiverId(squareHelper.getMySquareInfo().getId())
 			.setType(AhMessage.TYPE.ENTER_SQUARE)
 			.setStatus(AhMessage.STATUS.SENT)
 			.setTimeStamp().build();
@@ -241,7 +246,6 @@ public class ChatFragment extends AhFragment{
 		if (id == null){
 			chats = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE);
 		} else {
-			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			chat = messageDBHelper.getMessage(Integer.parseInt(id));
 		}
 

@@ -36,7 +36,6 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	private LayoutInflater inflater;
 	private MessageDBHelper messageDBHelper;
 
-
 	public ChupaChatListAdapter(Context context, Fragment frag) {
 		super(context, 0);
 		this.context = context;

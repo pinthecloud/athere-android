@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.SquarePagerAdapter;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
@@ -19,8 +18,8 @@ import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 
 public class SquareTabFragment extends AhFragment{
 
-	public static final int SQUARE_CHAT_TAB = 0;
-	public static final int SQUARE_CHUPA_TAB = 1;
+	public static final int CHAT_TAB = 0;
+	public static final int CHUPA_TAB = 1;
 	private final int BADGE_SIZE = 21;
 
 	private ViewPager mViewPager;
@@ -69,10 +68,10 @@ public class SquareTabFragment extends AhFragment{
 		 */
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), tabs, square);
+		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
 
 		// Set up the ViewPager with the sections adapter.
-		int startTab = pref.getInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY);
+		int startTab = squareHelper.getSquareExitTab();
 		mViewPager.setAdapter(mSquarePagerAdapter);
 		mViewPager.setCurrentItem(startTab);
 
@@ -83,7 +82,7 @@ public class SquareTabFragment extends AhFragment{
 
 			@Override
 			public void onPageSelected(int position) {
-				pref.putInt(AhGlobalVariable.SQUARE_EXIT_TAB_KEY, position);
+				squareHelper.setSquareExitTab(position);
 			}
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -92,7 +91,7 @@ public class SquareTabFragment extends AhFragment{
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
-		chupaTabBadge = tabs.getTabBadgeView(SQUARE_CHUPA_TAB);
+		chupaTabBadge = tabs.getTabBadgeView(CHUPA_TAB);
 
 
 		/*
@@ -112,8 +111,8 @@ public class SquareTabFragment extends AhFragment{
 
 			@Override
 			public void onCompleted(final AhMessage message) {
-				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChatFragment, message);
-				messageHelper.triggerMessageEvent(mSquarePagerAdapter.squareChupaListFragment, message);
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.chatFragment, message);
+				messageHelper.triggerMessageEvent(mSquarePagerAdapter.memberFragment, message);
 				refreshView();
 			}
 		});

@@ -3,6 +3,8 @@ package com.pinthecloud.athere.helper;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.Activity;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,7 +12,6 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -20,13 +21,10 @@ import com.pinthecloud.athere.util.AsyncChainer;
 
 public class MessageHelper {
 
+	private final String SEND_MESSAGE = "send_message";
+	
 	private AhApplication app;
 	private MobileServiceClient mClient;
-
-	/*
-	 * Methods name
-	 */
-	private final String SEND_MESSAGE = "send_message";
 
 
 	public MessageHelper() {
@@ -70,7 +68,7 @@ public class MessageHelper {
 		});
 
 	}
-
+	
 
 	/**
 	 *  ===[The Message Triggering Propagation Mechanism]===
@@ -93,7 +91,7 @@ public class MessageHelper {
 	 */
 
 	private Map<String, AhEntityCallback<AhMessage>> map = new HashMap<String, AhEntityCallback<AhMessage>>();
-	public void setMessageHandler(AhActivity activity, AhEntityCallback<AhMessage> callback){
+	public void setMessageHandler(Activity activity, AhEntityCallback<AhMessage> callback){
 		map.put(activity.getClass().getName(), callback);
 	}
 	public void setMessageHandler(AhFragment frag, AhEntityCallback<AhMessage> callback){

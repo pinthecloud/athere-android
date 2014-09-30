@@ -7,8 +7,6 @@ import android.os.Parcelable;
 import android.text.format.Time;
 
 import com.pinthecloud.athere.AhApplication;
-import com.pinthecloud.athere.AhGlobalVariable;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 
 public class AhMessage implements Parcelable {
 
@@ -68,10 +66,13 @@ public class AhMessage implements Parcelable {
 
 	private AhMessage() {
 	}
+	
 	public AhMessage(Parcel in){
 		this();
 		readToParcel(in);
 	}
+	
+	
 	public String getId() {
 		return id;
 	}
@@ -182,8 +183,7 @@ public class AhMessage implements Parcelable {
 	
 	
 	public boolean isMine(){
-		PreferenceHelper pref = AhApplication.getInstance().getPref();
-		return senderId.equals(pref.getString(AhGlobalVariable.USER_ID_KEY));
+		return senderId.equals(AhApplication.getInstance().getUserHelper().getMyUserInfo().getId());
 	}
 
 	
@@ -254,7 +254,6 @@ public class AhMessage implements Parcelable {
 	 * Message Builder Class
 	 */
 	public static class Builder {
-
 		private String id;
 		private String type;
 		private String content;
@@ -321,6 +320,7 @@ public class AhMessage implements Parcelable {
 			return this;
 		}
 
+		
 		public AhMessage build(){
 			AhMessage message = new AhMessage();
 			message.id = id;

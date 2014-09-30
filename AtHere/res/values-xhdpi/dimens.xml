@@ -1,6 +1,0 @@
-<resources>
-
-    <!-- Square -->
-    <dimen name="square_drawer_width">300dp</dimen>
-
-</resources>

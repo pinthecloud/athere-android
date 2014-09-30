@@ -1,102 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true" >
 
-    <FrameLayout
-        android:id="@+id/profile_settings_frag_camera_view"
+    <ProgressBar
+        android:id="@+id/profile_settings_frag_progress_bar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <com.pinthecloud.athere.view.SquareImageView
+        android:id="@+id/profile_settings_frag_profile_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:contentDescription="@string/profile_image" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_below="@+id/profile_settings_frag_profile_image"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/profile_settings_profile_right_margin"
+        android:paddingLeft="@dimen/profile_settings_profile_left_margin"
+        android:paddingRight="@dimen/profile_settings_profile_right_margin"
+        android:paddingStart="@dimen/profile_settings_profile_left_margin" >
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+        <TextView
+            android:id="@+id/profile_settings_frag_nick_name_warning_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_medium" />
 
-            <com.pinthecloud.athere.view.SquareImageView
-                android:id="@+id/profile_settings_frag_profile_picture"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/profile_image" />
-
-            <ImageButton
-                android:id="@+id/profile_settings_frag_self_camera_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/profile_settings_frag_profile_picture"
-                android:layout_alignRight="@+id/profile_settings_frag_profile_picture"
-                android:layout_alignTop="@+id/profile_settings_frag_profile_picture"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/rotate"
-                android:src="@drawable/camera_rotate"
-                android:visibility="gone" />
-
-            <ImageButton
-                android:id="@+id/profile_settings_frag_camera_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/profile_settings_frag_profile_picture"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/profile_settings_camera_button_bottom_margin"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/take"
-                android:src="@drawable/camera_take"
-                android:visibility="gone" />
-
-            <ProgressBar
-                android:id="@+id/profile_settings_frag_progress_bar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/profile_settings_frag_profile_info_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffffff"
+        <EditText
+            android:id="@+id/profile_settings_frag_nick_name_text"
+            android:layout_width="@dimen/profile_settings_nick_name_text_width"
+            android:layout_height="wrap_content"
+            android:ems="10"
             android:gravity="center"
-            android:orientation="vertical" >
+            android:hint="@string/nick_name"
+            android:inputType="text"
+            android:maxLength="10"
+            android:textSize="@dimen/font_large" />
 
-            <EditText
-                android:id="@+id/profile_settings_frag_nick_name_text"
-                android:layout_width="@dimen/profile_settings_text_width"
-                android:layout_height="@dimen/profile_settings_text_height"
-                android:ems="10"
-                android:gravity="center"
-                android:hint="@string/nick_name"
-                android:inputType="text"
-                android:maxLength="10"
-                android:textSize="@dimen/font_large" >
-            </EditText>
+        <EditText
+            android:id="@+id/profile_settings_frag_birth_gender_text"
+            android:layout_width="@dimen/profile_settings_birth_gender_text_width"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:enabled="false"
+            android:gravity="center"
+            android:inputType="text"
+            android:textSize="@dimen/font_large" />
 
-            <EditText
-                android:id="@+id/profile_settings_frag_company_text"
-                android:layout_width="@dimen/profile_settings_text_width"
-                android:layout_height="@dimen/profile_settings_text_height"
-                android:layout_marginBottom="@dimen/profile_settings_company_number_start_button_margin"
-                android:ems="10"
-                android:gravity="center"
-                android:hint="@string/number_of_member_question"
-                android:textSize="@dimen/font_large" />
-
-            <ImageButton
-                android:id="@+id/profile_settings_frag_start_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:contentDescription="@android:string/ok"
-                android:src="@drawable/ok_image_button_bg" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/profile_settings_frag_start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@android:string/ok"
+            android:src="@drawable/ok_image_button_bg" />
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

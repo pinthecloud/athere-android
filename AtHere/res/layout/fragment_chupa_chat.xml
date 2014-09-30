@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/chupa_chat_bg"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/chupa_chat_other_bar_height"
+        android:background="@android:color/white"
         android:gravity="start|center"
         android:orientation="horizontal"
         android:paddingEnd="0dp"
@@ -15,13 +16,14 @@
         android:paddingRight="0dp"
         android:paddingStart="@dimen/chupa_chat_other_bar_left_margin" >
 
-        <ImageView
+        <com.pinthecloud.athere.view.CircleImageView
             android:id="@+id/chupa_chat_frag_other_profile"
             android:layout_width="@dimen/chupa_chat_other_profile_width"
             android:layout_height="@dimen/chupa_chat_other_profile_height"
             android:layout_marginEnd="@dimen/chupa_chat_other_profile_nick_margin"
             android:layout_marginRight="@dimen/chupa_chat_other_profile_nick_margin"
-            android:contentDescription="@string/profile_image" />
+            app:civBorderColor="@color/gray_line"
+            app:civBorderWidth="@dimen/line_height" />
 
         <TextView
             android:id="@+id/chupa_chat_frag_other_nick_name"
@@ -64,7 +66,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/divider_height"
+        android:layout_height="@dimen/line_height"
         android:layout_gravity="center"
         android:background="@color/gray_line" />
 
@@ -73,6 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@drawable/chupa_chat_bg"
         android:divider="@null"
         android:transcriptMode="alwaysScroll" />
 
@@ -81,25 +84,25 @@
         android:layout_height="wrap_content"
         android:background="@color/chupa_inputbar_background"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/square_chat_input_bottom_margin"
-        android:paddingTop="@dimen/square_chat_input_top_margin" >
+        android:paddingBottom="@dimen/chat_input_bottom_margin"
+        android:paddingTop="@dimen/chat_input_top_margin" >
 
         <EditText
             android:id="@+id/chupa_chat_frag_message_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/square_chat_input_layout_left_margin"
-            android:layout_marginStart="@dimen/square_chat_input_layout_left_margin"
+            android:layout_marginLeft="@dimen/chat_input_layout_left_margin"
+            android:layout_marginStart="@dimen/chat_input_layout_left_margin"
             android:layout_weight="1"
             android:background="@drawable/bg_inputbar_highlight"
             android:ems="10"
             android:inputType="textMultiLine"
             android:maxLines="3"
-            android:paddingEnd="@dimen/square_chat_input_right_margin"
-            android:paddingLeft="@dimen/square_chat_input_left_margin"
-            android:paddingRight="@dimen/square_chat_input_right_margin"
-            android:paddingStart="@dimen/square_chat_input_left_margin"
+            android:paddingEnd="@dimen/chat_input_right_margin"
+            android:paddingLeft="@dimen/chat_input_left_margin"
+            android:paddingRight="@dimen/chat_input_right_margin"
+            android:paddingStart="@dimen/chat_input_left_margin"
             android:textSize="@dimen/font_large" >
 
             <requestFocus />
