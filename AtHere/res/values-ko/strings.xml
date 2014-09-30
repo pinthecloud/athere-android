@@ -39,7 +39,9 @@
     <string name="notification">알림</string>
     <string name="more">더보기</string>
     <string name="share_to">공유할 대상:</string>
-    <string name="settings">설정</string>
+    <string name="question">문의하기</string>
+    <string name="share">공유하기</string>
+    <string name="app_settings">앱설정</string>
     <string name="facebook_login">페이스북으로 로그인 하기</string>
     <string name="facebook_logout">로그아웃</string>
     <string name="refresh">새로고침</string>

@@ -42,7 +42,9 @@
     <string name="notification">Notification</string>
     <string name="more">More</string>
     <string name="share_to">Share to:</string>
-    <string name="settings">Settings</string>
+    <string name="question">Question</string>
+    <string name="share">Share</string>
+    <string name="app_settings">Settings</string>
     <string name="facebook_login">Login using Facebook</string>
     <string name="facebook_logout">Logout</string>
     <string name="refresh">Refresh</string>
@@ -87,7 +89,7 @@
 
     <!--
          Reference
-        <string name="dash">&#160;-&#160;</string>
+        <string name="dash">&#160;-&#160;</string>
     -->
 
 </resources>

@@ -2,6 +2,7 @@ package com.pinthecloud.athere.fragment;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,9 @@ import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.AsyncChainer;
+import com.pinthecloud.athere.util.AsyncChainer.Chainable;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class ProfileImageFragment extends AhFragment{
 
@@ -52,9 +56,21 @@ public class ProfileImageFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				user.getId(), 0, profileImage, true);
-		mAttacher.update();
+		final Bitmap placeHolder = FileUtil.getBitmapFromInternalStorage(context, user.getId()+AhGlobalVariable.SMALL);
+		AsyncChainer.asyncChain(thisFragment, new Chainable(){
+
+			@Override
+			public void doNext(AhFragment frag) {
+				blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
+						user.getId(), placeHolder, profileImage, true);
+			}
+		}, new Chainable(){
+
+			@Override
+			public void doNext(AhFragment frag) {
+				mAttacher.update();
+			}
+		});
 	}
 
 

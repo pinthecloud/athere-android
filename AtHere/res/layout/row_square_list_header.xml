@@ -12,6 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:drawableLeft="@drawable/groundlist_location_ico"
+        android:drawableStart="@drawable/groundlist_location_ico"
+        android:gravity="center"
         android:textColor="@color/square_list_address"
         android:textSize="@dimen/font_medium" />
 
@@ -23,6 +26,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/refresh"
-        android:src="@drawable/actionbar_logo" />
+        android:src="@drawable/groundlist_refresh_ico" />
 
 </RelativeLayout>

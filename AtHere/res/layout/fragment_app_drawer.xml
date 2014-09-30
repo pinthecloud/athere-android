@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/app_drawer_background"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -15,15 +15,17 @@
 
         <com.pinthecloud.athere.view.CircleImageView
             android:id="@+id/app_drawer_frag_profile_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:civBorderColor="@color/gray_line"
+            android:layout_width="@dimen/app_drawer_profile_image"
+            android:layout_height="@dimen/app_drawer_profile_image"
+            app:civBorderColor="@color/app_drawer_line"
             app:civBorderWidth="@dimen/line_height" />
 
         <TextView
             android:id="@+id/app_drawer_frag_nick_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_drawer_profile_text"
+            android:textSize="@dimen/font_large" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,26 +34,32 @@
             <TextView
                 android:id="@+id/app_drawer_frag_age"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_drawer_profile_text"
+                android:textSize="@dimen/font_medium" />
 
             <TextView
                 android:id="@+id/app_drawer_frag_gender"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_drawer_profile_text"
+                android:textSize="@dimen/font_medium" />
         </LinearLayout>
 
         <Button
             android:id="@+id/app_drawer_frag_profile_settings_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profile Settings" />
+            android:background="@android:color/transparent"
+            android:text="@string/profile_settings" />
     </LinearLayout>
 
     <ListView
         android:id="@+id/app_drawer_frag_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/app_drawer_frag_profile_layout" >
+        android:layout_below="@+id/app_drawer_frag_profile_layout"
+        android:divider="@null" >
     </ListView>
 
 </RelativeLayout>

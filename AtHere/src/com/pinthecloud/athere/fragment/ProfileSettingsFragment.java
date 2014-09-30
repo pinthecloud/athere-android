@@ -247,7 +247,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						if (!squareHelper.isLoggedInSquare() || squareHelper.isPreview()) {
 							progressBar.setVisibility(View.GONE);
 							saveProfileImage(user.getId());
-							
+
 							if(squareHelper.isPreview()){
 								Intent intent = new Intent(context, SquareActivity.class);
 								startActivity(intent);	

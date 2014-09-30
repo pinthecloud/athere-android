@@ -1,11 +1,12 @@
 <resources>
 
     <!-- Common -->
-    <dimen name="line_height">2dp</dimen>
+    <dimen name="line_height">1dp</dimen>
 
-    <!-- Drawer -->
+    <!-- App Drawer -->
     <dimen name="app_drawer_offset">60dp</dimen>
     <dimen name="app_drawer_shadow_width">10dp</dimen>
+    <dimen name="app_drawer_profile_image">110dp</dimen>
 
     <!-- Basic Profile -->
     <dimen name="basic_profile_profile_image_width">200dp</dimen>
@@ -131,12 +132,8 @@
     <dimen name="profile_settings_profile_right_margin">10dp</dimen>
 
     <!-- Profile Dialog -->
+    <dimen name="profile_dialog_profile_height">56dp</dimen>
     <dimen name="profile_dialog_send_button_height">52dp</dimen>
-    <dimen name="profile_dialog_nick_name_info_height">56dp</dimen>
-    <dimen name="profile_dialog_nick_name_top_margin">12dp</dimen>
-    <dimen name="profile_dialog_nick_name_age_margin">10dp</dimen>
-    <dimen name="profile_dialog_age_gender_margin">6dp</dimen>
-    <dimen name="profile_dialog_gender_company_number_margin">4dp</dimen>
 
     <!-- Font size -->
     <dimen name="font_x_large">22sp</dimen>

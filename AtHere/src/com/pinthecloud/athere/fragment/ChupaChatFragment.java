@@ -233,7 +233,7 @@ public class ChupaChatFragment extends AhFragment {
 						@Override
 						public void run() {
 							blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-									otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
+									otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
 							otherNickName.setText(otherUser.getNickName());
 							otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 						}
@@ -253,7 +253,7 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
+				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
 		String chupaCommunId = AhMessage.buildChupaCommunId(userHelper.getMyUserInfo().getId(), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}

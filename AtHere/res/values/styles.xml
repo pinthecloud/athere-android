@@ -32,11 +32,6 @@
         <item name="android:titleTextStyle">@style/WhiteActionBarTitleText</item>
     </style>
 
-    <style name="WhiteActionBar" parent="android:style/Widget.Holo.ActionBar">
-        <item name="android:background">@color/action_bar_red_background</item>
-        <item name="android:titleTextStyle">@style/WhiteActionBarTitleText</item>
-    </style>
-
     
     
     <!-- ActionBar title text -->

@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -13,7 +14,6 @@ import android.widget.ImageView;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.util.AsyncChainer;
-import com.pinthecloud.athere.util.BitmapUtil;
 import com.pinthecloud.athere.util.FileUtil;
 
 public class CachedBlobStorageHelper extends BlobStorageHelper {
@@ -47,6 +47,15 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 
 
 	public void setImageViewAsync(AhFragment frag, String containerName, String id, int placeHolderId, ImageView imageView, boolean isSave) {
+		Bitmap placeHolder = null;
+		if(placeHolderId != 0){
+			placeHolder = BitmapFactory.decodeResource(frag.getResources(), placeHolderId);
+		}
+		setImageViewAsync(frag, containerName, id, placeHolder, imageView, isSave);
+	}
+
+
+	public void setImageViewAsync(AhFragment frag, String containerName, String id, Bitmap placeHolder, ImageView imageView, boolean isSave) {
 		if (cancelPotentialWork(id, imageView)) {
 			// Check from cache
 			Bitmap bitmap = getBitmapFromMemCache(id);
@@ -63,16 +72,8 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 				return;
 			}
 
-			// Get from the server
-			Bitmap mPlaceHolderBitmap = null;
-			if(placeHolderId != 0){
-				int w = imageView.getWidth();
-				int h = imageView.getHeight();
-				mPlaceHolderBitmap = BitmapUtil.decodeInSampleSize(frag.getResources(), placeHolderId, w, h);	
-			}
-
 			BitmapWorkerTask task = new BitmapWorkerTask(frag, imageView, isSave);
-			AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), mPlaceHolderBitmap, task);
+			AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), placeHolder, task);
 			imageView.setImageDrawable(asyncDrawable);
 			task.execute(containerName, id);
 		}
@@ -105,7 +106,6 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 				FileUtil.saveBitmapToInternalStorage(app, id, bitmap);
 			}
 			addBitmapToMemoryCache(id, bitmap);
-
 
 			return bitmap;
 		}

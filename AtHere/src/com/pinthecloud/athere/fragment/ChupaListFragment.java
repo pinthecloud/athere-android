@@ -164,7 +164,7 @@ public class ChupaListFragment extends AhFragment{
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(activity, /* host Activity */
 				mDrawerLayout, /* DrawerLayout object */
-				R.drawable.indicator_drawer, /* nav drawer image to replace 'Up' caret */
+				R.drawable.actionbar_red_drawer_btn, /* nav drawer image to replace 'Up' caret */
 				R.string.drawer_open, /* "open drawer" description for accessibility */
 				R.string.drawer_close /* "close drawer" description for accessibility */
 				)
