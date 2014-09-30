@@ -76,7 +76,7 @@ public class ProfileDialog extends AhDialogFragment{
 			companyNumberText.setTextColor(getResources().getColor(R.color.blue));
 		}else{
 			genderImage.setImageResource(R.drawable.profile_gender_w);
-			companyNumberText.setTextColor(getResources().getColor(R.color.dark_red));
+			companyNumberText.setTextColor(getResources().getColor(R.color.red_dark));
 		}
 		nickNameText.setText(user.getNickName());
 		ageText.setText("" + user.getAge());

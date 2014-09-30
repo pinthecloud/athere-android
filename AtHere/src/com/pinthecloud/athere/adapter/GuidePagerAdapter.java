@@ -2,12 +2,12 @@ package com.pinthecloud.athere.adapter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.GuideImageFragment;
 
-public class GuidePagerAdapter extends FragmentPagerAdapter {
+public class GuidePagerAdapter extends FragmentStatePagerAdapter {
 
 	private int[] contents = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
 

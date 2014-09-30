@@ -176,6 +176,33 @@ public class ChatFragment extends AhFragment{
 	}
 
 
+	@Override 
+	public void onSaveInstanceState(Bundle outState) {
+		//first saving my state, so the bundle wont be empty.
+		outState.putString("VIEWPAGER_BUG",  "VIEWPAGER_FIX");
+		super.onSaveInstanceState(outState);
+	}
+	
+	
+	@Override
+	public void handleException(AhException ex) {
+		if(ex.getMethodName().equals("sendMessageAsync")){
+			AhMessage exMessage = (AhMessage)ex.getParameter();
+			exMessage.setStatus(AhMessage.STATUS.FAIL);
+			messageDBHelper.updateMessages(exMessage);
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					messageListAdapter.notifyDataSetChanged();
+				}
+			});
+		}else{
+			super.handleException(ex);	
+		}
+	}
+	
+	
 	public void sendChat(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 
@@ -267,24 +294,4 @@ public class ChatFragment extends AhFragment{
 			}
 		});
 	}
-
-
-	@Override
-	public void handleException(AhException ex) {
-		if(ex.getMethodName().equals("sendMessageAsync")){
-			AhMessage exMessage = (AhMessage)ex.getParameter();
-			exMessage.setStatus(AhMessage.STATUS.FAIL);
-			messageDBHelper.updateMessages(exMessage);
-			activity.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					messageListAdapter.notifyDataSetChanged();
-				}
-			});
-		}else{
-			super.handleException(ex);	
-		}
-	}
-
 }

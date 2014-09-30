@@ -18,7 +18,6 @@
     <string name="re_send">재전송</string>
     <string name="select">선택</string>
     <string name="gender">성별</string>
-    <string name="nick_name">닉네임</string>
     <string name="drawer">사이드바</string>
     <string name="rotate">카메라 돌리기</string>
     <string name="take">찍기</string>
@@ -35,7 +34,6 @@
     <string name="age">살</string>
     <string name="person">명</string>
     <string name="admin">관리자</string>
-    <string name="install">설치</string>
     <string name="square">그라운드</string>
     <string name="guide">가이드</string>
     <string name="notification">알림</string>
@@ -44,6 +42,8 @@
     <string name="settings">설정</string>
     <string name="facebook_login">페이스북으로 로그인 하기</string>
     <string name="facebook_logout">로그아웃</string>
+    <string name="refresh">새로고침</string>
+    <string name="register_profile">프로필 등록하기</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>
@@ -69,6 +69,7 @@
     <string name="greeting_sentence">모두에게 인사를 건네보세요.</string>
     <string name="share_sentence">같이 추파 던질래요? 지금 같은 공간에 있는 사람들을 만날 수 있어요!\nwww.sendchupa.com</string>
     <string name="duplicated_nick_name_message">다른 사람이 이미 사용하고 있는 닉네임 이에요.</string>
+    <string name="enter_nick_name_message">닉네임을 입력해 주세요</string>
 
     <!-- String Array -->
 
@@ -80,10 +81,6 @@
     <string-array name="profile_image_select_string_array">
         <item>앨범에서 사진 선택</item>
         <item>사진촬영</item>
-    </string-array>
-    <string-array name="square_tab_string_array">
-        <item>talk</item>
-        <item>chupa</item>
     </string-array>
 
 </resources>

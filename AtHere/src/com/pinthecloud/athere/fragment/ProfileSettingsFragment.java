@@ -49,7 +49,7 @@ public class ProfileSettingsFragment extends AhFragment{
 
 	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
-	private EditText birthYearEditText;
+	private TextView birthGenderText;
 	private ImageButton startButton;
 
 	private boolean isTypedNickName = true;
@@ -71,7 +71,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		profileImageView = (ImageView) view.findViewById(R.id.profile_settings_frag_profile_image);
 		nickNameWarningText = (TextView) view.findViewById(R.id.profile_settings_frag_nick_name_warning_text);
 		nickNameEditText = (EditText) view.findViewById(R.id.profile_settings_frag_nick_name_text);
-		birthYearEditText = (EditText) view.findViewById(R.id.profile_settings_frag_birth_gender_text);
+		birthGenderText = (TextView) view.findViewById(R.id.profile_settings_frag_birth_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_start_button);
 
 
@@ -176,7 +176,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		 */
 		int age = user.getAge();
 		String gender = user.getGenderString(context);
-		birthYearEditText.setText(age + " " + gender);
+		birthGenderText.setText(age + " " + gender);
 
 
 		/*

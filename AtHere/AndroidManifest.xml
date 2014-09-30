@@ -82,9 +82,10 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
         <activity
             android:name=".activity.SquareListActivity"
-            android:icon="@drawable/actionbar_logo"
+            android:icon="@drawable/transparent"
             android:label="@string/square"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppRedActionBarTheme" />
         <activity
             android:name=".activity.SquareActivity"
             android:icon="@drawable/actionbar_logo"

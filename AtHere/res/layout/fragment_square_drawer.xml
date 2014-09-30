@@ -251,7 +251,7 @@
         android:layout_alignParentBottom="true"
         android:background="@android:color/white"
         android:text="@string/exit_square"
-        android:textColor="@color/dark_red"
+        android:textColor="@color/red_dark"
         android:textSize="@dimen/font_medium" />
 
 </RelativeLayout>

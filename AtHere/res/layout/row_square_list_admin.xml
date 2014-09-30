@@ -34,10 +34,10 @@
             android:layout_height="@dimen/square_drawer_profile_company_num_height"
             android:background="@drawable/bg_groundlist_member_m"
             android:gravity="center"
-            android:paddingEnd="@dimen/square_list_member_right_margin"
-            android:paddingLeft="@dimen/square_list_member_left_margin"
-            android:paddingRight="@dimen/square_list_member_right_margin"
-            android:paddingStart="@dimen/square_list_member_left_margin"
+            android:paddingEnd="@dimen/square_list_distance_right_margin"
+            android:paddingLeft="@dimen/square_list_distance_left_margin"
+            android:paddingRight="@dimen/square_list_distance_right_margin"
+            android:paddingStart="@dimen/square_list_distance_left_margin"
             android:textColor="@android:color/white"
             android:textSize="@dimen/font_medium" />
     </LinearLayout>

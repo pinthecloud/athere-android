@@ -50,7 +50,7 @@ public class BasicProfileFragment extends AhFragment{
 
 	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
-	private EditText birthYearEditText;
+	private TextView birthGenderText;
 	private ImageButton startButton;
 
 	private boolean isTypedNickName = false;
@@ -72,7 +72,7 @@ public class BasicProfileFragment extends AhFragment{
 		profileImageView = (ImageView) view.findViewById(R.id.basic_profile_frag_profile_image);
 		nickNameWarningText = (TextView) view.findViewById(R.id.basic_profile_frag_nick_name_warning_text);
 		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_text);
-		birthYearEditText = (EditText) view.findViewById(R.id.basic_profile_frag_birth_gender_text);
+		birthGenderText = (TextView) view.findViewById(R.id.basic_profile_frag_birth_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
 
 
@@ -175,7 +175,7 @@ public class BasicProfileFragment extends AhFragment{
 		 */
 		int age = user.getAge();
 		String gender = user.getGenderString(context);
-		birthYearEditText.setText(age + " " + gender);
+		birthGenderText.setText(age + " " + gender);
 
 
 		/*
@@ -213,7 +213,7 @@ public class BasicProfileFragment extends AhFragment{
 				nickNameEditText.setEnabled(false);
 				startButton.setEnabled(false);
 				nickNameWarningText.setText("");
-				
+
 				userHelper.setMyNickName(nickName)
 				.setMyChupaEnable(true);
 
@@ -383,7 +383,7 @@ public class BasicProfileFragment extends AhFragment{
 			profileImageView.setEnabled(true);
 			nickNameEditText.setEnabled(true);
 			startButton.setEnabled(true);
-			
+
 			// Show warning text
 			String message = getResources().getString(R.string.duplicated_nick_name_message);
 			nickNameWarningText.setText(message);

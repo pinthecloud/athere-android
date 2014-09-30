@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="vertical" >
+    android:background="@color/square_list_header_background"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/square_list_header_top_bottom_margin"
+    android:paddingTop="@dimen/square_list_header_top_bottom_margin" >
 
     <TextView
         android:id="@+id/row_square_list_header_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/square_list_address"
         android:textSize="@dimen/font_medium" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/row_square_list_header_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/refresh"
+        android:src="@drawable/actionbar_logo" />
+
+</RelativeLayout>

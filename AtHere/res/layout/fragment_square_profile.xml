@@ -74,7 +74,7 @@
                 android:layout_height="@dimen/square_profile_text_height"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="@string/nick_name"
+                android:hint="@string/enter_nick_name_message"
                 android:inputType="text"
                 android:maxLength="10"
                 android:textSize="@dimen/font_large" >

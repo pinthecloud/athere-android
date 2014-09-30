@@ -11,6 +11,7 @@ import android.util.Log;
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.analysis.GAHelper;
+import com.pinthecloud.athere.fragment.AhFragment;
 
 public class AhDialogFragment extends DialogFragment {
 
@@ -36,7 +37,6 @@ public class AhDialogFragment extends DialogFragment {
 		activity = (Activity) context;
 		super.onCreate(savedInstanceState);
 
-		LogSM(simpleClassName + " onCreate");
 		gaHelper.sendScreenGA(simpleClassName);
 	}
 
@@ -44,14 +44,12 @@ public class AhDialogFragment extends DialogFragment {
 	@Override
 	public void onStart() {
 		super.onStart();
-		LogSM(simpleClassName + " onStart");
 		gaHelper.reportActivityStart(activity);
 	}
 
 
 	@Override
 	public void onStop() {
-		LogSM(simpleClassName + " onStop");
 		super.onStop();
 		gaHelper.reportActivityStop(activity);
 	}
@@ -80,9 +78,18 @@ public class AhDialogFragment extends DialogFragment {
 	}
 
 
-	protected void LogSM(String params){
+	public void Log(AhFragment fragment, Object... params){
 		if(AhGlobalVariable.DEBUG_MODE){
-			Log.d("Seungmin", params);
+			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
+			for(Object str : params) {
+				if (str == null) {
+					Log.e("ERROR", "null");
+					continue;
+				}
+				Log.e("ERROR", str.toString());
+			}
+			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 		}
 	}
 }

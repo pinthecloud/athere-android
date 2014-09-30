@@ -23,6 +23,7 @@ public class ProfileImageActivity extends AhActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.frame_activity);
 
+		Log(thisActivity, "here");
 
 		/*
 		 * Set helper

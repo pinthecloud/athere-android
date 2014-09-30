@@ -147,7 +147,7 @@ public class ChupaChatFragment extends AhFragment {
 			otherCompanyNumber.setTextColor(getResources().getColor(R.color.blue));
 		} else {
 			otherGender.setImageResource(R.drawable.profile_gender_w);
-			otherCompanyNumber.setTextColor(getResources().getColor(R.color.dark_red));
+			otherCompanyNumber.setTextColor(getResources().getColor(R.color.red_dark));
 		}
 
 

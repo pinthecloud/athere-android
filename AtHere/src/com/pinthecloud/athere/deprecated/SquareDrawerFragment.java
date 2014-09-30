@@ -249,7 +249,7 @@ public class SquareDrawerFragment extends AhFragment {
 			profileCompanyNumText.setTextColor(resources.getColor(R.color.blue));
 		} else{
 			profileGenderImage.setImageResource(R.drawable.profile_gender_w);
-			profileCompanyNumText.setTextColor(resources.getColor(R.color.dark_red));
+			profileCompanyNumText.setTextColor(resources.getColor(R.color.red_dark));
 		}
 	}
 

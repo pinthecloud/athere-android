@@ -43,20 +43,17 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:hint="@string/nick_name"
+            android:hint="@string/enter_nick_name_message"
             android:inputType="text"
             android:maxLength="10"
             android:textSize="@dimen/font_large" />
 
-        <EditText
+        <TextView
             android:id="@+id/profile_settings_frag_birth_gender_text"
-            android:layout_width="@dimen/profile_settings_birth_gender_text_width"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:enabled="false"
-            android:gravity="center"
-            android:inputType="text"
-            android:textSize="@dimen/font_large" />
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_medium" />
 
         <ImageButton
             android:id="@+id/profile_settings_frag_start_button"

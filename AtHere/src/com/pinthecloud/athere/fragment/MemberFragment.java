@@ -31,4 +31,12 @@ public class MemberFragment extends AhFragment{
 		View view = inflater.inflate(R.layout.fragment_member, container, false);
 		return view;
 	}
+
+
+	@Override 
+	public void onSaveInstanceState(Bundle outState) {
+		//first saving my state, so the bundle wont be empty.
+		outState.putString("VIEWPAGER_BUG",  "VIEWPAGER_FIX");
+		super.onSaveInstanceState(outState);
+	}
 }
