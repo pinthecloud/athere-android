@@ -232,7 +232,7 @@ public class ChatFragment extends AhFragment{
 			AhUser myUser = userHelper.getMyUserInfo();
 			String nickName = myUser.getNickName();
 			String enterMessage = getResources().getString(R.string.enter_square_message);
-			String warningMessage = getResources().getString(R.string.behave_well_warning);
+			String warningMessage = getResources().getString(R.string.greeting_sentence);
 			AhMessage enterChat = new AhMessage.Builder()
 			.setContent(nickName + " " + enterMessage + "\n" + warningMessage)
 			.setSender(nickName)
@@ -246,7 +246,6 @@ public class ChatFragment extends AhFragment{
 		if (id == null){
 			chats = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE);
 		} else {
-			//			talk = messageDBHelper.getLastMessage(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
 			chat = messageDBHelper.getMessage(Integer.parseInt(id));
 		}
 

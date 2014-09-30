@@ -188,7 +188,7 @@ public class SquareDrawerFragment extends AhFragment {
 			public void onCompleted(Boolean result) {
 				progressBar.setVisibility(View.GONE);
 
-				app.removeSquarePreference(thisFragment);
+				app.removeMySquarePreference(thisFragment);
 				Intent intent = new Intent(activity, SquareListActivity.class);
 				startActivity(intent);
 				activity.finish();

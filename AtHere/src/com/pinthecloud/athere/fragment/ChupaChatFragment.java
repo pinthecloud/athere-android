@@ -280,7 +280,7 @@ public class ChupaChatFragment extends AhFragment {
 				}
 			});
 		}else{
-			super.handleException(ex);	
+			super.handleException(ex);
 		}
 	}
 

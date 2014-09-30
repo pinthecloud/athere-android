@@ -2,16 +2,16 @@ package com.pinthecloud.athere.model;
 
 public class AppDrawerListItem {
 	private int iconId;
+	private String title;
 	private String content;
-	private String badge;
 
-	public AppDrawerListItem(int iconId, String content, String badge) {
+	public AppDrawerListItem(int iconId, String title, String content) {
 		super();
 		this.iconId = iconId;
+		this.title = title;
 		this.content = content;
-		this.badge = badge;
 	}
-	
+
 	public int getIconId() {
 		return iconId;
 	}
@@ -24,10 +24,10 @@ public class AppDrawerListItem {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getBadge() {
-		return badge;
+	public String getTitle() {
+		return title;
 	}
-	public void setBadge(String badge) {
-		this.badge = badge;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

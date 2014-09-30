@@ -3,8 +3,8 @@
 
     <!-- Default -->
     <string name="app_name">chupa</string>
-	<string name="facebook_app_id">383936855088677</string>
-	
+    <string name="facebook_app_id">383936855088677</string>
+
     <!-- Word -->
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">Close drawer</string>
@@ -43,15 +43,18 @@
     <string name="guide">guide</string>
     <string name="notification">Notification</string>
     <string name="more">More</string>
+    <string name="share_to">Share to:</string>
+    <string name="settings">Settings</string>
+    <string name="facebook_login">Login using Facebook</string>
+    <string name="facebook_logout">Logout</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
     <string name="max_nick_name_message">Please type in less then 10 letters.</string>
     <string name="bad_nick_name_message">Special letter is not good as nick name.</string>
     <string name="bad_entry_code_message">This is wrong entry code.</string>
-    <string name="exit_square_message">leaves ground.</string>
     <string name="enter_square_message">enters ground.</string>
-    <string name="behave_well_warning">Have good chatting.</string>
+    <string name="exit_square_message">leaves ground.</string>
     <string name="exit_square_consent_message">Every chat and chupa will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
     <string name="forced_logout_title">You have been logout.</string>
@@ -66,7 +69,10 @@
     <string name="location_setting_message">Please enable location access.</string>
     <string name="no_facebook_upload_message">We doesn\'t upload any contents on facebook.</string>
     <string name="birthday_access_message">We need birthday for calculating age.</string>
-    
+    <string name="greeting_sentence">Say hello to others.</string>
+    <string name="share_sentence">Would you throw Chupa with me? You can meet the people in the same place with you!\nwww.sendchupa.com</string>
+    <string name="duplicated_nick_name_message">Another user is already using this nick name.</string>
+
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">
         <item>Select picture from Album</item>
@@ -84,8 +90,7 @@
 
     <!--
          Reference
-        <string name="dash">&#160;-&#160;</string>
+        <string name="dash">&#160;-&#160;</string>
     -->
-    
 
 </resources>

@@ -27,7 +27,6 @@ import android.widget.TextView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareListActivity;
-import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
@@ -54,7 +53,7 @@ public class BasicProfileFragment extends AhFragment{
 	private EditText birthYearEditText;
 	private ImageButton startButton;
 
-	private boolean isTypedNickName = true;
+	private boolean isTypedNickName = false;
 	private boolean isTakenProfileImage = false;
 
 
@@ -149,7 +148,6 @@ public class BasicProfileFragment extends AhFragment{
 		/*
 		 * Set nick name edit text
 		 */
-		nickNameEditText.setText(user.getNickName());
 		nickNameEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -214,7 +212,8 @@ public class BasicProfileFragment extends AhFragment{
 				profileImageView.setEnabled(false);
 				nickNameEditText.setEnabled(false);
 				startButton.setEnabled(false);
-
+				nickNameWarningText.setText("");
+				
 				userHelper.setMyNickName(nickName)
 				.setMyChupaEnable(true);
 
@@ -375,30 +374,26 @@ public class BasicProfileFragment extends AhFragment{
 	}
 
 
+	@Override
+	public void handleException(final AhException ex) {
+		if(ex.getType().equals(AhException.TYPE.DUPLICATED_NICK_NAME)){
+			// Restore resources
+			AsyncChainer.clearChain(thisFragment);
+			progressBar.setVisibility(View.GONE);
+			profileImageView.setEnabled(true);
+			nickNameEditText.setEnabled(true);
+			startButton.setEnabled(true);
+			
+			// Show warning text
+			String message = getResources().getString(R.string.duplicated_nick_name_message);
+			nickNameWarningText.setText(message);
+		}else{
+			super.handleException(ex);	
+		}
+	}
+
+
 	private boolean isStartButtonEnable(){
 		return isTypedNickName && isTakenProfileImage;
-	}
-	
-	@Override
-	public void handleException(AhException ex) {
-		// TODO Auto-generated method stub
-		if (ex.getType().equals(AhException.TYPE.DUPLICATED_NICK_NAME)) {
-			AsyncChainer.clearChain(this);
-			progressBar.setVisibility(View.GONE);
-			new AhAlertDialog(null, AhException.TYPE.DUPLICATED_NICK_NAME.toString(), "OK", null, true, new AhDialogCallback() {
-
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					
-				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					
-				}
-			}).show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			return;
-		} else {
-			super.handleException(ex);
-		}
 	}
 }

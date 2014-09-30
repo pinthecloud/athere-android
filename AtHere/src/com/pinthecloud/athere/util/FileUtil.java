@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.format.Time;
-import android.util.Log;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.exception.AhException;
@@ -74,7 +73,7 @@ public class FileUtil {
 	}
 
 
-	public static void clearAllFilesExceptSomeFiles(Context context, String... names) {
+	public static void clearAllFilesExceptSomeFiles(Context context, String[] names) {
 		File dir = context.getFilesDir();
 		if(!dir.isDirectory()){
 			throw new AhException("File remove Error");
@@ -86,7 +85,6 @@ public class FileUtil {
 			}
 
 			if(names != null && Arrays.asList(names).contains(file.getName())){
-				Log.d("Seungmin", "here");
 				continue;
 			}
 

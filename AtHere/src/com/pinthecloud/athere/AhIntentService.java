@@ -224,7 +224,7 @@ public class AhIntentService extends IntentService {
 		//				}
 		//			}
 		//		});
-		app.removeSquarePreference(null);
+		app.removeMySquarePreference(null);
 		if (isRunning(app)){
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);

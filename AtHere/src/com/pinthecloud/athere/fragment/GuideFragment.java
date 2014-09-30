@@ -53,7 +53,7 @@ public class GuideFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		uiHelper = new UiLifecycleHelper(this.getActivity(), callback);
+		uiHelper = new UiLifecycleHelper(activity, callback);
 		uiHelper.onCreate(savedInstanceState);
 	}
 
@@ -129,15 +129,17 @@ public class GuideFragment extends AhFragment{
 				arr.add("1482905955291892");
 				arr.add("643223775792443");
 				arr.add("834963903211098");	// Seungmin
+				arr.add("766458060085007");	// Chaesoo
 				if (arr.contains(user.getId())) {
 					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
 					.show();
 					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
 				}
+				Log(thisFragment, user.getId());
 
 
 				/*
-				 * Mode to next activity
+				 * Move to next activity
 				 */
 				Intent intent = new Intent(context, BasicProfileActivity.class);
 				startActivity(intent);
