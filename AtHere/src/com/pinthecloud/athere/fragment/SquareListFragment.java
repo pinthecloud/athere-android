@@ -152,8 +152,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				/*
 				 * Get square and make enter dialog
 				 */
-				position -= 2;
-				final Square square = squareListAdapter.getItem(position);
+				final Square square = squareListAdapter.getItem(--position);
 				Bundle bundle = new Bundle();
 				SquareEnterDialog enterDialog = new SquareEnterDialog(square, new AhDialogCallback() {
 
