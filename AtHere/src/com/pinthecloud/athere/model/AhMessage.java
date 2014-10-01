@@ -36,7 +36,8 @@ public class AhMessage implements Parcelable {
 		UPDATE_USER_INFO("UPDATE_USER_INFO"), // To Square Users
 		MESSAGE_READ("MESSAGE_READ"),
 		FORCED_LOGOUT("FORCED_LOGOUT"),
-		ADMIN_MESSAGE("ADMIN_MESSAGE");
+		ADMIN_MESSAGE("ADMIN_MESSAGE"),
+		NOTIFICATION("NOTIFICATION");
 
 		private final String value;
 
@@ -189,7 +190,7 @@ public class AhMessage implements Parcelable {
 	
 	public boolean isNotification(){
 		return (type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString()) 
-				|| type.equals(TYPE.UPDATE_USER_INFO.toString()));
+				|| type.equals(TYPE.UPDATE_USER_INFO.toString()) || type.equals(TYPE.NOTIFICATION.toString()));
 	}
 
 	

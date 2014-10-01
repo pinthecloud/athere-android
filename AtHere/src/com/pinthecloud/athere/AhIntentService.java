@@ -86,6 +86,7 @@ public class AhIntentService extends IntentService {
 		}
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
+		Log.e("ERROR", ""+type);
 		new AhThread(new Runnable() {
 
 			public void run() {
@@ -105,6 +106,8 @@ public class AhIntentService extends IntentService {
 					FORCED_LOGOUT();
 				} else if (AhMessage.TYPE.ADMIN_MESSAGE.equals(type)) {
 					ADMIN_MESSAGE();
+				} else if (AhMessage.TYPE.NOTIFICATION.equals(type)) {
+					NOTIFICATION();
 				}
 			}
 		}).start();
@@ -235,6 +238,10 @@ public class AhIntentService extends IntentService {
 
 
 	private void ADMIN_MESSAGE() {
+		TALK();
+	}
+	
+	private void NOTIFICATION() {
 		TALK();
 	}
 
