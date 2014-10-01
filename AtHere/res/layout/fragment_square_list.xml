@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/square_list_frag_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@color/square_list_gray" >
 
     <ProgressBar
         android:id="@+id/square_list_frag_progress_bar"
@@ -12,18 +13,48 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/square_list_frag_location_access_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Get location access" />
-
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        xmlns:ptr="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/square_list_frag_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/square_list_background"
-        android:divider="@null" />
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/square_list_frag_address_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/square_list_header_background" >
+
+            <TextView
+                android:id="@+id/square_list_frag_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:drawablePadding="@dimen/square_list_margin"
+                android:gravity="center"
+                android:textColor="@color/square_list_address"
+                android:textSize="@dimen/font_normal" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/refresh"
+                android:src="@drawable/groundlist_refresh_ico" />
+        </RelativeLayout>
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/square_list_frag_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/square_list_margin"
+            android:layout_marginLeft="@dimen/square_list_margin"
+            android:layout_marginRight="@dimen/square_list_margin"
+            android:layout_marginStart="@dimen/square_list_margin"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/square_list_margin" />
+    </LinearLayout>
 
 </RelativeLayout>

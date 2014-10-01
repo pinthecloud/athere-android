@@ -74,8 +74,13 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 				 * Set UI component only in admin square list
 				 */
 				ImageView background = (ImageView)view.findViewById(R.id.row_square_list_admin_background);
+				ImageView lock = (ImageView)view.findViewById(R.id.row_square_list_admin_lock);
+				
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
 						square.getId(), 0, background, false);
+				if(square.getCode().equals("")){
+					lock.setVisibility(View.GONE);
+				}
 			}
 
 

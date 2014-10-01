@@ -189,7 +189,7 @@ public class AhMessage implements Parcelable {
 
 	
 	public boolean isNotification(){
-		return (type.equals(TYPE.UPDATE_USER_INFO.toString()) || type.equals(TYPE.NOTIFICATION.toString()));
+		return type.equals(TYPE.NOTIFICATION.toString());
 	}
 	
 	public boolean isEnterExitNotification(){

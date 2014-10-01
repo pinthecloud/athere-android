@@ -65,7 +65,7 @@
     <string name="review_message">내가 자주가는 장소의 소식이 궁금하세요?\n\n추가를 원하시는 그라운드를 리뷰로 말씀해주세요.</string>
     <string name="no_today_message">나중에 할게요</string>
     <string name="location_consent_message">추파는 위치정보를 사용해요. 괜찮아요?</string>
-    <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
+    <string name="location_turn_on_message">위치 서비스를 틀어주세요.</string>
     <string name="no_facebook_upload_message">저희는 어떤 것도 페이스북에 올리지 않아요.</string>
     <string name="birthday_access_message">나이 계산을 위해 생일이 필요해요.</string>
     <string name="greeting_sentence">모두에게 인사를 건네보세요.</string>
