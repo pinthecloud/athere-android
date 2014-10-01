@@ -57,7 +57,7 @@
             android:background="@drawable/general_text_input_bg"
             android:ems="10"
             android:inputType="textMultiLine"
-            android:maxLines="3"
+            android:maxLines="4"
             android:paddingEnd="@dimen/chat_inputbar_margin"
             android:paddingLeft="@dimen/chat_inputbar_margin"
             android:paddingRight="@dimen/chat_inputbar_margin"

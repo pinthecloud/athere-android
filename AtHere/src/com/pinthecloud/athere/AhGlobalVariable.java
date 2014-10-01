@@ -27,6 +27,4 @@ public class AhGlobalVariable{
 	public static final String SQUARE_KEY = "SQUARE_KEY";
 	public static final String USER_KEY = "USER_KEY";
 	public static final String SUDO_KEY = "SUDO_KEY";
-	
-	public static final String NUMBER_PICKER_VALUE_KEY = "NUMBER_PICKER_VALUE_KEY";
 }

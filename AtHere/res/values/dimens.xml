@@ -53,7 +53,6 @@
     <dimen name="chupa_chat_other_profile_height">38dp</dimen>
 
     <!-- Square list -->
-    <dimen name="square_list_header_top_bottom_margin">10dp</dimen>
     <dimen name="square_list_distance_line_height">18dp</dimen>
     <dimen name="square_list_margin">10dp</dimen>
 

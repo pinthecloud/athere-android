@@ -180,7 +180,7 @@ public class BasicProfileFragment extends AhFragment{
 		ageText.setText(""+age);
 		genderText.setText(gender);
 		if(user.isMale()){
-			genderText.setTextColor(getResources().getColor(R.color.man));
+			genderText.setTextColor(getResources().getColor(R.color.blue_man));
 		}else{
 			genderText.setTextColor(getResources().getColor(R.color.red_woman));
 		}

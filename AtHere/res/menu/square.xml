@@ -8,7 +8,7 @@
         android:title="@string/notification"/>
     <item
         android:id="@+id/menu_more"
-        android:icon="@drawable/actionbar_setting"
+        android:icon="@drawable/actionbar_white_exit_btn"
         android:showAsAction="ifRoom"
         android:title="@string/more"/>
 

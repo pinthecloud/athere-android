@@ -2,13 +2,12 @@
 <resources>
 
     <!-- Common -->
-    <color name="man">#144fb4</color>
+    <color name="blue_man">#144fb4</color>
     <color name="red_woman">#b1240e</color>
 
     <!-- Action Bar -->
     <color name="action_bar_red_background">#E6E72203</color>
     <color name="action_bar_white_background">#E6ffffff</color>
-    <color name="action_bar_item_divider">#f2f2f2</color>
 
     <!-- Basic profile -->
     <color name="basic_profile_gray">#908f93</color>
@@ -47,19 +46,9 @@
     <color name="profile_settings_background">#f2f2f2</color>
 
     <!-- gray -->
-    <color name="gray_tab_text_unselected">#959595</color>
     <color name="gray_background">#eaeaea</color>
     <color name="gray_list_selector">#f4f4f4</color>
-    <color name="gray_drawer_background">#f8f4f4f4</color>
     <color name="gray_line">#eeeeee</color>
     <color name="gray_light">#bdbdbd</color>
-    <color name="gray_dark">#636363</color>
-
-    <!-- red -->
-    <color name="red">#d6003b</color>
-    <color name="red_dark">#a6002e</color>
-
-    <!-- blue -->
-    <color name="blue">#0077d3</color>
 
 </resources>

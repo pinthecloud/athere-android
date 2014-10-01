@@ -73,7 +73,7 @@ public class AppDrawerFragment extends AhFragment{
 		ageText.setText(""+user.getAge());
 		genderText.setText(user.getGenderString(context));
 		if(user.isMale()){
-			genderText.setTextColor(getResources().getColor(R.color.man));
+			genderText.setTextColor(getResources().getColor(R.color.blue_man));
 		}else{
 			genderText.setTextColor(getResources().getColor(R.color.red_woman));
 		}

@@ -10,10 +10,8 @@
     <screenName name="com.pinthecloud.athere.fragment.SplashFragment">SplashFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.BasicProfileFragment">BasicProfileFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.SquareListFragment">SquareListFragment</screenName>
-    <screenName name="com.pinthecloud.athere.fragment.SquareProfileFragment">SquareProfileFragment</screenName>
-    <screenName name="com.pinthecloud.athere.fragment.SquareChatFragment">SquareChatFragment</screenName>
-    <screenName name="com.pinthecloud.athere.fragment.SquareChupaListFragment">SquareChupaListFragment</screenName>
-    <screenName name="com.pinthecloud.athere.fragment.SquareDrawerFragment">SquareDrawerFragment</screenName>
+    <screenName name="com.pinthecloud.athere.fragment.ChatFragment">ChatFragment</screenName>
+    <screenName name="com.pinthecloud.athere.fragment.ChupaListFragment">ChupaListFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.ChupaChatFragment">ChupaChatFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.ProfileImageFragment">ProfileImageFragment</screenName>
     <screenName name="com.pinthecloud.athere.fragment.ProfileSettingsFragment">ProfileSettingsFragment</screenName>
