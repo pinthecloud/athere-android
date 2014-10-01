@@ -18,6 +18,7 @@
     <color name="square_list_header_background">#b1240e</color>
     <color name="square_list_background">#f2f2f2</color>
     <color name="square_list_address">#CCffffff</color>
+    <color name="square_list_text">#4c4b4f</color>
 
     <!-- Square Enter Dialog -->
     <color name="square_enter_dialog_background">#e6ffffff</color>

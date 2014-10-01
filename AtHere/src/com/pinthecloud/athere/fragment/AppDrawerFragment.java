@@ -155,9 +155,9 @@ public class AppDrawerFragment extends AhFragment{
 		 * Set list item
 		 */
 		ArrayList<AppDrawerListItem> items = new ArrayList<AppDrawerListItem>();
-		items.add(new AppDrawerListItem(R.drawable.actionbar_logo, getResources().getString(R.string.question)));
-		items.add(new AppDrawerListItem(R.drawable.actionbar_logo, getResources().getString(R.string.share)));
-		items.add(new AppDrawerListItem(R.drawable.actionbar_logo, getResources().getString(R.string.app_settings)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_request_ico, getResources().getString(R.string.question)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_share_ico, getResources().getString(R.string.share)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_setting_ico, getResources().getString(R.string.app_settings)));
 		appDrawerListAdapter.addAll(items);
 
 		return view;

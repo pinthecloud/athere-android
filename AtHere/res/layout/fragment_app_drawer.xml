@@ -50,7 +50,7 @@
             android:id="@+id/app_drawer_frag_profile_settings_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
+            android:background="@drawable/drawer_profile_edit"
             android:text="@string/profile_settings"
             android:textColor="@color/app_drawer_profile_settings"
             android:textSize="@dimen/font_large" />
