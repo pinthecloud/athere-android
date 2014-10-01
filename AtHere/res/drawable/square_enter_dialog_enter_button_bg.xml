@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android" android:exitFadeDuration="@android:integer/config_shortAnimTime">
 
-    <item android:drawable="@drawable/general_chat_send_enable_btn" android:state_enabled="false"/>
-    <item android:drawable="@drawable/general_chat_send_btn"/>
+    <item android:drawable="@drawable/code_dialog_enter_enable_btn" android:state_enabled="false"/>
+    <item android:drawable="@drawable/code_dialog_enter_btn"/>
 
 </selector>

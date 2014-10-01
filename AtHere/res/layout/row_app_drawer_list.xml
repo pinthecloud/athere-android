@@ -11,7 +11,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textColor="@color/app_drawer_profile_text"
-        android:textSize="@dimen/font_medium" />
+        android:textSize="@dimen/font_large" />
 
     <View
         android:id="@+id/view1"

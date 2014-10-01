@@ -26,7 +26,7 @@ import com.pinthecloud.athere.model.AhMessage;
 public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	private enum TYPE{
-		NOTIFICATION,
+		EXIT_NOTIFICATION,
 		SEND,
 		RECEIVE
 	}
@@ -52,8 +52,8 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 		View view = convertView;
 		int type = getItemViewType(position);
 		if (view == null) {
-			if(type == TYPE.NOTIFICATION.ordinal()){
-				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
+			if(type == TYPE.EXIT_NOTIFICATION.ordinal()){
+				view = inflater.inflate(R.layout.row_chat_list_enter_exit_notification, parent, false);
 			} else if(type == TYPE.SEND.ordinal()){
 				view = inflater.inflate(R.layout.row_chupa_chat_list_send, parent, false);
 			} else if(type == TYPE.RECEIVE.ordinal()){
@@ -63,12 +63,14 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 
 		final AhMessage message = this.getItem(position);
 		if (message != null) {
-			/*
-			 * Find UI component
-			 */
 			TextView messageText = null;
-			if(type == TYPE.NOTIFICATION.ordinal()){
-				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
+			if(type == TYPE.EXIT_NOTIFICATION.ordinal()){
+				/*
+				 * Find and Set all UI component
+				 */
+				TextView nickNameText = (TextView)view.findViewById(R.id.row_chat_list_enter_exit_notification_nick_name);
+				nickNameText.setText(message.getSender());
+				messageText = (TextView)view.findViewById(R.id.row_chat_list_enter_exit_notification_message);
 			}else if(type == TYPE.SEND.ordinal()){
 				/*
 				 * Find UI component only in receive list
@@ -170,8 +172,8 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 	public int getItemViewType(int position) {
 		// Inflate different layout by user
 		AhMessage message = getItem(position);
-		if(message.isNotification()){
-			return TYPE.NOTIFICATION.ordinal();
+		if(message.isEnterExitNotification()){
+			return TYPE.EXIT_NOTIFICATION.ordinal();
 		}else{
 			if(message.isMine()){
 				return TYPE.SEND.ordinal();

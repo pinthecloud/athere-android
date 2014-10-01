@@ -184,6 +184,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				if(square.getDistance() <= square.getEntryRange() 
 						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 
+					square.setCode("1");
 					if(square.getCode().equals("")){
 						enterSquare(square, false);
 					} else{
@@ -193,7 +194,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 						enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 					}
 				} else{
-					// This square has code
+					// Give preview condition
 					bundle.putBoolean(SquareEnterDialog.SHOW_CODE, false);
 					enterDialog.setArguments(bundle);
 					enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
@@ -260,6 +261,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	private void enterSquare(final Square square, final boolean isPreview){
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
+		squareListView.setEnabled(false);
 
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -281,7 +283,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			@Override
 			public void doNext(AhFragment frag) {
 				if (isPreview) {
-					progressBar.setVisibility(View.GONE);
 					saveInformationAndEnterSquare(square, isPreview);
 					return;
 				}
@@ -289,7 +290,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				String enterMessage = getResources().getString(R.string.enter_square_message);
 				AhUser user = userHelper.getMyUserInfo();
 				AhMessage message = new AhMessage.Builder()
-				.setContent(user.getNickName() + " " + enterMessage)
+				.setContent(" " + enterMessage)
 				.setSender(user.getNickName())
 				.setSenderId(user.getId())
 				.setReceiverId(square.getId())
@@ -298,7 +299,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 					@Override
 					public void onCompleted(AhMessage entity) {
-						progressBar.setVisibility(View.GONE);
 						saveInformationAndEnterSquare(square, isPreview);
 					}
 				});

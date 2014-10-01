@@ -115,9 +115,9 @@ public class AhUser implements Parcelable{
 	}
 	public String getGenderString(Context context){
 		if(isMale){
-			return context.getResources().getString(R.string.male);
+			return context.getResources().getString(R.string.man);
 		}else{
-			return context.getResources().getString(R.string.female);
+			return context.getResources().getString(R.string.woman);
 		}
 	}
 

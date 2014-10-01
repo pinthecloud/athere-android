@@ -4,21 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-       
-    <com.pinthecloud.athere.view.PagerSlidingTabStrip
+    <com.pinthecloud.athere.view.PagerSlidingTabStrip
         android:id="@+id/square_tab_frag_tab"
         android:layout_width="match_parent"
         android:layout_height="@dimen/square_tab_height"
         android:background="@drawable/tabbar_bg"
-        android:textSize="@dimen/font_x_large"
-        app:pstsActivateTextColor="@android:color/white"
-        app:pstsDeactivateTextColor="@color/gray_tab_text_unselected"
         app:pstsDividerColor="@android:color/transparent"
-        app:pstsIndicatorColor="@color/red"
-        app:pstsIndicatorHeight="@dimen/square_tab_height"
+        app:pstsIndicatorColor="@android:color/transparent"
         app:pstsShouldExpand="true"
         app:pstsTabSwitch="true"
-        app:pstsTextAllCaps="false"
         app:pstsUnderlineColor="@android:color/transparent" />
 
     <android.support.v4.view.ViewPager

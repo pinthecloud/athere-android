@@ -16,7 +16,7 @@
         android:drawableStart="@drawable/groundlist_location_ico"
         android:gravity="center"
         android:textColor="@color/square_list_address"
-        android:textSize="@dimen/font_medium" />
+        android:textSize="@dimen/font_normal" />
 
     <ImageView
         android:id="@+id/row_square_list_header_refresh"

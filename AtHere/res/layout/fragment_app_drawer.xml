@@ -36,14 +36,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/app_drawer_profile_text"
-                android:textSize="@dimen/font_medium" />
+                android:textSize="@dimen/font_normal" />
 
             <TextView
                 android:id="@+id/app_drawer_frag_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/app_drawer_profile_text"
-                android:textSize="@dimen/font_medium" />
+                android:textSize="@dimen/font_normal" />
         </LinearLayout>
 
         <Button
@@ -51,7 +51,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:text="@string/profile_settings" />
+            android:text="@string/profile_settings"
+            android:textColor="@color/app_drawer_profile_settings"
+            android:textSize="@dimen/font_large" />
     </LinearLayout>
 
     <ListView
