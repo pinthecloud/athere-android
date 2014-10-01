@@ -12,7 +12,7 @@ import com.pinthecloud.athere.view.PagerSlidingTabStrip.IconTabProvider;
 
 public class SquarePagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider{
 
-	private int[] titleIcons = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
+	private int[] titleIcons = {R.drawable.tabbar_chat_icon, R.drawable.tabbar_member_icon};
 	public ChatFragment chatFragment;
 	public MemberFragment memberFragment;
 

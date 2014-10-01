@@ -12,15 +12,13 @@
     <string name="profile_image">프로필 사진</string>
     <string name="profile_settings">프로필 설정</string>
     <string name="my_profile">내 프로필</string>
-    <string name="male">남</string>
-    <string name="female">여</string>
+    <string name="man">남</string>
+    <string name="woman">여</string>
     <string name="delete">지우기</string>
     <string name="re_send">재전송</string>
     <string name="select">선택</string>
     <string name="gender">성별</string>
     <string name="drawer">사이드바</string>
-    <string name="rotate">카메라 돌리기</string>
-    <string name="take">찍기</string>
     <string name="exit_square">이 그라운드 나가기</string>
     <string name="send">보내기</string>
     <string name="send_chupa">추파 보내기</string>
@@ -28,7 +26,6 @@
     <string name="chat">채팅</string>
     <string name="chupa">추파</string>
     <string name="player">참가팀</string>
-    <string name="entry_code">입장 코드</string>
     <string name="blank">없음</string>
     <string name="fail">취소</string>
     <string name="age">살</string>
@@ -39,11 +36,15 @@
     <string name="notification">알림</string>
     <string name="more">더보기</string>
     <string name="share_to">공유할 대상:</string>
-    <string name="settings">설정</string>
+    <string name="question">문의하기</string>
+    <string name="share">공유하기</string>
+    <string name="app_settings">앱설정</string>
     <string name="facebook_login">페이스북으로 로그인 하기</string>
     <string name="facebook_logout">로그아웃</string>
     <string name="refresh">새로고침</string>
     <string name="register_profile">프로필 등록하기</string>
+    <string name="enter">입장하기</string>
+    <string name="preview">미리보기</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>
@@ -52,6 +53,7 @@
     <string name="bad_entry_code_message">잘못된 입장 코드예요.</string>
     <string name="enter_square_message">님이 그라운드에 들어왔어요.</string>
     <string name="exit_square_message">님이 그라운드를 나갔어요.</string>
+    <string name="enter_preview_square_message">님이 미리보기 모드로 그라운드에 들어왔어요.</string>
     <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워져요. 나가시나요?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈어요.</string>
     <string name="forced_logout_title">로그아웃 되셨어요.</string>
@@ -60,7 +62,7 @@
     <string name="internet_not_connected_message">인터넷에 연결할 수 없어요. 연결상태를 확인해주세요.</string>
     <string name="send_message_fail_message">작업을 선택해주세요.</string>
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
-    <string name="review_message">내가 자주가는 장소의 소식이 궁금하신가요? 추가를 원하시는 그라운드를 리뷰로 말씀해주세요.</string>
+    <string name="review_message">내가 자주가는 장소의 소식이 궁금하세요?\n\n추가를 원하시는 그라운드를 리뷰로 말씀해주세요.</string>
     <string name="no_today_message">나중에 할게요</string>
     <string name="location_consent_message">추파는 위치정보를 사용해요. 괜찮아요?</string>
     <string name="location_setting_message">위치 서비스를 틀어주세요.</string>
@@ -70,6 +72,7 @@
     <string name="share_sentence">같이 추파 던질래요? 지금 같은 공간에 있는 사람들을 만날 수 있어요!\nwww.sendchupa.com</string>
     <string name="duplicated_nick_name_message">다른 사람이 이미 사용하고 있는 닉네임 이에요.</string>
     <string name="enter_nick_name_message">닉네임을 입력해 주세요</string>
+    <string name="enter_code_message">코드를 입력해 주세요</string>
 
     <!-- String Array -->
 

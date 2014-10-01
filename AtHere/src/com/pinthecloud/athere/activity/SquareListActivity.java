@@ -36,7 +36,7 @@ public class SquareListActivity extends AhActivity {
 		mFragmentView = findViewById(R.id.square_list_notification_drawer_fragment);
 		FragmentManager fragmentManager = getFragmentManager();
 		mChupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
-		mChupaListFragment.setUp(mDrawerLayout);
+		mChupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_red_drawer_btn);
 
 
 		/*

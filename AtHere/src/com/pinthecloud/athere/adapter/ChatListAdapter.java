@@ -36,7 +36,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 
 	private enum TYPE{
 		ADMIN,
-		NOTIFICATION,
+		ENTER_NOTIFICATION,
 		SEND,
 		RECEIVE
 	}
@@ -70,9 +70,9 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		int type = getItemViewType(position);
 		if (view == null) {
 			if(type == TYPE.ADMIN.ordinal()){
-				view = inflater.inflate(R.layout.row_chat_admin_list, parent, false);
-			} else if(type == TYPE.NOTIFICATION.ordinal()){
-				view = inflater.inflate(R.layout.row_chat_notification_list, parent, false);
+				view = inflater.inflate(R.layout.row_chat_list_admin, parent, false);
+			} else if(type == TYPE.ENTER_NOTIFICATION.ordinal()){
+				view = inflater.inflate(R.layout.row_chat_list_enter_exit_notification, parent, false);
 			} else if(type == TYPE.SEND.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_list_send, parent, false);
 			} else if(type == TYPE.RECEIVE.ordinal()){
@@ -87,7 +87,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				/*
 				 * Find Common UI component
 				 */
-				messageText = (TextView)view.findViewById(R.id.row_chat_admin_message);
+				messageText = (TextView)view.findViewById(R.id.row_chat_list_admin_message);
 
 
 				/*
@@ -96,10 +96,15 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				String time = message.getTimeStamp();
 				String hour = time.substring(8, 10);
 				String minute = time.substring(10, 12);
-				TextView timeText = (TextView)view.findViewById(R.id.row_chat_admin_time);
+				TextView timeText = (TextView)view.findViewById(R.id.row_chat_list_admin_time);
 				timeText.setText(hour + ":" + minute);
-			} else if(type == TYPE.NOTIFICATION.ordinal()){
-				messageText = (TextView)view.findViewById(R.id.row_chat_notification_text);
+			} else if(type == TYPE.ENTER_NOTIFICATION.ordinal()){
+				/*
+				 * Find and Set UI component
+				 */
+				TextView nickNameText = (TextView)view.findViewById(R.id.row_chat_list_enter_exit_notification_nick_name);
+				nickNameText.setText(message.getSender());
+				messageText = (TextView)view.findViewById(R.id.row_chat_list_enter_exit_notification_message);
 			} else if(type == TYPE.SEND.ordinal()){
 				/*
 				 * Find UI component only in receive list
@@ -177,23 +182,25 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				 */
 				TextView timeText = (TextView)view.findViewById(R.id.row_chat_list_receive_time);
 				TextView nickNameText = (TextView)view.findViewById(R.id.row_chat_list_receive_nick_name);
-				final ImageView profileImage = (ImageView)view.findViewById(R.id.row_chat_list_receive_profile);
-				ImageView profileGenderImage = (ImageView)view.findViewById(R.id.row_chat_list_receive_gender);
+				ImageView profileImage = (ImageView)view.findViewById(R.id.row_chat_list_receive_profile_image);
 
 
 				/*
 				 * Set UI component only in receive list
 				 */
+
+				nickNameText.setText(message.getSender());
+				if(user.isMale()){
+					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_m, 0);
+				} else{
+					nickNameText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_w, 0);
+				}
+
 				String time = message.getTimeStamp();
 				String hour = time.substring(8, 10);
 				String minute = time.substring(10, 12);
 				timeText.setText(hour + ":" + minute);
-				nickNameText.setText(message.getSender());
-				if(user.isMale()){
-					profileGenderImage.setImageResource(R.drawable.chat_gender_m);
-				} else{
-					profileGenderImage.setImageResource(R.drawable.chat_gender_w);
-				}
+
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
 						user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
 				profileImage.setOnClickListener(new OnClickListener() {
@@ -259,8 +266,8 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		AhMessage message = getItem(position);
 		if(message.isAdmin()){
 			return TYPE.ADMIN.ordinal();
-		} else if(message.isNotification()){
-			return TYPE.NOTIFICATION.ordinal();
+		} else if(message.isEnterExitNotification()){
+			return TYPE.ENTER_NOTIFICATION.ordinal();
 		} else{
 			if(message.isMine()){
 				return TYPE.SEND.ordinal();

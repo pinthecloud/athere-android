@@ -50,7 +50,7 @@ public class BasicProfileFragment extends AhFragment{
 
 	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
-	private TextView birthGenderText;
+	private TextView ageGenderText;
 	private ImageButton startButton;
 
 	private boolean isTypedNickName = false;
@@ -72,7 +72,7 @@ public class BasicProfileFragment extends AhFragment{
 		profileImageView = (ImageView) view.findViewById(R.id.basic_profile_frag_profile_image);
 		nickNameWarningText = (TextView) view.findViewById(R.id.basic_profile_frag_nick_name_warning_text);
 		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_text);
-		birthGenderText = (TextView) view.findViewById(R.id.basic_profile_frag_birth_gender_text);
+		ageGenderText = (TextView) view.findViewById(R.id.basic_profile_frag_age_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
 
 
@@ -129,7 +129,7 @@ public class BasicProfileFragment extends AhFragment{
 						@Override
 						public void doPositiveThing(Bundle bundle) {
 							// Set profile image default
-							profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+							profileImageView.setImageResource(R.drawable.dialog_profile_default);
 							isTakenProfileImage = false;
 							startButton.setEnabled(isStartButtonEnable());
 						}
@@ -175,7 +175,7 @@ public class BasicProfileFragment extends AhFragment{
 		 */
 		int age = user.getAge();
 		String gender = user.getGenderString(context);
-		birthGenderText.setText(age + " " + gender);
+		ageGenderText.setText(age + " " + gender);
 
 
 		/*
@@ -278,7 +278,7 @@ public class BasicProfileFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		if(!isTakenProfileImage){
-			profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+			profileImageView.setImageResource(R.drawable.dialog_profile_default);
 		}else{
 			profileImageView.setImageBitmap(profileImageBitmap);
 		}

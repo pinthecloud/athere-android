@@ -1,6 +1,7 @@
 package com.pinthecloud.athere.model;
 
 public class Chupa {
+	
 //	map.put("profilePic", profilePic);
 //	map.put("userNickName", userNickName);
 //	map.put("userId", userId);

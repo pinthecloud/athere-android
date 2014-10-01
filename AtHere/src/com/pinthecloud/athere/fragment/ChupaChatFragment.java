@@ -143,10 +143,10 @@ public class ChupaChatFragment extends AhFragment {
 		otherAge.setText("" + otherUser.getAge());
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 		if (otherUser.isMale()) {
-			otherGender.setImageResource(R.drawable.profile_gender_m);
+			otherGender.setImageResource(R.drawable.general_gender_m);
 			otherCompanyNumber.setTextColor(getResources().getColor(R.color.blue));
 		} else {
-			otherGender.setImageResource(R.drawable.profile_gender_w);
+			otherGender.setImageResource(R.drawable.general_gender_w);
 			otherCompanyNumber.setTextColor(getResources().getColor(R.color.red_dark));
 		}
 
@@ -233,7 +233,7 @@ public class ChupaChatFragment extends AhFragment {
 						@Override
 						public void run() {
 							blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-									otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
+									otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
 							otherNickName.setText(otherUser.getNickName());
 							otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 						}
@@ -253,7 +253,7 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
+				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
 		String chupaCommunId = AhMessage.buildChupaCommunId(userHelper.getMyUserInfo().getId(), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}
@@ -366,7 +366,7 @@ public class ChupaChatFragment extends AhFragment {
 			String exitMessage = getResources().getString(R.string.exit_square_message);
 			String nickName = otherUser.getNickName();
 			final AhMessage exitChupa = new AhMessage.Builder()
-			.setContent(nickName + " " + exitMessage)
+			.setContent(" " + exitMessage)
 			.setSender(nickName)
 			.setSenderId(otherUser.getId())
 			.setReceiverId(squareHelper.getMySquareInfo().getId())

@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item 
         android:state_selected="true" 
-        android:drawable="@drawable/tabbar_chat_highlight" />
+        android:drawable="@drawable/ground_tabbar_member_highlight_ico" />
     <item 
-        android:drawable="@drawable/tabbar_chat" />
+        android:drawable="@drawable/ground_tabbar_member_ico" />
  </selector>

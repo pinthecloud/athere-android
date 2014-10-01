@@ -29,13 +29,13 @@
             android:layout_height="wrap_content"
             android:text="@string/register_profile"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/font_large" />
+            android:textSize="@dimen/font_x_large" />
 
         <com.pinthecloud.athere.view.CircleImageView
             android:id="@+id/basic_profile_frag_profile_image"
-            android:layout_width="@dimen/basic_profile_profile_image_width"
-            android:layout_height="@dimen/basic_profile_profile_image_height"
-            android:src="@drawable/bg_ground_profile_default"
+            android:layout_width="@dimen/basic_profile_profile_image_size"
+            android:layout_height="@dimen/basic_profile_profile_image_size"
+            android:src="@drawable/dialog_profile_default"
             app:civBorderColor="@color/basic_profile_gray"
             app:civBorderWidth="@dimen/line_height" />
 
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/basic_profile_warning"
-            android:textSize="@dimen/font_medium" />
+            android:textSize="@dimen/font_normal" />
 
         <EditText
             android:id="@+id/basic_profile_frag_nick_name_text"
@@ -57,14 +57,14 @@
             android:maxLength="10"
             android:textColor="@android:color/white"
             android:textColorHint="@color/basic_profile_gray"
-            android:textSize="@dimen/font_medium" />
+            android:textSize="@dimen/font_large" />
 
         <TextView
-            android:id="@+id/basic_profile_frag_birth_gender_text"
+            android:id="@+id/basic_profile_frag_age_gender_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/font_medium" />
+            android:textSize="@dimen/font_normal" />
 
         <ImageButton
             android:id="@+id/basic_profile_frag_start_button"

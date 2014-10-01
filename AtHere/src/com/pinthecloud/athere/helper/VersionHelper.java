@@ -22,7 +22,7 @@ public class VersionHelper {
 		MANDATORY,
 		OPTIONAL
 	}
-	
+
 	private AhApplication app;
 	private MobileServiceTable<AppVersion> appVersionTable;
 

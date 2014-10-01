@@ -1,15 +1,17 @@
 package com.pinthecloud.athere.dialog;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
@@ -18,20 +20,18 @@ import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.model.AhUser;
+import com.pinthecloud.athere.util.FileUtil;
 
 public class ProfileDialog extends AhDialogFragment{
 
-	private AhDialogCallback ahDialogCallback;
-	private AhApplication app;
 	private AhFragment frag;
 	private AhUser user;
+	private AhDialogCallback ahDialogCallback;
 
 	private ImageView profileImage;
-	private ImageView genderImage;
 	private TextView nickNameText;
-	private TextView ageText;
-	private TextView companyNumberText;
-	private Button sendChupaButton;
+	private TextView ageGenderText;
+	private RelativeLayout sendChupaLayout;
 
 	private SquareHelper squareHelper;
 	private UserHelper userHelper;
@@ -43,7 +43,7 @@ public class ProfileDialog extends AhDialogFragment{
 		this.frag = frag;
 		this.user = user;
 		this.ahDialogCallback = ahDialogCallback;
-		this.app = AhApplication.getInstance();
+		AhApplication app = AhApplication.getInstance();
 		this.squareHelper = app.getSquareHelper();
 		this.userHelper = app.getUserHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
@@ -60,33 +60,28 @@ public class ProfileDialog extends AhDialogFragment{
 		/*
 		 * Find UI component
 		 */
-		profileImage = (ImageView) view.findViewById(R.id.profile_dialog_profile);
-		genderImage = (ImageView) view.findViewById(R.id.profile_dialog_gender);
+		profileImage = (ImageView) view.findViewById(R.id.profile_dialog_profile_image);
 		nickNameText = (TextView) view.findViewById(R.id.profile_dialog_nick_name);
-		ageText = (TextView) view.findViewById(R.id.profile_dialog_age);
-		companyNumberText = (TextView) view.findViewById(R.id.profile_dialog_company_number);
-		sendChupaButton = (Button) view.findViewById(R.id.profile_dialog_send_button);
+		ageGenderText = (TextView) view.findViewById(R.id.profile_dialog_age_gender);
+		sendChupaLayout = (RelativeLayout) view.findViewById(R.id.profile_dialog_send_chupa_layout);
 
 
 		/*
 		 * Set UI Component
 		 */
-		if(user.isMale()){
-			genderImage.setImageResource(R.drawable.profile_gender_m);
-			companyNumberText.setTextColor(getResources().getColor(R.color.blue));
-		}else{
-			genderImage.setImageResource(R.drawable.profile_gender_w);
-			companyNumberText.setTextColor(getResources().getColor(R.color.red_dark));
-		}
 		nickNameText.setText(user.getNickName());
-		ageText.setText("" + user.getAge());
-		companyNumberText.setText("" + user.getCompanyNum());
+		ageGenderText.setText("" + user.getAge());
+		if(user.isMale()){
+			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.general_gender_m, 0,0,0);
+		}else{
+			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.general_gender_w, 0,0,0);
+		}
 
 
 		/*
 		 * Set event on chupa button
 		 */
-		sendChupaButton.setOnClickListener(new OnClickListener() {
+		sendChupaLayout.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -95,7 +90,7 @@ public class ProfileDialog extends AhDialogFragment{
 			}
 		});
 		if(user.getId().equals(userHelper.getMyUserInfo().getId()) || squareHelper.isPreview()){
-			sendChupaButton.setVisibility(View.GONE);
+			sendChupaLayout.setVisibility(View.GONE);
 		}
 
 
@@ -117,8 +112,9 @@ public class ProfileDialog extends AhDialogFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
+		Bitmap placeHolder = FileUtil.getBitmapFromInternalStorage(context, user.getId()+AhGlobalVariable.SMALL);
 		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE, 
-				user.getId(), R.drawable.dialog_profile_default, profileImage, true);
+				user.getId(), placeHolder, profileImage, true);
 	}
 
 

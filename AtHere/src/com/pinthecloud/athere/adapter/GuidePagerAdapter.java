@@ -9,7 +9,7 @@ import com.pinthecloud.athere.fragment.GuideImageFragment;
 
 public class GuidePagerAdapter extends FragmentStatePagerAdapter {
 
-	private int[] contents = {R.drawable.tabbar_chat_text, R.drawable.tabbar_chupa_text};
+	private int[] contents = {R.drawable.tabbar_chat_icon, R.drawable.tabbar_member_icon};
 
 	public GuidePagerAdapter(FragmentManager fm) {
 		super(fm);
