@@ -29,16 +29,16 @@
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingEnd="@dimen/guide_login_right_margin"
-        android:paddingLeft="@dimen/guide_login_left_margin"
-        android:paddingRight="@dimen/guide_login_right_margin"
-        android:paddingStart="@dimen/guide_login_left_margin" >
+        android:paddingEnd="@dimen/guide_login_margin"
+        android:paddingLeft="@dimen/guide_login_margin"
+        android:paddingRight="@dimen/guide_login_margin"
+        android:paddingStart="@dimen/guide_login_margin" >
 
         <com.facebook.widget.LoginButton
             android:id="@+id/guide_frag_login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/guide_login_button_bottom_margin"
+            android:layout_marginBottom="@dimen/guide_login_margin"
             facebook:confirm_logout="false"
             facebook:fetch_user_info="true"
             facebook:login_text="@string/facebook_login"

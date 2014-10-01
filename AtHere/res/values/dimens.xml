@@ -16,9 +16,7 @@
     <dimen name="basic_profile_profile_right_margin">10dp</dimen>
 
     <!-- Guide -->
-    <dimen name="guide_login_left_margin">10dp</dimen>
-    <dimen name="guide_login_right_margin">10dp</dimen>
-    <dimen name="guide_login_button_bottom_margin">10dp</dimen>
+    <dimen name="guide_login_margin">10dp</dimen>
 
     <!-- Square -->
     <dimen name="square_tab_height">48dp</dimen>

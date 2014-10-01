@@ -129,7 +129,7 @@ public class BasicProfileFragment extends AhFragment{
 						@Override
 						public void doPositiveThing(Bundle bundle) {
 							// Set profile image default
-							profileImageView.setImageResource(R.drawable.dialog_profile_default);
+							profileImageView.setImageResource(R.drawable.setup_profile_default_ico);
 							isTakenProfileImage = false;
 							startButton.setEnabled(isStartButtonEnable());
 						}
@@ -278,7 +278,7 @@ public class BasicProfileFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		if(!isTakenProfileImage){
-			profileImageView.setImageResource(R.drawable.dialog_profile_default);
+			profileImageView.setImageResource(R.drawable.setup_profile_default_ico);
 		}else{
 			profileImageView.setImageBitmap(profileImageBitmap);
 		}
