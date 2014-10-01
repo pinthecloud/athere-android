@@ -266,9 +266,11 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		AhMessage message = getItem(position);
 		if(message.isAdmin()){
 			return TYPE.ADMIN.ordinal();
-		} else if(message.isEnterExitNotification()){
+		} else if (message.isEnterExitNotification()){
 			return TYPE.ENTER_NOTIFICATION.ordinal();
-		} else{
+		} else if (message.isNotification()){
+			return TYPE.ENTER_NOTIFICATION.ordinal();
+		} else {
 			if(message.isMine()){
 				return TYPE.SEND.ordinal();
 			} else{
