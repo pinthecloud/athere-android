@@ -234,12 +234,12 @@ public class SplashFragment extends AhFragment {
 	public void handleException(AhException ex) {
 		if (ex.getType().equals(AhException.TYPE.GCM_REGISTRATION_FAIL)) {
 			String message = getResources().getString(R.string.google_play_services_message);
-			String install = getResources().getString(R.string.install);
-			new AhAlertDialog(null, message, install, null, true, new AhDialogCallback() {
+			new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_SERVICE_APP_ID));
+					Intent intent = new Intent(Intent.ACTION_VIEW,
+							Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_SERVICE_APP_ID));
 					startActivity(intent);
 					activity.finish();
 				}

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/profile_settings_background"
     android:focusable="true"
     android:focusableInTouchMode="true" >
 
@@ -14,11 +15,22 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-    <com.pinthecloud.athere.view.SquareImageView
+    <com.pinthecloud.athere.view.CircleImageView
         android:id="@+id/profile_settings_frag_profile_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/profile_image" />
+        android:layout_width="@dimen/basic_profile_profile_image_size"
+        android:layout_height="@dimen/basic_profile_profile_image_size"
+        android:layout_centerHorizontal="true"
+        app:civBorderColor="@color/basic_profile_gray"
+        app:civBorderWidth="@dimen/line_height" />
+
+    <com.pinthecloud.athere.view.CircleImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/profile_settings_frag_profile_image"
+        android:layout_alignEnd="@+id/profile_settings_frag_profile_image"
+        android:layout_alignRight="@+id/profile_settings_frag_profile_image"
+        android:src="@drawable/profile_default"
+        app:civBorderWidth="@null" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,28 +47,38 @@
             android:id="@+id/profile_settings_frag_nick_name_warning_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_medium" />
+            android:textColor="@color/profile_settings_warning"
+            android:textSize="@dimen/font_normal" />
 
         <EditText
             android:id="@+id/profile_settings_frag_nick_name_text"
-            android:layout_width="@dimen/profile_settings_nick_name_text_width"
+            android:layout_width="@dimen/basic_profile_nick_name_text_width"
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:hint="@string/nick_name"
+            android:hint="@string/enter_nick_name_message"
             android:inputType="text"
             android:maxLength="10"
+            android:textColorHint="@color/basic_profile_gray"
             android:textSize="@dimen/font_large" />
 
-        <EditText
-            android:id="@+id/profile_settings_frag_birth_gender_text"
-            android:layout_width="@dimen/profile_settings_birth_gender_text_width"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:enabled="false"
-            android:gravity="center"
-            android:inputType="text"
-            android:textSize="@dimen/font_large" />
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/profile_settings_frag_age_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_normal" />
+
+            <TextView
+                android:id="@+id/profile_settings_frag_gender_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_normal" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/profile_settings_frag_start_button"

@@ -130,6 +130,7 @@ public class GuideFragment extends AhFragment{
 				arr.add("643223775792443");
 				arr.add("834963903211098");	// Seungmin
 				arr.add("766458060085007");	// Chaesoo
+				arr.add("699691573453752");	// Hwajeong
 				if (arr.contains(user.getId())) {
 					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
 					.show();

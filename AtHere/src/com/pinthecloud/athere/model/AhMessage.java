@@ -67,13 +67,13 @@ public class AhMessage implements Parcelable {
 
 	private AhMessage() {
 	}
-	
+
 	public AhMessage(Parcel in){
 		this();
 		readToParcel(in);
 	}
-	
-	
+
+
 	public String getId() {
 		return id;
 	}
@@ -119,7 +119,7 @@ public class AhMessage implements Parcelable {
 		this.status = status.getValue();
 	}
 
-	
+
 	/*
 	 * Parcelable
 	 */
@@ -131,7 +131,7 @@ public class AhMessage implements Parcelable {
 			return new AhMessage[size]; 
 		}
 	};
-	
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -164,7 +164,7 @@ public class AhMessage implements Parcelable {
 		status = in.readInt();
 	}
 
-	
+
 	/*
 	 * Utility
 	 */
@@ -181,24 +181,27 @@ public class AhMessage implements Parcelable {
 				" chupaCommunId : "+this.chupaCommunId  + " \n " +
 				" status : "+this.status + " }";
 	}
-	
-	
+
+
 	public boolean isMine(){
 		return senderId.equals(AhApplication.getInstance().getUserHelper().getMyUserInfo().getId());
 	}
 
 	
 	public boolean isNotification(){
-		return (type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString()) 
-				|| type.equals(TYPE.UPDATE_USER_INFO.toString()) || type.equals(TYPE.NOTIFICATION.toString()));
+		return (type.equals(TYPE.UPDATE_USER_INFO.toString()) || type.equals(TYPE.NOTIFICATION.toString()));
+	}
+	
+	public boolean isEnterExitNotification(){
+		return type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString());
 	}
 
-	
+
 	public boolean isAdmin(){
 		return type.equals(TYPE.ADMIN_MESSAGE.toString());
 	}
-	
-	
+
+
 	public static String buildChupaCommunId(String id0, String id1) {
 		if (id0.compareTo(id1) > 0) {
 			return  id0 + id1;
@@ -321,7 +324,7 @@ public class AhMessage implements Parcelable {
 			return this;
 		}
 
-		
+
 		public AhMessage build(){
 			AhMessage message = new AhMessage();
 			message.id = id;

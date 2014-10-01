@@ -28,7 +28,6 @@ import com.pinthecloud.athere.model.Chupa;
 public class ChupaListFragment extends AhFragment{
 
 	private ActionBarDrawerToggle mDrawerToggle;
-	private DrawerLayout mDrawerLayout;
 
 	private ChupaListAdapter squareChupaListAdapter;
 	private ListView squareChupaListView;
@@ -153,9 +152,7 @@ public class ChupaListFragment extends AhFragment{
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(DrawerLayout drawerLayout) {
-		mDrawerLayout = drawerLayout;
-
+	public void setUp(DrawerLayout drawerLayout, int drawerIconId) {
 		ActionBar actionBar = activity.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
@@ -163,8 +160,8 @@ public class ChupaListFragment extends AhFragment{
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(activity, /* host Activity */
-				mDrawerLayout, /* DrawerLayout object */
-				R.drawable.indicator_drawer, /* nav drawer image to replace 'Up' caret */
+				drawerLayout, /* DrawerLayout object */
+				drawerIconId, /* nav drawer image to replace 'Up' caret */
 				R.string.drawer_open, /* "open drawer" description for accessibility */
 				R.string.drawer_close /* "close drawer" description for accessibility */
 				)
@@ -187,10 +184,10 @@ public class ChupaListFragment extends AhFragment{
 				activity.invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 			}
 		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		drawerLayout.setDrawerListener(mDrawerToggle);
 
 		// Defer code dependent on restoration of previous instance state.
-		mDrawerLayout.post(new Runnable() {
+		drawerLayout.post(new Runnable() {
 			@Override
 			public void run() {
 				mDrawerToggle.syncState();

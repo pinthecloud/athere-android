@@ -1,19 +1,15 @@
 package com.pinthecloud.athere.fragment;
 
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
@@ -36,7 +32,7 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	protected AhFragment thisFragment;
 	protected AhApplication app;
 	protected Context context;
-	protected Activity activity;
+	protected AhActivity activity;
 
 	protected MessageHelper messageHelper;
 	protected MessageDBHelper messageDBHelper;
@@ -65,42 +61,24 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		context = getActivity();
-		activity = (Activity) context;
+		activity = (AhActivity) context;
 		super.onCreate(savedInstanceState);
-
-		LogSM(simpleClassName + " onCreate");
 		gaHelper.sendScreenGA(simpleClassName);
 		ExceptionManager.setHandler(thisFragment);
 	}
 
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		LogSM(simpleClassName + " onCreateView");
-		return super.onCreateView(inflater, container, savedInstanceState);
-	}
-
-
-	@Override
 	public void onStart() {
 		super.onStart();
-		LogSM(simpleClassName + " onStart");
 		gaHelper.reportActivityStart(activity);
 	}
 
 
 	@Override
 	public void onStop() {
-		LogSM(simpleClassName + " onStop");
 		super.onStop();
 		gaHelper.reportActivityStop(activity);
-	}
-
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		LogSM(simpleClassName + " onActivityResult");
 	}
 
 
@@ -142,13 +120,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 				Log.e("ERROR", str.toString());
 			}
 			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-		}
-	}
-
-
-	public void LogSM(String params){
-		if(AhGlobalVariable.DEBUG_MODE){
-			Log.d("Seungmin", params);
 		}
 	}
 

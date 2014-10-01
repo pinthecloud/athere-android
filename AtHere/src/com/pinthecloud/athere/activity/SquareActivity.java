@@ -12,10 +12,12 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.fragment.AppDrawerFragment;
 import com.pinthecloud.athere.fragment.ChatFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
@@ -28,13 +30,14 @@ import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.Square;
 
-public class SquareActivity extends AhSlidingActivity {
+public class SquareActivity extends AhActivity {
 
 	private ProgressBar progressBar;
 	private AhFragment contentFragment;
 	private DrawerLayout mDrawerLayout; 
 	private View mFragmentView;
 	private ChupaListFragment chupaListFragment;
+	private SlidingMenu slidingMenu;
 
 	private MessageHelper messageHelper;
 	private UserHelper userHelper;
@@ -42,7 +45,7 @@ public class SquareActivity extends AhSlidingActivity {
 
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
 
@@ -65,7 +68,7 @@ public class SquareActivity extends AhSlidingActivity {
 		mFragmentView = findViewById(R.id.square_notification_drawer_fragment);
 		FragmentManager fragmentManager = getFragmentManager();
 		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_notification_drawer_fragment);
-		chupaListFragment.setUp(mDrawerLayout);
+		chupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_white_drawer_btn);
 
 
 		/*
@@ -78,6 +81,22 @@ public class SquareActivity extends AhSlidingActivity {
 			contentFragment = new SquareTabFragment(square);
 		}
 		fragmentTransaction.add(R.id.square_tab_layout, contentFragment);
+
+
+		/*
+		 * Set sliding menu
+		 */
+		slidingMenu = new SlidingMenu(thisActivity);
+		slidingMenu.setMenu(R.layout.frame_app_drawer);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
+		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
+		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);
+		slidingMenu.setFadeDegree(0.35f);
+		slidingMenu.attachToActivity(thisActivity, SlidingMenu.SLIDING_WINDOW);
+
+		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
+		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
 		fragmentTransaction.commit();
 
 
@@ -116,6 +135,11 @@ public class SquareActivity extends AhSlidingActivity {
 		// Close drawer
 		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 			mDrawerLayout.closeDrawer(mFragmentView);
+			return;
+		}
+
+		if(slidingMenu.isMenuShowing()){
+			slidingMenu.toggle();
 			return;
 		}
 
@@ -162,7 +186,7 @@ public class SquareActivity extends AhSlidingActivity {
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{
-				toggle();
+				slidingMenu.toggle();
 			}
 			return true;
 		case R.id.menu_notification:

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -49,7 +50,8 @@ public class ProfileSettingsFragment extends AhFragment{
 
 	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
-	private EditText birthYearEditText;
+	private TextView ageText;
+	private TextView genderText;
 	private ImageButton startButton;
 
 	private boolean isTypedNickName = true;
@@ -71,10 +73,19 @@ public class ProfileSettingsFragment extends AhFragment{
 		profileImageView = (ImageView) view.findViewById(R.id.profile_settings_frag_profile_image);
 		nickNameWarningText = (TextView) view.findViewById(R.id.profile_settings_frag_nick_name_warning_text);
 		nickNameEditText = (EditText) view.findViewById(R.id.profile_settings_frag_nick_name_text);
-		birthYearEditText = (EditText) view.findViewById(R.id.profile_settings_frag_birth_gender_text);
+		ageText = (TextView) view.findViewById(R.id.profile_settings_frag_age_text);
+		genderText = (TextView) view.findViewById(R.id.profile_settings_frag_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_start_button);
 
 
+		/*
+		 * Set Action Bar
+		 */
+		ActionBar actionBar = activity.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+		
+		
 		/*
 		 * Set Event on profile image view
 		 */
@@ -129,7 +140,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						@Override
 						public void doPositiveThing(Bundle bundle) {
 							// Set profile image default
-							profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+							profileImageView.setImageResource(R.drawable.dialog_profile_default);
 							isTakenProfileImage = false;
 							startButton.setEnabled(isStartButtonEnable());
 						}
@@ -176,7 +187,13 @@ public class ProfileSettingsFragment extends AhFragment{
 		 */
 		int age = user.getAge();
 		String gender = user.getGenderString(context);
-		birthYearEditText.setText(age + " " + gender);
+		ageText.setText(""+age);
+		genderText.setText(gender);
+		if(user.isMale()){
+			genderText.setTextColor(getResources().getColor(R.color.man));
+		}else{
+			genderText.setTextColor(getResources().getColor(R.color.woman));
+		}
 
 
 		/*
@@ -247,7 +264,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						if (!squareHelper.isLoggedInSquare() || squareHelper.isPreview()) {
 							progressBar.setVisibility(View.GONE);
 							saveProfileImage(user.getId());
-							
+
 							if(squareHelper.isPreview()){
 								Intent intent = new Intent(context, SquareActivity.class);
 								startActivity(intent);	
@@ -287,7 +304,7 @@ public class ProfileSettingsFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		if(!isTakenProfileImage){
-			profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+			profileImageView.setImageResource(R.drawable.dialog_profile_default);
 		}else{
 			profileImageView.setImageBitmap(profileImageBitmap);
 		}

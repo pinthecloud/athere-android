@@ -30,7 +30,7 @@ public class SquareHelper {
 	private final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
 	private final String IS_PREVIEW_KEY = "IS_PREVIEW_KEY";
 	private final String IS_REVIEW_KEY = "IS_REVIEW_KEY";
-	
+
 	private final String GET_NEAR_SQUARE = "get_near_square";
 
 	private final String currentLatitude = "currentLatitude";

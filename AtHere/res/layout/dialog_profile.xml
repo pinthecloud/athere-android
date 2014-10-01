@@ -2,72 +2,59 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
     android:background="@android:color/white" >
 
     <com.pinthecloud.athere.view.SquareImageView
-        android:id="@+id/profile_dialog_profile"
+        android:id="@+id/profile_dialog_profile_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/profile_image" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_dialog_nick_name_info_height"
-        android:layout_alignBottom="@+id/profile_dialog_profile"
-        android:background="@drawable/bg_profile_dialog_nick_name_info"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/profile_dialog_nick_name_top_margin" >
+        android:layout_height="@dimen/profile_dialog_profile_height"
+        android:layout_alignBottom="@+id/profile_dialog_profile_image"
+        android:background="@color/profile_dialog_profile" >
 
         <TextView
             android:id="@+id/profile_dialog_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/profile_dialog_nick_name_age_margin"
-            android:layout_marginRight="@dimen/profile_dialog_nick_name_age_margin"
-            android:textColor="@android:color/white"
+            android:layout_centerVertical="true"
             android:textSize="@dimen/font_large" />
 
         <TextView
-            android:id="@+id/profile_dialog_age"
+            android:id="@+id/profile_dialog_age_gender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/profile_dialog_age_gender_margin"
-            android:layout_marginRight="@dimen/profile_dialog_age_gender_margin"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/font_medium" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/square_drawer_profile_company_num_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/bg_profile_dialog_info"
-            android:gravity="center" >
+            android:textSize="@dimen/font_normal" />
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/profile_dialog_gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/profile_dialog_gender_company_number_margin"
-                android:layout_marginRight="@dimen/profile_dialog_gender_company_number_margin"
-                android:contentDescription="@string/gender" />
-
-            <TextView
-                android:id="@+id/profile_dialog_company_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/font_medium" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/profile_dialog_send_button"
+    <RelativeLayout
+        android:id="@+id/profile_dialog_send_chupa_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_dialog_send_button_height"
-        android:layout_below="@+id/profile_dialog_profile"
-        android:background="@android:color/white"
-        android:text="@string/send_chupa"
-        android:textColor="@color/dark_red"
-        android:textSize="@dimen/font_medium" />
+        android:layout_height="@dimen/profile_dialog_profile_height"
+        android:layout_below="@+id/profile_dialog_profile_image"
+        android:background="@color/profile_dialog_send_chupa" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/actionbar_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/send_chupa"
+            android:textColor="@color/profile_dialog_send_chupa_text"
+            android:textSize="@dimen/font_large" />
+    </RelativeLayout>
 
 </RelativeLayout>

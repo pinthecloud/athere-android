@@ -245,11 +245,11 @@ public class SquareDrawerFragment extends AhFragment {
 		profileCompanyNumText.setText("" + user.getCompanyNum());
 		Resources resources = getResources();
 		if(user.isMale()){
-			profileGenderImage.setImageResource(R.drawable.profile_gender_m);
+			profileGenderImage.setImageResource(R.drawable.general_gender_m);
 			profileCompanyNumText.setTextColor(resources.getColor(R.color.blue));
 		} else{
-			profileGenderImage.setImageResource(R.drawable.profile_gender_w);
-			profileCompanyNumText.setTextColor(resources.getColor(R.color.dark_red));
+			profileGenderImage.setImageResource(R.drawable.general_gender_w);
+			profileCompanyNumText.setTextColor(resources.getColor(R.color.red_dark));
 		}
 	}
 

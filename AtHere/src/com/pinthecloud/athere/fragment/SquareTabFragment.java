@@ -54,8 +54,8 @@ public class SquareTabFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_square_tab, container, false);
-
 		
+
 		/*
 		 * Set UI Component
 		 */
@@ -68,7 +68,7 @@ public class SquareTabFragment extends AhFragment{
 		 */
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
+		mSquarePagerAdapter = new SquarePagerAdapter(getFragmentManager(), square);
 
 		// Set up the ViewPager with the sections adapter.
 		int startTab = squareHelper.getSquareExitTab();
@@ -76,8 +76,8 @@ public class SquareTabFragment extends AhFragment{
 		mViewPager.setCurrentItem(startTab);
 
 		// Set up tabs with the view pager
-		tabs.setStartTab(startTab);
 		tabs.setViewPager(mViewPager);
+		tabs.setStartTab(startTab);
 		tabs.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
@@ -126,8 +126,8 @@ public class SquareTabFragment extends AhFragment{
 		super.onStart();
 		refreshView();
 	}
-
-
+	
+	
 	private void refreshView(){
 		final int chupaBadgeTotalNum = messageDBHelper.getAllChupaBadgeNum();
 		activity.runOnUiThread(new Runnable() {

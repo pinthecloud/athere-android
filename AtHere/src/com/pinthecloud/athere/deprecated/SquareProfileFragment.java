@@ -133,7 +133,7 @@ public class SquareProfileFragment extends AhFragment{
 				isCamera = false;
 				isTookPicture = true;
 				cameraButton.setEnabled(true);
-				cameraButton.setImageResource(R.drawable.camera_take_re);
+				cameraButton.setImageResource(R.drawable.actionbar_logo);
 				cameraRotateButton.setEnabled(true);
 				completeButton.setEnabled(isCompleteButtonEnable());
 			}
@@ -372,7 +372,7 @@ public class SquareProfileFragment extends AhFragment{
 			if(isCamera){
 				openCameraAndSetView();
 			}else{
-				profilePictureView.setImageResource(R.drawable.bg_ground_profile_default);
+				profilePictureView.setImageResource(R.drawable.dialog_profile_default);
 			}
 		}else{
 			profilePictureView.setImageBitmap(pictureBitmap);
@@ -457,7 +457,7 @@ public class SquareProfileFragment extends AhFragment{
 		isTookPicture = false;
 		cameraButton.setEnabled(true);
 		cameraButton.setVisibility(View.VISIBLE);
-		cameraButton.setImageResource(R.drawable.camera_take);
+		cameraButton.setImageResource(R.drawable.actionbar_logo);
 		cameraRotateButton.setEnabled(true);
 		cameraRotateButton.setVisibility(View.VISIBLE);
 		completeButton.setEnabled(false);
@@ -522,7 +522,7 @@ public class SquareProfileFragment extends AhFragment{
 				@Override
 				public void doPositiveThing(Bundle bundle) {
 					// Set profile image default
-					profilePictureView.setImageResource(R.drawable.bg_ground_profile_default);
+					profilePictureView.setImageResource(R.drawable.dialog_profile_default);
 
 					// Release camera and set button to re take
 					isCamera = false;

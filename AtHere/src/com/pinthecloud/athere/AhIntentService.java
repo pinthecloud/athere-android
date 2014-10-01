@@ -266,9 +266,9 @@ public class AhIntentService extends IntentService {
 			title = message.getContent();
 			String age = resources.getString(R.string.age);
 			String person = resources.getString(R.string.person);
-			String gender = resources.getString(R.string.male);
+			String gender = resources.getString(R.string.man);
 			if(!user.isMale()){
-				gender = resources.getString(R.string.female);
+				gender = resources.getString(R.string.woman);
 			}
 			content = gender + " " + user.getAge() + age + " " + user.getCompanyNum() + person;
 			resultIntent.setClass(_this, SquareActivity.class);
