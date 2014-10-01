@@ -77,6 +77,7 @@
     <string name="enter_code_message">Please enter code</string>
     <string name="chupa_bomb_notification_title">Chupa Bomb!</string>
     <string name="profile_settings_complete_message">Profile settings are completed.</string>
+    <string name="preview_warning_message">It\'s preview. You can\'t chat.</string>
 
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">

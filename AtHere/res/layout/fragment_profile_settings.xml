@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/profile_settings_profile_margin"
             android:gravity="center"
-            android:textColor="@color/profile_settings_warning"
+            android:textColor="@color/warning"
             android:textSize="@dimen/font_normal" />
 
         <EditText
@@ -92,6 +92,6 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
-        android:src="@drawable/enter_button_bg" />
+        android:src="@drawable/enter_button_profile_settings_bg" />
 
 </RelativeLayout>

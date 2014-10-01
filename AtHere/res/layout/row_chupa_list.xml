@@ -43,10 +43,7 @@
                 android:id="@+id/chupa_list_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/chat_list_receive_content_left_margin"
-                android:layout_marginStart="@dimen/chat_list_receive_content_left_margin"
                 android:ellipsize="end"
-                android:maxWidth="@dimen/chat_list_receive_content_max_width"
                 android:singleLine="true"
                 android:textSize="@dimen/font_small" />
         </LinearLayout>

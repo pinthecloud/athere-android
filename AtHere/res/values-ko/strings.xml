@@ -74,6 +74,7 @@
     <string name="enter_code_message">코드를 입력해 주세요</string>
     <string name="chupa_bomb_notification_title">추파 폭주!</string>
     <string name="profile_settings_complete_message">성공적으로 프로필을 수정하였어요.</string>
+    <string name="preview_warning_message">미리보기에요. 대화를 할 수 없어요.</string>
 
     <!-- String Array -->
 

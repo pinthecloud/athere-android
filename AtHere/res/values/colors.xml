@@ -4,6 +4,7 @@
     <!-- Common -->
     <color name="man">#144fb4</color>
     <color name="woman">#b1240e</color>
+    <color name="warning">#b1240e</color>
 
     <!-- Action Bar -->
     <color name="action_bar_red_background">#E6E72203</color>
@@ -12,7 +13,6 @@
 
     <!-- Basic profile -->
     <color name="basic_profile_gray">#908f93</color>
-    <color name="basic_profile_warning">#b1240e</color>
     <color name="basic_profile_text">#4c4b4f</color>
 
     <!-- Square List -->
@@ -46,7 +46,6 @@
 
     <!-- Profile Settings -->
     <color name="profile_settings_background">#f2f2f2</color>
-    <color name="profile_settings_warning">#b1240e</color>
 
     <!-- gray -->
     <color name="gray_tab_text_unselected">#959595</color>

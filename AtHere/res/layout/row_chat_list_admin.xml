@@ -14,8 +14,8 @@
         android:id="@+id/row_chat_list_admin_profile_image"
         android:layout_width="@dimen/chat_profile_image_width"
         android:layout_height="@dimen/chat_profile_image_height"
-        android:layout_marginEnd="@dimen/chat_list_receive_profile_image_profile_margin"
-        android:layout_marginRight="@dimen/chat_list_receive_profile_image_profile_margin"
+        android:layout_marginEnd="@dimen/chat_list_receive_profile_image_content_margin"
+        android:layout_marginRight="@dimen/chat_list_receive_profile_image_content_margin"
         android:contentDescription="@string/profile_image"
         android:src="@drawable/ground_chat_admin_profile_ico" />
 
@@ -27,6 +27,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/chat_list_receive_nick_name_message_margin"
             android:orientation="horizontal" >
 
             <TextView
