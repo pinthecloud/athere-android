@@ -51,7 +51,6 @@
 
     <!-- Sentence -->
     <string name="min_nick_name_message">Please type in more than 1 letters.</string>
-    <string name="max_nick_name_message">Please type in less then 10 letters.</string>
     <string name="bad_nick_name_message">Special letter is not good as nick name.</string>
     <string name="bad_entry_code_message">This is wrong entry code.</string>
     <string name="enter_square_message">enters ground.</string>
@@ -60,7 +59,7 @@
     <string name="exit_square_consent_message">Every chat and chupa will be deleted. Do you want to leave ground?</string>
     <string name="send_chupa_notification_title">sends you a chupa.</string>
     <string name="forced_logout_title">You have been logout.</string>
-    <string name="google_play_services_message">You need to check Google Play Service to use chupa.</string>
+    <string name="google_play_services_message">Please check Google Play Service.</string>
     <string name="update_app_message">There is a new version. Please update App.</string>
     <string name="internet_not_connected_message">Internet is unavailable. Please check network status.</string>
     <string name="send_message_fail_message">Select action.</string>
@@ -76,7 +75,8 @@
     <string name="duplicated_nick_name_message">Another user is already using this nick name.</string>
     <string name="enter_nick_name_message">Please enter nick name</string>
     <string name="enter_code_message">Please enter code</string>
-    <string name="notification_title">추파 폭</string>
+    <string name="chupa_bomb_notification_title">Chupa Bomb!</string>
+    <string name="profile_settings_complete_message">Profile settings are completed.</string>
 
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">

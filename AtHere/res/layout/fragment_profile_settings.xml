@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/profile_settings_background"
     android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/profile_settings_margin" >
 
     <ProgressBar
         android:id="@+id/profile_settings_frag_progress_bar"
@@ -36,17 +37,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/profile_settings_frag_profile_image"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingEnd="@dimen/profile_settings_profile_right_margin"
-        android:paddingLeft="@dimen/profile_settings_profile_left_margin"
-        android:paddingRight="@dimen/profile_settings_profile_right_margin"
-        android:paddingStart="@dimen/profile_settings_profile_left_margin" >
+        android:paddingTop="@dimen/profile_settings_margin" >
 
         <TextView
             android:id="@+id/profile_settings_frag_nick_name_warning_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/profile_settings_profile_margin"
+            android:gravity="center"
             android:textColor="@color/profile_settings_warning"
             android:textSize="@dimen/font_normal" />
 
@@ -54,6 +54,7 @@
             android:id="@+id/profile_settings_frag_nick_name_text"
             android:layout_width="@dimen/basic_profile_nick_name_text_width"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/profile_settings_profile_margin"
             android:background="@drawable/setup_text_input_bg"
             android:ems="10"
             android:gravity="center"
@@ -72,6 +73,8 @@
                 android:id="@+id/profile_settings_frag_age_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/profile_settings_age_gender_margin"
+                android:layout_marginRight="@dimen/profile_settings_age_gender_margin"
                 android:textSize="@dimen/font_normal" />
 
             <TextView

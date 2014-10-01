@@ -271,26 +271,31 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				if (isPreview) {
-					saveInformationAndEnterSquare(square, isPreview);
-					return;
+				if(!isPreview){
+					String enterMessage = getResources().getString(R.string.enter_square_message);
+					AhUser user = userHelper.getMyUserInfo();
+					AhMessage message = new AhMessage.Builder()
+					.setContent(" " + enterMessage)
+					.setSender(user.getNickName())
+					.setSenderId(user.getId())
+					.setReceiverId(square.getId())
+					.setType(AhMessage.TYPE.ENTER_SQUARE).build();
+					messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+
+						@Override
+						public void onCompleted(AhMessage entity) {
+							// Do nothing
+						}
+					});
+				} else{
+					AsyncChainer.notifyNext(frag);
 				}
+			}
+		}, new Chainable(){
 
-				String enterMessage = getResources().getString(R.string.enter_square_message);
-				AhUser user = userHelper.getMyUserInfo();
-				AhMessage message = new AhMessage.Builder()
-				.setContent(" " + enterMessage)
-				.setSender(user.getNickName())
-				.setSenderId(user.getId())
-				.setReceiverId(square.getId())
-				.setType(AhMessage.TYPE.ENTER_SQUARE).build();
-				messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-
-					@Override
-					public void onCompleted(AhMessage entity) {
-						saveInformationAndEnterSquare(square, isPreview);
-					}
-				});
+			@Override
+			public void doNext(AhFragment frag) {
+				saveInformationAndEnterSquare(square, isPreview);
 			}
 		});
 	}

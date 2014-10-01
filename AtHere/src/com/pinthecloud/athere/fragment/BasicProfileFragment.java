@@ -192,7 +192,7 @@ public class BasicProfileFragment extends AhFragment{
 
 				/*
 				 * Unproper nick name
-				 * Show warning toast for each situation
+				 * Show warning message for each situation
 				 */
 				String message = app.checkNickName(nickName);
 				if(!message.equals("")){

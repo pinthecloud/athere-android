@@ -73,9 +73,9 @@
 
     <!-- Profile Settings -->
     <dimen name="profile_settings_nick_name_text_width">240dp</dimen>
-    <dimen name="profile_settings_birth_gender_text_width">100dp</dimen>
-    <dimen name="profile_settings_profile_left_margin">10dp</dimen>
-    <dimen name="profile_settings_profile_right_margin">10dp</dimen>
+    <dimen name="profile_settings_margin">20dp</dimen>
+    <dimen name="profile_settings_profile_margin">10dp</dimen>
+    <dimen name="profile_settings_age_gender_margin">5dp</dimen>
 
     <!-- Profile Dialog -->
     <dimen name="profile_dialog_profile_height">50dp</dimen>

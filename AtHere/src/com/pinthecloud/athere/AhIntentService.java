@@ -303,7 +303,7 @@ public class AhIntentService extends IntentService {
 			content = message.getContent();
 			resultIntent.setClass(_this, SquareListActivity.class);
 		} else if (AhMessage.TYPE.NOTIFICATION.equals(type)) {
-			title = resources.getString(R.string.notification_title);
+			title = resources.getString(R.string.chupa_bomb_notification_title);
 			content = message.getContent();
 			Class<?> clazz = SquareListActivity.class;
 			if (squareHelper.isLoggedInSquare()) clazz = SquareActivity.class;

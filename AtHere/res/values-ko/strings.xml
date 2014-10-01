@@ -48,7 +48,6 @@
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>
-    <string name="max_nick_name_message">닉네임이 열 글자를 넘을 수 없어요.</string>
     <string name="bad_nick_name_message">완성되지 않거나 특수한 문자는 닉네임으로 적절하지 않아요.</string>
     <string name="bad_entry_code_message">잘못된 입장 코드예요.</string>
     <string name="enter_square_message">님이 그라운드에 들어왔어요.</string>
@@ -57,7 +56,7 @@
     <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워져요. 나가시나요?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈어요.</string>
     <string name="forced_logout_title">로그아웃 되셨어요.</string>
-    <string name="google_play_services_message">추파를 이용하기 위해서는 구글 플레이 서비스를 설치해야 해요.</string>
+    <string name="google_play_services_message">구글 플레이 서비스가 제대로 설치되어 있는지 확인해 주세요.</string>
     <string name="update_app_message">새로운 버전이 나왔어요. 업데이트 부탁드려요.</string>
     <string name="internet_not_connected_message">인터넷에 연결할 수 없어요. 연결상태를 확인해주세요.</string>
     <string name="send_message_fail_message">작업을 선택해주세요.</string>
@@ -73,7 +72,8 @@
     <string name="duplicated_nick_name_message">다른 사람이 이미 사용하고 있는 닉네임 이에요.</string>
     <string name="enter_nick_name_message">닉네임을 입력해 주세요</string>
     <string name="enter_code_message">코드를 입력해 주세요</string>
-    <string name="notification_title">추파 폭주</string>
+    <string name="chupa_bomb_notification_title">추파 폭주!</string>
+    <string name="profile_settings_complete_message">성공적으로 프로필을 수정하였어요.</string>
 
     <!-- String Array -->
 
