@@ -61,7 +61,7 @@ public class AhDialogFragment extends DialogFragment {
 			return;
 		}else{
 			super.show(manager, tag);
-			isShowing = true;	
+			isShowing = true;
 		}
 	}
 

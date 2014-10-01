@@ -50,7 +50,7 @@
         android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:contentDescription="@string/enter"
-        android:src="@drawable/square_enter_dialog_enter_button_bg" />
+        android:src="@drawable/enter_button_square_enter_dialog_bg" />
 
     <Button
         android:id="@+id/square_enter_dialog_preview_button"

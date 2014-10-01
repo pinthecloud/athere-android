@@ -68,7 +68,7 @@
     <string name="review_message">Do you want to hear favorite place\'s news?\n\nTell us your ground by review.</string>
     <string name="no_today_message">I will do</string>
     <string name="location_consent_message">Chupa use location information. Do you agree?</string>
-    <string name="location_setting_message">Please enable location access.</string>
+    <string name="location_turn_on_message">Please enable location service.</string>
     <string name="no_facebook_upload_message">We doesn\'t upload any contents on facebook.</string>
     <string name="birthday_access_message">We need birthday for calculating age.</string>
     <string name="greeting_sentence">Say hello to others.</string>

@@ -37,6 +37,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 	private enum TYPE{
 		ADMIN,
 		ENTER_NOTIFICATION,
+		NOTIFICATION,
 		SEND,
 		RECEIVE
 	}
@@ -73,6 +74,8 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				view = inflater.inflate(R.layout.row_chat_list_admin, parent, false);
 			} else if(type == TYPE.ENTER_NOTIFICATION.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_list_enter_exit_notification, parent, false);
+			} else if(type == TYPE.NOTIFICATION.ordinal()){
+				view = inflater.inflate(R.layout.row_chat_list_notification, parent, false);
 			} else if(type == TYPE.SEND.ordinal()){
 				view = inflater.inflate(R.layout.row_chat_list_send, parent, false);
 			} else if(type == TYPE.RECEIVE.ordinal()){
@@ -105,6 +108,8 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				TextView nickNameText = (TextView)view.findViewById(R.id.row_chat_list_enter_exit_notification_nick_name);
 				nickNameText.setText(message.getSender());
 				messageText = (TextView)view.findViewById(R.id.row_chat_list_enter_exit_notification_message);
+			} else if(type == TYPE.NOTIFICATION.ordinal()){
+				messageText = (TextView)view.findViewById(R.id.row_chat_list_notification_message);
 			} else if(type == TYPE.SEND.ordinal()){
 				/*
 				 * Find UI component only in receive list
@@ -269,7 +274,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 		} else if (message.isEnterExitNotification()){
 			return TYPE.ENTER_NOTIFICATION.ordinal();
 		} else if (message.isNotification()){
-			return TYPE.ENTER_NOTIFICATION.ordinal();
+			return TYPE.NOTIFICATION.ordinal();
 		} else {
 			if(message.isMine()){
 				return TYPE.SEND.ordinal();

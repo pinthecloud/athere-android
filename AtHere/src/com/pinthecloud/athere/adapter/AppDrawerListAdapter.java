@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
@@ -35,13 +36,14 @@ public class AppDrawerListAdapter extends ArrayAdapter<AppDrawerListItem> {
 			/*
 			 * Find UI Component
 			 */
+			ImageView icon = (ImageView)view.findViewById(R.id.row_app_drawer_list_icon);
 			TextView title = (TextView)view.findViewById(R.id.row_app_drawer_list_title);
 
 
 			/*
 			 * Set UI
 			 */
-			title.setCompoundDrawablesWithIntrinsicBounds(item.getIconId(), 0,0,0);
+			icon.setImageResource(item.getIconId());
 			title.setText(item.getTitle());
 		}
 		return view;

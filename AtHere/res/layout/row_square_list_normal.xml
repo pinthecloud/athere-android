@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/square_list_height"
-    android:background="@drawable/list_white_selector_bg"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/groundlist_normal_bg"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/square_list_margin"
+    android:paddingLeft="@dimen/square_list_margin"
+    android:paddingRight="@dimen/square_list_margin"
+    android:paddingStart="@dimen/square_list_margin" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/row_square_list_normal_line"
-        android:gravity="center"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/row_square_list_normal_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/square_list_name_distance_margin"
-            android:textSize="@dimen/font_large" />
-
-        <TextView
-            android:id="@+id/row_square_list_normal_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/square_drawer_profile_company_num_height"
-            android:background="@drawable/bg_groundlist_member_m"
-            android:gravity="center"
-            android:paddingEnd="@dimen/square_list_distance_right_margin"
-            android:paddingLeft="@dimen/square_list_distance_left_margin"
-            android:paddingRight="@dimen/square_list_distance_right_margin"
-            android:paddingStart="@dimen/square_list_distance_left_margin"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/font_medium" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/row_square_list_normal_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/square_list_text"
+        android:textSize="@dimen/font_large" />
 
     <View
-        android:id="@+id/row_square_list_normal_line"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:layout_alignParentBottom="true"
-        android:background="@color/gray_line" />
+        android:layout_width="@dimen/line_height"
+        android:layout_height="@dimen/square_list_distance_line_height"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/row_square_list_normal_distance"
+        android:layout_toStartOf="@+id/row_square_list_normal_distance"
+        android:background="@color/square_list_gray" />
+
+    <TextView
+        android:id="@+id/row_square_list_normal_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/square_drawer_profile_company_num_height"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/square_list_margin"
+        android:layout_marginStart="@dimen/square_list_margin"
+        android:textColor="@color/square_list_text"
+        android:textSize="@dimen/font_normal" />
 
 </RelativeLayout>

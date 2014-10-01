@@ -15,9 +15,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -52,12 +52,13 @@ GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener{
 
 	private ProgressBar progressBar;
-	private Button locationAccessButton;
+	private RelativeLayout addressLayout;
+	private TextView addressText;
+
 	private PullToRefreshListView pullToRefreshListView;
 	private ListView squareListView;
 	private SquareListAdapter squareListAdapter;
-	private View squareListHeader;
-	private TextView addressText;
+
 
 	private LocationHelper locationHelper;
 	private LocationListener locationListener;
@@ -73,13 +74,12 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		/*
 		 * Set UI component
 		 */
-		locationAccessButton = (Button)view.findViewById(R.id.square_list_frag_location_access_button);
 		progressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
+		addressLayout = (RelativeLayout)view.findViewById(R.id.square_list_frag_address_layout);
+		addressText = (TextView)view.findViewById(R.id.square_list_frag_address);
 		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
 		squareListView = pullToRefreshListView.getRefreshableView();
 		registerForContextMenu(squareListView);
-		squareListHeader = inflater.inflate(R.layout.row_square_list_header, null, false);
-		addressText = (TextView)squareListHeader.findViewById(R.id.row_square_list_header_address);
 
 
 		/*
@@ -110,20 +110,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		/*
 		 * Set button
 		 */
-		locationAccessButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				locationHelper.connect();
-			}
-		});
-
-
-		/*
-		 * Set square list view
-		 */
-		squareListView.addHeaderView(squareListHeader);
-		squareListHeader.setOnClickListener(new OnClickListener() {
+		addressLayout.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -131,6 +118,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			}
 		});
 
+
+		/*
+		 * Set square list view
+		 */
 		squareListAdapter = new SquareListAdapter(context, thisFragment);
 		squareListView.setAdapter(squareListAdapter);
 		squareListView.setOnItemClickListener(new OnItemClickListener() {
@@ -150,8 +141,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 						}
 						@Override
 						public void doNegativeThing(Bundle bundle) {
-							locationAccessButton.setVisibility(View.VISIBLE);
-							pullToRefreshListView.setVisibility(View.GONE);
+							addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+							addressText.setText(getResources().getString(R.string.location_turn_on_message));
 						}
 					});
 					return;
@@ -161,8 +152,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				/*
 				 * Get square and make enter dialog
 				 */
-				position -= 2;
-				final Square square = squareListAdapter.getItem(position);
+				final Square square = squareListAdapter.getItem(--position);
 				Bundle bundle = new Bundle();
 				SquareEnterDialog enterDialog = new SquareEnterDialog(square, new AhDialogCallback() {
 
@@ -184,7 +174,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				if(square.getDistance() <= square.getEntryRange() 
 						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 
-					square.setCode("1");
 					if(square.getCode().equals("")){
 						enterSquare(square, false);
 					} else{
@@ -238,11 +227,11 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	public void onStart() {
 		super.onStart();
 		if(locationHelper.isLocationEnabled()){
-			locationAccessButton.setVisibility(View.GONE);
-			pullToRefreshListView.setVisibility(View.VISIBLE);
+			addressText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.groundlist_location_ico, 0, 0, 0);
+			addressText.setText("");
 		}else{
-			locationAccessButton.setVisibility(View.VISIBLE);
-			pullToRefreshListView.setVisibility(View.GONE);
+			addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			addressText.setText(getResources().getString(R.string.location_turn_on_message));
 		}
 		locationHelper.connect();
 	}
@@ -393,8 +382,9 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				public void doNegativeThing(Bundle bundle) {
 					progressBar.setVisibility(View.GONE);
 					pullToRefreshListView.onRefreshComplete();
-					locationAccessButton.setVisibility(View.VISIBLE);
-					pullToRefreshListView.setVisibility(View.GONE);
+
+					addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+					addressText.setText(getResources().getString(R.string.location_turn_on_message));
 				}
 			});
 		}

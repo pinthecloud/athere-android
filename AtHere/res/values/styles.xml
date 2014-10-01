@@ -18,12 +18,12 @@
 
     <style name="AppRedActionBarTheme" parent="AppBaseTheme">
         <item name="android:actionBarStyle">@style/RedActionBar</item>
-        <item name="android:homeAsUpIndicator">@drawable/actionbar_back</item>
+        <item name="android:homeAsUpIndicator">@drawable/actionbar_red_back_btn</item>
     </style>
 
     <style name="AppWhiteActionBarTheme" parent="AppBaseTheme">
         <item name="android:actionBarStyle">@style/WhiteActionBar</item>
-        <item name="android:homeAsUpIndicator">@drawable/actionbar_back</item>
+        <item name="android:homeAsUpIndicator">@drawable/actionbar_white_back_btn</item>
     </style>
 
     <!-- ActionBar styles -->
