@@ -50,7 +50,7 @@
         android:id="@+id/row_chupa_chat_list_send_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_chupa_sent"
+        android:background="@drawable/general_msg_sent_bg"
         android:gravity="center|start"
         android:textColor="@android:color/white"
         android:textSize="@dimen/font_normal" />

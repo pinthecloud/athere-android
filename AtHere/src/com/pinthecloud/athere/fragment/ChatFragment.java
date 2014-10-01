@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.ChatListAdapter;
@@ -26,6 +27,7 @@ import com.pinthecloud.athere.model.Square;
 
 public class ChatFragment extends AhFragment{
 
+	private RelativeLayout previewLayout;
 	private ListView messageListView;
 	private ChatListAdapter messageListAdapter;
 	private List<AhMessage> chats;
@@ -59,10 +61,11 @@ public class ChatFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
+		previewLayout = (RelativeLayout) view.findViewById(R.id.chat_frag_preview_layout);
+		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
 		inputbarLayout = (LinearLayout) view.findViewById(R.id.chat_frag_inputbar_layout);
 		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
-		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
 
 
 		/*
@@ -70,9 +73,11 @@ public class ChatFragment extends AhFragment{
 		 */
 		if(squareHelper.isPreview()){
 			inputbarLayout.setVisibility(View.GONE);
-		} 
-		
-		
+		} else{
+			previewLayout.setVisibility(View.GONE);
+		}
+
+
 		/*
 		 * Set edit text
 		 */

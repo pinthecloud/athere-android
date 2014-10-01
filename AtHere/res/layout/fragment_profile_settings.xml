@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/profile_settings_background"
     android:focusable="true"
-    android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/profile_settings_margin" >
 
     <ProgressBar
         android:id="@+id/profile_settings_frag_progress_bar"
@@ -20,8 +21,7 @@
         android:layout_width="@dimen/basic_profile_profile_image_size"
         android:layout_height="@dimen/basic_profile_profile_image_size"
         android:layout_centerHorizontal="true"
-        app:civBorderColor="@color/basic_profile_gray"
-        app:civBorderWidth="@dimen/line_height" />
+        app:civBorderWidth="@dimen/none" />
 
     <com.pinthecloud.athere.view.CircleImageView
         android:layout_width="wrap_content"
@@ -30,29 +30,30 @@
         android:layout_alignEnd="@+id/profile_settings_frag_profile_image"
         android:layout_alignRight="@+id/profile_settings_frag_profile_image"
         android:src="@drawable/profile_edit_profile_reselect_ico"
-        app:civBorderWidth="@null" />
+        app:civBorderWidth="@dimen/none" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/profile_settings_frag_profile_image"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:paddingEnd="@dimen/profile_settings_profile_right_margin"
-        android:paddingLeft="@dimen/profile_settings_profile_left_margin"
-        android:paddingRight="@dimen/profile_settings_profile_right_margin"
-        android:paddingStart="@dimen/profile_settings_profile_left_margin" >
+        android:paddingTop="@dimen/profile_settings_margin" >
 
         <TextView
             android:id="@+id/profile_settings_frag_nick_name_warning_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/profile_settings_warning"
+            android:layout_marginBottom="@dimen/profile_settings_profile_margin"
+            android:gravity="center"
+            android:textColor="@color/red_woman"
             android:textSize="@dimen/font_normal" />
-        <EditText
+
+        <EditText
             android:id="@+id/profile_settings_frag_nick_name_text"
-            android:layout_width="@dimen/basic_profile_nick_name_text_width"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/profile_settings_profile_margin"
             android:background="@drawable/setup_text_input_bg"
             android:ems="10"
             android:gravity="center"
@@ -71,6 +72,8 @@
                 android:id="@+id/profile_settings_frag_age_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/age_gender_margin"
+                android:layout_marginRight="@dimen/age_gender_margin"
                 android:textSize="@dimen/font_normal" />
 
             <TextView
@@ -79,14 +82,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_normal" />
         </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/profile_settings_frag_start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:contentDescription="@android:string/ok"
-            android:src="@drawable/enter_button_profile_settings_bg" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/profile_settings_frag_start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@android:string/ok"
+        android:src="@drawable/enter_button_profile_settings_bg" />
 
 </RelativeLayout>

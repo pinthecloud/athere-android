@@ -28,7 +28,7 @@
     <TextView
         android:id="@+id/row_square_list_normal_distance"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/square_drawer_profile_company_num_height"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"

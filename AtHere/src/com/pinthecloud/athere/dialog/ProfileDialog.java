@@ -72,9 +72,9 @@ public class ProfileDialog extends AhDialogFragment{
 		nickNameText.setText(user.getNickName());
 		ageGenderText.setText("" + user.getAge());
 		if(user.isMale()){
-			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.general_gender_m, 0,0,0);
+			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_m, 0);
 		}else{
-			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.general_gender_w, 0,0,0);
+			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_w, 0);
 		}
 
 

@@ -51,7 +51,7 @@ public class SquareListActivity extends AhActivity {
 		 * Set sliding menu
 		 */
 		slidingMenu = new SlidingMenu(thisActivity);
-		slidingMenu.setMenu(R.layout.frame_app_drawer);
+		slidingMenu.setMenu(R.layout.app_drawer_frame);
 		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
 		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);

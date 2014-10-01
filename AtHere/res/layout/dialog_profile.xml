@@ -14,7 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_dialog_profile_height"
         android:layout_alignBottom="@+id/profile_dialog_profile_image"
-        android:background="@color/profile_dialog_profile" >
+        android:background="@color/profile_dialog_profile"
+        android:paddingEnd="@dimen/profile_dialog_profile_margin"
+        android:paddingLeft="@dimen/profile_dialog_profile_margin"
+        android:paddingRight="@dimen/profile_dialog_profile_margin"
+        android:paddingStart="@dimen/profile_dialog_profile_margin" >
 
         <TextView
             android:id="@+id/profile_dialog_nick_name"
@@ -30,7 +34,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/bg_profile_dialog_info"
+            android:background="@drawable/profile_dialog_info_bg"
+            android:drawablePadding="@dimen/age_gender_margin"
             android:textSize="@dimen/font_normal" />
     </RelativeLayout>
 
@@ -39,14 +44,18 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_dialog_profile_height"
         android:layout_below="@+id/profile_dialog_profile_image"
-        android:background="@color/profile_dialog_send_chupa" >
+        android:background="@color/profile_dialog_send_chupa"
+        android:paddingEnd="@dimen/none"
+        android:paddingLeft="@dimen/profile_dialog_profile_margin"
+        android:paddingRight="@dimen/none"
+        android:paddingStart="@dimen/profile_dialog_profile_margin" >
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:contentDescription="@string/logo"
-            android:src="@drawable/actionbar_logo" />
+            android:src="@drawable/profile_dialog_chupa_ico" />
 
         <TextView
             android:layout_width="wrap_content"

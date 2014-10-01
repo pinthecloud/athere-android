@@ -16,8 +16,8 @@
         android:layout_width="@dimen/chat_profile_image_width"
         android:layout_height="@dimen/chat_profile_image_height"
         android:layout_gravity="top"
-        android:layout_marginEnd="@dimen/chat_list_receive_profile_image_profile_margin"
-        android:layout_marginRight="@dimen/chat_list_receive_profile_image_profile_margin"
+        android:layout_marginEnd="@dimen/chat_list_receive_profile_image_content_margin"
+        android:layout_marginRight="@dimen/chat_list_receive_profile_image_content_margin"
         app:civBorderColor="@color/square_chat_other_profile_image_border"
         app:civBorderWidth="@dimen/line_height" />
 
@@ -30,6 +30,7 @@
             android:id="@+id/row_chat_list_receive_profile_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/chat_list_receive_nick_name_message_margin"
             android:orientation="horizontal" >
 
             <TextView
@@ -38,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/chat_list_receive_nick_name_time_margin"
                 android:layout_marginRight="@dimen/chat_list_receive_nick_name_time_margin"
+                android:drawablePadding="@dimen/age_gender_margin"
                 android:textColor="@color/square_chat_other_nick_name"
                 android:textSize="@dimen/font_normal" />
 
