@@ -6,7 +6,12 @@
     android:background="@drawable/guide_bg"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:padding="@dimen/basic_profile_margin" >
+    android:paddingBottom="@dimen/basic_profile_profile_margin"
+    android:paddingEnd="@dimen/basic_profile_profile_margin"
+    android:paddingLeft="@dimen/basic_profile_profile_margin"
+    android:paddingRight="@dimen/basic_profile_profile_margin"
+    android:paddingStart="@dimen/basic_profile_profile_margin"
+    android:paddingTop="@dimen/basic_profile_margin" >
 
     <ProgressBar
         android:id="@+id/basic_profile_frag_progress_bar"
@@ -21,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/basic_profile_title_bottom_margin"
+        android:layout_marginBottom="@dimen/basic_profile_margin"
         android:text="@string/register_profile"
         android:textColor="@color/basic_profile_text"
         android:textSize="@dimen/font_x_large" />
@@ -44,7 +49,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/basic_profile_profile_margin"
         android:gravity="center"
-        android:textColor="@color/warning"
+        android:textColor="@color/red_woman"
         android:textSize="@dimen/font_normal" />
 
     <EditText
@@ -91,10 +96,21 @@
         android:id="@+id/basic_profile_frag_start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/basic_profile_frag_location_consent"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/basic_profile_profile_margin"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
         android:src="@drawable/enter_button_basic_profile_bg" />
+
+    <TextView
+        android:id="@+id/basic_profile_frag_location_consent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/location_consent_message"
+        android:textSize="@dimen/font_small" />
 
 </RelativeLayout>

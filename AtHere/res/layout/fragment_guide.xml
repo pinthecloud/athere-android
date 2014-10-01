@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,15 +13,14 @@
         android:layout_height="0dp"
         android:layout_weight="4" />
 
-    <com.viewpagerindicator.UnderlinePageIndicator
+    <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/guide_frag_indicator"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:background="@color/gray_line" />
+        android:layout_height="wrap_content"
+        app:fillColor="@android:color/black"
+        app:radius="@dimen/guide_indicator_radious"
+        app:strokeColor="@android:color/black"
+        app:strokeWidth="@dimen/line_height" />
 
     <LinearLayout
         android:id="@+id/guide_frag_login_layout"
@@ -40,10 +39,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/guide_login_margin"
-            facebook:confirm_logout="false"
-            facebook:fetch_user_info="true"
-            facebook:login_text="@string/facebook_login"
-            facebook:logout_text="@string/facebook_logout" />
+            app:confirm_logout="false"
+            app:fetch_user_info="true"
+            app:login_text="@string/facebook_login"
+            app:logout_text="@string/facebook_logout" />
 
         <TextView
             android:layout_width="wrap_content"

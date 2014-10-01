@@ -10,15 +10,15 @@
     <dimen name="app_drawer_shadow_width">10dp</dimen>
     <dimen name="app_drawer_margin">20dp</dimen>
     <dimen name="app_drawer_profile_image">110dp</dimen>
-
+    
+    <!-- Guide -->
+    <dimen name="guide_indicator_radious">5dp</dimen>
+    <dimen name="guide_login_margin">10dp</dimen>
+    
     <!-- Basic Profile -->
     <dimen name="basic_profile_profile_image_size">200dp</dimen>
-    <dimen name="basic_profile_margin">20dp</dimen>
-    <dimen name="basic_profile_profile_margin">10dp</dimen>
-    <dimen name="basic_profile_title_bottom_margin">30dp</dimen>
-
-    <!-- Guide -->
-    <dimen name="guide_login_margin">10dp</dimen>
+    <dimen name="basic_profile_margin">18dp</dimen>
+    <dimen name="basic_profile_profile_margin">8dp</dimen>
 
     <!-- Square -->
     <dimen name="square_tab_height">48dp</dimen>
@@ -67,9 +67,8 @@
     <dimen name="chupa_list_content_margin">5dp</dimen>
 
     <!-- Profile Settings -->
-    <dimen name="profile_settings_nick_name_text_width">240dp</dimen>
-    <dimen name="profile_settings_margin">20dp</dimen>
-    <dimen name="profile_settings_profile_margin">10dp</dimen>
+    <dimen name="profile_settings_margin">30dp</dimen>
+    <dimen name="profile_settings_profile_margin">12dp</dimen>
 
     <!-- Profile Dialog -->
     <dimen name="profile_dialog_profile_height">50dp</dimen>

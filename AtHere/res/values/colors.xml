@@ -3,8 +3,7 @@
 
     <!-- Common -->
     <color name="man">#144fb4</color>
-    <color name="woman">#b1240e</color>
-    <color name="warning">#b1240e</color>
+    <color name="red_woman">#b1240e</color>
 
     <!-- Action Bar -->
     <color name="action_bar_red_background">#E6E72203</color>

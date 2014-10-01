@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/profile_settings_profile_margin"
             android:gravity="center"
-            android:textColor="@color/warning"
+            android:textColor="@color/red_woman"
             android:textSize="@dimen/font_normal" />
 
         <EditText

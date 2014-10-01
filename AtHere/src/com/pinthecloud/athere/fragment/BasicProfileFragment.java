@@ -182,7 +182,7 @@ public class BasicProfileFragment extends AhFragment{
 		if(user.isMale()){
 			genderText.setTextColor(getResources().getColor(R.color.man));
 		}else{
-			genderText.setTextColor(getResources().getColor(R.color.woman));
+			genderText.setTextColor(getResources().getColor(R.color.red_woman));
 		}
 
 
