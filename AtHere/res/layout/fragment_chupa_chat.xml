@@ -37,8 +37,8 @@
             android:id="@+id/chupa_chat_frag_other_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/chupa_chat_other_age_gender_margin"
-            android:layout_marginRight="@dimen/chupa_chat_other_age_gender_margin"
+            android:layout_marginEnd="@dimen/age_gender_margin"
+            android:layout_marginRight="@dimen/age_gender_margin"
             android:textSize="@dimen/font_medium" />
 
         <LinearLayout

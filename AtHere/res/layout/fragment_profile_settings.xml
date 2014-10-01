@@ -21,8 +21,7 @@
         android:layout_width="@dimen/basic_profile_profile_image_size"
         android:layout_height="@dimen/basic_profile_profile_image_size"
         android:layout_centerHorizontal="true"
-        app:civBorderColor="@color/basic_profile_gray"
-        app:civBorderWidth="@dimen/line_height" />
+        app:civBorderWidth="@dimen/none" />
 
     <com.pinthecloud.athere.view.CircleImageView
         android:layout_width="wrap_content"
@@ -52,7 +51,7 @@
 
         <EditText
             android:id="@+id/profile_settings_frag_nick_name_text"
-            android:layout_width="@dimen/basic_profile_nick_name_text_width"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/profile_settings_profile_margin"
             android:background="@drawable/setup_text_input_bg"
@@ -73,8 +72,8 @@
                 android:id="@+id/profile_settings_frag_age_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/profile_settings_age_gender_margin"
-                android:layout_marginRight="@dimen/profile_settings_age_gender_margin"
+                android:layout_marginEnd="@dimen/age_gender_margin"
+                android:layout_marginRight="@dimen/age_gender_margin"
                 android:textSize="@dimen/font_normal" />
 
             <TextView
@@ -93,6 +92,6 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
-        android:src="@drawable/enter_button_profile_settings_bg" />
+        android:src="@drawable/enter_button_bg" />
 
 </RelativeLayout>

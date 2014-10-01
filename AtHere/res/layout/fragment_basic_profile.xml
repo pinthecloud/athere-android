@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/setup_bg"
+    android:background="@drawable/guide_bg"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:padding="@dimen/basic_profile_margin" >
@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/basic_profile_title_bottom_margin"
         android:text="@string/register_profile"
-        android:textColor="@android:color/white"
+        android:textColor="@color/basic_profile_text"
         android:textSize="@dimen/font_x_large" />
 
     <com.pinthecloud.athere.view.CircleImageView
@@ -34,8 +34,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/basic_profile_profile_margin"
         android:src="@drawable/setup_profile_default_ico"
-        app:civBorderColor="@color/basic_profile_gray"
-        app:civBorderWidth="@dimen/line_height" />
+        app:civBorderWidth="@dimen/none" />
 
     <TextView
         android:id="@+id/basic_profile_frag_nick_name_warning_text"
@@ -50,7 +49,7 @@
 
     <EditText
         android:id="@+id/basic_profile_frag_nick_name_text"
-        android:layout_width="@dimen/basic_profile_nick_name_text_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/basic_profile_frag_nick_name_warning_text"
         android:layout_centerHorizontal="true"
@@ -61,18 +60,32 @@
         android:hint="@string/enter_nick_name_message"
         android:inputType="text"
         android:maxLength="10"
-        android:textColor="@android:color/white"
+        android:textColor="@color/basic_profile_text"
         android:textColorHint="@color/basic_profile_gray"
         android:textSize="@dimen/font_large" />
 
-    <TextView
-        android:id="@+id/basic_profile_frag_age_gender_text"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/basic_profile_frag_nick_name_text"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/font_normal" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/basic_profile_frag_age_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/age_gender_margin"
+            android:layout_marginRight="@dimen/age_gender_margin"
+            android:textColor="@color/basic_profile_text"
+            android:textSize="@dimen/font_normal" />
+
+        <TextView
+            android:id="@+id/basic_profile_frag_gender_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_normal" />
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/basic_profile_frag_start_button"
@@ -82,6 +95,6 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
         android:contentDescription="@android:string/ok"
-        android:src="@drawable/enter_button_basic_profile_bg" />
+        android:src="@drawable/enter_button_bg" />
 
 </RelativeLayout>

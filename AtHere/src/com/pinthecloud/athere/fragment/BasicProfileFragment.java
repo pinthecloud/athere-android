@@ -50,7 +50,8 @@ public class BasicProfileFragment extends AhFragment{
 
 	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
-	private TextView ageGenderText;
+	private TextView ageText;
+	private TextView genderText;
 	private ImageButton startButton;
 
 	private boolean isTypedNickName = false;
@@ -72,7 +73,8 @@ public class BasicProfileFragment extends AhFragment{
 		profileImageView = (ImageView) view.findViewById(R.id.basic_profile_frag_profile_image);
 		nickNameWarningText = (TextView) view.findViewById(R.id.basic_profile_frag_nick_name_warning_text);
 		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_text);
-		ageGenderText = (TextView) view.findViewById(R.id.basic_profile_frag_age_gender_text);
+		ageText = (TextView) view.findViewById(R.id.basic_profile_frag_age_text);
+		genderText = (TextView) view.findViewById(R.id.basic_profile_frag_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
 
 
@@ -175,7 +177,13 @@ public class BasicProfileFragment extends AhFragment{
 		 */
 		int age = user.getAge();
 		String gender = user.getGenderString(context);
-		ageGenderText.setText(age + " " + gender);
+		ageText.setText(""+age);
+		genderText.setText(gender);
+		if(user.isMale()){
+			genderText.setTextColor(getResources().getColor(R.color.man));
+		}else{
+			genderText.setTextColor(getResources().getColor(R.color.woman));
+		}
 
 
 		/*

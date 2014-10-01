@@ -11,8 +11,9 @@
     <color name="action_bar_item_divider">#f2f2f2</color>
 
     <!-- Basic profile -->
-    <color name="basic_profile_gray">#cecece</color>
-    <color name="basic_profile_warning">#ff9292</color>
+    <color name="basic_profile_gray">#908f93</color>
+    <color name="basic_profile_warning">#b1240e</color>
+    <color name="basic_profile_text">#4c4b4f</color>
 
     <!-- Square List -->
     <color name="square_list_header_background">#b1240e</color>
