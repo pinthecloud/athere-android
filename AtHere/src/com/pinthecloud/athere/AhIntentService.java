@@ -31,6 +31,7 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.ChupaChatFragment;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.helper.SquareHelper;
 import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
@@ -47,6 +48,7 @@ public class AhIntentService extends IntentService {
 	private MessageDBHelper messageDBHelper;
 	private UserDBHelper userDBHelper;
 	private UserHelper userHelper;
+	private SquareHelper squareHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
 
 	private AhMessage message = null;
@@ -66,6 +68,7 @@ public class AhIntentService extends IntentService {
 		messageDBHelper = app.getMessageDBHelper();
 		userDBHelper = app.getUserDBHelper();
 		userHelper = app.getUserHelper();
+		squareHelper = app.getSquareHelper();
 		blobStorageHelper = app.getBlobStorageHelper();
 	}
 
@@ -242,7 +245,25 @@ public class AhIntentService extends IntentService {
 	}
 	
 	private void NOTIFICATION() {
-		TALK();
+		int id = messageDBHelper.addMessage(message);
+		message.setId(String.valueOf(id));
+		boolean isChatEnable = userHelper.isChatEnable();
+		boolean isAppRunning = isRunning(app);
+		if (squareHelper.isLoggedInSquare()) {
+			if (isAppRunning) {
+				String currentActivityName = getCurrentRunningActivityName(app);
+				messageHelper.triggerMessageEvent(currentActivityName, message);
+				if (!isActivityRunning(app, SquareActivity.class) && isChatEnable){
+					// Is the User is Not in SquareActivity
+					alertNotification(AhMessage.TYPE.NOTIFICATION);
+				}
+			} else if(isChatEnable){
+				// if App Not Running
+				alertNotification(AhMessage.TYPE.NOTIFICATION);
+			}
+		} else {
+			alertNotification(AhMessage.TYPE.NOTIFICATION);
+		}
 	}
 
 
@@ -281,6 +302,12 @@ public class AhIntentService extends IntentService {
 			title = resources.getString(R.string.forced_logout_title);
 			content = message.getContent();
 			resultIntent.setClass(_this, SquareListActivity.class);
+		} else if (AhMessage.TYPE.NOTIFICATION.equals(type)) {
+			title = resources.getString(R.string.notification_title);
+			content = message.getContent();
+			Class<?> clazz = SquareListActivity.class;
+			if (squareHelper.isLoggedInSquare()) clazz = SquareActivity.class;
+			resultIntent.setClass(_this, clazz);
 		}
 
 

@@ -76,6 +76,7 @@
     <string name="duplicated_nick_name_message">Another user is already using this nick name.</string>
     <string name="enter_nick_name_message">Please enter nick name</string>
     <string name="enter_code_message">Please enter code</string>
+    <string name="notification_title">추파 폭</string>
 
     <!-- String Array -->
     <string-array name="profile_image_select_delete_string_array">

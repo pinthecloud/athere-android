@@ -73,6 +73,7 @@
     <string name="duplicated_nick_name_message">다른 사람이 이미 사용하고 있는 닉네임 이에요.</string>
     <string name="enter_nick_name_message">닉네임을 입력해 주세요</string>
     <string name="enter_code_message">코드를 입력해 주세요</string>
+    <string name="notification_title">추파 폭주</string>
 
     <!-- String Array -->
 
