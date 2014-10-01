@@ -44,7 +44,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/chupa_chat_profile_company_num_height"
-            android:background="@drawable/bg_sidebar_member"
             android:gravity="center"
             android:orientation="horizontal" >
 

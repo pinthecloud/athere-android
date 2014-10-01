@@ -133,7 +133,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				 * Check location service
 				 */
 				if(!locationHelper.isLocationEnabled()){
-					locationHelper.getLocationAccess(activity, new AhDialogCallback() {
+					locationHelper.getLocationService(activity, new AhDialogCallback() {
 
 						@Override
 						public void doPositiveThing(Bundle bundle) {
@@ -372,7 +372,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			progressBar.bringToFront();
 			locationHelper.requestLocationUpdates(locationListener);
 		} else{
-			locationHelper.getLocationAccess(activity, new AhDialogCallback() {
+			locationHelper.getLocationService(activity, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
@@ -418,7 +418,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				}
 			});
 		} else{
-			locationHelper.getLocationAccess(activity, new AhDialogCallback() {
+			locationHelper.getLocationService(activity, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {

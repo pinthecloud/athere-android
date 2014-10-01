@@ -21,7 +21,7 @@ public class ProfileImageActivity extends AhActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.frame_activity);
+		setContentView(R.layout.activity_frame);
 
 		Log(thisActivity, "here");
 

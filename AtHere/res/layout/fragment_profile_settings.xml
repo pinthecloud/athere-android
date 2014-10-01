@@ -30,7 +30,7 @@
         android:layout_alignEnd="@+id/profile_settings_frag_profile_image"
         android:layout_alignRight="@+id/profile_settings_frag_profile_image"
         android:src="@drawable/profile_edit_profile_reselect_ico"
-        app:civBorderWidth="@null" />
+        app:civBorderWidth="@dimen/none" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,7 +49,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/profile_settings_warning"
             android:textSize="@dimen/font_normal" />
-        <EditText
+
+        <EditText
             android:id="@+id/profile_settings_frag_nick_name_text"
             android:layout_width="@dimen/basic_profile_nick_name_text_width"
             android:layout_height="wrap_content"
@@ -79,14 +80,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/font_normal" />
         </LinearLayout>
-
-        <ImageButton
-            android:id="@+id/profile_settings_frag_start_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:contentDescription="@android:string/ok"
-            android:src="@drawable/enter_button_profile_settings_bg" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/profile_settings_frag_start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@android:string/ok"
+        android:src="@drawable/enter_button_profile_settings_bg" />
 
 </RelativeLayout>

@@ -73,7 +73,6 @@
                 android:id="@+id/chupa_list_badge_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_tabbar_badge"
                 android:gravity="center"
                 android:textColor="@color/red_dark"
                 android:textSize="@dimen/font_medium"
