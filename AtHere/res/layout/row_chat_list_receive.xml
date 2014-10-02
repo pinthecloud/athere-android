@@ -15,10 +15,9 @@
         android:id="@+id/row_chat_list_receive_profile_image"
         android:layout_width="@dimen/chat_profile_image_width"
         android:layout_height="@dimen/chat_profile_image_height"
-        android:layout_gravity="top"
         android:layout_marginEnd="@dimen/chat_list_receive_profile_image_content_margin"
         android:layout_marginRight="@dimen/chat_list_receive_profile_image_content_margin"
-        app:civBorderColor="@color/square_chat_other_profile_image_border"
+        app:civBorderColor="@color/divider"
         app:civBorderWidth="@dimen/line_width" />
 
     <LinearLayout

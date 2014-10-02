@@ -4,7 +4,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -36,7 +36,6 @@ public class ChupaChatActivity extends AhActivity {
 		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
 		final ChupaChatFragment chupaChatFragment = new ChupaChatFragment();
 		fragmentTransaction.add(R.id.activity_container, chupaChatFragment);
 		fragmentTransaction.commit();
@@ -66,11 +65,19 @@ public class ChupaChatActivity extends AhActivity {
 
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu items for use in the action bar
+		getMenuInflater().inflate(R.menu.chupa_chat, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		// Respond to the action bar's Up/Home button
 		case android.R.id.home:
-			NavUtils.navigateUpFromSameTask(this);
+			onBackPressed();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

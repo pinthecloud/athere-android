@@ -19,7 +19,7 @@
 
     <View
         android:layout_width="@dimen/line_width"
-        android:layout_height="@dimen/square_list_distance_line_height"
+        android:layout_height="@dimen/content_divider_height"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/row_square_list_normal_distance"
         android:layout_toStartOf="@+id/row_square_list_normal_distance"

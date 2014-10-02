@@ -56,8 +56,9 @@ public class ChupaListFragment extends AhFragment{
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				AhUser user = userDBHelper.getUser(squareChupaListAdapter.getItem(position).getUserId(), true);
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, squareChupaListAdapter.getItem(position).getUserId());
+				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
 		});
@@ -96,7 +97,7 @@ public class ChupaListFragment extends AhFragment{
 			public void run() {
 				squareChupaListAdapter.clear();
 				squareChupaListAdapter.addAll(convertToMap(lastChupaList));
-				
+
 				if(squareChupaListAdapter.getCount() < 1){
 					blankImage.setVisibility(View.VISIBLE);
 				} else{
@@ -113,8 +114,6 @@ public class ChupaListFragment extends AhFragment{
 			Chupa chupa = new Chupa();
 
 			String userId = null;
-			boolean isExit = false;
-
 			if (message.isMine()) {
 				// the other user is Receiver
 				userId = message.getReceiverId();
@@ -126,13 +125,7 @@ public class ChupaListFragment extends AhFragment{
 			chupa.setUserId(userId);
 			AhUser user = userDBHelper.getUser(userId, true);
 			chupa.setUserNickName(user != null ? user.getNickName() : "Unkown");
-
-			// check whether it is exited.
-			if (userDBHelper.isUserExit(userId)) {
-				isExit = true;
-			}
-			chupa.setExit(isExit);
-
+			chupa.setExit(userDBHelper.isUserExit(userId));
 			chupa.setContent(message.getContent());
 			chupa.setTimeStamp(message.getTimeStamp());
 			chupa.setId(message.getChupaCommunId());

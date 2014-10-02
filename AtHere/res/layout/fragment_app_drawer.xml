@@ -71,7 +71,7 @@
         android:layout_marginRight="@dimen/app_drawer_margin"
         android:layout_marginStart="@dimen/app_drawer_margin"
         android:layout_weight="1"
-        android:divider="@color/list_divider"
+        android:divider="@color/divider"
         android:dividerHeight="@dimen/line_width" >
     </ListView>
 

@@ -14,14 +14,16 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
+import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.Chupa;
 
 public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 
 	private Context context;
 	private AhFragment fragment;
+	private UserHelper userHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
-//	private UserDBHelper userDBHelper;
+
 
 	public ChupaListAdapter(Context context, AhFragment frag) {
 		super(context, 0);
@@ -29,9 +31,10 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 		this.fragment = frag;
 
 		AhApplication app = AhApplication.getInstance();
+		this.userHelper = app.getUserHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
-//		this.userDBHelper = app.getUserDBHelper();
 	}
+
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -47,9 +50,9 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 			/*
 			 * Find UI component
 			 */
-			final ImageView profileImage = (ImageView)view.findViewById(R.id.chupa_list_profile_pic);
+			ImageView profileImage = (ImageView)view.findViewById(R.id.chupa_list_profile_image);
 			TextView sender = (TextView)view.findViewById(R.id.chupa_list_sender);
-			TextView contentView = (TextView)view.findViewById(R.id.chupa_list_content);
+			TextView content = (TextView)view.findViewById(R.id.chupa_list_content);
 			TextView timeStamp = (TextView)view.findViewById(R.id.chupa_list_timestamp);
 			TextView badgeNum = (TextView)view.findViewById(R.id.chupa_list_badge_num);
 
@@ -59,27 +62,36 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 			 */
 			boolean isExit = chupa.isExit();
 			String userId = chupa.getUserId();
-//			AhUser user = userDBHelper.getUser(userId, true);
-//			String userNickName = user.getNickName();
 			String userNickName = chupa.getUserNickName();
 			int chupaBadge = chupa.getBadgeNum();
-			String content = chupa.getContent();
+			String contentString = chupa.getContent();
 			String time = chupa.getTimeStamp();
 			String hour = time.substring(8, 10);
 			String minute = time.substring(10, 12);
 
-			if (isExit) {
-				sender.setTextColor(context.getResources().getColor(R.color.gray_line));
-			} else {
-				sender.setTextColor(context.getResources().getColor(android.R.color.black));
-			}
-			sender.setText(userNickName);
 			blobStorageHelper.setImageViewAsync(fragment, BlobStorageHelper.USER_PROFILE, 
 					userId+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImage, true);
-			contentView.setText(content);
+
+			sender.setText(userNickName);
+			content.setText(contentString);
 			timeStamp.setText(hour + ":" + minute);
-			if (chupaBadge > 0) {
-				badgeNum.setText(String.valueOf(chupaBadge));
+
+			if(userId.equals(userHelper.getMyUserInfo().getId())){
+				content.setCompoundDrawablesWithIntrinsicBounds(R.drawable.actionbar_red_back_btn, 0, 0, 0);
+			}else{
+				content.setCompoundDrawablesWithIntrinsicBounds(R.drawable.actionbar_red_back_btn, 0, 0, 0);
+			}
+
+			if(isExit) {
+				sender.setTextColor(context.getResources().getColor(R.color.chupa_list_time));
+				content.setTextColor(context.getResources().getColor(R.color.chupa_list_time));
+			} else {
+				sender.setTextColor(context.getResources().getColor(R.color.chupa_list_text));
+				content.setTextColor(context.getResources().getColor(R.color.chupa_list_text));
+			}
+
+			if(chupaBadge > 0) {
+				badgeNum.setText(""+chupaBadge);
 				badgeNum.setVisibility(View.VISIBLE);
 			}else{
 				badgeNum.setVisibility(View.INVISIBLE);

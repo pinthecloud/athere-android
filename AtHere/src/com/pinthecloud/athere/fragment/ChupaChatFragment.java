@@ -33,7 +33,6 @@ import com.pinthecloud.athere.model.AhUser;
 
 public class ChupaChatFragment extends AhFragment {
 
-	private ActionBar mActionBar;
 	private EditText messageEditText;
 	private ImageButton sendButton;
 
@@ -43,15 +42,14 @@ public class ChupaChatFragment extends AhFragment {
 	private TextView otherAge;
 	private TextView otherCompanyNumber;
 
+	private ListView messageListView;
+	private ChupaChatListAdapter messageListAdapter;
+	private List<AhMessage> chupas;
+	private AhMessage chupa;
+	
 	public static AhUser otherUser;
 	private boolean isOtherUserExit = false;
 	private boolean isTypedMessage = false;
-
-	private ListView messageListView;
-	private ChupaChatListAdapter messageListAdapter;
-
-	private List<AhMessage> chupas;
-	private AhMessage chupa;
 
 
 	@Override
@@ -60,8 +58,7 @@ public class ChupaChatFragment extends AhFragment {
 
 		// Get parameter from previous activity intent
 		Intent intent = activity.getIntent();
-		String userId = intent.getStringExtra(AhGlobalVariable.USER_KEY);
-		otherUser = userDBHelper.getUser(userId, true);
+		otherUser = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
 
 
@@ -84,7 +81,6 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set UI component
 		 */
-		mActionBar = activity.getActionBar();
 		otherProfileImage = (ImageView) view.findViewById(R.id.chupa_chat_frag_other_profile);
 		otherNickName = (TextView) view.findViewById(R.id.chupa_chat_frag_other_nick_name);
 		otherGender = (ImageView) view.findViewById(R.id.chupa_chat_frag_other_gender);
@@ -98,10 +94,11 @@ public class ChupaChatFragment extends AhFragment {
 		/*
 		 * Set Action Bar
 		 */
-		mActionBar.setTitle(squareHelper.getMySquareInfo().getName());
-		mActionBar.setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = activity.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
 
-
+		
 		/*
 		 * Set message listview
 		 */
