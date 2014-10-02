@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/general_msg_recieved_bg"
             android:gravity="center|start"
-            android:textColor="@color/square_chat_text"
+            android:textColor="@color/square_text"
             android:textSize="@dimen/font_normal" />
     </LinearLayout>
 

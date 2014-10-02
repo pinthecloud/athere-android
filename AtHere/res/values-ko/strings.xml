@@ -11,7 +11,6 @@
     <string name="icon">아이콘</string>
     <string name="profile_image">프로필 사진</string>
     <string name="profile_settings">프로필 설정</string>
-    <string name="my_profile">내 프로필</string>
     <string name="man">남</string>
     <string name="woman">여</string>
     <string name="delete">지우기</string>

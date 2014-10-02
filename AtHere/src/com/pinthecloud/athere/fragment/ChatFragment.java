@@ -192,7 +192,7 @@ public class ChatFragment extends AhFragment{
 	@Override 
 	public void onSaveInstanceState(Bundle outState) {
 		//first saving my state, so the bundle wont be empty.
-		outState.putString("VIEWPAGER_BUG",  "VIEWPAGER_FIX");
+		outState.putString("VIEWPAGER_BUG_FIX",  "VIEWPAGER_BUG_FIX");
 		super.onSaveInstanceState(outState);
 	}
 
@@ -245,7 +245,7 @@ public class ChatFragment extends AhFragment{
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
-				
+
 				activity.runOnUiThread(new Runnable() {
 
 					@Override

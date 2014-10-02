@@ -235,10 +235,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	}
 
 	// Getting All Contacts
-	public List<AhUser> getAllUsers() {
-		return this.getAllUsers(false);
-	}
-
 	public List<AhUser> getAllUsers(boolean includingExits) {
 		List<AhUser> users = new ArrayList<AhUser>();
 

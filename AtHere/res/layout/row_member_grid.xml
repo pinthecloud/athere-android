@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ground_member_item_bg"
+    android:orientation="vertical" >
+
+    <com.pinthecloud.athere.view.SquareImageView
+        android:id="@+id/row_member_grid_profile_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/profile_image" />
+
+    <ImageView
+        android:id="@+id/row_member_grid_my_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/row_member_grid_profile_image"
+        android:layout_alignEnd="@+id/row_member_grid_profile_image"
+        android:layout_alignRight="@+id/row_member_grid_profile_image"
+        android:layout_marginBottom="@dimen/member_grid_margin"
+        android:layout_marginEnd="@dimen/member_grid_margin"
+        android:layout_marginRight="@dimen/member_grid_margin"
+        android:contentDescription="@string/profile_image"
+        android:src="@drawable/ground_member_me_ico" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/row_member_grid_profile_image"
+        android:padding="@dimen/member_grid_profile_margin" >
+
+        <TextView
+            android:id="@+id/row_member_grid_nick_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/square_text"
+            android:textSize="@dimen/font_normal" />
+
+        <ImageView
+            android:id="@+id/row_member_grid_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/gender" />
+    </RelativeLayout>
+
+</RelativeLayout>

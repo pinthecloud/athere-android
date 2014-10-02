@@ -56,29 +56,33 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			 */
 			TextView squareNameText = null;
 			TextView distanceText = null;
+			ImageView far = null;
 			if(type == TYPE.NORMAL.ordinal()){
 				/*
 				 * Find Common UI component
 				 */
 				squareNameText = (TextView)view.findViewById(R.id.row_square_list_normal_name);
 				distanceText = (TextView)view.findViewById(R.id.row_square_list_normal_distance);
+				far = (ImageView)view.findViewById(R.id.row_square_list_normal_far);
 			} else if(type == TYPE.ADMIN.ordinal()){
 				/*
 				 * Find Common UI component
 				 */
 				squareNameText = (TextView)view.findViewById(R.id.row_square_list_admin_name);
 				distanceText = (TextView)view.findViewById(R.id.row_square_list_admin_distance);
-
+				far = (ImageView)view.findViewById(R.id.row_square_list_admin_far);
 
 				/*
 				 * Set UI component only in admin square list
 				 */
 				ImageView background = (ImageView)view.findViewById(R.id.row_square_list_admin_background);
 				ImageView lock = (ImageView)view.findViewById(R.id.row_square_list_admin_lock);
-				
+
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
 						square.getId(), R.drawable.launcher, background, false);
-				if(square.getCode().equals("")){
+				if(!square.getCode().equals("")){
+					lock.setVisibility(View.VISIBLE);
+				} else{
 					lock.setVisibility(View.GONE);
 				}
 			}
@@ -87,14 +91,24 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 			/*
 			 * Set common UI component
 			 */
-			squareNameText.setText(square.getName());
 			int distance = square.getDistance();
 			String unit = context.getResources().getString(R.string.meter);
 			if((distance / 1000) >= 1){
 				distance /= 1000;  // km
 				unit = frag.getResources().getString(R.string.kilometer);	
 			}
+
+			squareNameText.setText(square.getName());
 			distanceText.setText(distance + unit);
+			if(square.isFar()){
+				far.setVisibility(View.VISIBLE);
+				squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
+				distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
+			} else{
+				far.setVisibility(View.GONE);
+				squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
+				distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
+			}
 		}
 		return view;
 	}

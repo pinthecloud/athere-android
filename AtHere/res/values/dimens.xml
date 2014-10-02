@@ -45,6 +45,10 @@
     <dimen name="chat_list_progress_width">14dp</dimen>
     <dimen name="chat_list_progress_height">14dp</dimen>
 
+    <!-- Member -->
+    <dimen name="member_grid_profile_margin">10dp</dimen>
+    <dimen name="member_grid_margin">5dp</dimen>
+    
     <!-- Chupa chat -->
     <dimen name="chupa_chat_other_bar_left_right_margin">20dp</dimen>
     <dimen name="chupa_chat_other_profile_nick_name_margin">13.5dp</dimen>

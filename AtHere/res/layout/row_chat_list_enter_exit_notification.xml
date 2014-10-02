@@ -19,7 +19,7 @@
             android:id="@+id/row_chat_list_enter_exit_notification_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/square_chat_text"
+            android:textColor="@color/square_text"
             android:textSize="@dimen/font_medium" />
 
         <TextView

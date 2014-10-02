@@ -61,6 +61,10 @@ public class UserHelper {
 		this.squareUserTable = mClient.getTable(SquareUser.class);
 	}
 
+
+	/*
+	 * Preference
+	 */
 	public boolean isLoggedInUser() {
 		return pref.getBoolean(IS_LOGGED_IN_USER_KEY);
 	}
@@ -75,6 +79,11 @@ public class UserHelper {
 		pref.putBoolean(IS_CHAT_ENABLE_KEY, isChatEnable);
 		return this;
 	}
+
+
+	/*
+	 * Model variables
+	 */
 	public UserHelper setMyAhId(String ahId) {
 		pref.putString(AH_ID_KEY, ahId);
 		return this;
@@ -114,6 +123,10 @@ public class UserHelper {
 		return this;
 	}
 
+
+	/*
+	 * Methods
+	 */
 	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -327,6 +340,43 @@ public class UserHelper {
 		});
 	}
 
+	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
+		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
+
+			@Override
+			protected String doInBackground(GoogleCloudMessaging... params) {
+				GoogleCloudMessaging gcm = params[0];
+				try {
+					return gcm.register(frag.getResources().getString(R.string.gcm_sender_id));
+				} catch (IOException e) {
+					return null;
+				}
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				if (result != null) {
+					if (callback != null){
+						callback.onCompleted(result);
+					}
+					AsyncChainer.notifyNext(frag);
+				} else {
+					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+				}
+			}
+		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
+	}
+
+
+	/*
+	 * Get User information from preference
+	 */
 	public AhUser getAdminUser(String id) {
 		AhUser user = new AhUser();
 		user.setId(id);
@@ -379,39 +429,14 @@ public class UserHelper {
 		pref.removePref(IS_LOGGED_IN_USER_KEY);
 	}
 
-	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-
-		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
-
-			@Override
-			protected String doInBackground(GoogleCloudMessaging... params) {
-				GoogleCloudMessaging gcm = params[0];
-				try {
-					return gcm.register(frag.getResources().getString(R.string.gcm_sender_id));
-				} catch (IOException e) {
-					return null;
-				}
-			}
-
-			@Override
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				if (result != null) {
-					if (callback != null){
-						callback.onCompleted(result);
-					}
-					AsyncChainer.notifyNext(frag);
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
-				}
-			}
-		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
+	public boolean isMyUser(AhUser user){
+		return user.getId().equals(getMyUserInfo().getId());
 	}
 
+	
+	/*
+	 * callback for message
+	 */
 	private AhEntityCallback<AhUser> _callback;
 	public void setUserHandler(AhEntityCallback<AhUser> callback){
 		_callback = callback;

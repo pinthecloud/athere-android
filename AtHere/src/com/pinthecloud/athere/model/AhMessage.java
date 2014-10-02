@@ -183,11 +183,9 @@ public class AhMessage implements Parcelable {
 				" status : "+this.status + " }";
 	}
 
-
 	public boolean isMine(){
 		return senderId.equals(AhApplication.getInstance().getUserHelper().getMyUserInfo().getId());
 	}
-
 
 	public boolean isNotification(){
 		return type.equals(TYPE.NOTIFICATION.toString());
@@ -197,11 +195,9 @@ public class AhMessage implements Parcelable {
 		return type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString());
 	}
 
-
 	public boolean isAdmin(){
 		return type.equals(TYPE.ADMIN_MESSAGE.toString());
 	}
-
 
 	public static String buildChupaCommunId(String id0, String id1) {
 		if (id0.compareTo(id1) > 0) {

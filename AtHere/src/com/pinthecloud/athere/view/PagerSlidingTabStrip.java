@@ -39,7 +39,6 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.R;
@@ -233,43 +232,19 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		tab.setGravity(Gravity.CENTER);
 		tab.setSingleLine();
 
-		View badge = new View(getContext());
-
-		RelativeLayout relativeLayout = new RelativeLayout(getContext());
-
-		RelativeLayout.LayoutParams tabLayoutParams = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		tabLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-
-		relativeLayout.addView(tab, tabLayoutParams);
-		relativeLayout.addView(badge);
-
-		addTab(position, relativeLayout);
+		addTab(position, tab);
 	}
 
 	private void addIconTab(final int position, int resId) {
 		ImageButton tab = new ImageButton(getContext());
 		tab.setImageResource(resId);
 
-		View badge = new View(getContext());
-
-		RelativeLayout relativeLayout = new RelativeLayout(getContext());
-
-		RelativeLayout.LayoutParams tabLayoutParams = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		tabLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-
-		relativeLayout.addView(tab, tabLayoutParams);
-		relativeLayout.addView(badge);
-
-		addTab(position, relativeLayout);
+		addTab(position, tab);
 	}
 
 	private void addTab(final int position, View tab) {
-		RelativeLayout layout = (RelativeLayout)tab;
-		View tabView = layout.getChildAt(0);
-		tabView.setFocusable(true);
-		tabView.setOnClickListener(new OnClickListener() {
+		tab.setFocusable(true);
+		tab.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				pager.setCurrentItem(position);
@@ -282,9 +257,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private void updateTabStyles() {
 		for (int i = 0; i < tabCount; i++) {
-			RelativeLayout layout = (RelativeLayout)tabsContainer.getChildAt(i);
-
-			View v = layout.getChildAt(0);
+			View v = tabsContainer.getChildAt(i);
 			v.setBackgroundResource(tabBackgroundResId);
 
 			if (v instanceof TextView) {
@@ -311,8 +284,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	private void updateActivateTab(final int position) {
 		for (int i = 0; i < tabCount; i++) {
-			RelativeLayout layout = (RelativeLayout)tabsContainer.getChildAt(i);
-			View v = layout.getChildAt(0);
+			View v = tabsContainer.getChildAt(i);
 
 			if (v instanceof TextView) {
 				TextView tab = (TextView) v;
@@ -628,10 +600,5 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 				return new SavedState[size];
 			}
 		};
-	}
-
-	public View getTabBadgeView(int position){
-		RelativeLayout layout = (RelativeLayout)tabsContainer.getChildAt(position);
-		return layout.getChildAt(1);
 	}
 }

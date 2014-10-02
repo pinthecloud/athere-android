@@ -22,6 +22,7 @@
     <color name="square_list_gray">#f2f2f2</color>
     <color name="square_list_address">#CCffffff</color>
     <color name="square_list_text">#4c4b4f</color>
+    <color name="square_list_far">#cecece</color>
 
     <!-- Square Enter Dialog -->
     <color name="square_enter_dialog_background">#e6ffffff</color>
@@ -29,10 +30,11 @@
     <color name="square_enter_dialog_hint">#cecece</color>
 
     <!-- Square -->
-    <color name="square_chat_text">#4c4b4f</color>
+    <color name="square_text">#4c4b4f</color>
     <color name="square_chat_text_light">#cecece</color>
     <color name="square_chat_inputbar_background">#e6ffffff</color>
     <color name="square_chat_other_nick_name">#5d5d5d</color>
+    <color name="square_member_background">#f2f2f2</color>
 
     <!-- Chupa List -->
     <color name="chupa_list_background">#f2f2f2</color>

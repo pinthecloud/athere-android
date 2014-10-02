@@ -122,7 +122,7 @@ public class AhIntentService extends IntentService {
 	private void TALK() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-		
+
 		boolean isChatEnable = userHelper.isChatEnable();
 		if (isRunning(app)) {
 			// Is the Chupa App Running
@@ -241,7 +241,7 @@ public class AhIntentService extends IntentService {
 	private void ADMIN_MESSAGE() {
 		TALK();
 	}
-	
+
 	private void NOTIFICATION() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));

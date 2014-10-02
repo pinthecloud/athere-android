@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/square_member_background"
     android:orientation="vertical" >
+        
+    <com.handmark.pulltorefresh.library.PullToRefreshGridView
+        android:id="@+id/member_frag_grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/member_grid_margin"
+        android:layout_marginLeft="@dimen/member_grid_margin"
+        android:layout_marginRight="@dimen/member_grid_margin"
+        android:layout_marginStart="@dimen/member_grid_margin"
+        android:horizontalSpacing="@dimen/member_grid_margin"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/member_grid_margin" />
 
-</GridLayout>
+</LinearLayout>

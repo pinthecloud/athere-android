@@ -229,7 +229,7 @@ public class BasicProfileFragment extends AhFragment{
 						// Get a user object from preference and Add the user
 						userHelper.setMyNickName(nickName)
 						.setMyChupaEnable(true);
-						
+
 						AhUser user = userHelper.getMyUserInfo();
 						userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 
@@ -355,9 +355,9 @@ public class BasicProfileFragment extends AhFragment{
 				int width = profileImageBitmap.getWidth();
 				int height = profileImageBitmap.getHeight();
 				if(height < width){
-					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, height, height);
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, width/2-height/2, 0, height, height);
 				} else{
-					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, width, width);
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, height/2-width/2, width, width);
 				}
 
 				int degree = BitmapUtil.getImageOrientation(imagePath);

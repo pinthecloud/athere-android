@@ -47,11 +47,11 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 			/*
 			 * Find UI component
 			 */
-			ImageView profileImage = (ImageView)view.findViewById(R.id.chupa_list_profile_image);
-			TextView sender = (TextView)view.findViewById(R.id.chupa_list_sender);
-			TextView content = (TextView)view.findViewById(R.id.chupa_list_content);
-			TextView timeStamp = (TextView)view.findViewById(R.id.chupa_list_timestamp);
-			TextView badgeNum = (TextView)view.findViewById(R.id.chupa_list_badge_num);
+			ImageView profileImage = (ImageView)view.findViewById(R.id.row_chupa_list_profile_image);
+			TextView sender = (TextView)view.findViewById(R.id.row_chupa_list_sender);
+			TextView content = (TextView)view.findViewById(R.id.row_chupa_list_content);
+			TextView timeStamp = (TextView)view.findViewById(R.id.row_chupa_list_timestamp);
+			TextView badgeNum = (TextView)view.findViewById(R.id.row_chupa_list_badge_num);
 
 
 			/*

@@ -5,15 +5,27 @@
     android:background="@drawable/groundlist_normal_bg"
     android:orientation="vertical"
     android:paddingEnd="@dimen/square_list_margin"
-    android:paddingLeft="@dimen/square_list_margin"
+    android:paddingLeft="@dimen/none"
     android:paddingRight="@dimen/square_list_margin"
-    android:paddingStart="@dimen/square_list_margin" >
+    android:paddingStart="@dimen/none" >
+
+    <ImageView
+        android:id="@+id/row_square_list_normal_far"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/preview"
+        android:src="@drawable/groundlist_normal_preview_ico"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/row_square_list_normal_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/square_list_margin"
+        android:layout_marginStart="@dimen/square_list_margin"
+        android:layout_toEndOf="@+id/row_square_list_normal_far"
+        android:layout_toRightOf="@+id/row_square_list_normal_far"
         android:textColor="@color/square_list_text"
         android:textSize="@dimen/font_large" />
 

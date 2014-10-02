@@ -20,7 +20,7 @@ public class SquarePagerAdapter extends FragmentStatePagerAdapter implements Ico
 	public SquarePagerAdapter(FragmentManager fm, Square square) {
 		super(fm);
 		chatFragment = new ChatFragment(square);
-		memberFragment = new MemberFragment(square);
+		memberFragment = new MemberFragment();
 	}
 
 
