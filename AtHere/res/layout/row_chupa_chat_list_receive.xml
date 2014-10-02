@@ -17,6 +17,7 @@
         android:layout_weight="1"
         android:background="@drawable/general_msg_recieved_bg"
         android:gravity="center|start"
+        android:textColor="@color/square_chat_text"
         android:textSize="@dimen/font_normal" />
 
     <TextView
@@ -24,8 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:paddingBottom="@dimen/chat_list_send_time_bottom_margin"
-        android:textColor="@color/gray_light"
+        android:layout_marginBottom="@dimen/chat_list_send_time_bottom_margin"
+        android:textColor="@color/square_chat_text_light"
         android:textSize="@dimen/font_medium" />
 
 </LinearLayout>

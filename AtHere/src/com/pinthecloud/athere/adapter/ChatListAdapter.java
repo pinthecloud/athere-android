@@ -228,7 +228,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 										"ChatSendChupa");
 
 								Intent intent = new Intent(context, ChupaChatActivity.class);
-								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+								intent.putExtra(AhGlobalVariable.USER_KEY, user);
 								context.startActivity(intent);
 							}
 							@Override

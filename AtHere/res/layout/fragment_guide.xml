@@ -1,44 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/guide_bg"
+    android:background="@color/guide_background"
     android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/guide"
+        android:src="@drawable/guide_bg" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/guide_frag_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/guide_frag_indicator" />
 
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/guide_frag_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/guide_frag_login_layout"
+        android:padding="@dimen/guide_indicator_radious"
         app:fillColor="@android:color/black"
         app:radius="@dimen/guide_indicator_radious"
         app:strokeColor="@android:color/black"
-        app:strokeWidth="@dimen/line_height" />
+        app:strokeWidth="@dimen/line_width" />
 
     <LinearLayout
         android:id="@+id/guide_frag_login_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingEnd="@dimen/guide_login_margin"
-        android:paddingLeft="@dimen/guide_login_margin"
-        android:paddingRight="@dimen/guide_login_margin"
-        android:paddingStart="@dimen/guide_login_margin" >
+        android:padding="@dimen/guide_login_layout_margin" >
 
         <com.facebook.widget.LoginButton
             android:id="@+id/guide_frag_login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/guide_login_margin"
+            android:layout_marginBottom="@dimen/guide_login_button_margin"
             app:confirm_logout="false"
             app:fetch_user_info="true"
             app:login_text="@string/facebook_login"
@@ -51,4 +57,4 @@
             android:textSize="@dimen/font_medium" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

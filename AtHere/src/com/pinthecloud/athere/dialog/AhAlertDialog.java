@@ -16,7 +16,7 @@ public class AhAlertDialog extends AhDialogFragment{
 	private String cancelMessage;
 	private boolean cancel;
 
-	
+
 	public AhAlertDialog(String title, String message, boolean cancel, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
@@ -25,7 +25,7 @@ public class AhAlertDialog extends AhDialogFragment{
 		this.cancel = cancel;
 	}
 
-	
+
 	public AhAlertDialog(String title, String message, String okMessage, String cancelMessage, boolean cancel, AhDialogCallback ahDialogCallback) {
 		super();
 		this.ahDialogCallback = ahDialogCallback;
@@ -36,7 +36,7 @@ public class AhAlertDialog extends AhDialogFragment{
 		this.cancel = cancel;
 	}
 
-	
+
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		if(okMessage == null){
@@ -69,7 +69,7 @@ public class AhAlertDialog extends AhDialogFragment{
 			});
 		}
 		AlertDialog alertDialog = altBuilder.create();
-		alertDialog.setCanceledOnTouchOutside(true);
+		//		alertDialog.setCanceledOnTouchOutside(true);
 		return alertDialog;
 	}
 }

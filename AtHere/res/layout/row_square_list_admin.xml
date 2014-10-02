@@ -8,6 +8,7 @@
         android:id="@+id/row_square_list_admin_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/launcher"
         android:contentDescription="@string/square"
         android:scaleType="fitXY" />
 
@@ -42,8 +43,8 @@
                 android:textSize="@dimen/font_large" />
 
             <View
-                android:layout_width="@dimen/line_height"
-                android:layout_height="@dimen/square_list_distance_line_height"
+                android:layout_width="@dimen/line_width"
+                android:layout_height="@dimen/content_divider_height"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/row_square_list_admin_distance"
                 android:layout_toStartOf="@+id/row_square_list_admin_distance"

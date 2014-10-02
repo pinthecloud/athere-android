@@ -56,10 +56,12 @@ public class MessageHelper {
 		mClient.invokeApi(SEND_MESSAGE, json, new ApiJsonOperationCallback() {
 
 			@Override
-			public void onCompleted(JsonElement json, Exception e,
+			public void onCompleted(JsonElement json, Exception exception,
 					ServiceFilterResponse response) {
-				if (e == null) {
-					callback.onCompleted(null);
+				if (exception == null) {
+					if (callback != null){
+						callback.onCompleted(null);
+					}
 					AsyncChainer.notifyNext(frag);
 				}
 				else

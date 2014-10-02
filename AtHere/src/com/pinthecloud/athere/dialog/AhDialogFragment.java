@@ -36,7 +36,6 @@ public class AhDialogFragment extends DialogFragment {
 		context = getActivity();
 		activity = (Activity) context;
 		super.onCreate(savedInstanceState);
-
 		gaHelper.sendScreenGA(simpleClassName);
 	}
 

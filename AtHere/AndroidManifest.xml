@@ -109,7 +109,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ChupaChatActivity"
+            android:icon="@drawable/transparent"
+            android:label="@string/chupa"
             android:screenOrientation="portrait"
+            android:theme="@style/AppRedActionBarTheme"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

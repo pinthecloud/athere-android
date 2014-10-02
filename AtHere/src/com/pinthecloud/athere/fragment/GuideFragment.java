@@ -126,11 +126,11 @@ public class GuideFragment extends AhFragment{
 				 * Register Developers as super user
 				 */
 				ArrayList<String> arr = new ArrayList<String>();
-				arr.add("1482905955291892");
-				arr.add("643223775792443");
-				arr.add("834963903211098");	// Seungmin
-				arr.add("766458060085007");	// Chaesoo
-				arr.add("699691573453752");	// Hwajeong
+				arr.add("1482905955291892"); // Pin the Cloud
+				arr.add("643223775792443");  // Hongkun
+				arr.add("834963903211098");	 // Seungmin
+				arr.add("766458060085007");	 // Chaesoo
+				arr.add("699691573453752");	 // Hwajeong
 				if (arr.contains(user.getId())) {
 					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
 					.show();

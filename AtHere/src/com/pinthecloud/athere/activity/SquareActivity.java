@@ -183,26 +183,32 @@ public class SquareActivity extends AhActivity {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			// Handle app drawer
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{
 				slidingMenu.toggle();
 			}
 			return true;
-		case R.id.menu_notification:
+		case R.id.square_menu_notification:
+			// Handle notification drawer
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{
 				mDrawerLayout.openDrawer(mFragmentView);
 			}
 			return true;
-		case R.id.menu_more:
-			Log(thisActivity, "here");
+		case R.id.square_menu_more:
+			// Exit square
 			String message = getResources().getString(R.string.exit_square_consent_message);
 			AhAlertDialog escDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
 				@Override
 				public void doPositiveThing(Bundle bundle) {
+					// Close opened drawer
+					if(mDrawerLayout.isDrawerOpen(mFragmentView)){
+						mDrawerLayout.closeDrawer(mFragmentView);
+					}
 					exitSquare();
 				}
 				@Override
