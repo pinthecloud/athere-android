@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,10 +24,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
@@ -49,7 +50,8 @@ public class ProfileSettingsFragment extends AhFragment{
 
 	private TextView nickNameWarningText;
 	private EditText nickNameEditText;
-	private EditText birthYearEditText;
+	private TextView ageText;
+	private TextView genderText;
 	private ImageButton startButton;
 
 	private boolean isTypedNickName = true;
@@ -71,8 +73,17 @@ public class ProfileSettingsFragment extends AhFragment{
 		profileImageView = (ImageView) view.findViewById(R.id.profile_settings_frag_profile_image);
 		nickNameWarningText = (TextView) view.findViewById(R.id.profile_settings_frag_nick_name_warning_text);
 		nickNameEditText = (EditText) view.findViewById(R.id.profile_settings_frag_nick_name_text);
-		birthYearEditText = (EditText) view.findViewById(R.id.profile_settings_frag_birth_gender_text);
+		ageText = (TextView) view.findViewById(R.id.profile_settings_frag_age_text);
+		genderText = (TextView) view.findViewById(R.id.profile_settings_frag_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_start_button);
+
+
+		/*
+		 * Set Action Bar
+		 */
+		ActionBar actionBar = activity.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
 
 
 		/*
@@ -129,7 +140,7 @@ public class ProfileSettingsFragment extends AhFragment{
 						@Override
 						public void doPositiveThing(Bundle bundle) {
 							// Set profile image default
-							profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+							profileImageView.setImageResource(R.drawable.profile_edit_profile_default_ico);
 							isTakenProfileImage = false;
 							startButton.setEnabled(isStartButtonEnable());
 						}
@@ -176,7 +187,13 @@ public class ProfileSettingsFragment extends AhFragment{
 		 */
 		int age = user.getAge();
 		String gender = user.getGenderString(context);
-		birthYearEditText.setText(age + " " + gender);
+		ageText.setText(""+age);
+		genderText.setText(gender);
+		if(user.isMale()){
+			genderText.setTextColor(getResources().getColor(R.color.blue_man));
+		}else{
+			genderText.setTextColor(getResources().getColor(R.color.red_woman));
+		}
 
 
 		/*
@@ -213,6 +230,7 @@ public class ProfileSettingsFragment extends AhFragment{
 				profileImageView.setEnabled(false);
 				nickNameEditText.setEnabled(false);
 				startButton.setEnabled(false);
+				nickNameWarningText.setText("");
 
 
 				/*
@@ -244,36 +262,36 @@ public class ProfileSettingsFragment extends AhFragment{
 
 					@Override
 					public void doNext(AhFragment frag) {
-						if (!squareHelper.isLoggedInSquare() || squareHelper.isPreview()) {
-							progressBar.setVisibility(View.GONE);
-							saveProfileImage(user.getId());
-							
-							if(squareHelper.isPreview()){
-								Intent intent = new Intent(context, SquareActivity.class);
-								startActivity(intent);	
-							}
-							activity.finish();
-							return;
+						if(squareHelper.isLoggedInSquare() && !squareHelper.isPreview()){
+							final AhUser user = userHelper.getMyUserInfo();
+							AhMessage message = new AhMessage.Builder()
+							.setContent(user.getNickName())
+							.setSender(user.getNickName())
+							.setSenderId(user.getId())
+							.setReceiverId(squareHelper.getMySquareInfo().getId())
+							.setType(AhMessage.TYPE.UPDATE_USER_INFO).build();
+							messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
+
+								@Override
+								public void onCompleted(AhMessage entity) {
+									// Do nothing
+								}
+							});
+						} else{
+							AsyncChainer.notifyNext(frag);
 						}
+					}
+				}, new Chainable(){
 
-						final AhUser user = userHelper.getMyUserInfo();
-						AhMessage message = new AhMessage.Builder()
-						.setContent(user.getNickName())
-						.setSender(user.getNickName())
-						.setSenderId(user.getId())
-						.setReceiverId(squareHelper.getMySquareInfo().getId())
-						.setType(AhMessage.TYPE.UPDATE_USER_INFO).build();
-						messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-
-							@Override
-							public void onCompleted(AhMessage entity) {
-								progressBar.setVisibility(View.GONE);
-								saveProfileImage(user.getId());
-								Intent intent = new Intent(context, SquareActivity.class);
-								startActivity(intent);
-								activity.finish();
-							}
-						});
+					@Override
+					public void doNext(AhFragment frag) {
+						progressBar.setVisibility(View.GONE);
+						profileImageView.setEnabled(true);
+						nickNameEditText.setEnabled(true);
+						startButton.setEnabled(true);
+						saveProfileImage(user.getId());
+						Toast.makeText(context, getResources().getString(R.string.profile_settings_complete_message)
+								, Toast.LENGTH_LONG).show();
 					}
 				});
 			}
@@ -287,7 +305,7 @@ public class ProfileSettingsFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		if(!isTakenProfileImage){
-			profileImageView.setImageResource(R.drawable.bg_ground_profile_default);
+			profileImageView.setImageResource(R.drawable.profile_edit_profile_default_ico);
 		}else{
 			profileImageView.setImageBitmap(profileImageBitmap);
 		}

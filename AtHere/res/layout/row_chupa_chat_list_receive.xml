@@ -3,31 +3,29 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/chupa_chat_list_receive_bottom_margin"
-    android:paddingEnd="@dimen/chupa_chat_list_receive_right_margin"
-    android:paddingLeft="@dimen/chupa_chat_list_receive_left_margin"
-    android:paddingRight="@dimen/chupa_chat_list_receive_right_margin"
-    android:paddingStart="@dimen/chupa_chat_list_receive_left_margin"
-    android:paddingTop="@dimen/chupa_chat_list_receive_top_margin" >
+    android:paddingBottom="@dimen/chat_list_top_bottom_margin"
+    android:paddingEnd="@dimen/chat_list_other_side_margin"
+    android:paddingLeft="@dimen/chat_list_our_side_margin"
+    android:paddingRight="@dimen/chat_list_other_side_margin"
+    android:paddingStart="@dimen/chat_list_our_side_margin"
+    android:paddingTop="@dimen/chat_list_top_bottom_margin" >
 
     <TextView
         android:id="@+id/row_chupa_chat_list_receive_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/bg_chupa_recieved"
+        android:background="@drawable/general_msg_recieved_bg"
         android:gravity="center|start"
-        android:textSize="@dimen/font_regular" />
+        android:textSize="@dimen/font_normal" />
 
     <TextView
         android:id="@+id/row_chupa_chat_list_receive_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginLeft="@dimen/chupa_chat_list_send_time_left_margin"
-        android:layout_marginStart="@dimen/chupa_chat_list_send_time_left_margin"
-        android:paddingBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
+        android:paddingBottom="@dimen/chat_list_send_time_bottom_margin"
         android:textColor="@color/gray_light"
-        android:textSize="@dimen/font_small" />
+        android:textSize="@dimen/font_medium" />
 
 </LinearLayout>

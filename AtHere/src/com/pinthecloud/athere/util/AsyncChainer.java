@@ -9,7 +9,7 @@ import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.fragment.AhFragment;
 
 public class AsyncChainer {
-	private static final int NUM_OF_QUEUE = 10;
+	private static final int NUM_OF_QUEUE = 16;
 	private static Map<String, Queue<Chainable>> mapQueue;
 	static {
 		mapQueue = new HashMap<String, Queue<Chainable>>();
@@ -57,7 +57,6 @@ public class AsyncChainer {
 
 
 	public static void clearChain(AhFragment frag) {
-		// TODO Auto-generated method stub
 		Class<?> clazz = null;
 		if (frag == null) {
 			clazz = AhFragment.class;

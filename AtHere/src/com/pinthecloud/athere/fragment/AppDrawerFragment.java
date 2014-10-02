@@ -31,9 +31,9 @@ import com.pinthecloud.athere.model.AppDrawerListItem;
 
 public class AppDrawerFragment extends AhFragment{
 
-	private final int SETTINGS = 0;
-	private final int REVIEW = 1;
-	private final int SHARE = 2;
+	private final int QUESTION = 0;
+	private final int SHARE = 1;
+	private final int SETTINGS = 2;
 
 	private ImageView profileImageView;
 	private TextView nickNameText;
@@ -72,6 +72,11 @@ public class AppDrawerFragment extends AhFragment{
 		nickNameText.setText(user.getNickName());
 		ageText.setText(""+user.getAge());
 		genderText.setText(user.getGenderString(context));
+		if(user.isMale()){
+			genderText.setTextColor(getResources().getColor(R.color.blue_man));
+		}else{
+			genderText.setTextColor(getResources().getColor(R.color.red_woman));
+		}
 
 
 		/*
@@ -126,12 +131,8 @@ public class AppDrawerFragment extends AhFragment{
 					int position, long id) {
 				Intent intent = null;
 				switch(position){
-				case SETTINGS:
-					intent = new Intent(context, SettingsActivity.class);
-					startActivity(intent);
-					break;
-				case REVIEW:
-					intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
+				case QUESTION:
+					intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:pinthecloud@gmail.com"));
 					startActivity(intent);
 					break;
 				case SHARE:
@@ -140,6 +141,10 @@ public class AppDrawerFragment extends AhFragment{
 					intent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_sentence));
 					intent.setType("text/plain");
 					startActivity(Intent.createChooser(intent, getResources().getText(R.string.share_to)));
+					break;
+				case SETTINGS:
+					intent = new Intent(context, SettingsActivity.class);
+					startActivity(intent);
 					break;
 				}
 			}
@@ -150,9 +155,9 @@ public class AppDrawerFragment extends AhFragment{
 		 * Set list item
 		 */
 		ArrayList<AppDrawerListItem> items = new ArrayList<AppDrawerListItem>();
-		items.add(new AppDrawerListItem(R.drawable.tabbar_chat_text, "Settings", "content1"));
-		items.add(new AppDrawerListItem(R.drawable.tabbar_chat_text, "Review", "content2"));
-		items.add(new AppDrawerListItem(R.drawable.tabbar_chupa_text, "Share", "content3"));
+		items.add(new AppDrawerListItem(R.drawable.drawer_request_ico, getResources().getString(R.string.question)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_share_ico, getResources().getString(R.string.share)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_setting_ico, getResources().getString(R.string.app_settings)));
 		appDrawerListAdapter.addAll(items);
 
 		return view;

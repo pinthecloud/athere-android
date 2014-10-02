@@ -94,11 +94,11 @@ public class LocationHelper {
 	}
 
 
-	public void getLocationAccess(final Activity activity, final AhDialogCallback callback){
+	public void getLocationService(final Activity activity, final AhDialogCallback callback){
 		/*
 		 * Set enable location service
 		 */
-		String message = activity.getResources().getString(R.string.location_setting_message);
+		String message = activity.getResources().getString(R.string.location_turn_on_message);
 		AhAlertDialog locSettingDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
 			@Override

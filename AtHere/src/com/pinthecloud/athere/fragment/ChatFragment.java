@@ -13,7 +13,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.ChatListAdapter;
@@ -25,15 +27,17 @@ import com.pinthecloud.athere.model.Square;
 
 public class ChatFragment extends AhFragment{
 
+	private RelativeLayout previewLayout;
+	private ListView messageListView;
+	private ChatListAdapter messageListAdapter;
+	private List<AhMessage> chats;
+	private AhMessage chat;
+
+	private LinearLayout inputbarLayout;
 	private EditText messageEditText;
 	private ImageButton sendButton;
 
-	private ListView messageListView;
-	private ChatListAdapter messageListAdapter;
 	private Square square;
-
-	private List<AhMessage> chats;
-	private AhMessage chat;
 
 
 	public ChatFragment() {
@@ -57,9 +61,21 @@ public class ChatFragment extends AhFragment{
 		/*
 		 * Set UI component
 		 */
+		previewLayout = (RelativeLayout) view.findViewById(R.id.chat_frag_preview_layout);
 		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
+		inputbarLayout = (LinearLayout) view.findViewById(R.id.chat_frag_inputbar_layout);
 		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
+
+
+		/*
+		 * If Preview, hide input bar.
+		 */
+		if(squareHelper.isPreview()){
+			inputbarLayout.setVisibility(View.GONE);
+		} else{
+			previewLayout.setVisibility(View.GONE);
+		}
 
 
 		/*
@@ -84,9 +100,6 @@ public class ChatFragment extends AhFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
-		if(squareHelper.isPreview()){
-			messageEditText.setEnabled(false);
-		}
 
 
 		/*
@@ -176,6 +189,33 @@ public class ChatFragment extends AhFragment{
 	}
 
 
+	@Override 
+	public void onSaveInstanceState(Bundle outState) {
+		//first saving my state, so the bundle wont be empty.
+		outState.putString("VIEWPAGER_BUG",  "VIEWPAGER_FIX");
+		super.onSaveInstanceState(outState);
+	}
+
+
+	@Override
+	public void handleException(AhException ex) {
+		if(ex.getMethodName().equals("sendMessageAsync")){
+			AhMessage exMessage = (AhMessage)ex.getParameter();
+			exMessage.setStatus(AhMessage.STATUS.FAIL);
+			messageDBHelper.updateMessages(exMessage);
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					messageListAdapter.notifyDataSetChanged();
+				}
+			});
+		}else{
+			super.handleException(ex);	
+		}
+	}
+
+
 	public void sendChat(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 
@@ -228,13 +268,13 @@ public class ChatFragment extends AhFragment{
 		/*
 		 * Set ENTER, EXIT, CHAT messages
 		 */
-		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
+		if(!squareHelper.isPreview() && messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
 			AhUser myUser = userHelper.getMyUserInfo();
 			String nickName = myUser.getNickName();
 			String enterMessage = getResources().getString(R.string.enter_square_message);
-			String warningMessage = getResources().getString(R.string.greeting_sentence);
+			String greetingMessage = getResources().getString(R.string.greeting_sentence);
 			AhMessage enterChat = new AhMessage.Builder()
-			.setContent(nickName + " " + enterMessage + "\n" + warningMessage)
+			.setContent(" " + enterMessage + "\n" + greetingMessage)
 			.setSender(nickName)
 			.setSenderId(myUser.getId())
 			.setReceiverId(squareHelper.getMySquareInfo().getId())
@@ -267,24 +307,4 @@ public class ChatFragment extends AhFragment{
 			}
 		});
 	}
-
-
-	@Override
-	public void handleException(AhException ex) {
-		if(ex.getMethodName().equals("sendMessageAsync")){
-			AhMessage exMessage = (AhMessage)ex.getParameter();
-			exMessage.setStatus(AhMessage.STATUS.FAIL);
-			messageDBHelper.updateMessages(exMessage);
-			activity.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					messageListAdapter.notifyDataSetChanged();
-				}
-			});
-		}else{
-			super.handleException(ex);	
-		}
-	}
-
 }

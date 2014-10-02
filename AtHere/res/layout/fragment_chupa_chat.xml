@@ -37,14 +37,13 @@
             android:id="@+id/chupa_chat_frag_other_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/chupa_chat_other_age_gender_margin"
-            android:layout_marginRight="@dimen/chupa_chat_other_age_gender_margin"
+            android:layout_marginEnd="@dimen/age_gender_margin"
+            android:layout_marginRight="@dimen/age_gender_margin"
             android:textSize="@dimen/font_medium" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="@dimen/chupa_chat_profile_company_num_height"
-            android:background="@drawable/bg_sidebar_member"
             android:gravity="center"
             android:orientation="horizontal" >
 
@@ -75,34 +74,37 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/chupa_chat_bg"
+        android:background="@drawable/chat_list_bg"
         android:divider="@null"
         android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/chupa_inputbar_background"
+        android:background="@color/square_chat_inputbar_background"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/chat_input_bottom_margin"
-        android:paddingTop="@dimen/chat_input_top_margin" >
+        android:paddingBottom="@dimen/chat_inputbar_margin"
+        android:paddingEnd="@dimen/none"
+        android:paddingLeft="@dimen/chat_inputbar_margin"
+        android:paddingRight="@dimen/none"
+        android:paddingStart="@dimen/chat_inputbar_margin"
+        android:paddingTop="@dimen/chat_inputbar_margin" >
 
         <EditText
             android:id="@+id/chupa_chat_frag_message_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/chat_input_layout_left_margin"
-            android:layout_marginStart="@dimen/chat_input_layout_left_margin"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/bg_inputbar_highlight"
+            android:background="@drawable/general_text_input_bg"
             android:ems="10"
             android:inputType="textMultiLine"
             android:maxLines="3"
-            android:paddingEnd="@dimen/chat_input_right_margin"
-            android:paddingLeft="@dimen/chat_input_left_margin"
-            android:paddingRight="@dimen/chat_input_right_margin"
-            android:paddingStart="@dimen/chat_input_left_margin"
+            android:paddingEnd="@dimen/chat_inputbar_margin"
+            android:paddingLeft="@dimen/chat_inputbar_margin"
+            android:paddingRight="@dimen/chat_inputbar_margin"
+            android:paddingStart="@dimen/chat_inputbar_margin"
+            android:textColor="@color/square_chat_text"
             android:textSize="@dimen/font_large" >
 
             <requestFocus />
@@ -115,7 +117,6 @@
             android:layout_gravity="bottom"
             android:background="@android:color/transparent"
             android:contentDescription="@string/send"
-            android:enabled="false"
             android:src="@drawable/send_image_button_bg" />
     </LinearLayout>
 

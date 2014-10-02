@@ -69,7 +69,7 @@ public class SettingsFragment extends AhFragment{
 
 
 		/*
-		 * Set UI
+		 * Set Action Bar
 		 */
 		ActionBar actionBar = activity.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);

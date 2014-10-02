@@ -8,7 +8,6 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
-import com.pinthecloud.athere.fragment.AhFragment;
 
 /**
  *  Base class for every activity.
@@ -21,15 +20,12 @@ public class AhActivity extends Activity {
 	protected AhApplication app;
 	protected FiveRocksHelper fiveRocksHelper;
 	protected UserHabitHelper userHabitHelper;
-
 	protected AhActivity thisActivity;
-	protected String simpleClassName;
 
 
 	public AhActivity(){
 		thisActivity = this;
 		app = AhApplication.getInstance();
-		simpleClassName = thisActivity.getClass().getSimpleName();
 		fiveRocksHelper = app.getFiveRocksHelper();
 		userHabitHelper = app.getUserHabitHelper();
 	}
@@ -38,7 +34,6 @@ public class AhActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		LogSM(simpleClassName + " onCreate");
 		fiveRocksHelper.initFiveRocks(thisActivity);
 	}
 
@@ -46,7 +41,6 @@ public class AhActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		LogSM(simpleClassName + " onStart");
 		fiveRocksHelper.onActivityStart(thisActivity);
 		userHabitHelper.activityStart(thisActivity);
 	}
@@ -54,24 +48,16 @@ public class AhActivity extends Activity {
 
 	@Override
 	protected void onStop() {
-		LogSM(simpleClassName + " onStop");
 		super.onStop();
 		fiveRocksHelper.onActivityStop(thisActivity);
 		userHabitHelper.activityStop(thisActivity);
 	}
 
 
-	@Override
-	protected void onDestroy() {
-		LogSM(simpleClassName + " onDestroy");
-		super.onDestroy();
-	}
-
-
-	public void Log(AhFragment fragment, Object... params){
+	public void Log(Activity activity, Object... params){
 		if(AhGlobalVariable.DEBUG_MODE){
 			Log.e("ERROR", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-			Log.e("ERROR", "[ "+fragment.getClass().getName() + " ]");
+			Log.e("ERROR", "[ "+activity.getClass().getName() + " ]");
 			for(Object str : params) {
 				if (str == null) {
 					Log.e("ERROR", "null");
@@ -80,13 +66,6 @@ public class AhActivity extends Activity {
 				Log.e("ERROR", str.toString());
 			}
 			Log.e("ERROR", "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-		}
-	}
-
-
-	public void LogSM(String params){
-		if(AhGlobalVariable.DEBUG_MODE){
-			Log.d("Seungmin", params);
 		}
 	}
 }

@@ -1,6 +1,5 @@
 package com.pinthecloud.athere.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
@@ -13,22 +12,16 @@ import com.pinthecloud.athere.adapter.SquarePagerAdapter;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.Square;
-import com.pinthecloud.athere.view.BadgeView;
 import com.pinthecloud.athere.view.PagerSlidingTabStrip;
 
 public class SquareTabFragment extends AhFragment{
 
 	public static final int CHAT_TAB = 0;
 	public static final int CHUPA_TAB = 1;
-	private final int BADGE_SIZE = 21;
 
 	private ViewPager mViewPager;
 	private SquarePagerAdapter mSquarePagerAdapter;
 	private PagerSlidingTabStrip tabs;
-
-	private View chupaTabBadge;
-	private BadgeView chupaBadge;
-
 	private Square square;
 
 
@@ -55,7 +48,7 @@ public class SquareTabFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_square_tab, container, false);
 
-		
+
 		/*
 		 * Set UI Component
 		 */
@@ -68,7 +61,7 @@ public class SquareTabFragment extends AhFragment{
 		 */
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSquarePagerAdapter = new SquarePagerAdapter(context, getFragmentManager(), square);
+		mSquarePagerAdapter = new SquarePagerAdapter(getFragmentManager(), square);
 
 		// Set up the ViewPager with the sections adapter.
 		int startTab = squareHelper.getSquareExitTab();
@@ -76,8 +69,8 @@ public class SquareTabFragment extends AhFragment{
 		mViewPager.setCurrentItem(startTab);
 
 		// Set up tabs with the view pager
-		tabs.setStartTab(startTab);
 		tabs.setViewPager(mViewPager);
+		tabs.setStartTab(startTab);
 		tabs.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
@@ -91,17 +84,6 @@ public class SquareTabFragment extends AhFragment{
 			public void onPageScrollStateChanged(int state) {
 			}
 		});
-		chupaTabBadge = tabs.getTabBadgeView(CHUPA_TAB);
-
-
-		/*
-		 * Set badge
-		 */
-		chupaBadge = new BadgeView(context, chupaTabBadge);
-		chupaBadge.setTextColor(Color.RED);
-		chupaBadge.setBadgeBackgroundColor(Color.WHITE);
-		chupaBadge.setTextSize(BADGE_SIZE);
-		chupaBadge.setBadgePosition(BadgeView.POSITION_CENTER_VERTICAL_RIGHT);
 
 
 		/*
@@ -113,34 +95,9 @@ public class SquareTabFragment extends AhFragment{
 			public void onCompleted(final AhMessage message) {
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.chatFragment, message);
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.memberFragment, message);
-				refreshView();
 			}
 		});
 
 		return view;
-	}
-
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		refreshView();
-	}
-
-
-	private void refreshView(){
-		final int chupaBadgeTotalNum = messageDBHelper.getAllChupaBadgeNum();
-		activity.runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				if(chupaBadgeTotalNum > 0){
-					chupaBadge.setText("" + chupaBadgeTotalNum);
-					chupaBadge.show();	
-				}else{
-					chupaBadge.hide();
-				}
-			}
-		});
 	}
 }

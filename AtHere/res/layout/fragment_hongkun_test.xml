@@ -15,9 +15,9 @@
     <ImageView
         android:id="@+id/hongkun_id_image_view"
         android:layout_width="97dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2.80"
-        android:src="@drawable/actionbar_logo" />
+        android:layout_height="0dp"
+        android:layout_weight="2.8"
+        android:src="@drawable/actionbar_red_back_btn" />
 
     <ListView
         android:id="@+id/hongkun_list_view"

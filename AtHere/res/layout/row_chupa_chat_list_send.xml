@@ -4,34 +4,34 @@
     android:layout_height="wrap_content"
     android:gravity="end"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/chupa_chat_list_send_bottom_margin"
-    android:paddingEnd="@dimen/chupa_chat_list_send_right_margin"
-    android:paddingLeft="@dimen/chupa_chat_list_send_left_margin"
-    android:paddingRight="@dimen/chupa_chat_list_send_right_margin"
-    android:paddingStart="@dimen/chupa_chat_list_send_left_margin"
-    android:paddingTop="@dimen/chupa_chat_list_send_top_margin" >
+    android:paddingBottom="@dimen/chat_list_top_bottom_margin"
+    android:paddingEnd="@dimen/chat_list_our_side_margin"
+    android:paddingLeft="@dimen/chat_list_other_side_margin"
+    android:paddingRight="@dimen/chat_list_our_side_margin"
+    android:paddingStart="@dimen/chat_list_other_side_margin"
+    android:paddingTop="@dimen/chat_list_top_bottom_margin" >
 
     <ImageButton
         android:id="@+id/row_chupa_chat_list_send_fail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
-        android:layout_marginEnd="@dimen/chupa_chat_list_send_time_right_margin"
-        android:layout_marginRight="@dimen/chupa_chat_list_send_time_right_margin"
+        android:layout_marginBottom="@dimen/chat_list_send_time_bottom_margin"
+        android:layout_marginEnd="@dimen/chat_list_send_time_right_margin"
+        android:layout_marginRight="@dimen/chat_list_send_time_right_margin"
         android:background="@android:color/transparent"
         android:contentDescription="@string/fail"
-        android:src="@drawable/msg_send_cancel"
+        android:src="@drawable/general_chat_msg_sent_error_btn"
         android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/row_chupa_chat_list_send_progress_bar"
-        android:layout_width="@dimen/chupa_chat_list_send_progress_width"
-        android:layout_height="@dimen/chupa_chat_list_send_progress_height"
+        android:layout_width="@dimen/chat_list_progress_width"
+        android:layout_height="@dimen/chat_list_progress_height"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
-        android:layout_marginEnd="@dimen/chupa_chat_list_send_time_right_margin"
-        android:layout_marginRight="@dimen/chupa_chat_list_send_time_right_margin"
+        android:layout_marginBottom="@dimen/chat_list_send_time_bottom_margin"
+        android:layout_marginEnd="@dimen/chat_list_send_time_right_margin"
+        android:layout_marginRight="@dimen/chat_list_send_time_right_margin"
         android:visibility="gone" />
 
     <TextView
@@ -39,20 +39,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/chupa_chat_list_send_time_bottom_margin"
-        android:layout_marginEnd="@dimen/chupa_chat_list_send_time_right_margin"
-        android:layout_marginRight="@dimen/chupa_chat_list_send_time_right_margin"
+        android:layout_marginBottom="@dimen/chat_list_send_time_bottom_margin"
+        android:layout_marginEnd="@dimen/chat_list_send_time_right_margin"
+        android:layout_marginRight="@dimen/chat_list_send_time_right_margin"
         android:textColor="@color/gray_light"
-        android:textSize="@dimen/font_small"
+        android:textSize="@dimen/font_medium"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/row_chupa_chat_list_send_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_chupa_sent"
+        android:background="@drawable/general_msg_sent_bg"
         android:gravity="center|start"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/font_regular" />
+        android:textSize="@dimen/font_normal" />
 
 </LinearLayout>

@@ -36,17 +36,15 @@ public class AppDrawerListAdapter extends ArrayAdapter<AppDrawerListItem> {
 			/*
 			 * Find UI Component
 			 */
-			ImageView iconImage = (ImageView)view.findViewById(R.id.row_app_drawer_list_icon);
-			TextView content = (TextView)view.findViewById(R.id.row_app_drawer_list_content);
+			ImageView icon = (ImageView)view.findViewById(R.id.row_app_drawer_list_icon);
 			TextView title = (TextView)view.findViewById(R.id.row_app_drawer_list_title);
 
 
 			/*
 			 * Set UI
 			 */
-			iconImage.setImageResource(item.getIconId());
+			icon.setImageResource(item.getIconId());
 			title.setText(item.getTitle());
-			content.setText(item.getContent());
 		}
 		return view;
 	}

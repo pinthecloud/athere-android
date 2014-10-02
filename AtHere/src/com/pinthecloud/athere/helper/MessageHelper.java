@@ -22,7 +22,7 @@ import com.pinthecloud.athere.util.AsyncChainer;
 public class MessageHelper {
 
 	private final String SEND_MESSAGE = "send_message";
-	
+
 	private AhApplication app;
 	private MobileServiceClient mClient;
 
@@ -68,7 +68,7 @@ public class MessageHelper {
 		});
 
 	}
-	
+
 
 	/**
 	 *  ===[The Message Triggering Propagation Mechanism]===

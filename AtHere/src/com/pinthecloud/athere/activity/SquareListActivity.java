@@ -8,20 +8,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.fragment.AppDrawerFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
 
 
-public class SquareListActivity extends AhSlidingActivity {
+public class SquareListActivity extends AhActivity {
 
 	private DrawerLayout mDrawerLayout; 
 	private View mFragmentView;
 	private ChupaListFragment mChupaListFragment;
+	private SlidingMenu slidingMenu;
 
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_list);
 
@@ -33,7 +36,7 @@ public class SquareListActivity extends AhSlidingActivity {
 		mFragmentView = findViewById(R.id.square_list_notification_drawer_fragment);
 		FragmentManager fragmentManager = getFragmentManager();
 		mChupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
-		mChupaListFragment.setUp(mDrawerLayout);
+		mChupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_red_drawer_btn);
 
 
 		/*
@@ -42,16 +45,38 @@ public class SquareListActivity extends AhSlidingActivity {
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		SquareListFragment squareListFragment = new SquareListFragment();
 		fragmentTransaction.add(R.id.square_list_layout, squareListFragment);
+
+
+		/*
+		 * Set sliding menu
+		 */
+		slidingMenu = new SlidingMenu(thisActivity);
+		slidingMenu.setMenu(R.layout.app_drawer_frame);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
+		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
+		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);
+		slidingMenu.setFadeDegree(0.35f);
+		slidingMenu.attachToActivity(thisActivity, SlidingMenu.SLIDING_WINDOW);
+
+		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
+		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
 		fragmentTransaction.commit();
 	}
-
-
+	
+	
 	@Override
 	public void onBackPressed() {
 		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 			mDrawerLayout.closeDrawer(mFragmentView);
 			return;
 		}
+		
+		if(slidingMenu.isMenuShowing()){
+			slidingMenu.toggle();
+			return;
+		}
+		
 		super.onBackPressed();
 	}
 
@@ -70,7 +95,7 @@ public class SquareListActivity extends AhSlidingActivity {
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{
-				toggle();
+				slidingMenu.toggle();
 			}
 			return true;
 		case R.id.menu_notification:

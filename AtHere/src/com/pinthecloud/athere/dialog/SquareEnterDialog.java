@@ -21,6 +21,7 @@ public class SquareEnterDialog extends AhDialogFragment{
 	public static final String SHOW_CODE = "SHOW_CODE"; 
 	private boolean showCode;
 
+	private TextView titleText;
 	private TextView warningText;
 	private EditText codeText;
 	private ImageButton enterButton;
@@ -34,20 +35,21 @@ public class SquareEnterDialog extends AhDialogFragment{
 		super();
 		this.ahDialogCallback = ahDialogCallback;
 		this.square = square;
+		setStyle(STYLE_NO_TITLE, 0);
 	}
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getDialog().setTitle(square.getName());
 		View view = inflater.inflate(R.layout.dialog_square_enter, container, false);
 		showCode = getArguments().getBoolean(SHOW_CODE);
 
-		
+
 		/*
 		 * Find UI component
 		 */
+		titleText = (TextView) view.findViewById(R.id.square_enter_dialog_title);
 		warningText = (TextView) view.findViewById(R.id.square_enter_dialog_code_warning_text);
 		codeText = (EditText) view.findViewById(R.id.square_enter_dialog_code_text);
 		enterButton = (ImageButton) view.findViewById(R.id.square_enter_dialog_enter_button);
@@ -57,6 +59,7 @@ public class SquareEnterDialog extends AhDialogFragment{
 		/*
 		 * Set UI
 		 */
+		titleText.setText(square.getName());
 		if(!showCode){
 			warningText.setVisibility(View.GONE);
 			codeText.setVisibility(View.GONE);

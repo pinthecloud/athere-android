@@ -23,12 +23,12 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.BasicProfileActivity;
 import com.pinthecloud.athere.adapter.GuidePagerAdapter;
 import com.pinthecloud.athere.helper.PreferenceHelper;
-import com.viewpagerindicator.UnderlinePageIndicator;
+import com.viewpagerindicator.CirclePageIndicator;
 
 public class GuideFragment extends AhFragment{
 
 	private ViewPager mPager;
-	private UnderlinePageIndicator indicator;
+	private CirclePageIndicator indicator;
 
 	private LoginButton loginButton;
 	private UiLifecycleHelper uiHelper;
@@ -68,7 +68,7 @@ public class GuideFragment extends AhFragment{
 		 * Find UI component
 		 */
 		mPager = (ViewPager)view.findViewById(R.id.guide_frag_viewpager);
-		indicator = (UnderlinePageIndicator)view.findViewById(R.id.guide_frag_indicator);
+		indicator = (CirclePageIndicator)view.findViewById(R.id.guide_frag_indicator);
 		loginButton = (LoginButton)view.findViewById(R.id.guide_frag_login_button);
 
 
@@ -77,7 +77,6 @@ public class GuideFragment extends AhFragment{
 		 */
 		mPager.setAdapter(new GuidePagerAdapter(getFragmentManager()));
 		indicator.setViewPager(mPager);
-		indicator.setFades(false);
 
 
 		/*
@@ -99,8 +98,9 @@ public class GuideFragment extends AhFragment{
 				 */
 				String birthday = user.getBirthday();
 				if (birthday == null) {
-					Toast.makeText(context, getResources().getString(R.string.birthday_access_message), Toast.LENGTH_LONG)
-					.show();
+					Toast.makeText(context, getResources().getString(R.string.birthday_access_message)
+							, Toast.LENGTH_LONG).show();
+
 					Session.NewPermissionsRequest newPermissionsRequest = 
 							new Session.NewPermissionsRequest(activity, Arrays.asList("user_birthday"));
 					session.requestNewReadPermissions(newPermissionsRequest);
@@ -130,6 +130,7 @@ public class GuideFragment extends AhFragment{
 				arr.add("643223775792443");
 				arr.add("834963903211098");	// Seungmin
 				arr.add("766458060085007");	// Chaesoo
+				arr.add("699691573453752");	// Hwajeong
 				if (arr.contains(user.getId())) {
 					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
 					.show();

@@ -1,24 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Common -->
+    <color name="blue_man">#144fb4</color>
+    <color name="red_woman">#b1240e</color>
+
+    <!-- Action Bar -->
+    <color name="action_bar_red_background">#E6E72203</color>
+    <color name="action_bar_white_background">#E6ffffff</color>
+
+    <!-- Basic profile -->
+    <color name="basic_profile_gray">#908f93</color>
+    <color name="basic_profile_text">#4c4b4f</color>
+
+    <!-- Square List -->
+    <color name="square_list_header_background">#b1240e</color>
+    <color name="square_list_gray">#f2f2f2</color>
+    <color name="square_list_address">#CCffffff</color>
+    <color name="square_list_text">#4c4b4f</color>
+
+    <!-- Square Enter Dialog -->
+    <color name="square_enter_dialog_background">#e6ffffff</color>
+    <color name="square_enter_dialog_text">#4c4b4f</color>
+    <color name="square_enter_dialog_hint">#cecece</color>
+
+    <!-- Square -->
+    <color name="square_chat_text">#4c4b4f</color>
+    <color name="square_chat_text_light">#cecece</color>
+    <color name="square_chat_inputbar_background">#e6ffffff</color>
+    <color name="square_chat_other_profile_image_border">#e6e6e6</color>
+    <color name="square_chat_other_nick_name">#5d5d5d</color>
+
+    <!-- Profile Dialog -->
+    <color name="profile_dialog_profile">#66ffffff</color>
+    <color name="profile_dialog_send_chupa_text">#b1240e</color>
+    <color name="profile_dialog_send_chupa">#e6ffffff</color>
+
+    <!-- App Drawer -->
+    <color name="app_drawer_background">#f2f2f2</color>
+    <color name="app_drawer_line">#e6e6e6</color>
+    <color name="app_drawer_profile_text">#4c4b4f</color>
+    <color name="app_drawer_profile_settings">#b1240e</color>
+
+    <!-- Profile Settings -->
+    <color name="profile_settings_background">#f2f2f2</color>
+
     <!-- gray -->
-    <color name="gray_tab_text_unselected">#959595</color>
     <color name="gray_background">#eaeaea</color>
     <color name="gray_list_selector">#f4f4f4</color>
-    <color name="gray_drawer_background">#f8f4f4f4</color>
     <color name="gray_line">#eeeeee</color>
     <color name="gray_light">#bdbdbd</color>
-    <color name="gray_dark">#636363</color>
-
-    <!-- Hwajung -->
-    <color name="chupa_inputbar_background">#80f4f4f4</color>
-    <color name="chat_inputbar_background">#80ffffff</color>
-
-    <!-- red -->
-    <color name="red">#d6003b</color>
-    <color name="dark_red">#a6002e</color>
-
-    <!-- blue -->
-    <color name="blue">#0077d3</color>
 
 </resources>

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/menu_notification"
-        android:icon="@drawable/indicator_notification_drawer"
+        android:icon="@drawable/actionbar_red_chupalist_btn"
         android:title="@string/notification"
         android:showAsAction="always" />
 

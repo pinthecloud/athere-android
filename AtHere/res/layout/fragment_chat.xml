@@ -2,41 +2,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/chat_list_bg"
     android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/chat_frag_preview_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_list_preview_bg" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/preview"
+            android:src="@drawable/ground_preview_notification_ico" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/preview_warning_message"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_medium" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/chat_frag_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/chat_bg"
         android:divider="@null"
         android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
+        android:id="@+id/chat_frag_inputbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/chat_inputbar_background"
+        android:background="@color/square_chat_inputbar_background"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/chat_input_bottom_margin"
-        android:paddingTop="@dimen/chat_input_top_margin" >
+        android:paddingBottom="@dimen/chat_inputbar_margin"
+        android:paddingEnd="@dimen/none"
+        android:paddingLeft="@dimen/chat_inputbar_margin"
+        android:paddingRight="@dimen/none"
+        android:paddingStart="@dimen/chat_inputbar_margin"
+        android:paddingTop="@dimen/chat_inputbar_margin" >
 
         <EditText
             android:id="@+id/chat_frag_message_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/chat_input_layout_left_margin"
-            android:layout_marginStart="@dimen/chat_input_layout_left_margin"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/bg_inputbar_highlight"
+            android:background="@drawable/general_text_input_bg"
             android:ems="10"
             android:inputType="textMultiLine"
-            android:maxLines="3"
-            android:paddingEnd="@dimen/chat_input_right_margin"
-            android:paddingLeft="@dimen/chat_input_left_margin"
-            android:paddingRight="@dimen/chat_input_right_margin"
-            android:paddingStart="@dimen/chat_input_left_margin"
+            android:maxLines="4"
+            android:paddingEnd="@dimen/chat_inputbar_margin"
+            android:paddingLeft="@dimen/chat_inputbar_margin"
+            android:paddingRight="@dimen/chat_inputbar_margin"
+            android:paddingStart="@dimen/chat_inputbar_margin"
+            android:textColor="@color/square_chat_text"
             android:textSize="@dimen/font_large" >
 
             <requestFocus />
@@ -49,7 +75,6 @@
             android:layout_gravity="bottom"
             android:background="@android:color/transparent"
             android:contentDescription="@string/send"
-            android:enabled="false"
             android:src="@drawable/send_image_button_bg" />
     </LinearLayout>
 

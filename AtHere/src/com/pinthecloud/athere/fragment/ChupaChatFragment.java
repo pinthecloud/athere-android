@@ -80,7 +80,7 @@ public class ChupaChatFragment extends AhFragment {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
 
-		
+
 		/*
 		 * Set UI component
 		 */
@@ -101,7 +101,7 @@ public class ChupaChatFragment extends AhFragment {
 		mActionBar.setTitle(squareHelper.getMySquareInfo().getName());
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 
-		
+
 		/*
 		 * Set message listview
 		 */
@@ -143,11 +143,11 @@ public class ChupaChatFragment extends AhFragment {
 		otherAge.setText("" + otherUser.getAge());
 		otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 		if (otherUser.isMale()) {
-			otherGender.setImageResource(R.drawable.profile_gender_m);
-			otherCompanyNumber.setTextColor(getResources().getColor(R.color.blue));
+			otherGender.setImageResource(R.drawable.general_gender_m);
+			otherCompanyNumber.setTextColor(getResources().getColor(R.color.blue_man));
 		} else {
-			otherGender.setImageResource(R.drawable.profile_gender_w);
-			otherCompanyNumber.setTextColor(getResources().getColor(R.color.dark_red));
+			otherGender.setImageResource(R.drawable.general_gender_w);
+			otherCompanyNumber.setTextColor(getResources().getColor(R.color.red_woman));
 		}
 
 
@@ -233,7 +233,7 @@ public class ChupaChatFragment extends AhFragment {
 						@Override
 						public void run() {
 							blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-									otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
+									otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
 							otherNickName.setText(otherUser.getNickName());
 							otherCompanyNumber.setText("" + otherUser.getCompanyNum());
 						}
@@ -253,7 +253,7 @@ public class ChupaChatFragment extends AhFragment {
 	public void onStart() {
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.launcher, otherProfileImage, true);
+				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
 		String chupaCommunId = AhMessage.buildChupaCommunId(userHelper.getMyUserInfo().getId(), otherUser.getId());
 		refreshView(chupaCommunId, null);
 	}
@@ -325,14 +325,14 @@ public class ChupaChatFragment extends AhFragment {
 	 */
 	private void refreshView(String chupaCommunId, final String id) {
 		if (chupaCommunId == null || chupaCommunId.equals("")) throw new AhException("No chupaCommunId");
-		
-		
+
+
 		/*
 		 * Clear badge numbers displayed on chupa list
 		 */
 		messageDBHelper.clearChupaBadgeNum(chupaCommunId);
-		
-		
+
+
 		/*
 		 * Get every chupa by chupaCommunId
 		 */
@@ -366,7 +366,7 @@ public class ChupaChatFragment extends AhFragment {
 			String exitMessage = getResources().getString(R.string.exit_square_message);
 			String nickName = otherUser.getNickName();
 			final AhMessage exitChupa = new AhMessage.Builder()
-			.setContent(nickName + " " + exitMessage)
+			.setContent(" " + exitMessage)
 			.setSender(nickName)
 			.setSenderId(otherUser.getId())
 			.setReceiverId(squareHelper.getMySquareInfo().getId())
