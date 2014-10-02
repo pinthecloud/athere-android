@@ -98,7 +98,7 @@ public class SquareListActivity extends AhActivity {
 				slidingMenu.toggle();
 			}
 			return true;
-		case R.id.menu_notification:
+		case R.id.square_list_menu_notification:
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{

@@ -10,6 +10,9 @@
     <color name="action_bar_red_background">#E6E72203</color>
     <color name="action_bar_white_background">#E6ffffff</color>
 
+    <!-- Guide -->
+    <color name="guide_background">#f2f2f2</color>
+    
     <!-- Basic profile -->
     <color name="basic_profile_gray">#908f93</color>
     <color name="basic_profile_text">#4c4b4f</color>
@@ -36,6 +39,10 @@
     <color name="chupa_list_text">#4c4b4f</color>
     <color name="chupa_list_time">#cecece</color>
 
+    <!-- Chupa Chat -->
+    <color name="chupa_chat_nick_name">#5d5d5d</color>
+    <color name="chupa_chat_age">#cecece</color>
+    
     <!-- Profile Dialog -->
     <color name="profile_dialog_profile">#66ffffff</color>
     <color name="profile_dialog_send_chupa_text">#b1240e</color>
@@ -52,7 +59,5 @@
     <!-- gray -->
     <color name="gray_background">#eaeaea</color>
     <color name="gray_list_selector">#f4f4f4</color>
-    <color name="gray_line">#eeeeee</color>
-    <color name="gray_light">#bdbdbd</color>
 
 </resources>

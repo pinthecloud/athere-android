@@ -236,17 +236,16 @@ public class UserHelper {
 			return;
 		}
 
-		user.setRegistrationId("");
-		user.setProfilePic("");
 		JsonElement json = user.toJson();
-
 		mClient.invokeApi(EXIT_SQUARE, json, new ApiJsonOperationCallback() {
 
 			@Override
 			public void onCompleted(JsonElement _json, Exception exception,
 					ServiceFilterResponse response) {
 				if (exception == null) {
-					callback.onCompleted(true);
+					if(callback != null){
+						callback.onCompleted(true);	
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
@@ -267,7 +266,9 @@ public class UserHelper {
 			public void onCompleted(List<AhUser> result, int count, Exception exception,
 					ServiceFilterResponse reponse) {
 				if (exception == null) {
-					callback.onCompleted(result, count);
+					if(callback != null){
+						callback.onCompleted(result, count);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.SERVER_ERROR));

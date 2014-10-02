@@ -141,7 +141,7 @@ public class AhIntentService extends IntentService {
 
 	private void CHUPA() {
 		int id = messageDBHelper.addMessage(message);
-		message.setId(String.valueOf(id));
+		message.setId(""+id);
 		messageDBHelper.increaseChupaBadgeNum(message.getChupaCommunId());
 
 		if (isRunning(app)) {
@@ -171,7 +171,7 @@ public class AhIntentService extends IntentService {
 
 	private void ENTER_SQUARE() {
 		int id = messageDBHelper.addMessage(message);
-		message.setId(String.valueOf(id));
+		message.setId(""+id);
 		userDBHelper.addIfNotExistOrUpdate(user);
 
 		if (isRunning(app)) {
@@ -290,7 +290,8 @@ public class AhIntentService extends IntentService {
 			title = message.getSender() +" " + resources.getString(R.string.send_chupa_notification_title);
 			content = message.getContent();
 			resultIntent.setClass(_this, ChupaChatActivity.class);
-			resultIntent.putExtra(AhGlobalVariable.USER_KEY, message.getSenderId());
+			AhUser _user = userDBHelper.getUser(message.getSenderId(), false);
+			resultIntent.putExtra(AhGlobalVariable.USER_KEY, _user);
 		} else if (AhMessage.TYPE.FORCED_LOGOUT.equals(type)){
 			title = resources.getString(R.string.forced_logout_title);
 			content = message.getContent();

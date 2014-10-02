@@ -113,19 +113,19 @@ public class ChupaListFragment extends AhFragment{
 		for(AhMessage message : lastChupaList){
 			Chupa chupa = new Chupa();
 
-			String userId = null;
+			String otherUserId = null;
 			if (message.isMine()) {
 				// the other user is Receiver
-				userId = message.getReceiverId();
+				otherUserId = message.getReceiverId();
 			} else {
 				// the other user is Sender
-				userId = message.getSenderId();
+				otherUserId = message.getSenderId();
 			}
 
-			chupa.setUserId(userId);
-			AhUser user = userDBHelper.getUser(userId, true);
-			chupa.setUserNickName(user != null ? user.getNickName() : "Unkown");
-			chupa.setExit(userDBHelper.isUserExit(userId));
+			AhUser otherUser = userDBHelper.getUser(otherUserId, true);
+			chupa.setUserId(otherUserId);
+			chupa.setUserNickName(otherUser != null ? otherUser.getNickName() : "Unkown");
+			chupa.setExit(userDBHelper.isUserExit(otherUserId));
 			chupa.setContent(message.getContent());
 			chupa.setTimeStamp(message.getTimeStamp());
 			chupa.setId(message.getChupaCommunId());

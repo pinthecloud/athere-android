@@ -193,7 +193,7 @@ public class BasicProfileFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
-				String nickName = nickNameEditText.getText().toString().trim();
+				final String nickName = nickNameEditText.getText().toString().trim();
 				nickNameEditText.setText(nickName);
 				nickNameEditText.setSelection(nickName.length());
 
@@ -222,14 +222,14 @@ public class BasicProfileFragment extends AhFragment{
 				startButton.setEnabled(false);
 				nickNameWarningText.setText("");
 
-				userHelper.setMyNickName(nickName)
-				.setMyChupaEnable(true);
-
 				AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
 					@Override
 					public void doNext(AhFragment frag) {
 						// Get a user object from preference and Add the user
+						userHelper.setMyNickName(nickName)
+						.setMyChupaEnable(true);
+						
 						AhUser user = userHelper.getMyUserInfo();
 						userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 

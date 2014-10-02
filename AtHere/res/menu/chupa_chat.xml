@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/menu_notification"
+        android:id="@+id/chupa_chat_menu_notification"
         android:icon="@drawable/actionbar_red_chupa_alarm_off_btn"
         android:showAsAction="ifRoom"
         android:title="@string/notification"/>

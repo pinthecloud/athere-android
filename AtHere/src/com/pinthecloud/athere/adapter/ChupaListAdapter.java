@@ -14,14 +14,12 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
-import com.pinthecloud.athere.helper.UserHelper;
 import com.pinthecloud.athere.model.Chupa;
 
 public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 
 	private Context context;
 	private AhFragment fragment;
-	private UserHelper userHelper;
 	private CachedBlobStorageHelper blobStorageHelper;
 
 
@@ -31,7 +29,6 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 		this.fragment = frag;
 
 		AhApplication app = AhApplication.getInstance();
-		this.userHelper = app.getUserHelper();
 		this.blobStorageHelper = app.getBlobStorageHelper();
 	}
 
@@ -75,12 +72,6 @@ public class ChupaListAdapter extends ArrayAdapter<Chupa> {
 			sender.setText(userNickName);
 			content.setText(contentString);
 			timeStamp.setText(hour + ":" + minute);
-
-			if(userId.equals(userHelper.getMyUserInfo().getId())){
-				content.setCompoundDrawablesWithIntrinsicBounds(R.drawable.actionbar_red_back_btn, 0, 0, 0);
-			}else{
-				content.setCompoundDrawablesWithIntrinsicBounds(R.drawable.actionbar_red_back_btn, 0, 0, 0);
-			}
 
 			if(isExit) {
 				sender.setTextColor(context.getResources().getColor(R.color.chupa_list_time));

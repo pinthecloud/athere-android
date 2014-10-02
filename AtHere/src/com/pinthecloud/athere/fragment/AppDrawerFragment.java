@@ -29,10 +29,10 @@ import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppDrawerListItem;
 
 public class AppDrawerFragment extends AhFragment{
-
-	private final int QUESTION = 0;
+	
+	private final int SETTINGS = 0;
 	private final int SHARE = 1;
-	private final int SETTINGS = 2;
+	private final int QUESTION = 2;
 
 	private ImageView profileImageView;
 	private TextView nickNameText;
@@ -152,9 +152,9 @@ public class AppDrawerFragment extends AhFragment{
 		 * Set list item
 		 */
 		ArrayList<AppDrawerListItem> items = new ArrayList<AppDrawerListItem>();
-		items.add(new AppDrawerListItem(R.drawable.drawer_request_ico, getResources().getString(R.string.question)));
-		items.add(new AppDrawerListItem(R.drawable.drawer_share_ico, getResources().getString(R.string.share)));
 		items.add(new AppDrawerListItem(R.drawable.drawer_setting_ico, getResources().getString(R.string.app_settings)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_share_ico, getResources().getString(R.string.share)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_request_ico, getResources().getString(R.string.question)));
 		appDrawerListAdapter.addAll(items);
 
 		return view;
