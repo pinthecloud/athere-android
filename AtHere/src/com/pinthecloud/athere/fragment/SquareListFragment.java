@@ -280,13 +280,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 					.setSenderId(user.getId())
 					.setReceiverId(square.getId())
 					.setType(AhMessage.TYPE.ENTER_SQUARE).build();
-					messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-
-						@Override
-						public void onCompleted(AhMessage entity) {
-							// Do nothing
-						}
-					});
+					messageHelper.sendMessageAsync(frag, message, null);
 				} else{
 					AsyncChainer.notifyNext(frag);
 				}

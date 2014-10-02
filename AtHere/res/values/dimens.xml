@@ -61,7 +61,8 @@
     <dimen name="chupa_list_height">88dp</dimen>
     <dimen name="chupa_list_profile_width">70dp</dimen>
     <dimen name="chupa_list_profile_height">70dp</dimen>
-    <dimen name="chupa_list_profile_left_margin">18dp</dimen>
+    <dimen name="chupa_list_left_right_margin">18dp</dimen>
+    <dimen name="chupa_list_top_bottom_margin">8dp</dimen>
     <dimen name="chupa_list_profile_text_margin">16dp</dimen>
     <dimen name="chupa_list_time_right_margin">18dp</dimen>
     <dimen name="chupa_list_content_margin">5dp</dimen>

@@ -61,6 +61,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			Bitmap bitmap = getBitmapFromMemCache(id);
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
+				AsyncChainer.notifyNext(frag);
 				return;
 			}
 
@@ -69,6 +70,7 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			if (bitmap != null) {
 				imageView.setImageBitmap(bitmap);
 				addBitmapToMemoryCache(id, bitmap);
+				AsyncChainer.notifyNext(frag);
 				return;
 			}
 
@@ -76,6 +78,8 @@ public class CachedBlobStorageHelper extends BlobStorageHelper {
 			AsyncDrawable asyncDrawable = new AsyncDrawable(frag.getResources(), placeHolder, task);
 			imageView.setImageDrawable(asyncDrawable);
 			task.execute(containerName, id);
+		} else{
+			AsyncChainer.notifyNext(frag);
 		}
 	}
 

@@ -56,7 +56,6 @@ public class ProfileImageFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log(thisFragment, user.getId());
 		final Bitmap placeHolder = FileUtil.getBitmapFromInternalStorage(context, user.getId()+AhGlobalVariable.SMALL);
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -69,7 +68,6 @@ public class ProfileImageFragment extends AhFragment{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				Log(thisFragment, "finish");
 				mAttacher.update();
 			}
 		});

@@ -1,80 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/chupa_list_height"
-    android:background="@drawable/list_white_selector_bg"
-    android:orientation="vertical" >
+    android:paddingBottom="@dimen/chupa_list_top_bottom_margin"
+    android:paddingEnd="@dimen/chupa_list_left_right_margin"
+    android:paddingLeft="@dimen/chupa_list_left_right_margin"
+    android:paddingRight="@dimen/chupa_list_left_right_margin"
+    android:paddingStart="@dimen/chupa_list_left_right_margin"
+    android:paddingTop="@dimen/chupa_list_top_bottom_margin" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingEnd="0dp"
-        android:paddingLeft="@dimen/chupa_list_profile_left_margin"
-        android:paddingRight="0dp"
-        android:paddingStart="@dimen/chupa_list_profile_left_margin" >
+    <ImageView
+        android:id="@+id/chupa_list_profile_pic"
+        android:layout_width="@dimen/chupa_list_profile_width"
+        android:layout_height="@dimen/chupa_list_profile_height"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/profile_image" />
 
-        <ImageView
-            android:id="@+id/chupa_list_profile_pic"
-            android:layout_width="@dimen/chupa_list_profile_width"
-            android:layout_height="@dimen/chupa_list_profile_height"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/profile_image" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/chupa_list_profile_text_margin"
+        android:layout_marginStart="@dimen/chupa_list_profile_text_margin"
+        android:layout_toEndOf="@+id/chupa_list_profile_pic"
+        android:layout_toRightOf="@+id/chupa_list_profile_pic"
+        android:orientation="vertical" >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/chupa_list_sender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/chupa_list_profile_text_margin"
-            android:layout_marginStart="@dimen/chupa_list_profile_text_margin"
-            android:layout_toEndOf="@+id/chupa_list_profile_pic"
-            android:layout_toRightOf="@+id/chupa_list_profile_pic"
-            android:orientation="vertical" >
+            android:layout_marginBottom="@dimen/chupa_list_content_margin"
+            android:singleLine="true"
+            android:textSize="@dimen/font_large" />
 
-            <TextView
-                android:id="@+id/chupa_list_sender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/chupa_list_content_margin"
-                android:singleLine="true"
-                android:textSize="@dimen/font_large" />
-
-            <TextView
-                android:id="@+id/chupa_list_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textSize="@dimen/font_small" />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/chupa_list_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/chupa_list_time_right_margin"
-            android:layout_marginRight="@dimen/chupa_list_time_right_margin"
-            android:orientation="vertical" >
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="@dimen/font_small" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/chupa_list_timestamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/chupa_list_content_margin"
-                android:textColor="@color/gray_light"
-                android:textSize="@dimen/font_small" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/chupa_list_time_right_margin"
+        android:layout_marginRight="@dimen/chupa_list_time_right_margin"
+        android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/chupa_list_badge_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/red_woman"
-                android:textSize="@dimen/font_medium"
-                android:visibility="invisible" />
-        </LinearLayout>
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/chupa_list_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/chupa_list_content_margin"
+            android:textColor="@color/gray_light"
+            android:textSize="@dimen/font_small" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/chupa_list_badge_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/red_woman"
+            android:textSize="@dimen/font_medium"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</RelativeLayout>

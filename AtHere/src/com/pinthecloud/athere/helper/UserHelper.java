@@ -124,6 +124,9 @@ public class UserHelper {
 			@Override
 			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
+					if (callback != null){
+						callback.onCompleted(entity);
+					}
 					callback.onCompleted(entity);
 					AsyncChainer.notifyNext(frag);
 				} else {
@@ -148,8 +151,9 @@ public class UserHelper {
 			@Override
 			public void onCompleted(SquareUser entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
-					if (callback != null)
+					if (callback != null){
 						callback.onCompleted(entity);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "addSquareUserAsync", AhException.TYPE.SERVER_ERROR));
@@ -293,8 +297,12 @@ public class UserHelper {
 		});
 	}
 
-	public void updateUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback){
+	public void updateMyUserAsync(final AhFragment frag, AhEntityCallback<AhUser> callback){
+		AhUser user = this.getMyUserInfo();
+		this.updateUserAsync(frag, user, callback);
+	}
 
+	public void updateUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback){
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -306,18 +314,15 @@ public class UserHelper {
 			public void onCompleted(AhUser entity, Exception exception,
 					ServiceFilterResponse response) {
 				if (exception == null) {
-					callback.onCompleted(entity);
+					if (callback != null){
+						callback.onCompleted(entity);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.SERVER_ERROR));
 				}
 			}
 		});
-	}
-
-	public void updateMyUserAsync(final AhFragment frag, AhEntityCallback<AhUser> callback){
-		AhUser user = this.getMyUserInfo();
-		this.updateUserAsync(frag, user, callback);
 	}
 
 	public AhUser getAdminUser(String id) {
@@ -395,7 +400,9 @@ public class UserHelper {
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
 				if (result != null) {
-					callback.onCompleted(result);
+					if (callback != null){
+						callback.onCompleted(result);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
