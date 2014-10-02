@@ -168,7 +168,7 @@ public class AppDrawerFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImageView, true);
+				user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_edit_profile_default_ico, profileImageView, true);
 	}
 
 

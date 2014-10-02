@@ -23,7 +23,7 @@
             android:layout_marginEnd="@dimen/chupa_chat_other_profile_nick_margin"
             android:layout_marginRight="@dimen/chupa_chat_other_profile_nick_margin"
             app:civBorderColor="@color/gray_line"
-            app:civBorderWidth="@dimen/line_height" />
+            app:civBorderWidth="@dimen/line_width" />
 
         <TextView
             android:id="@+id/chupa_chat_frag_other_nick_name"
@@ -65,7 +65,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
+        android:layout_height="@dimen/line_width"
         android:layout_gravity="center"
         android:background="@color/gray_line" />
 

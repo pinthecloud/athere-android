@@ -4,6 +4,7 @@
     <!-- Common -->
     <color name="blue_man">#144fb4</color>
     <color name="red_woman">#b1240e</color>
+    <color name="list_divider">#e6e6e6</color>
 
     <!-- Action Bar -->
     <color name="action_bar_red_background">#E6E72203</color>
@@ -30,6 +31,9 @@
     <color name="square_chat_inputbar_background">#e6ffffff</color>
     <color name="square_chat_other_profile_image_border">#e6e6e6</color>
     <color name="square_chat_other_nick_name">#5d5d5d</color>
+
+    <!-- Chupa List -->
+
 
     <!-- Profile Dialog -->
     <color name="profile_dialog_profile">#66ffffff</color>

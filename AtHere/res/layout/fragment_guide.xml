@@ -20,7 +20,7 @@
         app:fillColor="@android:color/black"
         app:radius="@dimen/guide_indicator_radious"
         app:strokeColor="@android:color/black"
-        app:strokeWidth="@dimen/line_height" />
+        app:strokeWidth="@dimen/line_width" />
 
     <LinearLayout
         android:id="@+id/guide_frag_login_layout"

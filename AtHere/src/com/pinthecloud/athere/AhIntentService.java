@@ -18,7 +18,6 @@ import android.media.AudioManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -89,7 +88,6 @@ public class AhIntentService extends IntentService {
 		}
 
 		final AhMessage.TYPE type = AhMessage.TYPE.valueOf(message.getType());
-		Log.e("ERROR", ""+type);
 		new AhThread(new Runnable() {
 
 			public void run() {
@@ -124,7 +122,7 @@ public class AhIntentService extends IntentService {
 	private void TALK() {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
-
+		
 		boolean isChatEnable = userHelper.isChatEnable();
 		if (isRunning(app)) {
 			// Is the Chupa App Running
@@ -279,19 +277,14 @@ public class AhIntentService extends IntentService {
 		String content = "";
 		Resources resources = _this.getResources();
 		if (AhMessage.TYPE.TALK.equals(type)){
-			Log.d("Seungmin", "asdf");
 			title = message.getSender();
 			content = message.getContent();
 			resultIntent.setClass(_this, SquareActivity.class);
 		} else if (AhMessage.TYPE.ENTER_SQUARE.equals(type)){
 			title = message.getContent();
 			String age = resources.getString(R.string.age);
-			String person = resources.getString(R.string.person);
-			String gender = resources.getString(R.string.man);
-			if(!user.isMale()){
-				gender = resources.getString(R.string.woman);
-			}
-			content = gender + " " + user.getAge() + age + " " + user.getCompanyNum() + person;
+			String gender = user.getGenderString(app);
+			content = user.getAge() + age + " " + gender;
 			resultIntent.setClass(_this, SquareActivity.class);
 		} else if (AhMessage.TYPE.CHUPA.equals(type)){
 			title = message.getSender() +" " + resources.getString(R.string.send_chupa_notification_title);

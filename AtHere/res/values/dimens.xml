@@ -1,8 +1,9 @@
 <resources>
 
     <!-- Common -->
-    <dimen name="line_height">1dp</dimen>
     <dimen name="none">0dp</dimen>
+    <dimen name="line_width">1dp</dimen>
+    <dimen name="line_thick_width">2dp</dimen>
     <dimen name="age_gender_margin">3dp</dimen>
 
     <!-- App Drawer -->

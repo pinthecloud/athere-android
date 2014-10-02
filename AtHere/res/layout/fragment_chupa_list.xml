@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:contentDescription="@string/blank"
-        android:src="@drawable/chupa_list_empty"
-        android:visibility="gone" />
+        android:src="@drawable/chupa_list_empty" />
 
     <ListView
         android:id="@+id/chupa_list_frag_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null" />
+        android:divider="@color/list_divider"
+        android:dividerHeight="@dimen/line_thick_width" />
 
 </RelativeLayout>
