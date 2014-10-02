@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Default -->
-    <string name="app_name">chupa</string>
+    <string name="app_name">Chupa</string>
 
     <!-- Word -->
     <string name="drawer_open">사이드바 열기</string>
@@ -66,7 +66,7 @@
     <string name="location_turn_on_message">위치 서비스를 틀어주세요.</string>
     <string name="no_facebook_upload_message">저희는 어떤 것도 페이스북에 올리지 않아요.</string>
     <string name="birthday_access_message">나이 계산을 위해 생일이 필요해요.</string>
-    <string name="greeting_sentence">모두에게 인사를 건네보세요.</string>
+    <string name="greeting_sentence">인사를 건네보세요.</string>
     <string name="share_sentence">같이 추파 던질래요? 지금 같은 공간에 있는 사람들을 만날 수 있어요!\nwww.sendchupa.com</string>
     <string name="duplicated_nick_name_message">다른 사람이 이미 사용하고 있는 닉네임 이에요.</string>
     <string name="enter_nick_name_message">닉네임을 입력해 주세요</string>

@@ -273,9 +273,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			public void doNext(AhFragment frag) {
 				if(!isPreview){
 					String enterMessage = getResources().getString(R.string.enter_square_message);
+					String greetingMessage = getResources().getString(R.string.greeting_sentence);
 					AhUser user = userHelper.getMyUserInfo();
 					AhMessage message = new AhMessage.Builder()
-					.setContent(" " + enterMessage)
+					.setContent(" " + enterMessage + "\n" + greetingMessage)
 					.setSender(user.getNickName())
 					.setSenderId(user.getId())
 					.setReceiverId(square.getId())

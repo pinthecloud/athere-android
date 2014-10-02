@@ -103,7 +103,7 @@ public class ChupaChatActivity extends AhActivity {
 		case android.R.id.home:
 			// Respond to the action bar's Up/Home button
 			onBackPressed();
-			return true;
+			break;
 		case R.id.chupa_chat_menu_notification:
 			// Handle chupa alarm
 			progressBar.setVisibility(View.VISIBLE);
@@ -124,7 +124,7 @@ public class ChupaChatActivity extends AhActivity {
 					invalidateOptionsMenu();
 				}
 			});
-			return true;
+			break;
 		}
 		return true;
 	}

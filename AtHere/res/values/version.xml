@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="google_play_services_version">5089000</integer>
+    <string name="facebook_app_id">383936855088677</string>
+    <string name="gcm_sender_id">750250117731</string>
 </resources>

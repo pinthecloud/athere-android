@@ -87,22 +87,25 @@ public class ChupaListFragment extends AhFragment{
 
 
 	private void refreshView() {
-		/*
-		 * Set square chupa list view
-		 */
+
 		final List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
+				// Set square chupa list view
 				squareChupaListAdapter.clear();
 				squareChupaListAdapter.addAll(convertToMap(lastChupaList));
-
+				
+				// If there is no message, show blank image
 				if(squareChupaListAdapter.getCount() < 1){
 					blankImage.setVisibility(View.VISIBLE);
 				} else{
 					blankImage.setVisibility(View.GONE);
 				}
+				
+				// Refresh square activity action bar notification item
+				activity.invalidateOptionsMenu();
 			}
 		});
 	}

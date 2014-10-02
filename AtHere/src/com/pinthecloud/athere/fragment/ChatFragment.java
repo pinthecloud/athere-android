@@ -245,6 +245,7 @@ public class ChatFragment extends AhFragment{
 				message.setStatus(AhMessage.STATUS.SENT);
 				message.setTimeStamp();
 				messageDBHelper.updateMessages(message);
+				
 				activity.runOnUiThread(new Runnable() {
 
 					@Override

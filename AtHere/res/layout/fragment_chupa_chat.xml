@@ -35,8 +35,7 @@
             android:textColor="@color/chupa_chat_nick_name"
             android:textSize="@dimen/font_large" />
 
-        <TextView
-            android:id="@+id/chupa_chat_frag_other_age_gender"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -44,8 +43,17 @@
             android:layout_centerVertical="true"
             android:background="@drawable/chupa_chat_partner_profile_info"
             android:gravity="center"
-            android:textColor="@color/chupa_chat_age"
-            android:textSize="@dimen/font_normal" />
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/chupa_chat_frag_other_age_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/age_gender_margin"
+                android:gravity="center"
+                android:textColor="@color/chupa_chat_age"
+                android:textSize="@dimen/font_normal" />
+        </LinearLayout>
     </RelativeLayout>
 
     <ListView

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.AppDrawerFragment;
@@ -40,6 +41,7 @@ public class SquareActivity extends AhActivity {
 	private SlidingMenu slidingMenu;
 
 	private MessageHelper messageHelper;
+	private MessageDBHelper messageDBHelper;
 	private UserHelper userHelper;
 	private SquareHelper squareHelper;
 
@@ -54,6 +56,7 @@ public class SquareActivity extends AhActivity {
 		 * Set Helper and get square
 		 */
 		messageHelper = app.getMessageHelper();
+		messageDBHelper = app.getMessageDBHelper();
 		userHelper = app.getUserHelper();
 		squareHelper = app.getSquareHelper();
 		Square square = squareHelper.getMySquareInfo();
@@ -172,15 +175,28 @@ public class SquareActivity extends AhActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu items for use in the action bar
+		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.square, menu);
-		return super.onCreateOptionsMenu(menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		MenuItem menuItem = menu.findItem(R.id.square_menu_notification);
+		if(messageDBHelper.getAllChupaBadgeNum() > 0){
+			menuItem.setIcon(R.drawable.actionbar_white_chupalist_highlight_btn);
+		}else{
+			menuItem.setIcon(R.drawable.actionbar_white_chupalist_btn);
+		}
+		return true;
 	}
 
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle presses on the action bar items
+		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// Handle app drawer
@@ -189,7 +205,7 @@ public class SquareActivity extends AhActivity {
 			}else{
 				slidingMenu.toggle();
 			}
-			return true;
+			break;
 		case R.id.square_menu_notification:
 			// Handle notification drawer
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
@@ -197,7 +213,7 @@ public class SquareActivity extends AhActivity {
 			}else{
 				mDrawerLayout.openDrawer(mFragmentView);
 			}
-			return true;
+			break;
 		case R.id.square_menu_more:
 			// Exit square
 			String message = getResources().getString(R.string.exit_square_consent_message);
@@ -217,9 +233,9 @@ public class SquareActivity extends AhActivity {
 				}
 			});
 			escDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			return true;
+			break;
 		}
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 
 

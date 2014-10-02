@@ -12,9 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ground_chat_notification_bg"
         android:gravity="center"
-        android:paddingBottom="@dimen/chat_list_top_bottom_margin"
-        android:paddingTop="@dimen/chat_list_top_bottom_margin"
         android:textColor="@color/square_chat_text_light"
-        android:textSize="@dimen/font_normal" />
+        android:textSize="@dimen/font_medium" />
 
 </LinearLayout>

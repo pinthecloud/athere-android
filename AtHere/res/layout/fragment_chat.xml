@@ -63,7 +63,7 @@
             android:paddingRight="@dimen/chat_inputbar_margin"
             android:paddingStart="@dimen/chat_inputbar_margin"
             android:textColor="@color/square_chat_text"
-            android:textSize="@dimen/font_large" >
+            android:textSize="@dimen/font_normal" >
 
             <requestFocus />
         </EditText>

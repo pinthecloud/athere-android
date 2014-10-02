@@ -108,7 +108,8 @@ public class UserHelper {
 	public UserHelper setMyNickName(String nickName) {
 		pref.putString(NICK_NAME_KEY, nickName);
 		return this;
-	}public UserHelper setMyChupaEnable(boolean isChupaEnable) {
+	}
+	public UserHelper setMyChupaEnable(boolean isChupaEnable) {
 		pref.putBoolean(IS_CHUPA_ENABLE_KEY, isChupaEnable);
 		return this;
 	}
@@ -366,7 +367,6 @@ public class UserHelper {
 
 	public void removeMySquareUserInfo() {
 		pref.removePref(IS_CHAT_ENABLE_KEY);
-		pref.removePref(IS_CHUPA_ENABLE_KEY);
 	}
 
 	public void removeMyUserInfo() {
@@ -391,7 +391,7 @@ public class UserHelper {
 			protected String doInBackground(GoogleCloudMessaging... params) {
 				GoogleCloudMessaging gcm = params[0];
 				try {
-					return gcm.register(AhGlobalVariable.GCM_SENDER_ID);
+					return gcm.register(frag.getResources().getString(R.string.gcm_sender_id));
 				} catch (IOException e) {
 					return null;
 				}

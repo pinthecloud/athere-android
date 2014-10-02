@@ -69,8 +69,8 @@ public class SquareTabFragment extends AhFragment{
 		mViewPager.setCurrentItem(startTab);
 
 		// Set up tabs with the view pager
-		tabs.setViewPager(mViewPager);
 		tabs.setStartTab(startTab);
+		tabs.setViewPager(mViewPager);
 		tabs.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override

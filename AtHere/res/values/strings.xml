@@ -2,8 +2,7 @@
 <resources>
 
     <!-- Default -->
-    <string name="app_name">chupa</string>
-    <string name="facebook_app_id">383936855088677</string>
+    <string name="app_name">Chupa</string>
 
     <!-- Word -->
     <string name="drawer_open">Open drawer</string>
