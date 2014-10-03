@@ -42,13 +42,13 @@
 
         <com.facebook.widget.LoginButton
             android:id="@+id/guide_frag_login_button"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/guide_login_button_margin"
             app:confirm_logout="false"
             app:fetch_user_info="true"
-            app:login_text="@string/facebook_login"
-            app:logout_text="@string/facebook_logout" />
+            app:login_text=""
+            app:logout_text="" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -83,7 +83,7 @@ public class BlobStorageHelper {
 			// Do noghing
 		}
 		if(bm == null){
-			bm = BitmapFactory.decodeResource(frag.getResources(), R.drawable.launcher);
+			bm = BitmapFactory.decodeResource(frag.getResources(), R.drawable.profile_dialog_chupa_ico);
 		}
 		return bm;
 	}

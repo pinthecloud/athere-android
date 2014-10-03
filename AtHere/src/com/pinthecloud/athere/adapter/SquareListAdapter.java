@@ -79,7 +79,7 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 				ImageView lock = (ImageView)view.findViewById(R.id.row_square_list_admin_lock);
 
 				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
-						square.getId(), R.drawable.launcher, background, false);
+						square.getId(), R.drawable.ground_premium_pic_default, background, false);
 				if(!square.getCode().equals("")){
 					lock.setVisibility(View.VISIBLE);
 				} else{

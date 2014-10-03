@@ -9,7 +9,8 @@
         android:id="@+id/row_member_grid_profile_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/profile_image" />
+        android:contentDescription="@string/profile_image"
+        android:src="@drawable/ground_member_profile_default" />
 
     <ImageView
         android:id="@+id/row_member_grid_my_profile"
