@@ -31,6 +31,7 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
@@ -53,8 +54,17 @@ public class ProfileSettingsFragment extends AhFragment{
 	private TextView genderText;
 	private ImageButton startButton;
 
+		private AhUser user;
 	private boolean isTypedNickName = true;
 	private boolean isTakenProfileImage = true;
+
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Intent intent = activity.getIntent();
+		user = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
+	}
 
 
 	@Override
@@ -62,7 +72,6 @@ public class ProfileSettingsFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_profile_settings, container, false);
-		final AhUser user = userHelper.getMyUserInfo();
 
 
 		/*
@@ -239,8 +248,14 @@ public class ProfileSettingsFragment extends AhFragment{
 
 					@Override
 					public void doNext(AhFragment frag) {
-						userHelper.setMyNickName(nickName);
-						userHelper.updateMyUserAsync(frag, null);
+						user.setNickName(nickName);
+						userHelper.updateUserAsync(frag, user, new AhEntityCallback<AhUser>() {
+
+							@Override
+							public void onCompleted(AhUser entity) {
+								userHelper.setMyNickName(entity.getNickName());
+							}
+						});
 					}
 				}, new Chainable() {
 
@@ -276,7 +291,14 @@ public class ProfileSettingsFragment extends AhFragment{
 						profileImageView.setEnabled(true);
 						nickNameEditText.setEnabled(true);
 						startButton.setEnabled(true);
-						saveProfileImage(user.getId());
+
+						// Save profile to internal storage
+						String userId = user.getId();
+						FileUtil.saveBitmapToInternalStorage(app, userId, profileImageBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallProfileImageBitmap);
+						blobStorageHelper.clearCache(userId);
+						blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
+
 						Toast.makeText(context, getResources().getString(R.string.profile_settings_complete_message)
 								, Toast.LENGTH_LONG).show();
 					}
@@ -385,17 +407,6 @@ public class ProfileSettingsFragment extends AhFragment{
 				file.delete();
 			}
 		}
-	}
-
-
-	/*
-	 * Save this setting and go to next activity
-	 */
-	private void saveProfileImage(String userId) {
-		FileUtil.saveBitmapToInternalStorage(app, userId, profileImageBitmap);
-		FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallProfileImageBitmap);
-		blobStorageHelper.clearCache(userId);
-		blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
 	}
 
 

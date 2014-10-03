@@ -29,6 +29,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
+import com.pinthecloud.athere.activity.SquarePreviewActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareEnterDialog;
 import com.pinthecloud.athere.exception.AhException;
@@ -171,7 +172,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				 * If enough close to enter or it is super user, check code.
 				 * Otherwise, cannot enter.
 				 */
-				PreferenceHelper.getInstance().removePref(AhGlobalVariable.SUDO_KEY);
 				if(!square.isFar()
 						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 
@@ -291,32 +291,31 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				saveInformationAndEnterSquare(square, isPreview);
+				Intent intent = new Intent();
+				if(!isPreview){
+					Time time = new Time();
+					time.setToNow();
+
+					squareHelper.setMySquareId(square.getId())
+					.setMySquareName(square.getName())
+					.setMySquareResetTime(square.getResetTime())
+					.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+					.setLoggedInSquare(true)
+					.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"))
+					.setReview(true)
+					.setPreview(isPreview);
+
+					intent.setClass(context, SquareActivity.class);
+					startActivity(intent);
+					activity.finish();
+				}else{
+					squareHelper.setPreview(isPreview);
+					intent.setClass(context, SquarePreviewActivity.class);
+					intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
+					startActivity(intent);
+				}
 			}
 		});
-	}
-
-
-	/*
-	 * Save this setting and go to next activity
-	 */
-	private void saveInformationAndEnterSquare(Square square, boolean isPreview) {
-		Time time = new Time();
-		time.setToNow();
-
-		userHelper.setChatEnable(true);
-		squareHelper.setMySquareId(square.getId())
-		.setMySquareName(square.getName())
-		.setMySquareResetTime(square.getResetTime())
-		.setSquareExitTab(SquareTabFragment.CHAT_TAB)
-		.setLoggedInSquare(true)
-		.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"))
-		.setPreview(isPreview)
-		.setReview(true);
-
-		Intent intent = new Intent(context, SquareActivity.class);
-		startActivity(intent);
-		activity.finish();
 	}
 
 
