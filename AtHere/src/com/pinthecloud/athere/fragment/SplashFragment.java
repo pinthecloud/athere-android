@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.GuideActivity;
@@ -180,6 +181,9 @@ public class SplashFragment extends AhFragment {
 						}
 
 						if (serverVer.getVersion() > clientVer) {
+							AhApplication.getInstance().removeMySquarePreference(thisFragment);
+							AhApplication.getInstance().removeMyUserPreference(thisFragment);
+							
 							String message = getResources().getString(R.string.update_app_message);
 							AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
 
