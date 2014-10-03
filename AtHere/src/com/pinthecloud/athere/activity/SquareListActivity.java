@@ -4,7 +4,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -102,25 +101,25 @@ public class SquareListActivity extends AhActivity {
 	}
 
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.square_list, menu);
-		return true;
-	}
-
-
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		MenuItem menuItem = menu.findItem(R.id.square_list_menu_notification);
-		if(messageDBHelper.getAllChupaBadgeNum() > 0){
-			menuItem.setIcon(R.drawable.actionbar_red_chupalist_highlight_btn);
-		}else{
-			menuItem.setIcon(R.drawable.actionbar_red_chupalist_btn);
-		}
-		return true;
-	}
+	//	@Override
+	//	public boolean onCreateOptionsMenu(Menu menu) {
+	//		super.onCreateOptionsMenu(menu);
+	//		getMenuInflater().inflate(R.menu.square_list, menu);
+	//		return true;
+	//	}
+	//
+	//
+	//	@Override
+	//	public boolean onPrepareOptionsMenu(Menu menu) {
+	//		super.onPrepareOptionsMenu(menu);
+	//		MenuItem menuItem = menu.findItem(R.id.square_list_menu_notification);
+	//		if(messageDBHelper.getAllChupaBadgeNum() > 0){
+	//			menuItem.setIcon(R.drawable.actionbar_red_chupalist_highlight_btn);
+	//		}else{
+	//			menuItem.setIcon(R.drawable.actionbar_red_chupalist_btn);
+	//		}
+	//		return true;
+	//	}
 
 
 	@Override
@@ -134,13 +133,13 @@ public class SquareListActivity extends AhActivity {
 				slidingMenu.toggle();
 			}
 			break;
-		case R.id.square_list_menu_notification:
-			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
-				mDrawerLayout.closeDrawer(mFragmentView);
-			}else{
-				mDrawerLayout.openDrawer(mFragmentView);
-			}
-			break;
+			//		case R.id.square_list_menu_notification:
+			//			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
+			//				mDrawerLayout.closeDrawer(mFragmentView);
+			//			}else{
+			//				mDrawerLayout.openDrawer(mFragmentView);
+			//			}
+			//			break;
 		}
 		return true;
 	}

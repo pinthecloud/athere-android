@@ -53,7 +53,7 @@
     <!-- App Drawer -->
     <color name="app_drawer_background">#f2f2f2</color>
     <color name="app_drawer_profile_text">#4c4b4f</color>
-    <color name="app_drawer_profile_settings">#b1240e</color>
+    <color name="app_drawer_profile_settings">#cecece</color>
 
     <!-- Profile Settings -->
     <color name="profile_settings_background">#f2f2f2</color>

@@ -312,11 +312,6 @@ public class UserHelper {
 		});
 	}
 
-	public void updateMyUserAsync(final AhFragment frag, AhEntityCallback<AhUser> callback){
-		AhUser user = this.getMyUserInfo();
-		this.updateUserAsync(frag, user, callback);
-	}
-
 	public void updateUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback){
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -413,10 +408,6 @@ public class UserHelper {
 		user.setNickName(nickName);
 		user.setChupaEnable(isChupaEnable);
 		return user;
-	}
-
-	public void removeMySquareUserInfo() {
-		pref.removePref(IS_CHAT_ENABLE_KEY);
 	}
 
 	public void removeMyUserInfo() {

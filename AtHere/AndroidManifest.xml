@@ -94,6 +94,11 @@
             android:theme="@style/AppWhiteActionBarTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name=".activity.SquarePreviewActivity"
+            android:icon="@drawable/transparent"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppWhiteActionBarTheme" />
+        <activity
             android:name=".activity.ProfileImageActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
