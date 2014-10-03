@@ -165,7 +165,6 @@ public class AhApplication extends Application{
 		blobStorageHelper.clearAllCache();
 
 		// Remove my preference
-		userHelper.removeMySquareUserInfo();
 		squareHelper.removeMySquareInfo();
 	}
 

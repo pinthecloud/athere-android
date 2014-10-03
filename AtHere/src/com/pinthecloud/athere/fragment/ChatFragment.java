@@ -69,7 +69,8 @@ public class ChatFragment extends AhFragment{
 
 
 		/*
-		 * If Preview, hide input bar.
+		 * If Preview, hide input bar and enable action bar
+		 * Otherwise, hide preview layout
 		 */
 		if(squareHelper.isPreview()){
 			inputbarLayout.setVisibility(View.GONE);

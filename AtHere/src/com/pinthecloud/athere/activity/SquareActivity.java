@@ -19,7 +19,6 @@ import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.fragment.AppDrawerFragment;
-import com.pinthecloud.athere.fragment.ChatFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -78,11 +77,7 @@ public class SquareActivity extends AhActivity {
 		 * Set tab
 		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		if(squareHelper.isPreview()){
-			contentFragment = new ChatFragment(square);	
-		}else{
-			contentFragment = new SquareTabFragment(square);
-		}
+		contentFragment = new SquareTabFragment(square);
 		fragmentTransaction.add(R.id.square_tab_layout, contentFragment);
 
 

@@ -228,6 +228,7 @@ public class BasicProfileFragment extends AhFragment{
 					public void doNext(AhFragment frag) {
 						// Get a user object from preference and Add the user
 						userHelper.setMyNickName(nickName)
+						.setChatEnable(true)
 						.setMyChupaEnable(true);
 
 						AhUser user = userHelper.getMyUserInfo();

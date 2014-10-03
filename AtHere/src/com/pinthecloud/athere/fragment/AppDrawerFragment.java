@@ -29,7 +29,7 @@ import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppDrawerListItem;
 
 public class AppDrawerFragment extends AhFragment{
-	
+
 	private final int SETTINGS = 0;
 	private final int SHARE = 1;
 	private final int QUESTION = 2;
@@ -51,7 +51,7 @@ public class AppDrawerFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_app_drawer, container, false);
-		user = userHelper.getMyUserInfo();
+
 
 
 		/*
@@ -63,19 +63,6 @@ public class AppDrawerFragment extends AhFragment{
 		genderText = (TextView) view.findViewById(R.id.app_drawer_frag_gender);
 		profileSettingsButton = (Button) view.findViewById(R.id.app_drawer_frag_profile_settings_button);
 		list = (ListView) view.findViewById(R.id.app_drawer_frag_list);
-
-
-		/*
-		 * Set UI
-		 */
-		nickNameText.setText(user.getNickName());
-		ageText.setText(""+user.getAge());
-		genderText.setText(user.getGenderString(context));
-		if(user.isMale()){
-			genderText.setTextColor(getResources().getColor(R.color.blue_man));
-		}else{
-			genderText.setTextColor(getResources().getColor(R.color.red_woman));
-		}
 
 
 		/*
@@ -111,6 +98,7 @@ public class AppDrawerFragment extends AhFragment{
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(context, ProfileSettingsActivity.class);
+				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
 		});
@@ -141,6 +129,7 @@ public class AppDrawerFragment extends AhFragment{
 					break;
 				case SETTINGS:
 					intent = new Intent(context, SettingsActivity.class);
+					intent.putExtra(AhGlobalVariable.USER_KEY, user);
 					startActivity(intent);
 					break;
 				}
@@ -164,8 +153,22 @@ public class AppDrawerFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
+		user = userHelper.getMyUserInfo();
+
+
+		/*
+		 * Set UI
+		 */
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
 				user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_edit_profile_default_ico, profileImageView, true);
+		nickNameText.setText(user.getNickName());
+		ageText.setText(""+user.getAge());
+		genderText.setText(user.getGenderString(context));
+		if(user.isMale()){
+			genderText.setTextColor(getResources().getColor(R.color.blue_man));
+		}else{
+			genderText.setTextColor(getResources().getColor(R.color.red_woman));
+		}
 	}
 
 

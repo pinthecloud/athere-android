@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="@dimen/settings_margin" >
 
     <ProgressBar
         android:id="@+id/settings_frag_progress_bar"
@@ -14,11 +15,121 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notification" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/groundlist_normal_bg"
+            android:paddingEnd="@dimen/settings_margin"
+            android:paddingLeft="@dimen/settings_margin"
+            android:paddingRight="@dimen/settings_margin"
+            android:paddingStart="@dimen/settings_margin" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/square"
+                android:textSize="@dimen/font_large" />
+
+            <ToggleButton
+                android:id="@+id/settings_frag_chat_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:drawableEnd="@drawable/alarm_on_off_toggle_bg"
+                android:drawableRight="@drawable/alarm_on_off_toggle_bg"
+                android:textOff=""
+                android:textOn="" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/groundlist_normal_bg"
+            android:paddingEnd="@dimen/settings_margin"
+            android:paddingLeft="@dimen/settings_margin"
+            android:paddingRight="@dimen/settings_margin"
+            android:paddingStart="@dimen/settings_margin" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/chupa"
+                android:textSize="@dimen/font_large" />
+
+            <ToggleButton
+                android:id="@+id/settings_frag_chupa_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:drawableEnd="@drawable/alarm_on_off_toggle_bg"
+                android:drawableRight="@drawable/alarm_on_off_toggle_bg"
+                android:textOff=""
+                android:textOn="" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/settings_frag_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/groundlist_normal_bg"
+            android:paddingEnd="@dimen/settings_margin"
+            android:layout_marginTop="@dimen/settings_margin"
+            android:layout_marginBottom="@dimen/settings_margin"
+            android:paddingLeft="@dimen/settings_margin"
+            android:paddingRight="@dimen/settings_margin"
+            android:paddingStart="@dimen/settings_margin" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/question"
+                android:textSize="@dimen/font_large" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/settings_frag_share"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/groundlist_normal_bg"
+            android:paddingEnd="@dimen/settings_margin"
+            android:paddingLeft="@dimen/settings_margin"
+            android:paddingRight="@dimen/settings_margin"
+            android:paddingStart="@dimen/settings_margin" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/share"
+                android:textSize="@dimen/font_large" />
+        </RelativeLayout>
+    </LinearLayout>
+
     <com.facebook.widget.LoginButton
         android:id="@+id/settings_frag_logout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/settings_logout_margin"
         facebook:confirm_logout="true"
         facebook:fetch_user_info="true"
         facebook:login_text="@string/facebook_login"
