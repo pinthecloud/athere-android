@@ -51,7 +51,7 @@
     <string name="enter_square_message">님이 그라운드에 들어왔어요.</string>
     <string name="exit_square_message">님이 그라운드를 나갔어요.</string>
     <string name="enter_preview_square_message">님이 미리보기 모드로 그라운드에 들어왔어요.</string>
-    <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워져요. 나가실래요?</string>
+    <string name="exit_square_consent_message">그라운드를 나가면 모든 채팅과 추파들이 지워져요. 나가시겠어요?</string>
     <string name="send_chupa_notification_title">님이 당신에게 추파를 보냈어요.</string>
     <string name="forced_logout_title">로그아웃 되셨어요.</string>
     <string name="google_play_services_message">구글 플레이 서비스가 제대로 설치되어 있는지 확인해주세요.</string>
@@ -61,20 +61,14 @@
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
     <string name="review_message">내가 자주가는 장소의 소식이 궁금하세요?\n\n추가를 원하시는 그라운드를 리뷰로 말씀해주세요.</string>
     <string name="no_today_message">나중에 할게요</string>
-<<<<<<< HEAD
+
     <string name="location_consent_message">추파는 위치정보를 사용하지만, 절대 수집하지 않아요.\n위치정보 사용에 동의하시면 위 버튼을 눌러주세요.</string>
     <string name="location_turn_on_message">위치 서비스를 켜주세요.</string>
-    <string name="no_facebook_upload_message">추파는 어떠한 정보도 페이스북에 올리지 않아요.</string>
+    <string name="no_facebook_upload_message">추파는 페이스북에 어떠한 글도 올리지 않아요.</string>
     <string name="birthday_access_message">나이를 위해 생일이 필요해요.</string>
     <string name="greeting_sentence">모두에게 인사를 건네보세요.</string>
-=======
-    <string name="location_consent_message">추파는 위치정보를 사용하지만, 절대 수집하지 않아요.\n위 버튼을 누르면 위치정보 사용에 동의하는 것이에요.</string>
-    <string name="location_turn_on_message">위치 서비스를 틀어주세요.</string>
-    <string name="no_facebook_upload_message">저희는 어떤 것도 페이스북에 올리지 않아요.</string>
-    <string name="birthday_access_message">나이 계산을 위해 생일이 필요해요.</string>
-    <string name="greeting_sentence">인사를 건네보세요.</string>
->>>>>>> 2e92ae0def3d54409623dc5e4c23006fcc7335a8
-    <string name="share_sentence">같이 추파 던질래요? 지금 같은 공간에 있는 사람들을 만날 수 있어요!\nwww.sendchupa.com</string>
+
+    <string name="share_sentence">같이 추파 던질래요? 지금 같은 공간에 있는 사람들을 만날 수 있어요!\nhttps://play.google.com/store/apps/details?id=com.pinthecloud.athere</string>
     <string name="duplicated_nick_name_message">이미 사용되고 있는 닉네임이에요.\n다시 입력해주세요.</string>
     <string name="enter_nick_name_message">닉네임을 입력해주세요.</string>
     <string name="enter_code_message">코드를 입력해주세요.</string>

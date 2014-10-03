@@ -54,11 +54,6 @@
             android:gravity="center"
             android:textColor="@color/red_woman"
             android:textSize="@dimen/font_normal" />
-<<<<<<< HEAD
-        
-    </LinearLayout>
-=======
->>>>>>> 2e92ae0def3d54409623dc5e4c23006fcc7335a8
 
         <EditText
             android:id="@+id/basic_profile_frag_nick_name_text"

@@ -8,6 +8,7 @@ import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
+import com.pinthecloud.athere.analysis.FlurryHelper;
 
 /**
  *  Base class for every activity.
@@ -20,6 +21,7 @@ public class AhActivity extends Activity {
 	protected AhApplication app;
 	protected FiveRocksHelper fiveRocksHelper;
 	protected UserHabitHelper userHabitHelper;
+	protected FlurryHelper flurryHelper;
 	protected AhActivity thisActivity;
 
 
@@ -28,6 +30,7 @@ public class AhActivity extends Activity {
 		app = AhApplication.getInstance();
 		fiveRocksHelper = app.getFiveRocksHelper();
 		userHabitHelper = app.getUserHabitHelper();
+		flurryHelper = app.getFlurryHelper();
 	}
 
 
@@ -43,6 +46,7 @@ public class AhActivity extends Activity {
 		super.onStart();
 		fiveRocksHelper.onActivityStart(thisActivity);
 		userHabitHelper.activityStart(thisActivity);
+		flurryHelper.onStartSession(thisActivity);
 	}
 
 
@@ -51,6 +55,7 @@ public class AhActivity extends Activity {
 		super.onStop();
 		fiveRocksHelper.onActivityStop(thisActivity);
 		userHabitHelper.activityStop(thisActivity);
+		flurryHelper.onEndSession(thisActivity);
 	}
 
 

@@ -129,10 +129,18 @@ public class AppDrawerFragment extends AhFragment{
 				Intent intent = null;
 				switch(position){
 				case QUESTION:
+					gaHelper.sendEventGA(
+							thisFragment.getClass().getSimpleName(),
+							"Question",
+							"Question");
 					intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:pinthecloud@gmail.com"));
 					startActivity(intent);
 					break;
 				case SHARE:
+					gaHelper.sendEventGA(
+							thisFragment.getClass().getSimpleName(),
+							"Share",
+							"Share");
 					intent = new Intent();
 					intent.setAction(Intent.ACTION_SEND);
 					intent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_sentence));
@@ -140,6 +148,10 @@ public class AppDrawerFragment extends AhFragment{
 					startActivity(Intent.createChooser(intent, getResources().getText(R.string.share_to)));
 					break;
 				case SETTINGS:
+					gaHelper.sendEventGA(
+							thisFragment.getClass().getSimpleName(),
+							"Settings",
+							"Settings");
 					intent = new Intent(context, SettingsActivity.class);
 					startActivity(intent);
 					break;

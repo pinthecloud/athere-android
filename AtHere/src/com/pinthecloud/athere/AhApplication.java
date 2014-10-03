@@ -11,6 +11,7 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
+import com.pinthecloud.athere.analysis.FlurryHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -55,6 +56,7 @@ public class AhApplication extends Application{
 	private static GAHelper gaHelper;
 	private static FiveRocksHelper fiveRocksHelper;
 	private static UserHabitHelper userHabitHelper;
+	private static FlurryHelper flurryHelper;
 
 	// DB
 	private static UserDBHelper userDBHelper;
@@ -97,6 +99,7 @@ public class AhApplication extends Application{
 		gaHelper = new GAHelper();
 		fiveRocksHelper = new FiveRocksHelper();
 		userHabitHelper = new UserHabitHelper();
+		flurryHelper = new FlurryHelper();
 	}
 
 	public static AhApplication getInstance(){
@@ -137,6 +140,9 @@ public class AhApplication extends Application{
 	}
 	public UserHabitHelper getUserHabitHelper() {
 		return userHabitHelper;
+	}
+	public FlurryHelper getFlurryHelper(){
+		return flurryHelper;
 	}
 
 
