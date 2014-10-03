@@ -39,7 +39,7 @@ public class SettingsFragment extends AhFragment{
 	private RelativeLayout shareButton;
 
 	private AhUser user;
-	
+
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
@@ -62,7 +62,7 @@ public class SettingsFragment extends AhFragment{
 		super.onCreate(savedInstanceState);
 		uiHelper = new UiLifecycleHelper(activity, callback);
 		uiHelper.onCreate(savedInstanceState);
-		
+
 		Intent intent = activity.getIntent();
 		user = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
@@ -182,6 +182,11 @@ public class SettingsFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
+				gaHelper.sendEventGA(
+						thisFragment.getClass().getSimpleName(),
+						"Question",
+						"SettingsQuestion");
+				
 				Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:pinthecloud@gmail.com"));
 				startActivity(intent);
 			}
@@ -190,6 +195,11 @@ public class SettingsFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
+				gaHelper.sendEventGA(
+						thisFragment.getClass().getSimpleName(),
+						"Share",
+						"SettingsShare");
+
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_SEND);
 				intent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_sentence));

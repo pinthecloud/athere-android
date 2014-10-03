@@ -94,7 +94,7 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/settings_frag_question"
+            android:id="@+id/settings_frag_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/settings_margin"
@@ -109,12 +109,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/question"
+                android:text="@string/share"
                 android:textSize="@dimen/font_large" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/settings_frag_share"
+            android:id="@+id/settings_frag_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/groundlist_normal_bg"
@@ -127,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/share"
+                android:text="@string/question"
                 android:textSize="@dimen/font_large" />
         </RelativeLayout>
     </LinearLayout>
