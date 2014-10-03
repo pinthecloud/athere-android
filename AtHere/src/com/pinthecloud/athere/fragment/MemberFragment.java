@@ -58,7 +58,7 @@ public class MemberFragment extends AhFragment{
 				gaHelper.sendEventGA(
 						thisFragment.getClass().getSimpleName(),
 						"ViewOtherProfile",
-						"Member");
+						"MemberProfile");
 
 				final AhUser user = memberGridAdapter.getItem(position);
 				ProfileDialog profileDialog = new ProfileDialog(thisFragment, user, new AhDialogCallback() {
@@ -68,7 +68,7 @@ public class MemberFragment extends AhFragment{
 						gaHelper.sendEventGA(
 								thisFragment.getClass().getSimpleName(),
 								"SendChupa",
-								"Member");
+								"MemberSendChupa");
 
 						Intent intent = new Intent(context, ChupaChatActivity.class);
 						intent.putExtra(AhGlobalVariable.USER_KEY, user);

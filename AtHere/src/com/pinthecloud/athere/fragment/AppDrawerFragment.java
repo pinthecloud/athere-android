@@ -45,7 +45,7 @@ public class AppDrawerFragment extends AhFragment{
 
 	private AhUser user;
 
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -110,6 +110,11 @@ public class AppDrawerFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
+				gaHelper.sendEventGA(
+						thisFragment.getClass().getSimpleName(),
+						"DrawerProfileSetting",
+						"ProfileSetting");
+
 				Intent intent = new Intent(context, ProfileSettingsActivity.class);
 				startActivity(intent);
 			}
@@ -132,7 +137,7 @@ public class AppDrawerFragment extends AhFragment{
 					gaHelper.sendEventGA(
 							thisFragment.getClass().getSimpleName(),
 							"Question",
-							"Question");
+							"DrawerQuestion");
 					intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:pinthecloud@gmail.com"));
 					startActivity(intent);
 					break;
@@ -140,7 +145,7 @@ public class AppDrawerFragment extends AhFragment{
 					gaHelper.sendEventGA(
 							thisFragment.getClass().getSimpleName(),
 							"Share",
-							"Share");
+							"DrawerShare");
 					intent = new Intent();
 					intent.setAction(Intent.ACTION_SEND);
 					intent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_sentence));
@@ -151,7 +156,7 @@ public class AppDrawerFragment extends AhFragment{
 					gaHelper.sendEventGA(
 							thisFragment.getClass().getSimpleName(),
 							"Settings",
-							"Settings");
+							"DrawerSettings");
 					intent = new Intent(context, SettingsActivity.class);
 					startActivity(intent);
 					break;
