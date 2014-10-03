@@ -24,6 +24,7 @@ import com.google.gson.JsonParser;
 import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.SquareActivity;
 import com.pinthecloud.athere.activity.SquareListActivity;
+import com.pinthecloud.athere.activity.SquarePreviewActivity;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.exception.AhException;
@@ -128,7 +129,7 @@ public class AhIntentService extends IntentService {
 			// Is the Chupa App Running
 			String currentActivityName = getCurrentRunningActivityName(app);
 			messageHelper.triggerMessageEvent(currentActivityName, message);
-			if (!isActivityRunning(app, SquareActivity.class) && isChatEnable){
+			if (!(isActivityRunning(app, SquareActivity.class) || isActivityRunning(app, SquarePreviewActivity.class)) && isChatEnable){
 				// Is the User is Not in SquareActivity
 				alertNotification(AhMessage.TYPE.TALK);
 			}
