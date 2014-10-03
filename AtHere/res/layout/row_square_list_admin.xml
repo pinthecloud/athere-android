@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
@@ -8,12 +8,13 @@
         android:id="@+id/row_square_list_admin_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/launcher"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/square"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:src="@drawable/ground_premium_pic_default" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/row_square_list_admin_background"
         android:background="@drawable/groundlist_premium_bg"

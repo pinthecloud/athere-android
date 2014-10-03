@@ -37,8 +37,6 @@
     <string name="question">문의하기</string>
     <string name="share">공유하기</string>
     <string name="app_settings">앱설정</string>
-    <string name="facebook_login">페이스북으로 로그인 하기</string>
-    <string name="facebook_logout">로그아웃</string>
     <string name="refresh">새로고침</string>
     <string name="register_profile">프로필 등록하기</string>
     <string name="enter">입장하기</string>

@@ -264,6 +264,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
+						progressBar.setVisibility(View.GONE);
+						squareListView.setEnabled(true);
 						userDBHelper.addAllUsers(list);
 					}
 				});

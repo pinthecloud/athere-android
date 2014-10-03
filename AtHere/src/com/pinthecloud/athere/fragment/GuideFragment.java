@@ -82,6 +82,7 @@ public class GuideFragment extends AhFragment{
 		/*
 		 * Set login button
 		 */
+		loginButton.setBackgroundResource(R.drawable.guide_login_btn);
 		loginButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 		loginButton.setReadPermissions(Arrays.asList("user_birthday"));
 		loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {

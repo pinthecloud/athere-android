@@ -58,7 +58,7 @@ public class MemberGridAdapter extends ArrayAdapter<AhUser>{
 			 * Set UI component
 			 */
 			blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE,
-					user.getId(), R.drawable.launcher, profileImage, true);
+					user.getId(), R.drawable.ground_member_profile_default, profileImage, true);
 			nickName.setText(user.getNickName());
 			if(userHelper.isMyUser(user)){
 				myProfile.setVisibility(View.VISIBLE);

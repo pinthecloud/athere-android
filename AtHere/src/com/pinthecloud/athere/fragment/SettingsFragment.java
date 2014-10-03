@@ -97,7 +97,7 @@ public class SettingsFragment extends AhFragment{
 		/*
 		 * Set logout button
 		 */
-		logoutButton.setBackgroundResource(R.drawable.code_dialog_enter_btn);
+		logoutButton.setBackgroundResource(R.drawable.guide_logout_btn);
 		logoutButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
 		logoutButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
 
