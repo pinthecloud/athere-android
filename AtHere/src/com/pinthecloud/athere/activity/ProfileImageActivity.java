@@ -22,12 +22,6 @@ public class ProfileImageActivity extends AhActivity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_frame);
-
-		Log(thisActivity, "here");
-
-		/*
-		 * Set helper
-		 */
 		messageHelper = app.getMessageHelper();
 
 

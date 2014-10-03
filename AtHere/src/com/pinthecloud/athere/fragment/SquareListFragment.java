@@ -171,7 +171,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				 * If enough close to enter or it is super user, check code.
 				 * Otherwise, cannot enter.
 				 */
-				if(square.getDistance() <= square.getEntryRange() 
+				PreferenceHelper.getInstance().removePref(AhGlobalVariable.SUDO_KEY);
+				if(!square.isFar()
 						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
 
 					if(square.getCode().equals("")){
@@ -273,20 +274,15 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			public void doNext(AhFragment frag) {
 				if(!isPreview){
 					String enterMessage = getResources().getString(R.string.enter_square_message);
+					String greetingMessage = getResources().getString(R.string.greeting_sentence);
 					AhUser user = userHelper.getMyUserInfo();
 					AhMessage message = new AhMessage.Builder()
-					.setContent(" " + enterMessage)
+					.setContent(" " + enterMessage + "\n" + greetingMessage)
 					.setSender(user.getNickName())
 					.setSenderId(user.getId())
 					.setReceiverId(square.getId())
 					.setType(AhMessage.TYPE.ENTER_SQUARE).build();
-					messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-
-						@Override
-						public void onCompleted(AhMessage entity) {
-							// Do nothing
-						}
-					});
+					messageHelper.sendMessageAsync(frag, message, null);
 				} else{
 					AsyncChainer.notifyNext(frag);
 				}
@@ -360,6 +356,14 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 					public int compare(Square lhs, Square rhs) {
 						return lhs.isAdmin() == rhs.isAdmin() ? 0 : 
 							!lhs.isAdmin() ? 1 : -1;
+					}
+				});
+				Collections.sort(list, new Comparator<Square>(){
+
+					@Override
+					public int compare(Square lhs, Square rhs) {
+						return lhs.isFar() == rhs.isFar() ? 0 : 
+							lhs.isFar() ? 1 : -1;
 					}
 				});
 

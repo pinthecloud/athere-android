@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.activity.ChupaChatActivity;
 import com.pinthecloud.athere.activity.ProfileImageActivity;
 import com.pinthecloud.athere.activity.ProfileSettingsActivity;
 import com.pinthecloud.athere.activity.SettingsActivity;
@@ -30,10 +29,10 @@ import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.model.AppDrawerListItem;
 
 public class AppDrawerFragment extends AhFragment{
-
-	private final int QUESTION = 0;
+	
+	private final int SETTINGS = 0;
 	private final int SHARE = 1;
-	private final int SETTINGS = 2;
+	private final int QUESTION = 2;
 
 	private ImageView profileImageView;
 	private TextView nickNameText;
@@ -90,9 +89,7 @@ public class AppDrawerFragment extends AhFragment{
 
 					@Override
 					public void doPositiveThing(Bundle bundle) {
-						Intent intent = new Intent(context, ChupaChatActivity.class);
-						intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
-						context.startActivity(intent);
+						// Do noghing
 					}
 					@Override
 					public void doNegativeThing(Bundle bundle) {
@@ -155,9 +152,9 @@ public class AppDrawerFragment extends AhFragment{
 		 * Set list item
 		 */
 		ArrayList<AppDrawerListItem> items = new ArrayList<AppDrawerListItem>();
-		items.add(new AppDrawerListItem(R.drawable.drawer_request_ico, getResources().getString(R.string.question)));
-		items.add(new AppDrawerListItem(R.drawable.drawer_share_ico, getResources().getString(R.string.share)));
 		items.add(new AppDrawerListItem(R.drawable.drawer_setting_ico, getResources().getString(R.string.app_settings)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_share_ico, getResources().getString(R.string.share)));
+		items.add(new AppDrawerListItem(R.drawable.drawer_request_ico, getResources().getString(R.string.question)));
 		appDrawerListAdapter.addAll(items);
 
 		return view;
@@ -168,7 +165,7 @@ public class AppDrawerFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, profileImageView, true);
+				user.getId()+AhGlobalVariable.SMALL, R.drawable.profile_edit_profile_default_ico, profileImageView, true);
 	}
 
 

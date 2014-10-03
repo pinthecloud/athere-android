@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/chat_list_top_bottom_margin"
     android:paddingTop="@dimen/chat_list_top_bottom_margin" >
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:background="@drawable/ground_chat_notification_bg"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/chat_list_top_bottom_margin"
-        android:paddingTop="@dimen/chat_list_top_bottom_margin" >
+        android:paddingTop="@dimen/none" >
 
         <TextView
             android:id="@+id/row_chat_list_enter_exit_notification_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/square_chat_text"
-            android:textSize="@dimen/font_normal" />
+            android:textColor="@color/square_text"
+            android:textSize="@dimen/font_medium" />
 
         <TextView
             android:id="@+id/row_chat_list_enter_exit_notification_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/square_chat_text_light"
-            android:textSize="@dimen/font_normal" />
+            android:textSize="@dimen/font_medium" />
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

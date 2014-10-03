@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Default -->
-    <string name="app_name">chupa</string>
+    <string name="app_name">Chupa</string>
 
     <!-- Word -->
     <string name="drawer_open">사이드바 열기</string>
@@ -11,7 +11,6 @@
     <string name="icon">아이콘</string>
     <string name="profile_image">프로필 사진</string>
     <string name="profile_settings">프로필 설정</string>
-    <string name="my_profile">내 프로필</string>
     <string name="man">남</string>
     <string name="woman">여</string>
     <string name="delete">지우기</string>
@@ -29,7 +28,6 @@
     <string name="blank">없음</string>
     <string name="fail">취소</string>
     <string name="age">살</string>
-    <string name="person">명</string>
     <string name="admin">관리자</string>
     <string name="square">그라운드</string>
     <string name="guide">가이드</string>
@@ -63,11 +61,19 @@
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
     <string name="review_message">내가 자주가는 장소의 소식이 궁금하세요?\n\n추가를 원하시는 그라운드를 리뷰로 말씀해주세요.</string>
     <string name="no_today_message">나중에 할게요</string>
+<<<<<<< HEAD
     <string name="location_consent_message">추파는 위치정보를 사용하지만, 절대 수집하지 않아요.\n위치정보 사용에 동의하시면 위 버튼을 눌러주세요.</string>
     <string name="location_turn_on_message">위치 서비스를 켜주세요.</string>
     <string name="no_facebook_upload_message">추파는 어떠한 정보도 페이스북에 올리지 않아요.</string>
     <string name="birthday_access_message">나이를 위해 생일이 필요해요.</string>
     <string name="greeting_sentence">모두에게 인사를 건네보세요.</string>
+=======
+    <string name="location_consent_message">추파는 위치정보를 사용하지만, 절대 수집하지 않아요.\n위 버튼을 누르면 위치정보 사용에 동의하는 것이에요.</string>
+    <string name="location_turn_on_message">위치 서비스를 틀어주세요.</string>
+    <string name="no_facebook_upload_message">저희는 어떤 것도 페이스북에 올리지 않아요.</string>
+    <string name="birthday_access_message">나이 계산을 위해 생일이 필요해요.</string>
+    <string name="greeting_sentence">인사를 건네보세요.</string>
+>>>>>>> 2e92ae0def3d54409623dc5e4c23006fcc7335a8
     <string name="share_sentence">같이 추파 던질래요? 지금 같은 공간에 있는 사람들을 만날 수 있어요!\nwww.sendchupa.com</string>
     <string name="duplicated_nick_name_message">이미 사용되고 있는 닉네임이에요.\n다시 입력해주세요.</string>
     <string name="enter_nick_name_message">닉네임을 입력해주세요.</string>

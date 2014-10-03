@@ -36,10 +36,8 @@ public class BlobStorageHelper {
 		try {
 			account = CloudStorageAccount.parse(storageConnectionString);
 		} catch (InvalidKeyException e) {
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
 			ExceptionManager.fireException(new AhException(null, "BlobStorageHelper", AhException.TYPE.BLOB_STORAGE_ERROR));
 		}
 
@@ -116,13 +114,12 @@ public class BlobStorageHelper {
 			container = blobClient.getContainerReference(containerName);
 			blob = container.getBlockBlobReference(id);
 			blob.delete();
-			return true;
 		} catch (URISyntaxException e) {
 			ExceptionManager.fireException(new AhException(frag, "deleteBitmapSync", AhException.TYPE.BLOB_STORAGE_ERROR));
 		} catch (StorageException e) {
-			// Do nothing
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 
@@ -138,8 +135,9 @@ public class BlobStorageHelper {
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
-				if (callback != null)
+				if (callback != null){
 					callback.onCompleted(result);
+				}
 				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);
@@ -158,8 +156,9 @@ public class BlobStorageHelper {
 			@Override
 			protected void onPostExecute(Bitmap result) {
 				super.onPostExecute(result);
-				if (callback != null)
+				if (callback != null){
 					callback.onCompleted(result);
+				}
 				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);
@@ -178,9 +177,9 @@ public class BlobStorageHelper {
 			@Override
 			protected void onPostExecute(String result) {
 				super.onPostExecute(result);
-
-				if (callback != null)
+				if (callback != null){
 					callback.onCompleted(result);
+				}
 				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);
@@ -199,8 +198,9 @@ public class BlobStorageHelper {
 			@Override
 			protected void onPostExecute(Boolean result) {
 				super.onPostExecute(result);
-				if (callback != null)
+				if (callback != null){
 					callback.onCompleted(result);
+				}
 				AsyncChainer.notifyNext(frag);
 			}
 		}).execute(id);

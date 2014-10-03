@@ -1,20 +1,23 @@
 <resources>
 
     <!-- Common -->
-    <dimen name="line_height">1dp</dimen>
     <dimen name="none">0dp</dimen>
+    <dimen name="line_width">1dp</dimen>
+    <dimen name="line_thick_width">2dp</dimen>
     <dimen name="age_gender_margin">3dp</dimen>
+    <dimen name="content_divider_height">18dp</dimen>
 
     <!-- App Drawer -->
     <dimen name="app_drawer_offset">60dp</dimen>
     <dimen name="app_drawer_shadow_width">10dp</dimen>
     <dimen name="app_drawer_margin">20dp</dimen>
     <dimen name="app_drawer_profile_image">110dp</dimen>
-    
+
     <!-- Guide -->
     <dimen name="guide_indicator_radious">5dp</dimen>
-    <dimen name="guide_login_margin">10dp</dimen>
-    
+    <dimen name="guide_login_layout_margin">30dp</dimen>
+    <dimen name="guide_login_button_margin">10dp</dimen>
+
     <!-- Basic Profile -->
     <dimen name="basic_profile_profile_image_size">200dp</dimen>
     <dimen name="basic_profile_margin">18dp</dimen>
@@ -42,27 +45,25 @@
     <dimen name="chat_list_progress_width">14dp</dimen>
     <dimen name="chat_list_progress_height">14dp</dimen>
 
+    <!-- Member -->
+    <dimen name="member_grid_profile_margin">10dp</dimen>
+    <dimen name="member_grid_margin">5dp</dimen>
+    
     <!-- Chupa chat -->
-    <dimen name="chupa_chat_other_bar_height">56dp</dimen>
-    <dimen name="chupa_chat_other_bar_left_margin">20dp</dimen>
-    <dimen name="chupa_chat_other_profile_nick_margin">13.5dp</dimen>
-    <dimen name="chupa_chat_other_nick_name_gender_margin">8dp</dimen>
-    <dimen name="chupa_chat_profile_company_num_height">27dp</dimen>
-    <dimen name="chupa_chat_other_gender_company_number_margin">3.5dp</dimen>
-    <dimen name="chupa_chat_other_profile_width">38dp</dimen>
-    <dimen name="chupa_chat_other_profile_height">38dp</dimen>
+    <dimen name="chupa_chat_other_bar_left_right_margin">20dp</dimen>
+    <dimen name="chupa_chat_other_profile_nick_name_margin">13.5dp</dimen>
+    <dimen name="chupa_chat_other_profile_width">48dp</dimen>
+    <dimen name="chupa_chat_other_profile_height">48dp</dimen>
 
     <!-- Square list -->
-    <dimen name="square_list_distance_line_height">18dp</dimen>
     <dimen name="square_list_margin">10dp</dimen>
 
     <!-- Chupa list -->
     <dimen name="chupa_list_height">88dp</dimen>
-    <dimen name="chupa_list_profile_width">70dp</dimen>
-    <dimen name="chupa_list_profile_height">70dp</dimen>
-    <dimen name="chupa_list_profile_left_margin">18dp</dimen>
-    <dimen name="chupa_list_profile_text_margin">16dp</dimen>
-    <dimen name="chupa_list_time_right_margin">18dp</dimen>
+    <dimen name="chupa_list_profile_image">60dp</dimen>
+    <dimen name="chupa_list_left_right_margin">18dp</dimen>
+    <dimen name="chupa_list_top_bottom_margin">8dp</dimen>
+    <dimen name="chupa_list_profile_image_content_margin">16dp</dimen>
     <dimen name="chupa_list_content_margin">5dp</dimen>
 
     <!-- Profile Settings -->

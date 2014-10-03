@@ -186,7 +186,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 				 * Find UI component only in receive list
 				 */
 				TextView timeText = (TextView)view.findViewById(R.id.row_chat_list_receive_time);
-				TextView nickNameText = (TextView)view.findViewById(R.id.row_chat_list_receive_nick_name);
+				TextView nickNameText = (TextView)view.findViewById(R.id.row_chat_list_receive_nick_name_gender);
 				ImageView profileImage = (ImageView)view.findViewById(R.id.row_chat_list_receive_profile_image);
 
 
@@ -228,7 +228,7 @@ public class ChatListAdapter extends ArrayAdapter<AhMessage> {
 										"ChatSendChupa");
 
 								Intent intent = new Intent(context, ChupaChatActivity.class);
-								intent.putExtra(AhGlobalVariable.USER_KEY, user.getId());
+								intent.putExtra(AhGlobalVariable.USER_KEY, user);
 								context.startActivity(intent);
 							}
 							@Override

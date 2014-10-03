@@ -27,18 +27,18 @@ public class Square implements Parcelable {
 	@com.google.gson.annotations.SerializedName("resetTime")
 	private int resetTime;
 	@com.google.gson.annotations.SerializedName("showRange")
-	private int showRange;
+	private int showRange = Integer.MAX_VALUE;
 	@com.google.gson.annotations.SerializedName("entryRange")
 	private int entryRange;
 
-	
+
 	public Square(){
 	}
 	public Square(Parcel in){
 		readToParcel(in);
 	}
-	
-	
+
+
 	public String getId() {
 		return id;
 	}
@@ -118,7 +118,12 @@ public class Square implements Parcelable {
 		this.entryRange = entryRange;
 	}
 
-	
+
+	public boolean isFar(){
+		return distance > entryRange;
+	}
+
+
 	/*
 	 * Parcelable
 	 */
@@ -130,7 +135,7 @@ public class Square implements Parcelable {
 			return new Square[size];
 		}
 	};
-	
+
 	@Override
 	public int describeContents() {
 		return 0;

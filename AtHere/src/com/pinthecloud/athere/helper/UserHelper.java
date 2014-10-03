@@ -61,6 +61,10 @@ public class UserHelper {
 		this.squareUserTable = mClient.getTable(SquareUser.class);
 	}
 
+
+	/*
+	 * Preference
+	 */
 	public boolean isLoggedInUser() {
 		return pref.getBoolean(IS_LOGGED_IN_USER_KEY);
 	}
@@ -75,6 +79,11 @@ public class UserHelper {
 		pref.putBoolean(IS_CHAT_ENABLE_KEY, isChatEnable);
 		return this;
 	}
+
+
+	/*
+	 * Model variables
+	 */
 	public UserHelper setMyAhId(String ahId) {
 		pref.putString(AH_ID_KEY, ahId);
 		return this;
@@ -108,11 +117,16 @@ public class UserHelper {
 	public UserHelper setMyNickName(String nickName) {
 		pref.putString(NICK_NAME_KEY, nickName);
 		return this;
-	}public UserHelper setMyChupaEnable(boolean isChupaEnable) {
+	}
+	public UserHelper setMyChupaEnable(boolean isChupaEnable) {
 		pref.putBoolean(IS_CHUPA_ENABLE_KEY, isChupaEnable);
 		return this;
 	}
 
+
+	/*
+	 * Methods
+	 */
 	public void addUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "addUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
@@ -124,6 +138,9 @@ public class UserHelper {
 			@Override
 			public void onCompleted(AhUser entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
+					if (callback != null){
+						callback.onCompleted(entity);
+					}
 					callback.onCompleted(entity);
 					AsyncChainer.notifyNext(frag);
 				} else {
@@ -148,8 +165,9 @@ public class UserHelper {
 			@Override
 			public void onCompleted(SquareUser entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
-					if (callback != null)
+					if (callback != null){
 						callback.onCompleted(entity);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "addSquareUserAsync", AhException.TYPE.SERVER_ERROR));
@@ -232,17 +250,16 @@ public class UserHelper {
 			return;
 		}
 
-		user.setRegistrationId("");
-		user.setProfilePic("");
 		JsonElement json = user.toJson();
-
 		mClient.invokeApi(EXIT_SQUARE, json, new ApiJsonOperationCallback() {
 
 			@Override
 			public void onCompleted(JsonElement _json, Exception exception,
 					ServiceFilterResponse response) {
 				if (exception == null) {
-					callback.onCompleted(true);
+					if(callback != null){
+						callback.onCompleted(true);	
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "exitSquareAsync", AhException.TYPE.SERVER_ERROR));
@@ -263,7 +280,9 @@ public class UserHelper {
 			public void onCompleted(List<AhUser> result, int count, Exception exception,
 					ServiceFilterResponse reponse) {
 				if (exception == null) {
-					callback.onCompleted(result, count);
+					if(callback != null){
+						callback.onCompleted(result, count);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "getUserListAsync", AhException.TYPE.SERVER_ERROR));
@@ -293,8 +312,12 @@ public class UserHelper {
 		});
 	}
 
-	public void updateUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback){
+	public void updateMyUserAsync(final AhFragment frag, AhEntityCallback<AhUser> callback){
+		AhUser user = this.getMyUserInfo();
+		this.updateUserAsync(frag, user, callback);
+	}
 
+	public void updateUserAsync(final AhFragment frag, AhUser user, final AhEntityCallback<AhUser> callback){
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -306,7 +329,9 @@ public class UserHelper {
 			public void onCompleted(AhUser entity, Exception exception,
 					ServiceFilterResponse response) {
 				if (exception == null) {
-					callback.onCompleted(entity);
+					if (callback != null){
+						callback.onCompleted(entity);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "updateUserAsync", AhException.TYPE.SERVER_ERROR));
@@ -315,11 +340,43 @@ public class UserHelper {
 		});
 	}
 
-	public void updateMyUserAsync(final AhFragment frag, AhEntityCallback<AhUser> callback){
-		AhUser user = this.getMyUserInfo();
-		this.updateUserAsync(frag, user, callback);
+	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
+		if (!app.isOnline()) {
+			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
+			return;
+		}
+
+		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
+
+			@Override
+			protected String doInBackground(GoogleCloudMessaging... params) {
+				GoogleCloudMessaging gcm = params[0];
+				try {
+					return gcm.register(frag.getResources().getString(R.string.gcm_sender_id));
+				} catch (IOException e) {
+					return null;
+				}
+			}
+
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				if (result != null) {
+					if (callback != null){
+						callback.onCompleted(result);
+					}
+					AsyncChainer.notifyNext(frag);
+				} else {
+					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
+				}
+			}
+		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
 	}
 
+
+	/*
+	 * Get User information from preference
+	 */
 	public AhUser getAdminUser(String id) {
 		AhUser user = new AhUser();
 		user.setId(id);
@@ -360,7 +417,6 @@ public class UserHelper {
 
 	public void removeMySquareUserInfo() {
 		pref.removePref(IS_CHAT_ENABLE_KEY);
-		pref.removePref(IS_CHUPA_ENABLE_KEY);
 	}
 
 	public void removeMyUserInfo() {
@@ -373,37 +429,14 @@ public class UserHelper {
 		pref.removePref(IS_LOGGED_IN_USER_KEY);
 	}
 
-	public void getRegistrationIdAsync(final AhFragment frag, final AhEntityCallback<String> callback) {
-		if (!app.isOnline()) {
-			ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
-			return;
-		}
-
-		(new AsyncTask<GoogleCloudMessaging, Void, String>() {
-
-			@Override
-			protected String doInBackground(GoogleCloudMessaging... params) {
-				GoogleCloudMessaging gcm = params[0];
-				try {
-					return gcm.register(AhGlobalVariable.GCM_SENDER_ID);
-				} catch (IOException e) {
-					return null;
-				}
-			}
-
-			@Override
-			protected void onPostExecute(String result) {
-				super.onPostExecute(result);
-				if (result != null) {
-					callback.onCompleted(result);
-					AsyncChainer.notifyNext(frag);
-				} else {
-					ExceptionManager.fireException(new AhException(frag, "getRegistrationIdAsync", AhException.TYPE.GCM_REGISTRATION_FAIL));
-				}
-			}
-		}).execute(GoogleCloudMessaging.getInstance(frag.getActivity()));
+	public boolean isMyUser(AhUser user){
+		return user.getId().equals(getMyUserInfo().getId());
 	}
 
+	
+	/*
+	 * callback for message
+	 */
 	private AhEntityCallback<AhUser> _callback;
 	public void setUserHandler(AhEntityCallback<AhUser> callback){
 		_callback = callback;

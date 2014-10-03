@@ -86,7 +86,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				+ NICK_NAME + " TEXT,"
 				+ IS_CHUPA_ENABLE + " INTEGER,"
 				+ COMPANY_NUM + " INTEGER,"
-
 				+ HAS_BEEN_OUT + " INTEGER"
 				+")";
 		db.execSQL(CREATE_TABLE);
@@ -120,23 +119,19 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 	}
 
-	
+
 	/**
 	 * All CRUD(Create, Read, Update, Delete) Operations
 	 */
 
 	// Adding new contact
 	public void addUser(AhUser user) {
-
 		if (user == null) return;
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDatabase("addUser");
-
 		ContentValues values = setAndGetValue(user);
 
 		// Inserting Row
 		db.insert(TABLE_NAME, null, values);
-		//		db.close(); // Closing database connection
 		this.closeDatabase("addUser");
 	}
 
@@ -155,7 +150,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		//		db.close(); // Closing database connection
 		this.closeDatabase("addAllUsers");
 	}
-	
+
 	private ContentValues setAndGetValue(AhUser user) {
 		ContentValues values = new ContentValues();
 		values.put(ID, user.getId());
@@ -169,16 +164,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		values.put(NICK_NAME, user.getNickName());
 		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
 		values.put(COMPANY_NUM, user.getCompanyNum());
-
 		values.put(HAS_BEEN_OUT, false);
 		return values;
 	}
 
-	// Getting single contact
-	public AhUser getUser(String id) {
-		return this.getUser(id, false);
-	}
 
+	// Getting single contact
 	public synchronized AhUser getUser(String id, boolean includingExits){
 		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("getUser(String id, boolean includingExits)");
@@ -204,26 +195,23 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	public boolean isUserExist(String userId){
 		boolean isExist = false;
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("isUserExist");
-
 		Cursor cursor = db.query(TABLE_NAME, null, ID + "=?",
 				new String[] { userId }, null, null, null, null);
 		if (cursor != null) {
 			isExist = cursor.moveToFirst();
 		}
-
 		this.closeDatabase("isUserExist");
 		return isExist;
 	}
 
 	public synchronized boolean isUserExit(String userId) {
 		boolean isExit = false;
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("isUserExit(String userId)");
 
 		Cursor cursor = db.query(TABLE_NAME, new String[]{ HAS_BEEN_OUT }, ID + "=?",
 				new String[] { userId }, null, null, null, null);
+
 		if (cursor != null && cursor.moveToFirst()) {
 			if (cursor.getInt(0) == 1){
 				isExit = true;
@@ -238,18 +226,15 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	public void addIfNotExistOrUpdate(AhUser user){
 		if (user == null) return;
-
-		if (this.isUserExist(user.getId()))
+		if (this.isUserExist(user.getId())){
 			this.updateUser(user);
-		else 
+		}
+		else {
 			this.addUser(user);
+		}
 	}
 
 	// Getting All Contacts
-	public List<AhUser> getAllUsers() {
-		return this.getAllUsers(false);
-	}
-
 	public List<AhUser> getAllUsers(boolean includingExits) {
 		List<AhUser> users = new ArrayList<AhUser>();
 
@@ -279,8 +264,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	// Updating single contact
 	public void updateUser(AhUser user) {
 		if (user == null) return;
-
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDatabase("updateUser");
 		ContentValues values = setAndGetValue(user);
 
@@ -298,13 +281,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
 	public void exitUser(String id) {
 		if (id == null || id.equals("")) return;
-
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDatabase("exitUser(String id)");
-
 		ContentValues values = new ContentValues();
 		values.put(HAS_BEEN_OUT, true);
-		
+
 		// Inserting Row
 		db.update(TABLE_NAME, values, ID + "=?", new String[] { id });
 		this.closeDatabase("exitUser(String id)");
@@ -321,7 +301,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		db.delete(TABLE_NAME, null, null);
 		this.closeDatabase("deleteAllUsers");
 	}
-	
+
 	private AhUser convertToUser(Cursor cursor) {
 		AhUser user = new AhUser();
 		String _id = cursor.getString(0);
@@ -347,7 +327,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		user.setNickName(nickName);
 		user.setChupaEnable(chupaEnable);		
 		user.setCompanyNum(companyNum);
-		
+
 		return user;
 	}
 }

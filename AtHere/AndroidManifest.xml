@@ -105,11 +105,16 @@
             android:theme="@style/AppRedActionBarTheme" />
         <activity
             android:name=".activity.SettingsActivity"
+            android:icon="@drawable/transparent"
             android:label="@string/app_settings"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppRedActionBarTheme" />
         <activity
             android:name=".activity.ChupaChatActivity"
+            android:icon="@drawable/transparent"
+            android:label="@string/chupa"
             android:screenOrientation="portrait"
+            android:theme="@style/AppRedActionBarTheme"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -109,6 +109,8 @@ public class AhUser implements Parcelable{
 	public void setCompanyNum(int companyNum) {
 		this.companyNum = companyNum;
 	}
+	
+	
 	public int getAge() {
 		Calendar c = Calendar.getInstance();
 		return c.get(Calendar.YEAR) - (getBirthYear() - 1);

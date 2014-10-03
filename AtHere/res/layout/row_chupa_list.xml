@@ -1,85 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/chupa_list_height"
-    android:background="@drawable/list_white_selector_bg"
-    android:orientation="vertical" >
+    android:paddingBottom="@dimen/chupa_list_top_bottom_margin"
+    android:paddingEnd="@dimen/chupa_list_left_right_margin"
+    android:paddingLeft="@dimen/chupa_list_left_right_margin"
+    android:paddingRight="@dimen/chupa_list_left_right_margin"
+    android:paddingStart="@dimen/chupa_list_left_right_margin"
+    android:paddingTop="@dimen/chupa_list_top_bottom_margin" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingEnd="0dp"
-        android:paddingLeft="@dimen/chupa_list_profile_left_margin"
-        android:paddingRight="0dp"
-        android:paddingStart="@dimen/chupa_list_profile_left_margin" >
+    <com.pinthecloud.athere.view.CircleImageView
+        android:id="@+id/row_chupa_list_profile_image"
+        android:layout_width="@dimen/chupa_list_profile_image"
+        android:layout_height="@dimen/chupa_list_profile_image"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/chat_list_receive_profile_image_content_margin"
+        android:layout_marginRight="@dimen/chat_list_receive_profile_image_content_margin"
+        app:civBorderColor="@color/divider"
+        app:civBorderWidth="@dimen/line_width" />
 
-        <ImageView
-            android:id="@+id/chupa_list_profile_pic"
-            android:layout_width="@dimen/chupa_list_profile_width"
-            android:layout_height="@dimen/chupa_list_profile_height"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/profile_image" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/chupa_list_profile_image_content_margin"
+        android:layout_marginStart="@dimen/chupa_list_profile_image_content_margin"
+        android:layout_toEndOf="@+id/row_chupa_list_profile_image"
+        android:layout_toRightOf="@+id/row_chupa_list_profile_image"
+        android:orientation="vertical" >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/row_chupa_list_sender"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/chupa_list_profile_text_margin"
-            android:layout_marginStart="@dimen/chupa_list_profile_text_margin"
-            android:layout_toEndOf="@+id/chupa_list_profile_pic"
-            android:layout_toRightOf="@+id/chupa_list_profile_pic"
-            android:orientation="vertical" >
+            android:layout_marginBottom="@dimen/chupa_list_content_margin"
+            android:singleLine="true"
+            android:textColor="@color/chupa_list_text"
+            android:textSize="@dimen/font_large" />
 
-            <TextView
-                android:id="@+id/chupa_list_sender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/chupa_list_content_margin"
-                android:singleLine="true"
-                android:textSize="@dimen/font_large" />
-
-            <TextView
-                android:id="@+id/chupa_list_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textSize="@dimen/font_small" />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/row_chupa_list_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/chupa_list_time_right_margin"
-            android:layout_marginRight="@dimen/chupa_list_time_right_margin"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/chupa_list_timestamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/chupa_list_content_margin"
-                android:textColor="@color/gray_light"
-                android:textSize="@dimen/font_small" />
-
-            <TextView
-                android:id="@+id/chupa_list_badge_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@color/red_woman"
-                android:textSize="@dimen/font_medium"
-                android:visibility="invisible" />
-        </LinearLayout>
-    </RelativeLayout>
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/chupa_list_text"
+            android:textSize="@dimen/font_normal" />
+    </LinearLayout>
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:background="@color/gray_line" />
+        android:layout_width="@dimen/line_width"
+        android:layout_height="@dimen/content_divider_height"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/row_chupa_list_time_layout"
+        android:layout_toStartOf="@+id/row_chupa_list_time_layout"
+        android:background="@color/divider" />
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/row_chupa_list_time_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/chupa_list_left_right_margin"
+        android:layout_marginStart="@dimen/chupa_list_left_right_margin"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/row_chupa_list_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/chupa_list_content_margin"
+            android:textColor="@color/chupa_list_time"
+            android:textSize="@dimen/font_medium" />
+
+        <TextView
+            android:id="@+id/row_chupa_list_badge_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/chupalist_badge_bg"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/font_medium"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+</RelativeLayout>

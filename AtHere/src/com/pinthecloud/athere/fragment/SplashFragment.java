@@ -168,7 +168,6 @@ public class SplashFragment extends AhFragment {
 
 			@Override
 			public void doNext(AhFragment frag) {
-
 				versionHelper.getServerAppVersionAsync(frag, new AhEntityCallback<AppVersion>() {
 
 					@Override

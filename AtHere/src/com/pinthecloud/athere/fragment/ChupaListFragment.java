@@ -56,8 +56,9 @@ public class ChupaListFragment extends AhFragment{
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				AhUser user = userDBHelper.getUser(squareChupaListAdapter.getItem(position).getUserId(), true);
 				Intent intent = new Intent(activity, ChupaChatActivity.class);
-				intent.putExtra(AhGlobalVariable.USER_KEY, squareChupaListAdapter.getItem(position).getUserId());
+				intent.putExtra(AhGlobalVariable.USER_KEY, user);
 				startActivity(intent);
 			}
 		});
@@ -86,21 +87,25 @@ public class ChupaListFragment extends AhFragment{
 
 
 	private void refreshView() {
-		/*
-		 * Set square chupa list view
-		 */
+
 		final List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
+				// Set square chupa list view
 				squareChupaListAdapter.clear();
 				squareChupaListAdapter.addAll(convertToMap(lastChupaList));
+				
+				// If there is no message, show blank image
 				if(squareChupaListAdapter.getCount() < 1){
 					blankImage.setVisibility(View.VISIBLE);
 				} else{
 					blankImage.setVisibility(View.GONE);
 				}
+				
+				// Refresh square activity action bar notification item
+				activity.invalidateOptionsMenu();
 			}
 		});
 	}
@@ -111,27 +116,19 @@ public class ChupaListFragment extends AhFragment{
 		for(AhMessage message : lastChupaList){
 			Chupa chupa = new Chupa();
 
-			String userId = null;
-			boolean isExit = false;
-
+			String otherUserId = null;
 			if (message.isMine()) {
 				// the other user is Receiver
-				userId = message.getReceiverId();
+				otherUserId = message.getReceiverId();
 			} else {
 				// the other user is Sender
-				userId = message.getSenderId();
+				otherUserId = message.getSenderId();
 			}
 
-			chupa.setUserId(userId);
-			AhUser user = userDBHelper.getUser(userId, true);
-			chupa.setUserNickName(user != null ? user.getNickName() : "Unkown");
-
-			// check whether it is exited.
-			if (userDBHelper.isUserExit(userId)) {
-				isExit = true;
-			}
-			chupa.setExit(isExit);
-
+			AhUser otherUser = userDBHelper.getUser(otherUserId, true);
+			chupa.setUserId(otherUserId);
+			chupa.setUserNickName(otherUser != null ? otherUser.getNickName() : "Unkown");
+			chupa.setExit(userDBHelper.isUserExit(otherUserId));
 			chupa.setContent(message.getContent());
 			chupa.setTimeStamp(message.getTimeStamp());
 			chupa.setId(message.getChupaCommunId());

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/menu_notification"
+        android:id="@+id/square_list_menu_notification"
         android:icon="@drawable/actionbar_red_chupalist_btn"
         android:title="@string/notification"
         android:showAsAction="always" />

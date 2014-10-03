@@ -10,17 +10,24 @@ import android.view.View;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.pinthecloud.athere.R;
+import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.fragment.AppDrawerFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
+import com.pinthecloud.athere.helper.MessageHelper;
+import com.pinthecloud.athere.interfaces.AhEntityCallback;
+import com.pinthecloud.athere.model.AhMessage;
 
 
 public class SquareListActivity extends AhActivity {
 
 	private DrawerLayout mDrawerLayout; 
 	private View mFragmentView;
-	private ChupaListFragment mChupaListFragment;
+	private ChupaListFragment chupaListFragment;
 	private SlidingMenu slidingMenu;
+
+	private MessageHelper messageHelper;
+	private MessageDBHelper messageDBHelper;
 
 
 	@Override
@@ -30,13 +37,15 @@ public class SquareListActivity extends AhActivity {
 
 
 		/*
-		 * Set UI Component and drawer
+		 * Set UI Component and drawer and helper
 		 */
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_list_drawer_layout);
 		mFragmentView = findViewById(R.id.square_list_notification_drawer_fragment);
 		FragmentManager fragmentManager = getFragmentManager();
-		mChupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
-		mChupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_red_drawer_btn);
+		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
+		chupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_red_drawer_btn);
+		messageHelper = app.getMessageHelper();
+		messageDBHelper = app.getMessageDBHelper();
 
 
 		/*
@@ -62,34 +71,61 @@ public class SquareListActivity extends AhActivity {
 		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
 		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
 		fragmentTransaction.commit();
+
+
+		/*
+		 * Set Handler for forced logout
+		 */
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+
+			@Override
+			public void onCompleted(AhMessage message) {
+				messageHelper.triggerMessageEvent(chupaListFragment, message);
+			}
+		});
 	}
-	
-	
+
+
 	@Override
 	public void onBackPressed() {
 		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 			mDrawerLayout.closeDrawer(mFragmentView);
 			return;
 		}
-		
+
 		if(slidingMenu.isMenuShowing()){
 			slidingMenu.toggle();
 			return;
 		}
-		
+
 		super.onBackPressed();
 	}
 
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.square_list, menu);
-		return super.onCreateOptionsMenu(menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		MenuItem menuItem = menu.findItem(R.id.square_list_menu_notification);
+		if(messageDBHelper.getAllChupaBadgeNum() > 0){
+			menuItem.setIcon(R.drawable.actionbar_red_chupalist_highlight_btn);
+		}else{
+			menuItem.setIcon(R.drawable.actionbar_red_chupalist_btn);
+		}
+		return true;
 	}
 
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
@@ -97,15 +133,15 @@ public class SquareListActivity extends AhActivity {
 			}else{
 				slidingMenu.toggle();
 			}
-			return true;
-		case R.id.menu_notification:
+			break;
+		case R.id.square_list_menu_notification:
 			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
 				mDrawerLayout.closeDrawer(mFragmentView);
 			}else{
 				mDrawerLayout.openDrawer(mFragmentView);
 			}
-			return true;
+			break;
 		}
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 }

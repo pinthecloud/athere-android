@@ -42,7 +42,7 @@ public class AhAlertListDialog extends AhDialogFragment{
 			}
 		});
 		AlertDialog alertDialog = altBuilder.create();
-		alertDialog.setCanceledOnTouchOutside(true);
+		//		alertDialog.setCanceledOnTouchOutside(true);
 		return alertDialog;
 	}
 }

@@ -89,7 +89,7 @@ public class ProfileDialog extends AhDialogFragment{
 				dismiss();
 			}
 		});
-		if(user.getId().equals(userHelper.getMyUserInfo().getId()) || squareHelper.isPreview()){
+		if(userHelper.isMyUser(user) || squareHelper.isPreview()){
 			sendChupaLayout.setVisibility(View.GONE);
 		}
 

@@ -3,78 +3,64 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/chupa_chat_list_bg"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/chupa_chat_other_bar_height"
-        android:background="@android:color/white"
-        android:gravity="start|center"
-        android:orientation="horizontal"
-        android:paddingEnd="0dp"
-        android:paddingLeft="@dimen/chupa_chat_other_bar_left_margin"
-        android:paddingRight="0dp"
-        android:paddingStart="@dimen/chupa_chat_other_bar_left_margin" >
+        android:layout_height="wrap_content"
+        android:background="@drawable/chupa_chat_other_bar_bg"
+        android:paddingEnd="@dimen/chupa_chat_other_bar_left_right_margin"
+        android:paddingLeft="@dimen/chupa_chat_other_bar_left_right_margin"
+        android:paddingRight="@dimen/chupa_chat_other_bar_left_right_margin"
+        android:paddingStart="@dimen/chupa_chat_other_bar_left_right_margin" >
 
         <com.pinthecloud.athere.view.CircleImageView
             android:id="@+id/chupa_chat_frag_other_profile"
             android:layout_width="@dimen/chupa_chat_other_profile_width"
             android:layout_height="@dimen/chupa_chat_other_profile_height"
-            android:layout_marginEnd="@dimen/chupa_chat_other_profile_nick_margin"
-            android:layout_marginRight="@dimen/chupa_chat_other_profile_nick_margin"
-            app:civBorderColor="@color/gray_line"
-            app:civBorderWidth="@dimen/line_height" />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/chupa_chat_other_profile_nick_name_margin"
+            android:layout_marginRight="@dimen/chupa_chat_other_profile_nick_name_margin"
+            app:civBorderColor="@color/divider"
+            app:civBorderWidth="@dimen/line_width" />
 
         <TextView
             android:id="@+id/chupa_chat_frag_other_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/chupa_chat_other_nick_name_gender_margin"
-            android:layout_marginRight="@dimen/chupa_chat_other_nick_name_gender_margin"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/chupa_chat_frag_other_profile"
+            android:layout_toRightOf="@+id/chupa_chat_frag_other_profile"
+            android:textColor="@color/chupa_chat_nick_name"
             android:textSize="@dimen/font_large" />
-
-        <TextView
-            android:id="@+id/chupa_chat_frag_other_age"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/age_gender_margin"
-            android:layout_marginRight="@dimen/age_gender_margin"
-            android:textSize="@dimen/font_medium" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/chupa_chat_profile_company_num_height"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/chupa_chat_partner_profile_info"
             android:gravity="center"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/chupa_chat_frag_other_gender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/chupa_chat_other_gender_company_number_margin"
-                android:layout_marginRight="@dimen/chupa_chat_other_gender_company_number_margin"
-                android:contentDescription="@string/gender" />
+            android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/chupa_chat_frag_other_company_number"
+                android:id="@+id/chupa_chat_frag_other_age_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_medium" />
+                android:drawablePadding="@dimen/age_gender_margin"
+                android:gravity="center"
+                android:textColor="@color/chupa_chat_age"
+                android:textSize="@dimen/font_normal" />
         </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:layout_gravity="center"
-        android:background="@color/gray_line" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/chupa_chat_frag_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/chat_list_bg"
         android:divider="@null"
         android:transcriptMode="alwaysScroll" />
 
@@ -104,7 +90,7 @@
             android:paddingLeft="@dimen/chat_inputbar_margin"
             android:paddingRight="@dimen/chat_inputbar_margin"
             android:paddingStart="@dimen/chat_inputbar_margin"
-            android:textColor="@color/square_chat_text"
+            android:textColor="@color/square_text"
             android:textSize="@dimen/font_large" >
 
             <requestFocus />

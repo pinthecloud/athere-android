@@ -50,7 +50,7 @@ public class GuideImageFragment extends AhFragment{
 	@Override 
 	public void onSaveInstanceState(Bundle outState) {
 		//first saving my state, so the bundle wont be empty.
-		outState.putString("VIEWPAGER_BUG",  "VIEWPAGER_FIX");
+		outState.putString("VIEWPAGER_BUG_FIX",  "VIEWPAGER_BUG_FIX");
 		super.onSaveInstanceState(outState);
 	}
 }

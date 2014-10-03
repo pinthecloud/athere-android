@@ -31,7 +31,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.dialog.AhAlertListDialog;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.model.AhMessage;
 import com.pinthecloud.athere.model.AhUser;
 import com.pinthecloud.athere.util.AsyncChainer;
@@ -241,13 +240,7 @@ public class ProfileSettingsFragment extends AhFragment{
 					@Override
 					public void doNext(AhFragment frag) {
 						userHelper.setMyNickName(nickName);
-						userHelper.updateMyUserAsync(frag, new AhEntityCallback<AhUser>() {
-
-							@Override
-							public void onCompleted(AhUser entity) {
-								// Do nothing
-							}
-						});
+						userHelper.updateMyUserAsync(frag, null);
 					}
 				}, new Chainable() {
 
@@ -270,13 +263,7 @@ public class ProfileSettingsFragment extends AhFragment{
 							.setSenderId(user.getId())
 							.setReceiverId(squareHelper.getMySquareInfo().getId())
 							.setType(AhMessage.TYPE.UPDATE_USER_INFO).build();
-							messageHelper.sendMessageAsync(frag, message, new AhEntityCallback<AhMessage>() {
-
-								@Override
-								public void onCompleted(AhMessage entity) {
-									// Do nothing
-								}
-							});
+							messageHelper.sendMessageAsync(frag, message, null);
 						} else{
 							AsyncChainer.notifyNext(frag);
 						}

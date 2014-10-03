@@ -193,7 +193,7 @@ public class BasicProfileFragment extends AhFragment{
 
 			@Override
 			public void onClick(View v) {
-				String nickName = nickNameEditText.getText().toString().trim();
+				final String nickName = nickNameEditText.getText().toString().trim();
 				nickNameEditText.setText(nickName);
 				nickNameEditText.setSelection(nickName.length());
 
@@ -222,14 +222,14 @@ public class BasicProfileFragment extends AhFragment{
 				startButton.setEnabled(false);
 				nickNameWarningText.setText("");
 
-				userHelper.setMyNickName(nickName)
-				.setMyChupaEnable(true);
-
 				AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
 					@Override
 					public void doNext(AhFragment frag) {
 						// Get a user object from preference and Add the user
+						userHelper.setMyNickName(nickName)
+						.setMyChupaEnable(true);
+
 						AhUser user = userHelper.getMyUserInfo();
 						userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
 
@@ -355,9 +355,9 @@ public class BasicProfileFragment extends AhFragment{
 				int width = profileImageBitmap.getWidth();
 				int height = profileImageBitmap.getHeight();
 				if(height < width){
-					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, height, height);
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, width/2-height/2, 0, height, height);
 				} else{
-					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, 0, width, width);
+					profileImageBitmap = BitmapUtil.crop(profileImageBitmap, 0, height/2-width/2, width, width);
 				}
 
 				int degree = BitmapUtil.getImageOrientation(imagePath);

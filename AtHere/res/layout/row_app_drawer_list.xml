@@ -23,11 +23,4 @@
         android:textColor="@color/app_drawer_profile_text"
         android:textSize="@dimen/font_large" />
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_height"
-        android:layout_alignParentBottom="true"
-        android:background="@color/app_drawer_line" />
-
 </RelativeLayout>

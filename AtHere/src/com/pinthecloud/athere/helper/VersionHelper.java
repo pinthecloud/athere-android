@@ -44,7 +44,9 @@ public class VersionHelper {
 			@Override
 			public void onCompleted(AppVersion entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
-					callback.onCompleted(entity);
+					if (callback != null){
+						callback.onCompleted(entity);
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.SERVER_ERROR));
@@ -67,7 +69,9 @@ public class VersionHelper {
 					ServiceFilterResponse response) {
 				if(exception == null){
 					if (list.size() == 1) {
-						callback.onCompleted(list.get(0));
+						if(callback != null){
+							callback.onCompleted(list.get(0));
+						}
 						AsyncChainer.notifyNext(frag);
 					} else {
 						ExceptionManager.fireException(new AhException(frag, "getServerAppVersionAsync", AhException.TYPE.SERVER_ERROR));

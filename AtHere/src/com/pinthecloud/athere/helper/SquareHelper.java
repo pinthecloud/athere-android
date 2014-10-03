@@ -157,7 +157,7 @@ public class SquareHelper {
 
 
 	public void createSquareAsync(final AhFragment frag, String name, String whoMade, double latitude, double longitude, boolean isAdmin, 
-			String code, int showRange, int entryRange, int resetTime, final AhEntityCallback<Square> callback) throws AhException {
+			String code, int entryRange, int resetTime, final AhEntityCallback<Square> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -165,12 +165,11 @@ public class SquareHelper {
 
 		Square square = new Square();
 		square.setName(name);
+		square.setWhoMade(whoMade);
 		square.setLatitude(latitude);
 		square.setLongitude(longitude);
-		square.setWhoMade(whoMade);
 		square.setCode(code);
 		square.setAdmin(isAdmin);
-		square.setShowRange(showRange);
 		square.setEntryRange(entryRange);
 		square.setResetTime(resetTime);
 		square.setMaleNum(0);
@@ -180,7 +179,9 @@ public class SquareHelper {
 
 			public void onCompleted(Square entity, Exception exception, ServiceFilterResponse response) {
 				if (exception == null) {
-					callback.onCompleted(entity);
+					if(callback != null){
+						callback.onCompleted(entity);	
+					}
 					AsyncChainer.notifyNext(frag);
 				} else {
 					ExceptionManager.fireException(new AhException(frag, "createSquareAsync", AhException.TYPE.SERVER_ERROR));

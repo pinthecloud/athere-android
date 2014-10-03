@@ -29,15 +29,16 @@ public class AhMessage implements Parcelable {
 		// No user Update
 		TALK("TALK"),			// To Square Users
 		CHUPA("CHUPA"),			// To Individual
+		ADMIN_MESSAGE("ADMIN_MESSAGE"),
+		NOTIFICATION("NOTIFICATION"),
+		MESSAGE_READ("MESSAGE_READ"),
 
 		// User Update
 		ENTER_SQUARE("ENTER_SQUARE"),	// To Square Users
 		EXIT_SQUARE("EXIT_SQUARE"),		// To Square Users
 		UPDATE_USER_INFO("UPDATE_USER_INFO"), // To Square Users
-		MESSAGE_READ("MESSAGE_READ"),
-		FORCED_LOGOUT("FORCED_LOGOUT"),
-		ADMIN_MESSAGE("ADMIN_MESSAGE"),
-		NOTIFICATION("NOTIFICATION");
+		FORCED_LOGOUT("FORCED_LOGOUT");
+
 
 		private final String value;
 
@@ -182,25 +183,21 @@ public class AhMessage implements Parcelable {
 				" status : "+this.status + " }";
 	}
 
-
 	public boolean isMine(){
 		return senderId.equals(AhApplication.getInstance().getUserHelper().getMyUserInfo().getId());
 	}
 
-	
 	public boolean isNotification(){
 		return type.equals(TYPE.NOTIFICATION.toString());
 	}
-	
+
 	public boolean isEnterExitNotification(){
 		return type.equals(TYPE.ENTER_SQUARE.toString()) || type.equals(TYPE.EXIT_SQUARE.toString());
 	}
 
-
 	public boolean isAdmin(){
 		return type.equals(TYPE.ADMIN_MESSAGE.toString());
 	}
-
 
 	public static String buildChupaCommunId(String id0, String id1) {
 		if (id0.compareTo(id1) > 0) {
