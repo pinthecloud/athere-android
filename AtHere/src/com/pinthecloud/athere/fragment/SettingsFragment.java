@@ -74,7 +74,6 @@ public class SettingsFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-
 		/*
 		 * Find UI component
 		 */
@@ -87,7 +86,7 @@ public class SettingsFragment extends AhFragment{
 
 
 		/*
-		 * Set Action Bar
+		 * 
 		 */
 		ActionBar actionBar = activity.getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);

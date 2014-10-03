@@ -54,7 +54,8 @@
             android:layout_marginRight="@dimen/square_list_margin"
             android:layout_marginStart="@dimen/square_list_margin"
             android:divider="@android:color/transparent"
-            android:dividerHeight="@dimen/square_list_margin" />
+            android:dividerHeight="@dimen/square_list_margin"
+            android:scrollbars="none" />
     </LinearLayout>
 
 </RelativeLayout>

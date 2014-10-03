@@ -86,7 +86,7 @@ public class SquareActivity extends AhActivity {
 		 */
 		slidingMenu = new SlidingMenu(thisActivity);
 		slidingMenu.setMenu(R.layout.app_drawer_frame);
-		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
 		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
 		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);

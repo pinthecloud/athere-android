@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.fragment.AppDrawerFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
@@ -26,7 +25,6 @@ public class SquareListActivity extends AhActivity {
 	private SlidingMenu slidingMenu;
 
 	private MessageHelper messageHelper;
-	private MessageDBHelper messageDBHelper;
 
 
 	@Override
@@ -44,7 +42,6 @@ public class SquareListActivity extends AhActivity {
 		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
 		chupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_red_drawer_btn);
 		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
 
 
 		/*
@@ -60,7 +57,7 @@ public class SquareListActivity extends AhActivity {
 		 */
 		slidingMenu = new SlidingMenu(thisActivity);
 		slidingMenu.setMenu(R.layout.app_drawer_frame);
-		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
 		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
 		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);

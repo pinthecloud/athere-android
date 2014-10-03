@@ -58,8 +58,4 @@
     <!-- Profile Settings -->
     <color name="profile_settings_background">#f2f2f2</color>
 
-    <!-- gray -->
-    <color name="gray_background">#eaeaea</color>
-    <color name="gray_list_selector">#f4f4f4</color>
-
 </resources>
