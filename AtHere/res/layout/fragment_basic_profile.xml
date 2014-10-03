@@ -89,14 +89,8 @@
             android:id="@+id/basic_profile_frag_gender_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-<<<<<<< HEAD
-            android:background="@android:color/transparent"
-            android:contentDescription="@android:string/ok"
-            android:src="@drawable/ok_image_button_bg" />
-
-=======
             android:textSize="@dimen/font_normal" />
->>>>>>> eb0be5fe40762ae04396a679750d2bc5fbd75b86
+        
     </LinearLayout>
 
     <ImageButton
