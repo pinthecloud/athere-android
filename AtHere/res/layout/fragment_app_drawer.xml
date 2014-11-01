@@ -62,7 +62,7 @@
             android:textSize="@dimen/font_large" />
     </LinearLayout>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/app_drawer_frag_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -71,8 +71,6 @@
         android:layout_marginRight="@dimen/app_drawer_margin"
         android:layout_marginStart="@dimen/app_drawer_margin"
         android:layout_weight="1"
-        android:divider="@color/divider"
-        android:dividerHeight="@dimen/line_width" >
-    </ListView>
+        android:scrollbars="none" />
 
 </LinearLayout>

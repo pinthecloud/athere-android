@@ -1,5 +1,6 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -8,14 +9,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,9 +23,6 @@ import android.widget.TextView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationListener;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
@@ -56,10 +53,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	private RelativeLayout addressLayout;
 	private TextView addressText;
 
-	private PullToRefreshListView pullToRefreshListView;
-	private ListView squareListView;
+	private RecyclerView squareListView;
 	private SquareListAdapter squareListAdapter;
-
+	private RecyclerView.LayoutManager squareListLayoutManager;
+	private List<Square> squareList;
 
 	private LocationHelper locationHelper;
 	private LocationListener locationListener;
@@ -130,9 +127,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		progressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
 		addressLayout = (RelativeLayout)view.findViewById(R.id.square_list_frag_address_layout);
 		addressText = (TextView)view.findViewById(R.id.square_list_frag_address);
-		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
-		squareListView = pullToRefreshListView.getRefreshableView();
-		registerForContextMenu(squareListView);
+		squareListView = (RecyclerView)view.findViewById(R.id.square_list_frag_list);
 	}
 
 
@@ -148,84 +143,17 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 
 	private void setSquareList(){
-		squareListAdapter = new SquareListAdapter(context, thisFragment);
+		squareListView.setHasFixedSize(true);
+
+		squareListLayoutManager = new LinearLayoutManager(context);
+		squareListView.setLayoutManager(squareListLayoutManager);
+
+		squareList = new ArrayList<Square>();
+		squareListAdapter = new SquareListAdapter(context, thisFragment, squareList, new SquareListViewItemClickListener());
 		squareListView.setAdapter(squareListAdapter);
-		squareListView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				/*
-				 * Check location service
-				 */
-				if(!locationHelper.isLocationEnabled()){
-					locationHelper.getLocationService(activity, new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							// Do nothing
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-							addressText.setText(getResources().getString(R.string.location_turn_on_message));
-						}
-					});
-					return;
-				}
-
-
-				/*
-				 * Get square and make enter dialog
-				 */
-				final Square square = squareListAdapter.getItem(--position);
-				Bundle bundle = new Bundle();
-				SquareEnterDialog enterDialog = new SquareEnterDialog(square, new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						enterSquare(square, false);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						enterSquare(square, true);
-					}
-				});
-
-
-				/*
-				 * If enough close to enter or it is super user, check code.
-				 * Otherwise, cannot enter.
-				 */
-				if(!square.isFar()
-						|| PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
-
-					if(square.getCode().equals("")){
-						enterSquare(square, false);
-					} else{
-						// This square has code
-						bundle.putBoolean(SquareEnterDialog.SHOW_CODE, true);
-						enterDialog.setArguments(bundle);
-						enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-					}
-				} else{
-					// Give preview condition
-					bundle.putBoolean(SquareEnterDialog.SHOW_CODE, false);
-					enterDialog.setArguments(bundle);
-					enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-				}
-			}
-		});
-		pullToRefreshListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				updateSquareList(View.GONE, locationListener);
-			}
-		});
 	}
-
-
+	
+	
 	private void setLocationListener(){
 		locationHelper = new LocationHelper(activity, this, this);
 		locationListener = new LocationListener() {
@@ -245,7 +173,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		};
 	}
 
-
+	
 	private void enterSquare(final Square square, final boolean isPreview){
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
@@ -319,10 +247,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	}
 
 
-	/*
-	 * Get square near from user
-	 * Now it just gets all squares cause of location law. (lati and longi is 0)
-	 */
 	private void getSquareList(Location loc){
 		double latitude = loc.getLatitude();
 		double longitude = loc.getLongitude();
@@ -331,9 +255,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 			@Override
 			public void onCompleted(List<Square> list, int count) {
 				progressBar.setVisibility(View.GONE);
-				pullToRefreshListView.onRefreshComplete();
 
-				// Sort square list by distance and premium
 				Collections.sort(list, new Comparator<Square>(){
 
 					@Override
@@ -366,9 +288,9 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 					}
 				});
 
-				// Add loaded square
-				squareListAdapter.clear();
-				squareListAdapter.addAll(list);
+				squareList.clear();
+				squareList.addAll(list);
+				squareListAdapter.notifyDataSetChanged();
 			}
 		});
 	}
@@ -389,7 +311,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				@Override
 				public void doNegativeThing(Bundle bundle) {
 					progressBar.setVisibility(View.GONE);
-					pullToRefreshListView.onRefreshComplete();
 
 					addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 					addressText.setText(getResources().getString(R.string.location_turn_on_message));
@@ -443,5 +364,70 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 	@Override
 	public void onDisconnected() {
+		// Do nothing
+	}
+
+
+	private class SquareListViewItemClickListener implements View.OnClickListener{
+
+		@Override
+		public void onClick(View v) {
+			if(!locationHelper.isLocationEnabled()){
+				locationHelper.getLocationService(activity, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Do nothing
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+						addressText.setText(context.getResources().getString(R.string.location_turn_on_message));
+					}
+				});
+				return;
+			}
+
+
+			/*
+			 * Get square and make enter dialog
+			 */
+			int position = squareListView.getChildPosition(v);
+			final Square square = squareList.get(position);
+			Bundle bundle = new Bundle();
+			SquareEnterDialog enterDialog = new SquareEnterDialog(square, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					enterSquare(square, false);
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					enterSquare(square, true);
+				}
+			});
+
+
+			/*
+			 * If enough close to enter or it is super user, check code.
+			 * Otherwise, cannot enter.
+			 */
+			if(!square.isFar() || PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
+
+				if(square.getCode().equals("")){
+					enterSquare(square, false);
+				} else{
+					// This square has code
+					bundle.putBoolean(SquareEnterDialog.SHOW_CODE, true);
+					enterDialog.setArguments(bundle);
+					enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+				}
+			} else{
+				// Give preview condition
+				bundle.putBoolean(SquareEnterDialog.SHOW_CODE, false);
+				enterDialog.setArguments(bundle);
+				enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		}
 	}
 }

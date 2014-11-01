@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/square_member_background"
     android:orientation="vertical" >
-        
+
     <com.handmark.pulltorefresh.library.PullToRefreshGridView
         android:id="@+id/member_frag_grid"
         android:layout_width="match_parent"
@@ -15,6 +15,7 @@
         android:layout_marginStart="@dimen/member_grid_margin"
         android:horizontalSpacing="@dimen/member_grid_margin"
         android:numColumns="2"
+        android:scrollbars="none"
         android:stretchMode="columnWidth"
         android:verticalSpacing="@dimen/member_grid_margin" />
 

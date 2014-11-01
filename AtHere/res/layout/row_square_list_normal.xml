@@ -1,52 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/groundlist_normal_bg"
-    android:orientation="vertical"
-    android:paddingEnd="@dimen/square_list_margin"
-    android:paddingLeft="@dimen/none"
-    android:paddingRight="@dimen/square_list_margin"
-    android:paddingStart="@dimen/none" >
+    android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/row_square_list_normal_far"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/preview"
-        android:src="@drawable/groundlist_normal_preview_ico"
-        android:visibility="gone" />
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/row_square_list_normal_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/square_list_margin"
-        android:layout_marginStart="@dimen/square_list_margin"
-        android:layout_toEndOf="@+id/row_square_list_normal_far"
-        android:layout_toRightOf="@+id/row_square_list_normal_far"
-        android:textColor="@color/square_list_text"
-        android:textSize="@dimen/font_large" />
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/groundlist_normal_bg"
+            android:paddingEnd="@dimen/square_list_margin"
+            android:paddingLeft="@dimen/none"
+            android:paddingRight="@dimen/square_list_margin"
+            android:paddingStart="@dimen/none" >
 
-    <View
-        android:layout_width="@dimen/line_width"
-        android:layout_height="@dimen/content_divider_height"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/row_square_list_normal_distance"
-        android:layout_toStartOf="@+id/row_square_list_normal_distance"
-        android:background="@color/square_list_gray" />
+            <ImageView
+                android:id="@+id/row_square_list_normal_far"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/preview"
+                android:src="@drawable/groundlist_normal_preview_ico"
+                android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/row_square_list_normal_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/square_list_margin"
-        android:layout_marginStart="@dimen/square_list_margin"
-        android:textColor="@color/square_list_text"
-        android:textSize="@dimen/font_normal" />
+            <TextView
+                android:id="@+id/row_square_list_normal_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/square_list_margin"
+                android:layout_marginStart="@dimen/square_list_margin"
+                android:layout_toEndOf="@+id/row_square_list_normal_far"
+                android:layout_toRightOf="@+id/row_square_list_normal_far"
+                android:textColor="@color/square_list_text"
+                android:textSize="@dimen/font_large" />
 
-</RelativeLayout>
+            <View
+                android:layout_width="@dimen/line_width"
+                android:layout_height="@dimen/content_divider_height"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/row_square_list_normal_distance"
+                android:layout_toStartOf="@+id/row_square_list_normal_distance"
+                android:background="@color/square_list_gray" />
+
+            <TextView
+                android:id="@+id/row_square_list_normal_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/square_list_margin"
+                android:layout_marginStart="@dimen/square_list_margin"
+                android:textColor="@color/square_list_text"
+                android:textSize="@dimen/font_normal" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

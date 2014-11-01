@@ -1,10 +1,14 @@
 package com.pinthecloud.athere.adapter;
 
+import java.util.List;
+
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +19,7 @@ import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.model.Square;
 
-public class SquareListAdapter extends ArrayAdapter<Square>{
+public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	private enum TYPE{
 		NORMAL,
@@ -24,110 +28,154 @@ public class SquareListAdapter extends ArrayAdapter<Square>{
 
 	private Context context;
 	private AhFragment frag;
-	private LayoutInflater inflater;
+	private List<Square> squareList;
+	private OnClickListener itemClickListener;
 	private CachedBlobStorageHelper blobStorageHelper;
 
 
-	public SquareListAdapter(Context context, AhFragment frag) {
-		super(context, 0);
+	public SquareListAdapter(Context context, AhFragment frag, List<Square> squareList, OnClickListener itemClickListener) {
 		this.context = context;
 		this.frag = frag;
-		this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.squareList = squareList;
+		this.itemClickListener = itemClickListener;
 		this.blobStorageHelper = AhApplication.getInstance().getBlobStorageHelper();
 	}
 
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = convertView;
-		int type = getItemViewType(position);
-		if (view == null) {
-			if(type == TYPE.NORMAL.ordinal()){
-				view = inflater.inflate(R.layout.row_square_list_normal, parent, false);
-			} else if(type == TYPE.ADMIN.ordinal()){
-				view = inflater.inflate(R.layout.row_square_list_admin, parent, false);
-			} 
+	private static class AdminViewHolder extends RecyclerView.ViewHolder {
+		public View view;
+		public TextView squareNameText;
+		public TextView distanceText;
+		public ImageView farImage;
+		public ImageView background;
+		public ImageView lockImage;
+
+		public AdminViewHolder(View view) {
+			super(view);
+			this.view = view;
+			this.squareNameText = (TextView)view.findViewById(R.id.row_square_list_admin_name);
+			this.distanceText = (TextView)view.findViewById(R.id.row_square_list_admin_distance);
+			this.farImage = (ImageView)view.findViewById(R.id.row_square_list_admin_far);
+			this.background = (ImageView)view.findViewById(R.id.row_square_list_admin_background);
+			this.lockImage = (ImageView)view.findViewById(R.id.row_square_list_admin_lock);
 		}
-
-		Square square = getItem(position);
-		if (square != null) {
-			/*
-			 * Find UI component
-			 */
-			TextView squareNameText = null;
-			TextView distanceText = null;
-			ImageView far = null;
-			if(type == TYPE.NORMAL.ordinal()){
-				/*
-				 * Find Common UI component
-				 */
-				squareNameText = (TextView)view.findViewById(R.id.row_square_list_normal_name);
-				distanceText = (TextView)view.findViewById(R.id.row_square_list_normal_distance);
-				far = (ImageView)view.findViewById(R.id.row_square_list_normal_far);
-			} else if(type == TYPE.ADMIN.ordinal()){
-				/*
-				 * Find Common UI component
-				 */
-				squareNameText = (TextView)view.findViewById(R.id.row_square_list_admin_name);
-				distanceText = (TextView)view.findViewById(R.id.row_square_list_admin_distance);
-				far = (ImageView)view.findViewById(R.id.row_square_list_admin_far);
-
-				/*
-				 * Set UI component only in admin square list
-				 */
-				ImageView background = (ImageView)view.findViewById(R.id.row_square_list_admin_background);
-				ImageView lock = (ImageView)view.findViewById(R.id.row_square_list_admin_lock);
-
-				blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
-						square.getId(), R.drawable.ground_premium_pic_default, background, false);
-				if(!square.getCode().equals("")){
-					lock.setVisibility(View.VISIBLE);
-				} else{
-					lock.setVisibility(View.GONE);
-				}
-			}
+	}
 
 
-			/*
-			 * Set common UI component
-			 */
-			int distance = square.getDistance();
-			String unit = context.getResources().getString(R.string.meter);
-			if((distance / 1000) >= 1){
-				distance /= 1000;  // km
-				unit = frag.getResources().getString(R.string.kilometer);	
-			}
+	private static class NormalViewHolder extends RecyclerView.ViewHolder {
+		public View view;
+		public TextView squareNameText;
+		public TextView distanceText;
+		public ImageView farImage;
 
-			squareNameText.setText(square.getName());
-			distanceText.setText(distance + unit);
-			if(square.isFar()){
-				far.setVisibility(View.VISIBLE);
-				squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
-				distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
-			} else{
-				far.setVisibility(View.GONE);
-				squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
-				distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
-			}
+		public NormalViewHolder(View view) {
+			super(view);
+			this.view = view;
+			this.squareNameText = (TextView)view.findViewById(R.id.row_square_list_normal_name);
+			this.distanceText = (TextView)view.findViewById(R.id.row_square_list_normal_distance);
+			this.farImage = (ImageView)view.findViewById(R.id.row_square_list_normal_far);
 		}
-		return view;
 	}
 
 
 	@Override
-	public int getViewTypeCount() {
-		return TYPE.values().length;
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		View view = null;
+		ViewHolder viewHolder = null;
+		if(viewType == TYPE.ADMIN.ordinal()){
+			view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_square_list_admin, parent, false);
+			viewHolder = new AdminViewHolder(view);
+		}else if(viewType == TYPE.NORMAL.ordinal()){
+			view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_square_list_normal, parent, false);
+			viewHolder = new NormalViewHolder(view);
+		}
+		return viewHolder;
+	}
+
+
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position) {
+		Square square = squareList.get(position);
+		int viewType = getItemViewType(position);
+		if(viewType == TYPE.ADMIN.ordinal()){
+			AdminViewHolder adminViewHolder = (AdminViewHolder)holder;
+			setAdminComponent(adminViewHolder, square);
+		}else if(viewType == TYPE.NORMAL.ordinal()){
+			NormalViewHolder normalViewHolder = (NormalViewHolder)holder;
+			setNormalComponent(normalViewHolder, square);
+		}
+	}
+
+
+	@Override
+	public int getItemCount() {
+		return this.squareList.size();
 	}
 
 
 	@Override
 	public int getItemViewType(int position) {
-		// Inflate different layout by user
-		Square square = getItem(position);
+		Square square = squareList.get(position);
 		if(square.isAdmin()){
 			return TYPE.ADMIN.ordinal();
 		} else{
 			return TYPE.NORMAL.ordinal();
 		}
+	}
+
+
+	private void setNormalComponent(NormalViewHolder holder, Square square){
+		int distance = square.getDistance();
+		String unit = context.getResources().getString(R.string.meter);
+		if((distance / 1000) >= 1){
+			distance /= 1000;  // km
+			unit = frag.getResources().getString(R.string.kilometer);	
+		}
+
+		holder.squareNameText.setText(square.getName());
+		holder.distanceText.setText(distance + unit);
+		if(square.isFar()){
+			holder.farImage.setVisibility(View.VISIBLE);
+			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
+			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
+		} else{
+			holder.farImage.setVisibility(View.GONE);
+			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
+			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
+		}
+
+		holder.view.setOnClickListener(itemClickListener);
+	}
+
+
+	private void setAdminComponent(AdminViewHolder holder, Square square){
+		int distance = square.getDistance();
+		String unit = context.getResources().getString(R.string.meter);
+		if((distance / 1000) >= 1){
+			distance /= 1000;  // km
+			unit = frag.getResources().getString(R.string.kilometer);	
+		}
+
+		holder.squareNameText.setText(square.getName());
+		holder.distanceText.setText(distance + unit);
+		if(square.isFar()){
+			holder.farImage.setVisibility(View.VISIBLE);
+			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
+			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
+		} else{
+			holder.farImage.setVisibility(View.GONE);
+			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
+			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
+		}
+
+		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
+				square.getId(), R.drawable.ground_premium_pic_default, holder.background, false);
+		if(!square.getCode().equals("")){
+			holder.lockImage.setVisibility(View.VISIBLE);
+		} else{
+			holder.lockImage.setVisibility(View.GONE);
+		}
+
+		holder.view.setOnClickListener(itemClickListener);
 	}
 }

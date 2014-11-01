@@ -1,10 +1,9 @@
 package com.pinthecloud.athere.activity;
 
-import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -33,40 +32,52 @@ public class SquarePreviewActivity extends AhActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_frame);
-
-
-		/*
-		 * Set Helper and get square
-		 */
-		messageHelper = app.getMessageHelper();
-		userHelper = app.getUserHelper();
-		Intent intent = getIntent();
-		Square square = intent.getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
-
-
-		/*
-		 * Set UI Component
-		 */
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
-		actionBar.setTitle(square.getName());
-		progressBar = (ProgressBar) findViewById(R.id.activity_progress_bar);
+		
+		setHelper();
+		findComponent();
+		
+		Square square = getIntent().getParcelableExtra(AhGlobalVariable.SQUARE_KEY);
+		setActionBar(square);
+		
 		FragmentManager fragmentManager = getFragmentManager();
-
-
-		/*
-		 * Set tab
-		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		contentFragment = new ChatFragment(square);	
 		fragmentTransaction.add(R.id.activity_container, contentFragment);
 		fragmentTransaction.commit();
+		
+		setMessageHandler();
+	}
 
 
-		/*
-		 * Set Handler for forced logout
-		 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			exitSquare();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		exitSquare();
+	}
+
+
+	private void findComponent(){
+		progressBar = (ProgressBar) findViewById(R.id.activity_progress_bar);
+	}
+	
+	
+	private void setHelper(){
+		messageHelper = app.getMessageHelper();
+		userHelper = app.getUserHelper();
+	}
+	
+	
+	private void setMessageHandler(){
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -75,23 +86,13 @@ public class SquarePreviewActivity extends AhActivity {
 			}
 		});
 	}
-
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			exitSquare();
-			break;
-		}
-		return true;
-	}
-
-
-	@Override
-	public void onBackPressed() {
-		exitSquare();
+	
+	
+	private void setActionBar(Square square){
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setTitle(square.getName());
 	}
 	
 	

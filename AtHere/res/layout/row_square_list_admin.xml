@@ -1,77 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/row_square_list_admin_background"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/square"
-        android:scaleType="fitXY"
-        android:src="@drawable/ground_premium_pic_default" />
+        android:layout_height="match_parent" >
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/row_square_list_admin_background"
-        android:background="@drawable/groundlist_premium_bg"
-        android:paddingEnd="@dimen/square_list_margin"
-        android:paddingLeft="@dimen/none"
-        android:paddingRight="@dimen/square_list_margin"
-        android:paddingStart="@dimen/none" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-        <ImageView
-            android:id="@+id/row_square_list_admin_far"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/preview"
-            android:src="@drawable/groundlist_premium_preview_ico"
-            android:visibility="gone" />
+            <ImageView
+                android:id="@+id/row_square_list_admin_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/square"
+                android:scaleType="fitXY"
+                android:src="@drawable/ground_premium_pic_default" />
 
-        <ImageView
-            android:id="@+id/row_square_list_admin_lock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/row_square_list_admin_far"
-            android:layout_toRightOf="@+id/row_square_list_admin_far"
-            android:contentDescription="@string/icon"
-            android:src="@drawable/groundlist_premium_locked_ico"
-            android:visibility="gone" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/row_square_list_admin_background"
+                android:background="@drawable/groundlist_premium_bg"
+                android:paddingEnd="@dimen/square_list_margin"
+                android:paddingLeft="@dimen/none"
+                android:paddingRight="@dimen/square_list_margin"
+                android:paddingStart="@dimen/none" >
 
-        <TextView
-            android:id="@+id/row_square_list_admin_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/square_list_margin"
-            android:layout_marginStart="@dimen/square_list_margin"
-            android:layout_toEndOf="@+id/row_square_list_admin_lock"
-            android:layout_toRightOf="@+id/row_square_list_admin_lock"
-            android:textColor="@color/square_list_text"
-            android:textSize="@dimen/font_large" />
+                <ImageView
+                    android:id="@+id/row_square_list_admin_far"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/preview"
+                    android:src="@drawable/groundlist_premium_preview_ico" />
 
-        <View
-            android:layout_width="@dimen/line_width"
-            android:layout_height="@dimen/content_divider_height"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/row_square_list_admin_distance"
-            android:layout_toStartOf="@+id/row_square_list_admin_distance"
-            android:background="@color/square_list_gray" />
+                <ImageView
+                    android:id="@+id/row_square_list_admin_lock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/row_square_list_admin_far"
+                    android:layout_toRightOf="@+id/row_square_list_admin_far"
+                    android:contentDescription="@string/icon"
+                    android:src="@drawable/groundlist_premium_locked_ico" />
 
-        <TextView
-            android:id="@+id/row_square_list_admin_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/square_list_margin"
-            android:layout_marginStart="@dimen/square_list_margin"
-            android:textColor="@color/square_list_text"
-            android:textSize="@dimen/font_normal" />
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/row_square_list_admin_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/square_list_margin"
+                    android:layout_marginStart="@dimen/square_list_margin"
+                    android:layout_toEndOf="@+id/row_square_list_admin_lock"
+                    android:layout_toRightOf="@+id/row_square_list_admin_lock"
+                    android:textColor="@color/square_list_text"
+                    android:textSize="@dimen/font_large" />
 
-</RelativeLayout>
+                <View
+                    android:layout_width="@dimen/line_width"
+                    android:layout_height="@dimen/content_divider_height"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/row_square_list_admin_distance"
+                    android:layout_toStartOf="@+id/row_square_list_admin_distance"
+                    android:background="@color/square_list_gray" />
+
+                <TextView
+                    android:id="@+id/row_square_list_admin_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/square_list_margin"
+                    android:layout_marginStart="@dimen/square_list_margin"
+                    android:textColor="@color/square_list_text"
+                    android:textSize="@dimen/font_normal" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

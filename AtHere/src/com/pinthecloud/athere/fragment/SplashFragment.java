@@ -51,49 +51,15 @@ public class SplashFragment extends AhFragment {
 		NotificationManager mNotificationManager =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-
-
-		/*
-		 * Get unique android id
-		 */
+		
 		if (!userHelper.hasMobileId()) {
 			String androidId = Secure.getString(app.getContentResolver(), Secure.ANDROID_ID);
 			userHelper.setMyMobileId(androidId);
 		}
-
-
-		/*
-		 * If time is up, remove local preferences.
-		 */
+		
 		if(squareHelper.isLoggedInSquare()){
-			Time time = new Time();
-			time.setToNow();
-			String currentTime = time.format("%Y:%m:%d:%H");
-			String[] currentArray = currentTime.split(":");
-			int currentYear = Integer.parseInt(currentArray[0]);
-			int currentMonth = Integer.parseInt(currentArray[1]);
-			int currentDay = Integer.parseInt(currentArray[2]);
-			int currentHour = Integer.parseInt(currentArray[3]);
-
-			String lastLoggedInSquareTime = squareHelper.getTimeStampAtLoggedInSquare();
-			String[] lastArray = lastLoggedInSquareTime.split(":");
-			int lastYear = Integer.parseInt(lastArray[0]);
-			int lastMonth = Integer.parseInt(lastArray[1]);
-			int lastDay = Integer.parseInt(lastArray[2]);
-			int lastHour = Integer.parseInt(lastArray[3]);
-
-			int resetTime = squareHelper.getMySquareInfo().getResetTime();
-			if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
-				app.removeMySquarePreference(thisFragment);
-			} else if(currentDay > lastDay && lastHour < resetTime){
-				app.removeMySquarePreference(thisFragment);
-			} else if(currentDay > lastDay && currentHour >= resetTime){
-				app.removeMySquarePreference(thisFragment);
-			} else if(currentDay == lastDay && lastHour < resetTime && currentHour >= resetTime){
-				app.removeMySquarePreference(thisFragment);
-			}
+			removeMySquarePreference();
 		}
-
 		
 		//		isHongkunTest();
 		runChupa();
@@ -136,6 +102,36 @@ public class SplashFragment extends AhFragment {
 	//	}
 
 
+	private void removeMySquarePreference(){
+		Time time = new Time();
+		time.setToNow();
+		String currentTime = time.format("%Y:%m:%d:%H");
+		String[] currentArray = currentTime.split(":");
+		int currentYear = Integer.parseInt(currentArray[0]);
+		int currentMonth = Integer.parseInt(currentArray[1]);
+		int currentDay = Integer.parseInt(currentArray[2]);
+		int currentHour = Integer.parseInt(currentArray[3]);
+
+		String lastLoggedInSquareTime = squareHelper.getTimeStampAtLoggedInSquare();
+		String[] lastArray = lastLoggedInSquareTime.split(":");
+		int lastYear = Integer.parseInt(lastArray[0]);
+		int lastMonth = Integer.parseInt(lastArray[1]);
+		int lastDay = Integer.parseInt(lastArray[2]);
+		int lastHour = Integer.parseInt(lastArray[3]);
+
+		int resetTime = squareHelper.getMySquareInfo().getResetTime();
+		if(currentYear > lastYear || currentMonth > lastMonth || currentDay > lastDay + 1){
+			app.removeMySquarePreference(thisFragment);
+		} else if(currentDay > lastDay && lastHour < resetTime){
+			app.removeMySquarePreference(thisFragment);
+		} else if(currentDay > lastDay && currentHour >= resetTime){
+			app.removeMySquarePreference(thisFragment);
+		} else if(currentDay == lastDay && lastHour < resetTime && currentHour >= resetTime){
+			app.removeMySquarePreference(thisFragment);
+		}
+	}
+
+
 	private void runChupa() {
 		AsyncChainer.asyncChain(thisFragment, new Chainable(){
 
@@ -157,7 +153,6 @@ public class SplashFragment extends AhFragment {
 					AsyncChainer.notifyNext(frag);
 				}
 			}
-
 		},new Chainable(){
 
 			@Override
@@ -165,7 +160,7 @@ public class SplashFragment extends AhFragment {
 				versionHelper.getServerAppVersionAsync(frag, new AhEntityCallback<AppVersion>() {
 
 					@Override
-					public void onCompleted(final AppVersion serverVer) {
+					public void onCompleted(AppVersion serverVer) {
 						double clientVer;
 						try {
 							clientVer = versionHelper.getClientAppVersion();
@@ -174,27 +169,7 @@ public class SplashFragment extends AhFragment {
 						}
 
 						if (serverVer.getVersion() > clientVer) {
-							AhApplication.getInstance().removeMySquarePreference(thisFragment);
-							AhApplication.getInstance().removeMyUserPreference(thisFragment);
-							
-							String message = getResources().getString(R.string.update_app_message);
-							AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
-
-								@Override
-								public void doPositiveThing(Bundle bundle) {
-									Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
-									startActivity(intent);
-								}
-								@Override
-								public void doNegativeThing(Bundle bundle) {
-									if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
-										activity.finish();
-									} else {
-										goToNextActivity();
-									}
-								}
-							});
-							updateDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+							updateApp(serverVer);
 						}else{
 							goToNextActivity();
 						}
@@ -205,10 +180,32 @@ public class SplashFragment extends AhFragment {
 	}
 
 
-	/*
-	 * Move to next activity by user status
-	 */
-	public void goToNextActivity() {
+	private void updateApp(final AppVersion serverVer){
+		AhApplication.getInstance().removeMySquarePreference(thisFragment);
+		AhApplication.getInstance().removeMyUserPreference(thisFragment);
+
+		String message = getResources().getString(R.string.update_app_message);
+		AhAlertDialog updateDialog = new AhAlertDialog(null, message, true, new AhDialogCallback() {
+
+			@Override
+			public void doPositiveThing(Bundle bundle) {
+				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
+				startActivity(intent);
+			}
+			@Override
+			public void doNegativeThing(Bundle bundle) {
+				if (serverVer.getType().equals(AppVersion.TYPE.MANDATORY.toString())){
+					activity.finish();
+				} else {
+					goToNextActivity();
+				}
+			}
+		});
+		updateDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+	}
+
+
+	private void goToNextActivity() {
 		if(thisFragment.isAdded()){
 			Intent intent = new Intent();
 			if (!userHelper.isLoggedInUser()){

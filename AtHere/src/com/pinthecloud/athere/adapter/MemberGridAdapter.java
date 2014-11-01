@@ -39,8 +39,7 @@ public class MemberGridAdapter extends ArrayAdapter<AhUser>{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
 		if (view == null) {
-			LayoutInflater inflater = (LayoutInflater) 
-					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.row_member_grid, parent, false);
 		}
 
