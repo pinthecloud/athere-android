@@ -59,7 +59,7 @@
     <string name="internet_not_connected_message">Internet is unavailable. Please check network status.</string>
     <string name="send_message_fail_message">Select action.</string>
     <string name="number_of_member_question">How many with you?</string>
-    <string name="review_message">Do you want to hear favorite place\'s news?\n\nTell us your ground by review.</string>
+    <string name="review_message">Please give us review!</string>
     <string name="no_today_message">I will do</string>
     <string name="location_consent_message">Chupa uses location information, but we never collect.\nIf you click above button, we think you agree the use.</string>
     <string name="location_turn_on_message">Please enable location service.</string>

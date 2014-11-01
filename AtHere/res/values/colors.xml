@@ -8,6 +8,12 @@
     <color name="brand_red_color">#E6E72203</color>
     <color name="brand_white_color">#E6ffffff</color>
 
+    <!-- Card View -->
+    <color name="cardview_light_background">#FFFAFAFA</color>
+	<color name="cardview_dark_background">#FF202020</color>
+    <color name="cardview_shadow_start_color">#37000000</color>
+    <color name="cardview_shadow_end_color">#03000000</color>
+    
     <!-- Guide -->
     <color name="guide_background">#f2f2f2</color>
 

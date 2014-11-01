@@ -7,6 +7,11 @@
     <dimen name="age_gender_margin">3dp</dimen>
     <dimen name="content_divider_height">18dp</dimen>
 
+    <!-- Card View -->
+    <dimen name="cardview_default_radius">2dp</dimen>
+    <dimen name="cardview_default_elevation">2dp</dimen>
+    <dimen name="cardview_compat_inset_shadow">1dp</dimen>
+    
     <!-- App Drawer -->
     <dimen name="app_drawer_offset">60dp</dimen>
     <dimen name="app_drawer_shadow_width">10dp</dimen>
@@ -14,7 +19,7 @@
     <dimen name="app_drawer_profile_image">110dp</dimen>
 
     <!-- Notification Drawer -->
-    <dimen name="notification_drawer_width">320dp</dimen>
+    <dimen name="notification_drawer_width">360dp</dimen>
 
     <!-- Guide -->
     <dimen name="guide_indicator_radious">5dp</dimen>

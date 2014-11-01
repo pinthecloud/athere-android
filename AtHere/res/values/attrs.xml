@@ -17,10 +17,24 @@
         <attr name="pstsActivateTextColor" format="color" />
         <attr name="pstsDeactivateTextColor" format="color" />
     </declare-styleable>
-
+    
     <declare-styleable name="CircleImageView">
         <attr name="civBorderWidth" format="dimension" />
         <attr name="civBorderColor" format="color" />
+    </declare-styleable>
+    
+    <declare-styleable name="CardView">
+        <attr name="cardBackgroundColor" format="color" />
+        <attr name="cardCornerRadius" format="dimension" />
+        <attr name="cardElevation" format="dimension" />
+        <attr name="cardMaxElevation" format="dimension" />
+        <attr name="cardUseCompatPadding" format="boolean" />
+        <attr name="cardPreventCornerOverlap" format="boolean" />
+        <attr name="contentPadding" format="dimension" />
+        <attr name="contentPaddingLeft" format="dimension" />
+        <attr name="contentPaddingRight" format="dimension" />
+        <attr name="contentPaddingTop" format="dimension" />
+        <attr name="contentPaddingBottom" format="dimension" />
     </declare-styleable>
 
 </resources>

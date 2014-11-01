@@ -46,8 +46,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.pinthecloud.athere.AhIntentService" >
-        </service>
+        <service android:name="com.pinthecloud.athere.AhIntentService" />
 
         <meta-data
             android:name="com.google.android.gms.version"
