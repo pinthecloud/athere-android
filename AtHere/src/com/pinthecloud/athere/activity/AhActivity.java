@@ -2,13 +2,14 @@ package com.pinthecloud.athere.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.pinthecloud.athere.AhApplication;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
-import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.analysis.FlurryHelper;
+import com.pinthecloud.athere.analysis.UserHabitHelper;
 
 /**
  *  Base class for every activity.
@@ -16,7 +17,7 @@ import com.pinthecloud.athere.analysis.FlurryHelper;
  *  Every Activity is a container for each Fragment.
  *  Fragments do the real works.
  */
-public class AhActivity extends Activity {
+public class AhActivity extends ActionBarActivity {
 
 	protected AhApplication app;
 	protected FiveRocksHelper fiveRocksHelper;

@@ -14,7 +14,7 @@
         android:layout_marginRight="@dimen/member_grid_margin"
         android:layout_marginStart="@dimen/member_grid_margin"
         android:horizontalSpacing="@dimen/member_grid_margin"
-        android:numColumns="auto_fit"
+        android:numColumns="2"
         android:stretchMode="columnWidth"
         android:verticalSpacing="@dimen/member_grid_margin" />
 

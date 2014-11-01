@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="20" />
+        android:targetSdkVersion="21" />
 
     <!-- Azure GCM permissions -->
     <permission
@@ -60,7 +60,7 @@
             android:name=".activity.SplashActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -72,54 +72,49 @@
         <activity
             android:name=".activity.GuideActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.facebook.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.BasicProfileActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.SquareListActivity"
-            android:icon="@drawable/transparent"
             android:label="@string/square"
             android:screenOrientation="portrait"
-            android:theme="@style/AppRedActionBarTheme" />
+            android:theme="@style/RedActionBarAppTheme" />
         <activity
             android:name=".activity.SquareActivity"
-            android:icon="@drawable/transparent"
             android:screenOrientation="portrait"
-            android:theme="@style/AppWhiteActionBarTheme"
+            android:theme="@style/WhiteActionBarAppTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.SquarePreviewActivity"
-            android:icon="@drawable/transparent"
             android:screenOrientation="portrait"
-            android:theme="@style/AppWhiteActionBarTheme" />
+            android:theme="@style/WhiteActionBarAppTheme" />
         <activity
             android:name=".activity.ProfileImageActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.ProfileSettingsActivity"
             android:icon="@drawable/transparent"
             android:label="@string/profile_settings"
             android:screenOrientation="portrait"
-            android:theme="@style/AppRedActionBarTheme" />
+            android:theme="@style/RedActionBarAppTheme" />
         <activity
             android:name=".activity.SettingsActivity"
-            android:icon="@drawable/transparent"
             android:label="@string/app_settings"
             android:screenOrientation="portrait"
-            android:theme="@style/AppRedActionBarTheme" />
+            android:theme="@style/RedActionBarAppTheme" />
         <activity
             android:name=".activity.ChupaChatActivity"
-            android:icon="@drawable/transparent"
             android:label="@string/chupa"
             android:screenOrientation="portrait"
-            android:theme="@style/AppRedActionBarTheme"
+            android:theme="@style/RedActionBarAppTheme"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -48,10 +48,6 @@ public class SplashFragment extends AhFragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_splash, container, false);
 
-
-		/*
-		 * Set notification removed when launched app 
-		 */
 		NotificationManager mNotificationManager =
 				(NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
@@ -98,10 +94,7 @@ public class SplashFragment extends AhFragment {
 			}
 		}
 
-
-		/*
-		 * Start Chupa Application
-		 */
+		
 		//		isHongkunTest();
 		runChupa();
 		return view;

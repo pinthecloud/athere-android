@@ -43,6 +43,7 @@ public class ProfileDialog extends AhDialogFragment{
 		this.frag = frag;
 		this.user = user;
 		this.ahDialogCallback = ahDialogCallback;
+		
 		AhApplication app = AhApplication.getInstance();
 		this.squareHelper = app.getSquareHelper();
 		this.userHelper = app.getUserHelper();
@@ -55,56 +56,9 @@ public class ProfileDialog extends AhDialogFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog_profile, container, false);
-
-
-		/*
-		 * Find UI component
-		 */
-		profileImage = (ImageView) view.findViewById(R.id.profile_dialog_profile_image);
-		nickNameText = (TextView) view.findViewById(R.id.profile_dialog_nick_name);
-		ageGenderText = (TextView) view.findViewById(R.id.profile_dialog_age_gender);
-		sendChupaLayout = (RelativeLayout) view.findViewById(R.id.profile_dialog_send_chupa_layout);
-
-
-		/*
-		 * Set UI Component
-		 */
-		nickNameText.setText(user.getNickName());
-		ageGenderText.setText("" + user.getAge());
-		if(user.isMale()){
-			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_m, 0);
-		}else{
-			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_w, 0);
-		}
-
-
-		/*
-		 * Set event on chupa button
-		 */
-		sendChupaLayout.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ahDialogCallback.doPositiveThing(null);
-				dismiss();
-			}
-		});
-		if(userHelper.isMyUser(user) || squareHelper.isPreview()){
-			sendChupaLayout.setVisibility(View.GONE);
-		}
-
-
-		/*
-		 * Set profile image
-		 */
-		profileImage.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ahDialogCallback.doNegativeThing(null);
-			}
-		});
-
+		findComponent(view);
+		setComponent();
+		setClickEvent();
 		return view;
 	}
 
@@ -122,5 +76,46 @@ public class ProfileDialog extends AhDialogFragment{
 	public void onStop() {
 		profileImage.setImageBitmap(null);
 		super.onStop();
+	}
+
+
+	private void findComponent(View view){
+		profileImage = (ImageView) view.findViewById(R.id.profile_dialog_profile_image);
+		nickNameText = (TextView) view.findViewById(R.id.profile_dialog_nick_name);
+		ageGenderText = (TextView) view.findViewById(R.id.profile_dialog_age_gender);
+		sendChupaLayout = (RelativeLayout) view.findViewById(R.id.profile_dialog_send_chupa_layout);
+	}
+
+
+	private void setComponent(){
+		nickNameText.setText(user.getNickName());
+		ageGenderText.setText("" + user.getAge());
+		if(user.isMale()){
+			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_m, 0);
+		}else{
+			ageGenderText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_w, 0);
+		}
+		if(userHelper.isMyUser(user) || squareHelper.isPreview()){
+			sendChupaLayout.setVisibility(View.GONE);
+		}
+	}
+	
+	
+	private void setClickEvent(){
+		sendChupaLayout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ahDialogCallback.doPositiveThing(null);
+				dismiss();
+			}
+		});
+		profileImage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ahDialogCallback.doNegativeThing(null);
+			}
+		});
 	}
 }

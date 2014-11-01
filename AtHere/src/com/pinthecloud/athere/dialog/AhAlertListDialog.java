@@ -27,11 +27,22 @@ public class AhAlertListDialog extends AhDialogFragment{
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Make Dialog
 		AlertDialog.Builder altBuilder = new AlertDialog.Builder(getActivity());
+		setTitle(altBuilder);
+		setItem(altBuilder);
+		return altBuilder.create();
+	}
+
+
+	private void setTitle(AlertDialog.Builder altBuilder){
 		if(title == null){
 			setStyle(STYLE_NO_TITLE, 0);
 		}else{
 			altBuilder.setTitle(title);
 		}
+	}
+
+
+	private void setItem(AlertDialog.Builder altBuilder){
 		altBuilder.setItems(list, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int item) {
 				for(int i=0 ; i<list.length ; i++){
@@ -41,8 +52,5 @@ public class AhAlertListDialog extends AhDialogFragment{
 				}
 			}
 		});
-		AlertDialog alertDialog = altBuilder.create();
-		//		alertDialog.setCanceledOnTouchOutside(true);
-		return alertDialog;
 	}
 }

@@ -78,12 +78,6 @@ public class SquarePreviewActivity extends AhActivity {
 
 
 	@Override
-	public void onBackPressed() {
-		exitSquare();
-	}
-
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
@@ -95,6 +89,12 @@ public class SquarePreviewActivity extends AhActivity {
 	}
 
 
+	@Override
+	public void onBackPressed() {
+		exitSquare();
+	}
+	
+	
 	private void exitSquare() {
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();

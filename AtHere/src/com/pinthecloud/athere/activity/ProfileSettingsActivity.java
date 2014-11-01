@@ -15,34 +15,34 @@ import com.pinthecloud.athere.model.AhMessage;
 
 public class ProfileSettingsActivity extends AhActivity{
 
-	private MessageHelper messageHelper;
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_frame);
 
-
-		/*
-		 * Set helper
-		 */
-		messageHelper = app.getMessageHelper();
-
-
-		/*
-		 * Set Fragment to container
-		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		ProfileSettingsFragment profileSettingsFragment = new ProfileSettingsFragment();
-		fragmentTransaction.add(R.id.activity_container, profileSettingsFragment);
+		ProfileSettingsFragment fragment = new ProfileSettingsFragment();
+		fragmentTransaction.add(R.id.activity_container, fragment);
 		fragmentTransaction.commit();
 
+		setMessageHandler();
+	}
 
-		/*
-		 * Set Handler for forced logout
-		 */
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+	private void setMessageHandler(){
+		MessageHelper messageHelper = app.getMessageHelper();
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -58,17 +58,5 @@ public class ProfileSettingsActivity extends AhActivity{
 				}
 			}
 		});
-	}
-	
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		// Respond to the action bar's Up/Home button
-		case android.R.id.home:
-			onBackPressed();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

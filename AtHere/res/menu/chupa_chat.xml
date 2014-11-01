@@ -1,10 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/chupa_chat_menu_notification"
         android:icon="@drawable/actionbar_red_chupa_alarm_off_btn"
-        android:showAsAction="ifRoom"
-        android:title="@string/notification"/>
+        android:title="@string/notification"
+        app:showAsAction="always" />
 
 </menu>

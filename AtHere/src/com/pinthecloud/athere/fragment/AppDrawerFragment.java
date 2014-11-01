@@ -45,26 +45,16 @@ public class AppDrawerFragment extends AhFragment{
 
 	private AhUser user;
 
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_app_drawer, container, false);
 
-
-
-		/*
-		 * Find UI component
-		 */
-		profileImageView = (ImageView) view.findViewById(R.id.app_drawer_frag_profile_image);
-		nickNameText = (TextView) view.findViewById(R.id.app_drawer_frag_nick_name);
-		ageText = (TextView) view.findViewById(R.id.app_drawer_frag_age);
-		genderText = (TextView) view.findViewById(R.id.app_drawer_frag_gender);
-		profileSettingsButton = (Button) view.findViewById(R.id.app_drawer_frag_profile_settings_button);
-		list = (ListView) view.findViewById(R.id.app_drawer_frag_list);
-
-
+		findComponent(view);
+		
+		
 		/*
 		 * Set image view event
 		 */
@@ -193,5 +183,15 @@ public class AppDrawerFragment extends AhFragment{
 	public void onStop() {
 		profileImageView.setImageBitmap(null);
 		super.onStop();
+	}
+
+
+	private void findComponent(View view){
+		profileImageView = (ImageView) view.findViewById(R.id.app_drawer_frag_profile_image);
+		nickNameText = (TextView) view.findViewById(R.id.app_drawer_frag_nick_name);
+		ageText = (TextView) view.findViewById(R.id.app_drawer_frag_age);
+		genderText = (TextView) view.findViewById(R.id.app_drawer_frag_gender);
+		profileSettingsButton = (Button) view.findViewById(R.id.app_drawer_frag_profile_settings_button);
+		list = (ListView) view.findViewById(R.id.app_drawer_frag_list);
 	}
 }

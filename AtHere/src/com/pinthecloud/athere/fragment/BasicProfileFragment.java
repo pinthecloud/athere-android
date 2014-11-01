@@ -65,18 +65,7 @@ public class BasicProfileFragment extends AhFragment{
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);		
 		AhUser user = userHelper.getMyUserInfo();
 
-
-		/*
-		 * Find UI component
-		 */
-		progressBar = (ProgressBar) view.findViewById(R.id.basic_profile_frag_progress_bar);
-		profileImageView = (ImageView) view.findViewById(R.id.basic_profile_frag_profile_image);
-		nickNameWarningText = (TextView) view.findViewById(R.id.basic_profile_frag_nick_name_warning_text);
-		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_text);
-		ageText = (TextView) view.findViewById(R.id.basic_profile_frag_age_text);
-		genderText = (TextView) view.findViewById(R.id.basic_profile_frag_gender_text);
-		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
-
+		findComponent(view);
 
 		/*
 		 * Set Event on profile image view
@@ -399,6 +388,17 @@ public class BasicProfileFragment extends AhFragment{
 		}else{
 			super.handleException(ex);	
 		}
+	}
+
+
+	private void findComponent(View view){
+		progressBar = (ProgressBar) view.findViewById(R.id.basic_profile_frag_progress_bar);
+		profileImageView = (ImageView) view.findViewById(R.id.basic_profile_frag_profile_image);
+		nickNameWarningText = (TextView) view.findViewById(R.id.basic_profile_frag_nick_name_warning_text);
+		nickNameEditText = (EditText) view.findViewById(R.id.basic_profile_frag_nick_name_text);
+		ageText = (TextView) view.findViewById(R.id.basic_profile_frag_age_text);
+		genderText = (TextView) view.findViewById(R.id.basic_profile_frag_gender_text);
+		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
 	}
 
 

@@ -57,125 +57,13 @@ public class ChatFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
+		findComponent(view);
+		setEditText();
+		setButtonEvent();
+		setChatList();
+		setPreviewLayout();
+		setMessageHandler();
 
-		/*
-		 * Set UI component
-		 */
-		previewLayout = (RelativeLayout) view.findViewById(R.id.chat_frag_preview_layout);
-		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
-		inputbarLayout = (LinearLayout) view.findViewById(R.id.chat_frag_inputbar_layout);
-		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
-		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
-
-
-		/*
-		 * If Preview, hide input bar and enable action bar
-		 * Otherwise, hide preview layout
-		 */
-		if(squareHelper.isPreview()){
-			inputbarLayout.setVisibility(View.GONE);
-		} else{
-			previewLayout.setVisibility(View.GONE);
-		}
-
-
-		/*
-		 * Set edit text
-		 */
-		messageEditText.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String message = s.toString().trim();
-				if(message.length() < 1){
-					sendButton.setEnabled(false);
-				}else{
-					sendButton.setEnabled(true);
-				}
-			}
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-
-
-		/*
-		 * Set button
-		 */
-		sendButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				AhUser myUser = userHelper.getMyUserInfo();
-				// Make message and send it
-				AhMessage.Builder messageBuilder = new AhMessage.Builder();
-				messageBuilder.setContent(messageEditText.getText().toString())
-				.setSender(myUser.getNickName())
-				.setSenderId(myUser.getId())
-				.setReceiverId(square.getId())
-				.setType(AhMessage.TYPE.TALK);
-				AhMessage sendChat = messageBuilder.build();
-				sendChat(sendChat);
-			}
-		});
-		sendButton.setEnabled(false);
-
-
-		/*
-		 * Set message list view
-		 */
-		messageListAdapter = new ChatListAdapter
-				(context, thisFragment);
-		messageListView.setAdapter(messageListAdapter);
-
-
-		//		messageListView.setOnScrollListener(new OnScrollListener() {
-		//			public void onScroll(AbsListView view, int firstVisibleItem,
-		//					int visibleItemCount, int totalItemCount) {
-		//				if (firstVisibleItem == 1) {
-		//					// TODO : Insert messageListView.add(0, messages);
-		//					offset++;
-		//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
-		//					messageList.clear();
-		//					messageList.addAll(0, talks);
-		//					messageListAdapter.notifyDataSetChanged();
-		//					messageListView.setSelection(messageListView.getCount() - 1);
-		//				}
-		//			}
-		//			public void onScrollStateChanged(AbsListView view, int scrollState) {
-		//			}
-		//		});
-
-
-		/**
-		 * See 
-		 *   1) com.pinthecloud.athere.helper.MessageEventHelper class, which is the implementation of the needed structure 
-		 *   2) com.pinthecloud.athere.AhIntentService class Line #47, which has the event time when to trigger
-		 *  
-		 * This method sets the MessageHandler received on app running
-		 */
-		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
-
-			@Override
-			public void onCompleted(final AhMessage message) {
-				// Chupa & Exit Square Message can't go through here
-				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
-						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
-					return;
-				}
-
-				if(message.getType().equals((AhMessage.TYPE.UPDATE_USER_INFO.toString()))){
-					refreshView(null);
-					return;
-				}
-
-				refreshView(message.getId());
-			}
-		});
 		return view;
 	}
 
@@ -186,7 +74,7 @@ public class ChatFragment extends AhFragment{
 		NotificationManager mNotificationManager = (NotificationManager) activity
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-		refreshView(null);
+		updateChatList(null);
 	}
 
 
@@ -217,6 +105,85 @@ public class ChatFragment extends AhFragment{
 	}
 
 
+	private void findComponent(View view){
+		previewLayout = (RelativeLayout) view.findViewById(R.id.chat_frag_preview_layout);
+		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
+		inputbarLayout = (LinearLayout) view.findViewById(R.id.chat_frag_inputbar_layout);
+		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
+		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
+	}
+
+
+	private void setEditText(){
+		/*
+		 * Set edit text
+		 */
+		messageEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String message = s.toString().trim();
+				if(message.length() < 1){
+					sendButton.setEnabled(false);
+				}else{
+					sendButton.setEnabled(true);
+				}
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+	}
+
+
+	private void setChatList(){
+		messageListAdapter = new ChatListAdapter(context, thisFragment);
+		messageListView.setAdapter(messageListAdapter);
+		//		messageListView.setOnScrollListener(new OnScrollListener() {
+		//			public void onScroll(AbsListView view, int firstVisibleItem,
+		//					int visibleItemCount, int totalItemCount) {
+		//				if (firstVisibleItem == 1) {
+		//					// TODO : Insert messageListView.add(0, messages);
+		//					offset++;
+		//					final List<AhMessage> talks = messageDBHelper.getAllMessagesByFifties(offset, AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.EXIT_SQUARE, AhMessage.TYPE.TALK);
+		//					messageList.clear();
+		//					messageList.addAll(0, talks);
+		//					messageListAdapter.notifyDataSetChanged();
+		//					messageListView.setSelection(messageListView.getCount() - 1);
+		//				}
+		//			}
+		//			public void onScrollStateChanged(AbsListView view, int scrollState) {
+		//			}
+		//		});
+	}
+
+
+	private void setButtonEvent(){
+		sendButton.setEnabled(false);
+		sendButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				AhUser myUser = userHelper.getMyUserInfo();
+
+				AhMessage.Builder messageBuilder = new AhMessage.Builder();
+				messageBuilder.setContent(messageEditText.getText().toString())
+				.setSender(myUser.getNickName())
+				.setSenderId(myUser.getId())
+				.setReceiverId(square.getId())
+				.setType(AhMessage.TYPE.TALK);
+				AhMessage sendChat = messageBuilder.build();
+
+				sendChat(sendChat);
+			}
+		});
+	}
+
+
 	public void sendChat(final AhMessage message){
 		message.setStatus(AhMessage.STATUS.SENDING);
 
@@ -233,7 +200,6 @@ public class ChatFragment extends AhFragment{
 		int id = messageDBHelper.addMessage(message);
 		message.setId(String.valueOf(id));
 
-		// Send message to server
 		messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -255,7 +221,38 @@ public class ChatFragment extends AhFragment{
 						messageListAdapter.notifyDataSetChanged();
 					}
 				});
-				refreshView(message.getId());
+				updateChatList(message.getId());
+			}
+		});
+	}
+
+
+	private void setPreviewLayout(){
+		if(squareHelper.isPreview()){
+			inputbarLayout.setVisibility(View.GONE);
+		} else{
+			previewLayout.setVisibility(View.GONE);
+		}
+	}
+
+
+	private void setMessageHandler(){
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+
+			@Override
+			public void onCompleted(final AhMessage message) {
+				// Chupa & Exit Square Message can't go through here
+				if (message.getType().equals(AhMessage.TYPE.CHUPA.toString())
+						|| message.getType().equals(AhMessage.TYPE.EXIT_SQUARE.toString())){
+					return;
+				}
+
+				if(message.getType().equals((AhMessage.TYPE.UPDATE_USER_INFO.toString()))){
+					updateChatList(null);
+					return;
+				}
+
+				updateChatList(message.getId());
 			}
 		});
 	}
@@ -266,7 +263,7 @@ public class ChatFragment extends AhFragment{
 	 * notify this Method When this Fragment is on Resume
 	 * so that the Message stored in MessageDBHelper can inflate to the view again
 	 */
-	private void refreshView(final String id){
+	private void updateChatList(final String id){
 		/*
 		 * Set ENTER, EXIT, CHAT messages
 		 */

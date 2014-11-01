@@ -72,16 +72,10 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_square_list, container, false);
 
-		/*
-		 * Set UI component
-		 */
-		progressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
-		addressLayout = (RelativeLayout)view.findViewById(R.id.square_list_frag_address_layout);
-		addressText = (TextView)view.findViewById(R.id.square_list_frag_address);
-		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
-		squareListView = pullToRefreshListView.getRefreshableView();
-		registerForContextMenu(squareListView);
-
+		findComponent(view);
+		setButtonEvent();
+		setSquareList();
+		setLocationListener();
 
 		/*
 		 * For easy developing, make back button to super user
@@ -107,22 +101,53 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		//			activity.addContentView(b, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		//		}
 
+		return view;
+	}
 
-		/*
-		 * Set button
-		 */
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(locationHelper.isLocationEnabled()){
+			addressText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.groundlist_location_ico, 0, 0, 0);
+			addressText.setText("");
+		}else{
+			addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			addressText.setText(getResources().getString(R.string.location_turn_on_message));
+		}
+		locationHelper.connect();
+	}
+
+
+	@Override
+	public void onStop() {
+		locationHelper.disconnect();
+		super.onStop();
+	}
+
+
+	private void findComponent(View view){
+		progressBar = (ProgressBar)view.findViewById(R.id.square_list_frag_progress_bar);
+		addressLayout = (RelativeLayout)view.findViewById(R.id.square_list_frag_address_layout);
+		addressText = (TextView)view.findViewById(R.id.square_list_frag_address);
+		pullToRefreshListView = (PullToRefreshListView)view.findViewById(R.id.square_list_frag_list);
+		squareListView = pullToRefreshListView.getRefreshableView();
+		registerForContextMenu(squareListView);
+	}
+
+
+	private void setButtonEvent(){
 		addressLayout.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				updateNearSquares(View.VISIBLE, locationListener);
+				updateSquareList(View.VISIBLE, locationListener);
 			}
 		});
+	}
 
 
-		/*
-		 * Set square list view
-		 */
+	private void setSquareList(){
 		squareListAdapter = new SquareListAdapter(context, thisFragment);
 		squareListView.setAdapter(squareListAdapter);
 		squareListView.setOnItemClickListener(new OnItemClickListener() {
@@ -195,21 +220,20 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				updateNearSquares(View.GONE, locationListener);
+				updateSquareList(View.GONE, locationListener);
 			}
 		});
+	}
 
 
-		/*
-		 * Set location helper and listener 
-		 */
+	private void setLocationListener(){
 		locationHelper = new LocationHelper(activity, this, this);
 		locationListener = new LocationListener() {
 
 			@Override
 			public void onLocationChanged(Location loc) {
 				locationHelper.removeLocationUpdates(this);
-				getNearSquares(loc);
+				getSquareList(loc);
 				locationHelper.getAddress(loc, new AhEntityCallback<String>() {
 
 					@Override
@@ -219,35 +243,9 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				});
 			}
 		};
-
-		return view;
 	}
 
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		if(locationHelper.isLocationEnabled()){
-			addressText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.groundlist_location_ico, 0, 0, 0);
-			addressText.setText("");
-		}else{
-			addressText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-			addressText.setText(getResources().getString(R.string.location_turn_on_message));
-		}
-		locationHelper.connect();
-	}
-
-
-	@Override
-	public void onStop() {
-		locationHelper.disconnect();
-		super.onStop();
-	}
-
-
-	/*
-	 * Enter a square 
-	 */
 	private void enterSquare(final Square square, final boolean isPreview){
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
@@ -325,7 +323,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	 * Get square near from user
 	 * Now it just gets all squares cause of location law. (lati and longi is 0)
 	 */
-	private void getNearSquares(Location loc){
+	private void getSquareList(Location loc){
 		double latitude = loc.getLatitude();
 		double longitude = loc.getLongitude();
 		squareHelper.getSquareListAsync(thisFragment, latitude, longitude, new AhListCallback<Square>() {
@@ -376,7 +374,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 	}
 
 
-	private void updateNearSquares(int progressBarVisible, final LocationListener locationListener){
+	private void updateSquareList(int progressBarVisible, final LocationListener locationListener){
 		if(locationHelper.isLocationEnabled()){
 			progressBar.setVisibility(progressBarVisible);
 			progressBar.bringToFront();
@@ -419,7 +417,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				return;
 			}
 
-			getNearSquares(loc);
+			getSquareList(loc);
 			locationHelper.getAddress(loc, new AhEntityCallback<String>() {
 
 				@Override

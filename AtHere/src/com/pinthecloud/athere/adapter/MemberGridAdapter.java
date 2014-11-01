@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pinthecloud.athere.AhApplication;
+import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AhFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
@@ -58,7 +59,7 @@ public class MemberGridAdapter extends ArrayAdapter<AhUser>{
 			 * Set UI component
 			 */
 			blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.USER_PROFILE,
-					user.getId(), R.drawable.ground_member_profile_default, profileImage, true);
+					user.getId()+AhGlobalVariable.SMALL, R.drawable.ground_member_profile_default, profileImage, true);
 			nickName.setText(user.getNickName());
 			if(userHelper.isMyUser(user)){
 				myProfile.setVisibility(View.VISIBLE);
@@ -70,7 +71,6 @@ public class MemberGridAdapter extends ArrayAdapter<AhUser>{
 			}else{
 				gender.setImageResource(R.drawable.general_gender_w);
 			}
-
 		}
 
 		return view;

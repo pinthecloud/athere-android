@@ -1,15 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/square_menu_notification"
         android:icon="@drawable/actionbar_white_chupalist_btn"
-        android:showAsAction="ifRoom"
-        android:title="@string/notification"/>
+        android:title="@string/notification"
+        app:showAsAction="always" />
     <item
         android:id="@+id/square_menu_more"
         android:icon="@drawable/actionbar_white_exit_btn"
-        android:showAsAction="ifRoom"
-        android:title="@string/more"/>
+        android:title="@string/more"
+        app:showAsAction="ifRoom" />
 
 </menu>

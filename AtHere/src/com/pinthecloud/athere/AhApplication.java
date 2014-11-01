@@ -9,9 +9,9 @@ import android.net.NetworkInfo;
 
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
+import com.pinthecloud.athere.analysis.FlurryHelper;
 import com.pinthecloud.athere.analysis.GAHelper;
 import com.pinthecloud.athere.analysis.UserHabitHelper;
-import com.pinthecloud.athere.analysis.FlurryHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
@@ -34,10 +34,10 @@ import com.pinthecloud.athere.util.FileUtil;
 public class AhApplication extends Application{
 
 	// Windows Azure Mobile Service Keys
-	private final String APP_URL = "https://athere.azure-mobile.net/";
-	private final String APP_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
-	private final String APP_TEST_URL = "https://atheresub.azure-mobile.net/";
-	private final String APP_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
+	private final String AZURE_REAL_URL = "https://athere.azure-mobile.net/";
+	private final String AZURE_REAL_KEY = "AyHtUuHXEwDSTuuLvvSYZtVSQZxtnT17";
+	private final String AZURE_TEST_URL = "https://atheresub.azure-mobile.net/";
+	private final String AZURE_TEST_KEY = "MRKovlGEFQRPXGTVMFaZCBkeBwQSQA92";
 
 	// Application
 	private static AhApplication app;
@@ -66,29 +66,29 @@ public class AhApplication extends Application{
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		app = this;
 
 		String AZURE_URL;
 		String AZURE_KEY;
 		if (AhGlobalVariable.DEBUG_MODE) {
-			AZURE_URL = APP_TEST_URL;
-			AZURE_KEY = APP_TEST_KEY;
+			AZURE_URL = AZURE_TEST_URL;
+			AZURE_KEY = AZURE_TEST_KEY;
 		} else {
-			AZURE_URL = APP_URL;
-			AZURE_KEY = APP_KEY;
+			AZURE_URL = AZURE_REAL_URL;
+			AZURE_KEY = AZURE_REAL_KEY;
 		}
 
-		app = this;
 		try {
 			mClient = new MobileServiceClient(
 					AZURE_URL,
 					AZURE_KEY,
-					this);
+					app);
 		} catch (MalformedURLException e) {
 			// Do nothing
 		}
 
-		userDBHelper = new UserDBHelper(this);
-		messageDBHelper = new MessageDBHelper(this);
+		userDBHelper = new UserDBHelper(app);
+		messageDBHelper = new MessageDBHelper(app);
 
 		userHelper = new UserHelper();
 		squareHelper = new SquareHelper();

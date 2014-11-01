@@ -84,8 +84,6 @@ public class AhFragment extends Fragment implements ExceptionManager.Handler{
 
 	@Override
 	public void handleException(final AhException ex) {
-		Log(thisFragment, "AhFragment handleException : " + ex.toString());
-
 		AhAlertDialog exceptionDialog = null;
 		String title = ex.getType().toString();
 		String message = ex.toString();

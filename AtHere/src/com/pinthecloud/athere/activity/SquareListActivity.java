@@ -4,57 +4,74 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.fragment.AppDrawerFragment;
-import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
-import com.pinthecloud.athere.helper.MessageHelper;
-import com.pinthecloud.athere.interfaces.AhEntityCallback;
-import com.pinthecloud.athere.model.AhMessage;
 
 
 public class SquareListActivity extends AhActivity {
 
-	private DrawerLayout mDrawerLayout; 
-	private View mFragmentView;
-	private ChupaListFragment chupaListFragment;
+	private DrawerLayout drawerLayout;
+	private ActionBarDrawerToggle drawerToggle;
 	private SlidingMenu slidingMenu;
 
-	private MessageHelper messageHelper;
-
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square_list);
 
-
-		/*
-		 * Set UI Component and drawer and helper
-		 */
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_list_drawer_layout);
-		mFragmentView = findViewById(R.id.square_list_notification_drawer_fragment);
+		setActionBar();
 		FragmentManager fragmentManager = getFragmentManager();
-		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_list_notification_drawer_fragment);
-		chupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_red_drawer_btn);
-		messageHelper = app.getMessageHelper();
-
-
-		/*
-		 * Set Fragment to container
-		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		SquareListFragment squareListFragment = new SquareListFragment();
-		fragmentTransaction.add(R.id.square_list_layout, squareListFragment);
+		setFragment(fragmentTransaction);
+		setSlidingMenu(fragmentTransaction);
+		setDrawerIndicator();
+		fragmentTransaction.commit();
+	}
 
 
-		/*
-		 * Set sliding menu
-		 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			slidingMenu.toggle();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		if(slidingMenu.isMenuShowing()){
+			slidingMenu.toggle();
+			return;
+		}
+		super.onBackPressed();
+	}
+
+
+	private void setActionBar(){
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+	}
+
+
+	private void setFragment(FragmentTransaction fragmentTransaction){
+		SquareListFragment fragment = new SquareListFragment ();
+		fragmentTransaction.add(R.id.square_list_layout, fragment);
+	}
+
+
+	private void setSlidingMenu(FragmentTransaction fragmentTransaction){
 		slidingMenu = new SlidingMenu(thisActivity);
 		slidingMenu.setMenu(R.layout.app_drawer_frame);
 		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
@@ -66,78 +83,37 @@ public class SquareListActivity extends AhActivity {
 
 		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
 		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
-		fragmentTransaction.commit();
+	}
 
 
-		/*
-		 * Set Handler for forced logout
-		 */
-		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+	private void setDrawerIndicator() {
+		drawerLayout = (DrawerLayout) findViewById(R.id.square_list_drawer_layout);
+		drawerToggle = new ActionBarDrawerToggle(thisActivity, /* host Activity */
+				drawerLayout, /* DrawerLayout object */
+				R.string.drawer_open, /* "open drawer" description for accessibility */
+				R.string.drawer_close /* "close drawer" description for accessibility */
+				)
+		{
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+			}
 
 			@Override
-			public void onCompleted(AhMessage message) {
-				messageHelper.triggerMessageEvent(chupaListFragment, message);
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				invalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+			}
+		};
+		drawerLayout.setDrawerListener(drawerToggle);
+		
+		// Defer code dependent on restoration of previous instance state.
+		drawerLayout.post(new Runnable() {
+			@Override
+			public void run() {
+				drawerToggle.syncState();
 			}
 		});
-	}
-
-
-	@Override
-	public void onBackPressed() {
-		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
-			mDrawerLayout.closeDrawer(mFragmentView);
-			return;
-		}
-
-		if(slidingMenu.isMenuShowing()){
-			slidingMenu.toggle();
-			return;
-		}
-
-		super.onBackPressed();
-	}
-
-
-	//	@Override
-	//	public boolean onCreateOptionsMenu(Menu menu) {
-	//		super.onCreateOptionsMenu(menu);
-	//		getMenuInflater().inflate(R.menu.square_list, menu);
-	//		return true;
-	//	}
-	//
-	//
-	//	@Override
-	//	public boolean onPrepareOptionsMenu(Menu menu) {
-	//		super.onPrepareOptionsMenu(menu);
-	//		MenuItem menuItem = menu.findItem(R.id.square_list_menu_notification);
-	//		if(messageDBHelper.getAllChupaBadgeNum() > 0){
-	//			menuItem.setIcon(R.drawable.actionbar_red_chupalist_highlight_btn);
-	//		}else{
-	//			menuItem.setIcon(R.drawable.actionbar_red_chupalist_btn);
-	//		}
-	//		return true;
-	//	}
-
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
-				mDrawerLayout.closeDrawer(mFragmentView);
-			}else{
-				slidingMenu.toggle();
-			}
-			break;
-			//		case R.id.square_list_menu_notification:
-			//			if(mDrawerLayout.isDrawerOpen(mFragmentView)){
-			//				mDrawerLayout.closeDrawer(mFragmentView);
-			//			}else{
-			//				mDrawerLayout.openDrawer(mFragmentView);
-			//			}
-			//			break;
-		}
-		return true;
 	}
 }

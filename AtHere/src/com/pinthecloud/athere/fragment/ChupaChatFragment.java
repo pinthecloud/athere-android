@@ -2,11 +2,11 @@ package com.pinthecloud.athere.fragment;
 
 import java.util.List;
 
-import android.app.ActionBar;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -56,9 +56,9 @@ public class ChupaChatFragment extends AhFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Get parameter from previous activity intent
 		Intent intent = activity.getIntent();
 		otherUser = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
+
 		myUser = userHelper.getMyUserInfo();
 		chupaCommunId = AhMessage.buildChupaCommunId(myUser.getId(), otherUser.getId());
 	}
@@ -70,54 +70,88 @@ public class ChupaChatFragment extends AhFragment {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_chupa_chat, container, false);
 
-
-		/*
-		 * Remove Notification when the user enters the Chupa chat room.
-		 * Set chupaCommunId and Remove badge.
-		 */
 		NotificationManager mNotificationManager = (NotificationManager) activity
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
 
+		findComponent(view);
+		setActionBar();
+		setOtherUserBar();
+		setEditText();
+		setButtonEvent();
+		setChupaChatList();
+		setMessageHanlder();
 
-		/*
-		 * Set UI component
-		 */
+		return view;
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
+				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
+		updateChupaChatList(chupaCommunId, null);
+	}
+
+
+	@Override
+	public void onStop() {
+		otherProfileImage.setImageBitmap(null);
+		super.onStop();
+	}
+
+
+	@Override
+	public void handleException(AhException ex) {
+		if(ex.getMethodName().equals("sendMessageAsync")){
+			AhMessage exMessage = (AhMessage)ex.getParameter();
+			exMessage.setStatus(AhMessage.STATUS.FAIL);
+			messageDBHelper.updateMessages(exMessage);
+			activity.runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					messageListAdapter.notifyDataSetChanged();
+				}
+			});
+		}else{
+			super.handleException(ex);
+		}
+	}
+
+
+	private void findComponent(View view){
 		otherProfileImage = (ImageView) view.findViewById(R.id.chupa_chat_frag_other_profile);
 		otherNickName = (TextView) view.findViewById(R.id.chupa_chat_frag_other_nick_name);
 		otherAgeGender = (TextView) view.findViewById(R.id.chupa_chat_frag_other_age_gender);
 		messageListView = (ListView) view.findViewById(R.id.chupa_chat_frag_list);
 		messageEditText = (EditText) view.findViewById(R.id.chupa_chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chupa_chat_frag_send_button);
+	}
 
 
-		/*
-		 * Set Action Bar
-		 */
-		ActionBar actionBar = activity.getActionBar();
+	private void setActionBar(){
+		ActionBar actionBar = activity.getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
+	}
 
 
-		/*
-		 * Set message listview
-		 */
+	private void setChupaChatList(){
 		messageListAdapter = new ChupaChatListAdapter(context, this);
 		messageListView.setAdapter(messageListAdapter);
+	}
 
 
-		/*
-		 * Set other user bar
-		 */
+	private void setOtherUserBar(){
 		otherNickName.setText(otherUser.getNickName());
 		otherAgeGender.setText(""+otherUser.getAge());
-
 		if (otherUser.isMale()) {
 			otherAgeGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_m, 0);
 		} else {
 			otherAgeGender.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.general_gender_w, 0);
 		}
-
 		otherProfileImage.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -145,11 +179,10 @@ public class ChupaChatFragment extends AhFragment {
 				profileDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
+	}
 
 
-		/*
-		 * Set edit text
-		 */
+	private void setEditText(){
 		messageEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -171,16 +204,14 @@ public class ChupaChatFragment extends AhFragment {
 			public void afterTextChanged(Editable s) {
 			}
 		});
+	}
 
 
-		/*
-		 * Set event on button
-		 */
+	private void setButtonEvent(){
 		sendButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// Make message
 				AhMessage.Builder messageBuilder = new AhMessage.Builder();
 				messageBuilder.setContent(messageEditText.getText().toString())
 				.setSender(myUser.getNickName())
@@ -193,16 +224,10 @@ public class ChupaChatFragment extends AhFragment {
 			}
 		});
 		sendButton.setEnabled(false);
+	}
 
 
-		/**
-		 * See 1) com.pinthecloud.athere.helper.MessageEventHelper class, which
-		 * is the implementation of the needed structure 2)
-		 * com.pinthecloud.athere.AhIntentService class Line #47, which has the
-		 * event time when to trigger
-		 * 
-		 * This method sets the MessageHandler received on app running
-		 */
+	private void setMessageHanlder(){
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -239,47 +264,9 @@ public class ChupaChatFragment extends AhFragment {
 				if(message.getType().equals(AhMessage.TYPE.ENTER_SQUARE.toString())){
 					message.setId(null);
 				}
-				Log(thisFragment, message.getType()+ " id : " + message.getId());
-				refreshView(chupaCommunId, message.getId());
+				updateChupaChatList(chupaCommunId, message.getId());
 			}
 		});
-
-		return view;
-	}
-
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		blobStorageHelper.setImageViewAsync(thisFragment, BlobStorageHelper.USER_PROFILE, 
-				otherUser.getId()+AhGlobalVariable.SMALL, R.drawable.profile_default, otherProfileImage, true);
-		refreshView(chupaCommunId, null);
-	}
-
-
-	@Override
-	public void onStop() {
-		otherProfileImage.setImageBitmap(null);
-		super.onStop();
-	}
-
-
-	@Override
-	public void handleException(AhException ex) {
-		if(ex.getMethodName().equals("sendMessageAsync")){
-			AhMessage exMessage = (AhMessage)ex.getParameter();
-			exMessage.setStatus(AhMessage.STATUS.FAIL);
-			messageDBHelper.updateMessages(exMessage);
-			activity.runOnUiThread(new Runnable() {
-
-				@Override
-				public void run() {
-					messageListAdapter.notifyDataSetChanged();
-				}
-			});
-		}else{
-			super.handleException(ex);
-		}
 	}
 
 
@@ -292,7 +279,6 @@ public class ChupaChatFragment extends AhFragment {
 		int id = messageDBHelper.addMessage(message);
 		message.setId(""+id);
 
-		// Send message to server
 		messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -312,7 +298,7 @@ public class ChupaChatFragment extends AhFragment {
 						messageListAdapter.remove(message);
 					}
 				});
-				refreshView(message.getChupaCommunId(), message.getId());
+				updateChupaChatList(message.getChupaCommunId(), message.getId());
 			}
 		});
 	}
@@ -321,13 +307,8 @@ public class ChupaChatFragment extends AhFragment {
 	/*
 	 * Set sent and received chupas to list view
 	 */
-	private void refreshView(String chupaCommunId, final String id) {
+	private void updateChupaChatList(String chupaCommunId, final String id) {
 		if (chupaCommunId == null || chupaCommunId.equals("")) throw new AhException("No chupaCommunId");
-
-
-		/*
-		 * Clear badge numbers displayed on chupa list
-		 */
 		messageDBHelper.clearChupaBadgeNum(chupaCommunId);
 
 

@@ -48,17 +48,14 @@ public class SquareTabFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_square_tab, container, false);
 
+		findComponent(view);
+		setMessageHandler();
 
+		
 		/*
-		 * Set UI Component
+		 * Set Tab
 		 */
-		mViewPager = (ViewPager) view.findViewById(R.id.square_tab_frag_pager);
-		tabs = (PagerSlidingTabStrip) view.findViewById(R.id.square_tab_frag_tab);
-
-
-		/*
-		 * Set tab
-		 */
+		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		mSquarePagerAdapter = new SquarePagerAdapter(getFragmentManager(), square);
@@ -85,10 +82,17 @@ public class SquareTabFragment extends AhFragment{
 			}
 		});
 
+		return view;
+	}
 
-		/*
-		 * Set message handle
-		 */
+
+	private void findComponent(View view){
+		mViewPager = (ViewPager) view.findViewById(R.id.square_tab_frag_pager);
+		tabs = (PagerSlidingTabStrip) view.findViewById(R.id.square_tab_frag_tab);
+	}
+
+
+	private void setMessageHandler(){
 		messageHelper.setMessageHandler(thisFragment, new AhEntityCallback<AhMessage>() {
 
 			@Override
@@ -97,7 +101,5 @@ public class SquareTabFragment extends AhFragment{
 				messageHelper.triggerMessageEvent(mSquarePagerAdapter.memberFragment, message);
 			}
 		});
-
-		return view;
 	}
 }

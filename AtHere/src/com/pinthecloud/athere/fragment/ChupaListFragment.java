@@ -3,11 +3,11 @@ package com.pinthecloud.athere.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,16 +40,28 @@ public class ChupaListFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_chupa_list, container, false);
 
-		/*
-		 * Set UI component
-		 */
-		squareChupaListView = (ListView)view.findViewById(R.id.chupa_list_frag_list);
-		blankImage = (ImageView)view.findViewById(R.id.chupa_list_frag_blank_image);
+		findComponent(view);
+		setChupaList();
+		setMessageHandler();
+		
+		return view;
+	}
 
 
-		/*
-		 * Set square chupa list view
-		 */
+	@Override
+	public void onStart() {
+		super.onStart();
+		updateChupaList();
+	}
+
+
+	private void findComponent(View view){
+		squareChupaListView = (ListView) view.findViewById(R.id.chupa_list_frag_list);
+		blankImage = (ImageView) view.findViewById(R.id.chupa_list_frag_blank_image);
+	}
+
+
+	private void setChupaList(){
 		squareChupaListAdapter = new ChupaListAdapter(context, thisFragment);
 		squareChupaListView.setAdapter(squareChupaListAdapter);
 		squareChupaListView.setOnItemClickListener(new OnItemClickListener() {
@@ -62,31 +74,21 @@ public class ChupaListFragment extends AhFragment{
 				startActivity(intent);
 			}
 		});
+	}
 
 
-		/*
-		 * Set message handler for getting push
-		 */
+	private void setMessageHandler(){
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override
 			public void onCompleted(AhMessage entity) {
-				refreshView();
+				updateChupaList();
 			}
 		});
-
-		return view;
 	}
 
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		refreshView();
-	}
-
-
-	private void refreshView() {
+	private void updateChupaList() {
 
 		final List<AhMessage> lastChupaList = messageDBHelper.getLastChupas();
 		activity.runOnUiThread(new Runnable() {
@@ -96,14 +98,14 @@ public class ChupaListFragment extends AhFragment{
 				// Set square chupa list view
 				squareChupaListAdapter.clear();
 				squareChupaListAdapter.addAll(convertToMap(lastChupaList));
-				
+
 				// If there is no message, show blank image
 				if(squareChupaListAdapter.getCount() < 1){
 					blankImage.setVisibility(View.VISIBLE);
 				} else{
 					blankImage.setVisibility(View.GONE);
 				}
-				
+
 				// Refresh square activity action bar notification item
 				activity.invalidateOptionsMenu();
 			}
@@ -149,8 +151,8 @@ public class ChupaListFragment extends AhFragment{
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(DrawerLayout drawerLayout, int drawerIconId) {
-		ActionBar actionBar = activity.getActionBar();
+	public void setUp(DrawerLayout drawerLayout) {
+		ActionBar actionBar = activity.getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 
@@ -158,7 +160,6 @@ public class ChupaListFragment extends AhFragment{
 		// between the navigation drawer and the action bar app icon.
 		mDrawerToggle = new ActionBarDrawerToggle(activity, /* host Activity */
 				drawerLayout, /* DrawerLayout object */
-				drawerIconId, /* nav drawer image to replace 'Up' caret */
 				R.string.drawer_open, /* "open drawer" description for accessibility */
 				R.string.drawer_close /* "close drawer" description for accessibility */
 				)

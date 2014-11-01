@@ -39,21 +39,35 @@ public class AhAlertDialog extends AhDialogFragment{
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		AlertDialog.Builder altBuilder = new AlertDialog.Builder(activity);
+		setTitle(altBuilder);
+		setOkCancelMessage();
+		altBuilder.setMessage(message);
+		setButton(altBuilder);
+		return altBuilder.create();
+	}
+
+
+	private void setTitle(AlertDialog.Builder altBuilder){
+		if(title == null){
+			setStyle(STYLE_NO_TITLE, 0);
+		}else{
+			altBuilder.setTitle(title);
+		}
+	}
+
+
+	private void setOkCancelMessage(){
 		if(okMessage == null){
 			okMessage =  getResources().getString(android.R.string.ok);
 		}
 		if(cancelMessage == null){
 			cancelMessage =  getResources().getString(android.R.string.no);	
 		}
+	}
 
-		// Make Dialog
-		AlertDialog.Builder altBuilder = new AlertDialog.Builder(activity);
-		if(title == null){
-			setStyle(STYLE_NO_TITLE, 0);
-		}else{
-			altBuilder.setTitle(title);
-		}
-		altBuilder.setMessage(message);
+
+	private void setButton(AlertDialog.Builder altBuilder){
 		altBuilder.setPositiveButton(okMessage, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog,int which) {
 				ahDialogCallback.doPositiveThing(null);
@@ -68,8 +82,5 @@ public class AhAlertDialog extends AhDialogFragment{
 				}
 			});
 		}
-		AlertDialog alertDialog = altBuilder.create();
-		//		alertDialog.setCanceledOnTouchOutside(true);
-		return alertDialog;
 	}
 }

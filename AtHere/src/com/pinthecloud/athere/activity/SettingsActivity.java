@@ -15,14 +15,10 @@ public class SettingsActivity extends AhActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_frame);
 
-
-		/*
-		 * Set Fragment to container
-		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		SettingsFragment profileSettingsFragment = new SettingsFragment();
-		fragmentTransaction.add(R.id.activity_container, profileSettingsFragment);
+		SettingsFragment fragment = new SettingsFragment();
+		fragmentTransaction.add(R.id.activity_container, fragment);
 		fragmentTransaction.commit();
 	}
 
@@ -30,7 +26,6 @@ public class SettingsActivity extends AhActivity{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		// Respond to the action bar's Up/Home button
 		case android.R.id.home:
 			onBackPressed();
 			return true;

@@ -44,32 +44,34 @@ public class SquareEnterDialog extends AhDialogFragment{
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog_square_enter, container, false);
 		showCode = getArguments().getBoolean(SHOW_CODE);
+		findComponent(view);
+		setComponent();
+		setEditText();
+		setButtonEvent();
+		return view;
+	}
 
 
-		/*
-		 * Find UI component
-		 */
+	private void findComponent(View view){
 		titleText = (TextView) view.findViewById(R.id.square_enter_dialog_title);
 		warningText = (TextView) view.findViewById(R.id.square_enter_dialog_code_warning_text);
 		codeText = (EditText) view.findViewById(R.id.square_enter_dialog_code_text);
 		enterButton = (ImageButton) view.findViewById(R.id.square_enter_dialog_enter_button);
 		previewButton = (Button) view.findViewById(R.id.square_enter_dialog_preview_button);
+	}
 
 
-		/*
-		 * Set UI
-		 */
+	private void setComponent(){
 		titleText.setText(square.getName());
 		if(!showCode){
 			warningText.setVisibility(View.GONE);
 			codeText.setVisibility(View.GONE);
 			enterButton.setVisibility(View.GONE);
 		}
+	}
 
 
-		/*
-		 * Set code edit text
-		 */
+	private void setEditText(){
 		codeText.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -89,11 +91,10 @@ public class SquareEnterDialog extends AhDialogFragment{
 			public void afterTextChanged(Editable s) {
 			}
 		});
+	}
 
 
-		/*
-		 * Set button event
-		 */
+	private void setButtonEvent(){
 		enterButton.setEnabled(false);
 		enterButton.setOnClickListener(new OnClickListener() {
 
@@ -118,7 +119,5 @@ public class SquareEnterDialog extends AhDialogFragment{
 				dismiss();
 			}
 		});
-
-		return view;
 	}
 }

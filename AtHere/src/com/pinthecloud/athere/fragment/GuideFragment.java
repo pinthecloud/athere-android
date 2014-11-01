@@ -56,6 +56,7 @@ public class GuideFragment extends AhFragment{
 		uiHelper = new UiLifecycleHelper(activity, callback);
 		uiHelper.onCreate(savedInstanceState);
 	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

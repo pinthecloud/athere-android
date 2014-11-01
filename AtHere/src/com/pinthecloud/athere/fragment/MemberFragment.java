@@ -36,18 +36,36 @@ public class MemberFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_member, container, false);
 
+		findComponent(view);
+		setMemberGrid();
+		
+		return view;
+	}
 
-		/*
-		 * Find UI component
-		 */
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		updateMemberGrid();
+	}
+
+
+	@Override 
+	public void onSaveInstanceState(Bundle outState) {
+		//first saving my state, so the bundle wont be empty.
+		outState.putString("VIEWPAGER_BUG_FIX",  "VIEWPAGER_BUG_FIX");
+		super.onSaveInstanceState(outState);
+	}
+
+
+	private void findComponent(View view){
 		pullToRefreshGridView = (PullToRefreshGridView)view.findViewById(R.id.member_frag_grid);
 		memberGridView = pullToRefreshGridView.getRefreshableView();
 		registerForContextMenu(memberGridView);
+	}
 
 
-		/*
-		 * Set member grid view
-		 */
+	private void setMemberGrid(){
 		memberGridAdapter = new MemberGridAdapter(context, thisFragment);
 		memberGridView.setAdapter(memberGridAdapter);
 		memberGridView.setOnItemClickListener(new OnItemClickListener() {
@@ -88,34 +106,14 @@ public class MemberFragment extends AhFragment{
 
 			@Override
 			public void onRefresh(PullToRefreshBase<GridView> refreshView) {
-				refreshView();
+				updateMemberGrid();
 				refreshView.onRefreshComplete();
 			}
 		});
-
-		return view;
 	}
 
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		refreshView();
-	}
-
-
-	@Override 
-	public void onSaveInstanceState(Bundle outState) {
-		//first saving my state, so the bundle wont be empty.
-		outState.putString("VIEWPAGER_BUG_FIX",  "VIEWPAGER_BUG_FIX");
-		super.onSaveInstanceState(outState);
-	}
-
-
-	private void refreshView() {
-		/*
-		 * Set member grid
-		 */
+	private void updateMemberGrid() {
 		final List<AhUser> userList = userDBHelper.getAllUsers(false);
 		userList.add(0, userHelper.getMyUserInfo());
 		activity.runOnUiThread(new Runnable() {

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
+import android.support.v7.app.ActionBar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -54,7 +54,7 @@ public class ProfileSettingsFragment extends AhFragment{
 	private TextView genderText;
 	private ImageButton startButton;
 
-		private AhUser user;
+	private AhUser user;
 	private boolean isTypedNickName = true;
 	private boolean isTakenProfileImage = true;
 
@@ -73,25 +73,10 @@ public class ProfileSettingsFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_profile_settings, container, false);
 
-
-		/*
-		 * Find UI component
-		 */
-		progressBar = (ProgressBar) view.findViewById(R.id.profile_settings_frag_progress_bar);
-		profileImageView = (ImageView) view.findViewById(R.id.profile_settings_frag_profile_image);
-		nickNameWarningText = (TextView) view.findViewById(R.id.profile_settings_frag_nick_name_warning_text);
-		nickNameEditText = (EditText) view.findViewById(R.id.profile_settings_frag_nick_name_text);
-		ageText = (TextView) view.findViewById(R.id.profile_settings_frag_age_text);
-		genderText = (TextView) view.findViewById(R.id.profile_settings_frag_gender_text);
-		startButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_start_button);
-
-
-		/*
-		 * Set Action Bar
-		 */
-		ActionBar actionBar = activity.getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
+		findComponent(view);
+		setActionBar();
+		setComponent();
+		setEditText();
 
 
 		/*
@@ -162,46 +147,6 @@ public class ProfileSettingsFragment extends AhFragment{
 				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		});
-
-
-		/*
-		 * Set nick name edit text
-		 */
-		nickNameEditText.setText(user.getNickName());
-		nickNameEditText.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String nickName = s.toString().trim();
-				if(nickName.length() < 1){
-					isTypedNickName = false;
-				}else{
-					isTypedNickName = true;
-				}
-				startButton.setEnabled(isStartButtonEnable());
-			}
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-
-
-		/*
-		 * Set gender and birth year edit text
-		 */
-		int age = user.getAge();
-		String gender = user.getGenderString(context);
-		ageText.setText(""+age);
-		genderText.setText(gender);
-		if(user.isMale()){
-			genderText.setTextColor(getResources().getColor(R.color.blue_man));
-		}else{
-			genderText.setTextColor(getResources().getColor(R.color.red_woman));
-		}
 
 
 		/*
@@ -407,6 +352,60 @@ public class ProfileSettingsFragment extends AhFragment{
 				file.delete();
 			}
 		}
+	}
+
+
+	private void findComponent(View view){
+		progressBar = (ProgressBar) view.findViewById(R.id.profile_settings_frag_progress_bar);
+		profileImageView = (ImageView) view.findViewById(R.id.profile_settings_frag_profile_image);
+		nickNameWarningText = (TextView) view.findViewById(R.id.profile_settings_frag_nick_name_warning_text);
+		nickNameEditText = (EditText) view.findViewById(R.id.profile_settings_frag_nick_name_text);
+		ageText = (TextView) view.findViewById(R.id.profile_settings_frag_age_text);
+		genderText = (TextView) view.findViewById(R.id.profile_settings_frag_gender_text);
+		startButton = (ImageButton) view.findViewById(R.id.profile_settings_frag_start_button);
+	}
+
+
+	private void setActionBar(){
+		ActionBar actionBar = activity.getSupportActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+	}
+
+
+	private void setComponent(){
+		ageText.setText(""+user.getAge());
+		genderText.setText(user.getGenderString(context));
+		if(user.isMale()){
+			genderText.setTextColor(getResources().getColor(R.color.blue_man));
+		}else{
+			genderText.setTextColor(getResources().getColor(R.color.red_woman));
+		}
+	}
+
+
+	private void setEditText(){
+		nickNameEditText.setText(user.getNickName());
+		nickNameEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String nickName = s.toString().trim();
+				if(nickName.length() < 1){
+					isTypedNickName = false;
+				}else{
+					isTypedNickName = true;
+				}
+				startButton.setEnabled(isStartButtonEnable());
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 	}
 
 

@@ -10,12 +10,4 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <fragment
-        android:id="@+id/square_list_notification_drawer_fragment"
-        android:name="com.pinthecloud.athere.fragment.ChupaListFragment"
-        android:layout_width="@dimen/notification_drawer_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        tools:layout="@layout/fragment_chupa_list" />
-
 </android.support.v4.widget.DrawerLayout>

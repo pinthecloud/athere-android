@@ -27,11 +27,6 @@ public class ProfileImageFragment extends AhFragment{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-
-		/*
-		 * Get user id from previous activity
-		 */
 		Intent intent = activity.getIntent();
 		user = intent.getParcelableExtra(AhGlobalVariable.USER_KEY);
 	}
@@ -42,11 +37,6 @@ public class ProfileImageFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_profile_image, container, false);
-
-
-		/*
-		 * Set UI component
-		 */
 		profileImage = (ImageView) view.findViewById(R.id.profile_image_frag_view);
 		mAttacher = new PhotoViewAttacher(profileImage);
 		return view;

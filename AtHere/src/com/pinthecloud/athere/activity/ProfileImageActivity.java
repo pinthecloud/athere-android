@@ -15,29 +15,23 @@ import com.pinthecloud.athere.model.AhMessage;
 
 public class ProfileImageActivity extends AhActivity{
 
-	private MessageHelper messageHelper;
-
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_frame);
-		messageHelper = app.getMessageHelper();
 
-
-		/*
-		 * Set Fragment to container
-		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		ProfileImageFragment profileImageFragment = new ProfileImageFragment();
-		fragmentTransaction.add(R.id.activity_container, profileImageFragment);
+		ProfileImageFragment fragment = new ProfileImageFragment();
+		fragmentTransaction.add(R.id.activity_container, fragment);
 		fragmentTransaction.commit();
 
+		setMessageHandler();
+	}
 
-		/*
-		 * Set Handler for forced logout
-		 */
+
+	private void setMessageHandler(){
+		MessageHelper messageHelper = app.getMessageHelper();
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
 			@Override

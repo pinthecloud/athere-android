@@ -50,121 +50,20 @@ public class SquareActivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
 
-
-		/*
-		 * Set Helper and get square
-		 */
-		messageHelper = app.getMessageHelper();
-		messageDBHelper = app.getMessageDBHelper();
-		userHelper = app.getUserHelper();
-		squareHelper = app.getSquareHelper();
+		setHelper();
+		findComponent();
+		
 		Square square = squareHelper.getMySquareInfo();
+		getSupportActionBar().setTitle(square.getName());
 
-
-		/*
-		 * Set UI Component and drawer
-		 */
-		getActionBar().setTitle(square.getName());
-		progressBar = (ProgressBar) findViewById(R.id.square_progress_bar);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_drawer_layout);
-		mFragmentView = findViewById(R.id.square_notification_drawer_fragment);
 		FragmentManager fragmentManager = getFragmentManager();
-		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_notification_drawer_fragment);
-		chupaListFragment.setUp(mDrawerLayout, R.drawable.actionbar_white_drawer_btn);
-
-
-		/*
-		 * Set tab
-		 */
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		contentFragment = new SquareTabFragment(square);
-		fragmentTransaction.add(R.id.square_tab_layout, contentFragment);
-
-
-		/*
-		 * Set sliding menu
-		 */
-		slidingMenu = new SlidingMenu(thisActivity);
-		slidingMenu.setMenu(R.layout.app_drawer_frame);
-		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
-		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
-		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);
-		slidingMenu.setFadeDegree(0.35f);
-		slidingMenu.attachToActivity(thisActivity, SlidingMenu.SLIDING_WINDOW);
-
-		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
-		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
+		setFragment(fragmentTransaction, square);
+		setDrawerFragment(fragmentManager);
+		setSlidingMenu(fragmentTransaction);
 		fragmentTransaction.commit();
-
-
-		/*
-		 * Set Handler for forced logout
-		 */
-		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
-
-			@Override
-			public void onCompleted(AhMessage message) {
-				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
-					final String toastMessage = getResources().getString(R.string.forced_logout_title);
-					thisActivity.runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							Toast.makeText(thisActivity, toastMessage, Toast.LENGTH_LONG)
-							.show();
-						}
-					});
-
-					Intent intent = new Intent(thisActivity, SquareListActivity.class);
-					startActivity(intent);
-					finish();
-					return;
-				}
-				messageHelper.triggerMessageEvent(contentFragment, message);
-				messageHelper.triggerMessageEvent(chupaListFragment, message);
-			}
-		});
-	}
-
-
-	@Override
-	public void onBackPressed() {
-		// Close drawer
-		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
-			mDrawerLayout.closeDrawer(mFragmentView);
-			return;
-		}
-
-		if(slidingMenu.isMenuShowing()){
-			slidingMenu.toggle();
-			return;
-		}
-
-		// Ask review
-		if(squareHelper.isReview()){
-			String message = getResources().getString(R.string.review_message);
-			String cancelMessage = getResources().getString(R.string.no_today_message);
-			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, null, cancelMessage, true, new AhDialogCallback() {
-
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					squareHelper.setReview(false);
-					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
-					startActivity(intent);
-				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					squareHelper.setReview(false);
-					finish();
-				}
-			});
-			reviewDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			return;
-		}
-
-		// Back
-		super.onBackPressed();
+		
+		setMessageHandler();
 	}
 
 
@@ -231,6 +130,116 @@ public class SquareActivity extends AhActivity {
 			break;
 		}
 		return true;
+	}
+
+
+	@Override
+	public void onBackPressed() {
+		// Close drawer
+		if(mDrawerLayout.isDrawerOpen(mFragmentView)){
+			mDrawerLayout.closeDrawer(mFragmentView);
+			return;
+		}
+
+		if(slidingMenu.isMenuShowing()){
+			slidingMenu.toggle();
+			return;
+		}
+
+		// Ask review
+		if(squareHelper.isReview()){
+			String message = getResources().getString(R.string.review_message);
+			String cancelMessage = getResources().getString(R.string.no_today_message);
+			AhAlertDialog reviewDialog = new AhAlertDialog(null, message, null, cancelMessage, true, new AhDialogCallback() {
+
+				@Override
+				public void doPositiveThing(Bundle bundle) {
+					squareHelper.setReview(false);
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + AhGlobalVariable.GOOGLE_PLAY_APP_ID));
+					startActivity(intent);
+				}
+				@Override
+				public void doNegativeThing(Bundle bundle) {
+					squareHelper.setReview(false);
+					finish();
+				}
+			});
+			reviewDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			return;
+		}
+
+		// Back
+		super.onBackPressed();
+	}
+
+
+	private void findComponent(){
+		progressBar = (ProgressBar) findViewById(R.id.square_progress_bar);
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.square_drawer_layout);
+		mFragmentView = findViewById(R.id.square_notification_drawer_fragment);
+	}
+
+
+	private void setHelper(){
+		messageHelper = app.getMessageHelper();
+		messageDBHelper = app.getMessageDBHelper();
+		userHelper = app.getUserHelper();
+		squareHelper = app.getSquareHelper();
+	}
+
+
+	private void setFragment(FragmentTransaction fragmentTransaction, Square square){
+		contentFragment = new SquareTabFragment(square);
+		fragmentTransaction.add(R.id.square_tab_layout, contentFragment);
+	}
+
+
+	private void setDrawerFragment(FragmentManager fragmentManager){
+		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_notification_drawer_fragment);
+		chupaListFragment.setUp(mDrawerLayout);
+	}
+
+
+	private void setSlidingMenu(FragmentTransaction fragmentTransaction){
+		slidingMenu = new SlidingMenu(thisActivity);
+		slidingMenu.setMenu(R.layout.app_drawer_frame);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
+		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
+		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);
+		slidingMenu.setFadeDegree(0.35f);
+		slidingMenu.attachToActivity(thisActivity, SlidingMenu.SLIDING_WINDOW);
+
+		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
+		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
+	}
+
+
+	private void setMessageHandler(){
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+
+			@Override
+			public void onCompleted(AhMessage message) {
+				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
+					final String toastMessage = getResources().getString(R.string.forced_logout_title);
+					thisActivity.runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							Toast.makeText(thisActivity, toastMessage, Toast.LENGTH_LONG)
+							.show();
+						}
+					});
+
+					Intent intent = new Intent(thisActivity, SquareListActivity.class);
+					startActivity(intent);
+					finish();
+					return;
+				}
+				messageHelper.triggerMessageEvent(contentFragment, message);
+				messageHelper.triggerMessageEvent(chupaListFragment, message);
+			}
+		});
 	}
 
 
