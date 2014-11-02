@@ -58,9 +58,6 @@
     <string name="number_of_member_question">몇 명이서 오셨나요?</string>
     <string name="review_message">리뷰를 제발 남겨주세요!</string>
     <string name="no_today_message">나중에 할게요</string>
-
-    <string name="location_consent_message">추파는 위치정보를 사용하지만, 절대 수집하지 않아요.\n위치정보 사용에 동의하시면 위 버튼을 눌러주세요.</string>
-    <string name="location_turn_on_message">위치 서비스를 켜주세요.</string>
     <string name="no_facebook_upload_message">추파는 페이스북에 어떠한 글도 올리지 않아요.</string>
     <string name="birthday_access_message">나이를 위해 생일이 필요해요.</string>
     <string name="greeting_sentence">모두에게 인사를 건네보세요.</string>

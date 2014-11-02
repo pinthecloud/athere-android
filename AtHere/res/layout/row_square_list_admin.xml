@@ -22,7 +22,7 @@
                 android:src="@drawable/ground_premium_pic_default" />
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/row_square_list_admin_background"
                 android:background="@drawable/groundlist_premium_bg"
@@ -50,26 +50,6 @@
                     android:layout_toRightOf="@+id/row_square_list_admin_lock"
                     android:textColor="@color/square_list_text"
                     android:textSize="@dimen/font_large" />
-
-                <View
-                    android:layout_width="@dimen/line_width"
-                    android:layout_height="@dimen/content_divider_height"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/row_square_list_admin_distance"
-                    android:layout_toStartOf="@+id/row_square_list_admin_distance"
-                    android:background="@color/square_list_gray" />
-
-                <TextView
-                    android:id="@+id/row_square_list_admin_distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/square_list_margin"
-                    android:layout_marginStart="@dimen/square_list_margin"
-                    android:textColor="@color/square_list_text"
-                    android:textSize="@dimen/font_normal" />
             </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>

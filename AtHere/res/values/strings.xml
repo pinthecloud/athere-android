@@ -30,8 +30,6 @@
     <string name="age">age</string>
     <string name="admin">Admin</string>
     <string name="square">Ground</string>
-    <string name="meter">m</string>
-    <string name="kilometer">km</string>
     <string name="guide">guide</string>
     <string name="notification">Notification</string>
     <string name="more">More</string>
@@ -60,8 +58,6 @@
     <string name="number_of_member_question">How many with you?</string>
     <string name="review_message">Please give us review!</string>
     <string name="no_today_message">I will do</string>
-    <string name="location_consent_message">Chupa uses location information, but we never collect.\nIf you click above button, we think you agree the use.</string>
-    <string name="location_turn_on_message">Please enable location service.</string>
     <string name="no_facebook_upload_message">We doesn\'t upload any contents on facebook.</string>
     <string name="birthday_access_message">We need birthday for calculating age.</string>
     <string name="greeting_sentence">Say hello to others.</string>

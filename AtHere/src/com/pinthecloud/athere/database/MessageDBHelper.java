@@ -65,7 +65,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	// Creating Tables
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_NAME + 
@@ -84,7 +83,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 
-	// Upgrading database
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Drop older table if existed
@@ -118,9 +116,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		values.put(id, value);
 	}
 
-	// Adding new contact
 	public int addMessage(AhMessage message) {
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDataBase("addMessage");
 
 		ContentValues values = new ContentValues();
@@ -134,7 +130,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		putValueWithoutNull(values, CHUPA_COMMUN_ID, message.getChupaCommunId());
 		values.put(STATUS, message.getStatus());
 
-		// Inserting Row
 		if (db == null) throw new AhException("db null in addMessage");
 		long id = db.insert(TABLE_NAME, null, values);
 
@@ -142,9 +137,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		return (int)id;
 	}
 
-	// Getting All Messages
 	public void updateMessages(AhMessage message) {
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDataBase("updateMessages");
 
 		ContentValues values = new ContentValues();
@@ -158,15 +151,12 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		putValueWithoutNull(values, CHUPA_COMMUN_ID, message.getChupaCommunId());
 		values.put(STATUS, message.getStatus());
 
-		// Inserting Row
 		db.update(TABLE_NAME, values, ID + " = ?", new String[]{ message.getId() });
 		this.closeDatabase("updateMessages");
 	}
 
 
-	// Getting single contact
 	public AhMessage getMessage(int id) {
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getMessage");
 
 		Cursor cursor = db.query(TABLE_NAME, null, ID + " = ?",
@@ -181,18 +171,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		return message;
 	}
 
-	// Getting All Messages
 	public List<AhMessage> getAllMessages() {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
-		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + TIME_STAMP;
-
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getAllMessages()");
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				messages.add(convertToMessage(cursor));
@@ -206,16 +191,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public List<AhMessage> getAllMessages(String type) {
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
-		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + TYPE + " = ?" +
 				" ORDER BY " + TIME_STAMP;
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getAllMessages(String type)");
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
 
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				messages.add(convertToMessage(cursor));
@@ -296,17 +278,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		whereStr.delete(whereStr.length()- 3, whereStr.length());
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
-		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + whereStr.toString() + 
 				" ORDER BY " + TIME_STAMP;
-
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getAllMessages(String... type)");
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				messages.add(convertToMessage(cursor));
@@ -322,11 +300,9 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 				" WHERE " + TYPE + " = ?" + 
 				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getLastMessage(AhMessage.TYPE type)");
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type.toString() });
 
-		// looping through all rows and adding to list
 		AhMessage message = null;
 		if (cursor != null && cursor.moveToFirst()) {
 			message = convertToMessage(cursor);
@@ -345,17 +321,14 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 		whereStr.delete(whereStr.length()- 3, whereStr.length());
 
-		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + whereStr.toString() + 
 				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getLastMessage(AhMessage.TYPE... types)");
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
-		// looping through all rows and adding to list
 		AhMessage message = null;
 		if (cursor != null && cursor.moveToFirst()) {
 			message = convertToMessage(cursor);
@@ -375,17 +348,14 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		whereStr.delete(whereStr.length()- 3, whereStr.length());
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
-		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + whereStr.toString() + 
 				" ORDER BY " + TIME_STAMP;
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getAllMessages(AhMessage.TYPE... types)");
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				messages.add(convertToMessage(cursor));
@@ -403,7 +373,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public boolean isEmpty() {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME;
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getAllMessages(AhMessage.TYPE type)");
 		Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -419,7 +388,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public boolean isEmpty(String type) {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + TYPE + " = ?";
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("isEmpty(String type)");
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ type });
 
@@ -444,7 +412,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + whereStr.toString();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("isEmpty(String... types)");
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
@@ -469,7 +436,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		String selectQuery = "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + whereStr.toString();
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("isEmpty(AhMessage.TYPE... types)");
 		Cursor cursor = db.rawQuery(selectQuery, argArray);
 
@@ -576,25 +542,20 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	//		return this.popAllMessages(type.toString());
 	//	}
 
-	// Deleting single contact
 	public void deleteMessage(String messageId) {
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDataBase("deleteMessage(String messageId)");
 		db.delete(TABLE_NAME, ID + " = ?",
 				new String[] { String.valueOf(messageId) });
-		//		db.close();
 		this.closeDatabase("deleteMessage(String messageId)");
 	}
 
 	public void deleteAllMessages() {
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDataBase("deleteAllMessages()");
 		db.delete(TABLE_NAME, null ,null);
 		this.closeDatabase("deleteAllMessages()");
 	}
 
 	public void deleteAllMessages(String strType) {
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDataBase("deleteAllMessages(String strType)");
 		db.delete(TABLE_NAME, TYPE + " = ?", new String[]{ strType });
 		this.closeDatabase("deleteAllMessages(String strType)");
@@ -607,17 +568,14 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public List<AhMessage> getLastChupas() {
 		List<AhMessage> list = new ArrayList<AhMessage>();
 
-		// Select All Query
 		String selectQuery = "SELECT t1.* FROM " + TABLE_NAME + " t1" +
 				" JOIN (SELECT MAX(id) id FROM " + TABLE_NAME +
 				" GROUP BY " + CHUPA_COMMUN_ID + ") t2 on t1.id = t2.id" +
 				" WHERE " + TYPE + " = ?" +
 				" ORDER BY " + TIME_STAMP + " DESC";
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getLastChupas()");
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString()});
 
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				list.add(convertToMessage(cursor));
@@ -631,17 +589,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	public List<AhMessage> getChupasByCommunId(String chupaCommunId) {
 		List<AhMessage> list = new ArrayList<AhMessage>();
 
-		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + TYPE + "=? AND " + CHUPA_COMMUN_ID + " = ?" +
 				" ORDER BY " + TIME_STAMP;
-
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getChupasByCommunId(String chupaCommunId)");
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString() 
 				,chupaCommunId});
 
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				list.add(convertToMessage(cursor));
@@ -653,18 +607,15 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 	}
 
 	public AhMessage getLastChupaByCommunId(String chupaCommunId) {
-		// Select All Query
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + TYPE + "=? AND " + CHUPA_COMMUN_ID + " = ?" +
 				" ORDER BY " + TIME_STAMP + " DESC LIMIT 1";
 
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDataBase("getLastChupaByCommunId(String chupaCommunId)");
 		Cursor cursor = db.rawQuery(selectQuery, new String[]{ AhMessage.TYPE.CHUPA.toString() 
 				,chupaCommunId});
 
 		AhMessage message = null;
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			message = (convertToMessage(cursor));
 		}
@@ -696,7 +647,7 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		.setTimeStamp(timeStamp)
 		.setChupaCommunId(chupaCommunId)
 		.setStatus(status);
-		
+
 		return messageBuilder.build();
 	}
 
@@ -758,7 +709,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			super(context, BADGE_DATABASE_NAME, null, BADGE_DATABASE_VERSION);
 		}
 
-		// Creating Tables
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			String CREATE_CHUPA_BADGES_TABLE = "CREATE TABLE " + CHUPA_BADGE_TABLE_NAME + 
@@ -770,7 +720,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			db.execSQL(CREATE_CHUPA_BADGES_TABLE);
 		}
 
-		// Upgrading database
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// Drop older table if existed
@@ -794,21 +743,18 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		}
 
 		private int createChupaBadge(String chupaCommunId) {
-			//			SQLiteDatabase db = this.getWritableDatabase();
 			SQLiteDatabase db = this.openDatabase("createChupaBadge(String chupaCommunId)");
 
 			ContentValues values = new ContentValues();
 			putValueWithoutNull(values, CHUPA_BADGE_COMMUN_ID, chupaCommunId);
 			values.put(CHUPA_BADGE_COUNT, 0);
 
-			// Inserting Row
 			long id = db.insert(CHUPA_BADGE_TABLE_NAME, null, values);
 			this.closeDatabase("createChupaBadge(String chupaCommunId)");
 			return (int)id;
 		}
 
 		private void updateChupaBadge(String chupaCommunId, int count) {
-			//			SQLiteDatabase db = this.getWritableDatabase();
 			SQLiteDatabase db = this.openDatabase("updateChupaBadge(String chupaCommunId, int count)");
 
 			ContentValues values = new ContentValues();
@@ -825,11 +771,9 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 		private int getChupaBadgeNum(String chupaCommunId) {
 			String selectQuery = "SELECT * FROM " + CHUPA_BADGE_TABLE_NAME +
 					" WHERE " + CHUPA_BADGE_COMMUN_ID + " = ?";
-			//			SQLiteDatabase db = this.getReadableDatabase();
 			SQLiteDatabase db = this.openDatabase("getChupaBadgeNum(String chupaCommunId)");
 			Cursor cursor = db.rawQuery(selectQuery, new String[]{ chupaCommunId });
 
-			// looping through all rows and adding to list
 			int ret = -1;
 			if (cursor != null && cursor.moveToFirst()) {
 				ret = cursor.getInt(2);
@@ -844,7 +788,6 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			SQLiteDatabase db = this.openDatabase("getAllChupaBadgeNum()");
 			Cursor cursor = db.rawQuery(selectQuery, null);
 
-			// looping through all rows and adding to list
 			int total = 0;
 			if (cursor != null && cursor.moveToFirst()) {
 				do {

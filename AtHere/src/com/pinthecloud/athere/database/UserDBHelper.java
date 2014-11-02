@@ -16,10 +16,8 @@ import com.pinthecloud.athere.model.AhUser;
 
 public class UserDBHelper extends SQLiteOpenHelper {
 
-
 	// All Static variables
 	// Database Version
-
 	private static int DATABASE_VERSION = 2;
 
 	// Database Name
@@ -39,7 +37,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	private final String PROFILE_PIC = "profile_pic";
 	private final String NICK_NAME = "nick_name";
 	private final String IS_CHUPA_ENABLE = "is_chupa_enable";
-	private final String COMPANY_NUM = "company_num";
 
 	private final String HAS_BEEN_OUT = "has_been_out";
 
@@ -51,6 +48,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
+	
 	/*
 	 * Creating Tables(non-Javadoc)
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
@@ -63,6 +61,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return mDb;
 	}
 
+	
 	private void closeDatabase(String name) {
 		//		Log.e("ERROR", "close : " + name);
 		if (mCount.decrementAndGet() == 0) {
@@ -85,12 +84,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 				+ PROFILE_PIC + " TEXT,"
 				+ NICK_NAME + " TEXT,"
 				+ IS_CHUPA_ENABLE + " INTEGER,"
-				+ COMPANY_NUM + " INTEGER,"
 				+ HAS_BEEN_OUT + " INTEGER"
 				+")";
 		db.execSQL(CREATE_TABLE);
 	}
 
+	
 	/*
 	 * Upgrading database(non-Javadoc)
 	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
@@ -105,6 +104,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
+	
 	@Override
 	public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
@@ -115,6 +115,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
+	
 	public void dropTable(SQLiteDatabase db) {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 	}
@@ -124,13 +125,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	 * All CRUD(Create, Read, Update, Delete) Operations
 	 */
 
-	// Adding new contact
 	public void addUser(AhUser user) {
 		if (user == null) return;
 		SQLiteDatabase db = this.openDatabase("addUser");
 		ContentValues values = setAndGetValue(user);
 
-		// Inserting Row
 		db.insert(TABLE_NAME, null, values);
 		this.closeDatabase("addUser");
 	}
@@ -138,16 +137,12 @@ public class UserDBHelper extends SQLiteOpenHelper {
 	public void addAllUsers(List<AhUser> list){
 
 		if (list == null || list.size() == 0) return;
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDatabase("addAllUsers");
 
 		for(AhUser user : list){
 			ContentValues values = setAndGetValue(user);
-
-			// Inserting Row
 			db.insert(TABLE_NAME, null, values);
 		}
-		//		db.close(); // Closing database connection
 		this.closeDatabase("addAllUsers");
 	}
 
@@ -163,15 +158,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		values.put(PROFILE_PIC, user.getProfilePic());
 		values.put(NICK_NAME, user.getNickName());
 		values.put(IS_CHUPA_ENABLE, user.isChupaEnable());
-		values.put(COMPANY_NUM, user.getCompanyNum());
 		values.put(HAS_BEEN_OUT, false);
 		return values;
 	}
 
-
-	// Getting single contact
 	public synchronized AhUser getUser(String id, boolean includingExits){
-		//		SQLiteDatabase db = this.getReadableDatabase();
 		SQLiteDatabase db = this.openDatabase("getUser(String id, boolean includingExits)");
 		UserHelper userHelper = AhApplication.getInstance().getUserHelper();
 		AhUser user = userHelper.getAdminUser(id);
@@ -191,7 +182,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		this.closeDatabase("getUser(String id, boolean includingExits)");
 		return user;
 	}
-
 
 	public boolean isUserExist(String userId){
 		boolean isExist = false;
@@ -234,11 +224,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	// Getting All Contacts
 	public List<AhUser> getAllUsers(boolean includingExits) {
 		List<AhUser> users = new ArrayList<AhUser>();
 
-		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
 		String[] args = null;
 		if (!includingExits) {
@@ -246,11 +234,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
 			args = new String[] { "0" };
 		}
 
-		//		SQLiteDatabase db = this.getWritableDatabase();
 		SQLiteDatabase db = this.openDatabase("getAllUsers(boolean includingExits)");
 		Cursor cursor = db.rawQuery(selectQuery, args);
 
-		// looping through all rows and adding to list
 		if (cursor != null && cursor.moveToFirst()) {
 			do {
 				users.add(convertToUser(cursor));
@@ -261,18 +247,15 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		return users;
 	}
 
-	// Updating single contact
 	public void updateUser(AhUser user) {
 		if (user == null) return;
 		SQLiteDatabase db = this.openDatabase("updateUser");
 		ContentValues values = setAndGetValue(user);
 
-		// Inserting Row
 		db.update(TABLE_NAME, values, ID + "=?", new String[] { user.getId() });
 		this.closeDatabase("updateUser");
 	}
 
-	// Deleting single contact
 	public void deleteUser(String id) {
 		SQLiteDatabase db = this.openDatabase("deleteUser");
 		db.delete(TABLE_NAME, ID + " = ?", new String[] { id });
@@ -285,15 +268,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(HAS_BEEN_OUT, true);
 
-		// Inserting Row
 		db.update(TABLE_NAME, values, ID + "=?", new String[] { id });
 		this.closeDatabase("exitUser(String id)");
-
-		//		String query = "UPDATE " + TABLE_NAME + " SET " + HAS_BEEN_OUT+"=?"+
-		//				" WHERE " + ID + "=?";
-		//		String [] selectionArgs = new String[]{ String.valueOf(1), id};
-		//		db.rawQuery(query, selectionArgs);
-		//		db.close();
 	}
 
 	public void deleteAllUsers() {
@@ -314,7 +290,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		String profilePic = cursor.getString(7);
 		String nickName = cursor.getString(8);
 		boolean chupaEnable = cursor.getInt(9) == 1;
-		int companyNum = cursor.getInt(10);
 
 		user.setId(_id);
 		user.setAhId(ahId);
@@ -326,7 +301,6 @@ public class UserDBHelper extends SQLiteOpenHelper {
 		user.setProfilePic(profilePic);
 		user.setNickName(nickName);
 		user.setChupaEnable(chupaEnable);		
-		user.setCompanyNum(companyNum);
 
 		return user;
 	}

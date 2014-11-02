@@ -21,7 +21,7 @@ import com.pinthecloud.athere.model.AhUser;
 public class ChupaChatActivity extends AhActivity {
 
 	private ProgressBar progressBar;
-	private ChupaChatFragment chupaChatFragment;
+	private ChupaChatFragment fragment;
 	private MessageHelper messageHelper;
 	private UserHelper userHelper;
 	private AhUser user;
@@ -32,46 +32,17 @@ public class ChupaChatActivity extends AhActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_frame);
 
-
-		/*
-		 * Set UI and helper and user
-		 */
-		progressBar = (ProgressBar) findViewById(R.id.activity_progress_bar);
-		messageHelper = app.getMessageHelper();
 		userHelper = app.getUserHelper();
 		user = userHelper.getMyUserInfo();
+		findComponent();
 
-
-		/*
-		 * Set Fragment to container
-		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		chupaChatFragment = new ChupaChatFragment();
-		fragmentTransaction.add(R.id.activity_container, chupaChatFragment);
+		fragment = new ChupaChatFragment();
+		fragmentTransaction.add(R.id.activity_container, fragment);
 		fragmentTransaction.commit();
 
-
-		/*
-		 * Set Handler for forced logout
-		 */
-		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
-
-			@Override
-			public void onCompleted(AhMessage message) {
-				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
-					String text = getResources().getString(R.string.forced_logout_title);
-					Toast toast = Toast.makeText(thisActivity, text, Toast.LENGTH_LONG);
-					toast.show();
-
-					Intent intent = new Intent(ChupaChatActivity.this, SquareListActivity.class);
-					startActivity(intent);
-					finish();
-					return;
-				}
-				messageHelper.triggerMessageEvent(chupaChatFragment, message);
-			}
-		});
+		setMessageHandler();
 	}
 
 
@@ -101,7 +72,6 @@ public class ChupaChatActivity extends AhActivity {
 		super.onOptionsItemSelected(item);
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// Respond to the action bar's Up/Home button
 			onBackPressed();
 			break;
 		case R.id.chupa_chat_menu_notification:
@@ -114,7 +84,8 @@ public class ChupaChatActivity extends AhActivity {
 			}else{
 				user.setChupaEnable(true);
 			}
-			userHelper.updateUserAsync(chupaChatFragment, user, new AhEntityCallback<AhUser>() {
+
+			userHelper.updateUserAsync(fragment, user, new AhEntityCallback<AhUser>() {
 
 				@Override
 				public void onCompleted(AhUser entity) {
@@ -127,5 +98,32 @@ public class ChupaChatActivity extends AhActivity {
 			break;
 		}
 		return true;
+	}
+
+
+	private void findComponent(){
+		progressBar = (ProgressBar) findViewById(R.id.activity_progress_bar);
+		messageHelper = app.getMessageHelper();
+	}
+
+
+	private void setMessageHandler(){
+		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
+
+			@Override
+			public void onCompleted(AhMessage message) {
+				if (message.getType().equals(AhMessage.TYPE.FORCED_LOGOUT.toString())) {
+					String text = getResources().getString(R.string.forced_logout_title);
+					Toast toast = Toast.makeText(thisActivity, text, Toast.LENGTH_LONG);
+					toast.show();
+
+					Intent intent = new Intent(ChupaChatActivity.this, SquareListActivity.class);
+					startActivity(intent);
+					finish();
+					return;
+				}
+				messageHelper.triggerMessageEvent(fragment, message);
+			}
+		});
 	}
 }

@@ -56,7 +56,7 @@ public class GuideFragment extends AhFragment{
 		uiHelper = new UiLifecycleHelper(activity, callback);
 		uiHelper.onCreate(savedInstanceState);
 	}
-	
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,92 +64,9 @@ public class GuideFragment extends AhFragment{
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_guide, container, false);
 
-
-		/*
-		 * Find UI component
-		 */
-		mPager = (ViewPager)view.findViewById(R.id.guide_frag_viewpager);
-		indicator = (CirclePageIndicator)view.findViewById(R.id.guide_frag_indicator);
-		loginButton = (LoginButton)view.findViewById(R.id.guide_frag_login_button);
-
-
-		/*
-		 * Set view pager and indicator
-		 */
-		mPager.setAdapter(new GuidePagerAdapter(getFragmentManager()));
-		indicator.setViewPager(mPager);
-
-
-		/*
-		 * Set login button
-		 */
-		loginButton.setBackgroundResource(R.drawable.guide_login_btn);
-		loginButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
-		loginButton.setReadPermissions(Arrays.asList("user_birthday"));
-		loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
-
-			@Override
-			public void onUserInfoFetched(GraphUser user) {
-				Session session = Session.getActiveSession();
-				if (session == null || session.isClosed() || user == null) {
-					return;
-				}
-
-
-				/*
-				 * Get auth and information from facebook
-				 */
-				String birthday = user.getBirthday();
-				if (birthday == null) {
-					Toast.makeText(context, getResources().getString(R.string.birthday_access_message)
-							, Toast.LENGTH_LONG).show();
-
-					Session.NewPermissionsRequest newPermissionsRequest = 
-							new Session.NewPermissionsRequest(activity, Arrays.asList("user_birthday"));
-					session.requestNewReadPermissions(newPermissionsRequest);
-					session.close();
-					return;
-				}
-
-				String birthYear = birthday.substring(6, birthday.length());
-				String name = user.getFirstName();
-				String gender = (String)user.getProperty("gender");
-				boolean isMale = true;
-				if(!gender.equals("male")){
-					isMale = false;
-				}
-
-				userHelper.setMyAhId(user.getId())
-				.setMyNickName(name)
-				.setMyMale(isMale)
-				.setMyBirthYear(Integer.parseInt(birthYear));
-
-
-				/*
-				 * Register Developers as super user
-				 */
-				ArrayList<String> arr = new ArrayList<String>();
-				arr.add("1482905955291892"); // Pin the Cloud
-				arr.add("643223775792443");  // Hongkun
-				arr.add("834963903211098");	 // Seungmin
-				arr.add("766458060085007");	 // Chaesoo
-				arr.add("699691573453752");	 // Hwajeong
-				if (arr.contains(user.getId())) {
-					Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
-					.show();
-					PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUDO_KEY, true);
-				}
-				Log(thisFragment, user.getId());
-
-
-				/*
-				 * Move to next activity
-				 */
-				Intent intent = new Intent(context, BasicProfileActivity.class);
-				startActivity(intent);
-				activity.finish();
-			}
-		});
+		findComponent(view);
+		setViewPager();
+		setLoginButton();
 
 		return view;
 	}
@@ -191,6 +108,87 @@ public class GuideFragment extends AhFragment{
 		uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
 	}
 
+
+	private void findComponent(View view){
+		mPager = (ViewPager)view.findViewById(R.id.guide_frag_viewpager);
+		indicator = (CirclePageIndicator)view.findViewById(R.id.guide_frag_indicator);
+		loginButton = (LoginButton)view.findViewById(R.id.guide_frag_login_button);
+	}
+
+
+	private void setViewPager(){
+		mPager.setAdapter(new GuidePagerAdapter(getFragmentManager()));
+		indicator.setViewPager(mPager);
+	}
+
+
+	private void setLoginButton(){
+		loginButton.setBackgroundResource(R.drawable.guide_login_btn);
+		loginButton.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+		loginButton.setReadPermissions(Arrays.asList("user_birthday"));
+		loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+
+			@Override
+			public void onUserInfoFetched(GraphUser user) {
+				Session session = Session.getActiveSession();
+				if (session != null && session.isOpened() || user != null) {
+					login(session, user);
+				}
+			}
+		});
+	}
+
+
+	private void login(Session session, GraphUser user){
+		String birthday = user.getBirthday();
+		if (birthday == null) {
+			Toast.makeText(context, getResources().getString(R.string.birthday_access_message)
+					, Toast.LENGTH_LONG).show();
+
+			Session.NewPermissionsRequest newPermissionsRequest = 
+					new Session.NewPermissionsRequest(activity, Arrays.asList("user_birthday"));
+			session.requestNewReadPermissions(newPermissionsRequest);
+			session.close();
+			return;
+		}
+
+		String birthYear = birthday.substring(6, birthday.length());
+		String name = user.getFirstName();
+		String gender = (String)user.getProperty("gender");
+		boolean isMale = true;
+		if(!gender.equals("male")){
+			isMale = false;
+		}
+
+		userHelper.setMyAhId(user.getId())
+		.setMyNickName(name)
+		.setMyMale(isMale)
+		.setMyBirthYear(Integer.parseInt(birthYear));
+
+		setSuperUser(user);
+
+		Intent intent = new Intent(context, BasicProfileActivity.class);
+		startActivity(intent);
+		activity.finish();
+	}
+
+
+	private void setSuperUser(GraphUser user){
+		ArrayList<String> arr = new ArrayList<String>();
+		arr.add("1482905955291892"); // Pin the Cloud
+		arr.add("643223775792443");  // Hongkun
+		arr.add("834963903211098");	 // Seungmin
+		arr.add("766458060085007");	 // Chaesoo
+		arr.add("699691573453752");	 // Hwajeong
+		if (arr.contains(user.getId())) {
+			Toast.makeText(activity, "Super User Activated!", Toast.LENGTH_LONG)
+			.show();
+			PreferenceHelper.getInstance().putBoolean(AhGlobalVariable.SUPER_USER_KEY, true);
+		}
+	}
+
+
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+		// Do nothing
 	}
 }

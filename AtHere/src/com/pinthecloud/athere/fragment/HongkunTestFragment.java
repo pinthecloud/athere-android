@@ -99,7 +99,6 @@ public class HongkunTestFragment extends AhFragment {
 						Square square = new Square();
 						square.setName("건대 왕대박");
 						square.setWhoMade("wangdaibak");
-						square.setDistance(0);
 						square.setCode("0307");
 						square.setAdmin(true);
 						square.setMaleNum(0);

@@ -16,7 +16,6 @@ public class PreferenceHelper {
 	
 	private SharedPreferences pref;
 	
-	
 	private static PreferenceHelper prefHelper = null;
 	public static PreferenceHelper getInstance() {
 		if (prefHelper == null) {

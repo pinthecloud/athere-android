@@ -63,210 +63,13 @@ public class BasicProfileFragment extends AhFragment{
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.fragment_basic_profile, container, false);		
+
 		AhUser user = userHelper.getMyUserInfo();
-
 		findComponent(view);
-
-		/*
-		 * Set Event on profile image view
-		 */
-		profileImageView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String title = getResources().getString(R.string.select);
-				String[] list = null;
-				if(isTakenProfileImage){
-					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
-				}else{
-					list = getResources().getStringArray(R.array.profile_image_select_string_array);
-				}
-				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
-				callbacks[0] = new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// Get image from gallery
-						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image/*");
-						startActivityForResult(intent, FileUtil.MEDIA_TYPE_GALLERY);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				callbacks[1] = new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// create Intent to take a picture and return control to the calling application
-						// create a file to save the image
-						// set the image file name
-						// start the image capture Intent
-						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-						imageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
-						intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-						startActivityForResult(intent, FileUtil.MEDIA_TYPE_CAMERA);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				if(list.length == 3){
-					callbacks[2] = new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							// Set profile image default
-							profileImageView.setImageResource(R.drawable.setup_profile_default_ico);
-							isTakenProfileImage = false;
-							startButton.setEnabled(isStartButtonEnable());
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							// Do nothing
-						}
-					};
-				}
-				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
-				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			}
-		});
-
-
-		/*
-		 * Set nick name edit text
-		 */
-		nickNameEditText.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String nickName = s.toString().trim();
-				if(nickName.length() < 1){
-					isTypedNickName = false;
-				}else{
-					isTypedNickName = true;
-				}
-				startButton.setEnabled(isStartButtonEnable());
-			}
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
-
-
-		/*
-		 * Set gender and birth year edit text
-		 */
-		int age = user.getAge();
-		String gender = user.getGenderString(context);
-		ageText.setText(""+age);
-		genderText.setText(gender);
-		if(user.isMale()){
-			genderText.setTextColor(getResources().getColor(R.color.blue_man));
-		}else{
-			genderText.setTextColor(getResources().getColor(R.color.brand_red_color_dark));
-		}
-
-
-		/*
-		 * Set Start Button
-		 */
-		startButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				final String nickName = nickNameEditText.getText().toString().trim();
-				nickNameEditText.setText(nickName);
-				nickNameEditText.setSelection(nickName.length());
-
-
-				/*
-				 * Unproper nick name
-				 * Show warning message for each situation
-				 */
-				String message = app.checkNickName(nickName);
-				if(!message.equals("")){
-					nickNameWarningText.setText(message);
-					return;
-				}
-
-
-				/*
-				 * Proper nick name
-				 * Show progress bar
-				 * Disable UI components for preventing double click
-				 * Save this setting and go to next activity
-				 */
-				progressBar.setVisibility(View.VISIBLE);
-				progressBar.bringToFront();
-				profileImageView.setEnabled(false);
-				nickNameEditText.setEnabled(false);
-				startButton.setEnabled(false);
-				nickNameWarningText.setText("");
-
-				AsyncChainer.asyncChain(thisFragment, new Chainable(){
-
-					@Override
-					public void doNext(AhFragment frag) {
-						// Get a user object from preference and Add the user
-						userHelper.setMyNickName(nickName)
-						.setChatEnable(true)
-						.setMyChupaEnable(true);
-
-						AhUser user = userHelper.getMyUserInfo();
-						userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
-
-							@Override
-							public void onCompleted(AhUser entity) {
-								userHelper.setMyId(entity.getId())
-								.setLoggedInUser(true);
-							}
-						});
-					}
-				}, new Chainable() {
-
-					@Override
-					public void doNext(AhFragment frag) {
-						// Upload bit and small profile images
-						AhUser user = userHelper.getMyUserInfo();
-						smallProfileImageBitmap = BitmapUtil.decodeInSampleSize(profileImageBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId(), profileImageBitmap, null);
-						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
-					}
-				}, new Chainable() {
-
-					@Override
-					public void doNext(AhFragment frag) {
-						AhUser user = userHelper.getMyUserInfo();
-						gaHelper.sendEventGA(
-								thisFragment.getClass().getSimpleName(),
-								"CheckGender",
-								user.getGenderString(context));
-						gaHelper.sendEventGA(
-								thisFragment.getClass().getSimpleName(),
-								"CheckAge",
-								""+user.getAge());
-
-						// Save profile images to internal storage
-						FileUtil.saveBitmapToInternalStorage(app, user.getId(), profileImageBitmap);
-						FileUtil.saveBitmapToInternalStorage(app, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap);
-
-						// Move to next activity
-						Intent intent = new Intent(context, SquareListActivity.class);
-						startActivity(intent);
-						activity.finish();
-					}
-				});
-			}
-		});
-		startButton.setEnabled(false);
+		setComponent(user);
+		setEditText();
+		setButtonEvent();
+		setProfileImageEvent();
 
 		return view;
 	}
@@ -276,7 +79,7 @@ public class BasicProfileFragment extends AhFragment{
 	public void onStart() {
 		super.onStart();
 		if(!isTakenProfileImage){
-			profileImageView.setImageResource(R.drawable.setup_profile_default_ico);
+			profileImageView.setImageResource(R.drawable.profile_edit_profile_default_ico);
 		}else{
 			profileImageView.setImageBitmap(profileImageBitmap);
 		}
@@ -294,9 +97,7 @@ public class BasicProfileFragment extends AhFragment{
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK){
-			/*
-			 * Get image URI and path from gallery or camera
-			 */
+			// Get Profile Image from gallery or camera
 			String imagePath = null;
 			switch(requestCode){
 			case FileUtil.MEDIA_TYPE_GALLERY:
@@ -335,10 +136,7 @@ public class BasicProfileFragment extends AhFragment{
 				break;
 			}
 
-
-			/*
-			 * Set the image
-			 */
+			// Set Profile Image
 			try {
 				profileImageBitmap = BitmapUtil.decodeInSampleSize(context, imageUri, BitmapUtil.BIG_PIC_SIZE, BitmapUtil.BIG_PIC_SIZE);
 
@@ -357,13 +155,10 @@ public class BasicProfileFragment extends AhFragment{
 			} catch (IOException e) {
 				// Do nothing
 			}
+
 			isTakenProfileImage = true;
 			startButton.setEnabled(isStartButtonEnable());
 
-
-			/*
-			 * If get image from camera, delete file
-			 */
 			if(requestCode == FileUtil.MEDIA_TYPE_CAMERA){
 				File file = new File(imagePath);
 				file.delete();
@@ -399,6 +194,201 @@ public class BasicProfileFragment extends AhFragment{
 		ageText = (TextView) view.findViewById(R.id.basic_profile_frag_age_text);
 		genderText = (TextView) view.findViewById(R.id.basic_profile_frag_gender_text);
 		startButton = (ImageButton) view.findViewById(R.id.basic_profile_frag_start_button);
+	}
+
+
+	private void setComponent(AhUser user){
+		int age = user.getAge();
+		String gender = user.getGenderString(context);
+		ageText.setText(""+age);
+		genderText.setText(gender);
+		if(user.isMale()){
+			genderText.setTextColor(getResources().getColor(R.color.blue_man));
+		}else{
+			genderText.setTextColor(getResources().getColor(R.color.brand_red_color_dark));
+		}
+	}
+
+
+	private void setEditText(){
+		nickNameEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String nickName = s.toString().trim();
+				if(nickName.length() < 1){
+					isTypedNickName = false;
+				}else{
+					isTypedNickName = true;
+				}
+				startButton.setEnabled(isStartButtonEnable());
+			}
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
+	}
+
+
+	private void setProfileImageEvent(){
+		profileImageView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String title = getResources().getString(R.string.select);
+				String[] list = null;
+				if(isTakenProfileImage){
+					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
+				}else{
+					list = getResources().getStringArray(R.array.profile_image_select_string_array);
+				}
+
+				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
+				callbacks[0] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from gallery
+						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+						intent.setType("image/*");
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_GALLERY);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				callbacks[1] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from camera
+						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						imageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_CAMERA);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				if(list.length == 3){
+					callbacks[2] = new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							// Set profile image default
+							profileImageView.setImageResource(R.drawable.profile_edit_profile_default_ico);
+							isTakenProfileImage = false;
+							startButton.setEnabled(isStartButtonEnable());
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							// Do nothing
+						}
+					};
+				}
+				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
+				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
+	}
+
+
+	private void setButtonEvent(){
+		startButton.setEnabled(false);
+		startButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				final String nickName = nickNameEditText.getText().toString().trim();
+				nickNameEditText.setText(nickName);
+				nickNameEditText.setSelection(nickName.length());
+
+
+				/*
+				 * Unproper nick name
+				 * Show warning message for each situation
+				 */
+				String message = app.checkNickName(nickName);
+				if(!message.equals("")){
+					nickNameWarningText.setText(message);
+					return;
+				}
+
+
+				/*
+				 * Proper nick name
+				 * Show progress bar
+				 * Disable UI components for preventing double click
+				 * Save this setting and go to next activity
+				 */
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+				profileImageView.setEnabled(false);
+				nickNameEditText.setEnabled(false);
+				startButton.setEnabled(false);
+				nickNameWarningText.setText("");
+
+				AsyncChainer.asyncChain(thisFragment, new Chainable(){
+
+					@Override
+					public void doNext(AhFragment frag) {
+						userHelper.setMyNickName(nickName)
+						.setChatEnable(true)
+						.setMyChupaEnable(true);
+
+						AhUser user = userHelper.getMyUserInfo();
+						userHelper.addUserAsync(thisFragment, user, new AhEntityCallback<AhUser>() {
+
+							@Override
+							public void onCompleted(AhUser entity) {
+								userHelper.setMyId(entity.getId())
+								.setLoggedInUser(true);
+							}
+						});
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						// Upload big and small profile images
+						AhUser user = userHelper.getMyUserInfo();
+						smallProfileImageBitmap = BitmapUtil.decodeInSampleSize(profileImageBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId(), profileImageBitmap, null);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						AhUser user = userHelper.getMyUserInfo();
+						gaHelper.sendEventGA(
+								thisFragment.getClass().getSimpleName(),
+								"CheckGender",
+								user.getGenderString(context));
+						gaHelper.sendEventGA(
+								thisFragment.getClass().getSimpleName(),
+								"CheckAge",
+								""+user.getAge());
+
+						// Save profile images to internal storage
+						FileUtil.saveBitmapToInternalStorage(app, user.getId(), profileImageBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap);
+
+						// Move to next activity
+						Intent intent = new Intent(context, SquareListActivity.class);
+						startActivity(intent);
+						activity.finish();
+					}
+				});
+			}
+		});
 	}
 
 

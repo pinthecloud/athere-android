@@ -20,8 +20,8 @@ public class BasicProfileActivity extends AhActivity{
 		 */
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-		BasicProfileFragment basicProfileFragment = new BasicProfileFragment();
-		fragmentTransaction.add(R.id.activity_container, basicProfileFragment);
+		BasicProfileFragment fragment = new BasicProfileFragment();
+		fragmentTransaction.add(R.id.activity_container, fragment);
 		fragmentTransaction.commit();
 	}
 }

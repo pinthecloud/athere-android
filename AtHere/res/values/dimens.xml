@@ -70,7 +70,7 @@
     <dimen name="chupa_list_content_margin">5dp</dimen>
 
     <!-- Profile Settings -->
-    <dimen name="profile_settings_margin">30dp</dimen>
+    <dimen name="profile_settings_margin">20dp</dimen>
     <dimen name="profile_settings_profile_margin">12dp</dimen>
 
     <!-- Settings -->

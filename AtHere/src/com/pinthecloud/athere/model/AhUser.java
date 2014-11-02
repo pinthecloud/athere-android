@@ -30,8 +30,6 @@ public class AhUser implements Parcelable{
 	private String nickName;
 	@com.google.gson.annotations.SerializedName("isChupaEnable")
 	private boolean isChupaEnable;
-	@com.google.gson.annotations.SerializedName("companyNum")
-	private int companyNum = 0;
 
 
 	public AhUser() {
@@ -103,14 +101,8 @@ public class AhUser implements Parcelable{
 	public void setChupaEnable(boolean isChupaEnable) {
 		this.isChupaEnable = isChupaEnable;
 	}
-	public int getCompanyNum() {
-		return companyNum;
-	}
-	public void setCompanyNum(int companyNum) {
-		this.companyNum = companyNum;
-	}
-	
-	
+
+
 	public int getAge() {
 		Calendar c = Calendar.getInstance();
 		return c.get(Calendar.YEAR) - (getBirthYear() - 1);
@@ -153,7 +145,6 @@ public class AhUser implements Parcelable{
 		dest.writeString(getProfilePic());
 		dest.writeString(getNickName());
 		dest.writeInt(isChupaEnable() ? 1 : 0);
-		dest.writeInt(getCompanyNum());
 	}
 
 	public void readToParcel(Parcel in){
@@ -167,7 +158,6 @@ public class AhUser implements Parcelable{
 		setProfilePic(in.readString());
 		setNickName(in.readString());
 		setChupaEnable(in.readInt() == 1);
-		setCompanyNum(in.readInt());
 	}
 
 
@@ -177,7 +167,7 @@ public class AhUser implements Parcelable{
 	@Override
 	public String toString() {
 		return concate(getId(), getAhId(), getMobileId(), getMobileType(), getRegistrationId(),
-				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable(), getCompanyNum());
+				isMale(), getBirthYear(), getProfilePic(), getNickName(), isChupaEnable());
 	}
 
 	private String concate(Object... args) {
@@ -201,7 +191,6 @@ public class AhUser implements Parcelable{
 		jo.addProperty("profilePic", getProfilePic());
 		jo.addProperty("nickName", getNickName());
 		jo.addProperty("isChupaEnable", isChupaEnable());
-		jo.addProperty("companyNum", getCompanyNum());
 
 		return jo;
 	}

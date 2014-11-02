@@ -20,16 +20,10 @@ public class Square implements Parcelable {
 	private int femaleNum;
 	@com.google.gson.annotations.SerializedName("isAdmin")
 	private boolean isAdmin;
-	@com.google.gson.annotations.SerializedName("distance")
-	private int distance;
 	@com.google.gson.annotations.SerializedName("code")
 	private String code;
 	@com.google.gson.annotations.SerializedName("resetTime")
 	private int resetTime;
-	@com.google.gson.annotations.SerializedName("showRange")
-	private int showRange = Integer.MAX_VALUE;
-	@com.google.gson.annotations.SerializedName("entryRange")
-	private int entryRange;
 
 
 	public Square(){
@@ -81,12 +75,6 @@ public class Square implements Parcelable {
 	public void setFemaleNum(int femaleNum) {
 		this.femaleNum = femaleNum;
 	}
-	public int getDistance() {
-		return distance;
-	}
-	public void setDistance(int distance) {
-		this.distance = distance;
-	}
 	public boolean isAdmin() {
 		return isAdmin;
 	}
@@ -104,18 +92,6 @@ public class Square implements Parcelable {
 	}
 	public void setResetTime(int resetTime) {
 		this.resetTime = resetTime;
-	}
-	public int getShowRange() {
-		return showRange;
-	}
-	public void setShowRange(int showRange) {
-		this.showRange = showRange;
-	}
-	public int getEntryRange() {
-		return entryRange;
-	}
-	public void setEntryRange(int entryRange) {
-		this.entryRange = entryRange;
 	}
 
 
@@ -145,12 +121,9 @@ public class Square implements Parcelable {
 		dest.writeDouble(longitude);
 		dest.writeInt(maleNum);
 		dest.writeInt(femaleNum);
-		dest.writeInt(distance);
 		dest.writeInt(isAdmin? 1: 0);
 		dest.writeString(code);
 		dest.writeInt(resetTime);
-		dest.writeInt(showRange);
-		dest.writeInt(entryRange);
 	}
 
 	public void readToParcel(Parcel in){
@@ -161,11 +134,8 @@ public class Square implements Parcelable {
 		longitude = in.readDouble();
 		maleNum = in.readInt();
 		femaleNum = in.readInt();
-		distance = in.readInt();
 		isAdmin = in.readInt() == 1;
 		code = in.readString();
 		resetTime = in.readInt();
-		showRange = in.readInt();
-		entryRange = in.readInt();
 	}
 }

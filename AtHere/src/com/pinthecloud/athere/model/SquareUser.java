@@ -7,9 +7,7 @@ public class SquareUser {
 	private String squareId;
 	@com.google.gson.annotations.SerializedName("userId")
 	private String userId;
-	@com.google.gson.annotations.SerializedName("isPreview")
-	private boolean isPreview;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -27,11 +25,5 @@ public class SquareUser {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-	public boolean isPreview() {
-		return isPreview;
-	}
-	public void setPreview(boolean isPreview) {
-		this.isPreview = isPreview;
 	}
 }

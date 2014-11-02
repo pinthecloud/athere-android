@@ -141,7 +141,6 @@ public class UserHelper {
 					if (callback != null){
 						callback.onCompleted(entity);
 					}
-					callback.onCompleted(entity);
 					AsyncChainer.notifyNext(frag);
 				} else {
 					if (response.getContent().contains(AhException.TYPE.DUPLICATED_NICK_NAME.toString())) { 
@@ -424,7 +423,7 @@ public class UserHelper {
 		return user.getId().equals(getMyUserInfo().getId());
 	}
 
-	
+
 	/*
 	 * callback for message
 	 */

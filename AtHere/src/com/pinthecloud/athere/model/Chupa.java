@@ -2,15 +2,6 @@ package com.pinthecloud.athere.model;
 
 public class Chupa {
 	
-//	map.put("profilePic", profilePic);
-//	map.put("userNickName", userNickName);
-//	map.put("userId", userId);
-//	map.put("content", content);
-//	map.put("timeStamp", timeStamp);
-//	map.put("chupaCommunId", chupaCommunId);
-//	map.put("isExit", isExit);
-//	map.put("chupaBadge", chupaBadge);
-	
 	private String id;
 	private String userNickName;
 	private String userId;
@@ -18,6 +9,7 @@ public class Chupa {
 	private String timeStamp;
 	private boolean isExit;
 	private int badgeNum;
+	
 	public String getId() {
 		return id;
 	}

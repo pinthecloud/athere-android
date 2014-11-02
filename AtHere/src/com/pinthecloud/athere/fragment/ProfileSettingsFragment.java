@@ -77,179 +77,8 @@ public class ProfileSettingsFragment extends AhFragment{
 		setActionBar();
 		setComponent();
 		setEditText();
-
-
-		/*
-		 * Set Event on profile image view
-		 */
-		profileImageBitmap = FileUtil.getBitmapFromInternalStorage(context, user.getId());
-		profileImageView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String title = getResources().getString(R.string.select);
-				String[] list = null;
-				if(isTakenProfileImage){
-					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
-				}else{
-					list = getResources().getStringArray(R.array.profile_image_select_string_array);
-				}
-				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
-				callbacks[0] = new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// Get image from gallery
-						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
-						intent.setType("image/*");
-						startActivityForResult(intent, FileUtil.MEDIA_TYPE_GALLERY);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				callbacks[1] = new AhDialogCallback() {
-
-					@Override
-					public void doPositiveThing(Bundle bundle) {
-						// create Intent to take a picture and return control to the calling application
-						// create a file to save the image
-						// set the image file name
-						// start the image capture Intent
-						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-						imageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
-						intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-						startActivityForResult(intent, FileUtil.MEDIA_TYPE_CAMERA);
-					}
-					@Override
-					public void doNegativeThing(Bundle bundle) {
-						// Do nothing
-					}
-				};
-				if(list.length == 3){
-					callbacks[2] = new AhDialogCallback() {
-
-						@Override
-						public void doPositiveThing(Bundle bundle) {
-							// Set profile image default
-							profileImageView.setImageResource(R.drawable.profile_edit_profile_default_ico);
-							isTakenProfileImage = false;
-							startButton.setEnabled(isStartButtonEnable());
-						}
-						@Override
-						public void doNegativeThing(Bundle bundle) {
-							// Do nothing
-						}
-					};
-				}
-				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
-				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-			}
-		});
-
-
-		/*
-		 * Set Start Button
-		 */
-		startButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				final String nickName = nickNameEditText.getText().toString().trim();
-				nickNameEditText.setText(nickName);
-				nickNameEditText.setSelection(nickName.length());
-
-
-				/*
-				 * Unproper nick name
-				 * Show warning toast for each situation
-				 */
-				String message = app.checkNickName(nickName);
-				if(!message.equals("")){
-					nickNameWarningText.setText(message);
-					return;
-				}
-
-
-				/*
-				 * Proper nick name
-				 * Show progress bar
-				 * Disable UI components for preventing double click
-				 * Save this setting and go to next activity
-				 */
-				progressBar.setVisibility(View.VISIBLE);
-				progressBar.bringToFront();
-				profileImageView.setEnabled(false);
-				nickNameEditText.setEnabled(false);
-				startButton.setEnabled(false);
-				nickNameWarningText.setText("");
-
-
-				/*
-				 * Enter Square
-				 */
-				AsyncChainer.asyncChain(thisFragment, new Chainable(){
-
-					@Override
-					public void doNext(AhFragment frag) {
-						user.setNickName(nickName);
-						userHelper.updateUserAsync(frag, user, new AhEntityCallback<AhUser>() {
-
-							@Override
-							public void onCompleted(AhUser entity) {
-								userHelper.setMyNickName(entity.getNickName());
-							}
-						});
-					}
-				}, new Chainable() {
-
-					@Override
-					public void doNext(AhFragment frag) {
-						// Upload the resized image to server
-						smallProfileImageBitmap = BitmapUtil.decodeInSampleSize(profileImageBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
-						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId(), profileImageBitmap, null);
-						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
-					}
-				}, new Chainable() {
-
-					@Override
-					public void doNext(AhFragment frag) {
-						if(squareHelper.isLoggedInSquare()){
-							final AhUser user = userHelper.getMyUserInfo();
-							AhMessage message = new AhMessage.Builder()
-							.setContent(user.getNickName())
-							.setSender(user.getNickName())
-							.setSenderId(user.getId())
-							.setReceiverId(squareHelper.getMySquareInfo().getId())
-							.setType(AhMessage.TYPE.UPDATE_USER_INFO).build();
-							messageHelper.sendMessageAsync(frag, message, null);
-						} else{
-							AsyncChainer.notifyNext(frag);
-						}
-					}
-				}, new Chainable(){
-
-					@Override
-					public void doNext(AhFragment frag) {
-						progressBar.setVisibility(View.GONE);
-						profileImageView.setEnabled(true);
-						nickNameEditText.setEnabled(true);
-						startButton.setEnabled(true);
-
-						// Save profile to internal storage
-						String userId = user.getId();
-						FileUtil.saveBitmapToInternalStorage(app, userId, profileImageBitmap);
-						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallProfileImageBitmap);
-						blobStorageHelper.clearCache(userId);
-						blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
-
-						Toast.makeText(context, getResources().getString(R.string.profile_settings_complete_message)
-								, Toast.LENGTH_LONG).show();
-					}
-				});
-			}
-		});
+		setButtonEvent();
+		setProfileImageEvent();
 
 		return view;
 	}
@@ -408,6 +237,174 @@ public class ProfileSettingsFragment extends AhFragment{
 		});
 	}
 
+
+	private void setButtonEvent(){
+		startButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				final String nickName = nickNameEditText.getText().toString().trim();
+				nickNameEditText.setText(nickName);
+				nickNameEditText.setSelection(nickName.length());
+
+
+				/*
+				 * Unproper nick name
+				 * Show warning toast for each situation
+				 */
+				String message = app.checkNickName(nickName);
+				if(!message.equals("")){
+					nickNameWarningText.setText(message);
+					return;
+				}
+
+
+				/*
+				 * Proper nick name
+				 * Show progress bar
+				 * Disable UI components for preventing double click
+				 * Save this setting and go to next activity
+				 */
+				progressBar.setVisibility(View.VISIBLE);
+				progressBar.bringToFront();
+				profileImageView.setEnabled(false);
+				nickNameEditText.setEnabled(false);
+				startButton.setEnabled(false);
+				nickNameWarningText.setText("");
+
+
+				/*
+				 * Enter Square
+				 */
+				AsyncChainer.asyncChain(thisFragment, new Chainable(){
+
+					@Override
+					public void doNext(AhFragment frag) {
+						user.setNickName(nickName);
+						userHelper.updateUserAsync(frag, user, new AhEntityCallback<AhUser>() {
+
+							@Override
+							public void onCompleted(AhUser entity) {
+								userHelper.setMyNickName(entity.getNickName());
+							}
+						});
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						// Upload the resized image to server
+						smallProfileImageBitmap = BitmapUtil.decodeInSampleSize(profileImageBitmap, BitmapUtil.SMALL_PIC_SIZE, BitmapUtil.SMALL_PIC_SIZE);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId(), profileImageBitmap, null);
+						blobStorageHelper.uploadBitmapAsync(frag, BlobStorageHelper.USER_PROFILE, user.getId()+AhGlobalVariable.SMALL, smallProfileImageBitmap, null);
+					}
+				}, new Chainable() {
+
+					@Override
+					public void doNext(AhFragment frag) {
+						if(squareHelper.isLoggedInSquare()){
+							final AhUser user = userHelper.getMyUserInfo();
+							AhMessage message = new AhMessage.Builder()
+							.setContent(user.getNickName())
+							.setSender(user.getNickName())
+							.setSenderId(user.getId())
+							.setReceiverId(squareHelper.getMySquareInfo().getId())
+							.setType(AhMessage.TYPE.UPDATE_USER_INFO).build();
+							messageHelper.sendMessageAsync(frag, message, null);
+						} else{
+							AsyncChainer.notifyNext(frag);
+						}
+					}
+				}, new Chainable(){
+
+					@Override
+					public void doNext(AhFragment frag) {
+						progressBar.setVisibility(View.GONE);
+						profileImageView.setEnabled(true);
+						nickNameEditText.setEnabled(true);
+						startButton.setEnabled(true);
+
+						// Save profile to internal storage
+						String userId = user.getId();
+						FileUtil.saveBitmapToInternalStorage(app, userId, profileImageBitmap);
+						FileUtil.saveBitmapToInternalStorage(app, userId+AhGlobalVariable.SMALL, smallProfileImageBitmap);
+						blobStorageHelper.clearCache(userId);
+						blobStorageHelper.clearCache(userId+AhGlobalVariable.SMALL);
+
+						Toast.makeText(context, getResources().getString(R.string.profile_settings_complete_message)
+								, Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		});
+	}
+
+	
+	private void setProfileImageEvent(){
+		profileImageBitmap = FileUtil.getBitmapFromInternalStorage(context, user.getId());
+		profileImageView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				String title = getResources().getString(R.string.select);
+				String[] list = null;
+				if(isTakenProfileImage){
+					list = getResources().getStringArray(R.array.profile_image_select_delete_string_array);
+				}else{
+					list = getResources().getStringArray(R.array.profile_image_select_string_array);
+				}
+				AhDialogCallback[] callbacks = new AhDialogCallback[list.length];
+				callbacks[0] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from gallery
+						Intent intent = new Intent(Intent.ACTION_PICK, Media.EXTERNAL_CONTENT_URI);
+						intent.setType("image/*");
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_GALLERY);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				callbacks[1] = new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						// Get image from camera
+						Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+						imageUri = FileUtil.getOutputMediaFileUri(FileUtil.MEDIA_TYPE_IMAGE);
+						intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+						startActivityForResult(intent, FileUtil.MEDIA_TYPE_CAMERA);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				};
+				if(list.length == 3){
+					callbacks[2] = new AhDialogCallback() {
+
+						@Override
+						public void doPositiveThing(Bundle bundle) {
+							// Set profile image default
+							profileImageView.setImageResource(R.drawable.profile_edit_profile_default_ico);
+							isTakenProfileImage = false;
+							startButton.setEnabled(isStartButtonEnable());
+						}
+						@Override
+						public void doNegativeThing(Bundle bundle) {
+							// Do nothing
+						}
+					};
+				}
+				AhAlertListDialog listDialog = new AhAlertListDialog(title, list, callbacks);
+				listDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
+			}
+		});
+	}
+	
 
 	private boolean isStartButtonEnable(){
 		return isTypedNickName && isTakenProfileImage;

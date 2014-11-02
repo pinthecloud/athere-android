@@ -2,7 +2,6 @@ package com.pinthecloud.athere.adapter;
 
 import java.util.List;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -26,15 +25,13 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		ADMIN
 	}
 
-	private Context context;
 	private AhFragment frag;
 	private List<Square> squareList;
 	private OnClickListener itemClickListener;
 	private CachedBlobStorageHelper blobStorageHelper;
 
 
-	public SquareListAdapter(Context context, AhFragment frag, List<Square> squareList, OnClickListener itemClickListener) {
-		this.context = context;
+	public SquareListAdapter(AhFragment frag, List<Square> squareList, OnClickListener itemClickListener) {
 		this.frag = frag;
 		this.squareList = squareList;
 		this.itemClickListener = itemClickListener;
@@ -45,7 +42,6 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 	private static class AdminViewHolder extends RecyclerView.ViewHolder {
 		public View view;
 		public TextView squareNameText;
-		public TextView distanceText;
 		public ImageView background;
 		public ImageView lockImage;
 
@@ -53,7 +49,6 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 			super(view);
 			this.view = view;
 			this.squareNameText = (TextView)view.findViewById(R.id.row_square_list_admin_name);
-			this.distanceText = (TextView)view.findViewById(R.id.row_square_list_admin_distance);
 			this.background = (ImageView)view.findViewById(R.id.row_square_list_admin_background);
 			this.lockImage = (ImageView)view.findViewById(R.id.row_square_list_admin_lock);
 		}
@@ -63,13 +58,11 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 	private static class NormalViewHolder extends RecyclerView.ViewHolder {
 		public View view;
 		public TextView squareNameText;
-		public TextView distanceText;
 
 		public NormalViewHolder(View view) {
 			super(view);
 			this.view = view;
 			this.squareNameText = (TextView)view.findViewById(R.id.row_square_list_normal_name);
-			this.distanceText = (TextView)view.findViewById(R.id.row_square_list_normal_distance);
 		}
 	}
 
@@ -121,31 +114,15 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
 	private void setNormalComponent(NormalViewHolder holder, Square square){
-		int distance = square.getDistance();
-		String unit = context.getResources().getString(R.string.meter);
-		if((distance / 1000) >= 1){
-			distance /= 1000;  // km
-			unit = frag.getResources().getString(R.string.kilometer);	
-		}
-
 		holder.squareNameText.setText(square.getName());
-		holder.distanceText.setText(distance + unit);
 		holder.view.setOnClickListener(itemClickListener);
 	}
 
 
 	private void setAdminComponent(AdminViewHolder holder, Square square){
-		int distance = square.getDistance();
-		String unit = context.getResources().getString(R.string.meter);
-		if((distance / 1000) >= 1){
-			distance /= 1000;  // km
-			unit = frag.getResources().getString(R.string.kilometer);	
-		}
-
 		holder.squareNameText.setText(square.getName());
-		holder.distanceText.setText(distance + unit);
 		holder.view.setOnClickListener(itemClickListener);
-		
+
 		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
 				square.getId(), R.drawable.ground_premium_pic_default, holder.background, false);
 		if(!square.getCode().equals("")){

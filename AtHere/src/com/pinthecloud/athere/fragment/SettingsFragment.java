@@ -215,10 +215,9 @@ public class SettingsFragment extends AhFragment{
 			@Override
 			public void onUserInfoFetched(GraphUser user) {
 				Session session = Session.getActiveSession();
-				if (session != null && session.isOpened() && user != null) {
-					return;
+				if (session == null || session.isClosed() || user == null) {
+					logout();
 				}
-				logout();
 			}
 		});
 	}
