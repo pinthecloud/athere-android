@@ -40,7 +40,6 @@
     <string name="refresh">새로고침</string>
     <string name="register_profile">프로필 등록하기</string>
     <string name="enter">입장하기</string>
-    <string name="preview">미리보기</string>
 
     <!-- Sentence -->
     <string name="min_nick_name_message">닉네임은 한 글자 이상 입력해주세요.</string>

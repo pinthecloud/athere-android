@@ -28,7 +28,6 @@ public class SquareHelper {
 	private final String SQUARE_EXIT_TAB_KEY = "SQUARE_EXIT_TAB_KEY";
 	private final String IS_LOGGED_IN_SQUARE_KEY = "IS_LOGGED_IN_SQUARE_KEY";
 	private final String TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY = "TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY";
-	private final String IS_PREVIEW_KEY = "IS_PREVIEW_KEY";
 	private final String IS_REVIEW_KEY = "IS_REVIEW_KEY";
 
 	private final String GET_NEAR_SQUARE = "get_near_square";
@@ -52,9 +51,6 @@ public class SquareHelper {
 
 	public boolean isLoggedInSquare() {
 		return pref.getBoolean(IS_LOGGED_IN_SQUARE_KEY);
-	}
-	public Boolean isPreview() {
-		return pref.getBoolean(IS_PREVIEW_KEY);
 	}
 	public Boolean isReview() {
 		return pref.getBoolean(IS_REVIEW_KEY);
@@ -89,10 +85,6 @@ public class SquareHelper {
 		pref.putString(TIME_STAMP_AT_LOGGED_IN_SQUARE_KEY, time);
 		return this;
 	}
-	public SquareHelper setPreview(Boolean isPreview) {
-		pref.putBoolean(IS_PREVIEW_KEY, isPreview);
-		return this;
-	}
 	public SquareHelper setReview(boolean isReview) {
 		pref.putBoolean(IS_REVIEW_KEY, isReview);
 		return this;
@@ -114,7 +106,6 @@ public class SquareHelper {
 		pref.removePref(SQUARE_RESET_KEY);
 		pref.removePref(SQUARE_EXIT_TAB_KEY);
 		pref.removePref(IS_LOGGED_IN_SQUARE_KEY);
-		pref.removePref(IS_PREVIEW_KEY);
 		pref.removePref(IS_REVIEW_KEY);
 	}	
 

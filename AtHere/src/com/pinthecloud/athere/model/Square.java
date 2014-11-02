@@ -119,11 +119,6 @@ public class Square implements Parcelable {
 	}
 
 
-	public boolean isFar(){
-		return distance > entryRange;
-	}
-
-
 	/*
 	 * Parcelable
 	 */

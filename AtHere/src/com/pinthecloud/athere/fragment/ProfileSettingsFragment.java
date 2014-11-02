@@ -215,7 +215,7 @@ public class ProfileSettingsFragment extends AhFragment{
 
 					@Override
 					public void doNext(AhFragment frag) {
-						if(squareHelper.isLoggedInSquare() && !squareHelper.isPreview()){
+						if(squareHelper.isLoggedInSquare()){
 							final AhUser user = userHelper.getMyUserInfo();
 							AhMessage message = new AhMessage.Builder()
 							.setContent(user.getNickName())

@@ -5,34 +5,13 @@
     android:background="@drawable/chat_list_bg"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/chat_frag_preview_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/chat_list_preview_bg" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/preview"
-            android:src="@drawable/ground_preview_notification_ico" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/preview_warning_message"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/font_medium" />
-    </RelativeLayout>
-
     <ListView
         android:id="@+id/chat_frag_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:divider="@null"
+        android:scrollbars="none"
         android:transcriptMode="alwaysScroll" />
 
     <LinearLayout

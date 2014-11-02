@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,14 +17,10 @@ import com.pinthecloud.athere.model.Square;
 
 public class SquareEnterDialog extends AhDialogFragment{
 
-	public static final String SHOW_CODE = "SHOW_CODE"; 
-	private boolean showCode;
-
 	private TextView titleText;
 	private TextView warningText;
 	private EditText codeText;
 	private ImageButton enterButton;
-	private Button previewButton;
 
 	private AhDialogCallback ahDialogCallback;
 	private Square square;
@@ -43,11 +38,12 @@ public class SquareEnterDialog extends AhDialogFragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.dialog_square_enter, container, false);
-		showCode = getArguments().getBoolean(SHOW_CODE);
+		
 		findComponent(view);
 		setComponent();
 		setEditText();
 		setButtonEvent();
+		
 		return view;
 	}
 
@@ -57,17 +53,11 @@ public class SquareEnterDialog extends AhDialogFragment{
 		warningText = (TextView) view.findViewById(R.id.square_enter_dialog_code_warning_text);
 		codeText = (EditText) view.findViewById(R.id.square_enter_dialog_code_text);
 		enterButton = (ImageButton) view.findViewById(R.id.square_enter_dialog_enter_button);
-		previewButton = (Button) view.findViewById(R.id.square_enter_dialog_preview_button);
 	}
 
 
 	private void setComponent(){
 		titleText.setText(square.getName());
-		if(!showCode){
-			warningText.setVisibility(View.GONE);
-			codeText.setVisibility(View.GONE);
-			enterButton.setVisibility(View.GONE);
-		}
 	}
 
 
@@ -109,14 +99,6 @@ public class SquareEnterDialog extends AhDialogFragment{
 					codeText.setSelection(code.length());
 					warningText.setText(getResources().getString(R.string.bad_entry_code_message));
 				}
-			}
-		});
-		previewButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ahDialogCallback.doNegativeThing(null);
-				dismiss();
 			}
 		});
 	}

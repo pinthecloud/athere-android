@@ -47,20 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/square_enter_dialog_button_margin"
         android:background="@android:color/transparent"
         android:contentDescription="@string/enter"
         android:src="@drawable/enter_button_square_enter_dialog_bg" />
-
-    <Button
-        android:id="@+id/square_enter_dialog_preview_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/code_dialog_preview_btn"
-        android:contentDescription="@string/preview"
-        android:text="@string/preview"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/font_normal" />
 
 </LinearLayout>

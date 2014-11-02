@@ -46,7 +46,6 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		public View view;
 		public TextView squareNameText;
 		public TextView distanceText;
-		public ImageView farImage;
 		public ImageView background;
 		public ImageView lockImage;
 
@@ -55,7 +54,6 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 			this.view = view;
 			this.squareNameText = (TextView)view.findViewById(R.id.row_square_list_admin_name);
 			this.distanceText = (TextView)view.findViewById(R.id.row_square_list_admin_distance);
-			this.farImage = (ImageView)view.findViewById(R.id.row_square_list_admin_far);
 			this.background = (ImageView)view.findViewById(R.id.row_square_list_admin_background);
 			this.lockImage = (ImageView)view.findViewById(R.id.row_square_list_admin_lock);
 		}
@@ -66,14 +64,12 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		public View view;
 		public TextView squareNameText;
 		public TextView distanceText;
-		public ImageView farImage;
 
 		public NormalViewHolder(View view) {
 			super(view);
 			this.view = view;
 			this.squareNameText = (TextView)view.findViewById(R.id.row_square_list_normal_name);
 			this.distanceText = (TextView)view.findViewById(R.id.row_square_list_normal_distance);
-			this.farImage = (ImageView)view.findViewById(R.id.row_square_list_normal_far);
 		}
 	}
 
@@ -134,16 +130,6 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 		holder.squareNameText.setText(square.getName());
 		holder.distanceText.setText(distance + unit);
-		if(square.isFar()){
-			holder.farImage.setVisibility(View.VISIBLE);
-			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
-			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
-		} else{
-			holder.farImage.setVisibility(View.GONE);
-			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
-			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
-		}
-
 		holder.view.setOnClickListener(itemClickListener);
 	}
 
@@ -158,16 +144,8 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 		holder.squareNameText.setText(square.getName());
 		holder.distanceText.setText(distance + unit);
-		if(square.isFar()){
-			holder.farImage.setVisibility(View.VISIBLE);
-			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
-			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_far));
-		} else{
-			holder.farImage.setVisibility(View.GONE);
-			holder.squareNameText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
-			holder.distanceText.setTextColor(frag.getResources().getColor(R.color.square_list_text));
-		}
-
+		holder.view.setOnClickListener(itemClickListener);
+		
 		blobStorageHelper.setImageViewAsync(frag, BlobStorageHelper.SQUARE_PROFILE, 
 				square.getId(), R.drawable.ground_premium_pic_default, holder.background, false);
 		if(!square.getCode().equals("")){
@@ -175,7 +153,5 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		} else{
 			holder.lockImage.setVisibility(View.GONE);
 		}
-
-		holder.view.setOnClickListener(itemClickListener);
 	}
 }

@@ -13,9 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.ChatListAdapter;
@@ -27,13 +25,11 @@ import com.pinthecloud.athere.model.Square;
 
 public class ChatFragment extends AhFragment{
 
-	private RelativeLayout previewLayout;
 	private ListView messageListView;
 	private ChatListAdapter messageListAdapter;
 	private List<AhMessage> chats;
 	private AhMessage chat;
 
-	private LinearLayout inputbarLayout;
 	private EditText messageEditText;
 	private ImageButton sendButton;
 
@@ -61,7 +57,6 @@ public class ChatFragment extends AhFragment{
 		setEditText();
 		setButtonEvent();
 		setChatList();
-		setPreviewLayout();
 		setMessageHandler();
 
 		return view;
@@ -106,9 +101,7 @@ public class ChatFragment extends AhFragment{
 
 
 	private void findComponent(View view){
-		previewLayout = (RelativeLayout) view.findViewById(R.id.chat_frag_preview_layout);
 		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
-		inputbarLayout = (LinearLayout) view.findViewById(R.id.chat_frag_inputbar_layout);
 		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
 	}
@@ -227,15 +220,6 @@ public class ChatFragment extends AhFragment{
 	}
 
 
-	private void setPreviewLayout(){
-		if(squareHelper.isPreview()){
-			inputbarLayout.setVisibility(View.GONE);
-		} else{
-			previewLayout.setVisibility(View.GONE);
-		}
-	}
-
-
 	private void setMessageHandler(){
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
@@ -257,17 +241,10 @@ public class ChatFragment extends AhFragment{
 		});
 	}
 
-
-	/**
-	 * @author hongkunyoo
-	 * notify this Method When this Fragment is on Resume
-	 * so that the Message stored in MessageDBHelper can inflate to the view again
-	 */
+	
 	private void updateChatList(final String id){
-		/*
-		 * Set ENTER, EXIT, CHAT messages
-		 */
-		if(!squareHelper.isPreview() && messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
+		// Show welcome chat
+		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
 			AhUser myUser = userHelper.getMyUserInfo();
 			String nickName = myUser.getNickName();
 			String enterMessage = getResources().getString(R.string.enter_square_message);
@@ -282,6 +259,9 @@ public class ChatFragment extends AhFragment{
 			.setTimeStamp().build();
 			messageDBHelper.addMessage(enterChat);
 		}
+		
+		
+		// Get chats
 		if (id == null){
 			chats = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE);
 		} else {
@@ -289,9 +269,7 @@ public class ChatFragment extends AhFragment{
 		}
 
 
-		/*
-		 * Set message list view
-		 */
+		// Set message list view
 		activity.runOnUiThread(new Runnable() {
 
 			@Override

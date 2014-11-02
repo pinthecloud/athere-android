@@ -26,13 +26,11 @@ import com.google.android.gms.location.LocationListener;
 import com.pinthecloud.athere.AhGlobalVariable;
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.activity.SquareActivity;
-import com.pinthecloud.athere.activity.SquarePreviewActivity;
 import com.pinthecloud.athere.adapter.SquareListAdapter;
 import com.pinthecloud.athere.dialog.SquareEnterDialog;
 import com.pinthecloud.athere.exception.AhException;
 import com.pinthecloud.athere.exception.ExceptionManager;
 import com.pinthecloud.athere.helper.LocationHelper;
-import com.pinthecloud.athere.helper.PreferenceHelper;
 import com.pinthecloud.athere.interfaces.AhDialogCallback;
 import com.pinthecloud.athere.interfaces.AhEntityCallback;
 import com.pinthecloud.athere.interfaces.AhListCallback;
@@ -152,8 +150,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		squareListAdapter = new SquareListAdapter(context, thisFragment, squareList, new SquareListViewItemClickListener());
 		squareListView.setAdapter(squareListAdapter);
 	}
-	
-	
+
+
 	private void setLocationListener(){
 		locationHelper = new LocationHelper(activity, this, this);
 		locationListener = new LocationListener() {
@@ -173,8 +171,8 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 		};
 	}
 
-	
-	private void enterSquare(final Square square, final boolean isPreview){
+
+	private void enterSquare(final Square square){
 		progressBar.setVisibility(View.VISIBLE);
 		progressBar.bringToFront();
 		squareListView.setEnabled(false);
@@ -186,7 +184,7 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 				// Get a user object from preference settings
 				// Enter a square with the user
 				final AhUser user = userHelper.getMyUserInfo();
-				userHelper.enterSquareAsync(frag, user, square.getId(), isPreview, new AhPairEntityCallback<String, List<AhUser>>() {
+				userHelper.enterSquareAsync(frag, user, square.getId(), new AhPairEntityCallback<String, List<AhUser>>() {
 
 					@Override
 					public void onCompleted(String userId, List<AhUser> list) {
@@ -200,48 +198,36 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			@Override
 			public void doNext(AhFragment frag) {
-				if(!isPreview){
-					String enterMessage = getResources().getString(R.string.enter_square_message);
-					String greetingMessage = getResources().getString(R.string.greeting_sentence);
-					AhUser user = userHelper.getMyUserInfo();
-					AhMessage message = new AhMessage.Builder()
-					.setContent(" " + enterMessage + "\n" + greetingMessage)
-					.setSender(user.getNickName())
-					.setSenderId(user.getId())
-					.setReceiverId(square.getId())
-					.setType(AhMessage.TYPE.ENTER_SQUARE).build();
-					messageHelper.sendMessageAsync(frag, message, null);
-				} else{
-					AsyncChainer.notifyNext(frag);
-				}
+				String enterMessage = getResources().getString(R.string.enter_square_message);
+				String greetingMessage = getResources().getString(R.string.greeting_sentence);
+				AhUser user = userHelper.getMyUserInfo();
+				AhMessage message = new AhMessage.Builder()
+				.setContent(" " + enterMessage + "\n" + greetingMessage)
+				.setSender(user.getNickName())
+				.setSenderId(user.getId())
+				.setReceiverId(square.getId())
+				.setType(AhMessage.TYPE.ENTER_SQUARE).build();
+				messageHelper.sendMessageAsync(frag, message, null);
 			}
 		}, new Chainable(){
 
 			@Override
 			public void doNext(AhFragment frag) {
+				Time time = new Time();
+				time.setToNow();
+
+				squareHelper.setMySquareId(square.getId())
+				.setMySquareName(square.getName())
+				.setMySquareResetTime(square.getResetTime())
+				.setSquareExitTab(SquareTabFragment.CHAT_TAB)
+				.setLoggedInSquare(true)
+				.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"))
+				.setReview(true);
+
 				Intent intent = new Intent();
-				if(!isPreview){
-					Time time = new Time();
-					time.setToNow();
-
-					squareHelper.setMySquareId(square.getId())
-					.setMySquareName(square.getName())
-					.setMySquareResetTime(square.getResetTime())
-					.setSquareExitTab(SquareTabFragment.CHAT_TAB)
-					.setLoggedInSquare(true)
-					.setTimeStampAtLoggedInSquare(time.format("%Y:%m:%d:%H"))
-					.setReview(true)
-					.setPreview(isPreview);
-
-					intent.setClass(context, SquareActivity.class);
-					startActivity(intent);
-					activity.finish();
-				}else{
-					squareHelper.setPreview(isPreview);
-					intent.setClass(context, SquarePreviewActivity.class);
-					intent.putExtra(AhGlobalVariable.SQUARE_KEY, square);
-					startActivity(intent);
-				}
+				intent.setClass(context, SquareActivity.class);
+				startActivity(intent);
+				activity.finish();
 			}
 		});
 	}
@@ -277,14 +263,6 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 					public int compare(Square lhs, Square rhs) {
 						return lhs.isAdmin() == rhs.isAdmin() ? 0 : 
 							!lhs.isAdmin() ? 1 : -1;
-					}
-				});
-				Collections.sort(list, new Comparator<Square>(){
-
-					@Override
-					public int compare(Square lhs, Square rhs) {
-						return lhs.isFar() == rhs.isFar() ? 0 : 
-							lhs.isFar() ? 1 : -1;
 					}
 				});
 
@@ -391,41 +369,24 @@ GooglePlayServicesClient.OnConnectionFailedListener{
 
 			/*
 			 * Get square and make enter dialog
+			 * Enter square directly or dialog by code
 			 */
 			int position = squareListView.getChildPosition(v);
 			final Square square = squareList.get(position);
-			Bundle bundle = new Bundle();
-			SquareEnterDialog enterDialog = new SquareEnterDialog(square, new AhDialogCallback() {
-
-				@Override
-				public void doPositiveThing(Bundle bundle) {
-					enterSquare(square, false);
-				}
-				@Override
-				public void doNegativeThing(Bundle bundle) {
-					enterSquare(square, true);
-				}
-			});
-
-
-			/*
-			 * If enough close to enter or it is super user, check code.
-			 * Otherwise, cannot enter.
-			 */
-			if(!square.isFar() || PreferenceHelper.getInstance().getBoolean(AhGlobalVariable.SUDO_KEY)){
-
-				if(square.getCode().equals("")){
-					enterSquare(square, false);
-				} else{
-					// This square has code
-					bundle.putBoolean(SquareEnterDialog.SHOW_CODE, true);
-					enterDialog.setArguments(bundle);
-					enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
-				}
+			if(square.getCode().equals("")){
+				enterSquare(square);
 			} else{
-				// Give preview condition
-				bundle.putBoolean(SquareEnterDialog.SHOW_CODE, false);
-				enterDialog.setArguments(bundle);
+				SquareEnterDialog enterDialog = new SquareEnterDialog(square, new AhDialogCallback() {
+
+					@Override
+					public void doPositiveThing(Bundle bundle) {
+						enterSquare(square);
+					}
+					@Override
+					public void doNegativeThing(Bundle bundle) {
+						// Do nothing
+					}
+				});
 				enterDialog.show(getFragmentManager(), AhGlobalVariable.DIALOG_KEY);
 			}
 		}

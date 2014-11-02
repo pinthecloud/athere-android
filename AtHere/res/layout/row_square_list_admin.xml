@@ -32,20 +32,10 @@
                 android:paddingStart="@dimen/none" >
 
                 <ImageView
-                    android:id="@+id/row_square_list_admin_far"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:contentDescription="@string/preview"
-                    android:src="@drawable/groundlist_premium_preview_ico" />
-
-                <ImageView
                     android:id="@+id/row_square_list_admin_lock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/row_square_list_admin_far"
-                    android:layout_toRightOf="@+id/row_square_list_admin_far"
                     android:contentDescription="@string/icon"
                     android:src="@drawable/groundlist_premium_locked_ico" />
 

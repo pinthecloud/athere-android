@@ -197,7 +197,7 @@ public class UserHelper {
 	//		});
 	//	}
 
-	public void enterSquareAsync(final AhFragment frag, AhUser user, String squareId, boolean isPreview, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
+	public void enterSquareAsync(final AhFragment frag, AhUser user, String squareId, final AhPairEntityCallback<String, List<AhUser>> callback) throws AhException {
 		if (!app.isOnline()) {
 			ExceptionManager.fireException(new AhException(frag, "enterSquareAsync", AhException.TYPE.INTERNET_NOT_CONNECTED));
 			return;
@@ -205,7 +205,7 @@ public class UserHelper {
 
 		JsonObject json = user.toJson();
 		json.addProperty("squareId", squareId);
-		json.addProperty("isPreview", isPreview);
+		json.addProperty("isPreview", false);
 
 		mClient.invokeApi(ENTER_SQUARE, json, new ApiJsonOperationCallback() {
 
