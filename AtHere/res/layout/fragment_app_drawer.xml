@@ -70,7 +70,6 @@
         android:layout_marginLeft="@dimen/app_drawer_margin"
         android:layout_marginRight="@dimen/app_drawer_margin"
         android:layout_marginStart="@dimen/app_drawer_margin"
-        android:layout_weight="1"
-        android:scrollbars="none" />
+        android:layout_weight="1" />
 
 </LinearLayout>

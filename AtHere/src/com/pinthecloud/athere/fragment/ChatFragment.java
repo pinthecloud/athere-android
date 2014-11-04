@@ -1,10 +1,13 @@
 package com.pinthecloud.athere.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,7 +16,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
 import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.adapter.ChatListAdapter;
@@ -25,10 +27,10 @@ import com.pinthecloud.athere.model.Square;
 
 public class ChatFragment extends AhFragment{
 
-	private ListView messageListView;
-	private ChatListAdapter messageListAdapter;
-	private List<AhMessage> chats;
-	private AhMessage chat;
+	private RecyclerView chatListView;
+	private ChatListAdapter chatListAdapter;
+	private RecyclerView.LayoutManager chatListLayoutManager;
+	private List<AhMessage> chatList;
 
 	private EditText messageEditText;
 	private ImageButton sendButton;
@@ -66,10 +68,15 @@ public class ChatFragment extends AhFragment{
 	@Override
 	public void onStart() {
 		super.onStart();
+
 		NotificationManager mNotificationManager = (NotificationManager) activity
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotificationManager.cancel(1);
-		updateChatList(null);
+
+		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
+			showWelcomeChat();
+		}
+		updateChatList();
 	}
 
 
@@ -91,7 +98,7 @@ public class ChatFragment extends AhFragment{
 
 				@Override
 				public void run() {
-					messageListAdapter.notifyDataSetChanged();
+					chatListAdapter.notifyDataSetChanged();
 				}
 			});
 		}else{
@@ -101,16 +108,13 @@ public class ChatFragment extends AhFragment{
 
 
 	private void findComponent(View view){
-		messageListView = (ListView) view.findViewById(R.id.chat_frag_list);
+		chatListView = (RecyclerView) view.findViewById(R.id.chat_frag_list);
 		messageEditText = (EditText) view.findViewById(R.id.chat_frag_message_text);
 		sendButton = (ImageButton) view.findViewById(R.id.chat_frag_send_button);
 	}
 
 
 	private void setEditText(){
-		/*
-		 * Set edit text
-		 */
 		messageEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -134,8 +138,16 @@ public class ChatFragment extends AhFragment{
 
 
 	private void setChatList(){
-		messageListAdapter = new ChatListAdapter(context, thisFragment);
-		messageListView.setAdapter(messageListAdapter);
+		chatListView.setHasFixedSize(true);
+
+		chatListLayoutManager = new LinearLayoutManager(context);
+		chatListView.setLayoutManager(chatListLayoutManager);
+
+		chatList = new ArrayList<AhMessage>();
+		chatListAdapter = new ChatListAdapter(context, thisFragment, chatList);
+		chatListView.setAdapter(chatListAdapter);
+
+
 		//		messageListView.setOnScrollListener(new OnScrollListener() {
 		//			public void onScroll(AbsListView view, int firstVisibleItem,
 		//					int visibleItemCount, int totalItemCount) {
@@ -177,49 +189,6 @@ public class ChatFragment extends AhFragment{
 	}
 
 
-	public void sendChat(final AhMessage message){
-		message.setStatus(AhMessage.STATUS.SENDING);
-
-		activity.runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				messageListAdapter.add(message);
-				messageListView.setSelection(messageListView.getCount() - 1);
-				messageEditText.setText("");
-			}
-		});
-
-		int id = messageDBHelper.addMessage(message);
-		message.setId(String.valueOf(id));
-
-		messageHelper.sendMessageAsync(thisFragment, message, new AhEntityCallback<AhMessage>() {
-
-			@Override
-			public void onCompleted(AhMessage entity) {
-				gaHelper.sendEventGA(
-						thisFragment.getClass().getSimpleName(),
-						"SendChat",
-						"Chat");
-
-				message.setStatus(AhMessage.STATUS.SENT);
-				message.setTimeStamp();
-				messageDBHelper.updateMessages(message);
-
-				activity.runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						messageListAdapter.remove(message);
-						messageListAdapter.notifyDataSetChanged();
-					}
-				});
-				updateChatList(message.getId());
-			}
-		});
-	}
-
-
 	private void setMessageHandler(){
 		messageHelper.setMessageHandler(this, new AhEntityCallback<AhMessage>() {
 
@@ -232,56 +201,96 @@ public class ChatFragment extends AhFragment{
 				}
 
 				if(message.getType().equals((AhMessage.TYPE.UPDATE_USER_INFO.toString()))){
-					updateChatList(null);
+					updateChatList();
 					return;
 				}
 
-				updateChatList(message.getId());
+				chatList.add(message);
+				activity.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						insertChat(message);
+					}
+				});
 			}
 		});
 	}
 
-	
-	private void updateChatList(final String id){
-		// Show welcome chat
-		if(messageDBHelper.isEmpty(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE)) {
-			AhUser myUser = userHelper.getMyUserInfo();
-			String nickName = myUser.getNickName();
-			String enterMessage = getResources().getString(R.string.enter_square_message);
-			String greetingMessage = getResources().getString(R.string.greeting_sentence);
-			AhMessage enterChat = new AhMessage.Builder()
-			.setContent(" " + enterMessage + "\n" + greetingMessage)
-			.setSender(nickName)
-			.setSenderId(myUser.getId())
-			.setReceiverId(squareHelper.getMySquareInfo().getId())
-			.setType(AhMessage.TYPE.ENTER_SQUARE)
-			.setStatus(AhMessage.STATUS.SENT)
-			.setTimeStamp().build();
-			messageDBHelper.addMessage(enterChat);
-		}
-		
-		
-		// Get chats
-		if (id == null){
-			chats = messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE);
-		} else {
-			chat = messageDBHelper.getMessage(Integer.parseInt(id));
-		}
+
+	private void showWelcomeChat(){
+		AhUser myUser = userHelper.getMyUserInfo();
+		String nickName = myUser.getNickName();
+		String enterMessage = getResources().getString(R.string.enter_square_message);
+		String greetingMessage = getResources().getString(R.string.greeting_sentence);
+		AhMessage enterChat = new AhMessage.Builder()
+		.setContent(" " + enterMessage + "\n" + greetingMessage)
+		.setSender(nickName)
+		.setSenderId(myUser.getId())
+		.setReceiverId(squareHelper.getMySquareInfo().getId())
+		.setType(AhMessage.TYPE.ENTER_SQUARE)
+		.setStatus(AhMessage.STATUS.SENT)
+		.setTimeStamp().build();
+		messageDBHelper.addMessage(enterChat);
+	}
 
 
-		// Set message list view
+	private void updateChatList(){
+		chatList.clear();
+		chatList.addAll(messageDBHelper.getAllMessages(AhMessage.TYPE.ENTER_SQUARE, AhMessage.TYPE.TALK, AhMessage.TYPE.ADMIN_MESSAGE));
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
-				if (id == null) {
-					messageListAdapter.clear();
-					messageListAdapter.addAll(chats);
-				} else {
-					messageListAdapter.add(chat);
-				}
-				messageListView.setSelection(messageListView.getCount() - 1);
+				chatListAdapter.notifyDataSetChanged();
+				chatListView.scrollToPosition(chatList.size()-1);
 			}
 		});
+	}
+
+
+	public void sendChat(final AhMessage chat){
+		chat.setStatus(AhMessage.STATUS.SENDING);
+		chatList.add(chat);
+		int id = messageDBHelper.addMessage(chat);
+		chat.setId(String.valueOf(id));
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				messageEditText.setText("");
+				insertChat(chat);
+			}
+		});
+
+		messageHelper.sendMessageAsync(thisFragment, chat, new AhEntityCallback<AhMessage>() {
+
+			@Override
+			public void onCompleted(AhMessage entity) {
+				gaHelper.sendEventGA(
+						thisFragment.getClass().getSimpleName(),
+						"SendChat",
+						"Chat");
+
+				chat.setStatus(AhMessage.STATUS.SENT);
+				chat.setTimeStamp();
+				messageDBHelper.updateMessages(chat);
+
+				activity.runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						chatListAdapter.notifyDataSetChanged();
+					}
+				});
+			}
+		});
+	}
+
+
+	private void insertChat(AhMessage chat){
+		chatListAdapter.notifyItemInserted(chatList.indexOf(chat));
+		chatListView.scrollToPosition(chatList.size()-1);
 	}
 }

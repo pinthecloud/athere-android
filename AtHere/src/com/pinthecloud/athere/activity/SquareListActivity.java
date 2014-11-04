@@ -11,7 +11,6 @@ import android.view.View;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.pinthecloud.athere.R;
-import com.pinthecloud.athere.fragment.AppDrawerFragment;
 import com.pinthecloud.athere.fragment.SquareListFragment;
 
 
@@ -28,11 +27,14 @@ public class SquareListActivity extends AhActivity {
 		setContentView(R.layout.activity_square_list);
 
 		setActionBar();
+		
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		
 		setFragment(fragmentTransaction);
-		setSlidingMenu(fragmentTransaction);
+		slidingMenu = app.getSlidingMenu(thisActivity, fragmentTransaction);
 		setDrawerIndicator();
+		
 		fragmentTransaction.commit();
 	}
 
@@ -68,21 +70,6 @@ public class SquareListActivity extends AhActivity {
 	private void setFragment(FragmentTransaction fragmentTransaction){
 		SquareListFragment fragment = new SquareListFragment ();
 		fragmentTransaction.add(R.id.square_list_layout, fragment);
-	}
-
-
-	private void setSlidingMenu(FragmentTransaction fragmentTransaction){
-		slidingMenu = new SlidingMenu(thisActivity);
-		slidingMenu.setMenu(R.layout.app_drawer_frame);
-		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
-		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
-		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);
-		slidingMenu.setFadeDegree(0.35f);
-		slidingMenu.attachToActivity(thisActivity, SlidingMenu.SLIDING_WINDOW);
-
-		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
-		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
 	}
 
 

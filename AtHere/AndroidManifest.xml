@@ -87,7 +87,7 @@
             android:name=".activity.SquareActivity"
             android:screenOrientation="portrait"
             android:theme="@style/WhiteActionBarAppTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.ProfileImageActivity"
             android:screenOrientation="portrait"

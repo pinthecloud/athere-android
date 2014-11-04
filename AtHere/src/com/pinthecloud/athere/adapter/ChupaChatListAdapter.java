@@ -53,7 +53,7 @@ public class ChupaChatListAdapter extends ArrayAdapter<AhMessage> {
 		int type = getItemViewType(position);
 		if (view == null) {
 			if(type == TYPE.EXIT_NOTIFICATION.ordinal()){
-				view = inflater.inflate(R.layout.row_chat_list_enter_exit_notification, parent, false);
+				view = inflater.inflate(R.layout.row_chat_list_enter_notification, parent, false);
 			} else if(type == TYPE.SEND.ordinal()){
 				view = inflater.inflate(R.layout.row_chupa_chat_list_send, parent, false);
 			} else if(type == TYPE.RECEIVE.ordinal()){

@@ -6,128 +6,85 @@
     android:orientation="vertical"
     android:padding="@dimen/settings_margin" >
 
-    <ProgressBar
+    <include
         android:id="@+id/settings_frag_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        layout="@layout/progress_bar"
         android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:background="@drawable/setting_alarm_bg"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/settings_item_margin"
+        android:paddingLeft="@dimen/settings_item_margin"
+        android:paddingRight="@dimen/settings_item_margin"
+        android:paddingStart="@dimen/settings_item_margin" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/setting_alarm_bg"
-            android:orientation="vertical"
-            android:paddingEnd="@dimen/settings_item_margin"
-            android:paddingLeft="@dimen/settings_item_margin"
-            android:paddingRight="@dimen/settings_item_margin"
-            android:paddingStart="@dimen/settings_item_margin" >
+            android:layout_marginBottom="@dimen/settings_item_margin"
+            android:layout_marginTop="@dimen/settings_item_margin"
+            android:text="@string/notification"
+            android:textSize="@dimen/font_large" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/settings_item_margin"
-                android:layout_marginTop="@dimen/settings_item_margin"
-                android:text="@string/notification"
-                android:textSize="@dimen/font_large" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/line_thick_width"
-                android:background="@color/divider" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="@string/square"
-                    android:textSize="@dimen/font_large" />
-
-                <ToggleButton
-                    android:id="@+id/settings_frag_chat_alarm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@android:color/transparent"
-                    android:drawableEnd="@drawable/alarm_on_off_toggle_bg"
-                    android:drawableRight="@drawable/alarm_on_off_toggle_bg"
-                    android:textOff=""
-                    android:textOn="" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="@string/chupa"
-                    android:textSize="@dimen/font_large" />
-
-                <ToggleButton
-                    android:id="@+id/settings_frag_chupa_alarm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@android:color/transparent"
-                    android:drawableEnd="@drawable/alarm_on_off_toggle_bg"
-                    android:drawableRight="@drawable/alarm_on_off_toggle_bg"
-                    android:textOff=""
-                    android:textOn="" />
-            </RelativeLayout>
-        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_thick_width"
+            android:background="@color/divider" />
 
         <RelativeLayout
-            android:id="@+id/settings_frag_share"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/settings_margin"
-            android:layout_marginTop="@dimen/settings_margin"
-            android:background="@drawable/groundlist_normal_bg"
-            android:paddingEnd="@dimen/settings_item_margin"
-            android:paddingLeft="@dimen/settings_item_margin"
-            android:paddingRight="@dimen/settings_item_margin"
-            android:paddingStart="@dimen/settings_item_margin" >
+            android:layout_height="wrap_content" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/share"
+                android:text="@string/square"
                 android:textSize="@dimen/font_large" />
+
+            <ToggleButton
+                android:id="@+id/settings_frag_chat_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:drawableEnd="@drawable/alarm_on_off_toggle_bg"
+                android:drawableRight="@drawable/alarm_on_off_toggle_bg"
+                android:textOff=""
+                android:textOn="" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/settings_frag_question"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/groundlist_normal_bg"
-            android:paddingEnd="@dimen/settings_item_margin"
-            android:paddingLeft="@dimen/settings_item_margin"
-            android:paddingRight="@dimen/settings_item_margin"
-            android:paddingStart="@dimen/settings_item_margin" >
+            android:layout_height="wrap_content" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="@string/question"
+                android:text="@string/chupa"
                 android:textSize="@dimen/font_large" />
+
+            <ToggleButton
+                android:id="@+id/settings_frag_chupa_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@android:color/transparent"
+                android:drawableEnd="@drawable/alarm_on_off_toggle_bg"
+                android:drawableRight="@drawable/alarm_on_off_toggle_bg"
+                android:textOff=""
+                android:textOn="" />
         </RelativeLayout>
     </LinearLayout>
 

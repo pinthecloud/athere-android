@@ -18,7 +18,6 @@ import com.pinthecloud.athere.R;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.dialog.AhAlertDialog;
 import com.pinthecloud.athere.fragment.AhFragment;
-import com.pinthecloud.athere.fragment.AppDrawerFragment;
 import com.pinthecloud.athere.fragment.ChupaListFragment;
 import com.pinthecloud.athere.fragment.SquareTabFragment;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -49,7 +48,7 @@ public class SquareActivity extends AhActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_square);
-
+		
 		setHelper();
 		findComponent();
 		
@@ -58,9 +57,11 @@ public class SquareActivity extends AhActivity {
 
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		
 		setFragment(fragmentTransaction, square);
 		setDrawerFragment(fragmentManager);
-		setSlidingMenu(fragmentTransaction);
+		slidingMenu = app.getSlidingMenu(thisActivity, fragmentTransaction);
+		
 		fragmentTransaction.commit();
 		
 		setMessageHandler();
@@ -197,21 +198,6 @@ public class SquareActivity extends AhActivity {
 	private void setDrawerFragment(FragmentManager fragmentManager){
 		chupaListFragment = (ChupaListFragment) fragmentManager.findFragmentById(R.id.square_notification_drawer_fragment);
 		chupaListFragment.setUp(mDrawerLayout);
-	}
-
-
-	private void setSlidingMenu(FragmentTransaction fragmentTransaction){
-		slidingMenu = new SlidingMenu(thisActivity);
-		slidingMenu.setMenu(R.layout.app_drawer_frame);
-		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
-		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
-		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);
-		slidingMenu.setFadeDegree(0.35f);
-		slidingMenu.attachToActivity(thisActivity, SlidingMenu.SLIDING_WINDOW);
-
-		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
-		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
 	}
 
 

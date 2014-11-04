@@ -12,6 +12,7 @@
     <dimen name="app_drawer_shadow_width">10dp</dimen>
     <dimen name="app_drawer_margin">20dp</dimen>
     <dimen name="app_drawer_profile_image">110dp</dimen>
+    <item name="app_drawer_fade_degree" format="float" type="dimen">0.35</item>
 
     <!-- Notification Drawer -->
     <dimen name="notification_drawer_width">360dp</dimen>

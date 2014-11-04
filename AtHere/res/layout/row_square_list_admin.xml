@@ -25,29 +25,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/row_square_list_admin_background"
-                android:background="@drawable/groundlist_premium_bg"
-                android:paddingEnd="@dimen/square_list_margin"
-                android:paddingLeft="@dimen/none"
-                android:paddingRight="@dimen/square_list_margin"
-                android:paddingStart="@dimen/none" >
+                android:orientation="horizontal" >
 
                 <ImageView
                     android:id="@+id/row_square_list_admin_lock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:contentDescription="@string/icon"
                     android:src="@drawable/groundlist_premium_locked_ico" />
 
                 <TextView
                     android:id="@+id/row_square_list_admin_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/square_list_margin"
-                    android:layout_marginStart="@dimen/square_list_margin"
                     android:layout_toEndOf="@+id/row_square_list_admin_lock"
                     android:layout_toRightOf="@+id/row_square_list_admin_lock"
+                    android:background="@drawable/groundlist_premium_bg"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="@dimen/none"
+                    android:paddingLeft="@dimen/square_list_margin"
+                    android:paddingRight="@dimen/none"
+                    android:paddingStart="@dimen/square_list_margin"
                     android:textColor="@color/square_list_text"
                     android:textSize="@dimen/font_large" />
             </RelativeLayout>

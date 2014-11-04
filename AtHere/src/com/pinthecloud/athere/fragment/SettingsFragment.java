@@ -2,7 +2,6 @@ package com.pinthecloud.athere.fragment;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.facebook.AppEventsLogger;
@@ -36,8 +34,6 @@ public class SettingsFragment extends AhFragment{
 
 	private ToggleButton chatAlarmButton;
 	private ToggleButton chupaAlarmButton;
-	private RelativeLayout questionButton;
-	private RelativeLayout shareButton;
 
 	private AhUser user;
 
@@ -130,8 +126,6 @@ public class SettingsFragment extends AhFragment{
 		logoutButton = (LoginButton)view.findViewById(R.id.settings_frag_logout_button);
 		chatAlarmButton = (ToggleButton)view.findViewById(R.id.settings_frag_chat_alarm);
 		chupaAlarmButton = (ToggleButton)view.findViewById(R.id.settings_frag_chupa_alarm);
-		questionButton = (RelativeLayout)view.findViewById(R.id.settings_frag_question);
-		shareButton = (RelativeLayout)view.findViewById(R.id.settings_frag_share);
 	}
 
 
@@ -171,37 +165,6 @@ public class SettingsFragment extends AhFragment{
 						userHelper.setMyChupaEnable(chupaAlarmButton.isChecked());
 					}
 				});
-			}
-		});
-
-		questionButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				gaHelper.sendEventGA(
-						thisFragment.getClass().getSimpleName(),
-						"Question",
-						"SettingsQuestion");
-
-				Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:pinthecloud@gmail.com"));
-				startActivity(intent);
-			}
-		});
-
-		shareButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				gaHelper.sendEventGA(
-						thisFragment.getClass().getSimpleName(),
-						"Share",
-						"SettingsShare");
-
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_SEND);
-				intent.putExtra(Intent.EXTRA_TEXT, getResources().getText(R.string.share_sentence));
-				intent.setType("text/plain");
-				startActivity(Intent.createChooser(intent, getResources().getText(R.string.share_to)));
 			}
 		});
 	}

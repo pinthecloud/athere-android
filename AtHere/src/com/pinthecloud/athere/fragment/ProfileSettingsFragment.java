@@ -339,7 +339,7 @@ public class ProfileSettingsFragment extends AhFragment{
 		});
 	}
 
-	
+
 	private void setProfileImageEvent(){
 		profileImageBitmap = FileUtil.getBitmapFromInternalStorage(context, user.getId());
 		profileImageView.setOnClickListener(new OnClickListener() {
@@ -404,7 +404,7 @@ public class ProfileSettingsFragment extends AhFragment{
 			}
 		});
 	}
-	
+
 
 	private boolean isStartButtonEnable(){
 		return isTypedNickName && isTakenProfileImage;

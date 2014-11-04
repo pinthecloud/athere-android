@@ -345,13 +345,13 @@ public class MessageDBHelper extends SQLiteOpenHelper {
 			typeArr.add(type.toString());
 			whereStr.append(TYPE + "=? OR ");
 		}
+		
 		whereStr.delete(whereStr.length()- 3, whereStr.length());
 		List<AhMessage> messages = new ArrayList<AhMessage>();
 
 		String selectQuery = "SELECT * FROM " + TABLE_NAME +
 				" WHERE " + whereStr.toString() + 
 				" ORDER BY " + TIME_STAMP;
-
 		SQLiteDatabase db = this.openDataBase("getAllMessages(AhMessage.TYPE... types)");
 		String[] argArray = typeArr.toArray(new String[typeArr.size()]);
 		Cursor cursor = db.rawQuery(selectQuery, argArray);

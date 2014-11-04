@@ -87,11 +87,11 @@ public class SquareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 		Square square = squareList.get(position);
 		int viewType = getItemViewType(position);
 		if(viewType == TYPE.ADMIN.ordinal()){
-			AdminViewHolder adminViewHolder = (AdminViewHolder)holder;
-			setAdminComponent(adminViewHolder, square);
+			AdminViewHolder viewHolder = (AdminViewHolder)holder;
+			setAdminComponent(viewHolder, square);
 		}else if(viewType == TYPE.NORMAL.ordinal()){
-			NormalViewHolder normalViewHolder = (NormalViewHolder)holder;
-			setNormalComponent(normalViewHolder, square);
+			NormalViewHolder viewHolder = (NormalViewHolder)holder;
+			setNormalComponent(viewHolder, square);
 		}
 	}
 

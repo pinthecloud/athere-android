@@ -3,11 +3,14 @@ package com.pinthecloud.athere;
 import java.net.MalformedURLException;
 
 import android.app.Application;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
+import com.pinthecloud.athere.activity.AhActivity;
 import com.pinthecloud.athere.analysis.FiveRocksHelper;
 import com.pinthecloud.athere.analysis.FlurryHelper;
 import com.pinthecloud.athere.analysis.GAHelper;
@@ -15,6 +18,7 @@ import com.pinthecloud.athere.analysis.UserHabitHelper;
 import com.pinthecloud.athere.database.MessageDBHelper;
 import com.pinthecloud.athere.database.UserDBHelper;
 import com.pinthecloud.athere.fragment.AhFragment;
+import com.pinthecloud.athere.fragment.AppDrawerFragment;
 import com.pinthecloud.athere.helper.BlobStorageHelper;
 import com.pinthecloud.athere.helper.CachedBlobStorageHelper;
 import com.pinthecloud.athere.helper.MessageHelper;
@@ -191,20 +195,11 @@ public class AhApplication extends Application{
 	}
 
 
-
-	/*
-	 * Check nick name EditText
-	 */
 	public String checkNickName(String nickName){
 		// Set regular expression for checking nick name
 		String nickNameRegx = "^[a-zA-Z0-9가-힣_-]{2,10}$";
 		String message = "";
 
-		/*
-		 * Check logic whether this nick name is valid or not
-		 * If user doesn't type in proper nick name,
-		 * can't go to next activity
-		 */
 		// Check length of nick name
 		if(nickName.length() < 2){
 			message = getResources().getString(R.string.min_nick_name_message);
@@ -212,6 +207,23 @@ public class AhApplication extends Application{
 			message = getResources().getString(R.string.bad_nick_name_message);
 		} 
 		return message;
+	}
+
+
+	public SlidingMenu getSlidingMenu(AhActivity activity, FragmentTransaction fragmentTransaction){
+		SlidingMenu slidingMenu = new SlidingMenu(activity);
+		slidingMenu.setMenu(R.layout.app_drawer_frame);
+		slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		slidingMenu.setShadowWidthRes(R.dimen.app_drawer_shadow_width);
+		slidingMenu.setShadowDrawable(R.drawable.app_drawer_shadow);
+		slidingMenu.setBehindOffsetRes(R.dimen.app_drawer_offset);
+		slidingMenu.setFadeDegree(0.35f);
+		slidingMenu.attachToActivity(activity, SlidingMenu.SLIDING_WINDOW);
+
+		AppDrawerFragment appDrawerFragment = new AppDrawerFragment();
+		fragmentTransaction.replace(R.id.app_drawer_container, appDrawerFragment);
+
+		return slidingMenu;
 	}
 
 

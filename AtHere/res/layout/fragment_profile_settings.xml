@@ -8,11 +8,12 @@
     android:focusableInTouchMode="true"
     android:padding="@dimen/profile_settings_margin" >
 
-    <ProgressBar
+    <include
         android:id="@+id/profile_settings_frag_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        layout="@layout/progress_bar"
         android:visibility="gone" />
 
     <LinearLayout
